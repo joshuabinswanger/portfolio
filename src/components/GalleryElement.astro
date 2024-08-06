@@ -1,0 +1,146 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Picture } from 'astro:assets';
+import "../styles/global.css";
+
+interface Props {
+    grid_three: string;
+    margin_top: string;
+    to: string;
+    title: string;
+    tools: string;
+    altText: string;
+    imagePath: string;
+    onhover_imagePath: string;
+    
+  };
+  
+// Get component props from Astro.props
+const { grid_three, margin_top, text_size, to, title, tools, imagePath, onhover_imagePath } = Astro.props;
+
+//Import all image paths to check against the passed in strings
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,webp}');
+if (!images[imagePath]) throw new Error(`"${imagePath}" does not exist in glob: "src/assets/**/*.{jpeg,jpg,png,gif,webp}"`);
+---
+
+
+
+
+<div id="GalleryRow_Wrapper" style="height:auto;" >
+  <div id="Spacer" style="pointer-events: none;">
+    {/*this is an empty div*/}
+  </div>
+
+  <div id="GalleryImageAndText_Wrapper" class:list={"hidden"} style="display: grid; pointer-events: auto;">
+    <div id="GalleryImage">
+       <a href={to}><Picture src={images[imagePath]()} alt="empty" style="width: 100%; height: auto;"></a> 
+    </div>
+
+    <div id= "GalleryTextGrid">
+      <div id="GalleryImage_Title">{title}</div>
+      <div id="GalleryImage_Tools">{tools}</div>  
+    </div>
+
+  </div>
+
+  <div id="Spacer" style="pointer-events: none;">
+  {/*this is an empty div*/}
+  </div>
+</div>
+
+
+
+
+
+
+<style define:vars={{ grid_three, margin_top }}>
+@import "../styles/global.css";
+
+/* Text Size*/
+
+  #GalleryImage_Title{
+    font-size: var(--font-size-normal);
+
+    @media (--bp-mobile){
+      font-size: var(--font-size-mobile);
+    }
+
+    @media (--bp-desktop-wide){
+      font-size: var(--font-size-desktop-wide);
+    }
+  }
+
+  #GalleryImage_Tools{
+    text-align: end;
+    font-size: var(--font-size-normal);
+
+
+    @media (--bp-mobile){
+      font-size: var(--font-size-mobile);
+    }
+
+    @media (--bp-desktop-wide){
+      font-size: var(--font-size-desktop-wide);
+    }
+  }
+
+/*Gallery Row Wrapper */
+
+  #GalleryRow_Wrapper { 
+    display: grid; 
+    grid-template-columns: var(--grid_three); 
+    margin-top: var(--margin_top);
+
+    @media (--bp-mobile) {
+      grid-template-columns: 1fr; 
+      margin-top: 1rem;
+    }
+  }
+
+
+
+/*Gallery Text Grid */
+#GalleryTextGrid {
+  display: grid; 
+  grid-template-columns: 1fr 1fr;
+}
+
+/*Fade */
+
+.hidden{
+  opacity: 0;
+  filter: blur(0.5px);
+  transition: all 0.66s;
+  transform: translateY(10%);
+}
+
+.show {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0)
+}
+
+
+
+</style>
+
+<script>
+	// Define the behaviour for our new type of HTML element.
+	const observer = new IntersectionObserver((entries) => {  
+			entries.forEach((entry) => {
+				console.log(entry)
+				if (entry.isIntersecting){
+					entry.target.classList.add("show");
+				}
+				else	{
+					entry.target.classList.remove("show");
+				}
+	
+		});
+	 });
+	
+	const fadeElements = document.querySelectorAll(".hidden");
+	fadeElements.forEach((el) => observer.observe(el));
+
+	
+</script>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="semicolon" format="1">
+  <advance width="312"/>
+  <unicode hex="003B"/>
+  <note>
+    semicolon
+  </note>
+  <outline>
+    <contour>
+      <point x="73" y="300" type="line"/>
+      <point x="241" y="300" type="line"/>
+      <point x="241" y="460" type="line"/>
+      <point x="73" y="460" type="line"/>
+    </contour>
+    <contour>
+      <point x="127" y="0" type="line"/>
+      <point x="118" y="-43"/>
+      <point x="95" y="-86"/>
+      <point x="66" y="-122" type="curve"/>
+      <point x="176" y="-185" type="line"/>
+      <point x="241" y="-95"/>
+      <point x="258" y="22"/>
+      <point x="239" y="160" type="curve"/>
+      <point x="73" y="160" type="line"/>
+      <point x="73" y="0" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+    <dict>
+      <key>com.schriftgestaltung.Glyphs.leftMetricsKey</key>
+      <string>period</string>
+      <key>com.schriftgestaltung.Glyphs.rightMetricsKey</key>
+      <string>period</string>
+    </dict>
+  </lib>
+</glyph>

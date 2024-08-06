@@ -1,0 +1,37 @@
+@font-face {
+  font-family: PowerGroteskUltraLight;
+  src: url(/public/fonts/PowerGroteskTrial-WOFF+CSS/PowerGroteskTrial-UltraLight.woff) format("woff");
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: PowerGroteskLight;
+  src: url(/public/fonts/PowerGroteskTrial-WOFF+CSS/PowerGroteskTrial-Light.woff) format("woff");
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: PowerGrotesk;
+  src: url(/public/fonts/PowerGroteskTrial-WOFF+CSS/PowerGroteskTrial-Regular.woff) format("woff");
+  font-weight: 200;
+}
+
+*{
+  font-family: PowerGroteskLight;
+  letter-spacing: 0.33px;
+}
+
+/* Variables */
+:root {
+  --padding: 5rem;
+  --pading-mobile: 1rem;
+  --pading-desktop-wide: 8rem;
+  --font-size-normal: 1rem;
+  --font-size-mobile: calc(0.25rem + 2vw);
+  --font-size-desktop-wide: calc(1rem + 1vw / 5);
+}
+/* Media Queries Breakpoints*/
+@custom-media --bp-mobile (width <= 850px);
+@custom-media --bp-tablet (850px <= width <= 1000px);
+@custom-media --bp-desktop (1000px <= width <= 1500px);
+@custom-media --bp-desktop-wide (width >= 1500px);

@@ -1,0 +1,234 @@
+---
+import GalleryElement from "./GalleryElement.astro";
+import NavigationBar from "./NavigationBar.astro"
+import "../styles/global.css";
+
+---
+<div id="GalleryTopWrapper">
+      
+	<div id="NavBar">
+	  <NavigationBar />
+	</div>
+	
+<!-- 	<div id="gutter_navbar"></div> -->
+
+	<div id="GalleryElementWrapper">
+
+			<div id="GalleryElement1" class:list={"Fade"}  style="grid-column: 1;">
+					<GalleryElement 
+					grid_three="0fr 2fr 3fr"
+					to="/projects/alice-in-woodland"
+					title="Alice in Woodland"
+					tools="3D Interactive"
+					altText="This is a Test"
+					imagePath="/src/assets/projects/aliceinwoodland/gallery_image/Alice_GalelryImage.webp"
+					onhover_imagePath="/src/assets/projects/aliceinwoodland/gallery_image/Alice_GalelryImage.webp"
+					/>
+			</div>
+			
+			<div id="GalleryElement2" class:list={"Fade"}   style="grid-column: 1;">
+				<GalleryElement 
+				grid_three="3fr 3fr 0fr"
+				margin_top="2em"
+				to="/projects/borkenkaefer"
+				title="Borkenkaefer"
+				tools="2D Poster"
+				altText="This is a Test"
+				imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
+				onhover_imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
+				/>
+			</div>
+
+			<div id="GalleryElement3" class:list={"Fade"}   style="grid-column: 1; height:auto;">
+				<GalleryElement 
+				grid_three="0fr 5fr 4fr"
+				margin_top="0vw"
+				to="/projects/alice-in-woodland"
+				title="Alice in Woodland"
+				tools="3D Interactive"
+				altText="This is a Test"
+				imagePath="/src/assets/projects/aliceinwoodland/gallery_image/Alice_GalelryImage.webp"
+				onhover_imagePath="/src/assets/projects/aliceinwoodland/gallery_image/Alice_GalelryImage.webp"
+				/>
+			</div>
+
+			<div id="GalleryElement4" class:list={"Fade"}  style="grid-column: 1;">
+				<GalleryElement 
+				grid_three="4fr 2fr 0fr"
+				margin_top="2em"
+				to="/projects/borkenkaefer"
+				title="Borkenkaefer"
+				tools="2D Poster"
+				altText="This is a Test"
+				imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
+				onhover_imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
+				/>
+			</div>
+
+			<div id="GalleryElement5" class:list={"Fade"}  style="grid-column: 1;">
+				<GalleryElement 
+				grid_three="0fr 4fr 6fr"
+				margin_top="1em"
+				to="/projects/borkenkaefer"
+				title="Borkenkaefer"
+				tools="2D Poster"
+				altText="This is a Test"
+				imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
+				onhover_imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
+				/>
+			</div>
+
+			<div id="GalleryElement6" class:list={"Fade"}   style="grid-column: 1;">
+				<GalleryElement 
+				grid_three="4fr 4fr 0fr"
+				margin_top="-2em"
+				to="/projects/borkenkaefer"
+				title="Borkenkaefer"
+				tools="2D Poster"
+				altText="This is a Test"
+				imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
+				onhover_imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
+				/>
+			</div>
+		</div>	
+
+<!-- 	<div id="gutter_right"></div> -->
+
+</div>
+
+
+
+<style>
+@import "../styles/global.css";
+
+#GalleryTopWrapper {	
+	display: grid; 
+	grid-template-columns: 17ch 1fr; 
+	row-gap: 0.25rem;
+	column-gap: 2rem;
+	margin-left: 3rem;
+	margin-right: 5rem;
+
+	@media (--bp-mobile) {
+		grid-template-columns:1fr;
+		margin-left: 5px;
+		margin-right: 5px;
+	}
+
+	@media (--bp-desktop-wide) {
+		grid-template-columns: 23ch 1fr;
+		column-gap: 4rem;
+		margin-left: clamp(2em, 7vw, 15vw);
+		margin-right: clamp(calc(2em + 23ch), calc(7vw + 23ch), calc(15vw + 23ch));
+	}
+}
+
+#NavBar {
+	position: sticky;
+	align-self: start;
+	top: var(--padding);
+
+		@media (--bp-mobile) {
+			display: none;
+		}
+
+		@media (--bp-desktop-wide) {
+			top: var( --pading-desktop-wide);
+		}
+
+}
+#GalleryElementWrapper {
+	display: grid; 
+	grid-template-columns: 1fr; 
+	align-content: start;
+	grid-row-gap: 5em; 
+	grid-auto-rows: auto;
+	pointer-events: none;
+	margin-top: var(--padding); 
+
+	@media (--bp-mobile) {
+		margin-top: 1em;
+		grid-row-gap: calc(1.5em + 5vw); 
+	}
+
+	@media (--bp-desktop-wide) {
+		margin-top: var( --pading-desktop-wide);
+		}
+}
+
+
+
+/* Gallery Elements, still one after the other, need more elegant solution */
+#GalleryElement1 { 
+grid-row: 1;
+top: 0px;
+}
+
+#GalleryElement2 { 
+grid-row: 1;
+
+}#GalleryElement3 { 
+grid-row: 2;
+
+}#GalleryElement4 { 
+grid-row: 2;
+
+}#GalleryElement5 { 
+grid-row: 3;
+
+}#GalleryElement6 { 
+grid-row: 3;
+}
+	
+@media (--bp-mobile) {
+
+	#GalleryElement1 { 
+	grid-row: 1;
+	}
+
+	#GalleryElement2 { 
+	grid-row: 2;
+	}
+
+	#GalleryElement3 { 
+	grid-row: 3;
+	}
+
+	#GalleryElement4 { 
+	grid-row: 4;
+	}
+
+	#GalleryElement5 { 
+	grid-row: 5;
+	}
+
+	#GalleryElement6 { 
+	grid-row: 6;
+	}
+
+}
+
+</style>
+
+
+<script>
+	// Define the behaviour for our new type of HTML element.
+	const observer = new IntersectionObserver((entries) => {  
+			entries.forEach((entry) => {
+				console.log(entry)
+				if (entry.isIntersecting){
+					entry.target.classList.add("show");
+				}
+				else	{
+					entry.target.classList.remove("show");
+				}
+	
+		});
+	 });
+	
+	const fadeElements = document.querySelectorAll(".Fade");
+	fadeElements.forEach((el) => observer.observe(el));
+
+	
+</script>
+	

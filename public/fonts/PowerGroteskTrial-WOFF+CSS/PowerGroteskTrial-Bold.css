@@ -1,0 +1,12 @@
+/* Webfont: PowerGroteskTrial-Bold */@font-face {
+    font-family: 'PowerGroteskTrial';
+    src: url('PowerGroteskTrial-Bold.eot'); /* IE9 Compat Modes */
+    src: url('PowerGroteskTrial-Bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('PowerGroteskTrial-Bold.woff') format('woff'), /* Modern Browsers */
+         url('PowerGroteskTrial-Bold.woff2') format('woff2'), /* Modern Browsers */
+         url('PowerGroteskTrial-Bold.ttf') format('truetype'); /* Safari, Android, iOS */
+             font-style: normal;
+    font-weight: bold;
+    text-rendering: optimizeLegibility;
+}
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="comma" format="1">
+  <advance width="299"/>
+  <unicode hex="002C"/>
+  <note>
+    comma
+  </note>
+  <outline>
+    <contour>
+      <point x="115" y="0" type="line"/>
+      <point x="106" y="-41"/>
+      <point x="84" y="-72"/>
+      <point x="56" y="-107" type="curve"/>
+      <point x="171" y="-148" type="line"/>
+      <point x="237" y="-47"/>
+      <point x="245" y="46"/>
+      <point x="221" y="153" type="curve"/>
+      <point x="56" y="153" type="line"/>
+      <point x="56" y="0" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+    <dict>
+      <key>com.schriftgestaltung.Glyphs.leftMetricsKey</key>
+      <string>=period-10</string>
+      <key>com.schriftgestaltung.Glyphs.rightMetricsKey</key>
+      <string>period</string>
+    </dict>
+  </lib>
+</glyph>

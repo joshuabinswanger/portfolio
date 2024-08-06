@@ -1,17 +1,22 @@
 {
-  "name": "portfolio-v1",
-  "type": "module",
-  "version": "0.0.1",
+  "name": "Portfolio_V1",
+  "packageManager": "yarn@4.3.1",
+  "browserslist":[
+    "defaults"
+  ],
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+    "build": "astro build",
+    "preview": "astro preview"
   },
   "dependencies": {
-    "astro": "^4.12.2",
-    "@astrojs/check": "^0.8.3",
-    "typescript": "^5.5.4"
+    "@rive-app/canvas": "^2.19.6",
+    "astro": "^4.12.3",
+    "autoprefixer": "^10.4.20",
+    "postcss-preset-env": "^10.0.0"
+  },
+  "devDependencies": {
+    "postcss": "^8.4.40"
   }
 }

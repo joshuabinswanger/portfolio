@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="exclamdown" format="1">
+  <advance width="285"/>
+  <unicode hex="00A1"/>
+  <note>
+    exclamdown
+  </note>
+  <outline>
+    <component base="exclam" yScale="-1" yOffset="461"/>
+  </outline>
+  <lib>
+    <dict>
+      <key>com.schriftgestaltung.Glyphs.ComponentInfo</key>
+      <array>
+        <dict>
+          <key>alignment</key>
+          <integer>-1</integer>
+          <key>index</key>
+          <integer>0</integer>
+          <key>name</key>
+          <string>exclam</string>
+        </dict>
+      </array>
+      <key>com.schriftgestaltung.Glyphs.lastChange</key>
+      <string>2018-01-09 09:49:18 +0000</string>
+      <key>com.schriftgestaltung.Glyphs.leftMetricsKey</key>
+      <string>exclam</string>
+      <key>com.schriftgestaltung.Glyphs.rightMetricsKey</key>
+      <string>exclam</string>
+    </dict>
+  </lib>
+</glyph>

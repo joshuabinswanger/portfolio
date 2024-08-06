@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="notequal" format="1">
+  <advance width="600"/>
+  <unicode hex="2260"/>
+  <outline>
+    <contour>
+      <point x="453" y="567" type="line"/>
+      <point x="267" y="38" type="line"/>
+      <point x="136" y="38" type="line"/>
+      <point x="322" y="567" type="line"/>
+    </contour>
+    <component base="equal"/>
+  </outline>
+  <lib>
+    <dict>
+      <key>com.schriftgestaltung.Glyphs.ComponentInfo</key>
+      <array>
+        <dict>
+          <key>alignment</key>
+          <integer>-1</integer>
+          <key>index</key>
+          <integer>0</integer>
+          <key>name</key>
+          <string>equal</string>
+        </dict>
+      </array>
+    </dict>
+  </lib>
+</glyph>

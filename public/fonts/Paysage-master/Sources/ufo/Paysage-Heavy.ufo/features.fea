@@ -1,0 +1,108 @@
+# automatic
+@Uppercase = [ A Aacute Abreve Acircumflex Adieresis Agrave Amacron Aogonek Aring Atilde AE B C Cacute Ccaron Ccedilla Ccircumflex Cdotaccent D Eth Dcaron Dcroat E Eacute Ecaron Ecircumflex Edieresis Edotaccent Egrave Emacron Eogonek F G Gbreve Gcircumflex Gcommaaccent Gdotaccent H Hbar Hcircumflex I Iacute Icircumflex Idieresis Idotaccent Igrave Imacron Iogonek J Jacute Jcircumflex K Kcommaaccent L Lacute Lcaron Lcommaaccent Ldot Lslash M N Nacute Ncaron Ncommaaccent Eng Ntilde O Oacute Ocircumflex Odieresis Ograve Ohungarumlaut Omacron Oslash Otilde OE P Thorn Q R Racute Rcaron Rcommaaccent S Sacute Scaron Scedilla Scircumflex Scommaaccent Germandbls T Tbar Tcaron Tcedilla Tcommaaccent U Uacute Ubreve Ucircumflex Udieresis Ugrave Uhungarumlaut Umacron Uogonek Uring V W Wacute Wcircumflex Wdieresis Wgrave X Y Yacute Ycircumflex Ydieresis Ygrave Z Zacute Zcaron Zdotaccent ];
+
+# Prefix: Languagesystems
+# automatic
+languagesystem DFLT dflt;
+
+languagesystem latn dflt;
+languagesystem latn AZE;
+languagesystem latn CRT;
+languagesystem latn KAZ;
+languagesystem latn TAT;
+languagesystem latn TRK;
+languagesystem latn ROM;
+languagesystem latn MOL;
+languagesystem latn CAT;
+languagesystem latn NLD;
+
+feature aalt {
+# automatic
+feature locl;
+feature case;
+feature salt;
+feature ss01;
+} aalt;
+
+feature ccmp {
+# automatic
+lookup ccmp_Other_1 {
+	@CombiningTopAccents = [acutecomb brevecomb caroncomb circumflexcomb commaturnedabovecomb dieresiscomb dotaccentcomb gravecomb hungarumlautcomb macroncomb ringcomb tildecomb];
+	@CombiningNonTopAccents = [cedillacomb ogonekcomb slashlongcomb slashshortcomb strokelongcomb strokeshortcomb];
+	sub [i j]' @CombiningTopAccents by [idotless jdotless];
+	sub [i j]' @CombiningNonTopAccents @CombiningTopAccents by [idotless jdotless];
+} ccmp_Other_1;
+} ccmp;
+
+feature locl {
+# automatic
+lookup locl_latn_0 {
+	script latn;
+	language AZE;
+	language CRT;
+	language KAZ;
+	language TAT;
+	language TRK;
+	sub i by idotaccent;
+} locl_latn_0;
+
+lookup locl_latn_1 {
+	script latn;
+	language ROM;
+	language MOL;
+	sub Scedilla by Scommaaccent;
+	sub scedilla by scommaaccent;
+	sub Tcedilla by Tcommaaccent;
+	sub tcedilla by tcommaaccent;
+} locl_latn_1;
+
+lookup locl_latn_2 {
+	script latn;
+	language CAT;
+	sub  l' periodcentered' l by ldot;
+	sub  L' periodcentered' L by Ldot;
+} locl_latn_2;
+
+lookup locl_latn_3 {
+	script latn;
+	language NLD;
+	sub iacute j' by jacute;
+	sub Iacute J' by Jacute;
+} locl_latn_3;
+} locl;
+
+feature case {
+# automatic
+sub at by at.case;
+} case;
+
+feature cpsp {
+# automatic
+pos @Uppercase <5 0 10 0>;
+} cpsp;
+
+feature salt {
+# automatic
+sub a by a.ss01;
+sub g by g.ss01;
+} salt;
+
+feature ss01 {
+# automatic
+sub a by a.ss01;
+sub aacute by aacute.ss01;
+sub abreve by abreve.ss01;
+sub acircumflex by acircumflex.ss01;
+sub adieresis by adieresis.ss01;
+sub agrave by agrave.ss01;
+sub amacron by amacron.ss01;
+sub aogonek by aogonek.ss01;
+sub aring by aring.ss01;
+sub atilde by atilde.ss01;
+sub g by g.ss01;
+sub gbreve by gbreve.ss01;
+sub gcircumflex by gcircumflex.ss01;
+sub gcommaaccent by gcommaaccent.ss01;
+sub gdotaccent by gdotaccent.ss01;
+} ss01;
+

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="arrowleft" format="1">
+  <advance width="692"/>
+  <unicode hex="2190"/>
+  <outline>
+    <component base="arrowright" xScale="-1" xOffset="692"/>
+  </outline>
+  <lib>
+    <dict>
+      <key>com.schriftgestaltung.Glyphs.ComponentInfo</key>
+      <array>
+        <dict>
+          <key>alignment</key>
+          <integer>1</integer>
+          <key>index</key>
+          <integer>0</integer>
+          <key>name</key>
+          <string>arrowright</string>
+        </dict>
+      </array>
+    </dict>
+  </lib>
+</glyph>

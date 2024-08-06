@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="less" format="1">
+  <advance width="438"/>
+  <unicode hex="003C"/>
+  <note>
+    less
+  </note>
+  <outline>
+    <component base="greater" xScale="-1" xOffset="438"/>
+  </outline>
+  <lib>
+    <dict>
+      <key>com.schriftgestaltung.Glyphs.ComponentInfo</key>
+      <array>
+        <dict>
+          <key>alignment</key>
+          <integer>1</integer>
+          <key>index</key>
+          <integer>0</integer>
+          <key>name</key>
+          <string>greater</string>
+        </dict>
+      </array>
+      <key>com.schriftgestaltung.Glyphs.leftMetricsKey</key>
+      <string>=|greater</string>
+      <key>com.schriftgestaltung.Glyphs.rightMetricsKey</key>
+      <string>=|greater</string>
+    </dict>
+  </lib>
+</glyph>

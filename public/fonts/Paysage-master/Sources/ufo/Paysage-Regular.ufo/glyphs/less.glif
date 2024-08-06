@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="less" format="1">
+  <advance width="357"/>
+  <unicode hex="003C"/>
+  <note>
+    less
+  </note>
+  <outline>
+    <component base="greater" xScale="-1" xOffset="357"/>
+  </outline>
+  <lib>
+    <dict>
+      <key>com.schriftgestaltung.Glyphs.lastChange</key>
+      <string>2018-01-09 09:49:18 +0000</string>
+      <key>com.schriftgestaltung.Glyphs.leftMetricsKey</key>
+      <string>=|greater</string>
+      <key>com.schriftgestaltung.Glyphs.rightMetricsKey</key>
+      <string>=|greater</string>
+    </dict>
+  </lib>
+</glyph>

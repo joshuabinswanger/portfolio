@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="d" format="1">
+  <advance width="580"/>
+  <unicode hex="0064"/>
+  <note>
+    d
+  </note>
+  <outline>
+    <component base="b" xScale="-1" xOffset="580"/>
+    <contour>
+      <point x="285" y="0" type="move" name="bottom"/>
+    </contour>
+    <contour>
+      <point x="425" y="552" type="move" name="center"/>
+    </contour>
+    <contour>
+      <point x="456" y="680" type="move" name="top"/>
+    </contour>
+    <contour>
+      <point x="540" y="680" type="move" name="topright"/>
+    </contour>
+  </outline>
+  <lib>
+    <dict>
+      <key>com.schriftgestaltung.Glyphs.leftMetricsKey</key>
+      <string>q</string>
+      <key>com.schriftgestaltung.Glyphs.rightMetricsKey</key>
+      <string>n</string>
+    </dict>
+  </lib>
+</glyph>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="dotelessi" format="1">
+  <advance width="270"/>
+  <outline>
+    <contour>
+      <point x="220" y="0" type="line"/>
+      <point x="50" y="0" type="line"/>
+      <point x="50" y="460" type="line"/>
+      <point x="220" y="460" type="line"/>
+    </contour>
+    <contour>
+      <point x="135" y="460" type="move" name="top"/>
+    </contour>
+  </outline>
+  <lib>
+    <dict>
+      <key>com.schriftgestaltung.Glyphs.leftMetricsKey</key>
+      <string>n</string>
+      <key>com.schriftgestaltung.Glyphs.rightMetricsKey</key>
+      <string>=|n</string>
+    </dict>
+  </lib>
+</glyph>

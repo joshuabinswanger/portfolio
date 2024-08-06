@@ -1,0 +1,12 @@
+/* Webfont: PowerGroteskTrial-HeavyItalic */@font-face {
+    font-family: 'PowerGroteskTrialHeavyIta';
+    src: url('PowerGroteskTrial-HeavyItalic.eot'); /* IE9 Compat Modes */
+    src: url('PowerGroteskTrial-HeavyItalic.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('PowerGroteskTrial-HeavyItalic.woff') format('woff'), /* Modern Browsers */
+         url('PowerGroteskTrial-HeavyItalic.woff2') format('woff2'), /* Modern Browsers */
+         url('PowerGroteskTrial-HeavyItalic.ttf') format('truetype'); /* Safari, Android, iOS */
+             font-style: italic;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+
