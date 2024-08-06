@@ -1,7 +1,7 @@
 {
   "name": "Portfolio_V1",
   "packageManager": "yarn@4.3.1",
-  "browserslist":[
+  "browserslist": [
     "defaults"
   ],
   "scripts": {
@@ -14,7 +14,8 @@
     "@rive-app/canvas": "^2.19.6",
     "astro": "^4.12.3",
     "autoprefixer": "^10.4.20",
-    "postcss-preset-env": "^10.0.0"
+    "postcss-preset-env": "^10.0.0",
+    "sharp": "^0.33.4"
   },
   "devDependencies": {
     "postcss": "^8.4.40"

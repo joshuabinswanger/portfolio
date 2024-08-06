@@ -31,7 +31,8 @@ const RAW_RUNTIME_STATE =
           ["astro", "npm:4.12.3"],\
           ["autoprefixer", "virtual:6296caf76b68a04b370cb4c18172e62fa1005871ae304a93d04298d0cabb6527af75e2f64b77d6d88c71aa25e03749dd4acf5b195d3b4ced8f39ac17b367227d#npm:10.4.20"],\
           ["postcss", "npm:8.4.40"],\
-          ["postcss-preset-env", "virtual:6296caf76b68a04b370cb4c18172e62fa1005871ae304a93d04298d0cabb6527af75e2f64b77d6d88c71aa25e03749dd4acf5b195d3b4ced8f39ac17b367227d#npm:10.0.0"]\
+          ["postcss-preset-env", "virtual:6296caf76b68a04b370cb4c18172e62fa1005871ae304a93d04298d0cabb6527af75e2f64b77d6d88c71aa25e03749dd4acf5b195d3b4ced8f39ac17b367227d#npm:10.0.0"],\
+          ["sharp", "npm:0.33.4"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -2192,7 +2193,8 @@ const RAW_RUNTIME_STATE =
           ["astro", "npm:4.12.3"],\
           ["autoprefixer", "virtual:6296caf76b68a04b370cb4c18172e62fa1005871ae304a93d04298d0cabb6527af75e2f64b77d6d88c71aa25e03749dd4acf5b195d3b4ced8f39ac17b367227d#npm:10.4.20"],\
           ["postcss", "npm:8.4.40"],\
-          ["postcss-preset-env", "virtual:6296caf76b68a04b370cb4c18172e62fa1005871ae304a93d04298d0cabb6527af75e2f64b77d6d88c71aa25e03749dd4acf5b195d3b4ced8f39ac17b367227d#npm:10.0.0"]\
+          ["postcss-preset-env", "virtual:6296caf76b68a04b370cb4c18172e62fa1005871ae304a93d04298d0cabb6527af75e2f64b77d6d88c71aa25e03749dd4acf5b195d3b4ced8f39ac17b367227d#npm:10.0.0"],\
+          ["sharp", "npm:0.33.4"]\
         ],\
         "linkType": "SOFT"\
       }]\

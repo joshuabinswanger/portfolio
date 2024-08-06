@@ -1479,6 +1479,7 @@ __metadata:
     autoprefixer: "npm:^10.4.20"
     postcss: "npm:^8.4.40"
     postcss-preset-env: "npm:^10.0.0"
+    sharp: "npm:^0.33.4"
   languageName: unknown
   linkType: soft
 
@@ -4844,7 +4845,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sharp@npm:^0.33.3":
+"sharp@npm:^0.33.3, sharp@npm:^0.33.4":
   version: 0.33.4
   resolution: "sharp@npm:0.33.4"
   dependencies:
