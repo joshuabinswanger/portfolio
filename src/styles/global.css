@@ -53,10 +53,10 @@
   --font-size-desktop-wide: calc(0.9rem + 1vw / 7);
 
   /* Columns */
-  --grid-template-columns-desktop: 17ch 1fr;
+  --grid-template-columns-desktop: 0fr 17ch 1fr;
   --grid-template-columns-mobile: 1fr;
-  --grid-template-columns-tablet: 12ch 1fr;
-  --grid-template-columns-desktop-wide: 17ch 1fr;
+  --grid-template-columns-tablet: 0fr 12ch 1fr;
+  --grid-template-columns-desktop-wide: 0fr 17ch 1fr;
 }
 /* Media Queries Breakpoints*/
 @custom-media --bp-mobile (width <= 650px);

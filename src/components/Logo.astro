@@ -1,11 +1,12 @@
 ---
 import { Picture } from "astro:assets"
-import RhizomLogo from "../assets/Logo_V3_Dark.png"
+import RhizomLogo from "../assets/Logo_V3_Light.svg"
 ---
 
 <div id="Logo">
 
-    <a href="/"><Picture src={RhizomLogo} id="Picture" alt="Rhizom Logo"></a>
+<!--     <Fragment set:html={RhizomLogo} /> -->
+    <a href="/"><Picture src={RhizomLogo} format="svg" id="Picture" alt="Rhizom Logo"></a>
 
 </div>
 
