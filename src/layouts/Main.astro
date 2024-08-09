@@ -1,11 +1,13 @@
 ---
 import Footer from "../components/Footer.astro"
+import { ViewTransitions } from 'astro:transitions';
+import { fade } from 'astro:transitions';
 
 import "../styles/global.css";
 
 const { title, description } = Astro.props;
 ---
-<html lang="en" style="height: 100%">
+<html lang="en" style="height: 100%" transition:animate={fade({ duration: '0.6s' })}>
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -13,6 +15,7 @@ const { title, description } = Astro.props;
     <meta name="generator" content={Astro.generator} />
 
     <meta name="description" content={description} />
+    <ViewTransitions />
  
     <title>{title}</title>
   </head>
