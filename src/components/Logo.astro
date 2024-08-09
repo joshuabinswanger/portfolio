@@ -1,0 +1,45 @@
+---
+import { Picture } from "astro:assets"
+import RhizomLogo from "../assets/Logo_V3_Dark.png"
+---
+
+<div id="Logo">
+
+    <a href="/"><Picture src={RhizomLogo} id="Picture" alt="Rhizom Logo"></a>
+
+</div>
+
+
+<style>
+@import "../styles/global.css";
+
+#Logo{
+    z-index: 1003;
+    width: 90%;
+
+@media (--bp-mobile){
+    position: fixed;
+    left: 10px;
+    top: 9px;
+    width: 25%;
+  }
+
+@media (--bp-tablet){
+    width: 100%;
+  }
+
+@media (--bp-desktop-wide) {
+			width: 90%;
+		}
+
+}
+
+
+
+
+#Picture{
+    width: 100%;
+    height: auto;
+}
+
+</style>

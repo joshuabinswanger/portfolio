@@ -29,7 +29,7 @@
 :root {
   /* Top Padding */
   --padding-desktop: 5rem;
-  --padding-mobile: 1rem;
+  --padding-mobile: 3rem;
   --padding-tablet: 2rem;
   --padding-desktop-wide: 6rem;
 
@@ -51,6 +51,12 @@
   --font-size-mobile: calc(0.44rem + 2vw);
   --font-size-tablet: 0.8rem;
   --font-size-desktop-wide: calc(0.9rem + 1vw / 7);
+
+  /* Columns */
+  --grid-template-columns-desktop: 17ch 1fr;
+  --grid-template-columns-mobile: 1fr;
+  --grid-template-columns-tablet: 12ch 1fr;
+  --grid-template-columns-desktop-wide: 17ch 1fr;
 }
 /* Media Queries Breakpoints*/
 @custom-media --bp-mobile (width <= 650px);

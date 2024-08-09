@@ -1,0 +1,51 @@
+---
+
+---
+
+<div id="TopWrapper">
+
+    <slot />
+
+</div>
+
+
+
+
+
+
+<style>
+@import "../styles/global.css";
+
+#TopWrapper{
+
+    display: grid; 
+	grid-template-columns: var(--grid-template-columns-desktop); 
+	row-gap: 0.25rem;
+	column-gap: 1rem;
+	margin-left: var(--margin-left-dekstop);
+	margin-right: var(--margin-right-desktop);
+
+	@media (--bp-mobile) {
+		grid-template-columns: var(--grid-template-columns-mobile);
+		margin-left: var(--margin-left-mobile);
+		margin-right: var(--margin-right-mobile);
+	}
+
+	@media (--bp-tablet){
+		grid-template-columns: var(--grid-template-columns-tablet);
+		margin-left: var(--margin-left-tablet);
+		margin-right: var(--margin-right-tablet);
+	}
+
+	@media (--bp-desktop-wide) {
+		grid-template-columns: var(--grid-template-columns-desktop-wide);
+		column-gap: 4rem;
+		margin-left: var(--margin-left-desktop-wide);
+		margin-right: var(--margin-right-desktop-wide);
+	}
+
+
+}
+
+
+</style>

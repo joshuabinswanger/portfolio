@@ -2,97 +2,98 @@
 import ImageElement from "./ImageElement.astro";
 import NavigationBar from "./NavigationBar.astro"
 import NavigationBarMobile from "./NavigationBarMobile.astro"
+import TopWrapper from "../layouts/TopWrapper.astro";
 import "../styles/global.css";
 
 ---
-<div id="GalleryTopWrapper">
-    
 
-	<div id="NavBar">
-	  <NavigationBar />
-	</div>
+
+<TopWrapper>
+    
+	<NavigationBar />
 
 	<div id="GalleryElementWrapper">
 
-			<div id="GalleryElement1" class:list={"Fade"}  style="grid-column: 1;">
-					<ImageElement 
-					grid_three="0fr 2fr 3fr"
-					to="/projects/alice-in-woodland"
-					title="ALICE IN WOODLAND"
-					tools="3D Interactive"
-					altText="This is a Test"
-					imagePath="/src/assets/projects/aliceinwoodland/gallery_image/AliceGalelryImage.jpg"
-					onhover_imagePath="/src/assets/projects/aliceinwoodland/gallery_image/AliceGalelryImage.jpg"
-					/>
-			</div>
-			
-			<div id="GalleryElement2" class:list={"Fade"}   style="grid-column: 1;">
+		<div id="GalleryElement1" class:list={"Fade"}  style="grid-column: 1;">
 				<ImageElement 
-				grid_three="3fr 3fr 0fr"
-				margin_top="2em"
-				to="/projects/borkenkaefer"
-				title="Borkenkäfer"
-				tools="2D Poster"
-				altText="This is a Test"
-				imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
-				onhover_imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
-				/>
-			</div>
-
-			<div id="GalleryElement3" class:list={"Fade"}   style="grid-column: 1; height:auto;">
-				<ImageElement 
-				grid_three="0fr 5fr 4fr"
-				margin_top="0vw"
+				grid_three="0fr 2fr 3fr"
 				to="/projects/alice-in-woodland"
-				title="Alice in Woodland"
+				title="ALICE IN WOODLAND"
 				tools="3D Interactive"
 				altText="This is a Test"
 				imagePath="/src/assets/projects/aliceinwoodland/gallery_image/AliceGalelryImage.jpg"
 				onhover_imagePath="/src/assets/projects/aliceinwoodland/gallery_image/AliceGalelryImage.jpg"
 				/>
-			</div>
+		</div>
+		
+		<div id="GalleryElement2" class:list={"Fade"}   style="grid-column: 1;">
+			<ImageElement 
+			grid_three="3fr 3fr 0fr"
+			margin_top="2em"
+			to="/projects/borkenkaefer"
+			title="Borkenkäfer"
+			tools="2D Poster"
+			altText="This is a Test"
+			imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
+			onhover_imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
+			/>
+		</div>
 
-			<div id="GalleryElement4" class:list={"Fade"}  style="grid-column: 1;">
-				<ImageElement 
-				grid_three="4fr 2fr 0fr"
-				margin_top="2em"
-				to="/projects/borkenkaefer"
-				title="Borkenkaefer"
-				tools="2D Poster"
-				altText="This is a Test"
-				imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
-				onhover_imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
-				/>
-			</div>
+		<div id="GalleryElement3" class:list={"Fade"}   style="grid-column: 1; height:auto;">
+			<ImageElement 
+			grid_three="0fr 5fr 4fr"
+			margin_top="0vw"
+			to="/projects/alice-in-woodland"
+			title="Alice in Woodland"
+			tools="3D Interactive"
+			altText="This is a Test"
+			imagePath="/src/assets/projects/aliceinwoodland/gallery_image/AliceGalelryImage.jpg"
+			onhover_imagePath="/src/assets/projects/aliceinwoodland/gallery_image/AliceGalelryImage.jpg"
+			/>
+		</div>
 
-			<div id="GalleryElement5" class:list={"Fade"}  style="grid-column: 1;">
-				<ImageElement 
-				grid_three="0fr 4fr 6fr"
-				margin_top="1em"
-				to="/projects/borkenkaefer"
-				title="Borkenkaefer"
-				tools="2D Poster"
-				altText="This is a Test"
-				imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
-				onhover_imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
-				/>
-			</div>
+		<div id="GalleryElement4" class:list={"Fade"}  style="grid-column: 1;">
+			<ImageElement 
+			grid_three="4fr 2fr 0fr"
+			margin_top="2em"
+			to="/projects/borkenkaefer"
+			title="Borkenkaefer"
+			tools="2D Poster"
+			altText="This is a Test"
+			imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
+			onhover_imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
+			/>
+		</div>
 
-			<div id="GalleryElement6" class:list={"Fade"}   style="grid-column: 1;">
-				<ImageElement 
-				grid_three="4fr 4fr 0fr"
-				margin_top="-2em"
-				to="/projects/borkenkaefer"
-				title="Borkenkaefer"
-				tools="2D Poster"
-				altText="This is a Test"
-				imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
-				onhover_imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
-				/>
-			</div>
-		</div>	
+		<div id="GalleryElement5" class:list={"Fade"}  style="grid-column: 1;">
+			<ImageElement 
+			grid_three="0fr 4fr 6fr"
+			margin_top="1em"
+			to="/projects/borkenkaefer"
+			title="Borkenkaefer"
+			tools="2D Poster"
+			altText="This is a Test"
+			imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
+			onhover_imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
+			/>
+		</div>
 
-</div>
+		<div id="GalleryElement6" class:list={"Fade"}   style="grid-column: 1;">
+			<ImageElement 
+			grid_three="4fr 4fr 0fr"
+			margin_top="-2em"
+			to="/projects/borkenkaefer"
+			title="Borkenkaefer"
+			tools="2D Poster"
+			altText="This is a Test"
+			imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
+			onhover_imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
+			/>
+		</div>
+	</div>	
+
+<TopWrapper />
+
 <div id="NavBarMobile">
 	<NavigationBarMobile />
 </div>  
@@ -101,37 +102,6 @@ import "../styles/global.css";
 <style>
 @import "../styles/global.css";
 
-#GalleryTopWrapper {	
-	display: grid; 
-	grid-template-columns: 13ch 1fr; 
-	row-gap: 0.25rem;
-	column-gap: 1rem;
-	margin-left: var(--margin-left-dekstop);
-	margin-right: var(--margin-right-desktop);
-
-	@media (--bp-mobile) {
-		grid-template-columns: 1fr;
-		margin-left: var(--margin-left-mobile);
-		margin-right: var(--margin-right-mobile);
-	}
-
-	@media (--bp-tablet){
-		grid-template-columns: 12ch 1fr;
-		margin-left: var(--margin-left-tablet);
-		margin-right: var(--margin-right-tablet);
-	}
-
-	@media (--bp-desktop-wide) {
-		grid-template-columns: 17ch 1fr;
-		column-gap: 4rem;
-		margin-left: var(--margin-left-desktop-wide);
-		margin-right: var(--margin-right-desktop-wide);
-	}
-}
-
-#NavBar {
-	top: 0px;
-	}
 
 #GalleryElementWrapper {
 	display: grid; 

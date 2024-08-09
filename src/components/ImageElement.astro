@@ -9,6 +9,7 @@ interface Props {
     to: string;
     title: string;
     tools: string;
+    VerticalBar: string;
     altText: string;
     imagePath: string;
     onhover_imagePath: string;
@@ -16,11 +17,23 @@ interface Props {
   };
   
 // Get component props from Astro.props
-const { grid_three, margin_top, text_size, to, title, tools, imagePath, onhover_imagePath } = Astro.props;
+const { grid_three, margin_top, text_size, to, title, tools, VerticalBar, imagePath, onhover_imagePath } = Astro.props;
 
 //Import all image paths to check against the passed in strings
 const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,webp}');
 if (!images[imagePath]) throw new Error(`"${imagePath}" does not exist in glob: "src/assets/**/*.{jpeg,jpg,png,gif,webp}"`);
+
+//Check if VertBar
+/* let VerticalBarClass; */
+
+const VerticalBarClass = title && tools ? "yes" : "no";
+
+/* if (VerticalBar === "yes") {
+  VerticalBarClass = "yes";
+} else {
+  VerticalBarClass = "no";
+}
+ */
 ---
 
 
@@ -36,9 +49,8 @@ if (!images[imagePath]) throw new Error(`"${imagePath}" does not exist in glob: 
        <a href={to}><Picture src={images[imagePath]()} alt="empty" style="width: 100%; height: auto;"></a> 
     </div>
 
-    <div id= "TextGrid">
-      <div id="Image_Title">{title}</div>
-      <div id="Image_Tools">{tools}</div>  
+    <div id="Image_Title">
+      {title}<span id="VertBar" class:list={VerticalBarClass}>&emsp;|&emsp;</span>{tools}
     </div>
 
   </div>
@@ -56,41 +68,32 @@ if (!images[imagePath]) throw new Error(`"${imagePath}" does not exist in glob: 
 <style define:vars={{ grid_three, margin_top }}>
 @import "../styles/global.css";
 
+#VertBar{
+  display:none;
+}
+
+#VertBar.yes {
+    display: block;
+}
 /* Text Size*/
 
-  #Image_Title{
-    font-size: var(--font-size-normal);
+#Image_Title{
+  display: flex;
+  font-size: calc(var(--font-size-normal) * 0.8);
 
-    @media (--bp-mobile){
-      font-size: var(--font-size-mobile);
-    }
-    
-    @media (--bp-tablet){
-      font-size: var(--font-size-tablet);
-    }
 
-    @media (--bp-desktop-wide){
-      font-size: var(--font-size-desktop-wide);
-    }
+  @media (--bp-mobile){
+    font-size: var(--font-size-mobile);
   }
 
-  #Image_Tools{
-    text-align: end;
-    font-size: var(--font-size-normal);
-
-
-    @media (--bp-mobile){
-      font-size: var(--font-size-mobile);
-    }
-
-    @media (--bp-tablet){
-      font-size: var(--font-size-tablet);
-    }
-
-    @media (--bp-desktop-wide){
-      font-size: var(--font-size-desktop-wide);
-    }
+  @media (--bp-tablet){
+    font-size: calc(var(--font-size-tablet) * 0.8) ;
   }
+
+  @media (--bp-desktop-wide){
+    font-size: calc(var(--font-size-desktop-wide) * 0.8);
+  }
+}
 
 /*Gallery Row Wrapper */
 
@@ -105,14 +108,6 @@ if (!images[imagePath]) throw new Error(`"${imagePath}" does not exist in glob: 
     }
   }
 
-
-
-/*Gallery Text Grid */
-#TextGrid {
-  display: grid; 
-   margin-top: 2px;
-  grid-template-columns: 1fr 1fr;
-}
 
 /*Fade */
 
