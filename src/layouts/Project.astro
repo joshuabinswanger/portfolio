@@ -5,6 +5,11 @@ import NavigationBarMobile from "../components/NavigationBarMobile.astro"
 import "../styles/global.css";
 
 ---
+
+<div id="NavBarMobile">
+	<NavigationBarMobile />
+</div>  
+
 <div id="ProjectTopWrapper">
       
 	<div id="NavBar">
@@ -19,12 +24,6 @@ import "../styles/global.css";
 	</div>	
 
 </div>
-<div id="NavBarMobile">
-	<NavigationBarMobile />
-</div>  
-
-
-
 
 <style>
 @import "../styles/global.css";
@@ -65,7 +64,7 @@ import "../styles/global.css";
 	align-content: start;
 	grid-row-gap: 1em; 
 	grid-auto-rows: auto;
-	pointer-events: none;
+
 	margin-top: var(--padding-desktop); 
 
 	@media (--bp-mobile) {
@@ -80,6 +79,14 @@ import "../styles/global.css";
 	@media (--bp-desktop-wide) {
 		margin-top: var( --padding-desktop-wide);
 		}
+}
+
+#ProjectElementWrapper *{
+	pointer-events: auto;
+}
+/* Disable pointer events on ProjectElementWrapper when input is checked */
+input:checked ~ #ProjectElementWrapper * {
+    pointer-events: none;
 }
 
 

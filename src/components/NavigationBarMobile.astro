@@ -18,7 +18,9 @@ import "../styles/global.css"
 ---
 <nav id="NavBarMobile">
 
-  <RhizomLogo />
+  <div id="logoContainer">
+    <RhizomLogo />
+  </div>
   
 
   <input id="input" type="checkbox"></input>
@@ -53,17 +55,17 @@ import "../styles/global.css"
 <style>
 @import "../styles/global.css";
 
-#Logo{
-
+#logoContainer {
+    pointer-events: auto;
+    cursor: pointer;
 }
+
 
 #NavBarMobile {
 	display: none;
 
 		@media (--bp-mobile) {
 			display: block;
-      pointer-events: none;
-			
 		}
 }
 
@@ -76,6 +78,56 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+#list {
+  position: fixed;
+  display: none;
+  top: 0;
+  left: 0;
+  padding-top: 25vh;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  justify-items: center;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+input:checked{
+  ~ #list{
+    display: static;
+    z-index: 1000;
+    ul {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+}
+
+ul {
+  font-size: 1.33rem; 
+  pointer-events: auto;
+  visibility: hidden;
+  opacity: 0;
+  padding: 0rem;
+  transition: opacity 0.78s 0.22s ease, visibility 1s 0.22s;
+  z-index: 1001;
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    font-style: normal;
+    font-weight: normal;
+  }
+}
+
+p {
+  margin: 0.75rem; 
+  margin-left: 0px; 
+  margin-top: 0px;
+}
+
+
 
 #input {
   display: block;
@@ -158,6 +210,7 @@ input:checked {
     backdrop-filter: blur(0);
     transition: backdrop-filter 1s ease, background-color 1s ease;
     z-index: 998;
+    pointer-events: none;
   }
 
   input:checked {
@@ -165,52 +218,11 @@ input:checked {
       display: block;
       background-color: rgba(255, 255, 255, 0.88); /* Example style */
       backdrop-filter: blur(15px);
+      pointer-events: auto;
     }
   }
 
-#list {
-  position: fixed;
-  top: 0;
-  left: 0;
-  padding-top: 25vh;
-  width: 100%;
-  height: 100%;
-  display: grid;
-  justify-items: center;
-  z-index: 1000;
-}
 
-input:checked{
-  ~ #list{
-    ul {
-      visibility: visible;
-      opacity: 1;
-    }
-  }
-}
-
-ul {
-  font-size: 1.33rem; 
-  pointer-events: auto;
-  visibility: hidden;
-  opacity: 0;
-  padding: 0rem;
-  transition: opacity 0.78s 0.22s ease, visibility 1s 0.22s;
-  z-index: 1001;
-
-  a {
-    text-decoration: none;
-    color: inherit;
-    font-style: normal;
-    font-weight: normal;
-  }
-}
-
-p {
-  margin: 0.75rem; 
-  margin-left: 0px; 
-  margin-top: 0px;
-}
 
 </style>
 
