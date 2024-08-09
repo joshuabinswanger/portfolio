@@ -39,7 +39,7 @@ const VerticalBarClass = title && tools ? "yes" : "no";
 
   <div id="ImageAndText_Wrapper" class:list={"hidden"} style="display: grid; pointer-events: auto;">
     <div id="GalleryImage">
-       <a href={to}><Picture transition:name={imagePath} src={images[imagePath]()} alt="empty" style="width: 100%; height: auto;"></a> 
+       <a href={to}><Picture src={images[imagePath]()} alt="empty" style="width: 100%; height: auto;"></a> 
     </div>
 
     <div id="Image_Title">
