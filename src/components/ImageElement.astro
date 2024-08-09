@@ -26,19 +26,19 @@ if (!images[imagePath]) throw new Error(`"${imagePath}" does not exist in glob: 
 
 
 
-<div id="GalleryRow_Wrapper" style="height:auto;" >
+<div id="Image_Wrapper" style="height:auto;" >
   <div id="Spacer" style="pointer-events: none;">
     {/*this is an empty div*/}
   </div>
 
-  <div id="GalleryImageAndText_Wrapper" class:list={"hidden"} style="display: grid; pointer-events: auto;">
+  <div id="ImageAndText_Wrapper" class:list={"hidden"} style="display: grid; pointer-events: auto;">
     <div id="GalleryImage">
        <a href={to}><Picture src={images[imagePath]()} alt="empty" style="width: 100%; height: auto;"></a> 
     </div>
 
-    <div id= "GalleryTextGrid">
-      <div id="GalleryImage_Title">{title}</div>
-      <div id="GalleryImage_Tools">{tools}</div>  
+    <div id= "TextGrid">
+      <div id="Image_Title">{title}</div>
+      <div id="Image_Tools">{tools}</div>  
     </div>
 
   </div>
@@ -58,11 +58,15 @@ if (!images[imagePath]) throw new Error(`"${imagePath}" does not exist in glob: 
 
 /* Text Size*/
 
-  #GalleryImage_Title{
+  #Image_Title{
     font-size: var(--font-size-normal);
 
     @media (--bp-mobile){
       font-size: var(--font-size-mobile);
+    }
+    
+    @media (--bp-tablet){
+      font-size: var(--font-size-tablet);
     }
 
     @media (--bp-desktop-wide){
@@ -70,13 +74,17 @@ if (!images[imagePath]) throw new Error(`"${imagePath}" does not exist in glob: 
     }
   }
 
-  #GalleryImage_Tools{
+  #Image_Tools{
     text-align: end;
     font-size: var(--font-size-normal);
 
 
     @media (--bp-mobile){
       font-size: var(--font-size-mobile);
+    }
+
+    @media (--bp-tablet){
+      font-size: var(--font-size-tablet);
     }
 
     @media (--bp-desktop-wide){
@@ -86,7 +94,7 @@ if (!images[imagePath]) throw new Error(`"${imagePath}" does not exist in glob: 
 
 /*Gallery Row Wrapper */
 
-  #GalleryRow_Wrapper { 
+  #Image_Wrapper { 
     display: grid; 
     grid-template-columns: var(--grid_three); 
     margin-top: var(--margin_top);
@@ -100,24 +108,25 @@ if (!images[imagePath]) throw new Error(`"${imagePath}" does not exist in glob: 
 
 
 /*Gallery Text Grid */
-#GalleryTextGrid {
+#TextGrid {
   display: grid; 
+   margin-top: 2px;
   grid-template-columns: 1fr 1fr;
 }
 
 /*Fade */
 
 .hidden{
-  opacity: 0;
-  filter: blur(0.5px);
+  opacity: 0.22;
+  filter: contrast(0.66) sepia(.8) blur(2px) grayscale(0.8);
   transition: all 0.66s;
   transform: translateY(10%);
 }
 
 .show {
   opacity: 1;
-  filter: blur(0);
-  transform: translateY(0)
+  filter:  contrast(1) brightness(1) sepia(0) blur(0px) grayscale(0);
+  transform: translateY(0);
 }
 
 
@@ -125,6 +134,11 @@ if (!images[imagePath]) throw new Error(`"${imagePath}" does not exist in glob: 
 </style>
 
 <script>
+
+let options = {
+  rootMargin: "100px 0px -88px 0px",
+};
+
 	// Define the behaviour for our new type of HTML element.
 	const observer = new IntersectionObserver((entries) => {  
 			entries.forEach((entry) => {
@@ -137,7 +151,7 @@ if (!images[imagePath]) throw new Error(`"${imagePath}" does not exist in glob: 
 				}
 	
 		});
-	 });
+	 }, options);
 	
 	const fadeElements = document.querySelectorAll(".hidden");
 	fadeElements.forEach((el) => observer.observe(el));

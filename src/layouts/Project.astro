@@ -1,0 +1,129 @@
+---
+import Image from "../components/ImageElement.astro";
+import NavigationBar from "../components/NavigationBar.astro"
+import NavigationBarMobile from "../components/NavigationBarMobile.astro"
+import "../styles/global.css";
+
+---
+<div id="ProjectTopWrapper">
+      
+	<div id="NavBar">
+	  <NavigationBar />
+	</div>
+
+	<div id="ProjectElementWrapper">
+
+		{/* We want the content of each page to go here */}
+		<slot />
+			
+	</div>	
+
+</div>
+<div id="NavBarMobile">
+	<NavigationBarMobile />
+</div>  
+
+
+
+
+<style>
+@import "../styles/global.css";
+
+#ProjectTopWrapper {	
+	display: grid; 
+	grid-template-columns: 17ch 1fr; 
+	row-gap: 0;
+	column-gap: 2rem;
+	margin-left: var(--margin-left-dekstop);
+	margin-right: var(--margin-right-dekstop);
+
+	@media (--bp-mobile) {
+		grid-template-columns:1fr;
+		margin-left: var(--margin-left-mobile);
+		margin-right: var(--margin-right-mobile);
+	}
+
+	@media (--bp-tablet){
+		grid-template-columns: 12ch 1fr;
+		margin-left: var(--margin-left-tablet);
+		margin-right: var(--margin-right-tablet);
+	}
+
+	@media (--bp-desktop-wide) {
+		grid-template-columns: 23ch 1fr;
+		column-gap: 4rem;
+		margin-left: var(--margin-left-desktop-wide);
+		margin-right: var(--margin-right-desktop-wide);
+	}
+
+}
+
+/* #NavBar {
+	position: sticky;
+	align-self: start;
+	top: var(--padding);
+
+		@media (--bp-mobile) {
+			display: none;
+		}
+
+		@media (--bp-desktop-wide) {
+			top: var( --pading-desktop-wide);
+		}
+
+}
+
+#NavBarMobile {
+	display: none;
+
+		@media (--bp-mobile) {
+			display: block;
+			
+		}
+} */
+
+#ProjectElementWrapper {
+	display: grid; 
+	grid-template-columns: 1fr; 
+	align-content: start;
+	grid-row-gap: 1em; 
+	grid-auto-rows: auto;
+	pointer-events: none;
+	margin-top: var(--padding); 
+
+	@media (--bp-mobile) {
+		margin-top: 1em;
+		grid-row-gap: calc( 0.5rem + 2vw); 
+	}
+
+	@media (--bp-desktop-wide) {
+		margin-top: var( --pading-desktop-wide);
+		}
+}
+
+
+
+
+
+
+/* <script>
+	// Define the behaviour for our new type of HTML element.
+	const observer = new IntersectionObserver((entries) => {  
+			entries.forEach((entry) => {
+				console.log(entry)
+				if (entry.isIntersecting){
+					entry.target.classList.add("show");
+				}
+				else	{
+					entry.target.classList.remove("show");
+				}
+	
+		});
+	 });
+	
+	const fadeElements = document.querySelectorAll(".Fade");
+	fadeElements.forEach((el) => observer.observe(el));
+
+	
+</script>
+	 */

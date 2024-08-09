@@ -1,37 +1,59 @@
 @font-face {
   font-family: PowerGroteskUltraLight;
-  src: url(/public/fonts/PowerGroteskTrial-WOFF+CSS/PowerGroteskTrial-UltraLight.woff) format("woff");
-  font-weight: 200;
+  src: url(/public/fonts/PowerGrotesk/PowerGroteskTrial-UltraLight.woff2) format("woff2");
+  font-weight: 100;
 }
 
 @font-face {
-  font-family: PowerGroteskLight;
-  src: url(/public/fonts/PowerGroteskTrial-WOFF+CSS/PowerGroteskTrial-Light.woff) format("woff");
-  font-weight: 200;
+  font-family: PowerGrotesk-Light;
+  src: url(/public/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-light.woff2) format('woff2'),
+       url(/public/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-light.woff) format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-  font-family: PowerGrotesk;
-  src: url(/public/fonts/PowerGroteskTrial-WOFF+CSS/PowerGroteskTrial-Regular.woff) format("woff");
-  font-weight: 200;
+  font-family: PowerGrotesk-Regular;	
+	src: url(/public/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.woff2) format('woff2'),
+       url(/public/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.woff) format('woff');
+/* src: url(/public/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.eot);
+	     url('/public/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.ttf') format('truetype'),
+	     url('/public/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.svg#youworkforthem') format('svg'),
+       url(/public/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.eot?#iefix) format('embedded-opentype'); */
+	font-weight: normal;
+	font-style: normal;
 }
 
-*{
-  font-family: PowerGroteskLight;
-  letter-spacing: 0.33px;
-}
 
 /* Variables */
 :root {
-  --padding: 5rem;
-  --pading-mobile: 1rem;
-  --pading-desktop-wide: 8rem;
-  --font-size-normal: 1rem;
-  --font-size-mobile: calc(0.25rem + 2vw);
-  --font-size-desktop-wide: calc(1rem + 1vw / 5);
+  /* Top Padding */
+  --padding-desktop: 5rem;
+  --padding-mobile: 1rem;
+  --padding-tablet: 2rem;
+  --padding-desktop-wide: 6rem;
+
+  /* Margins */
+  --margin-left-dekstop: 3rem;
+  --margin-right-desktop: 5rem;
+
+  --margin-left-mobile: 27px;
+  --margin-right-mobile: 27px;
+  
+  --margin-left-tablet: 27px;
+  --margin-right-tablet: 44px;
+
+  --margin-left-desktop-wide: clamp(2em, 13vw, 20vw);
+  --margin-right-desktop-wide: clamp(calc(2em + 17ch), calc(13vw + 17ch), calc(20vw + 17ch));
+
+  /* Font Sizes */
+  --font-size-dekstop: 1rem;
+  --font-size-mobile: calc(0.44rem + 2vw);
+  --font-size-tablet: 0.8rem;
+  --font-size-desktop-wide: calc(0.9rem + 1vw / 7);
 }
 /* Media Queries Breakpoints*/
-@custom-media --bp-mobile (width <= 850px);
-@custom-media --bp-tablet (850px <= width <= 1000px);
-@custom-media --bp-desktop (1000px <= width <= 1500px);
-@custom-media --bp-desktop-wide (width >= 1500px);
+@custom-media --bp-mobile (width <= 650px);
+@custom-media --bp-tablet (650px <= width <= 1050px);
+@custom-media --bp-desktop (1050px <= width <= 1800px);
+@custom-media --bp-desktop-wide (width >= 1800px);

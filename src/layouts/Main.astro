@@ -1,8 +1,6 @@
 ---
 import Footer from "../components/Footer.astro"
 
-import NavigationBar from "../components/Gallery.astro"
-
 import "../styles/global.css";
 
 const { title, description } = Astro.props;
@@ -18,7 +16,7 @@ const { title, description } = Astro.props;
  
     <title>{title}</title>
   </head>
-  <body style="min-height: 100%; display: grid; grid-template-rows: 1fr auto;">
+  <body style="min-height: 100%; display: grid; margin: 0; grid-template-rows: 1fr auto;  font-family: PowerGrotesk-Light; letter-spacing: 0.5px;">
 
           {/* We want the content of each page to go here */}
           <slot />
