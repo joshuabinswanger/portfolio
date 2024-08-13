@@ -1,6 +1,7 @@
 ---
 import type { ImageMetadata } from 'astro';
 import { Picture } from 'astro:assets';
+
 import "../styles/global.css";
 
 interface Props {
@@ -13,18 +14,18 @@ interface Props {
     altText: string;
     imagePath: string;
     onhover_imagePath: string;
+    viewtransition_name: string;
     
   };
   
 // Get component props from Astro.props
-const { grid_three, margin_top, text_size, to, title, tools, VerticalBar, imagePath, onhover_imagePath } = Astro.props;
+const { grid_three, margin_top, to, title, tools, VerticalBar, imagePath, onhover_imagePath, viewtransition_name } = Astro.props;
 
 //Import all image paths to check against the passed in strings
 const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,webp}');
 if (!images[imagePath]) throw new Error(`"${imagePath}" does not exist in glob: "src/assets/**/*.{jpeg,jpg,png,gif,webp}"`);
 
 //Check if VertBar
-
 const VerticalBarClass = title && tools ? "yes" : "no";
 
 ---
@@ -32,14 +33,14 @@ const VerticalBarClass = title && tools ? "yes" : "no";
 
 
 
-<div id="Image_Wrapper" style="height:auto;" >
+<div id="Image_Wrapper" style="height:auto;">
   <div id="Spacer" style="pointer-events: none;">
     {/*this is an empty div*/}
   </div>
 
   <div id="ImageAndText_Wrapper" class:list={"hidden"} style="display: grid; pointer-events: auto;">
     <div id="GalleryImage">
-       <a href={to}><Picture src={images[imagePath]()} alt="empty" style="width: 100%; height: auto;"></a> 
+       <a href={to}><Picture  src={images[imagePath]()} alt="empty" style="width: 100%; height: auto;"></a> 
     </div>
 
     <div id="Image_Title">
@@ -59,6 +60,7 @@ const VerticalBarClass = title && tools ? "yes" : "no";
 
 
 <style define:vars={{ grid_three, margin_top }}>
+
 @import "../styles/global.css";
 
 #VertBar{
@@ -72,19 +74,19 @@ const VerticalBarClass = title && tools ? "yes" : "no";
 
 #Image_Title{
   display: flex;
-  font-size: calc(var(--font-size-normal) * 0.8);
+  font-size: calc(var(--font-size-dekstop) - 0.2rem);
 
 
   @media (--bp-mobile){
-    font-size: var(--font-size-mobile);
+    font-size: calc(var(--font-size-mobile) - 0.2rem);
   }
 
   @media (--bp-tablet){
-    font-size: calc(var(--font-size-tablet) * 0.8) ;
+    font-size: calc(var(--font-size-tablet) - 0.2rem);
   }
 
   @media (--bp-desktop-wide){
-    font-size: calc(var(--font-size-desktop-wide) * 0.8);
+    font-size: calc(var(--font-size-desktop-wide)  - 0.2rem);
   }
 }
 
@@ -96,7 +98,6 @@ const VerticalBarClass = title && tools ? "yes" : "no";
     margin-top: var(--margin_top);
 
     @media (--bp-mobile) {
-      grid-template-columns: 1fr; 
       margin-top: 1rem;
     }
   }
@@ -107,7 +108,7 @@ const VerticalBarClass = title && tools ? "yes" : "no";
 .hidden{
   opacity: 0.22;
   filter: contrast(0.66) sepia(.8) blur(2px) grayscale(0.8);
-  transition: all 0.66s;
+  transition: all 1s ease;
   transform: translateY(10%);
 }
 
@@ -122,28 +123,27 @@ const VerticalBarClass = title && tools ? "yes" : "no";
 </style>
 
 <script>
- document.addEventListener('astro:page-load', () => {
 
-let options = {
-  rootMargin: "100px 0px -88px 0px",
-};
 
-	// Define the behaviour for our new type of HTML element.
-	const observer = new IntersectionObserver((entries) => {  
-			entries.forEach((entry) => {
-				console.log(entry)
-				if (entry.isIntersecting){
-					entry.target.classList.add("show");
-				}
-				else	{
-					entry.target.classList.remove("show");
-				}
-	
-		});
-	 }, options);
-	
-	const fadeElements = document.querySelectorAll(".hidden");
-	fadeElements.forEach((el) => observer.observe(el));
-  });
-	
-</script>
+     // IntersectionObserver options
+     let options = {
+         rootMargin: "100px 0px -88px 0px",
+     };
+ 
+     // Define the IntersectionObserver
+     const observer = new IntersectionObserver((entries) => {  
+         entries.forEach((entry) => {
+             console.log(entry);
+             if (entry.isIntersecting) {
+                 entry.target.classList.add("show");
+             } else {
+                 entry.target.classList.remove("show");
+             }
+         });
+     }, options);
+ 
+     // Select elements to observe and start observing them
+     const fadeElements = document.querySelectorAll(".hidden");
+     fadeElements.forEach((el) => observer.observe(el));
+ 
+ </script>

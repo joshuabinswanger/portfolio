@@ -51,7 +51,7 @@ const logoPath = "/assets/Rhizome_Test2.riv";
 
 
 
-<nav id="NavBar">
+<nav id="NavBar" transition:persist transition:animate="none">
 
 <RhizomLogo />
 
@@ -67,7 +67,7 @@ const logoPath = "/assets/Rhizome_Test2.riv";
 @import "../styles/global.css";
 
 ul {
-  font-size: 1rem; 
+  font-size: var(--font-size-dekstop); 
   margin-top: 0px; 
   padding-left: 7px;
 

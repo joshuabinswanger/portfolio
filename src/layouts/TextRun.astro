@@ -41,7 +41,7 @@
 </style>
 
 <script>
-
+document.addEventListener('astro:page-load', () => {
     let options = {
       rootMargin: "100px 0px -88px 0px",
     };
@@ -62,6 +62,8 @@
         
         const fadeElements = document.querySelectorAll(".hidden");
         fadeElements.forEach((el) => observer.observe(el));
+
+});
     
         
     </script>

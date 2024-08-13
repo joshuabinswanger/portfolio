@@ -30,36 +30,41 @@
   /* Top Padding */
   --padding-desktop: 5rem;
   --padding-mobile: 3rem;
-  --padding-tablet: 2rem;
+  --padding-tablet: 1rem;
   --padding-desktop-wide: 6rem;
 
   /* Margins */
-  --margin-left-dekstop: 3rem;
-  --margin-right-desktop: 5rem;
+  --margin-left-dekstop: 0;
+  --margin-right-desktop: 0;
 
-  --margin-left-mobile: 27px;
-  --margin-right-mobile: 27px;
+  --margin-left-mobile: 0px;
+  --margin-right-mobile: 0px;
   
-  --margin-left-tablet: 27px;
-  --margin-right-tablet: 44px;
+  --margin-left-tablet: 0px;
+  --margin-right-tablet: 0px;
 
-  --margin-left-desktop-wide: clamp(2em, 13vw, 20vw);
-  --margin-right-desktop-wide: clamp(calc(2em + 17ch), calc(13vw + 17ch), calc(20vw + 17ch));
+  --margin-left-desktop-wide: 0;
+  --margin-right-desktop-wide: 0;
 
   /* Font Sizes */
-  --font-size-dekstop: 1rem;
-  --font-size-mobile: calc(0.44rem + 2vw);
+  --font-size-dekstop: 0.8rem;
+  --font-size-mobile: 0.8rem;
   --font-size-tablet: 0.8rem;
-  --font-size-desktop-wide: calc(0.9rem + 1vw / 7);
+  --font-size-desktop-wide: 1rem;
 
-  /* Columns */
-  --grid-template-columns-desktop: 0fr 17ch 1fr;
-  --grid-template-columns-mobile: 1fr;
-  --grid-template-columns-tablet: 0fr 12ch 1fr;
-  --grid-template-columns-desktop-wide: 0fr 17ch 1fr;
+  /* Columns mobileNav Nav Spacer Main Spacer*/
+  --grid-template-columns-desktop: 0fr 17ch 1fr 7fr 1.5fr;
+  --grid-template-columns-mobile: 0fr 1ch 1fr 1ch;
+  --grid-template-columns-tablet:0fr 13ch 1fr 11fr 1.5fr;
+  --grid-template-columns-desktop-wide: 0fr 17ch 17ch 1fr 27ch;
 }
 /* Media Queries Breakpoints*/
 @custom-media --bp-mobile (width <= 650px);
 @custom-media --bp-tablet (650px <= width <= 1050px);
 @custom-media --bp-desktop (1050px <= width <= 1800px);
 @custom-media --bp-desktop-wide (width >= 1800px);
+
+
+/* View Transitions */
+
+

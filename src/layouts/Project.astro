@@ -3,12 +3,11 @@ import Image from "../components/ImageElement.astro";
 import NavigationBar from "../components/NavigationBar.astro"
 import NavigationBarMobile from "../components/NavigationBarMobile.astro"
 import "../styles/global.css";
+import TopWrapper from "./TopWrapper.astro";
 
 ---
 
-
-
-<div id="ProjectTopWrapper">
+<TopWrapper>
 	<div id="NavBarMobile">
 		<NavigationBarMobile />
 	</div>  
@@ -17,6 +16,8 @@ import "../styles/global.css";
 	  <NavigationBar />
 	</div>
 
+	<div id="Spacer"></div>
+
 	<div id="ProjectElementWrapper">
 
 		{/* We want the content of each page to go here */}
@@ -24,7 +25,9 @@ import "../styles/global.css";
 			
 	</div>	
 
-</div>
+	<div id="Spacer"></div>
+
+</TopWrapper>
 
 <style>
 @import "../styles/global.css";
