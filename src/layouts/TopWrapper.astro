@@ -1,6 +1,8 @@
 ---
-
+import NavigationBarMobile from "../components/NavigationBarMobile.astro"
 ---
+<NavigationBarMobile />
+
 
 <div id="TopWrapper">
 
@@ -19,14 +21,11 @@
 #TopWrapper{
 
     display: grid; 
-	grid-template-columns: var(--grid-template-columns-desktop); 
-	row-gap: 0.25rem;
-	column-gap: 0rem;
 	margin-left: var(--margin-left-dekstop);
 	margin-right: var(--margin-right-desktop);
 
 	@media (--bp-mobile) {
-		grid-template-columns: var(--grid-template-columns-mobile);
+/* 		grid-template-columns: var(--grid-template-columns-mobile); */
 		margin-left: var(--margin-left-mobile);
 		margin-right: var(--margin-right-mobile);
 	}
@@ -39,7 +38,6 @@
 
 	@media (--bp-desktop-wide) {
 		grid-template-columns: var(--grid-template-columns-desktop-wide);
-		column-gap: 4rem;
 		margin-left: var(--margin-left-desktop-wide);
 		margin-right: var(--margin-right-desktop-wide);
 	}

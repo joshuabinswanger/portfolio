@@ -3,7 +3,7 @@ import { Picture } from "astro:assets"
 import RhizomLogo from "../assets/Logo_V6_Dark.png"
 ---
 
-<div id="Logo">
+<div id="Logo" transition:persist>
 
     <a href="/"><Picture src={RhizomLogo} id="Picture" alt="Rhizom Logo"></a>
 
@@ -29,7 +29,7 @@ import RhizomLogo from "../assets/Logo_V6_Dark.png"
   }
 
 @media (--bp-desktop-wide) {
-			width: 90%;
+			width: 70%%;
 		}
 
 }

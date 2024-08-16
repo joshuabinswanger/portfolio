@@ -8,20 +8,13 @@ import "../styles/global.css";
 ---
 
 <TopWrapper>
-
-	<div id="NavBarMobile">
-		<NavigationBarMobile />
-	</div>  
 	
-    <NavigationBar />
-	
-	<div id="Spacer"></div>
 
 	<div id="GalleryElementWrapper">
 
-		<div id="GalleryElement1" class:list={"Fade"}  style="grid-column: 1;">
+
+		<div class:list={["Fade", "GalleryElement"]}>
 				<ImageElement 
-				grid_three="0fr 2fr 3fr"
 				to="/projects/alice-in-woodland"
 				title="Alice in Woodland"
 				tools="3D Interactive"
@@ -31,10 +24,10 @@ import "../styles/global.css";
 				viewtransition_name="1"
 				/>
 		</div>
-		
-		<div id="GalleryElement2" class:list={"Fade"}   style="grid-column: 1;">
+
+		<div class:list={["Fade", "GalleryElement"]} id="2">
 			<ImageElement 
-			grid_three="3fr 3fr 0fr"
+		
 			margin_top="2em"
 			to="/projects/borkenkaefer"
 			title="Borkenkäfer"
@@ -45,9 +38,9 @@ import "../styles/global.css";
 			/>
 		</div>
 
-		<div id="GalleryElement3" class:list={"Fade"}   style="grid-column: 1; height:auto;">
+		<div class:list={["Fade", "GalleryElement"]}>
 			<ImageElement 
-			grid_three="0fr 5fr 4fr"
+			
 			margin_top="0vw"
 			to="/projects/alice-in-woodland"
 			title="Alice in Woodland"
@@ -58,9 +51,9 @@ import "../styles/global.css";
 			/>
 		</div>
 
-		<div id="GalleryElement4" class:list={"Fade"}  style="grid-column: 1;">
+		<div class:list={["Fade", "GalleryElement" ]}>
 			<ImageElement 
-			grid_three="4fr 2fr 0fr"
+			
 			margin_top="2em"
 			to="/projects/borkenkaefer"
 			title="Borkenkaefer"
@@ -71,9 +64,9 @@ import "../styles/global.css";
 			/>
 		</div>
 
-		<div id="GalleryElement5" class:list={"Fade"}  style="grid-column: 1;">
+		<div class:list={["Fade", "GalleryElement"]}>
 			<ImageElement 
-			grid_three="0fr 4fr 6fr"
+			
 			margin_top="1em"
 			to="/projects/borkenkaefer"
 			title="Borkenkaefer"
@@ -84,9 +77,9 @@ import "../styles/global.css";
 			/>
 		</div>
 
-		<div id="GalleryElement6" class:list={"Fade"}   style="grid-column: 1;">
+		<div class:list={["Fade", "GalleryElement"]}>
 			<ImageElement 
-			grid_three="4fr 4fr 0fr"
+			
 			margin_top="-2em"
 			to="/projects/borkenkaefer"
 			title="Borkenkaefer"
@@ -98,7 +91,7 @@ import "../styles/global.css";
 		</div>
 	</div>	
 
-	<div id="Spacer"></div>
+<!-- 	<div id="Spacer"></div> -->
 	
 </TopWrapper>
 
@@ -111,51 +104,49 @@ import "../styles/global.css";
 
 
 #GalleryElementWrapper {
-	display: grid; 
-	grid-template-columns: 1fr; 
-	align-content: start;
-	grid-row-gap: 5em; 
-	grid-auto-rows: auto;
+	display: grid; 			
+	grid-template-areas: 	"a ."
+							"a b"	
+							"c b"		
+							"c d"		
+							"e d"
+							"e f"		
+							"g f"		
+							"g h";		
+	grid-template-columns: 1fr 1fr;
+	grid-column-gap: 2em; 
+	grid-row-gap: 5em;
 	pointer-events: none;
 	margin-top: var(--padding-desktop); 
-
-	@media (--bp-mobile) {
-		margin-top: var(--padding-mobile);
-		grid-row-gap: 0.5em; 
-	}
-
-	@media (--bp-tablet) {
-		margin-top: var(--padding-tablet);
-	}
-
-	@media (--bp-desktop-wide) {
-		margin-top: var( --padding-desktop-wide);
-		}
+	
 }
 
 
+/* #GalleryElementWrapper > *:nth-child(even) {
+	margin-top: 100px; /* Offset the right column by 150px */
 
-/* Gallery Elements, still one after the other, need more elegant solution */
-#GalleryElement1 { 
-grid-row: 1;
-top: 0px;
+#GalleryElementWrapper > *:nth-child(1) {
+	grid-area: a;
 }
 
-#GalleryElement2 { 
-grid-row: 1;
-
-}#GalleryElement3 { 
-grid-row: 2;
-
-}#GalleryElement4 { 
-grid-row: 2;
-
-}#GalleryElement5 { 
-grid-row: 3;
-
-}#GalleryElement6 { 
-grid-row: 3;
+#GalleryElementWrapper > *:nth-child(2) {
+	grid-area: b;
+}
+#GalleryElementWrapper > *:nth-child(3) {
+	grid-area: c;
 }
 
+#GalleryElementWrapper > *:nth-child(4) {
+	grid-area: d;
+}
+
+#GalleryElementWrapper > *:nth-child(5) {
+	grid-area: e;
+}
+
+#GalleryElementWrapper > *:nth-child(6) {
+	grid-area: f;
+	margin-top: -50px;
+}
 </style>
 	
