@@ -1,6 +1,5 @@
 {
   "name": "Portfolio_V1",
-  "packageManager": "yarn@4.3.1",
   "browserslist": [
     "defaults"
   ],
