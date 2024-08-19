@@ -1,10 +1,17 @@
 ---
 import NavigationBarMobile from "../components/NavigationBarMobile.astro"
+import NavigationBar from "../components/NavigationBar.astro"
 ---
-<NavigationBarMobile />
+<div id="NavMobile">
+	<NavigationBarMobile />
+</div>
 
 
 <div id="TopWrapper">
+
+	<div id="Nav">
+		<NavigationBar />
+	</div>
 
     <slot />
 
@@ -21,8 +28,10 @@ import NavigationBarMobile from "../components/NavigationBarMobile.astro"
 #TopWrapper{
 
     display: grid; 
+	grid-template-columns: var(--grid-template-columns-desktop);
 	margin-left: var(--margin-left-dekstop);
 	margin-right: var(--margin-right-desktop);
+	grid-column-gap: 4em;
 
 	@media (--bp-mobile) {
 /* 		grid-template-columns: var(--grid-template-columns-mobile); */
@@ -43,6 +52,20 @@ import NavigationBarMobile from "../components/NavigationBarMobile.astro"
 	}
 
 
+}
+
+#Nav {
+	@media (--bp-mobile) {
+		display: none;
+	}
+}
+
+#NavMobile {
+
+	display: none;
+	@media (--bp-mobile) {
+		display: block;
+	}
 }
 
 

@@ -28,14 +28,14 @@
 /* Variables */
 :root {
   /* Top Padding */
-  --padding-desktop: 5rem;
+  --padding-desktop: 3rem;
   --padding-mobile: 3rem;
   --padding-tablet: 1rem;
   --padding-desktop-wide: 6rem;
 
   /* Margins */
-  --margin-left-dekstop: 0;
-  --margin-right-desktop: 0;
+  --margin-left-dekstop: 0em;
+  --margin-right-desktop: 7em;
 
   --margin-left-mobile: 50px;
   --margin-right-mobile: 50px;
@@ -52,8 +52,8 @@
   --font-size-tablet: 0.8rem;
   --font-size-desktop-wide: 1rem;
 
-  /* Columns: mobileNav Spacer Nav Spacer Main Spacer*/
-  --grid-template-columns-desktop:      0fr 1fr 17ch 5ch 7fr 1.5fr;
+  /* Columns: Nav Main */
+  --grid-template-columns-desktop:      170px 1fr;
   --grid-template-columns-mobile:       0fr 1fr;
   --grid-template-columns-tablet:       0fr 2ch 17ch 2ch 11fr 1.5fr;
   --grid-template-columns-desktop-wide: 0fr 1fr 23ch 3ch 7fr 1.5fr;

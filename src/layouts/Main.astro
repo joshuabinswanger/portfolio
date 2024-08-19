@@ -2,6 +2,7 @@
 import Footer from "../components/Footer.astro"
 import { ViewTransitions } from 'astro:transitions';
 import { fade } from 'astro:transitions';
+import Backdrop from "../components/Backdrop.astro";
 
 import "../styles/global.css";
 
@@ -41,14 +42,14 @@ const myFade = {
     <title>{title}</title>
   </head>
   <body style="min-height: 100%; display: grid; margin: 0; grid-template-rows: 1fr auto;  font-family: PowerGrotesk-Light; letter-spacing: 0.5px;">
-
           {/* We want the content of each page to go here */}
           <slot />
   
-    <div id="FooterWrapper" style="grid-row-start: 3; grid-row-end: 4;">
+<!--     <div id="FooterWrapper" style="grid-row-start: 3; grid-row-end: 4;">
       <Footer />  
-    </div>
+    </div> -->
 
+   <Backdrop />
   </body>
 </html>
 

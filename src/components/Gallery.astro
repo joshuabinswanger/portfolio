@@ -19,74 +19,62 @@ import "../styles/global.css";
 				title="Alice in Woodland"
 				tools="3D Interactive"
 				altText="This is a Test"
-				imagePath="/src/assets/projects/aliceinwoodland/gallery_image/AliceGalelryImage.jpg"
-				onhover_imagePath="/src/assets/projects/aliceinwoodland/gallery_image/AliceGalelryImage.jpg"
-				viewtransition_name="1"
+				imagePath="/src/assets/galleryimages/GalleryImages_1.webp"
 				/>
 		</div>
 
 		<div class:list={["Fade", "GalleryElement"]} id="2">
 			<ImageElement 
 		
-			margin_top="2em"
 			to="/projects/borkenkaefer"
 			title="Borkenkäfer"
 			tools="2D Poster"
 			altText="This is a Test"
-			imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
-			onhover_imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
+			imagePath="/src/assets/galleryimages/GalleryImages_2.webp"
 			/>
 		</div>
 
 		<div class:list={["Fade", "GalleryElement"]}>
 			<ImageElement 
 			
-			margin_top="0vw"
 			to="/projects/alice-in-woodland"
 			title="Alice in Woodland"
 			tools="3D Interactive"
 			altText="This is a Test"
-			imagePath="/src/assets/projects/aliceinwoodland/gallery_image/AliceGalelryImage.jpg"
-			onhover_imagePath="/src/assets/projects/aliceinwoodland/gallery_image/AliceGalelryImage.jpg"
+			imagePath="/src/assets/galleryimages/GalleryImages_3.webp"
 			/>
 		</div>
 
 		<div class:list={["Fade", "GalleryElement" ]}>
 			<ImageElement 
 			
-			margin_top="2em"
 			to="/projects/borkenkaefer"
 			title="Borkenkaefer"
 			tools="2D Poster"
 			altText="This is a Test"
-			imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
-			onhover_imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
+			imagePath="/src/assets/galleryimages/GalleryImages_4.webp"
 			/>
 		</div>
 
 		<div class:list={["Fade", "GalleryElement"]}>
 			<ImageElement 
 			
-			margin_top="1em"
 			to="/projects/borkenkaefer"
 			title="Borkenkaefer"
 			tools="2D Poster"
 			altText="This is a Test"
-			imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
-			onhover_imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
+			imagePath="/src/assets/galleryimages/GalleryImages_5.webp"
 			/>
 		</div>
 
 		<div class:list={["Fade", "GalleryElement"]}>
 			<ImageElement 
-			
-			margin_top="-2em"
+		
 			to="/projects/borkenkaefer"
 			title="Borkenkaefer"
 			tools="2D Poster"
 			altText="This is a Test"
-			imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
-			onhover_imagePath="/src/assets/projects/borkenkaefer/gallery_image/image 2.png"
+			imagePath="/src/assets/galleryimages/GalleryImages_6.webp"
 			/>
 		</div>
 	</div>	
@@ -104,18 +92,21 @@ import "../styles/global.css";
 
 
 #GalleryElementWrapper {
+	/* desktop */
 	display: grid; 			
-	grid-template-areas: 	"a ."
-							"a b"	
-							"c b"		
-							"c d"		
-							"e d"
-							"e f"		
-							"g f"		
-							"g h";		
-	grid-template-columns: 1fr 1fr;
-	grid-column-gap: 2em; 
-	grid-row-gap: 5em;
+	grid-template-areas: 	"a . ."
+							"a b ."	
+							". b c"		
+							". . c"
+							"d . ."		
+							"d e ."
+							". e f"		
+							"g . f"		
+							"g h .";		
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-column-gap: 12vw; 
+	grid-auto-rows: 9rem;
+	align-items: start;
 	pointer-events: none;
 	margin-top: var(--padding-desktop); 
 	
