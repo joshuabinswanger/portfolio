@@ -1,6 +1,7 @@
 @font-face {
   font-family: PowerGroteskUltraLight;
-  src: url(/public/fonts/PowerGrotesk/PowerGroteskTrial-UltraLight.woff2) format("woff2");
+  src: url(/public/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-ultra-light.woff2) format("woff2"),
+       url(/public/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-ultra-light.woff) format('woff');
   font-weight: 100;
 }
 
@@ -25,6 +26,7 @@
 }
 
 
+
 /* Variables */
 :root {
   /* Top Padding */
@@ -35,7 +37,7 @@
 
   /* Margins */
   --margin-left-dekstop: 0em;
-  --margin-right-desktop: 7em;
+  --margin-right-desktop: 8vw;
 
   --margin-left-mobile: 50px;
   --margin-right-mobile: 50px;
@@ -47,13 +49,13 @@
   --margin-right-desktop-wide: 0;
 
   /* Font Sizes */
-  --font-size-dekstop: 0.8rem;
+  --font-size-dekstop: 14px;
   --font-size-mobile: 0.8rem;
   --font-size-tablet: 0.8rem;
   --font-size-desktop-wide: 1rem;
 
   /* Columns: Nav Main */
-  --grid-template-columns-desktop:      170px 1fr;
+  --grid-template-columns-desktop:      200px 1fr;
   --grid-template-columns-mobile:       0fr 1fr;
   --grid-template-columns-tablet:       0fr 2ch 17ch 2ch 11fr 1.5fr;
   --grid-template-columns-desktop-wide: 0fr 1fr 23ch 3ch 7fr 1.5fr;

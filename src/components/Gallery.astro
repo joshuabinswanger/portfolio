@@ -3,6 +3,7 @@ import ImageElement from "./ImageElement.astro";
 import NavigationBar from "./NavigationBar.astro"
 import NavigationBarMobile from "./NavigationBarMobile.astro"
 import TopWrapper from "../layouts/TopWrapper.astro";
+import GridLayout from "../layouts/GridLayout.astro";
 import "../styles/global.css";
 
 ---
@@ -10,10 +11,10 @@ import "../styles/global.css";
 <TopWrapper>
 	
 
-	<div id="GalleryElementWrapper">
+	<GridLayout>
 
 
-		<div class:list={["Fade", "GalleryElement"]}>
+		<div class:list={["Fade", "GalleryElement"]} style="grid-column-start: 1; grid-column-end: 5; grid-row-start: 1;">
 				<ImageElement 
 				to="/projects/alice-in-woodland"
 				title="Alice in Woodland"
@@ -23,7 +24,7 @@ import "../styles/global.css";
 				/>
 		</div>
 
-		<div class:list={["Fade", "GalleryElement"]} id="2">
+		 <div class:list={["Fade", "GalleryElement"]} style="grid-column-start: 8; grid-column-end: 13; grid-row-start: 5;">
 			<ImageElement 
 		
 			to="/projects/borkenkaefer"
@@ -33,7 +34,7 @@ import "../styles/global.css";
 			imagePath="/src/assets/galleryimages/GalleryImages_2.webp"
 			/>
 		</div>
-
+		<!--
 		<div class:list={["Fade", "GalleryElement"]}>
 			<ImageElement 
 			
@@ -58,7 +59,6 @@ import "../styles/global.css";
 
 		<div class:list={["Fade", "GalleryElement"]}>
 			<ImageElement 
-			
 			to="/projects/borkenkaefer"
 			title="Borkenkaefer"
 			tools="2D Poster"
@@ -69,7 +69,6 @@ import "../styles/global.css";
 
 		<div class:list={["Fade", "GalleryElement"]}>
 			<ImageElement 
-		
 			to="/projects/borkenkaefer"
 			title="Borkenkaefer"
 			tools="2D Poster"
@@ -77,67 +76,37 @@ import "../styles/global.css";
 			imagePath="/src/assets/galleryimages/GalleryImages_6.webp"
 			/>
 		</div>
-	</div>	
 
-<!-- 	<div id="Spacer"></div> -->
+		<div class:list={["Fade", "GalleryElement"]}>
+			<ImageElement 
+			to="/projects/borkenkaefer"
+			title="Borkenkaefer"
+			tools="2D Poster"
+			altText="This is a Test"
+			imagePath="/src/assets/galleryimages/GalleryImages_7.webp"
+			/>
+		</div>
+		<div class:list={["Fade", "GalleryElement"]}>
+			<ImageElement 
+			to="/projects/borkenkaefer"
+			title="Borkenkaefer"
+			tools="2D Poster"
+			altText="This is a Test"
+			imagePath="/src/assets/galleryimages/GalleryImages_8.webp"
+			/>
+		</div>
+		<div class:list={["Fade", "GalleryElement"]}>
+			<ImageElement 
+			to="/projects/borkenkaefer"
+			title="Borkenkaefer"
+			tools="2D Poster"
+			altText="This is a Test"
+			imagePath="/src/assets/galleryimages/GalleryImages_9.webp"
+			/>
+		</div> -->
+
+
+	</GridLayout>
 	
 </TopWrapper>
-
-
-
-
-<style>
-
-@import "../styles/global.css";
-
-
-#GalleryElementWrapper {
-	/* desktop */
-	display: grid; 			
-	grid-template-areas: 	"a . ."
-							"a b ."	
-							". b c"		
-							". . c"
-							"d . ."		
-							"d e ."
-							". e f"		
-							"g . f"		
-							"g h .";		
-	grid-template-columns: 1fr 1fr 1fr;
-	grid-column-gap: 12vw; 
-	grid-auto-rows: 9rem;
-	align-items: start;
-	pointer-events: none;
-	margin-top: var(--padding-desktop); 
-	
-}
-
-
-/* #GalleryElementWrapper > *:nth-child(even) {
-	margin-top: 100px; /* Offset the right column by 150px */
-
-#GalleryElementWrapper > *:nth-child(1) {
-	grid-area: a;
-}
-
-#GalleryElementWrapper > *:nth-child(2) {
-	grid-area: b;
-}
-#GalleryElementWrapper > *:nth-child(3) {
-	grid-area: c;
-}
-
-#GalleryElementWrapper > *:nth-child(4) {
-	grid-area: d;
-}
-
-#GalleryElementWrapper > *:nth-child(5) {
-	grid-area: e;
-}
-
-#GalleryElementWrapper > *:nth-child(6) {
-	grid-area: f;
-	margin-top: -50px;
-}
-</style>
 	

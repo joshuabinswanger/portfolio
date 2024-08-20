@@ -1,0 +1,21 @@
+---
+
+---
+
+<div id="GridContainer">
+
+    <slot />
+   
+</div>
+
+
+<style>
+
+#GridContainer {
+    display: grid; 			
+	grid-template-columns: repeat(13, 1fr);
+	grid-auto-rows: 55px;
+	pointer-events: none;
+	margin-top: var(--padding-desktop); 
+}
+</style>

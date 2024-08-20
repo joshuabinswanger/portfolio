@@ -1,0 +1,57 @@
+---
+import SquareBracketV from "./SquareBracket_V.astro";
+// imports all files that end with `.astro' in `./src/pages/post/`
+const projects = await Astro.glob('../pages/projects/*.astro')
+
+// Extract projectTitle from each page
+const pageTitles = projects.map(page => {
+  const { projectTitle } = page;
+  return { title: projectTitle, url: page.url };
+});
+
+---
+
+  <ul>
+    <a href="/">Gallery</a>
+    <div>&nbsp;&nbsp;</div>
+    {pageTitles.map(page => (
+        <li><a href={page.url}>{page.title}</a></li>
+    ))}
+  </ul>
+
+
+<style>
+@import "../styles/global.css";
+
+
+
+ul {
+  font-size: var(--font-size-dekstop);
+  padding: 1rem 1rem 1rem 1rem;
+  text-align: center;
+  margin: 0px;
+
+  @media (--bp-mobile){
+      font-size: var(--font-size-mobile);
+    }
+
+    @media (--bp-tablet){
+      font-size: var(--font-size-tablet);
+    }
+
+    @media (--bp-desktop-wide){
+      font-size: var(--font-size-desktop-wide);
+    }
+}
+
+li {
+  list-style: none;
+  margin: 0.5rem 0 0.5rem 0; 
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+</style>
