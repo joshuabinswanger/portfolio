@@ -56,7 +56,7 @@
 
   /* Columns: Nav Main */
   --grid-template-columns-desktop:      200px 1fr;
-  --grid-template-columns-mobile:       0fr 1fr;
+  --grid-template-columns-mobile:       1fr;
   --grid-template-columns-tablet:       0fr 2ch 17ch 2ch 11fr 1.5fr;
   --grid-template-columns-desktop-wide: 0fr 1fr 23ch 3ch 7fr 1.5fr;
 }

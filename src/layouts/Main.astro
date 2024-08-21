@@ -41,15 +41,39 @@ const myFade = {
  
     <title>{title}</title>
   </head>
-  <body style="min-height: 100%; display: grid; margin: 0; grid-template-rows: 1fr auto;  font-family: PowerGrotesk-Light;">
+  <body>
     
     {/* We want the content of each page to go here */}
     <slot />
 
-   <Backdrop transition:animate="none" transition:persist />
+   
   </body>
+  <Backdrop transition:animate="none" transition:persist />
 </html>
 
+
+
+
+<style>
+@import "../styles/global.css";
+
+
+body {
+  min-height: 100%; 
+  margin: 0; 
+  display: grid; 
+  grid-template-rows: 1fr auto; 
+  font-family: PowerGrotesk-Light;
+
+  @media (--bp-mobile){
+    grid-template-rows: 0px 1fr auto; 
+  }
+
+
+}
+
+
+</style>
 <!-- <style>
 
 @keyframes fadeIn {

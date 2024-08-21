@@ -14,7 +14,7 @@ import "../styles/global.css";
 	<GridLayout>
 
 
-		<div class:list={["Fade", "GalleryElement"]} style="grid-column-start: 1; grid-column-end: 5; grid-row-start: 1;">
+		<div class:list={["Fade", "GalleryElement"]}>
 				<ImageElement 
 				to="/projects/alice-in-woodland"
 				title="Alice in Woodland"
@@ -24,7 +24,7 @@ import "../styles/global.css";
 				/>
 		</div>
 
-		 <div class:list={["Fade", "GalleryElement"]} style="grid-column-start: 8; grid-column-end: 13; grid-row-start: 5;">
+		 <div class:list={["Fade", "GalleryElement"]}>
 			<ImageElement 
 		
 			to="/projects/borkenkaefer"
@@ -34,8 +34,8 @@ import "../styles/global.css";
 			imagePath="/src/assets/galleryimages/GalleryImages_2.webp"
 			/>
 		</div>
-		<!--
-		<div class:list={["Fade", "GalleryElement"]}>
+
+		<div class:list={["Fade", "GalleryElement"]} >
 			<ImageElement 
 			
 			to="/projects/alice-in-woodland"
@@ -103,10 +103,141 @@ import "../styles/global.css";
 			altText="This is a Test"
 			imagePath="/src/assets/galleryimages/GalleryImages_9.webp"
 			/>
-		</div> -->
+		</div>
 
 
 	</GridLayout>
 	
 </TopWrapper>
+
+<style>
+@import "../styles/global.css";
+
+
+
+.GalleryElement:nth-of-type(1) {
+	grid-column-start: 1; 
+	grid-column-end: span 7; 
+	grid-row-start: 1;
+
+
+
 	
+}
+
+.GalleryElement:nth-of-type(2) {
+	grid-column-start: 11; 
+	grid-column-end: span 8; 
+	grid-row-start: 7;
+
+	@media (--bp-mobile) {
+	grid-column-start: 1; 
+	grid-column-end: span 4; 
+	grid-row-start: 2;
+	}
+}
+
+.GalleryElement:nth-of-type(3) {
+	grid-column-start: 2;
+	grid-column-end: span 7; 
+	grid-row-start: 14;
+	
+}
+.GalleryElement:nth-of-type(4) {
+	grid-column-start: 11;
+	grid-column-end: span 6; 
+	grid-row-start: 22;
+
+}
+.GalleryElement:nth-of-type(5) {
+	grid-column-start: 1;
+		grid-column-end: span 8; 
+		grid-row-start: 28;
+
+}
+.GalleryElement:nth-of-type(6) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 35;
+
+}
+.GalleryElement:nth-of-type(7) {
+	grid-column-start: 1; 
+	grid-column-end: span 5; 
+	grid-row-start: 41;
+
+}
+.GalleryElement:nth-of-type(8) {
+	grid-column-start: 8; 
+	grid-column-end: span 9; 
+	grid-row-start: 45;
+
+	
+}
+.GalleryElement:nth-of-type(9) {
+	grid-column-start: 2; 
+	grid-column-end: span 5; 
+	grid-row-start: 55;
+
+}
+/* .GalleryElement:nth-of-type(10) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 53;
+
+}
+.GalleryElement:nth-of-type(11) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 60;
+}
+.GalleryElement:nth-of-type(12) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 66;
+}
+.GalleryElement:nth-of-type(13) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 71;
+
+}
+.GalleryElement:nth-of-type(14) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 77;
+
+}
+.GalleryElement:nth-of-type(15) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 81;
+}
+.GalleryElement:nth-of-type(16) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 86;
+}
+.GalleryElement:nth-of-type(17) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 92;
+} */
+
+@media (--bp-mobile) {
+	.GalleryElement {
+		margin-top: 5rem;
+	}
+	.GalleryElement:nth-of-type(odd){
+	grid-column-start: 1; 
+	grid-column-end:  6; 
+	grid-row-start: auto;
+	}
+	
+	.GalleryElement:nth-of-type(even){
+	grid-column-start: 3; 
+	grid-column-end: 8; 
+	grid-row-start: auto;
+	}
+}
+</style>

@@ -10,12 +10,18 @@
 
 
 <style>
+@import "../styles/global.css";
 
 #GridContainer {
     display: grid; 			
-	grid-template-columns: repeat(13, 1fr);
-	grid-auto-rows: 55px;
+	grid-template-columns: repeat(17, 1fr);
+	grid-auto-rows: 5vw;
 	pointer-events: none;
 	margin-top: var(--padding-desktop); 
+
+	@media (--bp-mobile) {
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+		grid-auto-rows: auto;
+	}
 }
 </style>

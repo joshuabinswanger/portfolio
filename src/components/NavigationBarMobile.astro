@@ -3,48 +3,14 @@ import type { ImageMetadata } from 'astro';
 import { Picture } from 'astro:assets';
 import RhizomLogo from "../assets/Logo_V6_Dark.png"
 import RhizomLogoComponent from "../components/Logo.astro"
+import Index from './Index.astro';
+import SquareBracketV from './SquareBracket_V.astro';
 import "../styles/global.css"
 
 ---
 <nav id="NavBarMobile">
 
-  <!-- <div id="NavBarContainer">
-    
-    <div id="LogoContainer">
-
-      <a href="/"><Picture src={RhizomLogo} id="Picture" alt="Rhizom Logo"></a>
-
-    </div>
-
-    <div id="ContactConatiner" class:list={"button"}>
-
-      <p> Contact </p>
-
-    </div>
-
-
-
-    <div id="InfoConatiner" class:list={"button"}>
-
-      <p> Info </p>
-
-    </div>
-
-    <div id="InstagramConatiner" class:list={"button"}>
-
-      <p> Instagram </p>
-
-    </div>
-
-    <div id="IndexConatiner" class:list={"button"}>
-
-      <p> Index </p>
-
-    </div>
-
-  </div> -->
-
-<input id="input" type="checkbox"></input>
+  <input id="input" type="checkbox"></input>
 
 
   <div id="Hamburger">
@@ -54,12 +20,17 @@ import "../styles/global.css"
     <span id="anim-span3"></span>
     
   </div> 
-  
-  <!-- Index -->
+    
+  <div id="Index">
+    <SquareBracketV>
+      <Index />
+    </SquareBracketV>
+
+  </div>  
 
 
 
-  <div id="backdrop"></div>
+    <div id="backdrop"></div>
 
 
 </nav>
@@ -76,19 +47,6 @@ import "../styles/global.css"
   bottom: 0px;
 }
 
-#NavBarContainer {
-
-  display: grid;
-  grid-auto-flow: row;
-  grid-template-columns: 2fr 1fr 1fr 1fr 1fr; 
-  place-items: center;
-  max-width: 700px;
-
-
-
-
-}
-
 .button {
   width: auto;
   height: 33px;
@@ -97,32 +55,12 @@ import "../styles/global.css"
   margin: 0px;
 }
 
-p{
-  margin: 0px;
-}
-
-#LogoContainer {
-  width: 150px;
+#Index {
   position: fixed;
-  top: 10px;
-  pointer-events: auto;
-  cursor: pointer;
-  margin: 0px;
-}
-
-#Picture {
-
-  width: 100%;
-  height: auto;
-
-}
-
-#list {
-  position: fixed;
-  display: none;
+  visibility: hidden;
   top: 0;
   left: 0;
-  padding-top: 25vh;
+  padding-top: 15vh;
   width: 100%;
   height: 100%;
   display: grid;
@@ -131,36 +69,10 @@ p{
   pointer-events: none;
 }
 
-ul {
-  font-size: var(--font-size-mobile); 
-  line-height: 2rem;
-  pointer-events: auto;
-  visibility: hidden;
-  opacity: 0;
-  padding: 0rem;
-  padding-left: 7px;
-  transition: opacity 0.78s 0.22s ease, visibility 1s 0.22s;
-  z-index: 1001;
-
-  a {
-    text-decoration: none;
-    color: inherit;
-    font-style: normal;
-    font-weight: normal;
-  }
-}
-
-
-
-
-li {
-  list-style: none;
-  margin: 0.5rem 0 0.5rem 0; 
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
+input:checked{
+    ~ #Index{
+      visibility: visible;
+    }
 }
 
 #backdrop {
@@ -185,18 +97,6 @@ a {
       pointer-events: auto;
     }
   }
-
-
-input:checked{
-  ~ #list{
-    display: static;
-    z-index: 1000;
-    ul {
-      visibility: visible;
-      opacity: 1;
-    }
-  }
-}
 
 
 
