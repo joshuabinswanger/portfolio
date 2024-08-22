@@ -1,9 +1,11 @@
 ---
 import ImageElement from "./ImageElement.astro";
+import ThumbnailElement from "./ThumbnailElement.astro";
 import NavigationBar from "./NavigationBar.astro"
 import NavigationBarMobile from "./NavigationBarMobile.astro"
 import TopWrapper from "../layouts/TopWrapper.astro";
 import GridLayout from "../layouts/GridLayout.astro";
+import SquareBracketH from "./SquareBracket_H.astro";
 import "../styles/global.css";
 
 ---
@@ -16,19 +18,72 @@ import "../styles/global.css";
 
 		<div class:list={["Fade", "GalleryElement"]}>
 				<ImageElement 
+				width="100%"
 				to="/projects/alice-in-woodland"
+				loading="eager"
 				title="Alice in Woodland"
 				tools="3D Interactive"
 				altText="This is a Test"
 				imagePath="/src/assets/galleryimages/GalleryImages_1.webp"
 				/>
+				<div id="FlexWrapper" style="display: grid; grid-template-columns: auto 1fr ">
+					<SquareBracketH>
+						<h1>Alice in Woodland</h1>
+						<h2>Poster</h2>
+						<h3>Client</h3>
+					</SquareBracketH>
+					<SquareBracketH>
+						<div id="GalleryThumbnails">
+							<ThumbnailElement 
+							width="100%"
+							aspectratio="1/1"
+							to="/projects/alice-in-woodland"
+							title="Alice in Woodland"
+							tools="3D Interactive"
+							altText="This is a Test"
+							imagePath="/src/assets/galleryimages/GalleryImages_9.webp"
+							/>
+							<ThumbnailElement  
+							width="100%"
+							aspectratio="1/1"
+							to="/projects/alice-in-woodland"
+							title="Alice in Woodland"
+							tools="3D Interactive"
+							altText="This is a Test"
+							imagePath="/src/assets/galleryimages/GalleryImages_8.webp"
+							/>
+							<ThumbnailElement 
+							width="100%"
+							aspectratio="1/1"
+							to="/projects/alice-in-woodland"
+							title="Alice in Woodland"
+							tools="3D Interactive"
+							altText="This is a Test"
+							imagePath="/src/assets/galleryimages/GalleryImages_7.webp"
+							/>
+							<ThumbnailElement 
+							width="100%"
+							aspectratio="1/1"
+							to="/projects/alice-in-woodland"
+							title="Alice in Woodland"
+							tools="3D Interactive"
+							altText="This is a Test"
+							imagePath="/src/assets/galleryimages/GalleryImages_1.webp"
+							/>
+						</div>
+					</SquareBracketH>
+				</div>
+
+		
+
 		</div>
 
 		 <div class:list={["Fade", "GalleryElement"]}>
 			<ImageElement 
-		
+			width="100%"
 			to="/projects/borkenkaefer"
 			title="Borkenkäfer"
+			loading="eager"
 			tools="2D Poster"
 			altText="This is a Test"
 			imagePath="/src/assets/galleryimages/GalleryImages_2.webp"
@@ -37,8 +92,9 @@ import "../styles/global.css";
 
 		<div class:list={["Fade", "GalleryElement"]} >
 			<ImageElement 
-			
+			width="100%"
 			to="/projects/alice-in-woodland"
+			loading="eager"
 			title="Alice in Woodland"
 			tools="3D Interactive"
 			altText="This is a Test"
@@ -48,7 +104,7 @@ import "../styles/global.css";
 
 		<div class:list={["Fade", "GalleryElement" ]}>
 			<ImageElement 
-			
+			width="100%"
 			to="/projects/borkenkaefer"
 			title="Borkenkaefer"
 			tools="2D Poster"
@@ -59,6 +115,7 @@ import "../styles/global.css";
 
 		<div class:list={["Fade", "GalleryElement"]}>
 			<ImageElement 
+			width="100%"
 			to="/projects/borkenkaefer"
 			title="Borkenkaefer"
 			tools="2D Poster"
@@ -69,6 +126,7 @@ import "../styles/global.css";
 
 		<div class:list={["Fade", "GalleryElement"]}>
 			<ImageElement 
+			width="100%"
 			to="/projects/borkenkaefer"
 			title="Borkenkaefer"
 			tools="2D Poster"
@@ -79,6 +137,7 @@ import "../styles/global.css";
 
 		<div class:list={["Fade", "GalleryElement"]}>
 			<ImageElement 
+			width="100%"
 			to="/projects/borkenkaefer"
 			title="Borkenkaefer"
 			tools="2D Poster"
@@ -88,6 +147,7 @@ import "../styles/global.css";
 		</div>
 		<div class:list={["Fade", "GalleryElement"]}>
 			<ImageElement 
+			width="100%"
 			to="/projects/borkenkaefer"
 			title="Borkenkaefer"
 			tools="2D Poster"
@@ -97,6 +157,7 @@ import "../styles/global.css";
 		</div>
 		<div class:list={["Fade", "GalleryElement"]}>
 			<ImageElement 
+			width="100%"
 			to="/projects/borkenkaefer"
 			title="Borkenkaefer"
 			tools="2D Poster"
@@ -113,14 +174,55 @@ import "../styles/global.css";
 <style>
 @import "../styles/global.css";
 
+#GalleryThumbnails {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	grid-auto-rows: auto;
+	gap: 5%;
+	filter: sepia(0.5) grayscale(0.5);
+	opacity: 0.75;
+}
 
+h1 {
+	font-family: PowerGrotesk-Medium;
+	font-weight: 600;
+	font-style: normal;
+	font-size: 1rem;
+	letter-spacing: 0.5px;
+	margin: 0px;
+
+}
+
+h2 {
+	font-family: PowerGrotesk-Light;
+	font-weight: 200;
+	font-style: italic;
+	font-size: 0.8rem;
+	letter-spacing: 0.5px;
+	margin-top: 4px;
+
+}
+
+h3 {
+	font-family: PowerGrotesk-Light;
+	font-weight: 200;
+	font-style: normal;
+	font-size: 0.8rem;
+	text-align: end;
+	letter-spacing: 0.5px;
+	margin: 0px;
+}
 
 .GalleryElement:nth-of-type(1) {
 	grid-column-start: 1; 
 	grid-column-end: span 7; 
 	grid-row-start: 1;
 
-
+	@media (--bp-mobile) {
+	grid-column-start: 1; 
+	grid-column-end: 4; 
+	grid-row-start: 1;
+	}
 
 	
 }
@@ -224,20 +326,4 @@ import "../styles/global.css";
 	grid-row-start: 92;
 } */
 
-@media (--bp-mobile) {
-	.GalleryElement {
-		margin-top: 5rem;
-	}
-	.GalleryElement:nth-of-type(odd){
-	grid-column-start: 1; 
-	grid-column-end:  6; 
-	grid-row-start: auto;
-	}
-	
-	.GalleryElement:nth-of-type(even){
-	grid-column-start: 3; 
-	grid-column-end: 8; 
-	grid-row-start: auto;
-	}
-}
 </style>

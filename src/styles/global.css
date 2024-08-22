@@ -9,21 +9,43 @@
   font-family: PowerGrotesk-Light;
   src: url(/public/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-light.woff2) format('woff2'),
        url(/public/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-light.woff) format('woff');
-  font-weight: normal;
+  font-weight: 200;
   font-style: normal;
 }
 
 @font-face {
+  font-family: PowerGrotesk-Light;
+  src: url(/public/fonts/PowerGrotesk/power-grotesk-light-italic/webfonts/power-grotesk-light-italic.woff2) format('woff2'),
+       url(/public/fonts/PowerGrotesk/power-grotesk-light-italic/webfonts/power-grotesk-light-italic.woff) format('woff');
+  font-weight: 200;
+  font-style: italic;
+}
+
+
+@font-face {
   font-family: PowerGrotesk-Regular;	
-	src: url(/public/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.woff2) format('woff2'),
-       url(/public/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.woff) format('woff');
-/* src: url(/public/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.eot);
-	     url('/public/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.ttf') format('truetype'),
-	     url('/public/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.svg#youworkforthem') format('svg'),
-       url(/public/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.eot?#iefix) format('embedded-opentype'); */
-	font-weight: normal;
+	src: url(/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.woff2) format('woff2'),
+       url(/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.woff) format('woff');
+	font-weight: 400;
 	font-style: normal;
 }
+
+@font-face {
+  font-family: PowerGrotesk-Medium;	
+	src: url(/fonts/PowerGrotesk/power-grotesk-medium/webfonts/power-grotesk-medium.woff2) format('woff2'),
+       url(/fonts/PowerGrotesk/power-grotesk-medium/webfonts/power-grotesk-medium.woff) format('woff');
+	font-weight: 600;
+	font-style: normal;
+}
+
+@font-face {
+  font-family: PowerGrotesk-Bold;	
+	src: url(/fonts/PowerGrotesk/power-grotesk-bold/webfonts/power-grotesk-bold.woff2) format('woff2'),
+       url(/fonts/PowerGrotesk/power-grotesk-bold/webfonts/power-grotesk-bold.woff) format('woff');
+	font-weight: 600;
+	font-style: normal;
+}
+
 
 
 

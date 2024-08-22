@@ -10,7 +10,6 @@ interface Props {
     width?: string;
     height?: string;
     aspectratio?: string;
-    loading?: string;
     to: string;
     altText: string;
     imagePath: string;
@@ -20,7 +19,7 @@ interface Props {
   };
   
 // Get component props from Astro.props
-const { margin_top = '0px', to, width = "100%", height = 'auto', aspectratio = 'auto', loading = 'lazy', imagePath, onhover_imagePath, viewtransition_name } = Astro.props;
+const { margin_top = '0px', to, width = "100%", height = 'auto', aspectratio = 'auto', imagePath, onhover_imagePath, viewtransition_name } = Astro.props;
 
 //Import all image paths to check against the passed in strings
 const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,webp}');
@@ -34,10 +33,9 @@ const myImage = images[imagePath]();
       <Picture  
       src={myImage} 
       formats={['avif', 'webp']}
-      widths={[240, 540, 720, myImage.width]}
-      sizes={'(max-width: 360px) 240px, (max-width: 720px) 540px, (max-width: 1600px) 720px,  ${myImage.width}px'}
+      widths={[120, 250, myImage.width / 4]}
+      sizes={'(max-width: 360px) 120px, (max-width: 1600px) 250px,  ${myImage.width}px'}
       alt="empty" 
-      loading={loading}
       style={`
       width: ${width}; 
       height: ${height}; 
