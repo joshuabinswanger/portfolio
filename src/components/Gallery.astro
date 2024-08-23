@@ -16,17 +16,15 @@ import "../styles/global.css";
 	<GridLayout>
 
 
-		<div class:list={["Fade", "GalleryElement"]}>
+		<div class:list={["fade", "GalleryElement"]}>
 				<ImageElement 
 				width="100%"
 				to="/projects/alice-in-woodland"
 				loading="eager"
-				title="Alice in Woodland"
-				tools="3D Interactive"
 				altText="This is a Test"
 				imagePath="/src/assets/galleryimages/GalleryImages_1.webp"
 				/>
-				<div id="FlexWrapper" style="display: grid; grid-template-columns: auto 1fr ">
+				<div id="FlexWrapper">
 					<SquareBracketH>
 						<h1>Alice in Woodland</h1>
 						<h2>Poster</h2>
@@ -78,7 +76,7 @@ import "../styles/global.css";
 
 		</div>
 
-		 <div class:list={["Fade", "GalleryElement"]}>
+		 <div class:list={["fade", "GalleryElement"]}>
 			<ImageElement 
 			width="100%"
 			to="/projects/borkenkaefer"
@@ -90,7 +88,7 @@ import "../styles/global.css";
 			/>
 		</div>
 
-		<div class:list={["Fade", "GalleryElement"]} >
+		<div class:list={["fade", "GalleryElement"]} >
 			<ImageElement 
 			width="100%"
 			to="/projects/alice-in-woodland"
@@ -102,7 +100,7 @@ import "../styles/global.css";
 			/>
 		</div>
 
-		<div class:list={["Fade", "GalleryElement" ]}>
+		<div class:list={["fade", "GalleryElement" ]}>
 			<ImageElement 
 			width="100%"
 			to="/projects/borkenkaefer"
@@ -113,7 +111,7 @@ import "../styles/global.css";
 			/>
 		</div>
 
-		<div class:list={["Fade", "GalleryElement"]}>
+		<div class:list={["fade", "GalleryElement"]}>
 			<ImageElement 
 			width="100%"
 			to="/projects/borkenkaefer"
@@ -124,7 +122,7 @@ import "../styles/global.css";
 			/>
 		</div>
 
-		<div class:list={["Fade", "GalleryElement"]}>
+		<div class:list={["fade", "GalleryElement"]}>
 			<ImageElement 
 			width="100%"
 			to="/projects/borkenkaefer"
@@ -135,7 +133,7 @@ import "../styles/global.css";
 			/>
 		</div>
 
-		<div class:list={["Fade", "GalleryElement"]}>
+		<div class:list={["fade", "GalleryElement"]}>
 			<ImageElement 
 			width="100%"
 			to="/projects/borkenkaefer"
@@ -145,7 +143,7 @@ import "../styles/global.css";
 			imagePath="/src/assets/galleryimages/GalleryImages_7.webp"
 			/>
 		</div>
-		<div class:list={["Fade", "GalleryElement"]}>
+		<div class:list={["fade", "GalleryElement"]}>
 			<ImageElement 
 			width="100%"
 			to="/projects/borkenkaefer"
@@ -155,7 +153,7 @@ import "../styles/global.css";
 			imagePath="/src/assets/galleryimages/GalleryImages_8.webp"
 			/>
 		</div>
-		<div class:list={["Fade", "GalleryElement"]}>
+		<div class:list={["fade", "GalleryElement"]}>
 			<ImageElement 
 			width="100%"
 			to="/projects/borkenkaefer"
@@ -174,6 +172,16 @@ import "../styles/global.css";
 <style>
 @import "../styles/global.css";
 
+.GalleryElement {
+	display: grid;
+}
+
+#FlexWrapper {
+	display: grid; 
+	grid-template-columns: auto 1fr;
+
+}
+
 #GalleryThumbnails {
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
@@ -191,6 +199,10 @@ h1 {
 	letter-spacing: 0.5px;
 	margin: 0px;
 
+	@media (--bp-mobile) {
+		font-size: 0.8rem;
+	}
+
 }
 
 h2 {
@@ -200,6 +212,11 @@ h2 {
 	font-size: 0.8rem;
 	letter-spacing: 0.5px;
 	margin-top: 4px;
+
+	@media (--bp-mobile) {
+		font-size: 0.6rem;
+		margin-top: 0px;
+	}
 
 }
 
@@ -211,119 +228,187 @@ h3 {
 	text-align: end;
 	letter-spacing: 0.5px;
 	margin: 0px;
-}
-
-.GalleryElement:nth-of-type(1) {
-	grid-column-start: 1; 
-	grid-column-end: span 7; 
-	grid-row-start: 1;
 
 	@media (--bp-mobile) {
-	grid-column-start: 1; 
-	grid-column-end: 4; 
-	grid-row-start: 1;
+		font-size: 0.6rem;
+		margin-top: -10px;
 	}
 
-	
 }
 
-.GalleryElement:nth-of-type(2) {
-	grid-column-start: 11; 
-	grid-column-end: span 8; 
-	grid-row-start: 7;
+@media (--bp-mobile) {
 
-	@media (--bp-mobile) {
-	grid-column-start: 1; 
-	grid-column-end: span 4; 
-	grid-row-start: 2;
+	.GalleryElement:nth-of-type(odd) {
+		grid-column-start: 1; 
+		grid-column-end: span 6; 
 	}
-}
 
-.GalleryElement:nth-of-type(3) {
-	grid-column-start: 2;
-	grid-column-end: span 7; 
-	grid-row-start: 14;
-	
-}
-.GalleryElement:nth-of-type(4) {
-	grid-column-start: 11;
-	grid-column-end: span 6; 
-	grid-row-start: 22;
+	.GalleryElement:nth-of-type(even) {
+		grid-column-start: 2; 
+		grid-column-end: span 6; 
+	}
+
+	.GalleryElement {
+		margin-bottom: 5rem;
+	}
 
 }
-.GalleryElement:nth-of-type(5) {
-	grid-column-start: 1;
+
+@media (--bp-desktop) {
+
+	.GalleryElement:nth-of-type(1) {
+		grid-column-start: 1; 
+		grid-column-end: span 7; 
+		grid-row-start: 1;
+		
+	}
+
+		
+
+
+	.GalleryElement:nth-of-type(2) {
+		grid-column-start: 11; 
 		grid-column-end: span 8; 
-		grid-row-start: 28;
+		grid-row-start: 7;
+
+		@media (--bp-mobile) {
+		grid-column-start: 1; 
+		grid-column-end: 4; 
+		grid-row-start: 2;
+		}
+	}
+
+	.GalleryElement:nth-of-type(3) {
+		grid-column-start: 2;
+		grid-column-end: span 7; 
+		grid-row-start: 14;
+		
+	}
+	.GalleryElement:nth-of-type(4) {
+		grid-column-start: 11;
+		grid-column-end: span 6; 
+		grid-row-start: 22;
+
+	}
+	.GalleryElement:nth-of-type(5) {
+		grid-column-start: 1;
+			grid-column-end: span 8; 
+			grid-row-start: 28;
+
+	}
+	.GalleryElement:nth-of-type(6) {
+		grid-column-start: 12; 
+		grid-column-end: span 6; 
+		grid-row-start: 35;
+
+	}
+	.GalleryElement:nth-of-type(7) {
+		grid-column-start: 1; 
+		grid-column-end: span 5; 
+		grid-row-start: 41;
+
+	}
+	.GalleryElement:nth-of-type(8) {
+		grid-column-start: 8; 
+		grid-column-end: span 9; 
+		grid-row-start: 45;
+
+		
+	}
+	.GalleryElement:nth-of-type(9) {
+		grid-column-start: 2; 
+		grid-column-end: span 5; 
+		grid-row-start: 55;
+
+	}
+	.GalleryElement:nth-of-type(10) {
+		grid-column-start: 12; 
+		grid-column-end: span 6; 
+		grid-row-start: 53;
+
+	}
+	.GalleryElement:nth-of-type(11) {
+		grid-column-start: 12; 
+		grid-column-end: span 6; 
+		grid-row-start: 60;
+	}
+	.GalleryElement:nth-of-type(12) {
+		grid-column-start: 12; 
+		grid-column-end: span 6; 
+		grid-row-start: 66;
+	}
+	.GalleryElement:nth-of-type(13) {
+		grid-column-start: 12; 
+		grid-column-end: span 6; 
+		grid-row-start: 71;
+
+	}
+	.GalleryElement:nth-of-type(14) {
+		grid-column-start: 12; 
+		grid-column-end: span 6; 
+		grid-row-start: 77;
+
+	}
+	.GalleryElement:nth-of-type(15) {
+		grid-column-start: 12; 
+		grid-column-end: span 6; 
+		grid-row-start: 81;
+	}
+	.GalleryElement:nth-of-type(16) {
+		grid-column-start: 12; 
+		grid-column-end: span 6; 
+		grid-row-start: 86;
+	}
+	.GalleryElement:nth-of-type(17) {
+		grid-column-start: 12; 
+		grid-column-end: span 6; 
+		grid-row-start: 92;
+	}
 
 }
-.GalleryElement:nth-of-type(6) {
-	grid-column-start: 12; 
-	grid-column-end: span 6; 
-	grid-row-start: 35;
 
-}
-.GalleryElement:nth-of-type(7) {
-	grid-column-start: 1; 
-	grid-column-end: span 5; 
-	grid-row-start: 41;
 
-}
-.GalleryElement:nth-of-type(8) {
-	grid-column-start: 8; 
-	grid-column-end: span 9; 
-	grid-row-start: 45;
+/*Fade */
 
-	
+.fade{
+  opacity: 0.22;
+  filter: contrast(0.66) sepia(.8) blur(5px) grayscale(0.8);
+  transition: all 1s ease;
+  transform: translateY(10%);
 }
-.GalleryElement:nth-of-type(9) {
-	grid-column-start: 2; 
-	grid-column-end: span 5; 
-	grid-row-start: 55;
 
+.show {
+  opacity: 1;
+  filter:  contrast(1) brightness(1) sepia(0) blur(0px) grayscale(0);
+  transform: translateY(0);
 }
-/* .GalleryElement:nth-of-type(10) {
-	grid-column-start: 12; 
-	grid-column-end: span 6; 
-	grid-row-start: 53;
 
-}
-.GalleryElement:nth-of-type(11) {
-	grid-column-start: 12; 
-	grid-column-end: span 6; 
-	grid-row-start: 60;
-}
-.GalleryElement:nth-of-type(12) {
-	grid-column-start: 12; 
-	grid-column-end: span 6; 
-	grid-row-start: 66;
-}
-.GalleryElement:nth-of-type(13) {
-	grid-column-start: 12; 
-	grid-column-end: span 6; 
-	grid-row-start: 71;
 
-}
-.GalleryElement:nth-of-type(14) {
-	grid-column-start: 12; 
-	grid-column-end: span 6; 
-	grid-row-start: 77;
-
-}
-.GalleryElement:nth-of-type(15) {
-	grid-column-start: 12; 
-	grid-column-end: span 6; 
-	grid-row-start: 81;
-}
-.GalleryElement:nth-of-type(16) {
-	grid-column-start: 12; 
-	grid-column-end: span 6; 
-	grid-row-start: 86;
-}
-.GalleryElement:nth-of-type(17) {
-	grid-column-start: 12; 
-	grid-column-end: span 6; 
-	grid-row-start: 92;
-} */
 
 </style>
+
+<script>
+
+
+     // IntersectionObserver options
+     let options = {
+         rootMargin: "800px 0px -200px 0px",
+     };
+ 
+     // Define the IntersectionObserver
+     const observer = new IntersectionObserver((entries) => {  
+         entries.forEach((entry) => {
+             console.log(entry);
+             if (entry.isIntersecting) {
+                 entry.target.classList.add("show");
+             } else {
+                 entry.target.classList.remove("show");
+             }
+         });
+     }, options);
+ 
+     // Select elements to observe and start observing them
+     const fadeElements = document.querySelectorAll(".fade");
+     fadeElements.forEach((el) => observer.observe(el));
+ 
+ </script>

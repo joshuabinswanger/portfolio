@@ -9,6 +9,8 @@
     </div>
 </div>
 <style>
+@import "../styles/global.css";
+
 :root {
 
     --border-size: 1px;
@@ -28,6 +30,10 @@
   padding: 0.6rem 0.75rem;
   align-content: center;
   justify-content: center;
+
+  @media (--bp-mobile) {
+    padding: 0.2rem 0.5rem;
+  }
 }
 
 
