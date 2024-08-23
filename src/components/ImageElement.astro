@@ -34,8 +34,8 @@ const myImage = images[imagePath]();
       <Picture  
       src={myImage} 
       formats={['avif', 'webp']}
-      widths={[240, 540, 720, myImage.width]}
-      sizes={'(max-width: 650px) 240px, (max-width: 1050px) 540px, (max-width: 1800px) 720px,  ${myImage.width}px'}
+      widths={[500, 1000, 1500, myImage.width]}
+      sizes={'(max-width: 650px) 500px, (max-width: 1050px) 1000px, (max-width: 1800px) 1500x,  ${myImage.width}px'}
       alt="empty" 
       loading={loading}
       style={`
@@ -54,15 +54,6 @@ const myImage = images[imagePath]();
 <style define:vars={{margin_top }}>
 
 @import "../styles/global.css";
-
-/* Text Size*/
-#content {
-    padding: 3px 10px;
-    display: flex;
-    justify-content: center;
-
-}
-
 
 /*Fade */
 

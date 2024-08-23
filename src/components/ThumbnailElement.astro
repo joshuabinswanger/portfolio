@@ -39,8 +39,8 @@ const myImage = images[imagePath]();
       style={`
       width: ${width}; 
       height: ${height}; 
-      object-fit: cover; 
-      aspect-ratio: ${aspectratio}
+      aspect-ratio: ${aspectratio};
+       object-fit: cover; 
       `}>
     </a> 
 </div>
@@ -53,45 +53,11 @@ const myImage = images[imagePath]();
 
 @import "../styles/global.css";
 
-/* Text Size*/
-#content {
-    padding: 3px 10px;
-    display: flex;
-    justify-content: center;
-    font-size: calc(var(--font-size-dekstop) - 0.7rem + 0.7vw );
-    letter-spacing: 0.8px;
-
-
-    @media (--bp-mobile){
-        font-size: calc(var(--font-size-mobile) - 0.2rem);
-    }
-
-    @media (--bp-tablet){
-        font-size: calc(var(--font-size-tablet) - 0.2rem);
-    }
-
-    @media (--bp-desktop-wide){
-        font-size: calc(var(--font-size-desktop-wide)  - 0.2rem);
-    }
+img {
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
 }
-
-
-/*Fade */
-
-.hidden{
-  opacity: 0.22;
-  filter: contrast(0.66) sepia(.8) blur(2px) grayscale(0.8);
-  transition: all 1s ease;
-  transform: translateY(10%);
-}
-
-.show {
-  opacity: 1;
-  filter:  contrast(1) brightness(1) sepia(0) blur(0px) grayscale(0);
-  transform: translateY(0);
-}
-
-
 
 </style>
 

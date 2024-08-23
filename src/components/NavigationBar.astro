@@ -91,7 +91,6 @@ import Index from './Index.astro';
   	}
 
 		@media (--bp-desktop-wide) {
-
       top: var(--padding-desktop-wide);
 		}
 
@@ -111,7 +110,17 @@ p {
   margin: 0px;
   padding: 1rem 1rem 1rem 1rem;
   text-align: center;
+
+  @media (--bp-tablet) {
+    font-size: var(--font-size-tablet);
+    padding: 0.5rem;
+  }
+
+  @media (--bp-desktop-wide) {
+    font-size: var(--font-size-dekstop-wide);
+  }
 }
+
 
 
 </style>

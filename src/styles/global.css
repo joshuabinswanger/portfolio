@@ -58,29 +58,29 @@
   --padding-desktop-wide: 6rem;
 
   /* Margins */
-  --margin-left-dekstop: 0em;
+  --margin-left-dekstop: 2vw;
   --margin-right-desktop: 8vw;
 
   --margin-left-mobile: 50px;
   --margin-right-mobile: 50px;
   
   --margin-left-tablet: 0px;
-  --margin-right-tablet: 0px;
+  --margin-right-tablet: 4vw;
 
-  --margin-left-desktop-wide: 0;
-  --margin-right-desktop-wide: 0;
+  --margin-left-desktop-wide: 12vw;
+  --margin-right-desktop-wide: 20vw;
 
   /* Font Sizes */
   --font-size-dekstop: 14px;
-  --font-size-mobile: 0.8rem;
-  --font-size-tablet: 0.8rem;
-  --font-size-desktop-wide: 1rem;
+  --font-size-mobile: 14px;
+  --font-size-tablet: 12px;
+  --font-size-desktop-wide: 16px;
 
   /* Columns: Nav Main */
   --grid-template-columns-desktop:      200px 1fr;
   --grid-template-columns-mobile:       1fr;
-  --grid-template-columns-tablet:       0fr 2ch 17ch 2ch 11fr 1.5fr;
-  --grid-template-columns-desktop-wide: 0fr 1fr 23ch 3ch 7fr 1.5fr;
+  --grid-template-columns-tablet:       150px 1fr;
+  --grid-template-columns-desktop-wide: 220px 1fr;
 }
 /* Media Queries Breakpoints*/
 @custom-media --bp-mobile (width <= 650px);

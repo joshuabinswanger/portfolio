@@ -1,13 +1,12 @@
 ---
 import ImageElement from "./ImageElement.astro";
 import ThumbnailElement from "./ThumbnailElement.astro";
-import NavigationBar from "./NavigationBar.astro"
-import NavigationBarMobile from "./NavigationBarMobile.astro"
 import TopWrapper from "../layouts/TopWrapper.astro";
 import GridLayout from "../layouts/GridLayout.astro";
 import SquareBracketH from "./SquareBracket_H.astro";
 import "../styles/global.css";
 
+import GameDesign101 from "./GalleryElement_GameDesign101.astro"
 ---
 
 <TopWrapper>
@@ -15,62 +14,9 @@ import "../styles/global.css";
 
 	<GridLayout>
 
-
-		<div class:list={["fade", "GalleryElement"]}>
-				<ImageElement 
-				width="100%"
-				to="/projects/alice-in-woodland"
-				loading="eager"
-				altText="This is a Test"
-				imagePath="/src/assets/galleryimages/GalleryImages_1.webp"
-				/>
-				<div id="FlexWrapper">
-					<SquareBracketH>
-						<h1>Alice in Woodland</h1>
-						<h2>Poster</h2>
-						<h3>Client</h3>
-					</SquareBracketH>
-					<SquareBracketH>
-						<div id="GalleryThumbnails">
-							<ThumbnailElement 
-							width="100%"
-							aspectratio="1/1"
-							to="/projects/alice-in-woodland"
-							title="Alice in Woodland"
-							tools="3D Interactive"
-							altText="This is a Test"
-							imagePath="/src/assets/galleryimages/GalleryImages_9.webp"
-							/>
-							<ThumbnailElement  
-							width="100%"
-							aspectratio="1/1"
-							to="/projects/alice-in-woodland"
-							title="Alice in Woodland"
-							tools="3D Interactive"
-							altText="This is a Test"
-							imagePath="/src/assets/galleryimages/GalleryImages_8.webp"
-							/>
-							<ThumbnailElement 
-							width="100%"
-							aspectratio="1/1"
-							to="/projects/alice-in-woodland"
-							title="Alice in Woodland"
-							tools="3D Interactive"
-							altText="This is a Test"
-							imagePath="/src/assets/galleryimages/GalleryImages_7.webp"
-							/>
-							<ThumbnailElement 
-							width="100%"
-							aspectratio="1/1"
-							to="/projects/alice-in-woodland"
-							title="Alice in Woodland"
-							tools="3D Interactive"
-							altText="This is a Test"
-							imagePath="/src/assets/galleryimages/GalleryImages_1.webp"
-							/>
-						</div>
-					</SquareBracketH>
-				</div>
+		<div class:list={"GalleryElement"}>
+			<GameDesign101 />
+		</div>
 
 		
 
@@ -169,6 +115,23 @@ import "../styles/global.css";
 	
 </TopWrapper>
 
+
+
+
+<script>
+document.querySelector('.GalleryElement:nth-child #GalleryThumbnails #Thumbnail:nth-child(3)').addEventListener('mouseover', function() {
+    document.querySelector('#ImageWrapper #ImageContainer:nth-child(3)').style.border = '2px solid red';  // Example: Adding a red border on hover
+});
+
+document.querySelector('#GalleryThumbnails #Thumbnail:nth-child(3)').addEventListener('mouseout', function() {
+    document.querySelector('#ImageWrapper #ImageContainer:nth-child(3)').style.border = '';  // Resetting the style on mouseout
+});
+
+</script>
+
+
+
+
 <style>
 @import "../styles/global.css";
 
@@ -176,65 +139,113 @@ import "../styles/global.css";
 	display: grid;
 }
 
-#FlexWrapper {
-	display: grid; 
-	grid-template-columns: auto 1fr;
+
+
+.GalleryElement:nth-of-type(1) {
+	grid-column-start: 1; 
+	grid-column-end: span 7; 
+	grid-row-start: 1;
+	
+}
+
+	
+
+
+.GalleryElement:nth-of-type(2) {
+	grid-column-start: 11; 
+	grid-column-end: span 8; 
+	grid-row-start: 7;
 
 }
 
-#GalleryThumbnails {
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	grid-auto-rows: auto;
-	gap: 5%;
-	filter: sepia(0.5) grayscale(0.5);
-	opacity: 0.75;
+.GalleryElement:nth-of-type(3) {
+	grid-column-start: 2;
+	grid-column-end: span 7; 
+	grid-row-start: 14;
+	
 }
-
-h1 {
-	font-family: PowerGrotesk-Medium;
-	font-weight: 600;
-	font-style: normal;
-	font-size: 1rem;
-	letter-spacing: 0.5px;
-	margin: 0px;
-
-	@media (--bp-mobile) {
-		font-size: 0.8rem;
-	}
+.GalleryElement:nth-of-type(4) {
+	grid-column-start: 11;
+	grid-column-end: span 6; 
+	grid-row-start: 22;
 
 }
-
-h2 {
-	font-family: PowerGrotesk-Light;
-	font-weight: 200;
-	font-style: italic;
-	font-size: 0.8rem;
-	letter-spacing: 0.5px;
-	margin-top: 4px;
-
-	@media (--bp-mobile) {
-		font-size: 0.6rem;
-		margin-top: 0px;
-	}
+.GalleryElement:nth-of-type(5) {
+	grid-column-start: 1;
+		grid-column-end: span 8; 
+		grid-row-start: 28;
 
 }
-
-h3 {
-	font-family: PowerGrotesk-Light;
-	font-weight: 200;
-	font-style: normal;
-	font-size: 0.8rem;
-	text-align: end;
-	letter-spacing: 0.5px;
-	margin: 0px;
-
-	@media (--bp-mobile) {
-		font-size: 0.6rem;
-		margin-top: -10px;
-	}
+.GalleryElement:nth-of-type(6) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 35;
 
 }
+.GalleryElement:nth-of-type(7) {
+	grid-column-start: 1; 
+	grid-column-end: span 5; 
+	grid-row-start: 41;
+
+}
+.GalleryElement:nth-of-type(8) {
+	grid-column-start: 8; 
+	grid-column-end: span 9; 
+	grid-row-start: 45;
+
+	
+}
+.GalleryElement:nth-of-type(9) {
+	grid-column-start: 2; 
+	grid-column-end: span 5; 
+	grid-row-start: 55;
+
+}
+.GalleryElement:nth-of-type(10) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 53;
+
+}
+.GalleryElement:nth-of-type(11) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 60;
+}
+.GalleryElement:nth-of-type(12) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 66;
+}
+.GalleryElement:nth-of-type(13) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 71;
+
+}
+.GalleryElement:nth-of-type(14) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 77;
+
+}
+.GalleryElement:nth-of-type(15) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 81;
+}
+.GalleryElement:nth-of-type(16) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 86;
+}
+.GalleryElement:nth-of-type(17) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 92;
+}
+
+
 
 @media (--bp-mobile) {
 
@@ -254,161 +265,24 @@ h3 {
 
 }
 
-@media (--bp-desktop) {
+@media (--bp-tablet) {
 
-	.GalleryElement:nth-of-type(1) {
-		grid-column-start: 1; 
-		grid-column-end: span 7; 
-		grid-row-start: 1;
-		
-	}
-
-		
-
-
-	.GalleryElement:nth-of-type(2) {
-		grid-column-start: 11; 
-		grid-column-end: span 8; 
-		grid-row-start: 7;
-
-		@media (--bp-mobile) {
-		grid-column-start: 1; 
-		grid-column-end: 4; 
-		grid-row-start: 2;
-		}
-	}
-
-	.GalleryElement:nth-of-type(3) {
-		grid-column-start: 2;
-		grid-column-end: span 7; 
-		grid-row-start: 14;
-		
-	}
-	.GalleryElement:nth-of-type(4) {
-		grid-column-start: 11;
-		grid-column-end: span 6; 
-		grid-row-start: 22;
-
-	}
-	.GalleryElement:nth-of-type(5) {
-		grid-column-start: 1;
-			grid-column-end: span 8; 
-			grid-row-start: 28;
-
-	}
-	.GalleryElement:nth-of-type(6) {
-		grid-column-start: 12; 
-		grid-column-end: span 6; 
-		grid-row-start: 35;
-
-	}
-	.GalleryElement:nth-of-type(7) {
-		grid-column-start: 1; 
-		grid-column-end: span 5; 
-		grid-row-start: 41;
-
-	}
-	.GalleryElement:nth-of-type(8) {
-		grid-column-start: 8; 
-		grid-column-end: span 9; 
-		grid-row-start: 45;
-
-		
-	}
-	.GalleryElement:nth-of-type(9) {
-		grid-column-start: 2; 
-		grid-column-end: span 5; 
-		grid-row-start: 55;
-
-	}
-	.GalleryElement:nth-of-type(10) {
-		grid-column-start: 12; 
-		grid-column-end: span 6; 
-		grid-row-start: 53;
-
-	}
-	.GalleryElement:nth-of-type(11) {
-		grid-column-start: 12; 
-		grid-column-end: span 6; 
-		grid-row-start: 60;
-	}
-	.GalleryElement:nth-of-type(12) {
-		grid-column-start: 12; 
-		grid-column-end: span 6; 
-		grid-row-start: 66;
-	}
-	.GalleryElement:nth-of-type(13) {
-		grid-column-start: 12; 
-		grid-column-end: span 6; 
-		grid-row-start: 71;
-
-	}
-	.GalleryElement:nth-of-type(14) {
-		grid-column-start: 12; 
-		grid-column-end: span 6; 
-		grid-row-start: 77;
-
-	}
-	.GalleryElement:nth-of-type(15) {
-		grid-column-start: 12; 
-		grid-column-end: span 6; 
-		grid-row-start: 81;
-	}
-	.GalleryElement:nth-of-type(16) {
-		grid-column-start: 12; 
-		grid-column-end: span 6; 
-		grid-row-start: 86;
-	}
-	.GalleryElement:nth-of-type(17) {
-		grid-column-start: 12; 
-		grid-column-end: span 6; 
-		grid-row-start: 92;
-	}
-
+.GalleryElement:nth-of-type(odd) {
+	grid-column-start: 1; 
+	grid-column-end: span 5; 
 }
 
-
-/*Fade */
-
-.fade{
-  opacity: 0.22;
-  filter: contrast(0.66) sepia(.8) blur(5px) grayscale(0.8);
-  transition: all 1s ease;
-  transform: translateY(10%);
+.GalleryElement:nth-of-type(even) {
+	grid-column-start: 2; 
+	grid-column-end: span 5; 
 }
 
-.show {
-  opacity: 1;
-  filter:  contrast(1) brightness(1) sepia(0) blur(0px) grayscale(0);
-  transform: translateY(0);
+.GalleryElement {
+	margin-bottom: 5rem;
+}
+
 }
 
 
 
 </style>
-
-<script>
-
-
-     // IntersectionObserver options
-     let options = {
-         rootMargin: "800px 0px -200px 0px",
-     };
- 
-     // Define the IntersectionObserver
-     const observer = new IntersectionObserver((entries) => {  
-         entries.forEach((entry) => {
-             console.log(entry);
-             if (entry.isIntersecting) {
-                 entry.target.classList.add("show");
-             } else {
-                 entry.target.classList.remove("show");
-             }
-         });
-     }, options);
- 
-     // Select elements to observe and start observing them
-     const fadeElements = document.querySelectorAll(".fade");
-     fadeElements.forEach((el) => observer.observe(el));
- 
- </script>

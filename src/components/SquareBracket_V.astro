@@ -10,6 +10,8 @@
 
 
 <style>
+@import "../styles/global.css";
+
 :root {
 
     --border-size: 1px;
@@ -49,7 +51,11 @@
 .bottom-border:before {
   content: '';
   width: 100%;
-  height: 15px;
+  height: 1.5vh;
+
+  @media (--bp-tablet) {
+    height: 1vh;
+  }
 }
 .top-border:after,
 .top-border:before {
