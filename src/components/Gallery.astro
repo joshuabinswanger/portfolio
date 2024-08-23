@@ -119,16 +119,8 @@ import GameDesign101 from "./GalleryElement_GameDesign101.astro"
 
 
 <script>
-/* document.querySelector('.GalleryElement:nth-child #GalleryThumbnails #Thumbnail:nth-child(3)').addEventListener('mouseover', function() {
-    document.querySelector('#ImageWrapper #ImageContainer:nth-child(3)').style.border = '2px solid red';  // Example: Adding a red border on hover
-});
 
-document.querySelector('#GalleryThumbnails #Thumbnail:nth-child(3)').addEventListener('mouseout', function() {
-    document.querySelector('#ImageWrapper #ImageContainer:nth-child(3)').style.border = '';  // Resetting the style on mouseout
-});
- */
-
-
+document.addEventListener('astro:page-load', ev => {
  // IntersectionObserver options
  let options = {
          rootMargin: "800px 0px -200px 0px",
@@ -150,6 +142,7 @@ document.querySelector('#GalleryThumbnails #Thumbnail:nth-child(3)').addEventLis
      const fadeElements = document.querySelectorAll(".fade");
      fadeElements.forEach((el) => observer.observe(el));
 
+  });
 </script>
 
 

@@ -73,29 +73,3 @@ const myImage = images[imagePath]();
 
 
 </style>
-
-<script>
-
-
-     // IntersectionObserver options
-     let options = {
-         rootMargin: "100px 0px -88px 0px",
-     };
- 
-     // Define the IntersectionObserver
-     const observer = new IntersectionObserver((entries) => {  
-         entries.forEach((entry) => {
-             console.log(entry);
-             if (entry.isIntersecting) {
-                 entry.target.classList.add("show");
-             } else {
-                 entry.target.classList.remove("show");
-             }
-         });
-     }, options);
- 
-     // Select elements to observe and start observing them
-     const fadeElements = document.querySelectorAll(".hidden");
-     fadeElements.forEach((el) => observer.observe(el));
- 
- </script>
