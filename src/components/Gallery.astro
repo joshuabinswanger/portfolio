@@ -14,12 +14,9 @@ import GameDesign101 from "./GalleryElement_GameDesign101.astro"
 
 	<GridLayout>
 
-		<div class:list={"GalleryElement"}>
+
+		<div class:list={["fade", "GalleryElement"]}>
 			<GameDesign101 />
-		</div>
-
-		
-
 		</div>
 
 		 <div class:list={["fade", "GalleryElement"]}>
@@ -33,6 +30,9 @@ import GameDesign101 from "./GalleryElement_GameDesign101.astro"
 			imagePath="/src/assets/galleryimages/GalleryImages_2.webp"
 			/>
 		</div>
+
+
+
 
 		<div class:list={["fade", "GalleryElement"]} >
 			<ImageElement 
@@ -119,13 +119,36 @@ import GameDesign101 from "./GalleryElement_GameDesign101.astro"
 
 
 <script>
-document.querySelector('.GalleryElement:nth-child #GalleryThumbnails #Thumbnail:nth-child(3)').addEventListener('mouseover', function() {
+/* document.querySelector('.GalleryElement:nth-child #GalleryThumbnails #Thumbnail:nth-child(3)').addEventListener('mouseover', function() {
     document.querySelector('#ImageWrapper #ImageContainer:nth-child(3)').style.border = '2px solid red';  // Example: Adding a red border on hover
 });
 
 document.querySelector('#GalleryThumbnails #Thumbnail:nth-child(3)').addEventListener('mouseout', function() {
     document.querySelector('#ImageWrapper #ImageContainer:nth-child(3)').style.border = '';  // Resetting the style on mouseout
 });
+ */
+
+
+ // IntersectionObserver options
+ let options = {
+         rootMargin: "800px 0px -200px 0px",
+     };
+ 
+     // Define the IntersectionObserver
+     const observer = new IntersectionObserver((entries) => {  
+         entries.forEach((entry) => {
+             console.log(entry);
+             if (entry.isIntersecting) {
+                 entry.target.classList.add("show");
+             } else {
+                 entry.target.classList.remove("show");
+             }
+         });
+     }, options);
+ 
+     // Select elements to observe and start observing them
+     const fadeElements = document.querySelectorAll(".fade");
+     fadeElements.forEach((el) => observer.observe(el));
 
 </script>
 
@@ -134,6 +157,21 @@ document.querySelector('#GalleryThumbnails #Thumbnail:nth-child(3)').addEventLis
 
 <style>
 @import "../styles/global.css";
+/*Fade */
+
+.fade{
+  opacity: 0.22;
+  filter: contrast(0.66) sepia(.8) blur(5px) grayscale(0.8);
+  transition: all 1s ease;
+  transform: translateY(10%);
+}
+
+.show {
+  opacity: 1;
+  filter:  contrast(1) brightness(1) sepia(0) blur(0px) grayscale(0);
+  transform: translateY(0);
+}
+
 
 .GalleryElement {
 	display: grid;

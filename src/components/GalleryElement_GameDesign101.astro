@@ -121,6 +121,8 @@ import ThumbnailElement from "./ThumbnailElement.astro";
 	</div>
 
 <script>
+
+/* Gallery Thumbnails Hover Interaction */
 document.querySelectorAll('#GalleryThumbnails #Thumbnail').forEach(function(thumbnail, index) {
     thumbnail.addEventListener('mouseover', function() {
         document.querySelector(`#ImageWrapper #ImageContainer:nth-child(${index + 2})`).style.opacity = '1';
@@ -130,30 +132,6 @@ document.querySelectorAll('#GalleryThumbnails #Thumbnail').forEach(function(thum
         document.querySelector(`#ImageWrapper #ImageContainer:nth-child(${index + 2})`).style.opacity = '0';
     });
 });
-
-
-	
-
-     // IntersectionObserver options
-     let options = {
-         rootMargin: "800px 0px -200px 0px",
-     };
- 
-     // Define the IntersectionObserver
-     const observer = new IntersectionObserver((entries) => {  
-         entries.forEach((entry) => {
-             console.log(entry);
-             if (entry.isIntersecting) {
-                 entry.target.classList.add("show");
-             } else {
-                 entry.target.classList.remove("show");
-             }
-         });
-     }, options);
- 
-     // Select elements to observe and start observing them
-     const fadeElements = document.querySelectorAll(".fade");
-     fadeElements.forEach((el) => observer.observe(el));
 
 </script>
 
@@ -278,20 +256,5 @@ h3 {
 		margin-top: -10px;
 	}
 
-}
-
-/*Fade */
-
-.fade{
-  opacity: 0.22;
-  filter: contrast(0.66) sepia(.8) blur(5px) grayscale(0.8);
-  transition: all 1s ease;
-  transform: translateY(10%);
-}
-
-.show {
-  opacity: 1;
-  filter:  contrast(1) brightness(1) sepia(0) blur(0px) grayscale(0);
-  transform: translateY(0);
 }
 </style>
