@@ -61,13 +61,25 @@ import ThumbnailElement from "./ThumbnailElement.astro";
 			/>
 		</div>
 	</div>
-	<div id="ThumbnailWrapper">
+	<div id="TextThumbnailWrapper">
 		<SquareBracketH>
-			<h1>Game Design 101</h1>
-			<h2>Poster</h2>
-			<h3>Client</h3>
+			<div id="TextWrap">
+				<h1>Game Design 101</h1>
+				<h2>Poster</h2>
+				<h3>Client</h3>
+			</div>
 		</SquareBracketH>
 		<SquareBracketH>
+			<div id="ArrowContainer">
+				<button class:list={"Arrow"}>
+					&larr;
+				</button>
+					
+				<button class:list={"Arrow"}>
+					&rarr;
+				</button>
+
+			</div>
 			<div id="GalleryThumbnails">
 				<div id="Thumbnail">
 					<ThumbnailElement 
@@ -174,12 +186,53 @@ opacity: 0;
 }
 
 
-#ThumbnailWrapper {
+#TextThumbnailWrapper {
 	display: grid; 
-	grid-template-columns: auto 1fr;
+	grid-template-columns: 2fr 3fr ;
+	align-content: center;
 
+	@media (--bp-mobile) {
+		grid-template-columns: 4fr 3fr;
+	}
+
+	@media (--bp-tablet) {
+		grid-template-columns: 3fr 2fr;
+	}
 }
 
+
+/* Arrows */
+
+#ArrowContainer {
+	display: none;
+	padding: ;
+	grid-template-columns: 1fr 1fr;
+	justify-content: center;
+	align-content: center;
+
+
+	@media (--bp-mobile) {
+		display: grid;
+	}
+
+	@media (--bp-tablet) {
+		display: grid;
+	}
+}
+
+.Arrow {
+	font: inherit;
+	font-family: PowerGrotesk-UltraLight;
+	font-size: 1.5rem;
+	text-align: center;
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	outline: inherit;
+
+}
 
 /* Thumbnail Elements */
 
@@ -191,6 +244,14 @@ opacity: 0;
 	filter: sepia(0.5) grayscale(0.5);
 	justify-content: center;
 	opacity: 0.75;
+
+	@media (--bp-mobile) {
+		display: none;
+	}
+
+	@media (--bp-tablet) {
+		display: none;
+	}
 }
 
 #Thumbnail {
@@ -198,21 +259,30 @@ opacity: 0;
 }
 
 
+
 /* Thumbnail Text */
+
+#TextWrapper {
+
+align-content: center;
+justify-content: center;
+
+}
+
 h1 {
 	font-family: PowerGrotesk-Medium;
 	font-weight: 600;
 	font-style: normal;
-	font-size: 1rem;
+	font-size: min(1vw, 1rem);
 	letter-spacing: 0.5px;
 	margin: 0px;
 
 	@media (--bp-mobile) {
-		font-size: 1rem;
+		font-size: 0.8rem;
 	}
 
 	@media (--bp-tablet) {
-		font-size: 0.8rem;
+		font-size: 1rem;
 	}
 
 }
@@ -253,7 +323,7 @@ h3 {
 
 	@media (--bp-tablet) {
 		font-size: 0.6rem;
-		margin-top: -10px;
+		margin-top: 0px;
 	}
 
 }

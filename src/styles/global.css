@@ -1,14 +1,15 @@
 @font-face {
-  font-family: PowerGroteskUltraLight;
-  src: url(/public/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-ultra-light.woff2) format("woff2"),
-       url(/public/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-ultra-light.woff) format('woff');
+  font-family: PowerGrotesk-UltraLight;
+  src: url(/fonts/PowerGrotesk/power-grotesk-ultra-light/webfonts/power-grotesk-ultra-light.woff2) format('woff2'),
+       url(/fonts/PowerGrotesk/power-grotesk-ultra-light/webfonts/power-grotesk-ultra-light.woff) format('woff');
   font-weight: 100;
+  font-style: normal;
 }
 
 @font-face {
   font-family: PowerGrotesk-Light;
-  src: url(/public/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-light.woff2) format('woff2'),
-       url(/public/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-light.woff) format('woff');
+  src: url(/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-light.woff2) format('woff2'),
+       url(/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-light.woff) format('woff');
   font-weight: 200;
   font-style: normal;
 }
