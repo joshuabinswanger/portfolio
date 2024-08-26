@@ -8,11 +8,11 @@ import SquareBracketV from './SquareBracket_V.astro';
 import "../styles/global.css"
 
 ---
-<nav id="NavBarMobile">
+<div id="Logo">
+  <RhizomLogoComponent/ >
+</div>
 
-  <div>
-    <RhizomLogoComponent/ >
-  </div>
+<nav id="NavBarMobile">
 
   <input id="input" type="checkbox"></input>
 
@@ -66,8 +66,12 @@ import "../styles/global.css"
   position: fixed;
   z-index: 1000;
   left: 0px;
-  bottom: 0px;
+  top: 0px;
 }
+
+#Logo {
+  height: 100svh;
+} 
 
 .button {
   width: auto;
