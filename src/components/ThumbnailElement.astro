@@ -29,7 +29,6 @@ if (!images[imagePath]) throw new Error(`"${imagePath}" does not exist in glob: 
 const myImage = images[imagePath]();
 ---
 <div id="Image">
-    <a href={to}>
       <Picture  
       src={myImage} 
       formats={['avif', 'webp']}
@@ -42,7 +41,6 @@ const myImage = images[imagePath]();
       aspect-ratio: ${aspectratio};
        object-fit: cover; 
       `}>
-    </a> 
 </div>
 
 

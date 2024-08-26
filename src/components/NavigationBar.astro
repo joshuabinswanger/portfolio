@@ -11,38 +11,6 @@ import Index from './Index.astro';
 
 ---
 
-<!-- <script>
-  import * as rive from "@rive-app/canvas";
-
-  const r = new rive.Rive({
-      src: "/assets/Rhizome_Test2.riv",
-      // OR the path to a discoverable and public Rive asset
-      // src: '/public/example.riv',
-      canvas: document.getElementById("canvas"),
-      autoplay: true,
-      stateMachines: "State Machine 1",
-      onLoad: () => {
-        r.resizeDrawingSurfaceToCanvas();
-      },
-  });
-
-  window.addEventListener(
-    "resize",
-    () => {
-      r.resizeDrawingSurfaceToCanvas();
-    },
-    false
-  );
-
-   // Add click event listener to canvas
-   document.addEventListener("DOMContentLoaded", () => {
-    const canvas = document.getElementById("canvas");
-    canvas.addEventListener("click", () => {
-      window.location.href = "/";
-    });
-  });
-</script> -->
-
 
 
 <nav id="NavBar" transition:persist>
@@ -57,15 +25,21 @@ import Index from './Index.astro';
 
 
     <SquareBracketV>
+      <a href="/">
         <p>Info</p>
+      </a>
     </SquareBracketV>
 
     <SquareBracketV>
-      <p>Contact</p>
+      <a href="/">
+        <p>Contact</p>
+      </a>
     </SquareBracketV>
 
     <SquareBracketV>
-      <p>Links</p>
+      <a href="/">
+        <p>Links</p>
+      </a>
    </SquareBracketV>
   
   </div>
@@ -103,7 +77,15 @@ import Index from './Index.astro';
 #MenuWrapper {
   width: 80%;
   align-items: start;
+  justify-items: stretch;
 }
+
+a {
+  text-decoration: none; /* Removes underline */
+  color: inherit; /* Inherits the color from the parent element */
+  background: none; /* Removes background if any */
+  border: none; /* Removes border if any */
+} 
 
 p {
   font-size: var(--font-size-dekstop);
@@ -120,6 +102,7 @@ p {
     font-size: var(--font-size-dekstop-wide);
   }
 }
+
 
 
 

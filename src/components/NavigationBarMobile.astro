@@ -24,11 +24,29 @@ import "../styles/global.css"
     <span id="anim-span3"></span>
     
   </div> 
-    
-  <div id="Index">
+  
+  <div id="MenuWrapper">
     <SquareBracketV>
       <Index />
     </SquareBracketV>
+
+    <SquareBracketV>
+      <a href="/" id="MenuItems">
+        <p>Info</p>
+      </a>
+    </SquareBracketV>
+
+    <SquareBracketV>
+      <a href="/" id="MenuItems">
+        <p>Contact</p>
+      </a>
+    </SquareBracketV>
+
+    <SquareBracketV>
+        <a href="/" id="MenuItems">
+          <p>Links</p>
+        </a>
+   </SquareBracketV>
 
   </div>  
 
@@ -59,25 +77,51 @@ import "../styles/global.css"
   margin: 0px;
 }
 
-#Index {
+#MenuWrapper {
   position: fixed;
   visibility: hidden;
   top: 0;
   left: 0;
   padding-top: 15vh;
-  width: 100%;
-  height: 100%;
+  padding-left: 28vw;
+  width: 44vw;
+  height: min-content;
   display: grid;
-  justify-items: center;
+  grid-gap: 0;
+  grid-template-columns: 1fr; /* Make all elements stretch to 100% width */
+  grid-auto-flow: row;
+  justify-items: stretch; /* Ensure all children stretch horizontally */
   z-index: 1000;
   pointer-events: none;
 }
 
+#MenuItems {
+  width: 100%; /* Ensure each menu item takes full width */
+  display: flex;
+  justify-content: center; /* Center the content inside */
+  align-items: center; /* Vertically center the content */
+}
+
 input:checked{
-    ~ #Index{
+    ~ #MenuWrapper{
       visibility: visible;
     }
 }
+
+a {
+  text-decoration: none; /* Removes underline */
+  color: inherit; /* Inherits the color from the parent element */
+  background: none; /* Removes background if any */
+  border: none; /* Removes border if any */
+} 
+
+p {
+  font-size: var(--font-size-mobile);
+  margin: 0px;
+  padding: 1rem 1rem 1rem 1rem;
+  text-align: center;
+}
+
 
 #backdrop {
     display: block;

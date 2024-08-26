@@ -1,0 +1,66 @@
+---
+import ImageElement from "./ImageElement.astro"
+import GalleryElement from "./GalleryElement.astro"
+
+const totalImages = 5;
+
+---
+<GalleryElement totalImages={totalImages}>
+
+<!-- Images -->
+
+<div slot="Image1"> 
+    <ImageElement 
+    width="100%"
+    to="/projects/alice-in-woodland"
+    loading="eager"
+    altText="This is a Test"
+    imagePath="/src/assets/galleryimages/GalleryImages_1.webp"
+    />
+</div>
+
+    <ImageElement 
+    width="100%"
+    to="/projects/alice-in-woodland"
+    title="Alice in Woodland"
+    tools="3D Interactive"
+    altText="This is a Test"
+    imagePath="/src/assets/galleryimages/GalleryImages_9.webp"
+    slot="Image2"
+    />
+
+<div slot="Image3"> 
+    <ImageElement  
+    width="100%"
+    to="/projects/alice-in-woodland"
+    title="Alice in Woodland"
+    tools="3D Interactive"
+    altText="This is a Test"
+    imagePath="/src/assets/galleryimages/GalleryImages_8.webp"
+    />
+</div>
+
+<div slot="Image4"> 
+    <ImageElement 
+    width="100%"
+    to="/projects/alice-in-woodland"
+    title="Alice in Woodland"
+    tools="3D Interactive"
+    altText="This is a Test"
+    imagePath="/src/assets/galleryimages/GalleryImages_7.webp"
+/>
+</div>
+
+<div slot="Image5"> 
+    <ImageElement 
+    width="100%"
+    to="/projects/alice-in-woodland"
+    title="Alice in Woodland"
+    tools="3D Interactive"
+    altText="This is a Test"
+    imagePath="/src/assets/galleryimages/GalleryImages_6.webp"
+    />
+</div>
+
+
+</GalleryElement>
