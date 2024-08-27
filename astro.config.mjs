@@ -4,5 +4,6 @@ import robotsTxt from "astro-robots-txt";
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [robotsTxt()]
+  site: 'https://rhizome.ch',
+  integrations: [robotsTxt()],
 });
