@@ -71,6 +71,7 @@ import "../styles/global.css"
 
 #Logo {
   height: 100svh;
+  pointer-events: auto;
 } 
 
 .button {
@@ -97,6 +98,9 @@ import "../styles/global.css"
   justify-items: stretch; /* Ensure all children stretch horizontally */
   z-index: 1000;
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 1s cubic-bezier(0.33, 1, 0.68, 1)  0.2s;
+
 }
 
 #MenuItems {
@@ -106,23 +110,18 @@ import "../styles/global.css"
   align-items: center; /* Vertically center the content */
 }
 
-input:checked{
-    ~ #MenuWrapper{
-      visibility: visible;
-    }
-}
-
 a {
   text-decoration: none; /* Removes underline */
   color: inherit; /* Inherits the color from the parent element */
   background: none; /* Removes background if any */
   border: none; /* Removes border if any */
+  pointer-events: auto;
 } 
 
 p {
   font-size: var(--font-size-mobile);
   margin: 0px;
-  padding: 1rem 1rem 1rem 1rem;
+  padding: 0.7rem 0.2rem;
   text-align: center;
 }
 
@@ -136,38 +135,12 @@ p {
     height: 100lvh;
     background-color: rgba(255, 255, 255, 0);
     backdrop-filter: blur(0);
-    transition: backdrop-filter 1s ease, background-color 1s ease;
+    transition: backdrop-filter 1s cubic-bezier(0.33, 1, 0.68, 1) , background-color 1s cubic-bezier(0.33, 1, 0.68, 1) ;
     z-index: 998;
     pointer-events: none;
   }
 
-  input:checked {
-    ~ #backdrop {
-      display: block;
-      background-color: rgba(255, 255, 255, 0.88); /* Example style */
-      backdrop-filter: blur(15px);
-      pointer-events: auto;
-    }
-  }
 
-
-
-
-#input {
-  display: block;
-  width: 44px;
-  height: 44px;
-  position: fixed;
-  bottom: 0px;
-  right: 10px;
-  pointer-events: auto;
-  cursor: pointer;
-  
-  opacity: 0; /* hide this */
-  z-index: 1001; /* and place it over the hamburger */
-  
-  -webkit-touch-callout: none;
-}
 
 #Hamburger {
   position: fixed;
@@ -184,8 +157,8 @@ p {
     background: #000000;
     /* transform-origin: 4px 0px; */
   
-    transition: transform 1s ease,
-                opacity 1s ease;
+    transition: transform 1s cubic-bezier(0.33, 1, 0.68, 1),
+                opacity 1s cubic-bezier(0.33, 1, 0.68, 1);
 
   }
 
@@ -205,6 +178,32 @@ p {
   }
 }
 
+/* Animation */
+#input {
+  display: block;
+  width: 44px;
+  height: 44px;
+  position: fixed;
+  bottom: 0px;
+  right: 10px;
+  pointer-events: auto;
+  cursor: pointer;
+  
+  opacity: 0; /* hide this */
+  z-index: 1001; /* and place it over the hamburger */
+  
+  -webkit-touch-callout: none;
+}
+
+input:checked {
+    ~ #backdrop {
+      display: block;
+      background-color: rgba(255, 255, 255, 0.88); /* Example style */
+      backdrop-filter: blur(15px);
+      pointer-events: auto;
+    }
+  }
+
 
 input:checked {
   ~ #Hamburger{
@@ -222,6 +221,18 @@ input:checked {
     }
   }
 }
+
+input:checked{
+    ~ #MenuWrapper{
+      visibility: visible;
+      opacity: 1;
+    }
+}
+
+
+
+
+
 
 
 

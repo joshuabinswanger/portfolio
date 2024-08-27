@@ -15,6 +15,7 @@
 :root {
 
     --border-size: 1px;
+    pointer-events: none;
 }
 
 
@@ -51,10 +52,13 @@
 .bottom-border:before {
   content: '';
   width: 100%;
-  height: 1.5vh;
+  height: 0.7rem;
 
+  @media (--bp-mobile) {
+    height: 0.7rem;
+  }
   @media (--bp-tablet) {
-    height: 1vh;
+    height: 0.6rem;
   }
 }
 .top-border:after,

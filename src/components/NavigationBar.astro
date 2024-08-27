@@ -16,7 +16,9 @@ import Index from './Index.astro';
 <nav id="NavBar" transition:persist>
 
   <div id="MenuWrapper">
-    <Logo />
+    <div style="pointer-events: auto;">
+      <Logo />
+    </div>
 
     <SquareBracketV>
        <Index />
@@ -85,21 +87,21 @@ a {
   color: inherit; /* Inherits the color from the parent element */
   background: none; /* Removes background if any */
   border: none; /* Removes border if any */
+  pointer-events: auto;
 } 
 
 p {
   font-size: var(--font-size-dekstop);
   margin: 0px;
-  padding: 1rem 1rem 1rem 1rem;
+  padding: 0.7rem 0.2rem;
   text-align: center;
 
   @media (--bp-tablet) {
     font-size: var(--font-size-tablet);
-    padding: 0.5rem;
   }
 
   @media (--bp-desktop-wide) {
-    font-size: var(--font-size-dekstop-wide);
+    font-size: 15px;
   }
 }
 

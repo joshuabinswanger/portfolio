@@ -37,7 +37,7 @@ interface Props {
 		</div>
 	</div>
 	<div id="ThumbnailWrapper">
-		<SquareBracketH padding="0.25rem 1rem">
+		<SquareBracketH padding="3% 1%">
 			<div id="TextContainer">
 				<h1>Game Design 101</h1>
 				<h2>Poster</h2>
@@ -58,24 +58,6 @@ interface Props {
 
 			</div>
 		
-			
-<!-- 			<div id="GalleryThumbnails">
-				<div id="Thumbnail">
-					<slot name="ThumbnailImage2" />
-				</div>
-
-				<div id="Thumbnail">
-					<slot name="ThumbnailImage3" />
-				</div>
-
-				<div id="Thumbnail">
-					<slot name="ThumbnailImage4" />
-				</div>
-
-				<div id="Thumbnail">
-					<slot name="ThumbnailImage5" />
-				</div>
-			</div> -->
 		</SquareBracketH>
 	</div>
 
@@ -92,50 +74,50 @@ document.querySelectorAll('#GalleryThumbnails #Thumbnail').forEach(function(thum
     });
 });
 */
+document.addEventListener('astro:page-load', ev => {
+	let currentIndex = 1; // Start at the first image
 
-let currentIndex = 1; // Start at the first image
 
+	// Function to update image visibility based on the current index
+	function updateImageVisibility() {
+	document.querySelectorAll('#ImageWrapper #ImageContainer').forEach((div, index) => {
+		if (index + 1 === currentIndex) {
+		div.style.opacity = '1';  // Show the current image
+		} else {
+		div.style.opacity = '0';  // Hide other images
+		}
+	});
+	}
 
-// Function to update image visibility based on the current index
-function updateImageVisibility() {
-  document.querySelectorAll('#ImageWrapper #ImageContainer').forEach((div, index) => {
-    if (index + 1 === currentIndex) {
-      div.style.opacity = '1';  // Show the current image
-    } else {
-      div.style.opacity = '0';  // Hide other images
-    }
-  });
-}
+	function updateCounter() {
+	const counterContainer = document.querySelector('#CounterContainer');
+	counterContainer.textContent = `${currentIndex} / ${totalImages}`;
+	}
 
-function updateCounter() {
-  const counterContainer = document.querySelector('#CounterContainer');
-  counterContainer.textContent = `${currentIndex} / ${totalImages}`;
-}
+	// Right arrow click event to increase the index
+	document.querySelector('#ArrowWrapper  div:nth-child(3)').addEventListener('click', function() {
+	currentIndex++;
+	if (currentIndex > totalImages) {
+		currentIndex = 1; // Loop back to the first image
+	}
+	updateImageVisibility();
+	updateCounter();
+	});
 
-// Right arrow click event to increase the index
-document.querySelector('#ArrowWrapper  div:nth-child(3)').addEventListener('click', function() {
-  currentIndex++;
-  if (currentIndex > totalImages) {
-    currentIndex = 1; // Loop back to the first image
-  }
-  updateImageVisibility();
-  updateCounter();
+	// Left arrow click event to decrease the index
+	document.querySelector('#ArrowWrapper  div:nth-child(1)').addEventListener('click', function() {
+	currentIndex--;
+	if (currentIndex < 1) {
+		currentIndex = totalImages; // Loop back to the last image
+	}
+	updateImageVisibility();
+	updateCounter();
+	});
+
+	// Initialize the gallery with the first image visible
+	updateImageVisibility();
+	updateCounter();
 });
-
-// Left arrow click event to decrease the index
-document.querySelector('#ArrowWrapper  div:nth-child(1)').addEventListener('click', function() {
-  currentIndex--;
-  if (currentIndex < 1) {
-    currentIndex = totalImages; // Loop back to the last image
-  }
-  updateImageVisibility();
-  updateCounter();
-});
-
-// Initialize the gallery with the first image visible
-updateImageVisibility();
-updateCounter();
-
 </script>
 
 <style>
@@ -158,7 +140,7 @@ updateCounter();
 #ImageWrapper > div {
 	grid-column: 1;
 	grid-row: 1;
-	transition: opacity 0.3s ease;
+	transition: opacity 1s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
 #ImageWrapper > div:nth-of-type(1) {
@@ -188,8 +170,9 @@ opacity: 0;
 #ThumbnailWrapper {
 	display: grid; 
 	width: 100%;
-	grid-template-columns: 3fr 2fr;
+	grid-template-columns: minmax(min-content, 3fr) 2fr;
 	justify-content: center;
+	align-content: center;
 
 }
 
@@ -228,23 +211,27 @@ opacity: 0;
 
 #CounterContainer {
 	text-align: center;
-	font-size: 0.8rem;
+	font-size: 1rem;
+
+	@media (--bp-mobile) {
+		font-size: 0.8rem;
+	}
+
+	@media (--bp-tablet) {
+		font-size: 1rem;
+	}
 }
 
 /* Thumbnail Text */
 #TextContainer {
-	padding-left: 0.7rem;
-
-	@media (--bp-mobile) {
-		padding: 0.5rem;
-	}
+	margin-left: 1.5ch;
 }
 
 h1 {
 	font-family: PowerGrotesk-Medium;
 	font-weight: 600;
 	font-style: normal;
-	font-size: 0.8rem;
+	font-size: 1rem;
 	letter-spacing: 0.7px;
 	margin: 0px;
 
@@ -253,7 +240,7 @@ h1 {
 	}
 
 	@media (--bp-tablet) {
-		font-size: 0.8rem;
+		font-size: 1rem;
 	}
 
 }
@@ -262,7 +249,7 @@ h2 {
 	font-family: PowerGrotesk-Light;
 	font-weight: 200;
 	font-style: italic;
-	font-size: 0.6rem;
+	font-size: 0.8rem;
 	letter-spacing: 0.5px;
 	margin: 0px;
 	margin-top: 4px;
@@ -274,7 +261,7 @@ h2 {
 	}
 
 	@media (--bp-tablet) {
-		font-size: 0.6rem;
+		font-size: 0.8rem;
 		margin-top: 0px;
 	}
 

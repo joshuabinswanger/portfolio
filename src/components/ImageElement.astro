@@ -19,7 +19,7 @@ interface Props {
   };
   
 // Get component props from Astro.props
-const { margin_top = '0px', to, width = "100%", height = 'auto', aspectratio = 'auto', loading = 'lazy', imagePath, onhover_imagePath, viewtransition_name } = Astro.props;
+const { margin_top = '0px', to, width = "100%", height = 'auto', aspectratio = 'auto', loading = 'lazy',altText = "Joshua Binswanger Scientific Illustration", imagePath, onhover_imagePath, viewtransition_name } = Astro.props;
 
 //Import all image paths to check against the passed in strings
 const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,webp}');
@@ -34,9 +34,9 @@ const myImage = images[imagePath]();
       <Picture  
       src={myImage} 
       formats={['avif', 'webp']}
-      widths={[500, 1000, 1500, myImage.width]}
-      sizes={'(max-width: 650px) 500px, (max-width: 1050px) 1000px, (max-width: 1800px) 1500x,  ${myImage.width}px'}
-      alt="empty" 
+      width={myImage.width / 3}
+      densities={[1, 1.5, 2, 2.5, 3]}
+      alt={altText} 
       loading={loading}
       style={`
       width: ${width}; 
@@ -68,6 +68,10 @@ const myImage = images[imagePath]();
   opacity: 1;
   filter:  contrast(1) brightness(1) sepia(0) blur(0px) grayscale(0);
   transform: translateY(0);
+}
+
+#Image {
+  pointer-events: auto;
 }
 
 

@@ -75,7 +75,7 @@
   --font-size-dekstop: 13px;
   --font-size-mobile: 14px;
   --font-size-tablet: 12px;
-  --font-size-desktop-wide: 13px;
+  --font-size-desktop-wide: 15px;
 
   /* Columns: Nav Main */
   --grid-template-columns-desktop:      200px 1fr;
