@@ -25,7 +25,7 @@ const { padding = "0.5rem 1rem" } = Astro.props;
 
 :root {
 
-    --border-size: 1px;
+/*     --border-size: 1px; */
 }
 
 
@@ -92,20 +92,20 @@ const { padding = "0.5rem 1rem" } = Astro.props;
 
 .top-border:after,
 .top-border:before {
-  border-top: var(--border-size) solid black;
+  border-top: 1px solid black;
 }
 .bottom-border:after,
 .bottom-border:before {
-  border-bottom: var(--border-size) solid black;
+  border-bottom: 1px solid black;
 }
 .top-border:before,
 .bottom-border:before {
-  border-left: var(--border-size) solid black;
+  border-left: 1px solid black;
   margin-left: -1px;
 }
 .top-border:after,
 .bottom-border:after {
-  border-right: var(--border-size) solid black;
+  border-right: 1px solid black;
 }
 
 </style>

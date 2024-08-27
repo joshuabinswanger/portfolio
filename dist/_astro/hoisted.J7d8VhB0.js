@@ -1,0 +1,1 @@
+import"./hoisted.D-2wbxhY.js";document.addEventListener("astro:page-load",()=>{let s={rootMargin:"100px 0px -88px 0px"};const t=new IntersectionObserver(o=>{o.forEach(e=>{console.log(e),e.isIntersecting?e.target.classList.add("show"):e.target.classList.remove("show")})},s);document.querySelectorAll(".hidden").forEach(o=>t.observe(o))});
