@@ -6,9 +6,11 @@ import ThumbnailElement from "./ThumbnailElement.astro";
 
 interface Props {
     totalImages: number;
+	title: string;
+	subtitle: string;
   };
   
-  const { totalImages } = Astro.props;
+  const { totalImages, title, subtitle } = Astro.props;
 
 ---
 
@@ -27,20 +29,12 @@ interface Props {
 			<slot name="Image3" />
 		</div>
 
-		<div id="ImageContainer">
-			<slot name="Image4" />
-
-		</div>
-
-		<div id="ImageContainer">
-			<slot name="Image5" />
-		</div>
 	</div>
-	<div id="ThumbnailWrapper">
+	<div id="DescriptionWrapper">
 		<SquareBracketH padding="3% 1%">
 			<div id="TextContainer">
-				<h1>Game Design 101</h1>
-				<h2>Poster</h2>
+				<h1>{title}</h1>
+				<h2>{subtitle}</h2>
 			</div>
 		</SquareBracketH>
 		<SquareBracketH>
@@ -49,7 +43,7 @@ interface Props {
 					&larr;
 				</div>
 				<div id="CounterContainer">
-					1 / {totalImages}
+					<>1 / {totalImages}
 				</div>
 		
 				<div id="ArrowContainer">
@@ -126,6 +120,8 @@ document.addEventListener('astro:page-load', ev => {
 
 .GalleryElementWrapper {
 	display: grid;
+	gap: 1%;
+	height: fit-content;
 }
 
 /* Images Overlapping*/
@@ -134,6 +130,7 @@ document.addEventListener('astro:page-load', ev => {
 	grid-template-columns: 1fr;
 	grid-template-rows: 1fr;
 	pointer-events: auto;
+	height: fit-content;
 
 }
 
@@ -163,13 +160,17 @@ opacity: 0;
 opacity: 0;
 }
 
-
+#ImageContainer {
+	height: fit-content;
+	box-shadow: 0px 0px 33px #988F822b;
+}
 
 /* Thumbnails */ 
 
-#ThumbnailWrapper {
+#DescriptionWrapper {
 	display: grid; 
 	width: 100%;
+	height: fit-content;
 	grid-template-columns: minmax(min-content, 3fr) 2fr;
 	justify-content: center;
 	align-content: center;
@@ -199,20 +200,25 @@ opacity: 0;
 
 #ArrowWrapper {
 	display: grid;
-	grid-template-columns: 1fr 2fr 1fr; 
+	width: 100%;
+	grid-template-columns: 1fr 1fr 1fr;
+	place-items: center;
+	
 }
 
 #ArrowContainer {
 	text-align: center;
+	width:fit-content;
 	pointer-events: auto;
 	cursor: pointer;
+	padding:0.5rem 0.5%;
 
 }
 
 #CounterContainer {
 	text-align: center;
 	font-size: 1rem;
-
+	padding:0.5rem 0.5%;
 	@media (--bp-mobile) {
 		font-size: 0.8rem;
 	}
@@ -223,8 +229,9 @@ opacity: 0;
 }
 
 /* Thumbnail Text */
+
 #TextContainer {
-	margin-left: 1.5ch;
+	width: fit-content;
 }
 
 h1 {

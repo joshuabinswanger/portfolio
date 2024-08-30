@@ -1,0 +1,40 @@
+---
+import ImageElement from "../../../components/ImageElement.astro"
+import GalleryElement from "../../../components/GalleryElement.astro"
+
+const totalImages = 3;
+
+---
+<GalleryElement totalImages={totalImages} title="ETH Visualisations" subtitle="Scientific Illustration">
+
+<!-- Images -->
+
+<div slot="Image1"> 
+    <ImageElement 
+    width="100%"
+    to="/projects/ethvisualisations"
+    loading="eager"
+    altText="Visualisation of Bacteria in a clay material"
+    imagePath="/src/assets/projects/ethvisualisations/ETHVisualisations_GalleryImage1.jpeg"
+    />
+</div>
+
+<div slot="Image2"> 
+    <ImageElement  
+    width="100%"
+    to="/projects/ethvisualisations"
+    altText="Bacteria with a cellulose hair"
+     imagePath="/src/assets/projects/ethvisualisations/ETHVisualisations_GalleryImage2.webp"
+    />
+</div>
+
+<div slot="Image3"> 
+    <ImageElement 
+    width="100%"
+    to="/projects/ethvisualisations"
+    altText="process of 3d printing a material with fungi inside"
+    imagePath="/src/assets/projects/ethvisualisations/ETHVisualisations_GalleryImage3.webp"
+/>
+</div>
+
+</GalleryElement>

@@ -40,13 +40,9 @@ const { padding = "0.5rem 1rem" } = Astro.props;
 }
 
 #SlotWrapper{
-  padding: var(--padding);
-  align-content: center;
-  justify-content: center;
-
-  @media (--bp-mobile) {
-    padding: var(--padding);
-  }
+  padding: 2%;
+  display: grid;              /* Enables grid layout */
+  place-items: center;        /* Centers content both horizontally and vertically  justify-items: center; (horizontal centering) and align-items: center; */
 }
 
 
