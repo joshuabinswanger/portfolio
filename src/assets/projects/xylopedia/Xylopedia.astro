@@ -1,0 +1,62 @@
+---
+import ImageElement from "../../../components/ImageElement.astro"
+import GalleryElement from "../../../components/GalleryElement.astro"
+
+const totalImages = 4;
+
+---
+<GalleryElement totalImages={totalImages} title="Xylopedia" subtitle="3D Learning App">
+
+<!-- Images -->
+
+<div slot="Image1"> 
+    <ImageElement 
+    width="100%"
+        to="/projects/xylopedia"
+    loading="eager"
+    altText="CT Image Rendering of Oak Wood 300microns"
+    imagePath="/src/assets/projects/xylopedia/Xylopedia_Gallery_1.webp"
+    />
+</div>
+
+<div slot="Image2"> 
+    <ImageElement 
+    width="100%"
+    to="/projects/xylopedia"
+    altText="Visualisation of Bacteria in a clay material"
+    imagePath="/src/assets/projects/xylopedia/Xylopedia_Gallery_2.webp"
+    />
+</div>
+
+<div slot="Image3"> 
+    <ImageElement 
+    width="100%"
+        to="/projects/xylopedia"
+    loading="eager"
+    altText="Visualisation of Bacteria in a clay material"
+    imagePath="/src/assets/projects/xylopedia/Xylopedia_Gallery_3.webp"
+    />
+</div>
+
+<div slot="Image4"> 
+    <ImageElement 
+    width="100%"
+        to="/projects/xylopedia"
+    loading="eager"
+    altText="Visualisation of Bacteria in a clay material"
+    imagePath="/src/assets/projects/xylopedia/Xylopedia_Gallery_4.webp"
+    />
+</div>
+
+<div slot="Image5"> 
+    <ImageElement 
+    width="100%"
+        to="/projects/xylopedia"
+    loading="eager"
+    altText="Visualisation of Bacteria in a clay material"
+    imagePath="/src/assets/projects/xylopedia/Xylopedia_Gallery_5.webp"
+    />
+</div>
+
+
+</GalleryElement>

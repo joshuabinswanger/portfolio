@@ -8,28 +8,41 @@ interface Props {
     totalImages: number;
 	title: string;
 	subtitle: string;
-  };
-  
-  const { totalImages, title, subtitle } = Astro.props;
+};
 
+const { totalImages, title, subtitle } = Astro.props;
+const instanceId = Math.random().toString(36).substr(2, 9); // Generate a unique ID for each instance
 ---
 
-<div class:list={["fade", "GalleryElementWrapper"]}>
+<div class:list={["fade", "GalleryElementWrapper"]} id={`GalleryElement-${instanceId}`}>
 	<div id="ImageWrapper">
-
+	  {totalImages >= 1 && (
 		<div id="ImageContainer">
-			<slot name="Image1" />
+		  <slot name="Image1" />
 		</div>
-
+	  )}
+	  {totalImages >= 2 && (
 		<div id="ImageContainer">
-			<slot name="Image2" />
+		  <slot name="Image2" />
 		</div>
-		
+	  )}
+	  {totalImages >= 3 && (
 		<div id="ImageContainer">
-			<slot name="Image3" />
+		  <slot name="Image3" />
 		</div>
-
+	  )}
+	  {totalImages >= 4 && (
+		<div id="ImageContainer">
+		  <slot name="Image4" />
+		</div>
+	  )}
+	  {totalImages >= 5 && (
+		<div id="ImageContainer">
+		  <slot name="Image5" />
+		</div>
+	  )}
 	</div>
+
 	<div id="DescriptionWrapper">
 		<SquareBracketH padding="3% 1%">
 			<div id="TextContainer">
@@ -43,7 +56,7 @@ interface Props {
 					&larr;
 				</div>
 				<div id="CounterContainer">
-					<>1 / {totalImages}
+					1 / {totalImages}
 				</div>
 		
 				<div id="ArrowContainer">
@@ -51,68 +64,49 @@ interface Props {
 				</div>
 
 			</div>
-		
 		</SquareBracketH>
 	</div>
+</div>
 
-<script define:vars={{ totalImages }}>
+<script define:vars={{ totalImages, instanceId }}>
+	(function() {
+		const imageCount = totalImages;
+		const instanceSelector = `#GalleryElement-${instanceId}`;
 
-/* Gallery Thumbnails Hover Interaction 
-document.querySelectorAll('#GalleryThumbnails #Thumbnail').forEach(function(thumbnail, index) {
-    thumbnail.addEventListener('mouseover', function() {
-        document.querySelector(`#ImageWrapper #ImageContainer:nth-child(${index + 2})`).style.opacity = '1';
-    });
+		document.addEventListener('astro:page-load', ev => {
+			let currentIndex = 1;
 
-    thumbnail.addEventListener('mouseout', function() {
-        document.querySelector(`#ImageWrapper #ImageContainer:nth-child(${index + 2})`).style.opacity = '0';
-    });
-});
-*/
-document.addEventListener('astro:page-load', ev => {
-	let currentIndex = 1; // Start at the first image
+			function updateImageVisibility() {
+				document.querySelectorAll(`${instanceSelector} #ImageWrapper #ImageContainer`).forEach((div, index) => {
+					div.style.opacity = (index + 1 === currentIndex) ? '1' : '0';
+				});
+			}
 
+			function updateCounter() {
+				const counterContainer = document.querySelector(`${instanceSelector} #CounterContainer`);
+				counterContainer.textContent = `${currentIndex} / ${imageCount}`;
+			}
 
-	// Function to update image visibility based on the current index
-	function updateImageVisibility() {
-	document.querySelectorAll('#ImageWrapper #ImageContainer').forEach((div, index) => {
-		if (index + 1 === currentIndex) {
-		div.style.opacity = '1';  // Show the current image
-		} else {
-		div.style.opacity = '0';  // Hide other images
-		}
-	});
-	}
+			document.querySelector(`${instanceSelector} #ArrowWrapper div:nth-child(3)`).addEventListener('click', function() {
+				currentIndex++;
+				if (currentIndex > imageCount) currentIndex = 1;
+				updateImageVisibility();
+				updateCounter();
+			});
 
-	function updateCounter() {
-	const counterContainer = document.querySelector('#CounterContainer');
-	counterContainer.textContent = `${currentIndex} / ${totalImages}`;
-	}
+			document.querySelector(`${instanceSelector} #ArrowWrapper div:nth-child(1)`).addEventListener('click', function() {
+				currentIndex--;
+				if (currentIndex < 1) currentIndex = imageCount;
+				updateImageVisibility();
+				updateCounter();
+			});
 
-	// Right arrow click event to increase the index
-	document.querySelector('#ArrowWrapper  div:nth-child(3)').addEventListener('click', function() {
-	currentIndex++;
-	if (currentIndex > totalImages) {
-		currentIndex = 1; // Loop back to the first image
-	}
-	updateImageVisibility();
-	updateCounter();
-	});
-
-	// Left arrow click event to decrease the index
-	document.querySelector('#ArrowWrapper  div:nth-child(1)').addEventListener('click', function() {
-	currentIndex--;
-	if (currentIndex < 1) {
-		currentIndex = totalImages; // Loop back to the last image
-	}
-	updateImageVisibility();
-	updateCounter();
-	});
-
-	// Initialize the gallery with the first image visible
-	updateImageVisibility();
-	updateCounter();
-});
+			updateImageVisibility();
+			updateCounter();
+		});
+	})();
 </script>
+
 
 <style>
 
