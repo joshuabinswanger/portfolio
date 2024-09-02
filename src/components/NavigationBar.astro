@@ -25,21 +25,21 @@ import Index from './Index.astro';
     </SquareBracketV>
 
     <SquareBracketV>
-      <a href="/">
+      <a href="/info" id="MenuItems">
         <p>Info</p>
       </a>
     </SquareBracketV>
 
     <SquareBracketV>
-      <a href="/">
+      <a href="/contact" id="MenuItems">
         <p>Contact</p>
       </a>
     </SquareBracketV>
 
     <SquareBracketV>
-      <a href="/">
-        <p>Links</p>
-      </a>
+        <a href="/links" id="MenuItems">
+          <p>Links</p>
+        </a>
    </SquareBracketV>
   
   </div>
@@ -55,6 +55,7 @@ import Index from './Index.astro';
   justify-items: center;
   grid-auto-rows: auto;
   top: var(--padding-desktop);
+  height: max-content;
 
 		@media (--bp-mobile) {
 			display: none;

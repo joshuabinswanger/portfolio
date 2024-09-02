@@ -41,6 +41,16 @@ const instanceId = Math.random().toString(36).substr(2, 9); // Generate a unique
 		  <slot name="Image5" />
 		</div>
 	  )}
+		{totalImages >= 6 && (
+		<div id="ImageContainer">
+			<slot name="Image6" />
+		</div>
+		)}
+		{totalImages >= 7 && (
+			<div id="ImageContainer">
+				<slot name="Image6" />
+			</div>
+			)}
 	</div>
 
 	<div id="DescriptionWrapper">
@@ -131,7 +141,7 @@ const instanceId = Math.random().toString(36).substr(2, 9); // Generate a unique
 #ImageWrapper > div {
 	grid-column: 1;
 	grid-row: 1;
-	transition: opacity 1s cubic-bezier(0.33, 1, 0.68, 1);
+	transition: opacity .7s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
 #ImageWrapper > div:nth-of-type(1) {
@@ -151,6 +161,14 @@ opacity: 0;
 }
 
 #ImageWrapper > div:nth-of-type(5) {
+opacity: 0;
+}
+
+#ImageWrapper > div:nth-of-type(6) {
+opacity: 0;
+}
+
+#ImageWrapper > div:nth-of-type(7) {
 opacity: 0;
 }
 
@@ -246,6 +264,10 @@ h1 {
 		font-size: 1rem;
 	}
 
+	@media (--bp-desktop-wide) {
+		font-size: 1.1rem;
+	}
+
 }
 
 h2 {
@@ -267,6 +289,12 @@ h2 {
 		font-size: 0.8rem;
 		margin-top: 0px;
 	}
+
+	@media (--bp-desktop-wide) {
+		font-size: 1rem;
+		margin-top: 0px;
+	}
+
 
 }
 

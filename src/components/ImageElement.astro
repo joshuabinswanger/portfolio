@@ -10,7 +10,7 @@ interface Props {
     height?: string;
     aspectratio?: string;
     loading?: 'eager' | 'lazy';
-    to: string;
+    to?: string;
     altText: string;
     imagePath: string;
     onhover_imagePath?: string;
@@ -19,7 +19,7 @@ interface Props {
   };
   
 // Get component props from Astro.props
-const { margin_top = '0px', to, width = "100%", height = 'auto', aspectratio = 'auto', loading = 'lazy',altText = "Joshua Binswanger Scientific Illustration", imagePath, onhover_imagePath, viewtransition_name } = Astro.props;
+const { margin_top = '0px', to = "/", width = "100%", height = 'auto', aspectratio = 'auto', loading = 'lazy',altText = "Joshua Binswanger Scientific Illustration", imagePath, onhover_imagePath, viewtransition_name } = Astro.props;
 
 //Import all image paths to check against the passed in strings
 const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,webp}');
