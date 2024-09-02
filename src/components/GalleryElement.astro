@@ -156,7 +156,7 @@ opacity: 0;
 
 #ImageContainer {
 	height: fit-content;
-	box-shadow: 0px 0px 33px #988F822b;
+	box-shadow: 0px 0px 44px #988f821b;
 }
 
 /* Thumbnails */ 
@@ -195,14 +195,15 @@ opacity: 0;
 #ArrowWrapper {
 	display: grid;
 	width: 100%;
-	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-columns: auto min-content auto;
 	place-items: center;
 	
 }
 
 #ArrowContainer {
+	justify-content: center;
 	text-align: center;
-	width:fit-content;
+	width: stretch;
 	pointer-events: auto;
 	cursor: pointer;
 	padding:0.5rem 0.5%;
@@ -211,6 +212,7 @@ opacity: 0;
 
 #CounterContainer {
 	text-align: center;
+	width: 5ch;
 	font-size: 1rem;
 	padding:0.5rem 0.5%;
 	@media (--bp-mobile) {

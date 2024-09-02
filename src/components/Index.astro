@@ -1,22 +1,22 @@
 ---
 import SquareBracketV from "./SquareBracket_V.astro";
 // imports all files that end with `.astro' in `./src/pages/projects/`
-const projects = await Astro.glob('../pages/projects/*.astro')
+/* const projects = await Astro.glob('../pages/projects/*.astro')
 
 // Extract projectTitle from each page
 const pageTitles = projects.map(page => {
   const { projectTitle } = page;
   return { title: projectTitle, url: page.url };
 });
-
+ */
 ---
 
   <ul>
     <a href="/">Gallery</a>
-    <div>&nbsp;&nbsp;</div>
+<!--     <div>&nbsp;&nbsp;</div>
     {pageTitles.map(page => (
         <li><a href={page.url}>{page.title}</a></li>
-    ))}
+    ))} -->
   </ul>
 
 
@@ -27,19 +27,19 @@ const pageTitles = projects.map(page => {
 
 ul {
   font-size: var(--font-size-dekstop);
-  padding: 1rem 0.2rem;
+  padding: 0.7rem 0.2rem;
   text-align: center;
   margin: 0px;
   
 
   @media (--bp-mobile){
       font-size: var(--font-size-mobile);
-      padding: 1rem 0.1rem;
+      padding: 0.7rem 0.2rem
     }
 
     @media (--bp-tablet){
       font-size: var(--font-size-tablet);
-      padding: rem 0.3rem;
+      padding: 0.7rem 0.2rem;
     }
 
     @media (--bp-desktop-wide){

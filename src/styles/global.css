@@ -60,7 +60,7 @@
 :root {
   /* Top Padding */
   --padding-desktop: 3rem;
-  --padding-mobile: 3rem;
+  --padding-mobile: 4rem;
   --padding-tablet: 1rem;
   --padding-desktop-wide: 6rem;
 
@@ -68,8 +68,8 @@
   --margin-left-dekstop: 2vw;
   --margin-right-desktop: 8vw;
 
-  --margin-left-mobile: 50px;
-  --margin-right-mobile: 50px;
+  --margin-left-mobile: 25px;
+  --margin-right-mobile: 25px;
   
   --margin-left-tablet: 0px;
   --margin-right-tablet: 4vw;
