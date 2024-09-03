@@ -1,5 +1,6 @@
 ---
 import SquareBracketH from "./SquareBracket_H.astro";
+import SquareBracketV from "./SquareBracket_V.astro";
 import "../styles/global.css";
 import ImageElement from "./ImageElement.astro";
 import ThumbnailElement from "./ThumbnailElement.astro";
@@ -130,11 +131,13 @@ const instanceId = Math.random().toString(36).substr(2, 9); // Generate a unique
 
 /* Images Overlapping*/
 #ImageWrapper {
+	position: relative;
 	display: grid; /* Parent container needs to be relative */
 	grid-template-columns: 1fr;
 	grid-template-rows: 1fr;
 	pointer-events: auto;
 	height: fit-content;
+	z-index: 2;
 
 }
 
@@ -173,8 +176,10 @@ opacity: 0;
 }
 
 #ImageContainer {
+	position: relative;
 	height: fit-content;
 	box-shadow: 0px 0px 44px #988f821b;
+	z-index: 2;
 }
 
 /* Thumbnails */ 

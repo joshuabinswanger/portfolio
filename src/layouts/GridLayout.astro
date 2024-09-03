@@ -16,7 +16,7 @@
     display: grid; 			
 	height: max-content;
 	grid-template-columns: repeat(17, 1fr);
-	grid-auto-rows: 5vw;
+	grid-auto-rows: 7vw;
 	pointer-events: none;
 	padding-top: var(--padding-desktop); 
 	padding-bottom: 55rem; 
@@ -35,7 +35,8 @@
 	}
 
 	@media (--bp-desktop-wide) {
-		padding-top: var(--padding-desktop-wide); 
+		padding-top: var(--padding-desktop-wide);
+		grid-auto-rows: 5vw; 
 	}
 }
 </style>

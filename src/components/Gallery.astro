@@ -19,20 +19,20 @@ import GameDesign101 from "../assets/projects/gamedesign101/GameDesign101.astro"
 
 	<GridLayout>
 
-		<div class:list={["fade", "GalleryElement"]}>
+		<div class:list={["GalleryElement"]}>
 			<Xylopedia/>
 		</div>
 		
-		 <div class:list={["fade", "GalleryElement"]}>
+		 <div class:list={["GalleryElement"]}>
 			<ETHVisualisations/>
 		</div>
 
-		<div class:list={["fade", "GalleryElement"]}>
+		<div class:list={["GalleryElement"]}>
 			<PhenologicalShift/>
 		</div>
 
 
-		<div class:list={["fade", "GalleryElement"]}>
+		<div class:list={["GalleryElement"]}>
 			<GameDesign101/>
 		</div>
 
@@ -46,6 +46,18 @@ import GameDesign101 from "../assets/projects/gamedesign101/GameDesign101.astro"
 <script>
 
 document.addEventListener('astro:page-load', ev => {
+
+
+// Select all ImageElement components
+const imageElements = document.querySelectorAll('ImageElement');
+
+// Loop through the ImageElement NodeList and start adding the fade class from the 3rd element onwards
+imageElements.forEach((image, index) => {
+	if (index >= 2) { // index starts from 0, so 2 is the 3rd element
+		image.classList.add('fade');
+	}
+});
+
  // IntersectionObserver options
  let options = {
          rootMargin: "800px 0px -200px 0px",
@@ -100,7 +112,7 @@ document.addEventListener('astro:page-load', ev => {
 
 .GalleryElement:nth-of-type(1) {
 	grid-column-start: 1; 
-	grid-column-end: span 7; 
+	grid-column-end: span 8; 
 	grid-row-start: 1;
 	
 }
@@ -109,22 +121,22 @@ document.addEventListener('astro:page-load', ev => {
 
 
 .GalleryElement:nth-of-type(2) {
-	grid-column-start: 11; 
-	grid-column-end: span 8; 
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
 	grid-row-start: 7;
 
 }
 
 .GalleryElement:nth-of-type(3) {
-	grid-column-start: 2;
-	grid-column-end: span 7; 
-	grid-row-start: 14;
+	grid-column-start: 3;
+	grid-column-end: span 5; 
+	grid-row-start: 11;
 	
 }
 .GalleryElement:nth-of-type(4) {
-	grid-column-start: 11;
-	grid-column-end: span 6; 
-	grid-row-start: 22;
+	grid-column-start: 10;
+	grid-column-end: span 7; 
+	grid-row-start: 15;
 
 }
 .GalleryElement:nth-of-type(5) {
