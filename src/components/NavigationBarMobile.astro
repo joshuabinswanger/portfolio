@@ -4,7 +4,9 @@ import { Picture } from 'astro:assets';
 import RhizomLogo from "../assets/Logo_V6_Dark.png"
 import RhizomLogoComponent from "../components/Logo.astro"
 import Index from './Index.astro';
-import SquareBracketV from './SquareBracket_V.astro';
+import BracketOpenV from './BracketOpenV.astro';
+import BracketMiddleV from './BracketMiddleV.astro';
+import BracketCloseV from './BracketCloseV.astro';
 import Backdrop from './Backdrop.astro';
 import "../styles/global.css"
 
@@ -27,28 +29,30 @@ import "../styles/global.css"
   </div> 
   
   <div id="MenuWrapper">
-    <SquareBracketV>
-      <Index />
-    </SquareBracketV>
 
-    <SquareBracketV>
+    <BracketOpenV />
+      
+      <Index />
+
+    <BracketMiddleV />
+
       <a href="/" id="MenuItems">
         <p>Info</p>
       </a>
-    </SquareBracketV>
+    
+    <BracketMiddleV />
 
-    <SquareBracketV>
       <a href="/" id="MenuItems">
         <p>Contact</p>
       </a>
-    </SquareBracketV>
+    
+    <BracketMiddleV />
 
-    <SquareBracketV>
-        <a href="/" id="MenuItems">
-          <p>Links</p>
-        </a>
-   </SquareBracketV>
+      <a href="/" id="MenuItems">
+        <p>Links</p>
+      </a>
 
+    <BracketCloseV />
   </div>  
 
 
@@ -122,7 +126,6 @@ a {
 p {
   font-size: var(--font-size-mobile);
   margin: 0px;
-  padding: 0.7rem 0.2rem;
   text-align: center;
 }
 

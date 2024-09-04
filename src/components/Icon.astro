@@ -1,0 +1,27 @@
+---
+export interface Props {
+  icon: string;
+  width?: string;
+  height?: string;
+}
+
+const { icon, width="auto", height="auto" }= Astro.props as Props;
+const { default: innerHTML } = await import(`/src/assets/svg/${icon}.svg?raw`);
+---
+<div id="IconWrapper">
+    <Fragment set:html={innerHTML} />
+</div>
+
+
+<style define:vars={{width}}>
+ #IconWrapper {
+    display: grid;
+    grid-column: 1;
+	grid-row: 1;
+    width: var(--width);
+    justify-content: center;
+    align-content: center;
+ }
+
+
+</style>

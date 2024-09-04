@@ -72,7 +72,7 @@
   --margin-right-mobile: 25px;
   
   --margin-left-tablet: 0px;
-  --margin-right-tablet: 4vw;
+  --margin-right-tablet: calc(150px * 0.8);
 
   --margin-left-desktop-wide: calc(15vw - 220px);
   --margin-right-desktop-wide: 15vw;

@@ -11,5 +11,23 @@ import Footer from "./Footer.astro";
 ---
 
 <TopWrapper>
-    
+    <GridLayout>
+        <div id="ProfilePic">
+
+        </div>
+
+        <div id="AboutText">
+
+        [Name] is a versatile scientific illustrator and designer, blending nature’s beauty with cutting-edge tech to create stunning, accurate visuals. Inspired by the natural world, they craft everything from digital art to 3D models, translating complex science into engaging visuals. With strong communication skills and a passion for nature, [Name] collaborates with experts to deliver work that inspires curiosity and showcases the wonder of the world around us.
+        </div>
+    </GridLayout>    
 </TopWrapper>
+
+
+<style>
+#AboutText {
+    grid-column-start: 5;
+    grid-column-end: span 8;
+}
+
+</style>

@@ -4,360 +4,392 @@ import SquareBracketV from "./SquareBracket_V.astro";
 import BracketOpenH from "./BracketOpenH.astro";
 import BracketCloseH from "./BracketCloseH.astro";
 import BracketMiddleH from "./BracketMiddleH.astro";
+import Icon from "./Icon.astro";
 import "../styles/global.css";
 import ImageElement from "./ImageElement.astro";
 import ThumbnailElement from "./ThumbnailElement.astro";
 
 interface Props {
-    totalImages: number;
-	title: string;
-	subtitle: string;
-};
+  totalImages: number;
+  title: string;
+  subtitle: string;
+}
 
 const { totalImages, title, subtitle } = Astro.props;
-const instanceId = Math.random().toString(36).substr(2, 9); // Generate a unique ID for each instance
+const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a unique ID for each instance
 ---
 
 <div class:list={["fade", "GalleryElementWrapper"]} id={`GalleryElement-${instanceId}`}>
-	<div id="ImageWrapper">
-	  {totalImages >= 1 && (
-		<div id="ImageContainer">
-		  <slot name="Image1" />
-		</div>
-	  )}
-	  {totalImages >= 2 && (
-		<div id="ImageContainer">
-		  <slot name="Image2" />
-		</div>
-	  )}
-	  {totalImages >= 3 && (
-		<div id="ImageContainer">
-		  <slot name="Image3" />
-		</div>
-	  )}
-	  {totalImages >= 4 && (
-		<div id="ImageContainer">
-		  <slot name="Image4" />
-		</div>
-	  )}
-	  {totalImages >= 5 && (
-		<div id="ImageContainer">
-		  <slot name="Image5" />
-		</div>
-	  )}
-		{totalImages >= 6 && (
-		<div id="ImageContainer">
-			<slot name="Image6" />
-		</div>
-		)}
-		{totalImages >= 7 && (
-			<div id="ImageContainer">
-				<slot name="Image6" />
-			</div>
-			)}
-	</div>
+  <div id="ImageWrapper">
+    {totalImages >= 1 && (
+      <div id="ImageContainer">
+        <div class:list={ "Description"}>
+          <slot name="Description1" />
+          <div id="DescriptionBG"></div>
+        </div>
+        <slot name="Image1" />
+      </div>
+    )}
+    {totalImages >= 2 && (
+      <div id="ImageContainer">
+        <div class:list={ "Description"}>
+          <slot name="Description2" />
+		  <div id="DescriptionBG"></div>
+        </div>
+        <slot name="Image2" />
+      </div>
+    )}
+    {totalImages >= 3 && (
+      <div id="ImageContainer">
+        <div class:list={ "Description"}>
+          <slot name="Description3" />
+		  <div id="DescriptionBG"></div>
+        </div>
+        <slot name="Image3" />
+      </div>
+    )}
+    {totalImages >= 4 && (
+      <div id="ImageContainer">
+        <div class:list={ "Description"}>
+          <slot name="Description4" />
+          <div id="DescriptionBG"></div>
+        </div>
+        <slot name="Image4" />
+      </div>
+    )}
+    {totalImages >= 5 && (
+      <div id="ImageContainer">
+        <div class:list={ "Description"}>
+          <slot name="Description5" />
+		  <div id="DescriptionBG"></div>
+        </div>
+        <slot name="Image5" />
+      </div>
+    )}
+    {totalImages >= 6 && (
+      <div id="ImageContainer">
+        <div class:list={ "Description"}>
+          <slot name="Description6" />
+		  <div id="DescriptionBG"></div>
+        </div>
+        <slot name="Image6" />
+      </div>
+    )}
+    {totalImages >= 7 && (
+      <div id="ImageContainer">
+        <div class:list={ "Description"}>
+          <slot name="Description7" />
+		  <div id="DescriptionBG"></div>
+        </div>
+        <slot name="Image6" />
+      </div>
+    )}
+  </div>
 
-	<div id="DescriptionWrapper">
-		<BracketOpenH />
-		
-		<div id="TextContainer">
-			<div>
-				<h1>{title}</h1>
-				<h2>{subtitle}</h2>
-			</div>
-		
-		</div>
+  <div id="DescriptionWrapper">
+    <BracketOpenH />
 
-		<BracketMiddleH />
-		
-		<div id="ArrowWrapper">
-			<div id="ArrowContainer">
-				&larr;
-			</div>
-			<div id="CounterContainer">
-				1 / {totalImages}
-			</div>
+    <div id="TextContainer">
+      <div id="TextWrapper">
+        <h1>{title}</h1>
+        <h2>{subtitle}</h2>
+      </div>
+    </div>
 
-			<div id="ArrowContainer">
-				&rarr;
-			</div>
+    <BracketMiddleH />
 
-		</div>
+    <div id="ArrowWrapper">
+      <div id="ArrowContainer" class:list={["prevArrow"]}>&larr;</div>
+      <div id="CounterContainer">1 / {totalImages}</div>
+      <div id="ArrowContainer" class:list={["nextArrow"]}>&rarr;</div>
+    </div>
 
-		<BracketMiddleH />
+    <BracketMiddleH />
 
-		<div id="Info">
-			<p>i</p>
-		</div>
+    <div id="Info">
+      <input id="input" type="checkbox"></input>
+      <Icon icon="Info" height="100%" />
+    </div>
 
-		<BracketCloseH />
-		
-	</div>
+    <BracketCloseH />
+  </div>
 </div>
 
 <script define:vars={{ totalImages, instanceId }}>
-	(function() {
-		const imageCount = totalImages;
-		const instanceSelector = `#GalleryElement-${instanceId}`;
+  document.addEventListener('astro:page-load', () => {
+	 (function () {
+    const imageCount = totalImages;
+    const instanceSelector = `#GalleryElement-${instanceId}`;
+    let currentIndex = 1;
 
-		document.addEventListener('astro:page-load', ev => {
-			let currentIndex = 1;
+    function updateImageVisibility() {
+      document.querySelectorAll(`${instanceSelector} #ImageWrapper #ImageContainer`).forEach((div, index) => {
+        div.style.opacity = index + 1 === currentIndex ? "1" : "0";
+      });
+    }
 
-			function updateImageVisibility() {
-				document.querySelectorAll(`${instanceSelector} #ImageWrapper #ImageContainer`).forEach((div, index) => {
-					div.style.opacity = (index + 1 === currentIndex) ? '1' : '0';
-				});
-			}
+    function updateCounter() {
+      const counterContainer = document.querySelector(`${instanceSelector} #CounterContainer`);
+      counterContainer.textContent = `${currentIndex} / ${imageCount}`;
+    }
 
-			function updateCounter() {
-				const counterContainer = document.querySelector(`${instanceSelector} #CounterContainer`);
-				counterContainer.textContent = `${currentIndex} / ${imageCount}`;
-			}
+    document
+      .querySelector(`${instanceSelector} #ArrowWrapper div:nth-child(3)`)
+      .addEventListener("click", function () {
+        currentIndex++;
+        if (currentIndex > imageCount) currentIndex = 1;
+        updateImageVisibility();
+        updateCounter();
+      });
 
-			document.querySelector(`${instanceSelector} #ArrowWrapper div:nth-child(3)`).addEventListener('click', function() {
-				currentIndex++;
-				if (currentIndex > imageCount) currentIndex = 1;
-				updateImageVisibility();
-				updateCounter();
-			});
+    document
+      .querySelector(`${instanceSelector} #ArrowWrapper div:nth-child(1)`)
+      .addEventListener("click", function () {
+        currentIndex--;
+        if (currentIndex < 1) currentIndex = imageCount;
+        updateImageVisibility();
+        updateCounter();
+      });
 
-			document.querySelector(`${instanceSelector} #ArrowWrapper div:nth-child(1)`).addEventListener('click', function() {
-				currentIndex--;
-				if (currentIndex < 1) currentIndex = imageCount;
-				updateImageVisibility();
-				updateCounter();
-			});
+    updateImageVisibility();
+    updateCounter();
+  })();
 
-			updateImageVisibility();
-			updateCounter();
-		});
-	})();
+
+ 
+  const infoDiv = document.querySelector(`#GalleryElement-${instanceId} #Info`);
+  const instanceSelector = `#GalleryElement-${instanceId}`; // Target this specific gallery element
+  let descriptionVisible = false;
+
+  // A function to find the currently visible image and return its index
+  function getCurrentIndex() {
+    const imageContainers = document.querySelectorAll(
+      `${instanceSelector} #ImageWrapper #ImageContainer`
+    );
+
+    let visibleIndex = 1; // Default to 1 if none are visible
+
+    imageContainers.forEach((container, index) => {
+      // Check if the image is visible (opacity is 1, meaning it's active)
+      if (window.getComputedStyle(container).opacity === '1') {
+        visibleIndex = index + 1; // Adjust because index is 0-based
+      }
+    });
+
+    return visibleIndex;
+  }
+
+  // A function to hide all descriptions
+  function hideAllDescriptions() {
+  const allDescriptions = document.querySelectorAll(`${instanceSelector} .Description`);
+  allDescriptions.forEach((description) => {
+/*     description.style.visibility = 'hidden'; */
+    description.style.opacity = '0';
+  });
+  descriptionVisible = false; // Reset the visibility state
+}
+
+  // A function to toggle the visibility of the description for the current image
+  function toggleDescriptionVisibility() {
+    const currentIndex = getCurrentIndex(); // Get the index of the visible image in this specific gallery
+    const activeDescription = document.querySelector(
+      `${instanceSelector} #ImageWrapper #ImageContainer:nth-of-type(${currentIndex}) .Description`
+    );
+
+    if (descriptionVisible) {
+/*       activeDescription.style.visibility = 'hidden'; */
+      activeDescription.style.opacity = '0';
+    } else {
+ /*      activeDescription.style.visibility = 'visible'; */
+      activeDescription.style.opacity = '1';
+    }
+
+    // Toggle the description visibility state
+    descriptionVisible = !descriptionVisible;
+  }
+  // Initially hide all descriptions on page load
+  hideAllDescriptions();
+
+
+  // Add click event listener to the #Info div of this specific gallery
+  infoDiv.addEventListener('click', function () {
+    toggleDescriptionVisibility();
+  });
+
+
+    // Add event listeners for the arrow clicks
+	const nextArrow = document.querySelector(`${instanceSelector} .nextArrow`);
+  const prevArrow = document.querySelector(`${instanceSelector} .prevArrow`);
+
+  // On click of the next arrow, hide all descriptions
+  nextArrow.addEventListener('click', () => {
+    hideAllDescriptions();
+    // Add logic for switching to the next image
+  });
+
+  // On click of the previous arrow, hide all descriptions
+  prevArrow.addEventListener('click', () => {
+    hideAllDescriptions();
+    // Add logic for switching to the previous image
+  });
+
+});
 </script>
 
-
 <style>
+  @import "../styles/global.css";
 
-@import "../styles/global.css";
-
-.GalleryElementWrapper {
-	display: grid;
-	gap: 1%;
-	height: fit-content;
-}
-
-/* Images Overlapping*/
-#ImageWrapper {
-	position: relative;
-	display: grid; /* Parent container needs to be relative */
-	grid-template-columns: 1fr;
-	grid-template-rows: 1fr;
-	pointer-events: auto;
-	height: fit-content;
-	z-index: 2;
-
-}
-
-#ImageWrapper > div {
-	grid-column: 1;
-	grid-row: 1;
-	transition: opacity .7s cubic-bezier(0.33, 1, 0.68, 1);
-}
-
-#ImageWrapper > div:nth-of-type(1) {
-  opacity: 1; /* First image should be visible */
-}
-
-#ImageWrapper > div:nth-of-type(2) {
-opacity: 0;
-}
-
-#ImageWrapper > div:nth-of-type(3) {
-opacity: 0;
-}
-
-#ImageWrapper > div:nth-of-type(4) {
-opacity: 0;
-}
-
-#ImageWrapper > div:nth-of-type(5) {
-opacity: 0;
-}
-
-#ImageWrapper > div:nth-of-type(6) {
-opacity: 0;
-}
-
-#ImageWrapper > div:nth-of-type(7) {
-opacity: 0;
-}
-
-#ImageContainer {
-	position: relative;
-	height: fit-content;
-	box-shadow: 0px 0px 44px #988f821b;
-	z-index: 2;
-}
-
-/* Thumbnails */ 
-
-#DescriptionWrapper {
-	display: grid; 
-	width: 100%;
-	height: fit-content;
-	grid-template-columns: 1.5ch minmax(min-content, 3fr) 3ch 2fr 3ch 3ch 1.5ch;
-	justify-content: center;
-	align-content: center;
-
-}
-
-
-
-
-/* Thumbnail Elements */
-
-#GalleryThumbnails {
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	grid-auto-rows: auto;
-	gap: 5%;
-	filter: sepia(0.5) grayscale(0.5);
-	justify-content: center;
-	opacity: 0.75;
-}
-
-#Thumbnail {
-	pointer-events: auto;
-}
-
-/* Arrows */
-
-#ArrowWrapper {
-	display: grid;
-	width: 100%;
-	grid-template-columns: auto min-content auto;
-	place-items: center;
-	
-}
-
-#ArrowContainer {
-	justify-content: center;
-	text-align: center;
-	width: stretch;
-	pointer-events: auto;
-	cursor: pointer;
-	padding:0.5rem 0.5%;
-
-}
-
-#CounterContainer {
-	text-align: center;
-	width: 5ch;
-	font-size: 1rem;
-	padding:0.5rem 0.5%;
-	@media (--bp-mobile) {
-		font-size: 0.8rem;
-	}
-
-	@media (--bp-tablet) {
-		font-size: 1rem;
-	}
-}
-
-/* Thumbnail Text */
-
-
-#TextContainer {
-	width: fit-content;
+  .GalleryElementWrapper {
     display: grid;
+    gap: 1%;
+    height: fit-content;
+  }
+
+  /* Images Overlapping*/
+  #ImageWrapper {
+    position: relative;
+    display: grid; /* Parent container needs to be relative */
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    pointer-events: auto;
+    height: fit-content;
+    z-index: 2;
+  }
+
+  #ImageWrapper > div {
+    grid-column: 1;
+    grid-row: 1;
+    transition: opacity 0.7s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+
+  #ImageWrapper > div:nth-of-type(1) {
+    opacity: 1; /* First image should be visible */
+  }
+
+  #ImageWrapper > div:nth-of-type(2),
+  #ImageWrapper > div:nth-of-type(3),
+  #ImageWrapper > div:nth-of-type(4),
+  #ImageWrapper > div:nth-of-type(5),
+  #ImageWrapper > div:nth-of-type(6),
+  #ImageWrapper > div:nth-of-type(7) {
+    opacity: 0;
+  }
+
+  #ImageContainer {
+    position: relative;
+    height: fit-content;
+    box-shadow: 0px 0px 44px #988f821b;
+    z-index: 2;
+  }
+
+  .Description {
+    position: absolute;
+    top: 0;
+    left: 0;
+	/* visibility: hidden; */
+	opacity: 0;
+	transition: opacity 0.5s ease-in-out;
+    width: 100%;
+    height: 100%;
+    z-index: 2; /* Ensure it appears above the image */
+    display: flex;
     align-items: center;
-}
+    justify-content: center;
+    pointer-events: none; /* Prevent interaction with the description if needed */
+  }
 
-#TextWrapper{
+  #DescriptionBG {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; 
+	background-color: rgba(255, 255, 255, 0.88); /* Example style */
+	/* backdrop-filter: blur(15px);
+	transition: blur 0.5s ease-in-out; */
 
-}
+  }
 
-h1 {
-	font-family: PowerGrotesk-Medium;
-	font-weight: 600;
-	font-style: normal;
-	font-size: 1rem;
-	letter-spacing: 0.7px;
-	margin: 0px;
+  /* Thumbnails */
 
-	@media (--bp-mobile) {
-		font-size: 0.8rem;
-	}
-
-	@media (--bp-tablet) {
-		font-size: 1rem;
-	}
-
-	@media (--bp-desktop-wide) {
-		font-size: 1.1rem;
-	}
-
-}
-
-h2 {
-	font-family: PowerGrotesk-Light;
-	font-weight: 200;
-	font-style: italic;
-	font-size: 0.8rem;
-	letter-spacing: 0.5px;
-	margin: 0px;
-	margin-top: 0px;
-	
-
-	@media (--bp-mobile) {
-		font-size: 0.6rem;
-		margin-top: 0px;
-	}
-
-	@media (--bp-tablet) {
-		font-size: 0.8rem;
-		margin-top: 0px;
-	}
-
-	@media (--bp-desktop-wide) {
-		font-size: 1rem;
-		margin-top: 0px;
-	}
-
-
-}
-
-h3 {
-	font-family: PowerGrotesk-Light;
-	font-weight: 200;
-	font-style: normal;
-	font-size: 0.8rem;
-	text-align: end;
-	letter-spacing: 0.5px;
-	margin: 0px;
-
-
-	@media (--bp-mobile) {
-		font-size: 0.6rem;
-	}
-
-	@media (--bp-tablet) {
-		font-size: 0.6rem;
-	}
-
-}
-
-#Info {
-	text-align: center;
-	text-justify: distribute;
-}
-
-/* #shift {
-	margin-left: calc(var(--border-size) * -1.41);
-	height: 100%;
+  #DescriptionWrapper {
     display: grid;
-    align-items: stretch; 
+    width: 100%;
+    height: fit-content;
+    grid-template-columns: 1.5ch minmax(min-content, 3fr) 3ch 2fr 3ch 3.5ch 1.5ch;
+    justify-content: center;
+    align-content: center;
+  }
 
-#shift > div {
-	height: 100%;
-} */
+  /* Arrows */
+
+  #ArrowWrapper {
+    display: grid;
+    width: 100%;
+    grid-template-columns: auto min-content auto;
+    place-items: center;
+  }
+
+  #ArrowContainer {
+    justify-content: center;
+    text-align: center;
+    width: stretch;
+    height: stretch;
+    pointer-events: auto;
+    cursor: pointer;
+    padding: 0.5rem 0.5%;
+  }
+
+  #CounterContainer {
+    text-align: center;
+    width: 5ch;
+    font-size: 1rem;
+    padding: 0.5rem 0.5%;
+  }
+
+  /* Text Elements */
+  #TextContainer {
+    width: auto;
+    display: grid;
+    place-items: center;
+  }
+
+  h1 {
+    font-family: PowerGrotesk-Medium;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 1rem;
+    letter-spacing: 0.7px;
+    margin: 0px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  h2 {
+    font-family: PowerGrotesk-Light;
+    font-weight: 200;
+    font-style: italic;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    margin: 0px;
+  }
+
+  #Info {
+    display: grid;
+    place-items: center;
+  }
+
+  #input {
+    margin: 0;
+    grid-column: 1;
+    grid-row: 1;
+    position: relative;
+    pointer-events: auto;
+    cursor: pointer;
+    opacity: 0; /* hide this */
+    z-index: 1001; /* and place it over the checkbox */
+    -webkit-touch-callout: none;
+  }
 </style>

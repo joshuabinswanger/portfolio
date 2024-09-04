@@ -19,20 +19,20 @@ import GameDesign101 from "../assets/projects/gamedesign101/GameDesign101.astro"
 
 	<GridLayout>
 
-		<div class:list={["GalleryElement"]}>
+		<div class:list={["GalleryElementWrapper"]}>
 			<Xylopedia/>
 		</div>
 		
-		 <div class:list={["GalleryElement"]}>
+		 <div class:list={["GalleryElementWrapper"]}>
 			<ETHVisualisations/>
 		</div>
 
-		<div class:list={["GalleryElement"]}>
+		<div class:list={["GalleryElementWrapper"]}>
 			<PhenologicalShift/>
 		</div>
 
 
-		<div class:list={["GalleryElement"]}>
+		<div class:list={["GalleryElementWrapper"]}>
 			<GameDesign101/>
 		</div>
 
@@ -103,14 +103,14 @@ imageElements.forEach((image, index) => {
 }
 
 
-.GalleryElement {
+.GalleryElementWrapper {
 	display: grid;
 	height: fit-content;
 }
 
 
 
-.GalleryElement:nth-of-type(1) {
+.GalleryElementWrapper:nth-of-type(1) {
 	grid-column-start: 1; 
 	grid-column-end: span 8; 
 	grid-row-start: 1;
@@ -120,95 +120,95 @@ imageElements.forEach((image, index) => {
 	
 
 
-.GalleryElement:nth-of-type(2) {
+.GalleryElementWrapper:nth-of-type(2) {
 	grid-column-start: 12; 
 	grid-column-end: span 6; 
 	grid-row-start: 7;
 
 }
 
-.GalleryElement:nth-of-type(3) {
+.GalleryElementWrapper:nth-of-type(3) {
 	grid-column-start: 3;
 	grid-column-end: span 5; 
 	grid-row-start: 11;
 	
 }
-.GalleryElement:nth-of-type(4) {
+.GalleryElementWrapper:nth-of-type(4) {
 	grid-column-start: 10;
 	grid-column-end: span 7; 
 	grid-row-start: 15;
 
 }
-.GalleryElement:nth-of-type(5) {
+.GalleryElementWrapper:nth-of-type(5) {
 	grid-column-start: 1;
 		grid-column-end: span 8; 
 		grid-row-start: 28;
 
 }
-.GalleryElement:nth-of-type(6) {
+.GalleryElementWrapper:nth-of-type(6) {
 	grid-column-start: 12; 
 	grid-column-end: span 6; 
 	grid-row-start: 35;
 
 }
-.GalleryElement:nth-of-type(7) {
+.GalleryElementWrapper:nth-of-type(7) {
 	grid-column-start: 1; 
 	grid-column-end: span 5; 
 	grid-row-start: 41;
 
 }
-.GalleryElement:nth-of-type(8) {
+.GalleryElementWrapper:nth-of-type(8) {
 	grid-column-start: 8; 
 	grid-column-end: span 9; 
 	grid-row-start: 45;
 
 	
 }
-.GalleryElement:nth-of-type(9) {
+.GalleryElementWrapper:nth-of-type(9) {
 	grid-column-start: 2; 
 	grid-column-end: span 5; 
 	grid-row-start: 55;
 
 }
-.GalleryElement:nth-of-type(10) {
+.GalleryElementWrapper:nth-of-type(10) {
 	grid-column-start: 12; 
 	grid-column-end: span 6; 
 	grid-row-start: 53;
 
 }
-.GalleryElement:nth-of-type(11) {
+.GalleryElementWrapper:nth-of-type(11) {
 	grid-column-start: 12; 
 	grid-column-end: span 6; 
 	grid-row-start: 60;
 }
-.GalleryElement:nth-of-type(12) {
+.GalleryElementWrapper:nth-of-type(12) {
 	grid-column-start: 12; 
 	grid-column-end: span 6; 
 	grid-row-start: 66;
 }
-.GalleryElement:nth-of-type(13) {
+.GalleryElementWrapper:nth-of-type(13) {
 	grid-column-start: 12; 
 	grid-column-end: span 6; 
 	grid-row-start: 71;
 
 }
-.GalleryElement:nth-of-type(14) {
+.GalleryElementWrapper:nth-of-type(14) {
 	grid-column-start: 12; 
 	grid-column-end: span 6; 
 	grid-row-start: 77;
 
 }
-.GalleryElement:nth-of-type(15) {
+.GalleryElementWrapper:nth-of-type(15) {
 	grid-column-start: 12; 
 	grid-column-end: span 6; 
 	grid-row-start: 81;
 }
-.GalleryElement:nth-of-type(16) {
+.GalleryElementWrapper:nth-of-type(16) {
 	grid-column-start: 12; 
 	grid-column-end: span 6; 
 	grid-row-start: 86;
 }
-.GalleryElement:nth-of-type(17) {
+.GalleryElementWrapper:nth-of-type(17) {
 	grid-column-start: 12; 
 	grid-column-end: span 6; 
 	grid-row-start: 92;
@@ -218,17 +218,17 @@ imageElements.forEach((image, index) => {
 
 @media (--bp-mobile) {
 
-	.GalleryElement:nth-of-type(odd) {
+	.GalleryElementWrapper:nth-of-type(odd) {
 		grid-column-start: 1; 
 		grid-column-end: span 6; 
 	}
 
-	.GalleryElement:nth-of-type(even) {
+	.GalleryElementWrapper:nth-of-type(even) {
 		grid-column-start: 2; 
 		grid-column-end: span 6; 
 	}
 
-	.GalleryElement {
+	.GalleryElementWrapper {
 		margin-bottom: 5rem;
 	}
 
@@ -236,17 +236,84 @@ imageElements.forEach((image, index) => {
 
 @media (--bp-tablet) {
 
-.GalleryElement:nth-of-type(odd) {
+.GalleryElementWrapper:nth-of-type(1) {
 	grid-column-start: 1; 
 	grid-column-end: span 5; 
 }
 
-.GalleryElement:nth-of-type(even) {
+.GalleryElementWrapper:nth-of-type(2) {
 	grid-column-start: 2; 
 	grid-column-end: span 5; 
 }
 
-.GalleryElement {
+.GalleryElementWrapper:nth-of-type(3) {
+	grid-column-start: 1; 
+	grid-column-end: span 5; 
+}
+
+.GalleryElementWrapper:nth-of-type(4) {
+	grid-column-start: 3; 
+	grid-column-end: span 5; 
+}
+
+.GalleryElementWrapper:nth-of-type(5) {
+	grid-column-start: 2; 
+	grid-column-end: span 5; 
+}
+
+.GalleryElementWrapper:nth-of-type(6) {
+	grid-column-start: 3; 
+	grid-column-end: span 5; 
+}
+
+.GalleryElementWrapper:nth-of-type(7) {
+	grid-column-start: 1; 
+	grid-column-end: span 5; 
+}
+
+.GalleryElementWrapper:nth-of-type(8) {
+	grid-column-start: 2; 
+	grid-column-end: span 5; 
+}
+
+.GalleryElementWrapper:nth-of-type(9) {
+	grid-column-start: 3; 
+	grid-column-end: span 5; 
+}
+.GalleryElementWrapper:nth-of-type(10) {
+	grid-column-start: 1; 
+	grid-column-end: span 5; 
+}
+.GalleryElementWrapper:nth-of-type(11) {
+	grid-column-start: 2; 
+	grid-column-end: span 5; 
+}
+.GalleryElementWrapper:nth-of-type(12) {
+	grid-column-start: 3; 
+	grid-column-end: span 5; 
+}
+.GalleryElementWrapper:nth-of-type(13) {
+	grid-column-start: 1; 
+	grid-column-end: span 5; 
+}
+.GalleryElementWrapper:nth-of-type(14) {
+	grid-column-start: 2; 
+	grid-column-end: span 5; 
+}
+.GalleryElementWrapper:nth-of-type(15) {
+	grid-column-start: 3; 
+	grid-column-end: span 5; 
+}
+.GalleryElementWrapper:nth-of-type(16) {
+	grid-column-start: 1; 
+	grid-column-end: span 5; 
+}
+.GalleryElementWrapper:nth-of-type(17) {
+	grid-column-start: 2; 
+	grid-column-end: span 5; 
+}
+
+.GalleryElementWrapper {
 	margin-bottom: 5rem;
 }
 
