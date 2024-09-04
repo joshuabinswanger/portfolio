@@ -23,11 +23,6 @@ const { padding = "0.5rem 1rem" } = Astro.props;
 
 @import "../styles/global.css";
 
-:root {
-
-/*     --border-size: 1px; */
-}
-
 
 .SquareH {
   width: 100%;
@@ -88,20 +83,19 @@ const { padding = "0.5rem 1rem" } = Astro.props;
 
 .top-border:after,
 .top-border:before {
-  border-top: 1px solid black;
+  border-top: var(--border-size) solid black;
 }
 .bottom-border:after,
 .bottom-border:before {
-  border-bottom: 1px solid black;
+  border-bottom: var(--border-size) solid black;
 }
 .top-border:before,
 .bottom-border:before {
-  border-left: 1px solid black;
-  margin-left: -1px;
+  border-left: var(--border-size) solid black;
 }
 .top-border:after,
 .bottom-border:after {
-  border-right: 1px solid black;
+  border-right: var(--border-size) solid black;
 }
 
 </style>

@@ -24,24 +24,29 @@ import Index from './Index.astro';
        <Index />
     </SquareBracketV>
 
+    <div id="shift">
     <SquareBracketV>
       <a href="/info" id="MenuItems">
         <p>Info</p>
       </a>
     </SquareBracketV>
-
+   </div>
+  
+   <div id="shift">
     <SquareBracketV>
       <a href="/contact" id="MenuItems">
         <p>Contact</p>
       </a>
     </SquareBracketV>
+  </div>
 
+  <div id="shift">
     <SquareBracketV>
         <a href="/links" id="MenuItems">
           <p>Links</p>
         </a>
    </SquareBracketV>
-  
+  </div>
   </div>
 
 </nav>
@@ -70,6 +75,10 @@ import Index from './Index.astro';
 		}
 
 }
+/* 
+#shift {
+  margin-top: calc(var(--border-size) * -1.5);
+} */
 
 * {
   letter-spacing: 0.8px;

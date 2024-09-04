@@ -74,14 +74,16 @@
   --margin-left-tablet: 0px;
   --margin-right-tablet: 4vw;
 
-  --margin-left-desktop-wide: 12vw;
-  --margin-right-desktop-wide: 20vw;
+  --margin-left-desktop-wide: calc(15vw - 220px);
+  --margin-right-desktop-wide: 15vw;
 
   /* Font Sizes */
   --font-size-dekstop: 13px;
   --font-size-mobile: 14px;
   --font-size-tablet: 12px;
   --font-size-desktop-wide: 15px;
+
+  --border-size: 0.5px;
 
   /* Columns: Nav Main */
   --grid-template-columns-desktop:      200px 1fr;
@@ -97,5 +99,8 @@
 
 
 /* View Transitions */
+
+ 
+
 
 

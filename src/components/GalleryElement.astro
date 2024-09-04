@@ -1,6 +1,9 @@
 ---
 import SquareBracketH from "./SquareBracket_H.astro";
 import SquareBracketV from "./SquareBracket_V.astro";
+import BracketOpenH from "./BracketOpenH.astro";
+import BracketCloseH from "./BracketCloseH.astro";
+import BracketMiddleH from "./BracketMiddleH.astro";
 import "../styles/global.css";
 import ImageElement from "./ImageElement.astro";
 import ThumbnailElement from "./ThumbnailElement.astro";
@@ -55,27 +58,40 @@ const instanceId = Math.random().toString(36).substr(2, 9); // Generate a unique
 	</div>
 
 	<div id="DescriptionWrapper">
-		<SquareBracketH padding="3% 1%">
-			<div id="TextContainer">
+		<BracketOpenH />
+		
+		<div id="TextContainer">
+			<div>
 				<h1>{title}</h1>
 				<h2>{subtitle}</h2>
 			</div>
-		</SquareBracketH>
-		<SquareBracketH>
-			<div id="ArrowWrapper">
-				<div id="ArrowContainer">
-					&larr;
-				</div>
-				<div id="CounterContainer">
-					1 / {totalImages}
-				</div>
 		
-				<div id="ArrowContainer">
-					&rarr;
-				</div>
+		</div>
 
+		<BracketMiddleH />
+		
+		<div id="ArrowWrapper">
+			<div id="ArrowContainer">
+				&larr;
 			</div>
-		</SquareBracketH>
+			<div id="CounterContainer">
+				1 / {totalImages}
+			</div>
+
+			<div id="ArrowContainer">
+				&rarr;
+			</div>
+
+		</div>
+
+		<BracketMiddleH />
+
+		<div id="Info">
+			<p>i</p>
+		</div>
+
+		<BracketCloseH />
+		
 	</div>
 </div>
 
@@ -188,7 +204,7 @@ opacity: 0;
 	display: grid; 
 	width: 100%;
 	height: fit-content;
-	grid-template-columns: minmax(min-content, 3fr) 2fr;
+	grid-template-columns: 1.5ch minmax(min-content, 3fr) 3ch 2fr 3ch 3ch 1.5ch;
 	justify-content: center;
 	align-content: center;
 
@@ -249,8 +265,15 @@ opacity: 0;
 
 /* Thumbnail Text */
 
+
 #TextContainer {
 	width: fit-content;
+    display: grid;
+    align-items: center;
+}
+
+#TextWrapper{
+
 }
 
 h1 {
@@ -282,7 +305,7 @@ h2 {
 	font-size: 0.8rem;
 	letter-spacing: 0.5px;
 	margin: 0px;
-	margin-top: 4px;
+	margin-top: 0px;
 	
 
 	@media (--bp-mobile) {
@@ -322,4 +345,19 @@ h3 {
 	}
 
 }
+
+#Info {
+	text-align: center;
+	text-justify: distribute;
+}
+
+/* #shift {
+	margin-left: calc(var(--border-size) * -1.41);
+	height: 100%;
+    display: grid;
+    align-items: stretch; 
+
+#shift > div {
+	height: 100%;
+} */
 </style>

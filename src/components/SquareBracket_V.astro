@@ -13,8 +13,6 @@
 @import "../styles/global.css";
 
 :root {
-/* 
-    --border-size: 10px; */
     pointer-events: none;
 }
 
@@ -63,19 +61,19 @@
 }
 .top-border:after,
 .top-border:before {
-  border-top: 1px solid black;
+  border-top: var(--border-size) solid black;
 }
 .bottom-border:after,
 .bottom-border:before {
-  border-bottom: 1px solid black;
+  border-bottom: var(--border-size) solid black;
 }
 .top-border:before,
 .bottom-border:before {
-  border-left: 1px solid black;
+  border-left: var(--border-size) solid black;
 }
 .top-border:after,
 .bottom-border:after {
-  border-right: 1px solid black;
+  border-right: var(--border-size) solid black;
 }
 
 </style>
