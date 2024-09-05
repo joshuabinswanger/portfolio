@@ -23,6 +23,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
   <div id="ImageWrapper">
     {totalImages >= 1 && (
       <div id="ImageContainer">
+        <div class:list={ "Filter"}></div>
         <div class:list={ "Description"}>
           <slot name="Description1" />
           <p>Hello</p>
@@ -32,6 +33,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
     )}
     {totalImages >= 2 && (
       <div id="ImageContainer">
+        <div class:list={ "Filter"}></div>
         <div class:list={ "Description"}>
           <slot name="Description2" />
           <p>Hello</p>
@@ -41,6 +43,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
     )}
     {totalImages >= 3 && (
       <div id="ImageContainer">
+        <div class:list={ "Filter"}></div>
         <div class:list={ "Description"}>
           <slot name="Description3" />
           <p>Hello</p>
@@ -50,6 +53,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
     )}
     {totalImages >= 4 && (
       <div id="ImageContainer">
+        <div class:list={ "Filter"}></div>
         <div class:list={ "Description"}>
           <slot name="Description4" />
           <p>Hello</p>
@@ -59,6 +63,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
     )}
     {totalImages >= 5 && (
       <div id="ImageContainer">
+        <div class:list={ "Filter"}></div>
         <div class:list={ "Description"}>
           <slot name="Description5" />
           <p>Hello</p>
@@ -68,6 +73,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
     )}
     {totalImages >= 6 && (
       <div id="ImageContainer">
+        <div class:list={ "Filter"}></div>
         <div class:list={ "Description"}>
           <slot name="Description6" />
           <p>Hello</p>
@@ -77,6 +83,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
     )}
     {totalImages >= 7 && (
       <div id="ImageContainer">
+        <div class:list={ "Filter"}></div>
         <div class:list={ "Description"}>
           <slot name="Description7" />
           <p>Hello</p>
@@ -141,133 +148,184 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 		return visibleIndex;
 	}
 
-	document.addEventListener('astro:page-load', () => {
-		const instanceSelector = `#GalleryElement-${instanceId}`; // Target this specific gallery element
-		let currentIndex = 1; // Start from the first image
-		const imageCount = totalImages;
+document.addEventListener('astro:page-load', () => {
 
-		// Image Visibility
-		function updateImageVisibility() {
-			const imageContainers = document.querySelectorAll(`${instanceSelector} #ImageWrapper #ImageContainer`);
+  const instanceSelector = `#GalleryElement-${instanceId}`; // Target this specific gallery element
+  let currentIndex = 1; // Start from the first image
+  const imageCount = totalImages;
 
-			// Error handling: Check if the image containers exist
-			if (!imageContainers || imageContainers.length === 0) {
-				console.error(`No image containers found for selector: ${instanceSelector}`);
-				
-				return;
-			}
 
-			// Update the visibility of images based on the current index
-			imageContainers.forEach((div, index) => {
-				div.style.opacity = index + 1 === currentIndex ? "1" : "0";
-        div.style.filter = index + 1 === currentIndex ? "blur(0px)" : "blur(11px)";
-			});
-		}
 
-		// Counter
-		function updateCounter() {
-			const counterContainer = document.querySelector(`${instanceSelector} #CounterContainer`);
 
-			// Error handling: Check if counter container exists
-			if (!counterContainer) {
-				console.error(`Counter container not found for selector: ${instanceSelector}`);
-				return;
-			}
+  // Image Visibility
+  function updateImageVisibility() {
+    const imageContainers = document.querySelectorAll(`${instanceSelector} #ImageWrapper #ImageContainer`);
+    const imageFilters = document.querySelectorAll(`${instanceSelector} #ImageWrapper #ImageContainer .Filter`);
 
-			counterContainer.textContent = `${currentIndex} / ${imageCount}`;
-		}
-
-		// A function to hide all descriptions
-    function hideAllDescriptions() {
-      const allDescriptions = document.querySelectorAll(`${instanceSelector} .Description`);
-      // Error handling: Check if descriptions exist
-      if (!allDescriptions || allDescriptions.length === 0) {
-        console.error(`No descriptions found for selector: ${instanceSelector}`);
-        return;
-      }
-
-      allDescriptions.forEach((description) => {
-        description.style.opacity = '0';
-        description.style.backdropFilter = 'blur(0px)';
-        // Optionally: Leave the blur unchanged if you don't want it to reset completely
-      });
-
-      descriptionVisible = false; // Reset the visibility state
+    // Error handling: Check if the image containers exist
+    if (!imageContainers || imageContainers.length === 0) {
+      console.error(`No image containers found for selector: ${instanceSelector}`);
+      
+      return;
     }
 
-		// A function to toggle the visibility of the description for the current image
-		function toggleDescriptionVisibility() {
-			const activeDescription = document.querySelector(
-				`${instanceSelector} #ImageWrapper #ImageContainer:nth-of-type(${currentIndex}) .Description`
-			);
+    // Update the visibility of images based on the current index: blur > switch > blur
+    imageFilters.forEach((div, index) => {
+      if (index + 1 === currentIndex || index + 1 === currentIndex + 1 || index + 1 === currentIndex - 1) {
+    div.style.backdropFilter = "blur(5px)";
+    div.style.backgroundColor = "#fbf9f4ff";
+  } 
+    });
 
 
-			// Error handling: Check if the active description elements exist
-			if (!activeDescription) {
-				console.error(`Description or not found for the current image.`);
-				return;
-			}
+    setTimeout(() => {
+      imageContainers.forEach((div, index) => {
+      div.style.opacity = index + 1 === currentIndex ? "1" : "0";
+      });
+    }, 200);
 
-			if (descriptionVisible) {
+    setTimeout(() => {
+    imageFilters.forEach((div, index) => {
+      div.style.backdropFilter = index + 1 === currentIndex ? "blur(0px)" : "blur(5px)";
+      div.style.backgroundColor = "#fbf9f400";
+    });
+  }, 333);
+  }
 
-              activeDescription.style.opacity = '0';
-              activeDescription.style.backdropFilter = 'blur(0px)';
-         
 
-          } else {
-            activeDescription.style.opacity = '1';
-            activeDescription.style.backdropFilter = 'blur(22px)';
 
-          }
 
-          // Toggle the description visibility state
-          descriptionVisible = !descriptionVisible;
-		}
+  
+  // Counter
+  function updateCounter() {
+    const counterContainer = document.querySelector(`${instanceSelector} #CounterContainer`);
 
-		// Arrow Function forward
-		document.querySelector(`${instanceSelector} #ArrowWrapper div:nth-child(3)`)
-			?.addEventListener("click", function () {
-				currentIndex++;
-				if (currentIndex > imageCount) currentIndex = 1; // Loop back to the first image if at the end
+    // Error handling: Check if counter container exists
+    if (!counterContainer) {
+      console.error(`Counter container not found for selector: ${instanceSelector}`);
+      return;
+    }
 
-				updateCounter();
-       
-        hideAllDescriptions();
-        setTimeout (() => {
-          updateImageVisibility();
-        }, 300);
+    counterContainer.textContent = `${currentIndex} / ${imageCount}`;
+  }
+
+
+
+
+
+
+
+  // A function to hide all descriptions
+  function hideAllDescriptions() {
+    const allDescriptions = document.querySelectorAll(`${instanceSelector} .Description`);
+    // Error handling: Check if descriptions exist
+    if (!allDescriptions || allDescriptions.length === 0) {
+      console.error(`No descriptions found for selector: ${instanceSelector}`);
+      return;
+    }
+
+    allDescriptions.forEach((description) => {
+      description.style.opacity = '0';
+      description.style.backdropFilter = 'blur(0px)';
+      // Optionally: Leave the blur unchanged if you don't want it to reset completely
+    });
+
+    descriptionVisible = false; // Reset the visibility state
+  }
+
+
+
+
+
+
+
+
+
+  
+  // A function to toggle the visibility of the description for the current image
+  function toggleDescriptionVisibility() {
+    const activeDescription = document.querySelector(
+      `${instanceSelector} #ImageWrapper #ImageContainer:nth-of-type(${currentIndex}) .Description`
+    );
+
+
+    // Error handling: Check if the active description elements exist
+    if (!activeDescription) {
+      console.error(`Description or not found for the current image.`);
+      return;
+    }
+
+    if (descriptionVisible) {
+
+            activeDescription.style.opacity = '0';
+            activeDescription.style.backdropFilter = 'blur(0px)';
         
-			});
 
-		// Arrow Function backward
-		document.querySelector(`${instanceSelector} #ArrowWrapper div:nth-child(1)`)
-			?.addEventListener("click", function () {
-				currentIndex--;
-				if (currentIndex < 1) currentIndex = imageCount; // Loop to the last image if at the beginning
+        } else {
+          activeDescription.style.opacity = '1';
+          activeDescription.style.backdropFilter = 'blur(22px)';
 
-				updateCounter();
-				hideAllDescriptions(); // Hide descriptions when navigating
-        setTimeout (() => {
-          updateImageVisibility();
-        }, 300);
-       
-			});
+        }
 
-		// Add click event listener to the #Info div of this specific gallery
-		const infoDiv = document.querySelector(`${instanceSelector} #Info`);
-		if (infoDiv) {
-			infoDiv.addEventListener('click', function () {
-				toggleDescriptionVisibility();
-			});
-		} else {
-			console.error(`Info div not found for selector: ${instanceSelector}`);
-		}
+        // Toggle the description visibility state
+        descriptionVisible = !descriptionVisible;
+  }
 
-		// Initially call functions to sync UI with the current state
-		updateImageVisibility();
-		updateCounter();
-		hideAllDescriptions();
-	});
+
+
+
+
+
+
+
+
+  // Arrow Function forward
+  document.querySelector(`${instanceSelector} #ArrowWrapper div:nth-child(3)`)
+    ?.addEventListener("click", function () {
+      currentIndex++;
+      if (currentIndex > imageCount) currentIndex = 1; // Loop back to the first image if at the end
+
+      updateCounter();
+      hideAllDescriptions();
+      updateImageVisibility();
+      
+    });
+
+
+
+
+
+  // Arrow Function backward
+  document.querySelector(`${instanceSelector} #ArrowWrapper div:nth-child(1)`)
+    ?.addEventListener("click", function () {
+      currentIndex--;
+      if (currentIndex < 1) currentIndex = imageCount; // Loop to the last image if at the beginning
+
+      updateCounter();
+      hideAllDescriptions(); // Hide descriptions when navigating
+      updateImageVisibility();
+      
+    });
+
+
+
+
+
+  // Add click event listener to the #Info div of this specific gallery
+  const infoDiv = document.querySelector(`${instanceSelector} #Info`);
+  if (infoDiv) {
+    infoDiv.addEventListener('click', function () {
+      toggleDescriptionVisibility();
+    });
+  } else {
+    console.error(`Info div not found for selector: ${instanceSelector}`);
+  }
+
+  // Initially call functions to sync UI with the current state
+  updateImageVisibility();
+  updateCounter();
+  hideAllDescriptions();
+});
 
 </script>
 
@@ -299,12 +357,11 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
   #ImageWrapper > div {
     grid-column: 1;
     grid-row: 1;
-    transition: opacity 0.8s  ease-in-out, filter 0.5s ease-out ;
   }
 
   #ImageWrapper > div:nth-of-type(1) {
     opacity: 1; /* First image should be visible */
-    filter: blur(0px);
+    backdrop-filter: blur(0px);
   }
 
   #ImageWrapper > div:nth-of-type(2),
@@ -314,7 +371,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
   #ImageWrapper > div:nth-of-type(6),
   #ImageWrapper > div:nth-of-type(7) {
     opacity: 0;
-    filter: blur(11px);
+    backdrop-filter: blur(11px);
   }
 
   #ImageContainer {
@@ -323,6 +380,20 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
     box-shadow: 0px 0px 44px #988f821b;
     z-index: 1;
 	  pointer-events: auto;
+
+    
+  }
+
+  .Filter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #fbf9f400;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(5px);
+    z-index: 11;
+    transition: backdrop-filter ease-in-out 0.2s, background-color ease-in-out 0.2s;
   }
 
   .Description {
