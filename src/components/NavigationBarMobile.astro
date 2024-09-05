@@ -7,7 +7,6 @@ import Index from './Index.astro';
 import BracketOpenV from './BracketOpenV.astro';
 import BracketMiddleV from './BracketMiddleV.astro';
 import BracketCloseV from './BracketCloseV.astro';
-import Backdrop from './Backdrop.astro';
 import "../styles/global.css"
 
 ---
@@ -57,7 +56,7 @@ import "../styles/global.css"
 
 
 
-    <div id="backdrop"> <Backdrop/></div>
+    <div id="backdrop"></div>
 
 
 </nav>
@@ -137,7 +136,7 @@ p {
     left: 0;
     width: 100%;
     height: 100lvh;
-    background-color: rgba(255, 255, 255, 0);
+    background-color: #fbf9f400;
     backdrop-filter: blur(0);
     transition: backdrop-filter 1s cubic-bezier(0.33, 1, 0.68, 1) , background-color 1s cubic-bezier(0.33, 1, 0.68, 1) ;
     z-index: 998;
@@ -202,7 +201,7 @@ p {
 input:checked {
     ~ #backdrop {
       display: block;
-      background-color: rgba(255, 255, 255, 0.88); /* Example style */
+      background-color: var(--bg-color-trans); /* Example style */
       backdrop-filter: blur(15px);
       pointer-events: auto;
     }

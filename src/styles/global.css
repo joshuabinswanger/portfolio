@@ -58,6 +58,13 @@
 
 /* Variables */
 :root {
+
+  /* Colors */
+  --bg-color: #fbf9f4;
+  --bg-color-trans: #fbf9f4ac;
+  --bg-light: #FBF9F4;
+
+
   /* Top Padding */
   --padding-desktop: 3rem;
   --padding-mobile: 4rem;
@@ -66,7 +73,7 @@
 
   /* Margins */
   --margin-left-dekstop: 2vw;
-  --margin-right-desktop: 8vw;
+  --margin-right-desktop: calc(2vw + 150px);
 
   --margin-left-mobile: 25px;
   --margin-right-mobile: 25px;
@@ -74,8 +81,8 @@
   --margin-left-tablet: 0px;
   --margin-right-tablet: calc(150px * 0.8);
 
-  --margin-left-desktop-wide: calc(15vw - 220px);
-  --margin-right-desktop-wide: 15vw;
+  --margin-left-desktop-wide: calc(17vw - 220px);
+  --margin-right-desktop-wide: 17vw;
 
   /* Font Sizes */
   --font-size-dekstop: 13px;
@@ -93,8 +100,8 @@
 }
 /* Media Queries Breakpoints*/
 @custom-media --bp-mobile (width <= 650px);
-@custom-media --bp-tablet (650px <= width <= 1050px);
-@custom-media --bp-desktop (1050px <= width <= 1800px);
+@custom-media --bp-tablet (650px <= width <= 1200px);
+@custom-media --bp-desktop (1200px <= width <= 1800px);
 @custom-media --bp-desktop-wide (width >= 1800px);
 
 
