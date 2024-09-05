@@ -25,7 +25,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
       <div id="ImageContainer">
         <div class:list={ "Description"}>
           <slot name="Description1" />
-          <div id="DescriptionBG"></div>
+          <p>Hello</p>
         </div>
         <slot name="Image1" />
       </div>
@@ -34,7 +34,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
       <div id="ImageContainer">
         <div class:list={ "Description"}>
           <slot name="Description2" />
-		  <div id="DescriptionBG"></div>
+          <p>Hello</p>
         </div>
         <slot name="Image2" />
       </div>
@@ -43,7 +43,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
       <div id="ImageContainer">
         <div class:list={ "Description"}>
           <slot name="Description3" />
-		  <div id="DescriptionBG"></div>
+          <p>Hello</p>
         </div>
         <slot name="Image3" />
       </div>
@@ -52,7 +52,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
       <div id="ImageContainer">
         <div class:list={ "Description"}>
           <slot name="Description4" />
-          <div id="DescriptionBG"></div>
+          <p>Hello</p>
         </div>
         <slot name="Image4" />
       </div>
@@ -61,7 +61,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
       <div id="ImageContainer">
         <div class:list={ "Description"}>
           <slot name="Description5" />
-		  <div id="DescriptionBG"></div>
+          <p>Hello</p>
         </div>
         <slot name="Image5" />
       </div>
@@ -70,7 +70,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
       <div id="ImageContainer">
         <div class:list={ "Description"}>
           <slot name="Description6" />
-		  <div id="DescriptionBG"></div>
+          <p>Hello</p>
         </div>
         <slot name="Image6" />
       </div>
@@ -79,7 +79,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
       <div id="ImageContainer">
         <div class:list={ "Description"}>
           <slot name="Description7" />
-		  <div id="DescriptionBG"></div>
+          <p>Hello</p>
         </div>
         <slot name="Image6" />
       </div>
@@ -160,6 +160,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 			// Update the visibility of images based on the current index
 			imageContainers.forEach((div, index) => {
 				div.style.opacity = index + 1 === currentIndex ? "1" : "0";
+        div.style.filter = index + 1 === currentIndex ? "blur(0px)" : "blur(5px)";
 			});
 		}
 
@@ -177,22 +178,22 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 		}
 
 		// A function to hide all descriptions
-		function hideAllDescriptions() {
-			const allDescriptions = document.querySelectorAll(`${instanceSelector} .Description`);
+    function hideAllDescriptions() {
+      const allDescriptions = document.querySelectorAll(`${instanceSelector} .Description`);
+      // Error handling: Check if descriptions exist
+      if (!allDescriptions || allDescriptions.length === 0) {
+        console.error(`No descriptions found for selector: ${instanceSelector}`);
+        return;
+      }
 
-			// Error handling: Check if descriptions exist
-			if (!allDescriptions || allDescriptions.length === 0) {
-				console.error(`No descriptions found for selector: ${instanceSelector}`);
-				return;
-			}
+      allDescriptions.forEach((description) => {
+        description.style.opacity = '0';
+        description.style.backdropFilter = 'blur(0px)';
+        // Optionally: Leave the blur unchanged if you don't want it to reset completely
+      });
 
-			allDescriptions.forEach((description) => {
-				description.style.opacity = '0';
-				description.style.backdropFilter = 'blur(0)';
-			});
-
-			descriptionVisible = false; // Reset the visibility state
-		}
+      descriptionVisible = false; // Reset the visibility state
+    }
 
 		// A function to toggle the visibility of the description for the current image
 		function toggleDescriptionVisibility() {
@@ -200,26 +201,27 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 				`${instanceSelector} #ImageWrapper #ImageContainer:nth-of-type(${currentIndex}) .Description`
 			);
 
-			const activeDescriptionBG = document.querySelector(
-				`${instanceSelector} #ImageWrapper #ImageContainer:nth-of-type(${currentIndex}) .Description #DescriptionBG`
-			);
 
 			// Error handling: Check if the active description elements exist
-			if (!activeDescription || !activeDescriptionBG) {
+			if (!activeDescription) {
 				console.error(`Description or Description background not found for the current image.`);
 				return;
 			}
 
 			if (descriptionVisible) {
-				activeDescription.style.opacity = '0';
-				activeDescriptionBG.style.backdropFilter = 'blur(0)';
-			} else {
-				activeDescription.style.opacity = '1';
-				activeDescriptionBG.style.backdropFilter = 'blur(22px)';
-			}
 
-			// Toggle the description visibility state
-			descriptionVisible = !descriptionVisible;
+              activeDescription.style.opacity = '0';
+              activeDescription.style.backdropFilter = 'blur(0px)';
+         
+
+          } else {
+            activeDescription.style.opacity = '1';
+            activeDescription.style.backdropFilter = 'blur(22px)';
+
+          }
+
+          // Toggle the description visibility state
+          descriptionVisible = !descriptionVisible;
 		}
 
 		// Arrow Function forward
@@ -227,9 +229,14 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 			?.addEventListener("click", function () {
 				currentIndex++;
 				if (currentIndex > imageCount) currentIndex = 1; // Loop back to the first image if at the end
-				updateImageVisibility();
+
 				updateCounter();
-				hideAllDescriptions(); // Hide descriptions when navigating
+       
+        hideAllDescriptions();
+        setTimeout (() => {
+          updateImageVisibility();
+        }, 300);
+        
 			});
 
 		// Arrow Function backward
@@ -237,9 +244,13 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 			?.addEventListener("click", function () {
 				currentIndex--;
 				if (currentIndex < 1) currentIndex = imageCount; // Loop to the last image if at the beginning
-				updateImageVisibility();
+
 				updateCounter();
 				hideAllDescriptions(); // Hide descriptions when navigating
+        setTimeout (() => {
+          updateImageVisibility();
+        }, 300);
+       
 			});
 
 		// Add click event listener to the #Info div of this specific gallery
@@ -262,7 +273,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 
 
 
-
+  
 
 	
 
@@ -288,11 +299,12 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
   #ImageWrapper > div {
     grid-column: 1;
     grid-row: 1;
-    transition: opacity 0.7s cubic-bezier(0.33, 1, 0.68, 1);
+    transition: opacity 0.33s  ease-in, filter 0.33s ease-in /* cubic-bezier(0.33, 1, 0.68, 1) */; 
   }
 
   #ImageWrapper > div:nth-of-type(1) {
     opacity: 1; /* First image should be visible */
+    filter: blur(0px);
   }
 
   #ImageWrapper > div:nth-of-type(2),
@@ -302,43 +314,37 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
   #ImageWrapper > div:nth-of-type(6),
   #ImageWrapper > div:nth-of-type(7) {
     opacity: 0;
+    filter: blur(5px);
   }
 
   #ImageContainer {
     position: relative;
     height: fit-content;
     box-shadow: 0px 0px 44px #988f821b;
-    z-index: 3;
-	pointer-events: auto;
+    z-index: 1;
+	  pointer-events: auto;
   }
 
   .Description {
     position: absolute;
     top: 0;
     left: 0;
-	opacity: 0;
-	transition: opacity 0.5s ease-in-out;
+    opacity: 0;
     width: 100%;
     height: 100%;
-    z-index: 2; /* Ensure it appears above the image */
+    z-index: 10; /* Ensure it appears above the image */
     display: flex;
     align-items: center;
     justify-content: center;
     pointer-events: none; /* Prevent interaction with the description if needed */
+    background-color: var(--bg-color-trans); /* Example style */
+     /* Start with no blur (initial state) */
+    backdrop-filter: blur(0px);
+
+    /* Add transition for backdrop-filter */
+    transition: backdrop-filter ease-in-out 0.2s, opacity 0.2s ease-in-out;
   }
 
-  #DescriptionBG {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1; 
-	background-color: var(--bg-color-trans); /* Example style */
-	backdrop-filter: blur(0px);
-	transition: blur 0.5s ease-in-out;
-
-  }
 
   /* Thumbnails */
 
