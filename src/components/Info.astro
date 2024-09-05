@@ -25,9 +25,15 @@ import Footer from "./Footer.astro";
 
 
 <style>
+@import "../styles/global.css";
+
 #AboutText {
     grid-column-start: 5;
     grid-column-end: span 8;
+
+    @media (--bp-mobile) {
+        grid-column-start: 1;
+    }
 }
 
 </style>

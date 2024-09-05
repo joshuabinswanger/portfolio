@@ -73,7 +73,7 @@
 
   /* Margins */
   --margin-left-dekstop: 2vw;
-  --margin-right-desktop: calc(2vw + 150px);
+  --margin-right-desktop: calc(2vw + 200px);
 
   --margin-left-mobile: 25px;
   --margin-right-mobile: 25px;
@@ -81,7 +81,7 @@
   --margin-left-tablet: 0px;
   --margin-right-tablet: calc(150px * 0.8);
 
-  --margin-left-desktop-wide: calc(17vw - 220px);
+  --margin-left-desktop-wide: calc(17vw - 200px);
   --margin-right-desktop-wide: 17vw;
 
   /* Font Sizes */
@@ -90,13 +90,16 @@
   --font-size-tablet: 12px;
   --font-size-desktop-wide: 15px;
 
+    letter-spacing: 0.6px;
+
+  /* border size */
   --border-size: 0.5px;
 
   /* Columns: Nav Main */
   --grid-template-columns-desktop:      200px 1fr;
   --grid-template-columns-mobile:       1fr;
   --grid-template-columns-tablet:       150px 1fr;
-  --grid-template-columns-desktop-wide: 220px 1fr;
+  --grid-template-columns-desktop-wide: 200px 1fr;
 }
 /* Media Queries Breakpoints*/
 @custom-media --bp-mobile (width <= 650px);
