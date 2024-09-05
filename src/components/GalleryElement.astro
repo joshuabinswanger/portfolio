@@ -204,7 +204,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 
 			// Error handling: Check if the active description elements exist
 			if (!activeDescription) {
-				console.error(`Description or Description background not found for the current image.`);
+				console.error(`Description or not found for the current image.`);
 				return;
 			}
 
@@ -299,7 +299,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
   #ImageWrapper > div {
     grid-column: 1;
     grid-row: 1;
-    transition: opacity 0.8s  ease-in-out, filter 0.5s ease-out; /* cubic-bezier(0.33, 1, 0.68, 1) */; 
+    transition: opacity 0.8s  ease-in-out, filter 0.5s ease-out ;
   }
 
   #ImageWrapper > div:nth-of-type(1) {
