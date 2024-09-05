@@ -253,7 +253,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 		}
 
 		// Handle hover events for all image containers
-		const activeImageContainers = document.querySelectorAll(`${instanceSelector} #ImageWrapper #ImageContainer`);
+		const activeImageContainers = document.querySelectorAll(`${instanceSelector} #ImageWrapper #ImageContainer:nth-of-type(${currentIndex})`);
 
 		// Error handling: Check if the image containers exist for hover events
 		if (!activeImageContainers || activeImageContainers.length === 0) {
@@ -263,9 +263,10 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 
 		activeImageContainers.forEach((container, index) => {
 			console.log(`Container Index: ${index}, Container:`, container);
-			const containerIndex = currentIndex; // Adjust for 0-based index
+			const containerIndex = index + 1; // Adjust for 0-based index
 
 			const activeDescription = container.querySelector('.Description');
+			
 			const activeDescriptionBG = container.querySelector('.Description #DescriptionBG');
 
 			// Error handling: Ensure both description and background exist for each container
@@ -277,11 +278,8 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 			// Show description on mouse enter (hover) only if it's the current image
 			container.addEventListener('mouseenter', () => {
 				console.log(`Hovering over containerIndex: ${containerIndex}, currentIndex: ${currentIndex}`);
-				if (containerIndex === currentIndex) {
-					console.log('Showing description');
 					activeDescription.style.opacity = '1'; // Show description
 					activeDescriptionBG.style.backdropFilter = 'blur(22px)'; // Apply blur effect
-    }
 			});
 
 			container.addEventListener('mouseleave', () => {
@@ -320,7 +318,6 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
     display: grid; /* Parent container needs to be relative */
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
-    pointer-events: auto;
     height: fit-content;
     z-index: 2;
   }
@@ -348,7 +345,8 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
     position: relative;
     height: fit-content;
     box-shadow: 0px 0px 44px #988f821b;
-    z-index: 2;
+    z-index: 3;
+	pointer-events: auto;
   }
 
   .Description {

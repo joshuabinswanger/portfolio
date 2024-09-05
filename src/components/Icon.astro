@@ -6,7 +6,7 @@ export interface Props {
 }
 
 const { icon, width="auto", height="auto" }= Astro.props as Props;
-const { default: innerHTML } = await import(`/src/assets/svg/${icon}.svg?raw`);
+const { default: innerHTML } = await import(`../assets/svg/${icon}.svg?raw`);
 ---
 <div id="IconWrapper">
     <Fragment set:html={innerHTML} />
