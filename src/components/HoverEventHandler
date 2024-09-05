@@ -1,0 +1,36 @@
+	// Handle hover events for all image containers
+		const activeImageContainers = document.querySelectorAll(`${instanceSelector} #ImageWrapper #ImageContainer:nth-of-type(${currentIndex})`);
+
+		// Error handling: Check if the image containers exist for hover events
+		if (!activeImageContainers || activeImageContainers.length === 0) {
+			console.error(`No image containers found for selector: ${instanceSelector}`);
+			return;
+		}
+
+		activeImageContainers.forEach((container, index) => {
+			console.log(`Container Index: ${index}, Container:`, container);
+			const containerIndex = index + 1; // Adjust for 0-based index
+
+			const activeDescription = container.querySelector('.Description');
+			
+			const activeDescriptionBG = container.querySelector('.Description #DescriptionBG');
+
+			// Error handling: Ensure both description and background exist for each container
+			if (!activeDescription || !activeDescriptionBG) {
+				console.warn(`Description or Description background not found for image container at index ${index}.`);
+				return;
+			}
+			
+			// Show description on mouse enter (hover) only if it's the current image
+			container.addEventListener('mouseenter', () => {
+				console.log(`Hovering over containerIndex: ${containerIndex}, currentIndex: ${currentIndex}`);
+					activeDescription.style.opacity = '1'; // Show description
+					activeDescriptionBG.style.backdropFilter = 'blur(22px)'; // Apply blur effect
+			});
+
+			container.addEventListener('mouseleave', () => {
+					// Hide description and remove blur effect
+					activeDescription.style.opacity = '0';
+					activeDescriptionBG.style.backdropFilter = 'blur(0)';
+			});
+		});
