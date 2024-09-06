@@ -19,21 +19,51 @@ const { totalImages, title, subtitle } = Astro.props;
 const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a unique ID for each instance
 ---
 
-<div class:list={["fade", "GalleryElementWrapper"]} id={`GalleryElement-${instanceId}`}>
+<div class:list={["GalleryElementWrapper"]} id={`GalleryElement-${instanceId}`}>
   <div id="ImageWrapper">
+
     {totalImages >= 1 && (
       <div id="ImageContainer">
-        <div class:list={ "Description"}>
-          <slot name="Description1" />
-          <p>Hello</p>
+
+        <div class:list={ "ImageInfo"}>
+
+          <div class:list={"ImageInfoText"}>
+            <p><slot name="ImageInfoTitel1" /></p>
+            <p><slot name="ImageInfo1" /></p>
+          </div>
+
+          <div class:list={"DetailsWrapper"}>
+            <div class:list={"DetailClient"}>
+              <h1><slot name="ClientTitel1" /></h1>
+              <h2><slot name="Client1" /></h2>
+            </div>
+            <div class:list={"DetailTools"}>
+              <h1><slot name="ToolsTitel1" /></h1>
+              <h2><slot name="Tools1" /></h2>
+            </div>
+            <div class:list={"DetailCollab"}>
+              <h1><slot name="CollabTitel1" /></h1>
+              <h2><slot name="Collab1" /></h2>
+            </div>
+            <div class:list={"DetailMyPart"}>
+              <h1><slot name="MyPartTitel1" /></h1>
+              <h2><slot name="MyPart1" /></h2>
+            </div>
+          </div>
+
         </div>
+
         <slot name="Image1" />
+
       </div>
     )}
+
+
+
     {totalImages >= 2 && (
       <div id="ImageContainer">
-        <div class:list={ "Description"}>
-          <slot name="Description2" />
+        <div class:list={ "ImageInfo"}>
+          <slot name="ImageInfo2" />
           <p>Hello</p>
         </div>
         <slot name="Image2" />
@@ -41,8 +71,8 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
     )}
     {totalImages >= 3 && (
       <div id="ImageContainer">
-        <div class:list={ "Description"}>
-          <slot name="Description3" />
+        <div class:list={ "ImageInfo"}>
+          <slot name="ImageInfo3" />
           <p>Hello</p>
         </div>
         <slot name="Image3" />
@@ -50,8 +80,8 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
     )}
     {totalImages >= 4 && (
       <div id="ImageContainer">
-        <div class:list={ "Description"}>
-          <slot name="Description4" />
+        <div class:list={ "ImageInfo"}>
+          <slot name="ImageInfo4" />
           <p>Hello</p>
         </div>
         <slot name="Image4" />
@@ -59,8 +89,8 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
     )}
     {totalImages >= 5 && (
       <div id="ImageContainer">
-        <div class:list={ "Description"}>
-          <slot name="Description5" />
+        <div class:list={ "ImageInfo"}>
+          <slot name="ImageInfo5" />
           <p>Hello</p>
         </div>
         <slot name="Image5" />
@@ -68,8 +98,8 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
     )}
     {totalImages >= 6 && (
       <div id="ImageContainer">
-        <div class:list={ "Description"}>
-          <slot name="Description6" />
+        <div class:list={ "ImageInfo"}>
+          <slot name="ImageInfo6" />
           <p>Hello</p>
         </div>
         <slot name="Image6" />
@@ -77,8 +107,8 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
     )}
     {totalImages >= 7 && (
       <div id="ImageContainer">
-        <div class:list={ "Description"}>
-          <slot name="Description7" />
+        <div class:list={ "ImageInfo"}>
+          <slot name="ImageInfo7" />
           <p>Hello</p>
         </div>
         <slot name="Image6" />
@@ -86,7 +116,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
     )}
   </div>
 
-  <div id="DescriptionWrapper">
+  <div id="GalleryDescriptionWrapper">
     <BracketOpenH />
 
     <div id="TextContainer">
@@ -178,50 +208,50 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 		}
 
 		// A function to hide all descriptions
-    function hideAllDescriptions() {
-      const allDescriptions = document.querySelectorAll(`${instanceSelector} .Description`);
+    function hideAllImageInfos() {
+      const allImageInfos = document.querySelectorAll(`${instanceSelector} .ImageInfo`);
       // Error handling: Check if descriptions exist
-      if (!allDescriptions || allDescriptions.length === 0) {
-        console.error(`No descriptions found for selector: ${instanceSelector}`);
+      if (!allImageInfos || allImageInfos.length === 0) {
+        console.error(`No ImageInfos found for selector: ${instanceSelector}`);
         return;
       }
 
-      allDescriptions.forEach((description) => {
-        description.style.opacity = '0';
-        description.style.backdropFilter = 'blur(0px)';
+      allImageInfos.forEach((ImageInfo) => {
+        ImageInfo.style.opacity = '0';
+        ImageInfo.style.backdropFilter = 'blur(0px)';
         // Optionally: Leave the blur unchanged if you don't want it to reset completely
       });
 
-      descriptionVisible = false; // Reset the visibility state
+      ImageInfoVisible = false; // Reset the visibility state
     }
 
 		// A function to toggle the visibility of the description for the current image
-		function toggleDescriptionVisibility() {
-			const activeDescription = document.querySelector(
-				`${instanceSelector} #ImageWrapper #ImageContainer:nth-of-type(${currentIndex}) .Description`
+		function toggleImageInfoVisibility() {
+			const activeImageInfo = document.querySelector(
+				`${instanceSelector} #ImageWrapper #ImageContainer:nth-of-type(${currentIndex}) .ImageInfo`
 			);
 
 
 			// Error handling: Check if the active description elements exist
-			if (!activeDescription) {
-				console.error(`Description or not found for the current image.`);
+			if (!activeImageInfo) {
+				console.error(`ImageInfo or not found for the current image.`);
 				return;
 			}
 
-			if (descriptionVisible) {
+			if (ImageInfoVisible) {
 
-              activeDescription.style.opacity = '0';
-              activeDescription.style.backdropFilter = 'blur(0px)';
+              activeImageInfo.style.opacity = '0';
+              activeImageInfo.style.backdropFilter = 'blur(0px)';
          
 
           } else {
-            activeDescription.style.opacity = '1';
-            activeDescription.style.backdropFilter = 'blur(22px)';
+            activeImageInfo.style.opacity = '1';
+            activeImageInfo.style.backdropFilter = 'blur(22px)';
 
           }
 
           // Toggle the description visibility state
-          descriptionVisible = !descriptionVisible;
+          ImageInfoVisible = !ImageInfoVisible;
 		}
 
 		// Arrow Function forward
@@ -232,7 +262,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 
 				updateCounter();
        
-        hideAllDescriptions();
+        hideAllImageInfos();
         setTimeout (() => {
           updateImageVisibility();
         }, 300);
@@ -246,7 +276,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 				if (currentIndex < 1) currentIndex = imageCount; // Loop to the last image if at the beginning
 
 				updateCounter();
-				hideAllDescriptions(); // Hide descriptions when navigating
+				hideAllImageInfos(); // Hide descriptions when navigating
         setTimeout (() => {
           updateImageVisibility();
         }, 300);
@@ -257,7 +287,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 		const infoDiv = document.querySelector(`${instanceSelector} #Info`);
 		if (infoDiv) {
 			infoDiv.addEventListener('click', function () {
-				toggleDescriptionVisibility();
+				toggleImageInfoVisibility();
 			});
 		} else {
 			console.error(`Info div not found for selector: ${instanceSelector}`);
@@ -266,7 +296,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 		// Initially call functions to sync UI with the current state
 		updateImageVisibility();
 		updateCounter();
-		hideAllDescriptions();
+		hideAllImageInfos();
 	});
 
 </script>
@@ -325,7 +355,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 	  pointer-events: auto;
   }
 
-  .Description {
+  .ImageInfo {
     position: absolute;
     top: 0;
     left: 0;
@@ -346,16 +376,89 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
   }
 
 
-  /* Thumbnails */
+#GalleryDescriptionWrapper {
+  display: grid;
+  width: 100%;
+  height: fit-content;
+  grid-template-columns: 1.5ch minmax(min-content, 3fr) 3ch 2fr 3ch 3.5ch 1.5ch;
+  justify-content: center;
+  align-content: center;
+}
 
-  #DescriptionWrapper {
-    display: grid;
-    width: 100%;
-    height: fit-content;
-    grid-template-columns: 1.5ch minmax(min-content, 3fr) 3ch 2fr 3ch 3.5ch 1.5ch;
-    justify-content: center;
-    align-content: center;
+.ImageInfoText{
+    position: absolute;
+    font-size: 0.8rem;
+    width: 33ch;
+
+    :nth-child(1){
+      font-family: PowerGrotesk-Medium;
+    }
+
+    :nth-child(2){
+      font-family: PowerGrotesk-Light;
+      font-style: italic;
+    }
   }
+
+.DetailsWrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  div {
+    padding: 1rem;
+    width: 27ch;
+  }
+
+  h1 {
+    font-size: 0.6rem;
+    font-family: PowerGrotesk-Medium;
+  }
+
+  h2 {
+    font-size: 0.6rem;
+    font-family: PowerGrotesk-Light;
+  
+  }
+
+}
+
+
+.DetailCollab {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+}
+
+
+
+
+.DetailMyPart {
+  position: absolute;
+  top: 0;
+  right: 0;
+  text-align: right;
+}
+
+.DetailClient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.DetailTools{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  text-align: right;
+
+}
+
+
+
+
+
 
   /* Arrows */
 

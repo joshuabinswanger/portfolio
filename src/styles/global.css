@@ -73,7 +73,7 @@
 
   /* Margins */
   --margin-left-dekstop: 2vw;
-  --margin-right-desktop: calc(2vw + 200px);
+  --margin-right-desktop: calc(2vw + 100px);
 
   --margin-left-mobile: 25px;
   --margin-right-mobile: 25px;

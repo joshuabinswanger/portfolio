@@ -12,6 +12,7 @@ import Xylopedia from "../assets/projects/xylopedia/Xylopedia.astro";
 import ETHVisualisations from "../assets/projects/ethvisualisations/ETHVisualisations.astro";
 import PhenologicalShift from "../assets/projects/phenologicalshift/PhenologicalShift.astro"
 import GameDesign101 from "../assets/projects/gamedesign101/GameDesign101.astro";
+import Borkenkaefer from "../assets/projects/borkenkaefer/Borkenkaefer.astro";
 ---
 
 <TopWrapper>
@@ -27,15 +28,18 @@ import GameDesign101 from "../assets/projects/gamedesign101/GameDesign101.astro"
 			<ETHVisualisations/>
 		</div>
 
-		<div class:list={["fade", "GalleryElementWrapper"]}>
+		<div class:list={[ "GalleryElementWrapper"]}>
 			<PhenologicalShift/>
 		</div>
 
 
-		<div class:list={["fade", "GalleryElementWrapper"]}>
+		<div class:list={["GalleryElementWrapper"]}>
 			<GameDesign101/>
 		</div>
 
+		<div class:list={["GalleryElementWrapper"]}>
+			<Borkenkaefer/>
+		</div>
 	</GridLayout>
 
 </TopWrapper>
@@ -49,7 +53,7 @@ document.addEventListener('astro:page-load', ev => {
 
 
 // Select all ImageElement components
-const imageElements = document.querySelectorAll('ImageElement');
+const imageElements = document.querySelectorAll('.GalleryElementWrapper');
 
 // Loop through the ImageElement NodeList and start adding the fade class from the 3rd element onwards
 imageElements.forEach((image, index) => {
@@ -139,8 +143,8 @@ imageElements.forEach((image, index) => {
 }
 .GalleryElementWrapper:nth-of-type(5) {
 	grid-column-start: 1;
-		grid-column-end: span 8; 
-		grid-row-start: 28;
+		grid-column-end: span 7; 
+		grid-row-start: 21;
 
 }
 .GalleryElementWrapper:nth-of-type(6) {
