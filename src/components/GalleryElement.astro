@@ -171,41 +171,72 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 		return visibleIndex;
 	}
 
-	document.addEventListener('astro:page-load', () => {
-		const instanceSelector = `#GalleryElement-${instanceId}`; // Target this specific gallery element
-		let currentIndex = 1; // Start from the first image
-		const imageCount = totalImages;
+document.addEventListener('astro:page-load', () => {
 
-		// Image Visibility
-		function updateImageVisibility() {
-			const imageContainers = document.querySelectorAll(`${instanceSelector} #ImageWrapper #ImageContainer`);
+  const instanceSelector = `#GalleryElement-${instanceId}`; // Target this specific gallery element
+  let currentIndex = 1; // Start from the first image
+  const imageCount = totalImages;
 
-			// Error handling: Check if the image containers exist
-			if (!imageContainers || imageContainers.length === 0) {
-				console.error(`No image containers found for selector: ${instanceSelector}`);
-				
-				return;
-			}
 
-			// Update the visibility of images based on the current index
-			imageContainers.forEach((div, index) => {
-				div.style.opacity = index + 1 === currentIndex ? "1" : "0";
-        div.style.filter = index + 1 === currentIndex ? "blur(0px)" : "blur(11px)";
-			});
-		}
 
-		// Counter
-		function updateCounter() {
-			const counterContainer = document.querySelector(`${instanceSelector} #CounterContainer`);
 
-			// Error handling: Check if counter container exists
-			if (!counterContainer) {
-				console.error(`Counter container not found for selector: ${instanceSelector}`);
-				return;
-			}
+  // Image Visibility
+  function updateImageVisibility() {
+    const imageContainers = document.querySelectorAll(`${instanceSelector} #ImageWrapper #ImageContainer`);
+    const imageFilters = document.querySelectorAll(`${instanceSelector} #ImageWrapper #ImageContainer .Filter`);
 
-			counterContainer.textContent = `${currentIndex} / ${imageCount}`;
-		}
+    // Error handling: Check if the image containers exist
+    if (!imageContainers || imageContainers.length === 0) {
+      console.error(`No image containers found for selector: ${instanceSelector}`);
+      
+      return;
+    }
+
+    // Update the visibility of images based on the current index: blur > switch > blur
+    imageFilters.forEach((div, index) => {
+      if (index + 1 === currentIndex || index + 1 === currentIndex + 1 || index + 1 === currentIndex - 1) {
+    div.style.backdropFilter = "blur(5px)";
+    div.style.backgroundColor = "#fbf9f4ff";
+  } 
+    });
+
+
+    setTimeout(() => {
+      imageContainers.forEach((div, index) => {
+      div.style.opacity = index + 1 === currentIndex ? "1" : "0";
+      });
+    }, 200);
+
+    setTimeout(() => {
+    imageFilters.forEach((div, index) => {
+      div.style.backdropFilter = index + 1 === currentIndex ? "blur(0px)" : "blur(5px)";
+      div.style.backgroundColor = "#fbf9f400";
+    });
+  }, 333);
+  }
+
+
+
+
+  
+  // Counter
+  function updateCounter() {
+    const counterContainer = document.querySelector(`${instanceSelector} #CounterContainer`);
+
+    // Error handling: Check if counter container exists
+    if (!counterContainer) {
+      console.error(`Counter container not found for selector: ${instanceSelector}`);
+      return;
+    }
+
+    counterContainer.textContent = `${currentIndex} / ${imageCount}`;
+  }
+
+
+
+
+
+
 
 		// A function to hide all descriptions
     function hideAllImageInfos() {
@@ -248,17 +279,17 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
             activeImageInfo.style.opacity = '1';
             activeImageInfo.style.backdropFilter = 'blur(22px)';
 
-          }
+        }
 
           // Toggle the description visibility state
           ImageInfoVisible = !ImageInfoVisible;
 		}
 
-		// Arrow Function forward
-		document.querySelector(`${instanceSelector} #ArrowWrapper div:nth-child(3)`)
-			?.addEventListener("click", function () {
-				currentIndex++;
-				if (currentIndex > imageCount) currentIndex = 1; // Loop back to the first image if at the end
+  // Arrow Function forward
+  document.querySelector(`${instanceSelector} #ArrowWrapper div:nth-child(3)`)
+    ?.addEventListener("click", function () {
+      currentIndex++;
+      if (currentIndex > imageCount) currentIndex = 1; // Loop back to the first image if at the end
 
 				updateCounter();
        
@@ -269,11 +300,15 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
         
 			});
 
-		// Arrow Function backward
-		document.querySelector(`${instanceSelector} #ArrowWrapper div:nth-child(1)`)
-			?.addEventListener("click", function () {
-				currentIndex--;
-				if (currentIndex < 1) currentIndex = imageCount; // Loop to the last image if at the beginning
+
+
+
+
+  // Arrow Function backward
+  document.querySelector(`${instanceSelector} #ArrowWrapper div:nth-child(1)`)
+    ?.addEventListener("click", function () {
+      currentIndex--;
+      if (currentIndex < 1) currentIndex = imageCount; // Loop to the last image if at the beginning
 
 				updateCounter();
 				hideAllImageInfos(); // Hide descriptions when navigating
@@ -329,12 +364,11 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
   #ImageWrapper > div {
     grid-column: 1;
     grid-row: 1;
-    transition: opacity 0.8s  ease-in-out, filter 0.5s ease-out ;
   }
 
   #ImageWrapper > div:nth-of-type(1) {
     opacity: 1; /* First image should be visible */
-    filter: blur(0px);
+    backdrop-filter: blur(0px);
   }
 
   #ImageWrapper > div:nth-of-type(2),
@@ -344,7 +378,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
   #ImageWrapper > div:nth-of-type(6),
   #ImageWrapper > div:nth-of-type(7) {
     opacity: 0;
-    filter: blur(11px);
+    backdrop-filter: blur(11px);
   }
 
   #ImageContainer {
