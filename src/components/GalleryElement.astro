@@ -25,6 +25,8 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
     {totalImages >= 1 && (
       <div id="ImageContainer">
 
+         <div class:list={ "Filter"}></div>
+
         <div class:list={ "ImageInfo"}>
 
           <div class:list={"ImageInfoText"}>
@@ -62,6 +64,10 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 
     {totalImages >= 2 && (
       <div id="ImageContainer">
+
+      <div class:list={ "Filter"}></div>
+
+
         <div class:list={ "ImageInfo"}>
           <slot name="ImageInfo2" />
           <p>Hello</p>
@@ -69,8 +75,15 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
         <slot name="Image2" />
       </div>
     )}
+
+
+
     {totalImages >= 3 && (
       <div id="ImageContainer">
+
+        <div class:list={ "Filter"}></div>
+
+
         <div class:list={ "ImageInfo"}>
           <slot name="ImageInfo3" />
           <p>Hello</p>
@@ -78,8 +91,16 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
         <slot name="Image3" />
       </div>
     )}
+
+
+
+
+
     {totalImages >= 4 && (
       <div id="ImageContainer">
+
+        <div class:list={ "Filter"}></div>
+
         <div class:list={ "ImageInfo"}>
           <slot name="ImageInfo4" />
           <p>Hello</p>
@@ -87,8 +108,13 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
         <slot name="Image4" />
       </div>
     )}
+
+
     {totalImages >= 5 && (
       <div id="ImageContainer">
+        
+        <div class:list={ "Filter"}></div>
+        
         <div class:list={ "ImageInfo"}>
           <slot name="ImageInfo5" />
           <p>Hello</p>
@@ -96,8 +122,17 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
         <slot name="Image5" />
       </div>
     )}
+
+
+
+
     {totalImages >= 6 && (
       <div id="ImageContainer">
+
+
+        <div class:list={ "Filter"}></div>
+
+
         <div class:list={ "ImageInfo"}>
           <slot name="ImageInfo6" />
           <p>Hello</p>
@@ -105,8 +140,17 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
         <slot name="Image6" />
       </div>
     )}
+
+
+
+
+
     {totalImages >= 7 && (
       <div id="ImageContainer">
+
+        <div class:list={ "Filter"}></div>
+
+
         <div class:list={ "ImageInfo"}>
           <slot name="ImageInfo7" />
           <p>Hello</p>
@@ -195,7 +239,7 @@ document.addEventListener('astro:page-load', () => {
     // Update the visibility of images based on the current index: blur > switch > blur
     imageFilters.forEach((div, index) => {
       if (index + 1 === currentIndex || index + 1 === currentIndex + 1 || index + 1 === currentIndex - 1) {
-    div.style.backdropFilter = "blur(5px)";
+    div.style.backdropFilter = "blur(5px) sepia(0)";
     div.style.backgroundColor = "#fbf9f4ff";
   } 
     });
@@ -209,7 +253,7 @@ document.addEventListener('astro:page-load', () => {
 
     setTimeout(() => {
     imageFilters.forEach((div, index) => {
-      div.style.backdropFilter = index + 1 === currentIndex ? "blur(0px)" : "blur(5px)";
+      div.style.backdropFilter = index + 1 === currentIndex ? "blur(0px) sepia(0)" : "blur(5px) sepia(1)";
       div.style.backgroundColor = "#fbf9f400";
     });
   }, 333);
@@ -388,6 +432,22 @@ document.addEventListener('astro:page-load', () => {
     z-index: 1;
 	  pointer-events: auto;
   }
+  .Filter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #fbf9f400;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(0px) sepia(0);
+    z-index: 11;
+    transition: backdrop-filter ease-in-out 0.2s, background-color ease-in-out 0.2s;
+  }
+
+
+
+
+/*   Image Info */
 
   .ImageInfo {
     position: absolute;
