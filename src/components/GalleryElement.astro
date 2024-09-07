@@ -13,9 +13,10 @@ interface Props {
   totalImages: number;
   title: string;
   subtitle: string;
+  bgcolor: string;
 }
 
-const { totalImages, title, subtitle } = Astro.props;
+const { totalImages, title, subtitle, bgcolor = "#fbf9f4ee" } = Astro.props;
 const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a unique ID for each instance
 ---
 
@@ -69,8 +70,31 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 
 
         <div class:list={ "ImageInfo"}>
-          <slot name="ImageInfo2" />
-          <p>Hello</p>
+
+          <div class:list={"ImageInfoText"}>
+            <p><slot name="ImageInfoTitel2" /></p>
+            <p><slot name="ImageInfo2" /></p>
+          </div>
+
+          <div class:list={"DetailsWrapper"}>
+            <div class:list={"DetailClient"}>
+              <h1><slot name="ClientTitel2" /></h1>
+              <h2><slot name="Client2" /></h2>
+            </div>
+            <div class:list={"DetailTools"}>
+              <h1><slot name="ToolsTitel2" /></h1>
+              <h2><slot name="Tools2" /></h2>
+            </div>
+            <div class:list={"DetailCollab"}>
+              <h1><slot name="CollabTitel2" /></h1>
+              <h2><slot name="Collab2" /></h2>
+            </div>
+            <div class:list={"DetailMyPart"}>
+              <h1><slot name="MyPartTitel2" /></h1>
+              <h2><slot name="MyPart2" /></h2>
+            </div>
+          </div>
+
         </div>
         <slot name="Image2" />
       </div>
@@ -85,8 +109,31 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 
 
         <div class:list={ "ImageInfo"}>
-          <slot name="ImageInfo3" />
-          <p>Hello</p>
+
+          <div class:list={"ImageInfoText"}>
+            <p><slot name="ImageInfoTitel3" /></p>
+            <p><slot name="ImageInfo3" /></p>
+          </div>
+
+          <div class:list={"DetailsWrapper"}>
+            <div class:list={"DetailClient"}>
+              <h1><slot name="ClientTitel3" /></h1>
+              <h2><slot name="Client3" /></h2>
+            </div>
+            <div class:list={"DetailTools"}>
+              <h1><slot name="ToolsTitel3" /></h1>
+              <h2><slot name="Tools3" /></h2>
+            </div>
+            <div class:list={"DetailCollab"}>
+              <h1><slot name="CollabTitel3" /></h1>
+              <h2><slot name="Collab3" /></h2>
+            </div>
+            <div class:list={"DetailMyPart"}>
+              <h1><slot name="MyPartTitel3" /></h1>
+              <h2><slot name="MyPart3" /></h2>
+            </div>
+
+          </div>
         </div>
         <slot name="Image3" />
       </div>
@@ -102,8 +149,31 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
         <div class:list={ "Filter"}></div>
 
         <div class:list={ "ImageInfo"}>
-          <slot name="ImageInfo4" />
-          <p>Hello</p>
+
+          <div class:list={"ImageInfoText"}>
+            <p><slot name="ImageInfoTitel4" /></p>
+            <p><slot name="ImageInfo4" /></p>
+          </div>
+
+          <div class:list={"DetailsWrapper"}>
+            <div class:list={"DetailClient"}>
+              <h1><slot name="ClientTitel4" /></h1>
+              <h2><slot name="Client4" /></h2>
+            </div>
+            <div class:list={"DetailTools"}>
+              <h1><slot name="ToolsTitel4" /></h1>
+              <h2><slot name="Tools4" /></h2>
+            </div>
+            <div class:list={"DetailCollab"}>
+              <h1><slot name="CollabTitel" /></h1>
+              <h2><slot name="Collab4" /></h2>
+            </div>
+            <div class:list={"DetailMyPart"}>
+              <h1><slot name="MyPartTitel4" /></h1>
+              <h2><slot name="MyPart4" /></h2>
+            </div>
+          </div>
+
         </div>
         <slot name="Image4" />
       </div>
@@ -116,8 +186,31 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
         <div class:list={ "Filter"}></div>
         
         <div class:list={ "ImageInfo"}>
-          <slot name="ImageInfo5" />
-          <p>Hello</p>
+
+          <div class:list={"ImageInfoText"}>
+            <p><slot name="ImageInfoTitel5" /></p>
+            <p><slot name="ImageInfo5" /></p>
+          </div>
+
+          <div class:list={"DetailsWrapper"}>
+            <div class:list={"DetailClient"}>
+              <h1><slot name="ClientTitel5" /></h1>
+              <h2><slot name="Client5" /></h2>
+            </div>
+            <div class:list={"DetailTools"}>
+              <h1><slot name="ToolsTitel5" /></h1>
+              <h2><slot name="Tools5" /></h2>
+            </div>
+            <div class:list={"DetailCollab"}>
+              <h1><slot name="CollabTitel5" /></h1>
+              <h2><slot name="Collab5" /></h2>
+            </div>
+            <div class:list={"DetailMyPart"}>
+              <h1><slot name="MyPartTitel5" /></h1>
+              <h2><slot name="MyPart5" /></h2>
+            </div>
+          </div>
+
         </div>
         <slot name="Image5" />
       </div>
@@ -134,8 +227,31 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 
 
         <div class:list={ "ImageInfo"}>
-          <slot name="ImageInfo6" />
-          <p>Hello</p>
+
+          <div class:list={"ImageInfoText"}>
+            <p><slot name="ImageInfoTitel6" /></p>
+            <p><slot name="ImageInfo6" /></p>
+          </div>
+
+          <div class:list={"DetailsWrapper"}>
+            <div class:list={"DetailClient"}>
+              <h1><slot name="ClientTitel6" /></h1>
+              <h2><slot name="Client6" /></h2>
+            </div>
+            <div class:list={"DetailTools"}>
+              <h1><slot name="ToolsTitel6" /></h1>
+              <h2><slot name="Tools6" /></h2>
+            </div>
+            <div class:list={"DetailCollab"}>
+              <h1><slot name="CollabTitel6" /></h1>
+              <h2><slot name="Collab6" /></h2>
+            </div>
+            <div class:list={"DetailMyPart"}>
+              <h1><slot name="MyPartTitel6" /></h1>
+              <h2><slot name="MyPart6" /></h2>
+            </div>
+          </div>
+
         </div>
         <slot name="Image6" />
       </div>
@@ -152,10 +268,33 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 
 
         <div class:list={ "ImageInfo"}>
-          <slot name="ImageInfo7" />
-          <p>Hello</p>
+
+          <div class:list={"ImageInfoText"}>
+            <p><slot name="ImageInfoTitel7" /></p>
+            <p><slot name="ImageInfo7" /></p>
+          </div>
+
+          <div class:list={"DetailsWrapper"}>
+            <div class:list={"DetailClient"}>
+              <h1><slot name="ClientTitel7" /></h1>
+              <h2><slot name="Client7" /></h2>
+            </div>
+            <div class:list={"DetailTools"}>
+              <h1><slot name="ToolsTitel7" /></h1>
+              <h2><slot name="Tools7" /></h2>
+            </div>
+            <div class:list={"DetailCollab"}>
+              <h1><slot name="CollabTitel7" /></h1>
+              <h2><slot name="Collab7" /></h2>
+            </div>
+            <div class:list={"DetailMyPart"}>
+              <h1><slot name="MyPartTitel7" /></h1>
+              <h2><slot name="MyPart7" /></h2>
+            </div>
+          </div>
+          
         </div>
-        <slot name="Image6" />
+        <slot name="Image7" />
       </div>
     )}
   </div>
@@ -188,7 +327,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
   </div>
 </div>
 
-<script define:vars={{ totalImages, instanceId }}>
+<script define:vars={{ totalImages, instanceId, bgcolor }}>
 
 	// Global Function: Get Current Index
 	function getCurrentIndex(instanceSelector) {
@@ -239,8 +378,8 @@ document.addEventListener('astro:page-load', () => {
     // Update the visibility of images based on the current index: blur > switch > blur
     imageFilters.forEach((div, index) => {
       if (index + 1 === currentIndex || index + 1 === currentIndex + 1 || index + 1 === currentIndex - 1) {
-    div.style.backdropFilter = "blur(5px) sepia(0)";
-    div.style.backgroundColor = "#fbf9f4ff";
+    div.style.backdropFilter = "blur(5px)";
+     div.style.backgroundColor = bgcolor;
   } 
     });
 
@@ -253,7 +392,7 @@ document.addEventListener('astro:page-load', () => {
 
     setTimeout(() => {
     imageFilters.forEach((div, index) => {
-      div.style.backdropFilter = index + 1 === currentIndex ? "blur(0px) sepia(0)" : "blur(5px) sepia(1)";
+      div.style.backdropFilter = index + 1 === currentIndex ? "blur(0px)" : "blur(5px)";
       div.style.backgroundColor = "#fbf9f400";
     });
   }, 333);
@@ -439,7 +578,7 @@ document.addEventListener('astro:page-load', () => {
     background-color: #fbf9f400;
     width: 100%;
     height: 100%;
-    backdrop-filter: blur(0px) sepia(0);
+    backdrop-filter: blur(0px);
     z-index: 11;
     transition: backdrop-filter ease-in-out 0.2s, background-color ease-in-out 0.2s;
   }
@@ -507,12 +646,19 @@ document.addEventListener('astro:page-load', () => {
   h1 {
     font-size: 0.6rem;
     font-family: PowerGrotesk-Medium;
+
+    @media (--bp-desktop-wide) {
+      font-size: 0.8rem;
+    }
   }
 
   h2 {
     font-size: 0.6rem;
     font-family: PowerGrotesk-Light;
-  
+    
+    @media (--bp-desktop-wide) {
+      font-size: 0.8rem;
+    }
   }
 
 }

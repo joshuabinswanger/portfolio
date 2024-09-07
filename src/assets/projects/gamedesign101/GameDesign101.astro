@@ -3,9 +3,10 @@ import ImageElement from "../../../components/ImageElement.astro"
 import GalleryElement from "../../../components/GalleryElement.astro"
 
 const totalImages = 6;
+const bgcolor = "#000000";
 
 ---
-<GalleryElement totalImages={totalImages} title="Game Design 101" subtitle="Motion Graphics">
+<GalleryElement totalImages={totalImages} title="Game Design 101" subtitle="Motion Graphics" bgcolor={bgcolor}>
 
 <!-- Images  possible Inputs
  interface Props {
@@ -23,6 +24,8 @@ const totalImages = 6;
   };
   -->
 
+<!-- Image 1 -->
+
 <div slot="Image1"> 
     <ImageElement 
     width="100%"
@@ -31,6 +34,44 @@ const totalImages = 6;
     imagePath="/src/assets/projects/gamedesign101/GameDesign101_GalleryImages_1.webp"
     />
 </div>
+
+<Fragment slot="ImageInfoTitel1">
+    Käfer
+</Fragment>
+<Fragment slot="ImageInfo1">
+    Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalco- graphus)
+</Fragment>
+
+<Fragment slot="ClientTitel1">
+    Client
+</Fragment>
+<Fragment slot="Client1">
+    LWF
+</Fragment>
+
+<Fragment slot="ToolsTitel1">
+    Tools
+</Fragment>
+<Fragment slot="Tools1">
+    Photoshop
+</Fragment>
+
+<Fragment slot="CollabTitel1">
+    Content
+</Fragment>
+<Fragment slot="Collab1">
+    LWF
+</Fragment>
+
+<Fragment slot="MyPartTitel1">
+    Design
+</Fragment>
+<Fragment slot="MyPart1">
+   Joshua Binswanger
+</Fragment>
+
+
+<!-- Image 2 -->
 
 <div slot="Image2"> 
     <ImageElement 
@@ -41,6 +82,44 @@ const totalImages = 6;
     />
 </div>
 
+<Fragment slot="ImageInfoTitel2">
+    Käfer
+</Fragment>
+<Fragment slot="ImageInfo2">
+    Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalco- graphus)
+</Fragment>
+
+<Fragment slot="ClientTitel2">
+    Client
+</Fragment>
+<Fragment slot="Client2">
+    LWF
+</Fragment>
+
+<Fragment slot="ToolsTitel2">
+    Tools
+</Fragment>
+<Fragment slot="Tools2">
+    Photoshop
+</Fragment>
+
+<Fragment slot="CollabTitel2">
+    Content
+</Fragment>
+<Fragment slot="Collab2">
+    LWF
+</Fragment>
+
+<Fragment slot="MyPartTitel2">
+    Design
+</Fragment>
+<Fragment slot="MyPart2">
+   Joshua Binswanger
+</Fragment>
+
+
+ <!-- Image 3 -->
+
 <div slot="Image3"> 
     <ImageElement 
     width="100%"
@@ -49,6 +128,46 @@ const totalImages = 6;
     imagePath="/src/assets/projects/gamedesign101/GameDesign101_GalleryImages_3.webp"
     />
 </div>
+
+<Fragment slot="ImageInfoTitel3">
+    Käfer
+</Fragment>
+<Fragment slot="ImageInfo3">
+    Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalco- graphus)
+</Fragment>
+
+<Fragment slot="ClientTitel3">
+    Client
+</Fragment>
+<Fragment slot="Client3">
+    LWF
+</Fragment>
+
+<Fragment slot="ToolsTitel3">
+    Tools
+</Fragment>
+<Fragment slot="Tools3">
+    Photoshop
+</Fragment>
+
+<Fragment slot="CollabTitel3">
+    Content
+</Fragment>
+<Fragment slot="Collab3">
+    LWF
+</Fragment>
+
+<Fragment slot="MyPartTitel3">
+    Design
+</Fragment>
+<Fragment slot="MyPart3">
+   Joshua Binswanger
+</Fragment>
+
+
+
+
+<!-- Image 4 -->
 
 <div slot="Image4"> 
     <ImageElement 
@@ -59,6 +178,45 @@ const totalImages = 6;
     />
 </div>
 
+<Fragment slot="ImageInfoTitel4">
+    Käfer
+</Fragment>
+<Fragment slot="ImageInfo4">
+    Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalco- graphus)
+</Fragment>
+
+<Fragment slot="ClientTitel4">
+    Client
+</Fragment>
+<Fragment slot="Client4">
+    LWF
+</Fragment>
+
+<Fragment slot="ToolsTitel4">
+    Tools
+</Fragment>
+<Fragment slot="Tools4">
+    Photoshop
+</Fragment>
+
+<Fragment slot="CollabTitel4">
+    Content
+</Fragment>
+<Fragment slot="Collab4">
+    LWF
+</Fragment>
+
+<Fragment slot="MyPartTitel4">
+    Design
+</Fragment>
+<Fragment slot="MyPart4">
+   Joshua Binswanger
+</Fragment>
+
+
+
+<!-- Image 5 -->
+
 <div slot="Image5"> 
     <ImageElement 
     width="100%"
@@ -68,6 +226,46 @@ const totalImages = 6;
     />
 </div>
 
+
+
+<Fragment slot="ImageInfoTitel5">
+    Käfer
+</Fragment>
+<Fragment slot="ImageInfo5">
+    Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalco- graphus)
+</Fragment>
+
+<Fragment slot="ClientTitel5">
+    Client
+</Fragment>
+<Fragment slot="Client5">
+    LWF
+</Fragment>
+
+<Fragment slot="ToolsTitel5">
+    Tools
+</Fragment>
+<Fragment slot="Tools5">
+    Photoshop
+</Fragment>
+
+<Fragment slot="CollabTitel5">
+    Content
+</Fragment>
+<Fragment slot="Collab5">
+    LWF
+</Fragment>
+
+<Fragment slot="MyPartTitel5">
+    Design
+</Fragment>
+<Fragment slot="MyPart5">
+   Joshua Binswanger
+</Fragment>
+
+
+<!-- Image 6 -->
+
 <div slot="Image6"> 
     <ImageElement 
     width="100%"
@@ -76,5 +274,40 @@ const totalImages = 6;
     imagePath="/src/assets/projects/gamedesign101/GameDesign101_GalleryImages_6.webp"
     />
 </div>
+
+<Fragment slot="ImageInfoTitel6">
+    Käfer
+</Fragment>
+<Fragment slot="ImageInfo6">
+    Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalco- graphus)
+</Fragment>
+
+<Fragment slot="ClientTitel6">
+    Client
+</Fragment>
+<Fragment slot="Client6">
+    LWF
+</Fragment>
+
+<Fragment slot="ToolsTitel6">
+    Tools
+</Fragment>
+<Fragment slot="Tools6">
+    Photoshop
+</Fragment>
+
+<Fragment slot="CollabTitel6">
+    Content
+</Fragment>
+<Fragment slot="Collab6">
+    LWF
+</Fragment>
+
+<Fragment slot="MyPartTitel6">
+    Design
+</Fragment>
+<Fragment slot="MyPart6">
+   Joshua Binswanger
+</Fragment>
 
 </GalleryElement>
