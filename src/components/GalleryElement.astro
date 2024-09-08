@@ -621,7 +621,7 @@ document.addEventListener('astro:page-load', () => {
 .ImageInfoText{
     position: absolute;
     font-size: 0.8rem;
-    width: 33ch;
+    width: 27ch;
 
     :nth-child(1){
       font-family: PowerGrotesk-Medium;
@@ -640,7 +640,7 @@ document.addEventListener('astro:page-load', () => {
 
   div {
     padding: 1rem;
-    width: 27ch;
+    width: 21ch;
   }
 
   h1 {
@@ -655,6 +655,7 @@ document.addEventListener('astro:page-load', () => {
   h2 {
     font-size: 0.6rem;
     font-family: PowerGrotesk-Light;
+    width: 33ch;
     
     @media (--bp-desktop-wide) {
       font-size: 0.8rem;
@@ -678,7 +679,13 @@ document.addEventListener('astro:page-load', () => {
   position: absolute;
   top: 0;
   right: 0;
-  text-align: right;
+  text-align: right; /* Align text to the right */
+  width: 100%; /* Ensure it takes the full width of its container */
+  padding: 1rem;
+  h2 {
+  width: 100%; /* Make sure h2 takes up full width */
+  text-align: right; /* Align h2 text to the right */
+  }
 }
 
 .DetailClient {
@@ -691,8 +698,14 @@ document.addEventListener('astro:page-load', () => {
   position: absolute;
   bottom: 0;
   right: 0;
-  text-align: right;
+  text-align: right; /* Align text to the right */
+  width: 100%; /* Ensure it takes the full width of its container */
+  padding: 1rem; 
 
+  h2 {
+  width: 100%; /* Make sure h2 takes up full width */
+  text-align: right; /* Align h2 text to the right */
+  }
 }
 
 
