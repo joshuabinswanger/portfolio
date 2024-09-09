@@ -367,6 +367,7 @@ document.addEventListener('astro:page-load', () => {
   function updateImageVisibility() {
     const imageContainers = document.querySelectorAll(`${instanceSelector} #ImageWrapper #ImageContainer`);
     const imageFilters = document.querySelectorAll(`${instanceSelector} #ImageWrapper #ImageContainer .Filter`);
+    const imageTarget = document.querySelectorAll(`${instanceSelector} #ImageWrapper #ImageContainer  #Image`)
 
     // Error handling: Check if the image containers exist
     if (!imageContainers || imageContainers.length === 0) {
@@ -375,7 +376,16 @@ document.addEventListener('astro:page-load', () => {
       return;
     }
 
+      // Error handling: Check if the image containers exist
+  if (!imageTarget || imageTarget.length === 0) {
+    console.error(`No image containers found for selector: ${instanceSelector}`);
+    return;
+  }
+
     // Update the visibility of images based on the current index: blur > switch > blur
+
+
+    //Blur and Fade in Filter
     imageFilters.forEach((div, index) => {
       if (index + 1 === currentIndex || index + 1 === currentIndex + 1 || index + 1 === currentIndex - 1) {
     div.style.backdropFilter = "blur(5px)";
@@ -384,19 +394,38 @@ document.addEventListener('astro:page-load', () => {
     });
 
 
+  //Fade in new Image
     setTimeout(() => {
       imageContainers.forEach((div, index) => {
       div.style.opacity = index + 1 === currentIndex ? "1" : "0";
       });
     }, 200);
 
+    //Make Filter unblur and transparent
     setTimeout(() => {
     imageFilters.forEach((div, index) => {
       div.style.backdropFilter = index + 1 === currentIndex ? "blur(0px)" : "blur(5px)";
       div.style.backgroundColor = "#fbf9f400";
     });
   }, 333);
+
+  // Set pointer events for current and next image
+  setTimeout(() => {
+    imageTarget.forEach((div, index) => {
+      // Disable pointer events for current image (currentIndex)
+      if (index + 1 === currentIndex) {
+        div.style.pointerEvents = "auto";
+      }
+
+      // Disable pointer events for all other images
+      else {
+        div.style.pointerEvents = "none";
+      }
+    });
+  }, 333);
+
   }
+
 
 
 
@@ -474,14 +503,15 @@ document.addEventListener('astro:page-load', () => {
       currentIndex++;
       if (currentIndex > imageCount) currentIndex = 1; // Loop back to the first image if at the end
 
-				updateCounter();
+			
        
         hideAllImageInfos();
         setTimeout (() => {
           updateImageVisibility();
         }, 300);
         
-			});
+        });
+        updateCounter();
 
 
 
@@ -489,17 +519,20 @@ document.addEventListener('astro:page-load', () => {
 
   // Arrow Function backward
   document.querySelector(`${instanceSelector} #ArrowWrapper div:nth-child(1)`)
-    ?.addEventListener("click", function () {
+    
+  ?.addEventListener("click", function () {
       currentIndex--;
       if (currentIndex < 1) currentIndex = imageCount; // Loop to the last image if at the beginning
 
-				updateCounter();
-				hideAllImageInfos(); // Hide descriptions when navigating
         setTimeout (() => {
-          updateImageVisibility();
-        }, 300);
-       
-			});
+            updateImageVisibility();
+          }, 300);
+        
+        });
+
+        hideAllImageInfos(); // Hide descriptions when navigating
+          
+        updateCounter();
 
 		// Add click event listener to the #Info div of this specific gallery
 		const infoDiv = document.querySelector(`${instanceSelector} #Info`);
@@ -513,8 +546,9 @@ document.addEventListener('astro:page-load', () => {
 
 		// Initially call functions to sync UI with the current state
 		updateImageVisibility();
+    hideAllImageInfos();
 		updateCounter();
-		hideAllImageInfos();
+		
 
     // Make Description visible
     const Description = document.querySelector(`${instanceSelector} #GalleryDescriptionWrapper`);
@@ -574,8 +608,13 @@ document.addEventListener('astro:page-load', () => {
     height: fit-content;
     box-shadow: 0px 0px 44px #988f821b;
     z-index: 1;
-	  pointer-events: auto;
+	  pointer-events: none;
   }
+
+  #ImageContainer #Image {
+    pointer-events: none;
+  }
+
   .Filter {
     position: absolute;
     top: 0;

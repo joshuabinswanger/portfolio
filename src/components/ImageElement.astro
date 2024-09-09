@@ -19,26 +19,26 @@ interface Props {
   };
   
 // Get component props from Astro.props
-const { margin_top = '0px', to = "/", width = "100%", height = 'auto', aspectratio = 'auto', loading = 'lazy',altText = "Joshua Binswanger Scientific Illustration", imagePath, onhover_imagePath, viewtransition_name } = Astro.props;
+const { margin_top = '0px', to, width = "100%", height = 'auto', aspectratio = 'auto', loading = 'lazy',altText = "Joshua Binswanger Scientific Illustration", imagePath, onhover_imagePath, viewtransition_name } = Astro.props;
 
 //Import all image paths to check against the passed in strings
 const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,webp}');
 
 // Check if the image exists and assign it to myImage
 if (!images[imagePath]) throw new Error(`"${imagePath}" does not exist in glob: "src/assets/**/*.{jpeg,jpg,png,gif,webp}"`);
-const myImage = images[imagePath]();
-/* const imageUrl = myImage.src; // Use the actual image URL
+const myImage = await images[imagePath]();
+const imageUrl = myImage.default.src; // Use the actual image URL
 
 // If the `to` prop is passed, it will override the imageUrl
-const linkUrl = to ?? imageUrl; */
+const linkUrl = to ?? imageUrl;
 
 ---
 <div id="Image">
-    <a href={to}>
+    <a href={linkUrl}>
       <Picture  
-      src={myImage} 
+      src={myImage.default} 
       formats={['avif', 'webp']}
-      width={myImage.width / 3}
+      width={myImage.default.width / 3}
       densities={[1, 1.5, 2, 2.5, 3]}
       alt={altText} 
       loading={loading}
