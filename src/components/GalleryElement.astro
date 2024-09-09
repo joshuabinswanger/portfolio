@@ -515,6 +515,11 @@ document.addEventListener('astro:page-load', () => {
 		updateImageVisibility();
 		updateCounter();
 		hideAllImageInfos();
+
+    // Make Description visible
+    const Description = document.querySelector(`${instanceSelector} #GalleryDescriptionWrapper`);
+    Description.style.opacity = '1';
+
 	});
 
 </script>
@@ -581,6 +586,7 @@ document.addEventListener('astro:page-load', () => {
     backdrop-filter: blur(0px);
     z-index: 11;
     transition: backdrop-filter ease-in-out 0.2s, background-color ease-in-out 0.2s;
+    pointer-events: none;
   }
 
 
@@ -609,14 +615,7 @@ document.addEventListener('astro:page-load', () => {
   }
 
 
-#GalleryDescriptionWrapper {
-  display: grid;
-  width: 100%;
-  height: fit-content;
-  grid-template-columns: 1.5ch minmax(min-content, 3fr) 3ch 2fr 3ch 3.5ch 1.5ch;
-  justify-content: center;
-  align-content: center;
-}
+
 
 .ImageInfoText{
     position: absolute;
@@ -640,7 +639,17 @@ document.addEventListener('astro:page-load', () => {
 
   div {
     padding: 1rem;
-    width: 21ch;
+    width: 23ch;
+
+    @media (--bp-desktop-wide) {
+      width: 33ch;
+  
+    }
+    @media (--bp-mobile) {
+      width: 17ch;
+    }
+
+ 
   }
 
   h1 {
@@ -655,7 +664,6 @@ document.addEventListener('astro:page-load', () => {
   h2 {
     font-size: 0.6rem;
     font-family: PowerGrotesk-Light;
-    width: 33ch;
     
     @media (--bp-desktop-wide) {
       font-size: 0.8rem;
@@ -713,7 +721,18 @@ document.addEventListener('astro:page-load', () => {
 
 
 
-  /* Arrows */
+  /* GalleryDescription */
+
+  #GalleryDescriptionWrapper {
+  display: grid;
+  width: 100%;
+  opacity: 0;
+  height: fit-content;
+  grid-template-columns: 1.5ch minmax(min-content, 3fr) 3ch 2fr 3ch 3.5ch 1.5ch;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 1.5s ease-in;
+}
 
   #ArrowWrapper {
     display: grid;
@@ -755,6 +774,10 @@ document.addEventListener('astro:page-load', () => {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    @media (--bp-mobile) {
+    font-size: 0.8rem;
+    }
   }
 
   h2 {
@@ -764,6 +787,11 @@ document.addEventListener('astro:page-load', () => {
     font-size: 0.8rem;
     letter-spacing: 0.5px;
     margin: 0px;
+
+    @media (--bp-mobile) {
+    font-size: 0.8rem;
+    }
+  
   }
 
   #Info {

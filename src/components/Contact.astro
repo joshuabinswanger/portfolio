@@ -1,18 +1,16 @@
 ---
-import ImageElement from "./ImageElement.astro";
-import ThumbnailElement from "./ThumbnailElement.astro";
 import TopWrapper from "../layouts/TopWrapper.astro";
-import GridLayout from "../layouts/GridLayout.astro";
-import SquareBracketH from "./SquareBracket_H.astro";
 import "../styles/global.css";
-
+import BracketOpenH from "./BracketOpenH.astro";
+import BracketCloseH from "./BracketCloseH.astro";
+import BracketMiddleH from "./BracketMiddleH.astro";
 
 ---
 
 <TopWrapper>
     
     <div id="email">
-        <p>info[at]rhizome.ch</p>
+        <BracketOpenH strokewidth="3px" /><p>info@rhizome.ch</p><BracketCloseH strokewidth="3px" />
     </div>
 </TopWrapper>
 
@@ -21,10 +19,30 @@ import "../styles/global.css";
 @import "../styles/global.css";
 
     #email {
+        display: grid;
+        font-family: PowerGrotesk-Regular;
+        letter-spacing: 3px;
+        font-size: 2rem;
         padding: 33%;
-        padding-top: var(--padding-desktop);
+        padding-top: calc(var(--padding-desktop) + 6rem);
         text-align: center;
         top: 15vh;
+        height: fit-content;
+        grid-template-columns: 1ch min-content 1ch;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
 
+        p {
+            margin: 0;
+            width: min-content;
+        
+        }
+      
+        @media (--bp-mobile) {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    
     }
 </style>

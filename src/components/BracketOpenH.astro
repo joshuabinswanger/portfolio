@@ -1,4 +1,9 @@
 ---
+interface Props {
+ strokewidth: string;
+}
+
+const { strokewidth = "1px" } = Astro.props;
 ---
 
 <div class="svg-container">
@@ -10,7 +15,7 @@
 </div>
 
 
-<style>
+<style define:vars={{strokewidth}}>
 
 /* SVG container */
 .svg-container {
@@ -30,6 +35,6 @@ svg {
 path {
     fill: none;
     stroke: #000;
-    stroke-width: 1px;
+    stroke-width: var(--strokewidth);
 }
 </style>

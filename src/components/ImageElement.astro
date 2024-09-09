@@ -27,6 +27,10 @@ const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{j
 // Check if the image exists and assign it to myImage
 if (!images[imagePath]) throw new Error(`"${imagePath}" does not exist in glob: "src/assets/**/*.{jpeg,jpg,png,gif,webp}"`);
 const myImage = images[imagePath]();
+/* const imageUrl = myImage.src; // Use the actual image URL
+
+// If the `to` prop is passed, it will override the imageUrl
+const linkUrl = to ?? imageUrl; */
 
 ---
 <div id="Image">
