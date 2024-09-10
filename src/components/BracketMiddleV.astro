@@ -1,8 +1,14 @@
 ---
+interface Props {
+ strokewidth?: string;
+ strokecolor?: string;
+}
+
+const { strokewidth = "1px", strokecolor = "black" } = Astro.props;
 ---
 
 
-<div class="svg-container">
+<div class:list="svg-container">
     <svg xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 202 32" preserveAspectRatio="xMidYMid">
         <path 
         vector-effect="non-scaling-stroke"
@@ -10,12 +16,10 @@
     </svg>
 </div>
 
-
-<style>
-
+<style define:vars={{strokewidth, strokecolor}}>
 /* SVG container */
 .svg-container {
-       width: auto;
+       width: 100%;
        height: auto;
     
     }
@@ -30,7 +34,7 @@ svg {
 /* Keep stroke width constant */
 path {
     fill: none;
-    stroke: #000;
-    stroke-width: 1px;
+    stroke: var(--strokecolor);
+    stroke-width: var(--strokewidth);
 }
 </style>

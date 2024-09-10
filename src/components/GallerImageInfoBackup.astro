@@ -1,0 +1,106 @@
+
+.DetailsWrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  
+    div {
+      padding: 1rem;
+      width: 50%;
+  
+      @media (--bp-desktop-wide) {
+        width: 33ch;
+    
+      }
+      @media (--bp-mobile) {
+        width: 13ch;
+      }
+  
+   
+    }
+  
+    h1 {
+      font-size: 0.6rem;
+      font-family: PowerGrotesk-Medium;
+  
+      @media (--bp-desktop-wide) {
+        font-size: 0.8rem;
+      }
+    }
+  
+    h2 {
+      font-size: 0.6rem;
+      font-family: PowerGrotesk-Light;
+      
+      @media (--bp-desktop-wide) {
+        font-size: 0.8rem;
+      }
+    }
+  
+  }
+  
+  .ImageInfoText{
+      position: absolute;
+      font-size: 0.8rem;
+      width: 70%;
+  
+      :nth-child(1){
+        font-family: PowerGrotesk-Medium;
+      }
+  
+      :nth-child(2){
+        font-family: PowerGrotesk-Light;
+        font-style: italic;
+      }
+  
+      @media (--bp-mobile) {
+        font-size: 0.6rem;
+        }
+  
+    }
+  
+  
+  .DetailCollab {
+    position: absolute;
+    top: 0;
+    left: 0;
+  
+  }
+  
+  
+  
+  
+  .DetailMyPart {
+    position: absolute;
+    top: 0;
+    right: 0;
+    text-align: right; /* Align text to the right */
+    width: 100%; /* Ensure it takes the full width of its container */
+    padding: 1rem;
+    h2 {
+    width: 100%; /* Make sure h2 takes up full width */
+    text-align: right; /* Align h2 text to the right */
+    }
+  }
+  
+  .DetailClient {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+  
+  .DetailTools{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    text-align: right; /* Align text to the right */
+    width: 100%; /* Ensure it takes the full width of its container */
+    padding: 1rem; 
+  
+    h2 {
+    width: 100%; /* Make sure h2 takes up full width */
+    text-align: right; /* Align h2 text to the right */
+    }
+  }
+  
+  

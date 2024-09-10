@@ -1,9 +1,10 @@
 ---
-import SquareBracketH from "./SquareBracket_H.astro";
-import SquareBracketV from "./SquareBracket_V.astro";
 import BracketOpenH from "./BracketOpenH.astro";
 import BracketCloseH from "./BracketCloseH.astro";
 import BracketMiddleH from "./BracketMiddleH.astro";
+import BracketOpenV from "./BracketOpenV.astro";
+import BracketCloseV from "./BracketCloseV.astro";
+import BracketMiddleV from "./BracketMiddleV.astro";
 import Icon from "./Icon.astro";
 import "../styles/global.css";
 import ImageElement from "./ImageElement.astro";
@@ -26,35 +27,35 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
     {totalImages >= 1 && (
       <div id="ImageContainer">
 
-         <div class:list={ "Filter"}></div>
+        <div class:list={ "Filter"}></div>
+
 
         <div class:list={ "ImageInfo"}>
 
-          <div class:list={"ImageInfoText"}>
-            <p><slot name="ImageInfoTitel1" /></p>
-            <p><slot name="ImageInfo1" /></p>
-          </div>
+          <div class:list={"ImageInfoWrapper"}>
+            <BracketOpenV strokewidth="0.5px"/>
 
-          <div class:list={"DetailsWrapper"}>
-            <div class:list={"DetailClient"}>
-              <h1><slot name="ClientTitel1" /></h1>
-              <h2><slot name="Client1" /></h2>
-            </div>
-            <div class:list={"DetailTools"}>
-              <h1><slot name="ToolsTitel1" /></h1>
-              <h2><slot name="Tools1" /></h2>
-            </div>
-            <div class:list={"DetailCollab"}>
-              <h1><slot name="CollabTitel1" /></h1>
-              <h2><slot name="Collab1" /></h2>
-            </div>
-            <div class:list={"DetailMyPart"}>
-              <h1><slot name="MyPartTitel1" /></h1>
-              <h2><slot name="MyPart1" /></h2>
-            </div>
+              <div class:list={"ImageDescriptionWrapper"}>
+                <slot name="ImageDescription1" />
+              </div>
+
+              <BracketMiddleV strokewidth="0.5px" />
+
+              <div class:list={"ProjectInfoWrapper"}>
+                <slot name="ProjectInfo1" />
+              </div>
+
+              <BracketMiddleV strokewidth="0.5px" />
+
+              <div class:list={"DetailsInfoWrapper"}>
+                <slot name="DetailsInfo1" />
+              </div>
+
+            <BracketCloseV strokewidth="0.5px" />
           </div>
 
         </div>
+
 
         <slot name="Image1" />
 
@@ -66,43 +67,45 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
     {totalImages >= 2 && (
       <div id="ImageContainer">
 
-      <div class:list={ "Filter"}></div>
+        <div class:list={ "Filter"}></div>
 
 
         <div class:list={ "ImageInfo"}>
 
-          <div class:list={"ImageInfoText"}>
-            <p><slot name="ImageInfoTitel2" /></p>
-            <p><slot name="ImageInfo2" /></p>
-          </div>
+          <div class:list={"ImageInfoWrapper"}>
+            <BracketOpenV strokewidth="0.5px"/>
 
-          <div class:list={"DetailsWrapper"}>
-            <div class:list={"DetailClient"}>
-              <h1><slot name="ClientTitel2" /></h1>
-              <h2><slot name="Client2" /></h2>
-            </div>
-            <div class:list={"DetailTools"}>
-              <h1><slot name="ToolsTitel2" /></h1>
-              <h2><slot name="Tools2" /></h2>
-            </div>
-            <div class:list={"DetailCollab"}>
-              <h1><slot name="CollabTitel2" /></h1>
-              <h2><slot name="Collab2" /></h2>
-            </div>
-            <div class:list={"DetailMyPart"}>
-              <h1><slot name="MyPartTitel2" /></h1>
-              <h2><slot name="MyPart2" /></h2>
-            </div>
+              <div class:list={"ImageDescriptionWrapper"}>
+                <slot name="ImageDescription2" />
+              </div>
+
+              <BracketMiddleV strokewidth="0.5px" />
+
+              <div class:list={"ProjectInfoWrapper"}>
+                <slot name="ProjectInfo2" />
+              </div>
+
+              <BracketMiddleV strokewidth="0.5px" />
+
+              <div class:list={"DetailsInfoWrapper"}>
+                <slot name="DetailsInfo2" />
+              </div>
+
+            <BracketCloseV strokewidth="0.5px" />
           </div>
 
         </div>
+
+
         <slot name="Image2" />
+
       </div>
     )}
 
 
 
     {totalImages >= 3 && (
+
       <div id="ImageContainer">
 
         <div class:list={ "Filter"}></div>
@@ -110,32 +113,33 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 
         <div class:list={ "ImageInfo"}>
 
-          <div class:list={"ImageInfoText"}>
-            <p><slot name="ImageInfoTitel3" /></p>
-            <p><slot name="ImageInfo3" /></p>
+          <div class:list={"ImageInfoWrapper"}>
+            <BracketOpenV strokewidth="0.5px"/>
+
+              <div class:list={"ImageDescriptionWrapper"}>
+                <slot name="ImageDescription3" />
+              </div>
+
+              <BracketMiddleV strokewidth="0.5px" />
+
+              <div class:list={"ProjectInfoWrapper"}>
+                <slot name="ProjectInfo3" />
+              </div>
+
+              <BracketMiddleV strokewidth="0.5px" />
+
+              <div class:list={"DetailsInfoWrapper"}>
+                <slot name="DetailsInfo3" />
+              </div>
+
+            <BracketCloseV strokewidth="0.5px" />
           </div>
 
-          <div class:list={"DetailsWrapper"}>
-            <div class:list={"DetailClient"}>
-              <h1><slot name="ClientTitel3" /></h1>
-              <h2><slot name="Client3" /></h2>
-            </div>
-            <div class:list={"DetailTools"}>
-              <h1><slot name="ToolsTitel3" /></h1>
-              <h2><slot name="Tools3" /></h2>
-            </div>
-            <div class:list={"DetailCollab"}>
-              <h1><slot name="CollabTitel3" /></h1>
-              <h2><slot name="Collab3" /></h2>
-            </div>
-            <div class:list={"DetailMyPart"}>
-              <h1><slot name="MyPartTitel3" /></h1>
-              <h2><slot name="MyPart3" /></h2>
-            </div>
-
-          </div>
         </div>
+
+
         <slot name="Image3" />
+
       </div>
     )}
 
@@ -148,71 +152,76 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 
         <div class:list={ "Filter"}></div>
 
+
         <div class:list={ "ImageInfo"}>
 
-          <div class:list={"ImageInfoText"}>
-            <p><slot name="ImageInfoTitel4" /></p>
-            <p><slot name="ImageInfo4" /></p>
-          </div>
+          <div class:list={"ImageInfoWrapper"}>
+            <BracketOpenV strokewidth="0.5px"/>
 
-          <div class:list={"DetailsWrapper"}>
-            <div class:list={"DetailClient"}>
-              <h1><slot name="ClientTitel4" /></h1>
-              <h2><slot name="Client4" /></h2>
-            </div>
-            <div class:list={"DetailTools"}>
-              <h1><slot name="ToolsTitel4" /></h1>
-              <h2><slot name="Tools4" /></h2>
-            </div>
-            <div class:list={"DetailCollab"}>
-              <h1><slot name="CollabTitel" /></h1>
-              <h2><slot name="Collab4" /></h2>
-            </div>
-            <div class:list={"DetailMyPart"}>
-              <h1><slot name="MyPartTitel4" /></h1>
-              <h2><slot name="MyPart4" /></h2>
-            </div>
+              <div class:list={"ImageDescriptionWrapper"}>
+                <slot name="ImageDescription4" />
+              </div>
+
+              <BracketMiddleV strokewidth="0.5px" />
+
+              <div class:list={"ProjectInfoWrapper"}>
+                <slot name="ProjectInfo4" />
+              </div>
+
+              <BracketMiddleV strokewidth="0.5px" />
+
+              <div class:list={"DetailsInfoWrapper"}>
+                <slot name="DetailsInfo4" />
+              </div>
+
+            <BracketCloseV strokewidth="0.5px" />
           </div>
 
         </div>
+
+
         <slot name="Image4" />
+
       </div>
     )}
 
 
     {totalImages >= 5 && (
+
       <div id="ImageContainer">
-        
+
         <div class:list={ "Filter"}></div>
-        
+
+
         <div class:list={ "ImageInfo"}>
 
-          <div class:list={"ImageInfoText"}>
-            <p><slot name="ImageInfoTitel5" /></p>
-            <p><slot name="ImageInfo5" /></p>
-          </div>
+          <div class:list={"ImageInfoWrapper"}>
+            <BracketOpenV strokewidth="0.5px"/>
 
-          <div class:list={"DetailsWrapper"}>
-            <div class:list={"DetailClient"}>
-              <h1><slot name="ClientTitel5" /></h1>
-              <h2><slot name="Client5" /></h2>
-            </div>
-            <div class:list={"DetailTools"}>
-              <h1><slot name="ToolsTitel5" /></h1>
-              <h2><slot name="Tools5" /></h2>
-            </div>
-            <div class:list={"DetailCollab"}>
-              <h1><slot name="CollabTitel5" /></h1>
-              <h2><slot name="Collab5" /></h2>
-            </div>
-            <div class:list={"DetailMyPart"}>
-              <h1><slot name="MyPartTitel5" /></h1>
-              <h2><slot name="MyPart5" /></h2>
-            </div>
+              <div class:list={"ImageDescriptionWrapper"}>
+                <slot name="ImageDescription5" />
+              </div>
+
+              <BracketMiddleV strokewidth="0.5px" />
+
+              <div class:list={"ProjectInfoWrapper"}>
+                <slot name="ProjectInfo5" />
+              </div>
+
+              <BracketMiddleV strokewidth="0.5px" />
+
+              <div class:list={"DetailsInfoWrapper"}>
+                <slot name="DetailsInfo5" />
+              </div>
+
+            <BracketCloseV strokewidth="0.5px" />
           </div>
 
         </div>
+
+
         <slot name="Image5" />
+
       </div>
     )}
 
@@ -220,48 +229,48 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 
 
     {totalImages >= 6 && (
+      
       <div id="ImageContainer">
-
 
         <div class:list={ "Filter"}></div>
 
 
         <div class:list={ "ImageInfo"}>
 
-          <div class:list={"ImageInfoText"}>
-            <p><slot name="ImageInfoTitel6" /></p>
-            <p><slot name="ImageInfo6" /></p>
-          </div>
+          <div class:list={"ImageInfoWrapper"}>
+            <BracketOpenV strokewidth="0.5px"/>
 
-          <div class:list={"DetailsWrapper"}>
-            <div class:list={"DetailClient"}>
-              <h1><slot name="ClientTitel6" /></h1>
-              <h2><slot name="Client6" /></h2>
-            </div>
-            <div class:list={"DetailTools"}>
-              <h1><slot name="ToolsTitel6" /></h1>
-              <h2><slot name="Tools6" /></h2>
-            </div>
-            <div class:list={"DetailCollab"}>
-              <h1><slot name="CollabTitel6" /></h1>
-              <h2><slot name="Collab6" /></h2>
-            </div>
-            <div class:list={"DetailMyPart"}>
-              <h1><slot name="MyPartTitel6" /></h1>
-              <h2><slot name="MyPart6" /></h2>
-            </div>
+              <div class:list={"ImageDescriptionWrapper"}>
+                <slot name="ImageDescription6" />
+              </div>
+
+              <BracketMiddleV strokewidth="0.5px" />
+
+              <div class:list={"ProjectInfoWrapper"}>
+                <slot name="ProjectInfo6" />
+              </div>
+
+              <BracketMiddleV strokewidth="0.5px" />
+
+              <div class:list={"DetailsInfoWrapper"}>
+                <slot name="DetailsInfo6" />
+              </div>
+
+            <BracketCloseV strokewidth="0.5px" />
           </div>
 
         </div>
+
+
         <slot name="Image6" />
+
       </div>
     )}
-
-
 
 
 
     {totalImages >= 7 && (
+
       <div id="ImageContainer">
 
         <div class:list={ "Filter"}></div>
@@ -269,34 +278,36 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 
         <div class:list={ "ImageInfo"}>
 
-          <div class:list={"ImageInfoText"}>
-            <p><slot name="ImageInfoTitel7" /></p>
-            <p><slot name="ImageInfo7" /></p>
+          <div class:list={"ImageInfoWrapper"}>
+            <BracketOpenV strokewidth="0.5px"/>
+
+              <div class:list={"ImageDescriptionWrapper"}>
+                <slot name="ImageDescription7" />
+              </div>
+
+              <BracketMiddleV strokewidth="0.5px" />
+
+              <div class:list={"ProjectInfoWrapper"}>
+                <slot name="ProjectInfo7" />
+              </div>
+
+              <BracketMiddleV strokewidth="0.5px" />
+
+              <div class:list={"DetailsInfoWrapper"}>
+                <slot name="DetailsInfo7" />
+              </div>
+
+            <BracketCloseV strokewidth="0.5px" />
           </div>
 
-          <div class:list={"DetailsWrapper"}>
-            <div class:list={"DetailClient"}>
-              <h1><slot name="ClientTitel7" /></h1>
-              <h2><slot name="Client7" /></h2>
-            </div>
-            <div class:list={"DetailTools"}>
-              <h1><slot name="ToolsTitel7" /></h1>
-              <h2><slot name="Tools7" /></h2>
-            </div>
-            <div class:list={"DetailCollab"}>
-              <h1><slot name="CollabTitel7" /></h1>
-              <h2><slot name="Collab7" /></h2>
-            </div>
-            <div class:list={"DetailMyPart"}>
-              <h1><slot name="MyPartTitel7" /></h1>
-              <h2><slot name="MyPart7" /></h2>
-            </div>
-          </div>
-          
         </div>
+
+
         <slot name="Image7" />
+
       </div>
     )}
+
   </div>
 
   <div id="GalleryDescriptionWrapper">
@@ -325,6 +336,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 
     <BracketCloseH />
   </div>
+
 </div>
 
 <script define:vars={{ totalImages, instanceId, bgcolor }}>
@@ -515,6 +527,13 @@ document.addEventListener('astro:page-load', () => {
           updateCounter();
 
         }, 300);
+
+        setTimeout (() => {
+
+          hideAllImageInfos();
+
+        }, 600);
+
         
      
         });
@@ -540,7 +559,16 @@ document.addEventListener('astro:page-load', () => {
 
             updateCounter();
           }, 300);
+
+          setTimeout (() => {
+
+            hideAllImageInfos();
+
+          }, 600);
+
         });
+
+        
 
 
 		// Add click event listener to the #Info div of this specific gallery
@@ -650,9 +678,9 @@ document.addEventListener('astro:page-load', () => {
     width: 100%;
     height: 100%;
     z-index: 10; /* Ensure it appears above the image */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    place-content: center;
+    justify-items: center;
     pointer-events: none; /* Prevent interaction with the description if needed */
     background-color: var(--bg-color-trans); /* Example style */
      /* Start with no blur (initial state) */
@@ -660,121 +688,56 @@ document.addEventListener('astro:page-load', () => {
 
     /* Add transition for backdrop-filter */
     transition: backdrop-filter ease-in-out 0.2s, opacity 0.2s ease-in-out;
-  }
 
-
-
-
-.ImageInfoText{
-    position: absolute;
     font-size: 0.8rem;
-    width: 27ch;
 
-    :nth-child(1){
-      font-family: PowerGrotesk-Medium;
+    overflow: hidden;
 
-      @media (--bp-desktop-wide) {
-      font-size: 1rem;
-      }
-    }
-
-    :nth-child(2){
-      font-family: PowerGrotesk-Light;
-      font-style: italic;
-
-      @media (--bp-desktop-wide) {
-      font-size: 1rem;
-      }
-    }
-
-  }
-
-.DetailsWrapper {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-
-  div {
-    padding: 1rem;
-    width: 23ch;
-
-    @media (--bp-desktop-wide) {
-      width: 33ch;
-  
-    }
     @media (--bp-mobile) {
-      width: 17ch;
-    }
-
- 
-  }
-
-  h1 {
-    font-size: 0.6rem;
-    font-family: PowerGrotesk-Medium;
-
-    @media (--bp-desktop-wide) {
-      font-size: 0.8rem;
+      font-size: 0.6rem;
     }
   }
 
-  h2 {
-    font-size: 0.6rem;
-    font-family: PowerGrotesk-Light;
-    
-    @media (--bp-desktop-wide) {
-      font-size: 0.8rem;
-    }
+
+  .ImageDescriptionWrapper, .ProjectInfoWrapper, .DetailsInfoWrapper {
+
+  width: 80%;           /* Ensure it takes full width */
+  justify-self: center; /* Centers items horizontally */
+
+}
+
+.ImageDescriptionWrapper {
+
+  @media (--bp-desktop-wide) {
+    font-size: 1rem;
   }
 
 }
 
-
-.DetailCollab {
-  position: absolute;
-  top: 0;
-  left: 0;
+.DetailsInfoWrapper {
 
 }
 
+.ImageInfoWrapper {
+  display: grid;
+  width: 80%;
+  align-items: space-between;
+  row-gap: 1rem;
 
+  @media (--bp-mobile) {
+    row-gap: 0.2rem;
 
+  }
 
-.DetailMyPart {
-  position: absolute;
-  top: 0;
-  right: 0;
-  text-align: right; /* Align text to the right */
-  width: 100%; /* Ensure it takes the full width of its container */
-  padding: 1rem;
-  h2 {
-  width: 100%; /* Make sure h2 takes up full width */
-  text-align: right; /* Align h2 text to the right */
+  @media (--bp-tablet) {
+    row-gap: 0.4rem;
+
+  }
+
+  @media (--bp-desktop-wide) {
+    width: 70%;
   }
 }
-
-.DetailClient {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-}
-
-.DetailTools{
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  text-align: right; /* Align text to the right */
-  width: 100%; /* Ensure it takes the full width of its container */
-  padding: 1rem; 
-
-  h2 {
-  width: 100%; /* Make sure h2 takes up full width */
-  text-align: right; /* Align h2 text to the right */
-  }
-}
-
-
-
 
 
 
@@ -812,6 +775,10 @@ document.addEventListener('astro:page-load', () => {
     width: 5ch;
     font-size: 1rem;
     padding: 0.5rem 0.5%;
+
+    @media (--bp-mobile) {
+      font-size: 0.8rem;
+    }
   }
 
   /* Text Elements */
@@ -833,7 +800,7 @@ document.addEventListener('astro:page-load', () => {
     text-overflow: ellipsis;
 
     @media (--bp-mobile) {
-    font-size: 0.8rem;
+    font-size: 0.6rem;
     }
   }
 
@@ -846,7 +813,7 @@ document.addEventListener('astro:page-load', () => {
     margin: 0px;
 
     @media (--bp-mobile) {
-    font-size: 0.8rem;
+    font-size: 0.6rem;
     }
   
   }
