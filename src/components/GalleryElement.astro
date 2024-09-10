@@ -508,7 +508,7 @@ document.addEventListener('astro:page-load', () => {
 
         setTimeout (() => {
 
-          hideAllImageInfos();
+          //hideAllImageInfos();
           
           updateImageVisibility();
 
@@ -533,7 +533,7 @@ document.addEventListener('astro:page-load', () => {
 
         setTimeout (() => {
 
-          hideAllImageInfos(); // Hide descriptions when navigating
+          // hideAllImageInfos(); // Hide descriptions when navigating
           
 
             updateImageVisibility();
@@ -672,12 +672,21 @@ document.addEventListener('astro:page-load', () => {
 
     :nth-child(1){
       font-family: PowerGrotesk-Medium;
+
+      @media (--bp-desktop-wide) {
+      font-size: 1rem;
+      }
     }
 
     :nth-child(2){
       font-family: PowerGrotesk-Light;
       font-style: italic;
+
+      @media (--bp-desktop-wide) {
+      font-size: 1rem;
+      }
     }
+
   }
 
 .DetailsWrapper {
