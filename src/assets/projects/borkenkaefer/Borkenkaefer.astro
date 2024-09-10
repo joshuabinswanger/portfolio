@@ -6,16 +6,34 @@ const totalImages = 5;
 
 ---
 <GalleryElement totalImages={totalImages} title="Borkenkäfer" subtitle="Poster Illustration">
+    
 
-<!-- Images -->
+<!-- Images  possible Inputs
+ interface Props {
+    margin_top?: string;
+    width?: string;
+    height?: string;
+    aspectratio?: string;
+    loading?: 'eager' | 'lazy';
+    to: string;
+    altText: string;
+    imagePath: string;
+    onhover_imagePath?: string;
+    viewtransition_name?: string;
+    
+  };
+  -->
 
-<div slot="Image1"> 
+  <!-- Image 1 -->
+
+<Fragment slot="Image1"> 
     <ImageElement 
     loading="eager"
     altText="Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalcographus)"
     imagePath="/src/assets/projects/borkenkaefer/Borkenkaefer_Gallery_1.webp"
     />
-</div>
+</Fragment>
+
 <Fragment slot="ImageInfoTitel1">
     Käfer
 </Fragment>
@@ -52,32 +70,186 @@ const totalImages = 5;
 </Fragment>
 
 
-<div slot="Image2"> 
+
+  <!-- Image 2 -->
+
+<Fragment slot="Image2"> 
     <ImageElement  
     altText="Bacteria with a cellulose hair"
        imagePath="/src/assets/projects/borkenkaefer/Borkenkaefer_Gallery_2.webp"
     />
-</div>
+</Fragment>
 
-<div slot="Image3"> 
+<Fragment slot="ImageInfoTitel1">
+    Käfer
+</Fragment>
+<Fragment slot="ImageInfo1">
+    Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalco- graphus)
+</Fragment>
+
+<Fragment slot="ClientTitel1">
+    Client
+</Fragment>
+<Fragment slot="Client1">
+    LWF
+</Fragment>
+
+<Fragment slot="ToolsTitel1">
+    Tools
+</Fragment>
+<Fragment slot="Tools1">
+    Photoshop
+</Fragment>
+
+<Fragment slot="CollabTitel1">
+    Content
+</Fragment>
+<Fragment slot="Collab1">
+    LWF
+</Fragment>
+
+<Fragment slot="MyPartTitel1">
+    Design
+</Fragment>
+<Fragment slot="MyPart1">
+   Joshua Binswanger
+</Fragment>
+
+
+
+  <!-- Image 3 -->
+
+<Fragment slot="Image3"> 
     <ImageElement 
     altText="process of 3d printing a material with fungi inside"
      imagePath="/src/assets/projects/borkenkaefer/Borkenkaefer_Gallery_3.webp"
 />
-</div>
+</Fragment>
 
-<div slot="Image4"> 
+<Fragment slot="ImageInfoTitel1">
+    Käfer
+</Fragment>
+<Fragment slot="ImageInfo1">
+    Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalco- graphus)
+</Fragment>
+
+<Fragment slot="ClientTitel1">
+    Client
+</Fragment>
+<Fragment slot="Client1">
+    LWF
+</Fragment>
+
+<Fragment slot="ToolsTitel1">
+    Tools
+</Fragment>
+<Fragment slot="Tools1">
+    Photoshop
+</Fragment>
+
+<Fragment slot="CollabTitel1">
+    Content
+</Fragment>
+<Fragment slot="Collab1">
+    LWF
+</Fragment>
+
+<Fragment slot="MyPartTitel1">
+    Design
+</Fragment>
+<Fragment slot="MyPart1">
+   Joshua Binswanger
+</Fragment>
+
+
+  <!-- Image 4 -->
+
+<Fragment slot="Image4"> 
     <ImageElement 
     altText="Visualisation of Bacteria in a clay material"
      imagePath="/src/assets/projects/borkenkaefer/Borkenkaefer_Gallery_4.webp"
     />
-</div>
+</Fragment>
 
-<div slot="Image5"> 
+<Fragment slot="ImageInfoTitel1">
+    Käfer
+</Fragment>
+<Fragment slot="ImageInfo1">
+    Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalco- graphus)
+</Fragment>
+
+<Fragment slot="ClientTitel1">
+    Client
+</Fragment>
+<Fragment slot="Client1">
+    LWF
+</Fragment>
+
+<Fragment slot="ToolsTitel1">
+    Tools
+</Fragment>
+<Fragment slot="Tools1">
+    Photoshop
+</Fragment>
+
+<Fragment slot="CollabTitel1">
+    Content
+</Fragment>
+<Fragment slot="Collab1">
+    LWF
+</Fragment>
+
+<Fragment slot="MyPartTitel1">
+    Design
+</Fragment>
+<Fragment slot="MyPart1">
+   Joshua Binswanger
+</Fragment>
+
+
+  <!-- Image 5 -->
+
+<Fragment slot="Image5"> 
     <ImageElement  
     altText="Bacteria with a cellulose hair"
      imagePath="/src/assets/projects/borkenkaefer/Borkenkaefer_Gallery_5.webp"
     />
-</div>
+</Fragment>
+
+<Fragment slot="ImageInfoTitel1">
+    Käfer
+</Fragment>
+<Fragment slot="ImageInfo1">
+    Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalco- graphus)
+</Fragment>
+
+<Fragment slot="ClientTitel1">
+    Client
+</Fragment>
+<Fragment slot="Client1">
+    LWF
+</Fragment>
+
+<Fragment slot="ToolsTitel1">
+    Tools
+</Fragment>
+<Fragment slot="Tools1">
+    Photoshop
+</Fragment>
+
+<Fragment slot="CollabTitel1">
+    Content
+</Fragment>
+<Fragment slot="Collab1">
+    LWF
+</Fragment>
+
+<Fragment slot="MyPartTitel1">
+    Design
+</Fragment>
+<Fragment slot="MyPart1">
+   Joshua Binswanger
+</Fragment>
+
 
 </GalleryElement>
