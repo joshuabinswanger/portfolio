@@ -28,11 +28,24 @@ import Footer from "./Footer.astro";
 @import "../styles/global.css";
 
 #AboutText {
-    grid-column-start: 5;
-    grid-column-end: span 8;
+    padding-top: calc(var(--padding-desktop) + 1rem);
+    grid-column-start: 3;
+    grid-column-end: span 12;
+    letter-spacing: 2px;
 
     @media (--bp-mobile) {
         grid-column-start: 1;
+        padding: 1rem 2rem;
+    }
+
+    @media (--bp-tablet) {
+        grid-column-start: 2;
+        grid-column-end: 7;
+    }
+
+    @media (--bp-desktop-wide) {
+        grid-column-start: 5;
+        grid-column-end: span 8;
     }
 }
 

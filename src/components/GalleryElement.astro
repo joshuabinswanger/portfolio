@@ -13,9 +13,10 @@ interface Props {
   totalImages: number;
   title: string;
   subtitle: string;
+  bgcolor: string;
 }
 
-const { totalImages, title, subtitle } = Astro.props;
+const { totalImages, title, subtitle, bgcolor = "#fbf9f4ee" } = Astro.props;
 const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a unique ID for each instance
 ---
 
@@ -69,8 +70,31 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 
 
         <div class:list={ "ImageInfo"}>
-          <slot name="ImageInfo2" />
-          <p>Hello</p>
+
+          <div class:list={"ImageInfoText"}>
+            <p><slot name="ImageInfoTitel2" /></p>
+            <p><slot name="ImageInfo2" /></p>
+          </div>
+
+          <div class:list={"DetailsWrapper"}>
+            <div class:list={"DetailClient"}>
+              <h1><slot name="ClientTitel2" /></h1>
+              <h2><slot name="Client2" /></h2>
+            </div>
+            <div class:list={"DetailTools"}>
+              <h1><slot name="ToolsTitel2" /></h1>
+              <h2><slot name="Tools2" /></h2>
+            </div>
+            <div class:list={"DetailCollab"}>
+              <h1><slot name="CollabTitel2" /></h1>
+              <h2><slot name="Collab2" /></h2>
+            </div>
+            <div class:list={"DetailMyPart"}>
+              <h1><slot name="MyPartTitel2" /></h1>
+              <h2><slot name="MyPart2" /></h2>
+            </div>
+          </div>
+
         </div>
         <slot name="Image2" />
       </div>
@@ -85,8 +109,31 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 
 
         <div class:list={ "ImageInfo"}>
-          <slot name="ImageInfo3" />
-          <p>Hello</p>
+
+          <div class:list={"ImageInfoText"}>
+            <p><slot name="ImageInfoTitel3" /></p>
+            <p><slot name="ImageInfo3" /></p>
+          </div>
+
+          <div class:list={"DetailsWrapper"}>
+            <div class:list={"DetailClient"}>
+              <h1><slot name="ClientTitel3" /></h1>
+              <h2><slot name="Client3" /></h2>
+            </div>
+            <div class:list={"DetailTools"}>
+              <h1><slot name="ToolsTitel3" /></h1>
+              <h2><slot name="Tools3" /></h2>
+            </div>
+            <div class:list={"DetailCollab"}>
+              <h1><slot name="CollabTitel3" /></h1>
+              <h2><slot name="Collab3" /></h2>
+            </div>
+            <div class:list={"DetailMyPart"}>
+              <h1><slot name="MyPartTitel3" /></h1>
+              <h2><slot name="MyPart3" /></h2>
+            </div>
+
+          </div>
         </div>
         <slot name="Image3" />
       </div>
@@ -102,8 +149,31 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
         <div class:list={ "Filter"}></div>
 
         <div class:list={ "ImageInfo"}>
-          <slot name="ImageInfo4" />
-          <p>Hello</p>
+
+          <div class:list={"ImageInfoText"}>
+            <p><slot name="ImageInfoTitel4" /></p>
+            <p><slot name="ImageInfo4" /></p>
+          </div>
+
+          <div class:list={"DetailsWrapper"}>
+            <div class:list={"DetailClient"}>
+              <h1><slot name="ClientTitel4" /></h1>
+              <h2><slot name="Client4" /></h2>
+            </div>
+            <div class:list={"DetailTools"}>
+              <h1><slot name="ToolsTitel4" /></h1>
+              <h2><slot name="Tools4" /></h2>
+            </div>
+            <div class:list={"DetailCollab"}>
+              <h1><slot name="CollabTitel" /></h1>
+              <h2><slot name="Collab4" /></h2>
+            </div>
+            <div class:list={"DetailMyPart"}>
+              <h1><slot name="MyPartTitel4" /></h1>
+              <h2><slot name="MyPart4" /></h2>
+            </div>
+          </div>
+
         </div>
         <slot name="Image4" />
       </div>
@@ -116,8 +186,31 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
         <div class:list={ "Filter"}></div>
         
         <div class:list={ "ImageInfo"}>
-          <slot name="ImageInfo5" />
-          <p>Hello</p>
+
+          <div class:list={"ImageInfoText"}>
+            <p><slot name="ImageInfoTitel5" /></p>
+            <p><slot name="ImageInfo5" /></p>
+          </div>
+
+          <div class:list={"DetailsWrapper"}>
+            <div class:list={"DetailClient"}>
+              <h1><slot name="ClientTitel5" /></h1>
+              <h2><slot name="Client5" /></h2>
+            </div>
+            <div class:list={"DetailTools"}>
+              <h1><slot name="ToolsTitel5" /></h1>
+              <h2><slot name="Tools5" /></h2>
+            </div>
+            <div class:list={"DetailCollab"}>
+              <h1><slot name="CollabTitel5" /></h1>
+              <h2><slot name="Collab5" /></h2>
+            </div>
+            <div class:list={"DetailMyPart"}>
+              <h1><slot name="MyPartTitel5" /></h1>
+              <h2><slot name="MyPart5" /></h2>
+            </div>
+          </div>
+
         </div>
         <slot name="Image5" />
       </div>
@@ -134,8 +227,31 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 
 
         <div class:list={ "ImageInfo"}>
-          <slot name="ImageInfo6" />
-          <p>Hello</p>
+
+          <div class:list={"ImageInfoText"}>
+            <p><slot name="ImageInfoTitel6" /></p>
+            <p><slot name="ImageInfo6" /></p>
+          </div>
+
+          <div class:list={"DetailsWrapper"}>
+            <div class:list={"DetailClient"}>
+              <h1><slot name="ClientTitel6" /></h1>
+              <h2><slot name="Client6" /></h2>
+            </div>
+            <div class:list={"DetailTools"}>
+              <h1><slot name="ToolsTitel6" /></h1>
+              <h2><slot name="Tools6" /></h2>
+            </div>
+            <div class:list={"DetailCollab"}>
+              <h1><slot name="CollabTitel6" /></h1>
+              <h2><slot name="Collab6" /></h2>
+            </div>
+            <div class:list={"DetailMyPart"}>
+              <h1><slot name="MyPartTitel6" /></h1>
+              <h2><slot name="MyPart6" /></h2>
+            </div>
+          </div>
+
         </div>
         <slot name="Image6" />
       </div>
@@ -152,10 +268,33 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 
 
         <div class:list={ "ImageInfo"}>
-          <slot name="ImageInfo7" />
-          <p>Hello</p>
+
+          <div class:list={"ImageInfoText"}>
+            <p><slot name="ImageInfoTitel7" /></p>
+            <p><slot name="ImageInfo7" /></p>
+          </div>
+
+          <div class:list={"DetailsWrapper"}>
+            <div class:list={"DetailClient"}>
+              <h1><slot name="ClientTitel7" /></h1>
+              <h2><slot name="Client7" /></h2>
+            </div>
+            <div class:list={"DetailTools"}>
+              <h1><slot name="ToolsTitel7" /></h1>
+              <h2><slot name="Tools7" /></h2>
+            </div>
+            <div class:list={"DetailCollab"}>
+              <h1><slot name="CollabTitel7" /></h1>
+              <h2><slot name="Collab7" /></h2>
+            </div>
+            <div class:list={"DetailMyPart"}>
+              <h1><slot name="MyPartTitel7" /></h1>
+              <h2><slot name="MyPart7" /></h2>
+            </div>
+          </div>
+          
         </div>
-        <slot name="Image6" />
+        <slot name="Image7" />
       </div>
     )}
   </div>
@@ -188,7 +327,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
   </div>
 </div>
 
-<script define:vars={{ totalImages, instanceId }}>
+<script define:vars={{ totalImages, instanceId, bgcolor }}>
 
 	// Global Function: Get Current Index
 	function getCurrentIndex(instanceSelector) {
@@ -228,6 +367,7 @@ document.addEventListener('astro:page-load', () => {
   function updateImageVisibility() {
     const imageContainers = document.querySelectorAll(`${instanceSelector} #ImageWrapper #ImageContainer`);
     const imageFilters = document.querySelectorAll(`${instanceSelector} #ImageWrapper #ImageContainer .Filter`);
+    const imageTarget = document.querySelectorAll(`${instanceSelector} #ImageWrapper #ImageContainer  #Image`)
 
     // Error handling: Check if the image containers exist
     if (!imageContainers || imageContainers.length === 0) {
@@ -236,28 +376,56 @@ document.addEventListener('astro:page-load', () => {
       return;
     }
 
+      // Error handling: Check if the image containers exist
+  if (!imageTarget || imageTarget.length === 0) {
+    console.error(`No image containers found for selector: ${instanceSelector}`);
+    return;
+  }
+
     // Update the visibility of images based on the current index: blur > switch > blur
+
+
+    //Blur and Fade in Filter
     imageFilters.forEach((div, index) => {
       if (index + 1 === currentIndex || index + 1 === currentIndex + 1 || index + 1 === currentIndex - 1) {
-    div.style.backdropFilter = "blur(5px) sepia(0)";
-    div.style.backgroundColor = "#fbf9f4ff";
+    div.style.backdropFilter = "blur(5px)";
+     div.style.backgroundColor = bgcolor;
   } 
     });
 
 
+  //Fade in new Image
     setTimeout(() => {
       imageContainers.forEach((div, index) => {
       div.style.opacity = index + 1 === currentIndex ? "1" : "0";
       });
     }, 200);
 
+    //Make Filter unblur and transparent
     setTimeout(() => {
     imageFilters.forEach((div, index) => {
-      div.style.backdropFilter = index + 1 === currentIndex ? "blur(0px) sepia(0)" : "blur(5px) sepia(1)";
+      div.style.backdropFilter = index + 1 === currentIndex ? "blur(0px)" : "blur(5px)";
       div.style.backgroundColor = "#fbf9f400";
     });
   }, 333);
+
+  // Set pointer events for current and next image
+  setTimeout(() => {
+    imageTarget.forEach((div, index) => {
+      // Disable pointer events for current image (currentIndex)
+      if (index + 1 === currentIndex) {
+        div.style.pointerEvents = "auto";
+      }
+
+      // Disable pointer events for all other images
+      else {
+        div.style.pointerEvents = "none";
+      }
+    });
+  }, 333);
+
   }
+
 
 
 
@@ -335,14 +503,15 @@ document.addEventListener('astro:page-load', () => {
       currentIndex++;
       if (currentIndex > imageCount) currentIndex = 1; // Loop back to the first image if at the end
 
-				updateCounter();
+			
        
         hideAllImageInfos();
         setTimeout (() => {
           updateImageVisibility();
         }, 300);
         
-			});
+        });
+        updateCounter();
 
 
 
@@ -350,17 +519,20 @@ document.addEventListener('astro:page-load', () => {
 
   // Arrow Function backward
   document.querySelector(`${instanceSelector} #ArrowWrapper div:nth-child(1)`)
-    ?.addEventListener("click", function () {
+    
+  ?.addEventListener("click", function () {
       currentIndex--;
       if (currentIndex < 1) currentIndex = imageCount; // Loop to the last image if at the beginning
 
-				updateCounter();
-				hideAllImageInfos(); // Hide descriptions when navigating
         setTimeout (() => {
-          updateImageVisibility();
-        }, 300);
-       
-			});
+            updateImageVisibility();
+          }, 300);
+        
+        });
+
+        hideAllImageInfos(); // Hide descriptions when navigating
+          
+        updateCounter();
 
 		// Add click event listener to the #Info div of this specific gallery
 		const infoDiv = document.querySelector(`${instanceSelector} #Info`);
@@ -374,8 +546,14 @@ document.addEventListener('astro:page-load', () => {
 
 		// Initially call functions to sync UI with the current state
 		updateImageVisibility();
+    hideAllImageInfos();
 		updateCounter();
-		hideAllImageInfos();
+		
+
+    // Make Description visible
+    const Description = document.querySelector(`${instanceSelector} #GalleryDescriptionWrapper`);
+    Description.style.opacity = '1';
+
 	});
 
 </script>
@@ -430,8 +608,13 @@ document.addEventListener('astro:page-load', () => {
     height: fit-content;
     box-shadow: 0px 0px 44px #988f821b;
     z-index: 1;
-	  pointer-events: auto;
+	  pointer-events: none;
   }
+
+  #ImageContainer #Image {
+    pointer-events: none;
+  }
+
   .Filter {
     position: absolute;
     top: 0;
@@ -439,9 +622,10 @@ document.addEventListener('astro:page-load', () => {
     background-color: #fbf9f400;
     width: 100%;
     height: 100%;
-    backdrop-filter: blur(0px) sepia(0);
+    backdrop-filter: blur(0px);
     z-index: 11;
     transition: backdrop-filter ease-in-out 0.2s, background-color ease-in-out 0.2s;
+    pointer-events: none;
   }
 
 
@@ -470,19 +654,12 @@ document.addEventListener('astro:page-load', () => {
   }
 
 
-#GalleryDescriptionWrapper {
-  display: grid;
-  width: 100%;
-  height: fit-content;
-  grid-template-columns: 1.5ch minmax(min-content, 3fr) 3ch 2fr 3ch 3.5ch 1.5ch;
-  justify-content: center;
-  align-content: center;
-}
+
 
 .ImageInfoText{
     position: absolute;
     font-size: 0.8rem;
-    width: 33ch;
+    width: 27ch;
 
     :nth-child(1){
       font-family: PowerGrotesk-Medium;
@@ -501,18 +678,35 @@ document.addEventListener('astro:page-load', () => {
 
   div {
     padding: 1rem;
-    width: 27ch;
+    width: 23ch;
+
+    @media (--bp-desktop-wide) {
+      width: 33ch;
+  
+    }
+    @media (--bp-mobile) {
+      width: 17ch;
+    }
+
+ 
   }
 
   h1 {
     font-size: 0.6rem;
     font-family: PowerGrotesk-Medium;
+
+    @media (--bp-desktop-wide) {
+      font-size: 0.8rem;
+    }
   }
 
   h2 {
     font-size: 0.6rem;
     font-family: PowerGrotesk-Light;
-  
+    
+    @media (--bp-desktop-wide) {
+      font-size: 0.8rem;
+    }
   }
 
 }
@@ -532,7 +726,13 @@ document.addEventListener('astro:page-load', () => {
   position: absolute;
   top: 0;
   right: 0;
-  text-align: right;
+  text-align: right; /* Align text to the right */
+  width: 100%; /* Ensure it takes the full width of its container */
+  padding: 1rem;
+  h2 {
+  width: 100%; /* Make sure h2 takes up full width */
+  text-align: right; /* Align h2 text to the right */
+  }
 }
 
 .DetailClient {
@@ -545,8 +745,14 @@ document.addEventListener('astro:page-load', () => {
   position: absolute;
   bottom: 0;
   right: 0;
-  text-align: right;
+  text-align: right; /* Align text to the right */
+  width: 100%; /* Ensure it takes the full width of its container */
+  padding: 1rem; 
 
+  h2 {
+  width: 100%; /* Make sure h2 takes up full width */
+  text-align: right; /* Align h2 text to the right */
+  }
 }
 
 
@@ -554,7 +760,18 @@ document.addEventListener('astro:page-load', () => {
 
 
 
-  /* Arrows */
+  /* GalleryDescription */
+
+  #GalleryDescriptionWrapper {
+  display: grid;
+  width: 100%;
+  opacity: 0;
+  height: fit-content;
+  grid-template-columns: 1.5ch minmax(min-content, 3fr) 3ch 2fr 3ch 3.5ch 1.5ch;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 1.5s ease-in;
+}
 
   #ArrowWrapper {
     display: grid;
@@ -596,6 +813,10 @@ document.addEventListener('astro:page-load', () => {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    @media (--bp-mobile) {
+    font-size: 0.8rem;
+    }
   }
 
   h2 {
@@ -605,6 +826,11 @@ document.addEventListener('astro:page-load', () => {
     font-size: 0.8rem;
     letter-spacing: 0.5px;
     margin: 0px;
+
+    @media (--bp-mobile) {
+    font-size: 0.8rem;
+    }
+  
   }
 
   #Info {
