@@ -2,98 +2,88 @@
 import ImageElement from "../../../components/ImageElement.astro"
 import GalleryElement from "../../../components/GalleryElement.astro"
 
-const totalImages = 6;
+const totalImages = 5;
 
 ---
-<GalleryElement totalImages={totalImages} title="ETH Visualisations" subtitle="Scientific Illustration">
+<GalleryElement totalImages={totalImages} title="Structure of Wood" subtitle="Visualisation">
 
 <!-- Image 1 -->
 
 <Fragment slot="Image1"> 
     <ImageElement 
     loading="eager"
-    altText="Visualisation of Bacteria in a clay material"
-    imagePath="/src/assets/projects/ethvisualisations/ETHVisualisations_Gallery_1.webp"
+    altText="Wood Anatomy of Pine"
+    imagePath="/src/assets/projects/structureofwood/StructureofWood_Gallery_1.webp"
     />
 </Fragment>
 
 <Fragment slot="ImageInfoTitel1">
-    Käfer
+  Wood Cells of Pine Wood
 </Fragment>
 <Fragment slot="ImageInfo1">
-    Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalco- graphus)
+    Wood Anatomy of Pine ~200 microns (0.2mm)
 </Fragment>
 
 <Fragment slot="ClientTitel1">
-    Client
+    For
 </Fragment>
 <Fragment slot="Client1">
-    LWF
+    ETH, Wood Materials Science
 </Fragment>
 
 <Fragment slot="ToolsTitel1">
     Tools
 </Fragment>
 <Fragment slot="Tools1">
-    Photoshop
+    ZBrush, Keyshot, Adobe Suite
 </Fragment>
 
-<Fragment slot="CollabTitel1">
-    Content
-</Fragment>
-<Fragment slot="Collab1">
-    LWF
-</Fragment>
 
-<Fragment slot="MyPartTitel1">
-    Design
-</Fragment>
-<Fragment slot="MyPart1">
-   Joshua Binswanger
-</Fragment>
 
 <!-- Image 2 -->
 
 <Fragment slot="Image2"> 
-    <ImageElement  
-    altText="Bacteria with a cellulose hair"
-     imagePath="/src/assets/projects/ethvisualisations/ETHVisualisations_Gallery_2.webp"
+    <ImageElement 
+    altText="Visualisation of Bacteria in a clay material"
+    imagePath="/src/assets/projects/structureofwood/StructureofWood_Gallery_2.webp"
     />
 </Fragment>
-
 <Fragment slot="ImageInfoTitel2">
-    Käfer
+    Xylopedia
 </Fragment>
 <Fragment slot="ImageInfo2">
-    Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalco- graphus)
+   xylopedia.de
 </Fragment>
 
 <Fragment slot="ClientTitel2">
-    Client
+    For
 </Fragment>
 <Fragment slot="Client2">
-    LWF
+    HNE Eberswalde
 </Fragment>
 
 <Fragment slot="ToolsTitel2">
     Tools
 </Fragment>
 <Fragment slot="Tools2">
-    Photoshop
+    Unity, 3D Slicer, Blender, Cinema 4D,
+    Houdini, Illastik, Substance Painter 
 </Fragment>
 
 <Fragment slot="CollabTitel2">
-    Content
+    Team    
 </Fragment>
 <Fragment slot="Collab2">
-    LWF
+    S. Scherrer, J. Hammel, J. Lauströer,
+    J. Stuhrmann, S. Lautner, M. Möhring
 </Fragment>
 
 <Fragment slot="MyPartTitel2">
-    Design
+    Funding
 </Fragment>
 <Fragment slot="MyPart2">
-   Joshua Binswanger
+Foundation for Innovation
+in Higher Education
 </Fragment>
 
 
@@ -101,9 +91,9 @@ const totalImages = 6;
 
 <Fragment slot="Image3"> 
     <ImageElement 
-    altText="process of 3d printing a material with fungi inside"
-    imagePath="/src/assets/projects/ethvisualisations/ETHVisualisations_Gallery_3.webp"
-/>
+    altText="Visualisation of Bacteria in a clay material"
+    imagePath="/src/assets/projects/structureofwood/StructureofWood_Gallery_3.webp"
+    />
 </Fragment>
 
 <Fragment slot="ImageInfoTitel3">
@@ -143,12 +133,14 @@ const totalImages = 6;
 
 
 
+
+
 <!-- Image 4 -->
 
 <Fragment slot="Image4"> 
     <ImageElement 
     altText="Visualisation of Bacteria in a clay material"
-    imagePath="/src/assets/projects/ethvisualisations/ETHVisualisations_Gallery_4.webp"
+    imagePath="/src/assets/projects/structureofwood/StructureofWood_Gallery_4.webp"
     />
 </Fragment>
 
@@ -188,12 +180,15 @@ const totalImages = 6;
 </Fragment>
 
 
+
+
+
 <!-- Image 5 -->
 
 <Fragment slot="Image5"> 
-    <ImageElement  
-    altText="Bacteria with a cellulose hair"
-     imagePath="/src/assets/projects/ethvisualisations/ETHVisualisations_Gallery_5.webp"
+    <ImageElement 
+    altText="Visualisation of Bacteria in a clay material"
+    imagePath="/src/assets/projects/structureofwood/StructureofWood_Gallery_5.webp"
     />
 </Fragment>
 
@@ -232,49 +227,5 @@ const totalImages = 6;
    Joshua Binswanger
 </Fragment>
 
-
-<!-- Image 6 -->
-
-<Fragment slot="Image6"> 
-    <ImageElement 
-    altText="process of 3d printing a material with fungi inside"
-    imagePath="/src/assets/projects/ethvisualisations/ETHVisualisations_Gallery_6.webp"
-/>
-</Fragment>
-
-<Fragment slot="ImageInfoTitel6">
-    Käfer
-</Fragment>
-<Fragment slot="ImageInfo6">
-    Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalco- graphus)
-</Fragment>
-
-<Fragment slot="ClientTitel6">
-    Client
-</Fragment>
-<Fragment slot="Client6">
-    LWF
-</Fragment>
-
-<Fragment slot="ToolsTitel6">
-    Tools
-</Fragment>
-<Fragment slot="Tools6">
-    Photoshop
-</Fragment>
-
-<Fragment slot="CollabTitel6">
-    Content
-</Fragment>
-<Fragment slot="Collab6">
-    LWF
-</Fragment>
-
-<Fragment slot="MyPartTitel6">
-    Design
-</Fragment>
-<Fragment slot="MyPart6">
-   Joshua Binswanger
-</Fragment>
 
 </GalleryElement>

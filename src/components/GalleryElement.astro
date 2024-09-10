@@ -442,6 +442,7 @@ document.addEventListener('astro:page-load', () => {
     }
 
     counterContainer.textContent = `${currentIndex} / ${imageCount}`;
+    console.log(`this is number ${currentIndex} in ${instanceSelector}`)
   }
 
 
@@ -503,15 +504,21 @@ document.addEventListener('astro:page-load', () => {
       currentIndex++;
       if (currentIndex > imageCount) currentIndex = 1; // Loop back to the first image if at the end
 
-			
-       
-        hideAllImageInfos();
+      
+
         setTimeout (() => {
+
+          hideAllImageInfos();
+          
           updateImageVisibility();
+
+          updateCounter();
+
         }, 300);
         
+     
         });
-        updateCounter();
+     
 
 
 
@@ -525,14 +532,16 @@ document.addEventListener('astro:page-load', () => {
       if (currentIndex < 1) currentIndex = imageCount; // Loop to the last image if at the beginning
 
         setTimeout (() => {
+
+          hideAllImageInfos(); // Hide descriptions when navigating
+          
+
             updateImageVisibility();
+
+            updateCounter();
           }, 300);
-        
         });
 
-        hideAllImageInfos(); // Hide descriptions when navigating
-          
-        updateCounter();
 
 		// Add click event listener to the #Info div of this specific gallery
 		const infoDiv = document.querySelector(`${instanceSelector} #Info`);

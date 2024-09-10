@@ -13,6 +13,7 @@ import ETHVisualisations from "../assets/projects/ethvisualisations/ETHVisualisa
 import PhenologicalShift from "../assets/projects/phenologicalshift/PhenologicalShift.astro"
 import GameDesign101 from "../assets/projects/gamedesign101/GameDesign101.astro";
 import Borkenkaefer from "../assets/projects/borkenkaefer/Borkenkaefer.astro";
+import StructureofWood from "../assets/projects/structureofwood/StructureofWood.astro";
 ---
 
 <TopWrapper>
@@ -40,6 +41,12 @@ import Borkenkaefer from "../assets/projects/borkenkaefer/Borkenkaefer.astro";
 		<div class:list={["GalleryElementWrapper"]}>
 			<Borkenkaefer/>
 		</div>
+
+		<div class:list={["GalleryElementWrapper"]}>
+			<StructureofWood/>
+		</div>
+
+
 	</GridLayout>
 
 </TopWrapper>
@@ -148,9 +155,9 @@ imageElements.forEach((image, index) => {
 
 }
 .GalleryElementWrapper:nth-of-type(6) {
-	grid-column-start: 12; 
-	grid-column-end: span 6; 
-	grid-row-start: 35;
+	grid-column-start: 10; 
+	grid-column-end: span 7; 
+	grid-row-start: 27;
 
 }
 .GalleryElementWrapper:nth-of-type(7) {
