@@ -39,7 +39,8 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
                 <slot name="ImageDescription1" />
               </div>
 
-              <BracketMiddleV strokewidth="0.5px" />
+            <BracketCloseV strokewidth="0.5px" />
+            <BracketOpenV strokewidth="0.5px"/>
 
               <div class:list={"ProjectInfoWrapper"}>
                 <slot name="ProjectInfo1" />
@@ -341,7 +342,15 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 
 <script define:vars={{ totalImages, instanceId, bgcolor }}>
 
-	// Global Function: Get Current Index
+
+
+document.addEventListener('astro:page-load', () => {
+
+  const instanceSelector = `#GalleryElement-${instanceId}`; // Target this specific gallery element
+  let currentIndex = 1; // Start from the first image
+  const imageCount = totalImages;
+
+  	// Global Function: Get Current Index
 	function getCurrentIndex(instanceSelector) {
 		const imageContainers = document.querySelectorAll(
 			`${instanceSelector} #ImageWrapper #ImageContainer`
@@ -366,11 +375,6 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 		return visibleIndex;
 	}
 
-document.addEventListener('astro:page-load', () => {
-
-  const instanceSelector = `#GalleryElement-${instanceId}`; // Target this specific gallery element
-  let currentIndex = 1; // Start from the first image
-  const imageCount = totalImages;
 
 
 
@@ -696,29 +700,13 @@ document.addEventListener('astro:page-load', () => {
     @media (--bp-mobile) {
       font-size: 0.6rem;
     }
+
+    @media (--bp-desktop-wide) {
+      font-size: 1rem;
+    }
   }
 
-
-  .ImageDescriptionWrapper, .ProjectInfoWrapper, .DetailsInfoWrapper {
-
-  width: 80%;           /* Ensure it takes full width */
-  justify-self: center; /* Centers items horizontally */
-
-}
-
-.ImageDescriptionWrapper {
-
-  @media (--bp-desktop-wide) {
-    font-size: 1rem;
-  }
-
-}
-
-.DetailsInfoWrapper {
-
-}
-
-.ImageInfoWrapper {
+  .ImageInfoWrapper {
   display: grid;
   width: 80%;
   align-items: space-between;
@@ -738,6 +726,21 @@ document.addEventListener('astro:page-load', () => {
     width: 70%;
   }
 }
+
+
+  .ImageDescriptionWrapper, .ProjectInfoWrapper, .DetailsInfoWrapper {
+
+  width: 80%;           /* Ensure it takes full width */
+  justify-self: center; /* Centers items horizontally */
+
+}
+
+.ProjectInfoWrapper, .DetailsInfoWrapper {
+  margin: -2rem 0;
+
+
+}
+
 
 
 

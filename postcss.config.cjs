@@ -4,6 +4,7 @@ module.exports = {
       ({ 
         stage: 0,
       }),
-      require('autoprefixer')
+      require('autoprefixer'),
+      require('postcss-nesting')
     ]
   };

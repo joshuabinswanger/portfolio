@@ -12,7 +12,7 @@
   "dependencies": {
     "@astrojs/check": "^0.9.3",
     "@rive-app/canvas": "^2.19.6",
-    "astro": "^4.14.4",
+    "astro": "^4.15.4",
     "autoprefixer": "^10.4.20",
     "postcss-preset-env": "^10.0.0",
     "sharp": "^0.33.4",
@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "astro-robots-txt": "^1.0.0",
-    "postcss": "^8.4.40"
+    "postcss": "^8.4.45",
+    "postcss-nesting": "^13.0.0"
   }
 }
