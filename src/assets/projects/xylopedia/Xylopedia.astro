@@ -1,11 +1,12 @@
 ---
 import ImageElement from "../../../components/ImageElement.astro"
 import GalleryElement from "../../../components/GalleryElement.astro"
+import "../../../styles/global.css"
 
 const totalImages = 5;
 
 ---
-<GalleryElement totalImages={totalImages} title="Xylopedia" subtitle="3D Learning App">
+<GalleryElement totalImages={totalImages} title="Xylopedia" subtitle="3D Learning App" bgcolor="#DFE2D8cc">
 
 <!-- Image 1 -->
 
@@ -19,7 +20,7 @@ const totalImages = 5;
 
 <Fragment slot="ImageDescription1">
     <span>CT scan rendering of oak wood (Quercus robur) ~300 microns (0.3mm)</span>
-    <p>Tool: Rendering in Houdini, custom import tool for image stacks</p>
+    <p>Tool: Houdini, Rendering and custom import tool for image stacks</p>
 </Fragment>
 
 <Fragment slot="ProjectInfo1">
@@ -151,21 +152,22 @@ const totalImages = 5;
  <Fragment slot="DetailsInfo5">
     <p><span>Client:</span> HNE Eberswalde, Helmholtz-Zentrum Hereon </p>
     <p> <span>Team:</span> S. Scherrer, J. Hammel, J. Lauströer, J. Stuhrmann, S. Lautner, M. Möhring</p>
-    <p><span>Funding:</span>Foundation for Innovation in Higher Education</p>
+    <p><span>Funding:</span> Foundation for Innovation in Higher Education</p>
     <p> <span>Tools:</span>    Unity, 3D Slicer, Blender, Cinema 4D, Houdini, Illastik, Substance Painter </p>
 </Fragment>
 
 
 </GalleryElement>
 
-
 <style>
+    
+span {
+    font-family: PowerGrotesk-Medium;	
+}
 
-    span {
-        font-family: PowerGrotesk-Medium;
-    }
+p {
+    margin: 0.25rem 0;
 
-    p {
-        margin: 0.5rem 0;
-    }
+}
+
 </style>

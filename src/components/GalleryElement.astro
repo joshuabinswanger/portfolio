@@ -17,7 +17,7 @@ interface Props {
   bgcolor: string;
 }
 
-const { totalImages, title, subtitle, bgcolor = "#fbf9f4ee" } = Astro.props;
+const { totalImages, title, subtitle, bgcolor = "#fbf9f4cc" } = Astro.props;
 const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a unique ID for each instance
 ---
 
@@ -80,13 +80,14 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
                 <slot name="ImageDescription2" />
               </div>
 
-              <BracketMiddleV strokewidth="0.5px" />
+            <BracketCloseV strokewidth="0.5px" />
+            <BracketOpenV strokewidth="0.5px"/>
 
               <div class:list={"ProjectInfoWrapper"}>
                 <slot name="ProjectInfo2" />
               </div>
 
-              <BracketMiddleV strokewidth="0.5px" />
+            <BracketMiddleV strokewidth="0.5px" />
 
               <div class:list={"DetailsInfoWrapper"}>
                 <slot name="DetailsInfo2" />
@@ -121,13 +122,14 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
                 <slot name="ImageDescription3" />
               </div>
 
-              <BracketMiddleV strokewidth="0.5px" />
+            <BracketCloseV strokewidth="0.5px" />
+            <BracketOpenV strokewidth="0.5px"/>
 
               <div class:list={"ProjectInfoWrapper"}>
                 <slot name="ProjectInfo3" />
               </div>
 
-              <BracketMiddleV strokewidth="0.5px" />
+            <BracketMiddleV strokewidth="0.5px" />
 
               <div class:list={"DetailsInfoWrapper"}>
                 <slot name="DetailsInfo3" />
@@ -163,7 +165,8 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
                 <slot name="ImageDescription4" />
               </div>
 
-              <BracketMiddleV strokewidth="0.5px" />
+            <BracketCloseV strokewidth="0.5px" />
+            <BracketOpenV strokewidth="0.5px"/>
 
               <div class:list={"ProjectInfoWrapper"}>
                 <slot name="ProjectInfo4" />
@@ -203,7 +206,8 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
                 <slot name="ImageDescription5" />
               </div>
 
-              <BracketMiddleV strokewidth="0.5px" />
+            <BracketCloseV strokewidth="0.5px" />
+            <BracketOpenV strokewidth="0.5px"/>
 
               <div class:list={"ProjectInfoWrapper"}>
                 <slot name="ProjectInfo5" />
@@ -245,13 +249,14 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
                 <slot name="ImageDescription6" />
               </div>
 
-              <BracketMiddleV strokewidth="0.5px" />
+            <BracketCloseV strokewidth="0.5px" />
+            <BracketOpenV strokewidth="0.5px"/>
 
               <div class:list={"ProjectInfoWrapper"}>
                 <slot name="ProjectInfo6" />
               </div>
 
-              <BracketMiddleV strokewidth="0.5px" />
+            <BracketMiddleV strokewidth="0.5px" />
 
               <div class:list={"DetailsInfoWrapper"}>
                 <slot name="DetailsInfo6" />
@@ -286,13 +291,14 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
                 <slot name="ImageDescription7" />
               </div>
 
-              <BracketMiddleV strokewidth="0.5px" />
+            <BracketCloseV strokewidth="0.5px" />
+            <BracketOpenV strokewidth="0.5px"/>
 
               <div class:list={"ProjectInfoWrapper"}>
                 <slot name="ProjectInfo7" />
               </div>
 
-              <BracketMiddleV strokewidth="0.5px" />
+            <BracketMiddleV strokewidth="0.5px" />
 
               <div class:list={"DetailsInfoWrapper"}>
                 <slot name="DetailsInfo7" />
@@ -674,39 +680,40 @@ document.addEventListener('astro:page-load', () => {
 
 /*   Image Info */
 
-  .ImageInfo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10; /* Ensure it appears above the image */
-    display: grid;
-    place-content: center;
-    justify-items: center;
-    pointer-events: none; /* Prevent interaction with the description if needed */
-    background-color: var(--bg-color-trans); /* Example style */
-     /* Start with no blur (initial state) */
-    backdrop-filter: blur(0px);
+.ImageInfo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10; /* Ensure it appears above the image */
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  pointer-events: none; /* Prevent interaction with the description if needed */
+  background-color: var(--bg-color-trans); /* Example style */
+    /* Start with no blur (initial state) */
+  backdrop-filter: blur(0px);
 
-    /* Add transition for backdrop-filter */
-    transition: backdrop-filter ease-in-out 0.2s, opacity 0.2s ease-in-out;
+  /* Add transition for backdrop-filter */
+  transition: backdrop-filter ease-in-out 0.2s, opacity 0.2s ease-in-out;
 
-    font-size: 0.8rem;
+  font-size: 0.8rem;
 
-    overflow: hidden;
+  overflow: hidden;
 
-    @media (--bp-mobile) {
-      font-size: 0.6rem;
-    }
-
-    @media (--bp-desktop-wide) {
-      font-size: 1rem;
-    }
+  @media (--bp-mobile) {
+    font-size: 0.6rem;
   }
 
-  .ImageInfoWrapper {
+  @media (--bp-desktop-wide) {
+    font-size: 1rem;
+    line-height: 1.33;
+  }
+}
+
+.ImageInfoWrapper {
   display: grid;
   width: 80%;
   align-items: space-between;
@@ -728,19 +735,49 @@ document.addEventListener('astro:page-load', () => {
 }
 
 
-  .ImageDescriptionWrapper, .ProjectInfoWrapper, .DetailsInfoWrapper {
+.ImageDescriptionWrapper, .ProjectInfoWrapper, .DetailsInfoWrapper {
 
   width: 80%;           /* Ensure it takes full width */
   justify-self: center; /* Centers items horizontally */
 
+  span {
+    font-family: PowerGrotesk-Medium;
+  }
+
+  @media (--bp-mobile) {
+    width: 90%;
+    }
+
 }
 
-.ProjectInfoWrapper, .DetailsInfoWrapper {
-  margin: -2rem 0;
 
 
+.ImageDescriptionWrapper {
+    @media (--bp-mobile) {
+      margin-top: -0.6rem;
+      margin-bottom: -1rem;
+    }
 }
 
+.ProjectInfoWrapper {
+  margin-top: -1.5rem;
+  margin-bottom: -2rem;
+
+    @media (--bp-mobile) {
+      margin-top: -0.8rem;
+      margin-bottom: -1rem;
+  }
+}
+
+.DetailsInfoWrapper {
+  margin-top: -2rem;
+  margin-bottom: -1.5rem;
+
+    @media (--bp-mobile) {
+      margin-top: -1rem;
+      margin-bottom: -0.8rem;
+  }
+}
 
 
 
