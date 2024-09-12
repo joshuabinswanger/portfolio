@@ -38,8 +38,7 @@ const linkUrl = to ?? imageUrl;
       <Picture  
       src={myImage.default} 
       formats={['avif', 'webp']}
-      width={myImage.default.width / 3}
-      densities={[2, 2.5, 3]}
+      width={myImage.default.width}
       alt={altText} 
       loading={loading}
       style={`
