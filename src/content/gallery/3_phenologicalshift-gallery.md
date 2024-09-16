@@ -1,0 +1,57 @@
+---
+projectName: "3_phenologicalshift"
+title: "Phenological Shift"
+subtitle: "3D Learning App"
+
+tags:
+  - Science2Science
+  - 3D
+  - ClimateChange
+  - Houdini
+
+bgcolor: "#DFE2D8cc"
+
+projectDescription: |
+        **Xylopedia** is an app for explorative learning of micro-anatomical wood structures. 
+        Students at the University for Sustainable Development in Eberswalde, Germany, now have the app to help them understand the complex anatomy of wood. 
+        Based on microCT scans from the Helmholtz Centre Hereon, we created novel 3D models for real-time exploration.
+
+credits: |
+    **Client:** HNE Eberswalde *br*
+    **Team:** S. Scherrer, J. Hammel, J. Lauströer, J. Stuhrmann, S. Lautner, M. Möhring*br*
+    **Tools:** Unity, Blender, Cinema 4D*br*
+
+
+images:
+  - src: "/src/assets/projects/phenologicalshift/Phenological Shift_GalleryImage_1.webp"
+    alt: "CT Image Rendering of Oak Wood 300microns"
+    loading: "eager"
+    to: "/"
+    description:  |
+        **CT scan rendering of oak wood (Quercus robur) ~300 microns (0.3mm)** *br*   
+        Tool: Houdini, Rendering and custom import tool for image stacks
+
+  - src: "/src/assets/projects/phenologicalshift/Phenological Shift_GalleryImage_2.webp"
+    alt: "Xylopedia App iOS"
+    to: "/"
+    description:  |
+        **App on Ipad; Screenshot from Web App** *br*   
+         Tool: App developed in Unity (Dev: Jochen Stuhrmann)
+
+  - src: "/src/assets/projects/phenologicalshift/Phenological Shift_GalleryImage_3.webp"
+    alt: "Xylopedia App iOS"
+    to: "/"
+    description:  |
+        **Screenshots from Web App** *br*   
+         Tool: App developed in Unity (Dev: Jochen Stuhrmann)
+
+  - src: "/src/assets/projects/phenologicalshift/Phenological Shift_GalleryImage_4.webp"
+    alt: "Xylopedia App iOS"
+    to: "/"
+    description:  |
+        **3D model of axial (red) and radial (green) parenchyma cells in oak wood (Quercus robur)** *br*   
+         Tool: Houdini
+
+
+
+---

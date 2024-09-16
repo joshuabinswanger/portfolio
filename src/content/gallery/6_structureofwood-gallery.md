@@ -1,0 +1,87 @@
+---
+projectName: "6_structureofwood"
+title: "Structure of Wood"
+subtitle: "Visualisations & 3D Prints"
+tags:
+  - barkbeetle
+  - farming
+  - climatechange
+  - forest
+
+bgcolor: "#111111cc"
+
+projectDescription: |
+       Visual Identity created for the Events Series **"Game Design 101"** at the MEEET Lab of the University of Zurich. With a porcedrual system in Houdini that lets you create a fully art-directable growth animation, making it possible to have high-end visuals for a series of events.  
+
+credits: |
+    **Client:** MEEET Lab, University of Zurich*br*
+    **Tools:** Houdini, Octane, Blender, Davinci, Affinty Suite *br*
+
+
+images:
+  - src: "/src/assets/projects/structureofwood/StructureofWood_Gallery_1.webp"
+    alt: "Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalcographus)"
+    loading: "eager"
+    description:  |
+        **Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalcographus)** *br*   
+        Tool: Photoshop
+    imageTags: 
+      - houdini
+      - 3D
+      - octane
+      - procedural
+      - mograph
+      
+
+  - src: "/src/assets/projects/structureofwood/StructureofWood_Gallery_2.webp"
+    alt: "Houdini procedurally generated 3D Blood Vessels representing a Nintendo 64 Close Up"
+    description:  |
+        **N64 Controller Close Up** *br*   
+         Tool:  Houdini, Octane, Blender, Davinci
+    imageTags:
+      - houdini
+      - 3D
+      - octane
+      - procedural
+      - mograph
+
+  - src: "/src/assets/projects/structureofwood/StructureofWood_Gallery_3.webp"
+    alt: "Poster showing Houdini procedurally generated 3D Blood Vessels representing a Nintendo 64"
+    description:  |
+        **Poster for Event Series** *br*   
+         Tool:  Houdini, Octane, Blender, Affinity Suite, Davinci
+    imageTags:
+      - houdini
+      - 3D
+      - octane
+      - procedural
+      - mograph
+      - graphicdesign
+
+  - src: "/src/assets/projects/structureofwood/StructureofWood_Gallery_4.webp"
+    alt: "Houdini procedurally generated 3D Blood Vessels representing a Joystick"
+    description:  |
+        **Joystick** *br*   
+         Tool: Houdini, Blender
+    imageTags:
+      - houdini
+      - 3D
+      - octane
+      - procedural
+      - mograph
+
+  - src: "/src/assets/projects/structureofwood/StructureofWood_Gallery_5.webp"
+    alt: "Houdini procedurally generated 3D Blood Vessels representing a Keyboard"
+    description:  |
+        **Keyboard** *br*   
+        Tool: Houdini, Houdini Modeler
+    imageTags:
+      - houdini
+      - 3D
+      - octane
+      - procedural
+      - mograph
+
+
+
+---

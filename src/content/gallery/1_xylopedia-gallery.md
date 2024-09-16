@@ -1,0 +1,79 @@
+---
+projectName: "1_xylopedia"
+title: "Xylopedia"
+subtitle: "3D Learning App"
+
+tags:
+  - nature
+  - photography
+  - art
+
+bgcolor: "#DFE2D8cc"
+
+projectDescription: |
+        **Xylopedia** is an app for explorative learning of micro-anatomical wood structures. *br*
+        Students at the University for Sustainable Development in Eberswalde, Germany, now have the app to help them understand the complex anatomy of wood. Based on microCT scans from the Helmholtz Centre Hereon, we created novel 3D models for real-time exploration. *br* *br*
+        **<a href="https://ms.hereon.de/xylopedia/index.php.en" target="_blank" style="pointer-events: auto;">Visit Xylopedia</a>**
+
+credits: |
+    **Client:** HNE Eberswalde *br*
+    **Team:** S. Scherrer, J. Hammel, J. Lauströer, J. Stuhrmann, S. Lautner, M. Möhring*br*
+    **Tools:** Unity, Blender, Cinema 4D*br*
+
+
+images:
+  - src: "/src/assets/projects/xylopedia/Xylopedia_Gallery_1.webp"
+    alt: "CT Image Rendering of Oak Wood 300microns"
+    loading: "eager"
+    to: "/"
+    description:  |
+        **CT scan rendering of oak wood (Quercus robur) ~300 microns (0.3mm)** *br*   
+        Tool: Houdini, Rendering and custom import tool for image stacks
+    tags: 
+      - houdini
+      - 3D
+
+  - src: "/src/assets/projects/xylopedia/Xylopedia_Gallery_2.webp"
+    alt: "Xylopedia App iOS"
+    to: "/"
+    description:  |
+        **App on Ipad; Screenshot from Web App** *br*   
+         Tool: App developed in Unity (Dev: Jochen Stuhrmann)
+    tags: 
+      - houdini
+      - 3D
+
+  - src: "/src/assets/projects/xylopedia/Xylopedia_Gallery_3.webp"
+    alt: "Xylopedia App iOS"
+    to: "/"
+    description:  |
+        **Screenshots from Web App** *br*   
+         Tool: App developed in Unity (Dev: Jochen Stuhrmann)
+    tags: 
+      - houdini
+      - 3D
+
+  - src: "/src/assets/projects/xylopedia/Xylopedia_Gallery_4.webp"
+    alt: "Xylopedia App iOS"
+    to: "/"
+    description:  |
+        **3D model of axial (red) and radial (green) parenchyma cells in oak wood (Quercus robur)** *br*   
+         Tool: Houdini
+    tags: 
+      - houdini
+      - 3D  
+
+  - src: "/src/assets/projects/xylopedia/Xylopedia_Gallery_5.webp"
+    alt: "Xylopedia App iOS"
+    to: "/"
+    description:  |
+        **Manual segmentation of radial parenchyma cells in 3D Slicer** *br*   
+         Tool: 3D Slicer
+    tags: 
+      - houdini
+      - 3D
+
+
+
+
+---

@@ -1,0 +1,83 @@
+---
+projectName: "2_ethvisualisation"
+title: "Scientific Illustration ETH"
+subtitle: "Process Illustrations"
+
+tags:
+  - ETH
+  - Science2Science
+  - 3D
+  - Houdini
+
+bgcolor: "#DFE2D8cc"
+
+projectDescription: |
+      For papers and proposals by various research groups at the ETH, I have created illustrations showing the process of their experiments.
+      Collaborating and accurately depicting these processes is always an interesting challenge and often creates an engaging dialogue between scientist and designer. 
+
+credits: |
+    **Client:** ETH *br*
+    **Tools:** Houdini, Blender, Adobe Suite, Affinity Suite*br*
+
+
+images:
+  - src: "/src/assets/projects/ethvisualisations/ETHVisualisations_Gallery_1.webp"
+    alt: "Visualisation of Bacteria in a clay material"
+    loading: "eager"
+    to: "/"
+    description:  |
+        **Bacteria on clay material, showing the platelets that make up this particular clay.** *br*
+        Client: Complex Materials Group ETH*br*
+        Tool: Houdini
+
+  - src: "/src/assets/projects/ethvisualisations/ETHVisualisations_Gallery_2.webp"
+    alt: "Bacteria with a cellulose hair"
+    to: "/"
+    description:  |
+        **Process Illustration** *br*   
+        Client: Complex Materials Group ETH *br*
+        Tool: Houdini
+
+  - src: "/src/assets/projects/ethvisualisations/ETHVisualisations_Gallery_3.webp"
+    alt: "process of 3d printing a material with fungi inside"
+    to: "/"
+    description:  |
+        **Close up showing the porous structure of this clay material.** *br*   
+        Tool: Houdini
+
+  - src: "/src/assets/projects/ethvisualisations/ETHVisualisations_Gallery_4.webp"
+    alt: "Visualisation of Bacteria in a clay material"
+    to: "/"
+    description:  |
+        **Illustration for Paper: Three-dimensional printing of mycelium hydrogels into living complex materials** *br*  
+        **DOI: 10.1038/s41563-022-01429-5** *br*
+        Client: Silvan Gantenbein, Complex Materials Group ETH *br*
+        Tool: Houdini
+
+
+  - src: "/src/assets/projects/ethvisualisations/ETHVisualisations_Gallery_5.webp"
+    alt: "Bacteria with a cellulose hair"
+    to: "/"
+    description:  |
+        **Finished 3D printed Products. The self-healing and soft material is useful for many different applications. ** *br* 
+        **DOI: 10.1038/s41563-022-01429-5** *br*  
+        Client: Silvan Gantenbein, Complex Materials Group ETH *br*
+        Tool: ZBrush, Keyshot
+
+  - src: "/src/assets/projects/ethvisualisations/ETHVisualisations_Gallery_6.webp"
+    alt: "process of 3d printing a material with fungi inside"
+    to: "/"
+    description:  |
+        **Fungi hyphens close up, showing how the material starts to be held together by the interpenetrating hyphen strings.** *br* 
+        **DOI: 10.1038/s41563-022-01429-5** *br*
+        Client: Silvan Gantenbein, Complex Materials Group ETH *br*  
+        Tool: Photoshop, ZBrush, Keyshot
+
+
+
+
+
+
+
+
+---
