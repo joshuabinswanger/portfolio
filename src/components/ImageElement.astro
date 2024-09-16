@@ -31,14 +31,13 @@ if (!galleryProjectImages) {
 }
 
 
-//Import all image paths to check against the passed in strings
+//Import all images from collection to check against the passed in strings (for later use of tags i.e.)
 const images = galleryProjectImages.data.images;
              
-const imageExists = images.some((img) => img.src === imagePath);
 
-if (!imageExists) {
-  throw new Error(`Image path "${imagePath}" does not exist in the content collection for project "${project}".`);
-}
+//import this specific image with astro.glob so we can actually use it
+const allImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/projects/**/*.{jpeg,jpg,png,gif,webp}');
+const myImage = await allImages[imagePath]();
 
 // If the `to` prop is passed, it will override the imageUrl
 const linkUrl = to ?? imagePath;
@@ -47,10 +46,10 @@ const linkUrl = to ?? imagePath;
 <div id="Image">
     <a href={linkUrl}>
       <Picture  
-      src={imagePath} 
+      src={allImages[imagePath]()} 
       formats={['avif', 'webp']}
-      width={width}
-      height={height}
+      width={myImage.default.width}
+      height={myImage.default.height}
       alt={altText} 
       loading={loading}
       style={`
