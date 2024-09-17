@@ -1,14 +1,14 @@
----
-projectName: "6_structureofwood"
-title: "Structure of Wood"
-subtitle: "Visualisations & 3D Prints"
+projectName: "4_gamedesign101"
+title: "Game Design 101"
+subtitle: "Motion Graphics"
 tags:
-  - barkbeetle
-  - farming
-  - climatechange
-  - forest
+  - MotionGraphics
+  - 3D
+  - Procedural
+  - VEX
+  - Houdini
 
-bgcolor: "#111111cc"
+bgcolor: "#ffffffcc"
 
 projectDescription: |
        Visual Identity created for the Events Series **"Game Design 101"** at the MEEET Lab of the University of Zurich. With a porcedrual system in Houdini that lets you create a fully art-directable growth animation, making it possible to have high-end visuals for a series of events.  
@@ -19,12 +19,12 @@ credits: |
 
 
 images:
-  - src: "/src/assets/projects/structureofwood/StructureofWood_Gallery_1.webp"
-    alt: "Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalcographus)"
+  - src: "/src/assets/projects/gamedesign101/GameDesign101_GalleryImages_1.webp"
+    alt: "Houdini procedurally generated 3D Blood Vessels representing a Nintendo 64 Controller"
     loading: "eager"
     description:  |
-        **Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalcographus)** *br*   
-        Tool: Photoshop
+        **N64 Controller** *br*   
+        Tool: Houdini, Octane, Blender, Davinci
     imageTags: 
       - houdini
       - 3D
@@ -33,7 +33,7 @@ images:
       - mograph
       
 
-  - src: "/src/assets/projects/structureofwood/StructureofWood_Gallery_2.webp"
+  - src: "/src/assets/projects/gamedesign101/GameDesign101_GalleryImages_2.webp"
     alt: "Houdini procedurally generated 3D Blood Vessels representing a Nintendo 64 Close Up"
     description:  |
         **N64 Controller Close Up** *br*   
@@ -45,7 +45,7 @@ images:
       - procedural
       - mograph
 
-  - src: "/src/assets/projects/structureofwood/StructureofWood_Gallery_3.webp"
+  - src: "/src/assets/projects/gamedesign101/GameDesign101_GalleryImages_3.webp"
     alt: "Poster showing Houdini procedurally generated 3D Blood Vessels representing a Nintendo 64"
     description:  |
         **Poster for Event Series** *br*   
@@ -58,7 +58,7 @@ images:
       - mograph
       - graphicdesign
 
-  - src: "/src/assets/projects/structureofwood/StructureofWood_Gallery_4.webp"
+  - src: "/src/assets/projects/gamedesign101/GameDesign101_GalleryImages_4.webp"
     alt: "Houdini procedurally generated 3D Blood Vessels representing a Joystick"
     description:  |
         **Joystick** *br*   
@@ -70,7 +70,7 @@ images:
       - procedural
       - mograph
 
-  - src: "/src/assets/projects/structureofwood/StructureofWood_Gallery_5.webp"
+  - src: "/src/assets/projects/gamedesign101/GameDesign101_GalleryImages_5.webp"
     alt: "Houdini procedurally generated 3D Blood Vessels representing a Keyboard"
     description:  |
         **Keyboard** *br*   
@@ -81,7 +81,3 @@ images:
       - octane
       - procedural
       - mograph
-
-
-
----

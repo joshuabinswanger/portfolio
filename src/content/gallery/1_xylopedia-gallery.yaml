@@ -1,4 +1,3 @@
----
 projectName: "1_xylopedia"
 title: "Xylopedia"
 subtitle: "3D Learning App"
@@ -29,7 +28,7 @@ images:
     description:  |
         **CT scan rendering of oak wood (Quercus robur) ~300 microns (0.3mm)** *br*   
         Tool: Houdini, Rendering and custom import tool for image stacks
-    tags: 
+    imageTags: 
       - houdini
       - 3D
 
@@ -39,7 +38,7 @@ images:
     description:  |
         **App on Ipad; Screenshot from Web App** *br*   
          Tool: App developed in Unity (Dev: Jochen Stuhrmann)
-    tags: 
+    imageTags: 
       - houdini
       - 3D
 
@@ -49,7 +48,7 @@ images:
     description:  |
         **Screenshots from Web App** *br*   
          Tool: App developed in Unity (Dev: Jochen Stuhrmann)
-    tags: 
+    imageTags: 
       - houdini
       - 3D
 
@@ -59,7 +58,7 @@ images:
     description:  |
         **3D model of axial (red) and radial (green) parenchyma cells in oak wood (Quercus robur)** *br*   
          Tool: Houdini
-    tags: 
+    imageTags: 
       - houdini
       - 3D  
 
@@ -69,11 +68,6 @@ images:
     description:  |
         **Manual segmentation of radial parenchyma cells in 3D Slicer** *br*   
          Tool: 3D Slicer
-    tags: 
+    imageTags: 
       - houdini
       - 3D
-
-
-
-
----

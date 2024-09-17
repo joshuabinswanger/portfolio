@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 // 2. Define your collection(s)
 const galleryCollection = defineCollection({ 
-    type: 'content',
+    type: 'data',
   schema: z.object({
     projectName: z.string(),
     title: z.string(),

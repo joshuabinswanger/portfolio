@@ -1,4 +1,3 @@
----
 projectName: "3_phenologicalshift"
 title: "Phenological Shift"
 subtitle: "3D Learning App"
@@ -51,7 +50,3 @@ images:
     description:  |
         **3D model of axial (red) and radial (green) parenchyma cells in oak wood (Quercus robur)** *br*   
          Tool: Houdini
-
-
-
----
