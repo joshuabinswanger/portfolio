@@ -418,6 +418,10 @@ const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 1
 
   document.addEventListener('astro:page-load', () => {
 
+    function isPhonePortrait() {
+      return window.matchMedia('(max-width: 650px) and (orientation: portrait)').matches;
+    }
+
     const imageElements = document.querySelectorAll(`.GalleryElement #ImageWrapper #Image a`);
     // Initialize PhotoSwipeLightbox
     const options = {
@@ -432,7 +436,14 @@ const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 1
       // to apply styles just to this instance of PhotoSwipe
       mainClass: 'pswp--custom-bg pswp--custom-icon-colors',
 
-      padding: { top: 20, bottom: 40, left: 100, right: 100 },
+      paddingFn: () => {
+        if (isPhonePortrait()) {
+          return { top: 0, bottom: 0, left: 10, right: 10  }  
+        }
+        else {
+          return { top: 20, bottom: 40, left: 100, right: 100 }
+        };
+      },
 
       showHideAnimationType: 'fade',
 
@@ -441,7 +452,7 @@ const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 1
       children: imageElements,
       pswpModule: () => import('photoswipe'), // Import the PhotoSwipe module dynamically
     };
-
+    
    
     const lightbox = new PhotoSwipeLightbox(options);
 
@@ -596,7 +607,7 @@ const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 1
   }
 
   @media (--bp-mobile) {
-    width: 90%;
+    width: 85%;
     }
 
 }
@@ -606,6 +617,10 @@ const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 1
 .ImageDescriptionWrapper {
   margin-top: -1rem;
   margin-bottom: 1rem;
+
+  @media (--bp-mobile) {
+    margin-top: -.1rem;
+  }
 }
 
 /*
@@ -624,7 +639,7 @@ const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 1
   margin-bottom: -1rem;
 
     @media (--bp-mobile) {
-      margin-bottom: -1rem;
+      margin-bottom: -.1rem;
   }
 } 
 
