@@ -140,59 +140,42 @@ declare module 'astro:content' {
 	>;
 
 	type ContentEntryMap = {
-		"gallery": {
-"1_xylopedia-gallery.md": {
-	id: "1_xylopedia-gallery.md";
-  slug: "1_xylopedia-gallery";
-  body: string;
-  collection: "gallery";
-  data: InferEntrySchema<"gallery">
-} & { render(): Render[".md"] };
-"2_ethvisualisation-gallery.md": {
-	id: "2_ethvisualisation-gallery.md";
-  slug: "2_ethvisualisation-gallery";
-  body: string;
-  collection: "gallery";
-  data: InferEntrySchema<"gallery">
-} & { render(): Render[".md"] };
-"3_phenologicalshift-gallery.md": {
-	id: "3_phenologicalshift-gallery.md";
-  slug: "3_phenologicalshift-gallery";
-  body: string;
-  collection: "gallery";
-  data: InferEntrySchema<"gallery">
-} & { render(): Render[".md"] };
-"4_gamedesign101-gallery.md": {
-	id: "4_gamedesign101-gallery.md";
-  slug: "4_gamedesign101-gallery";
-  body: string;
-  collection: "gallery";
-  data: InferEntrySchema<"gallery">
-} & { render(): Render[".md"] };
-"5_borkenkaefer-gallery.md": {
-	id: "5_borkenkaefer-gallery.md";
-  slug: "5_borkenkaefer-gallery";
-  body: string;
-  collection: "gallery";
-  data: InferEntrySchema<"gallery">
-} & { render(): Render[".md"] };
-"6_structureofwood-gallery.md": {
-	id: "6_structureofwood-gallery.md";
-  slug: "6_structureofwood-gallery";
-  body: string;
-  collection: "gallery";
-  data: InferEntrySchema<"gallery">
-} & { render(): Render[".md"] };
-};
-
+		
 	};
 
 	type DataEntryMap = {
-		"projects": Record<string, {
-  id: string;
-  collection: "projects";
-  data: any;
-}>;
+		"gallery": {
+"1_xylopedia-gallery": {
+	id: "1_xylopedia-gallery";
+  collection: "gallery";
+  data: InferEntrySchema<"gallery">
+};
+"2_ethvisualisation-gallery": {
+	id: "2_ethvisualisation-gallery";
+  collection: "gallery";
+  data: InferEntrySchema<"gallery">
+};
+"3_phenologicalshift-gallery": {
+	id: "3_phenologicalshift-gallery";
+  collection: "gallery";
+  data: InferEntrySchema<"gallery">
+};
+"4_gamedesign101-gallery": {
+	id: "4_gamedesign101-gallery";
+  collection: "gallery";
+  data: InferEntrySchema<"gallery">
+};
+"5_borkenkaefer-gallery": {
+	id: "5_borkenkaefer-gallery";
+  collection: "gallery";
+  data: InferEntrySchema<"gallery">
+};
+"6_structureofwood-gallery": {
+	id: "6_structureofwood-gallery";
+  collection: "gallery";
+  data: InferEntrySchema<"gallery">
+};
+};
 
 	};
 

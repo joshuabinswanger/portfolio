@@ -1,0 +1,90 @@
+{
+  "$ref": "#/definitions/gallery",
+  "definitions": {
+    "gallery": {
+      "type": "object",
+      "properties": {
+        "projectName": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "subtitle": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "bgcolor": {
+          "type": "string"
+        },
+        "projectDescription": {
+          "type": "string"
+        },
+        "credits": {
+          "type": "string"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "src": {
+                "type": "string"
+              },
+              "alt": {
+                "type": "string"
+              },
+              "width": {
+                "type": "string"
+              },
+              "loading": {
+                "type": "string",
+                "enum": [
+                  "eager",
+                  "lazy"
+                ]
+              },
+              "to": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "imageTags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "src",
+              "alt",
+              "description"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "projectName",
+        "title",
+        "subtitle",
+        "tags",
+        "projectDescription",
+        "credits",
+        "images"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}
