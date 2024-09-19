@@ -110,7 +110,18 @@
 
 /* View Transitions */
 
- 
+@import "photoswipe/style.css";
+
+.pswp--custom-bg {
+  --pswp-bg: var(--bg-color) !important;
+}
+
+.pswp--custom-icon-colors {
+  --pswp-icon-color: #000000 !important;
+
+}
+
+
 
 
 

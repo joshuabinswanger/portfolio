@@ -43,8 +43,13 @@ const myImage = await allImages[imagePath]();
 const linkUrl = to ?? imagePath;
 
 ---
-<div id="Image">
-    <a href={linkUrl}>
+<a 
+class:list="photo-link"
+href={myImage.default.src}
+data-pswp-width={myImage.default.width}
+data-pswp-height={myImage.default.height}
+target="_blank"
+>
       <Picture  
       src={allImages[imagePath]()} 
       formats={['avif', 'webp']}
@@ -57,9 +62,8 @@ const linkUrl = to ?? imagePath;
       height: ${height}; 
       object-fit: cover; 
       aspect-ratio: ${aspectratio}
-      `}>
-    </a> 
-</div>
+      `}>   
+</a> 
 
 
 
@@ -85,10 +89,12 @@ const linkUrl = to ?? imagePath;
 }
 
 #Image {
-  pointer-events: none;
+  pointer-events: auto;
 }
 
-
+a {
+  height: 100%;
+}
 #Image a img {
   vertical-align: bottom; /* or middle, top, depending on the desired effect */
 }

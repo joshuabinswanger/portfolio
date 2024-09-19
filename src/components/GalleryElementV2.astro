@@ -8,6 +8,14 @@ import BracketMiddleV from "./BracketMiddleV.astro";
 import Icon from "./Icon.astro";
 import ImageElement from './ImageElement.astro';
 import { getEntry } from 'astro:content';
+import { imageConfig } from "astro:assets";
+import {PhotoSwipeLightbox} from "/photoswipe/lightbox";
+
+import "photoswipe/style.css";
+
+
+// Get component props from Astro.props
+const { project } = Astro.props;
 
 interface Props {
   project: string;
@@ -20,12 +28,42 @@ if (!galleryProject) {
   throw new Error(`Project with slug "${Astro.props.project + "-gallery"}" not found.`);
   
 }
-// Get component props from Astro.props
-const { project } = Astro.props;
+
+
 
 const bgcolor = galleryProject.data.bgcolor;
 
 const images_amount = galleryProject.data.images.length;
+
+
+// Glob import all image files from the specified directory
+//const allImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/projects/**/*.{jpeg,jpg,png,gif,webp}');
+
+// Map through the images in galleryProject and dynamically import them
+//const imageSrcs = galleryProject.data.images.map(image => image.src);
+
+/* const importedImages = await Promise.all(
+  imageSrcs.map(async (imageSrc) => {
+    // Find the image in allImages
+    const imageKey = Object.keys(allImages).find(path => path.endsWith(imageSrc));
+    if (imageKey) {
+      const importedImage = await allImages[imageKey]();
+      return importedImage.default; // Extract metadata (src, width, height)
+    }
+    console.error(`Image ${imageSrc} not found in the project assets.`);
+    return null;
+  })
+); */
+
+// Filter out null values (for images not found)
+//const validImportedImages = importedImages.filter(img => img !== null);
+
+// Create an array of objects where each object contains width and height
+/* const imageDimensions = validImportedImages.map(image => ({
+  width: image.width,
+  height: image.height
+})); */
+
 
 const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a unique ID for each instance
 
@@ -48,7 +86,7 @@ function formatString(input) {
 
 ---
 
-<div id={`GalleryElement-${instanceId}`} class:list={"GalleryElement"}>
+<div id={`GalleryElement-${instanceId}`} class:list={"GalleryElement"} data-instanceid={instanceId}>
 
 
   <div id="ImageWrapper">
@@ -59,7 +97,7 @@ function formatString(input) {
       
         <div class:list={ "ImageInfo"}>
 
-          <div class:list={"ImageInfoWrapper"}>
+          {<div class:list={"ImageInfoWrapper"}>
             <BracketOpenV strokewidth="0.5px"/>
 
               <div class:list={"ImageDescriptionWrapper"}>
@@ -80,21 +118,20 @@ function formatString(input) {
               </div>
 
             <BracketCloseV strokewidth="0.5px" />
-          </div>
+          </div>}
 
         </div>
 
         <div class:list={"Filter"}></div>
-
-        {/* Conditional rendering based on index */}
-        <ImageElement
-          project={project}
-          imagePath={ image.src}
-          altText={image.alt}
-          width="100%"
-          loading={index === 0 ? "eager" : "lazy"}
-        />
-
+        <div id="Image">
+          <ImageElement
+            project={project}
+            imagePath={image.src}
+            altText={image.alt}
+            width="100%"
+            loading={index === 0 ? "eager" : "lazy"}
+          />
+        </div>
       </div>
     ))}
   
@@ -134,9 +171,11 @@ function formatString(input) {
 <script define:vars={{ instanceId, bgcolor, images_amount, galleryProject }}>
 
 
-
 document.addEventListener('astro:page-load', () => {
 
+
+
+  /* Gallery */
   const instanceSelector = `#GalleryElement-${instanceId}`; // Target this specific gallery element
   let currentIndex = 1; // Start from the first image
   const imageCount = images_amount;
@@ -389,8 +428,47 @@ document.addEventListener('astro:page-load', () => {
     const Description = document.querySelector(`${instanceSelector} #GalleryDescriptionWrapper`);
     Description.style.opacity = '1';
 
+
+
 	});
 
+</script>
+
+<script>
+
+  let lightbox;
+
+/* import "photoswipe/style.css"; */
+import PhotoSwipeLightbox from "photoswipe/lightbox";
+
+const imageElements = document.querySelectorAll(`.GalleryElement #ImageWrapper #Image a`);
+
+  document.addEventListener('astro:page-load', () => {
+
+    
+    // Initialize PhotoSwipeLightbox
+    const options = {
+
+      initialZoomLevel: `fit`,
+      bgOpacity: 0.88,
+      zoom: false,
+      
+      // to apply styles just to this instance of PhotoSwipe
+      mainClass: 'pswp--custom-bg pswp--custom-icon-colors',
+
+      gallery: `.GalleryElement`,
+      children: imageElements,
+      pswpModule: () => import('photoswipe'), // Import the PhotoSwipe module dynamically
+    };
+
+   
+    const lightbox = new PhotoSwipeLightbox(options);
+    lightbox.addFilter('clickedIndex', (clickedIndex, e) => {
+      clickedIndex -= 1;
+      return clickedIndex;
+    });
+    lightbox.init(); // Initialize the lightbox
+  });
 </script>
 
 
@@ -401,6 +479,10 @@ document.addEventListener('astro:page-load', () => {
 
 <style>
   @import "../styles/global.css";
+
+
+ 
+
 
   .GalleryElement {
     display: grid;
@@ -443,11 +525,11 @@ document.addEventListener('astro:page-load', () => {
     height: fit-content;
     box-shadow: 0px 0px 44px #988f821b;
     z-index: 1;
-	  pointer-events: none;
+	  pointer-events: auto;
   }
 
   .ImageContainer #Image {
-    pointer-events: none;
+    pointer-events: auto;
   }
 
   .Filter {
