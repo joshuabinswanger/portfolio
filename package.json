@@ -14,6 +14,7 @@
     "@rive-app/canvas": "^2.19.6",
     "astro": "^4.15.4",
     "autoprefixer": "^10.4.20",
+    "hammerjs": "^2.0.8",
     "photoswipe": "^5.4.4",
     "postcss-preset-env": "^10.0.0",
     "sharp": "^0.33.4",

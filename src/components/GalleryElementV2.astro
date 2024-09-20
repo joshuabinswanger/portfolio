@@ -9,9 +9,8 @@ import Icon from "./Icon.astro";
 import ImageElement from './ImageElement.astro';
 import { getEntry } from 'astro:content';
 import { imageConfig } from "astro:assets";
-import {PhotoSwipeLightbox} from "/photoswipe/lightbox";
-
 import "photoswipe/style.css";
+import PhotoSwipeLightbox from "photoswipe/lightbox";
 
 
 // Get component props from Astro.props
@@ -403,17 +402,14 @@ document.addEventListener('astro:page-load', () => {
 
 </script>
 
-<script>
+<script >
 
-  let lightbox;
+const instanceId = document.querySelector(".GalleryElement").getAttribute('data-instanceid')
+console.log(`instanceId: ${instanceId}`);
 
-/* import "photoswipe/style.css"; */
-import PhotoSwipeLightbox from "photoswipe/lightbox";
+let lightbox;
 
 const leftArrowSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 155 139" "width="39" height="35"><path d="m0 69 69 69 14-12-45-46h116V58H38l44-44L69 0 0 69Z" style="fill-rule:nonzero"/></svg>';
-
-
-
 const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 139 139" "width="139" height="139"><path d="m69 83-56 55-13-12 56-57L0 14 13 0l56 56 56-56 13 14-55 55 55 57-13 12-56-55Z"/></svg>';
 
   document.addEventListener('astro:page-load', () => {
@@ -422,7 +418,7 @@ const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 1
       return window.matchMedia('(max-width: 650px) and (orientation: portrait)').matches;
     }
 
-    const imageElements = document.querySelectorAll(`.GalleryElement #ImageWrapper #Image a`);
+    const imageElements = document.querySelectorAll(`#GalleryElement-${instanceId} #ImageWrapper #Image a`);
     // Initialize PhotoSwipeLightbox
     const options = {
       arrowPrevSVG: leftArrowSVGString,
