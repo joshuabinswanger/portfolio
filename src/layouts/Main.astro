@@ -3,6 +3,7 @@ import Footer from "../components/Footer.astro"
 import { ViewTransitions } from 'astro:transitions';
 import { fade } from 'astro:transitions';
 import Backdrop from "../components/Background.astro";
+import { AstroFont } from "astro-font";
 
 import "../styles/global.css";
 
@@ -32,6 +33,49 @@ const myFade = {
 <html lang="en" style="height: 100%; 		-webkit-font-smoothing: auto;
 -moz-osx-font-smoothing: auto;" transition:animate={fade({ duration: '0.6s' })}>
   <head>
+    <AstroFont
+    config={[
+      {
+        name: "PowerGrotesk",
+        src: [
+          {
+            style: 'normal',
+            weight: '100',
+            path: '/fonts/PowerGrotesk/power-grotesk-ultra-light/webfonts/power-grotesk-ultra-light.woff2'
+          },
+          {
+            style: 'normal',
+            weight: '200',
+            path: '/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-light.woff2'
+          },
+          {
+            style: 'italic',
+            weight: '200',
+            path: '/fonts/PowerGrotesk/power-grotesk-light-italic/webfonts/power-grotesk-light-italic.woff2'
+          },
+          {
+            style: 'normal',
+            weight: '400',
+            path: '/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.woff2'
+          },
+          {
+            style: 'normal',
+            weight: '500',
+            path: '/fonts/PowerGrotesk/power-grotesk-medium/webfonts/power-grotesk-medium.woff2'
+          },
+          {
+            style: 'normal',
+            weight: '600',
+            path: '/fonts/PowerGrotesk/power-grotesk-bold/webfonts/power-grotesk-bold.woff2'
+          }
+        ],
+        preload: true,
+        display: "swap",
+        selector: "body",
+        fallback: "sans-serif",
+      },
+    ]}
+  />
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />

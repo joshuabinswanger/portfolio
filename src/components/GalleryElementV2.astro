@@ -10,7 +10,6 @@ import ImageElement from './ImageElement.astro';
 import { getEntry } from 'astro:content';
 import { imageConfig } from "astro:assets";
 import "photoswipe/style.css";
-import PhotoSwipeLightbox from "photoswipe/lightbox";
 
 
 // Get component props from Astro.props
@@ -65,26 +64,27 @@ function formatString(input) {
         <div class:list={ "ImageInfo"}>
 
           {<div class:list={"ImageInfoWrapper"}>
+            <div id="spacer"></div>
             <BracketOpenV strokewidth="0.5px"/>
 
               <div class:list={"ImageDescriptionWrapper"}>
                 <Fragment set:html={formatString(image.description)} />
               </div>
 
-       {/*      <BracketCloseV strokewidth="0.5px" />
-            <BracketOpenV strokewidth="0.5px"/> */}
+            <BracketCloseV strokewidth="0.5px" />
+            <div id="spacer"></div>
+            <BracketOpenV strokewidth="0.5px"/>
 
               <div class:list={"ProjectInfoWrapper"}>
                 <Fragment set:html={formatString(galleryProject.data.projectDescription) } />
               </div>
-{/* 
-            <BracketMiddleV strokewidth="0.5px" /> */}
 
               <div class:list={"DetailsInfoWrapper"}>
                 <Fragment set:html={formatString(galleryProject.data.credits)} />
               </div>
 
             <BracketCloseV strokewidth="0.5px" />
+            <div id="spacer"></div>
           </div>}
 
         </div>
@@ -136,9 +136,6 @@ function formatString(input) {
 </div>
 
 <script>
-
-
-
 
 document.addEventListener('astro:page-load', () => {
 
@@ -425,6 +422,7 @@ galleryElements.forEach((el) => {
 </script>
 
 <script>
+
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
 
 const leftArrowSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 155 139" "width="39" height="35"><path d="m0 69 69 69 14-12-45-46h116V58H38l44-44L69 0 0 69Z" style="fill-rule:nonzero"/></svg>';
@@ -443,6 +441,7 @@ document.addEventListener('astro:page-load', () => {
 
   
   let lightbox;
+
   const galleryElements = document.querySelectorAll(".GalleryElement");
 
 
@@ -584,8 +583,9 @@ document.addEventListener("astro:before-swap", () => {
   height: 100%;
   z-index: 10; /* Ensure it appears above the image */
   display: grid;
-  place-content: center;
   justify-items: center;
+  align-items: center;
+
   pointer-events: none; /* Prevent interaction with the description if needed */
   background-color: var(--bg-color-trans); /* Example style */
     /* Start with no blur (initial state) */
@@ -610,30 +610,18 @@ document.addEventListener("astro:before-swap", () => {
 
 .ImageInfoWrapper {
   display: grid;
-  width: 88%;
-  grid-template-rows: 1ch fit-content fit-content fit-content 1ch;
-  row-gap: 2rem;
+  width: min(88%, 66ch);
+  height: 90%;
+  grid-template-rows: 1fr min-content  min-content  min-content 0.5fr min-content min-content min-content min-content 1fr;
+  align-items: center;
 
-  @media (--bp-mobile) {
-    row-gap: 0.2rem;
-
-  }
-
-  @media (--bp-tablet) {
-    row-gap: 0.4rem;
-
-  }
-
-  @media (--bp-desktop-wide) {
-    width: 66%;
-  }
 }
-
 
 .ImageDescriptionWrapper, .ProjectInfoWrapper, .DetailsInfoWrapper {
 
   width: 80%;           /* Ensure it takes full width */
   justify-self: center; /* Centers items horizontally */
+ 
 
   span {
     font-family: PowerGrotesk-Medium;
@@ -646,35 +634,6 @@ document.addEventListener("astro:before-swap", () => {
 }
 
 
-
-.ImageDescriptionWrapper {
-  margin-top: -1rem;
-  margin-bottom: 1rem;
-
-  @media (--bp-mobile) {
-    margin-top: -.1rem;
-  }
-}
-
-/*
-.ProjectInfoWrapper {
-  margin-top: -1.5rem;
-  margin-bottom: -2rem;
-  overflow: hidden;
-
-    @media (--bp-mobile) {
-      margin-top: -0.8rem;
-      margin-bottom: -1rem;
-  }
-}
-*/
-.DetailsInfoWrapper {
-  margin-bottom: -1rem;
-
-    @media (--bp-mobile) {
-      margin-bottom: -.1rem;
-  }
-} 
 
 
 
