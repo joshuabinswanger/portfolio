@@ -28,11 +28,9 @@ if (!galleryProject) {
   
 }
 
-
-
 const bgcolor = galleryProject.data.bgcolor;
 
-const images_amount = galleryProject.data.images.length;
+const imagesAmount = galleryProject.data.images.length;
 
 const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a unique ID for each instance
 
@@ -55,7 +53,7 @@ function formatString(input) {
 
 ---
 
-<div id={`GalleryElement-${instanceId}`} class:list={"GalleryElement"} data-instanceid={instanceId}>
+<div id={`GalleryElement-${instanceId}`} class:list={"GalleryElement"} data-instanceid={instanceId} data-bgcolor={bgcolor} data-imagesAmount={imagesAmount} data-galleryProject={galleryProject} >
 
 
   <div id="ImageWrapper">
@@ -122,7 +120,7 @@ function formatString(input) {
 
     <div id="ArrowWrapper">
       <div id="ArrowContainer" class:list={["prevArrow"]}>&larr;</div>
-      <div id="CounterContainer">1 / ${images_amount}</div>
+      <div id="CounterContainer">1 / ${imagesAmount}</div>
       <div id="ArrowContainer" class:list={["nextArrow"]}>&rarr;</div>
     </div>
 
@@ -137,21 +135,20 @@ function formatString(input) {
 
 </div>
 
-<script define:vars={{ instanceId, bgcolor, images_amount, galleryProject }}>
+<script>
+
+
 
 
 document.addEventListener('astro:page-load', () => {
 
+  const galleryElements = document.querySelectorAll(".GalleryElement");
 
+  let ImageInfoVisible = false;
+//Functions
 
-  /* Gallery */
-  const instanceSelector = `#GalleryElement-${instanceId}`; // Target this specific gallery element
-  let currentIndex = 1; // Start from the first image
-  const imageCount = images_amount;
-  console.log(`Number of images: ${imageCount}`); // Optional: to check if it works
-  
-  // Global Function: Get Current Index
-	function getCurrentIndex(instanceSelector) {
+// Function: Get Current Index
+function getCurrentIndex(instanceSelector) {
 		const imageContainers = document.querySelectorAll(
 			`${instanceSelector} #ImageWrapper .ImageContainer`
 		);
@@ -166,7 +163,7 @@ document.addEventListener('astro:page-load', () => {
 		imageContainers.forEach((container, index) => {
 			// Check if the image is visible (opacity is 1, meaning it's active)
 			if (window.getComputedStyle(container).opacity === '1') {
-				visibleIndex = index; // Adjust because index is 0-based
+				visibleIndex = index + 1; // Adjust because index is 0-based
 				console.log(`current visible Index: ${visibleIndex}`);
 				return;
 			}
@@ -176,23 +173,20 @@ document.addEventListener('astro:page-load', () => {
 	}
 
 
+// Function: Image Visibility
+function updateImageVisibility(instanceSelector, currentIndex, bgcolor) {
+  const imageContainers = document.querySelectorAll(`${instanceSelector} #ImageWrapper .ImageContainer`);
+  const imageFilters = document.querySelectorAll(`${instanceSelector} #ImageWrapper .Filter`);
+  const imageTarget = document.querySelectorAll(`${instanceSelector} #ImageWrapper .ImageContainer  #Image`)
 
+  // Error handling: Check if the image containers exist
+  if (!imageContainers || imageContainers.length === 0) {
+    console.error(`No image containers found for selector: ${instanceSelector}`);
+    
+    return;
+  }
 
-
-  // Image Visibility
-  function updateImageVisibility() {
-    const imageContainers = document.querySelectorAll(`${instanceSelector} #ImageWrapper .ImageContainer`);
-    const imageFilters = document.querySelectorAll(`${instanceSelector} #ImageWrapper .Filter`);
-    const imageTarget = document.querySelectorAll(`${instanceSelector} #ImageWrapper .ImageContainer  #Image`)
-
-    // Error handling: Check if the image containers exist
-    if (!imageContainers || imageContainers.length === 0) {
-      console.error(`No image containers found for selector: ${instanceSelector}`);
-      
-      return;
-    }
-
-      // Error handling: Check if the image targets exist
+    // Error handling: Check if the image targets exist
   if (!imageTarget || imageTarget.length === 0) {
     console.error(`No image containers found for selector: ${instanceSelector}`);
     return;
@@ -203,7 +197,7 @@ document.addEventListener('astro:page-load', () => {
 
     // Load new image
     imageContainers.forEach((div, index) => {
-      if (index + 1 === currentIndex + 1){
+      if (index + 1 === currentIndex){
         div.style.display = "block";
       }
 
@@ -257,160 +251,186 @@ document.addEventListener('astro:page-load', () => {
   
 
 
-  // Counter
-  function updateCounter() {
-    const counterContainer = document.querySelector(`${instanceSelector} #CounterContainer`);
+// Function: Counter
+function updateCounter(instanceSelector, currentIndex, imageCount) {
+  const counterContainer = document.querySelector(`${instanceSelector} #CounterContainer`);
 
-    // Error handling: Check if counter container exists
-    if (!counterContainer) {
-      console.error(`Counter container not found for selector: ${instanceSelector}`);
-      return;
-    }
-
-    counterContainer.textContent = `${currentIndex} / ${imageCount}`;
-    console.log(`this is number ${currentIndex} in ${instanceSelector}`)
+  // Error handling: Check if counter container exists
+  if (!counterContainer) {
+    console.error(`Counter container not found for selector: ${instanceSelector}`);
+    return;
   }
 
+  counterContainer.textContent = `${currentIndex} / ${imageCount}`;
+  console.log(`this is number ${currentIndex} in ${instanceSelector}`)
+}
 
-  // A function to hide all descriptions
-  function hideImageInfos() {
-    const ImageInfos = document.querySelector(`${instanceSelector} #ImageWrapper .ImageContainer:nth-of-type(${currentIndex}) .ImageInfo`);
-    
-    // Error handling: Check if descriptions exist
-    if (!ImageInfos || ImageInfos.length === 0) {
-      console.error(`No ImageInfos found for selector: ${instanceSelector}`);
-      return;
-    }
 
-    //set current image info to 0 and blur(0px)
-    ImageInfos.style.opacity = '0';
-    ImageInfos.style.backdropFilter = 'blur(0px)';
+// Function: A function to hide all descriptions
+function hideImageInfos(instanceSelector, currentIndex) {
+  const ImageInfos = document.querySelector(`${instanceSelector} #ImageWrapper .ImageContainer:nth-of-type(${currentIndex}) .ImageInfo`);
+  
 
-    ImageInfoVisible = false; // Reset the visibility state
+
+  // Error handling: Check if descriptions exist
+  if (!ImageInfos || ImageInfos.length === 0) {
+    console.error(`No ImageInfos found for selector: ${instanceSelector}`);
+    return;
   }
 
+  //set current image info to 0 and blur(0px)
+  ImageInfos.style.opacity = '0';
+  ImageInfos.style.backdropFilter = 'blur(0px)';
+
+  ImageInfoVisible = false; // Reset the visibility state
+}
 
 
-  // A function to toggle the visibility of the description for the current image
-  function toggleImageInfoVisibility() {
-    const activeImageInfo = document.querySelector(
-      `${instanceSelector} #ImageWrapper  .ImageContainer:nth-of-type(${currentIndex}) .ImageInfo`
-    );
 
+// Function:  A function to toggle the visibility of the description for the current image
+function toggleImageInfoVisibility(instanceSelector, currentIndex) {
 
-    // Error handling: Check if the active description elements exist
-    if (!activeImageInfo) {
-      console.error(`ImageInfo or not found for the current image.`);
-      return;
-    }
+  const activeImageInfo = document.querySelector(
+    `${instanceSelector} #ImageWrapper  .ImageContainer:nth-of-type(${currentIndex}) .ImageInfo`
+  );
 
-    if (ImageInfoVisible) {
-
-            activeImageInfo.style.opacity = '0';
-            activeImageInfo.style.backdropFilter = 'blur(0px)';
-        
-
-        } else {
-          activeImageInfo.style.opacity = '1';
-          activeImageInfo.style.backdropFilter = 'blur(22px)';
-
-      }
-
-        // Toggle the description visibility state
-        ImageInfoVisible = !ImageInfoVisible;
+  // Error handling: Check if the active description elements exist
+  if (!activeImageInfo) {
+    console.error(`ImageInfo or not found for the current image.`);
+    return;
   }
+ 
 
-  // Arrow Function forward
-  document.querySelector(`${instanceSelector} #ArrowWrapper div:nth-child(3)`)
-    ?.addEventListener("click", function () {
-      currentIndex++;
-      if (currentIndex > imageCount) currentIndex = 1; // Loop back to the first image if at the end
+  if (ImageInfoVisible) {
 
-
-          setTimeout (() => {
-            
-            updateImageVisibility();
-
-            updateCounter();
-
-          }, 300);
-
-
-          setTimeout (() => {
-
-            hideImageInfos();
-
-          }, 600);
+          activeImageInfo.style.opacity = '0';
+          activeImageInfo.style.backdropFilter = 'blur(0px)';
+          console.log(`ImageInfo-${instanceSelector} turned off`);
       
-        });
-     
+
+      } else {
+
+        activeImageInfo.style.opacity = '1';
+        activeImageInfo.style.backdropFilter = 'blur(22px)';
+        console.log(`ImageInfo-${instanceSelector} turned on`);
+
+    }
+
+      // Toggle the description visibility state
+      ImageInfoVisible = !ImageInfoVisible;
+}
 
 
 
+// For Each Gallery
+
+galleryElements.forEach((el) => {
+
+  let currentIndex = 1; // Start from the first image
+
+  const instanceId = el.getAttribute('data-instanceid');
+  const instanceSelector = `#GalleryElement-${instanceId}`; // Target this specific gallery element
+  console.log(`instanceSelector: ${instanceSelector}`); // Optional: to check if it works
+
+  const imageCount = el.getAttribute('data-imagesAmount');
+  console.log(`Number of images: ${imageCount}`); // Optional: to check if it works
+  
+  const bgcolor = el.getAttribute('data-bgcolor');
+  console.log(`BG Color: ${bgcolor}`); // Optional: to check if it works
+  
+
+    // Arrow Function forward
+    document.querySelector(`${instanceSelector} #ArrowWrapper div:nth-child(3)`)
+      ?.addEventListener("click", function () {
+        currentIndex = getCurrentIndex(instanceSelector);
+        currentIndex++;
+        if (currentIndex > imageCount) currentIndex = 1; // Loop back to the first image if at the end
 
 
-  // Arrow Function backward
-  document.querySelector(`${instanceSelector} #ArrowWrapper div:nth-child(1)`)
-    
-  ?.addEventListener("click", function () {
+            setTimeout (() => {
+              
+              updateImageVisibility(instanceSelector, currentIndex, bgcolor);
+
+              updateCounter(instanceSelector, currentIndex, imageCount);
+
+            }, 300);
+
+
+            setTimeout (() => {
+
+              hideImageInfos(instanceSelector, currentIndex);
+
+            }, 600);
+        
+          });
+
+
+    // Arrow Function backward
+    document.querySelector(`${instanceSelector} #ArrowWrapper div:nth-child(1)`)
+    ?.addEventListener("click", function () {
       currentIndex--;
-      if (currentIndex < 1) currentIndex = imageCount; // Loop to the last image if at the beginning
+
+  
+        if (currentIndex < 1) currentIndex = Number(imageCount); // Loop to the last image if at the beginning
+
+        console.log(`now this is the current Index: ${currentIndex}`)
 
         setTimeout (() => {
+          console.log(`now this is the current Index in the timeout: ${currentIndex}`)
           
-           updateImageVisibility();
+          updateImageVisibility(instanceSelector, currentIndex, bgcolor);
 
-            updateCounter();
+          updateCounter(instanceSelector, currentIndex, imageCount);
 
           }, 300);
 
 
-          setTimeout (() => {
+        setTimeout (() => {
 
-            hideImageInfos();
+          hideImageInfos(instanceSelector, currentIndex);
 
-          }, 600);
+        }, 600);
 
+    });
+      
+
+    // Add click event listener to the #Info div of this specific gallery
+      const infoDiv = document.querySelector(`${instanceSelector} #Info`);
+      if (infoDiv) {
+        infoDiv.addEventListener('click', function () {
+          toggleImageInfoVisibility(instanceSelector, currentIndex);
         });
+      } else {
+        console.error(`Info div not found for selector: ${instanceSelector}`);
+      }
 
-        
-
-
-		// Add click event listener to the #Info div of this specific gallery
-		const infoDiv = document.querySelector(`${instanceSelector} #Info`);
-		if (infoDiv) {
-			infoDiv.addEventListener('click', function () {
-				toggleImageInfoVisibility();
-			});
-		} else {
-			console.error(`Info div not found for selector: ${instanceSelector}`);
-		}
-
-		// Initially call functions to sync UI with the current state
-		updateImageVisibility();
-    hideImageInfos();
-		updateCounter();
-		
+    // Initially call functions to sync UI with the current state
+    updateImageVisibility(instanceSelector, currentIndex, bgcolor);
+    hideImageInfos(instanceSelector, currentIndex);
+    updateCounter(instanceSelector, currentIndex, imageCount);
+    
 
     // Make Description Bar visible
     const Description = document.querySelector(`${instanceSelector} #GalleryDescriptionWrapper`);
     Description.style.opacity = '1';
 
 
+  //ForEachEnd
+  });
 
-	});
+
+
+});
 
 </script>
 
 <script>
-
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
-let lightbox;
 
 const leftArrowSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 155 139" "width="39" height="35"><path d="m0 69 69 69 14-12-45-46h116V58H38l44-44L69 0 0 69Z" style="fill-rule:nonzero"/></svg>';
 const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 139 139" "width="139" height="139"><path d="m69 83-56 55-13-12 56-57L0 14 13 0l56 56 56-56 13 14-55 55 55 57-13 12-56-55Z"/></svg>';
 
-const galleryElements = document.querySelectorAll(".GalleryElement");
+
 
 function isPhonePortrait() {
       return window.matchMedia('(max-width: 650px) and (orientation: portrait)').matches;
@@ -420,6 +440,11 @@ function isPhonePortrait() {
 
 
 document.addEventListener('astro:page-load', () => {
+
+  
+  let lightbox;
+  const galleryElements = document.querySelectorAll(".GalleryElement");
+
 
   galleryElements.forEach((el) => {
 
