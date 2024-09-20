@@ -136,6 +136,7 @@ function formatString(input) {
 </div>
 
 <script>
+import Hammer from 'hammerjs';
 
 document.addEventListener('astro:page-load', () => {
 
@@ -389,6 +390,66 @@ galleryElements.forEach((el) => {
         }, 600);
 
     });
+      
+
+    //Mount Hammer JS
+    const swipeElement = document.querySelector(`${instanceSelector}`);
+    console.log(`swipeElemet is: ${swipeElement}`);
+    const hammer = new Hammer(swipeElement);
+
+    //Add Swipe Gesture forward
+    hammer.on('swiperight', function() {
+      currentIndex = getCurrentIndex(instanceSelector);
+        currentIndex++;
+        if (currentIndex > imageCount) currentIndex = 1; // Loop back to the first image if at the end
+
+
+            setTimeout (() => {
+              
+              updateImageVisibility(instanceSelector, currentIndex, bgcolor);
+
+              updateCounter(instanceSelector, currentIndex, imageCount);
+
+            }, 300);
+
+
+            setTimeout (() => {
+
+              hideImageInfos(instanceSelector, currentIndex);
+
+            }, 600);
+      console.log('You swiped the element forward!');
+    });
+
+
+    //Add Swipe Gesture backward
+    hammer.on('swipeleft', function() {
+      currentIndex--;
+
+  
+        if (currentIndex < 1) currentIndex = Number(imageCount); // Loop to the last image if at the beginning
+
+        console.log(`now this is the current Index: ${currentIndex}`)
+
+        setTimeout (() => {
+          console.log(`now this is the current Index in the timeout: ${currentIndex}`)
+          
+          updateImageVisibility(instanceSelector, currentIndex, bgcolor);
+
+          updateCounter(instanceSelector, currentIndex, imageCount);
+
+          }, 300);
+
+
+        setTimeout (() => {
+
+          hideImageInfos(instanceSelector, currentIndex);
+
+        }, 600);
+        
+        console.log('You swiped the element backward!');
+    });
+
       
 
     // Add click event listener to the #Info div of this specific gallery
