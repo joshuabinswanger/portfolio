@@ -398,7 +398,7 @@ galleryElements.forEach((el) => {
     const hammer = new Hammer(swipeElement);
 
     //Add Swipe Gesture forward
-    hammer.on('swiperight', function() {
+    hammer.on('swipeleft', function() {
       currentIndex = getCurrentIndex(instanceSelector);
         currentIndex++;
         if (currentIndex > imageCount) currentIndex = 1; // Loop back to the first image if at the end
@@ -423,7 +423,7 @@ galleryElements.forEach((el) => {
 
 
     //Add Swipe Gesture backward
-    hammer.on('swipeleft', function() {
+    hammer.on('swiperight', function() {
       currentIndex--;
 
   
