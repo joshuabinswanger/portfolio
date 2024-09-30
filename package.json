@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.3",
+    "@glidejs/glide": "^3.6.2",
     "@rive-app/canvas": "^2.19.6",
     "astro": "^4.15.4",
     "astro-font": "^0.1.81",
@@ -23,6 +24,7 @@
     "typescript": "^5.5.4"
   },
   "devDependencies": {
+    "@types/glidejs__glide": "^3.6.5",
     "astro-robots-txt": "^1.0.0",
     "postcss": "^8.4.45",
     "postcss-nesting": "^13.0.0"
