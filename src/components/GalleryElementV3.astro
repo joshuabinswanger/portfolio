@@ -153,69 +153,97 @@ const Sliders = document.querySelectorAll('.glide')
 
 
 
-Sliders.forEach((item, index) => {
-  console.log(`This is the slider at index ${index} with ID: ${item.id}`);
+  Sliders.forEach((item, index) => {
+    console.log(`This is the slider at index ${index} with ID: ${item.id}`);
 
 
-
-  const CustomLength = function(Glide, Components, Events) {
-    return {
-      mount () {
-        Events.emit('glide.length', Components.Sizes.length)
-        console.log('Console log', Components.Sizes.length)
+    // initialize function CustomLength
+    const CustomLength = function(Glide, Components, Events) {
+      return {
+        mount () {
+          Events.emit('glide.length', Components.Sizes.length)
+          console.log('Console log', Components.Sizes.length)
+        }
       }
     }
-  }
-  
-  var glide =  new Glide(item, {type: 'carousel'})
 
-  let totalSlides;
+    let totalSlides;
 
-  glide.on('glide.length', (length) => {
-    totalSlides = length;
-  });
+    var glide =  new Glide(item, {type: 'carousel'})
 
-  glide.mount({CustomLength});
+    glide.on('glide.length', (length) => {
+      totalSlides = length;
+    });
 
- 
+    glide.mount({CustomLength});
 
-
-
-  
-
-  console.log('Total slides from custom event:', totalSlides);
-  
-
-
-  // Function to update the counter
-  const updateCounter = () => {
-    var currentIndex = glide.index;
+    console.log('Total slides from custom event:', totalSlides);
     
-    // Select the specific CounterContainer within the current slider (item)
-    const counterContainer = item.querySelector('.CounterContainer');
+    // Function to update the counter
+    const updateCounter = () => {
+      var currentIndex = glide.index;
+      
+      // Select the specific CounterContainer within the current slider (item)
+      const counterContainer = item.querySelector('.CounterContainer');
+      
+      if (counterContainer) {
+        // Update the text content of the counter for the current slider
+        counterContainer.textContent = `${currentIndex + 1} / ${totalSlides}`;
+      } else {
+        console.error(`CounterContainer not found for slider with ID: ${item.id}`);
+      }
+    };
     
-    if (counterContainer) {
-      // Update the text content of the counter for the current slider
-      counterContainer.textContent = `${currentIndex} / ${totalSlides}`;
+
+    //show/hide Image Info
+    // Initialize ImageInfoVisible if it hasn't been
+    let ImageInfoVisible;  // Ensure it's defined
+
+    const toggleImageInfoVisibility = () => {
+
+      // Get current slide index from Glide
+      const currentIndex = glide.index;
+
+      // Select all .ImageInfo elements inside the item
+      const activeImageInfo = item.querySelector('.glide__slide--active .ImageInfo');
+        
+        // Log the element instead of using a template string
+        console.log(activeImageInfo);
+
+        if (ImageInfoVisible) {
+          // Use class to control visibility and style
+          activeImageInfo.classList.remove('InfoVisible');
+          console.log(`${item.id} with ImageInfo:${activeImageInfo.id} at index ${currentIndex} Info off`);
+
+        } else {
+          // Use class to control visibility and style
+          activeImageInfo.classList.add('InfoVisible');
+          console.log(`${item.id} with ImageInfo:${activeImageInfo.id} at index ${currentIndex} Info on`);
+        }
+
+        // Toggle the description visibility state
+        ImageInfoVisible = !ImageInfoVisible;
+     
+    };
+
+    
+
+
+    // Initial counter update when the slider is first loaded
+    updateCounter();
+  
+    // Listen for the 'run' event, which is triggered on any navigation (e.g., next/prev)
+    glide.on('run', updateCounter);
+
+    // Add click event listener to the #Info div of this specific gallery
+    const infoDiv = item.querySelector(`#Info`);
+    if (infoDiv) {
+      infoDiv.addEventListener('click', toggleImageInfoVisibility);
     } else {
-      console.error(`CounterContainer not found for slider with ID: ${item.id}`);
+      console.error(`Info div not found for selector: ${item.id}`);
     }
-
-   
-  };
-
-  // Initial counter update when the slider is first loaded
-  updateCounter();
- 
-  // Listen for the 'run' event, which is triggered on any navigation (e.g., next/prev)
-  glide.on('run', updateCounter);
-  
-
-
-
-});
-
-
+    
+  });
 });
 </script>
 
@@ -299,6 +327,7 @@ Sliders.forEach((item, index) => {
     </script>
 
 
+
 <style>
 @import "node_modules/@glidejs/glide/dist/css/glide.core.min.css";
 
@@ -365,13 +394,15 @@ Sliders.forEach((item, index) => {
 
   pointer-events: none; /* Prevent interaction with the description if needed */
   background-color: var(--bg-color-trans); /* Example style */
-    /* Start with no blur (initial state) */
+  
+  /* Start with no blur (initial state) */
   backdrop-filter: blur(0px);
 
   /* Add transition for backdrop-filter */
-  transition: backdrop-filter ease-in-out 0.2s, opacity 0.2s ease-in-out;
+  transition: backdrop-filter ease-in-out 0.3s, opacity 0.3s ease-in-out;
 
   font-size: 0.8rem;
+  hyphens: auto;
 
   overflow: hidden;
 
@@ -383,6 +414,12 @@ Sliders.forEach((item, index) => {
     font-size: 1rem;
     line-height: 1.33;
   }
+}
+
+.InfoVisible {
+  opacity: 1;
+  backdrop-filter: blur(22px);
+  transition: opacity 0.3s, backdrop-filter 0.3s ease;
 }
 
 .ImageInfoWrapper {
@@ -496,5 +533,7 @@ h2 {
   pointer-events: auto;
   margin: 0 -5px;
 }
+
+
   
 </style>
