@@ -89,7 +89,8 @@ return formattedString;
           <div class:list={"Filter"}>
           </div>
 
-          <div id="Image" class:list={"ImageElement"}>
+
+          <div id="Image" class:list={["ImageElement", index >= 2 ? 'hidden-image' : '']}>
             <ImageElement
               project={project}
               imagePath={image.src}
@@ -157,6 +158,7 @@ const Sliders = document.querySelectorAll('.GalleryElement')
         slideChanged(s) {
           updateCounter(s);
           hideImageInfo();
+          updateSlideVisibility(s);
         },
       })
 
@@ -235,7 +237,33 @@ const Sliders = document.querySelectorAll('.GalleryElement')
       console.error(`Info div not found for selector: ${item.id}`);
     }
 
-  
+
+// Function to update slide visibility
+const updateSlideVisibility = (sliderInstance) => {
+  const totalSlides = sliderInstance.track.details.slides.length;
+  const currentSlideIndex = sliderInstance.track.details.rel;
+  const slides = item.querySelectorAll('.keen-slider__slide');
+
+  slides.forEach((slide, index) => {
+    const imageDiv = slide.querySelector('.ImageElement');
+    if (imageDiv) {
+      // Calculate indices to show, wrapping around using modulo
+      const indicesToShow = [
+        (currentSlideIndex - 1 + totalSlides) % totalSlides,
+        currentSlideIndex,
+        (currentSlideIndex + 1) % totalSlides,
+      ];
+
+      if (indicesToShow.includes(index)) {
+        imageDiv.classList.remove('hidden-image');
+      } else {
+        imageDiv.classList.add('hidden-image');
+      }
+    }
+  });
+};
+
+    
   }); 
 
 });
@@ -351,7 +379,9 @@ const Sliders = document.querySelectorAll('.GalleryElement')
   pointer-events: none;
 }
 
-
+.hidden-image {
+    display: none;
+  }
 
 
 /*   Image Info */

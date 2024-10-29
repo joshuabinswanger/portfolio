@@ -24,7 +24,8 @@
     "postcss-preset-env": "^10.0.0",
     "sharp": "^0.33.4",
     "swiper": "^11.1.14",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "unpic": "^3.19.0"
   },
   "devDependencies": {
     "@types/glidejs__glide": "^3.6.5",

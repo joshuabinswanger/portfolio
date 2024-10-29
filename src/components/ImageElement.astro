@@ -43,13 +43,13 @@ const myImage = await allImages[imagePath]();
 const linkUrl = to ?? imagePath;
 
 ---
-<a 
+<!-- <a 
 class:list="photo-link"
 href={myImage.default.src}
 data-pswp-width={myImage.default.width}
 data-pswp-height={myImage.default.height}
 target="_blank"
->
+> -->
       <Picture  
       src={allImages[imagePath]()} 
       formats={['avif', 'webp']}
@@ -65,7 +65,7 @@ target="_blank"
       object-fit: cover; 
       aspect-ratio: ${aspectratio}
       `}>   
-</a> 
+<!-- </a>  -->
 
 
 
