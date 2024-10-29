@@ -47,6 +47,7 @@ return formattedString;
 
 }
 
+
 ---
 
 <div id={`slider-${instanceId}`} class:list={"GalleryElement "}  data-instanceId={instanceId} data-imagesAmount={imagesAmount} data-galleryProject={galleryProject} >
@@ -234,46 +235,7 @@ const Sliders = document.querySelectorAll('.GalleryElement')
       console.error(`Info div not found for selector: ${item.id}`);
     }
 
-    //show/hide Image Info
-/*       let ImageInfoVisible;  // Ensure it's defined
-
-      const toggleImageInfoVisibility = () => {
-
-        // Get current slide index from Glide
-        const currentIndex = glide.index;
-
-        // Select all .ImageInfo elements inside the item
-        const activeImageInfo = item.querySelector('.glide__slide--active .ImageInfo');
-          
-          // Log the element instead of using a template string
-          console.log(activeImageInfo);
-
-          if (ImageInfoVisible) {
-            // Use class to control visibility and style
-            activeImageInfo.classList.remove('InfoVisible');
-            console.log(`${item.id} with ImageInfo:${activeImageInfo.id} at index ${currentIndex} Info off`);
-
-          } else {
-            // Use class to control visibility and style
-            activeImageInfo.classList.add('InfoVisible');
-            console.log(`${item.id} with ImageInfo:${activeImageInfo.id} at index ${currentIndex} Info on`);
-          }
-
-          // Toggle the description visibility state
-          ImageInfoVisible = !ImageInfoVisible;
-      
-      }; */
-
-
-
-    // Add click event listener to the #Info div of this specific gallery
-/*     const infoDiv = item.querySelector(`#Info`);
-    if (infoDiv) {
-      infoDiv.addEventListener('click', toggleImageInfoVisibility);
-    } else {
-      console.error(`Info div not found for selector: ${item.id}`);
-    }
-    */
+  
   }); 
 
 });
