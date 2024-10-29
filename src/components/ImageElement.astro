@@ -43,29 +43,29 @@ const myImage = await allImages[imagePath]();
 const linkUrl = to ?? imagePath;
 
 ---
-<!-- <a 
+<a 
 class:list="photo-link"
 href={myImage.default.src}
 data-pswp-width={myImage.default.width}
 data-pswp-height={myImage.default.height}
 target="_blank"
-> -->
-      <Picture  
-      src={allImages[imagePath]()} 
-      formats={['avif', 'webp']}
-      widths={[240, 540, 720, myImage.width]}
-      sizes={`(max-width: 360px) 240px, (max-width: 720px) 540px, (max-width: 1600px) 720px, ${myImage.width}px`}
-      width={myImage.default.width}
-      height={myImage.default.height}
-      alt={altText} 
-      loading={loading}
-      style={`
-      width: ${width}; 
-      height: ${height}; 
-      object-fit: cover; 
-      aspect-ratio: ${aspectratio}
-      `}>   
-<!-- </a>  -->
+>
+
+    <Picture  
+    src={allImages[imagePath]()} 
+    formats={['avif', 'webp']}
+    widths={[240, 540, 720, myImage.default.width]}
+    sizes={`(max-width: 360px) 240px, (max-width: 720px) 540px, (max-width: 1600px) 720px, ${myImage.default.width}px`}
+    alt={altText} 
+    loading={loading}
+    style={`
+    width: ${width}; 
+    height: ${height}; 
+    object-fit: cover; 
+    aspect-ratio: ${aspectratio}
+    `}>   
+    
+</a> 
 
 
 

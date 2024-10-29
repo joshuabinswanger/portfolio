@@ -96,7 +96,7 @@ return formattedString;
               imagePath={image.src}
               altText={image.alt}
               width="100%"
-              loading={index === 0 ? "eager" : "lazy"}
+               loading="lazy"
             />
           </div>
 
@@ -262,6 +262,28 @@ const updateSlideVisibility = (sliderInstance) => {
     }
   });
 };
+
+    // Observer to detect when hidden images become visible
+    const hiddenImages = item.querySelectorAll('.ImageElement.hidden-image');
+    const options = {
+      rootMargin: '200px 0px',
+      threshold: 0.01,
+    };
+
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const imageDiv = entry.target;
+          imageDiv.classList.remove('hidden-image');
+          // Update slider to account for the new visible slide
+          slider.refresh();
+          observer.unobserve(imageDiv);
+        }
+      });
+    }, options);
+
+    hiddenImages.forEach((img) => imageObserver.observe(img));
+
 
     
   }); 

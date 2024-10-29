@@ -43,12 +43,12 @@ imageElements.forEach((image, index) => {
 });
 
  // IntersectionObserver options
- let options = {
+ let optionsFade = {
          rootMargin: "800px 0px -200px 0px",
      };
  
      // Define the IntersectionObserver
-     const observer = new IntersectionObserver((entries) => {  
+     const observerFade = new IntersectionObserver((entries) => {  
          entries.forEach((entry) => {
              console.log(entry);
              if (entry.isIntersecting) {
@@ -57,11 +57,13 @@ imageElements.forEach((image, index) => {
                  entry.target.classList.remove("show");
              }
          });
-     }, options);
+     }, optionsFade);
  
      // Select elements to observe and start observing them
      const fadeElements = document.querySelectorAll(".fade");
-     fadeElements.forEach((el) => observer.observe(el));
+     fadeElements.forEach((el) => observerFade.observe(el));
+
+
 
   });
 </script>
