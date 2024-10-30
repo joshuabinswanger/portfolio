@@ -11,7 +11,6 @@ import { getEntry } from 'astro:content';
 
 import 'keen-slider/keen-slider.min.css';
 import "photoswipe/style.css";
-import "../styles/photoswipe-dynamic-caption-plugin.css";
 import { marked } from 'marked';
 
 // Get component props from Astro.props
@@ -293,7 +292,6 @@ const updateSlideVisibility = (sliderInstance) => {
 <script>
 
     import PhotoSwipeLightbox from 'photoswipe/lightbox';
-    import PhotoSwipeDynamicCaption  from 'photoswipe-dynamic-caption-plugin';
     
     const leftArrowSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 155 139" "width="39" height="35"><path d="m0 69 69 69 14-12-45-46h116V58H38l44-44L69 0 0 69Z" style="fill-rule:nonzero"/></svg>';
     const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 139 139" "width="139" height="139"><path d="m69 83-56 55-13-12 56-57L0 14 13 0l56 56 56-56 13 14-55 55 55 57-13 12-56-55Z"/></svg>';
