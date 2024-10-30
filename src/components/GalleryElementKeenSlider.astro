@@ -9,8 +9,9 @@ import Icon from "./Icon.astro";
 import ImageElement from './ImageElement.astro';
 import { getEntry } from 'astro:content';
 
-import 'keen-slider/keen-slider.min.css'
+import 'keen-slider/keen-slider.min.css';
 import "photoswipe/style.css";
+import { marked } from 'marked';
 
 // Get component props from Astro.props
 const { project } = Astro.props;
@@ -18,8 +19,6 @@ const { project } = Astro.props;
 interface Props {
   project: string;
 }
-
-
 
 // Fetch the specific gallery project by the project name (slug)
 const galleryProject = await getEntry('gallery', Astro.props.project + "-gallery"); // Use the `project` prop
@@ -32,20 +31,7 @@ const imagesAmount = galleryProject.data.images.length;
 
 const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a unique ID for each instance
 
-// format string credits
-function formatString(input) {
 
-let formattedString = input
-  .replace(/\*\*(.*?)\*\*/g, function(match, textBetweenStars) {
-    // Wrap text between ** in <strong> tags
-    return '<strong>' + textBetweenStars + '</strong>';
-  })
-  // Replace *break* with <br>
-  .replace(/\*br\*/g, '<br>');
-
-return formattedString;
-
-}
 
 
 ---
@@ -65,24 +51,14 @@ return formattedString;
             <BracketOpenV strokewidth="0.5px"/>
 
               <div class:list={"ImageDescriptionWrapper"}>
-                <Fragment set:html={formatString(image.description)} />
-              </div>
-
-            <BracketCloseV strokewidth="0.5px" />
-            <div id="spacer"></div>
-            <BracketOpenV strokewidth="0.5px"/>
-
-              <div class:list={"ProjectInfoWrapper"}>
-                <Fragment set:html={formatString(galleryProject.data.projectDescription) } />
-              </div>
-
-              <div class:list={"DetailsInfoWrapper"}>
-                <Fragment set:html={formatString(galleryProject.data.credits)} />
+                <Fragment set:html={marked.parse(image.description)} />
               </div>
 
             <BracketCloseV strokewidth="0.5px" />
             <div id="spacer"></div>
           </div>}
+
+          
 
           </div>
 
@@ -102,6 +78,22 @@ return formattedString;
 
         </div>
     ))}
+
+    <div id="ProjectInfoSlide" class:list={["keen-slider__slide"]}>
+      <div id="spacer"></div>
+        <BracketOpenV strokewidth="0.5px"/>
+
+          <div class:list={"ProjectInfoWrapper"}>
+            <Fragment set:html={marked.parse(galleryProject.data.projectDescription) } />
+          </div>
+
+          <div class:list={"DetailsInfoWrapper"}>
+            <Fragment set:html={marked.parse(galleryProject.data.credits)} />
+          </div>
+
+        <BracketCloseV strokewidth="0.5px" />
+        <div id="spacer"></div>
+      </div>
     
   </div>
 
@@ -454,7 +446,7 @@ const updateSlideVisibility = (sliderInstance) => {
   display: grid;
   width: min(88%, 66ch);
   height: 90%;
-  grid-template-rows: 1fr min-content  min-content  min-content 0.5fr min-content min-content min-content min-content 1fr;
+  grid-template-rows:   1fr min-content  min-content min-content 1fr;
   align-items: center;
 
 }

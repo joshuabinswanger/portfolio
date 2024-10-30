@@ -20,6 +20,7 @@
     "flickity": "^3.0.0",
     "hammerjs": "^2.0.8",
     "keen-slider": "^6.8.6",
+    "marked": "^14.1.3",
     "photoswipe": "^5.4.4",
     "postcss-preset-env": "^10.0.0",
     "sharp": "^0.33.4",
