@@ -11,6 +11,7 @@ import { getEntry } from 'astro:content';
 
 import 'keen-slider/keen-slider.min.css';
 import "photoswipe/style.css";
+import "../styles/photoswipe-dynamic-caption-plugin.css";
 import { marked } from 'marked';
 
 // Get component props from Astro.props
@@ -80,20 +81,25 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
     ))}
 
     <div id="ProjectInfoSlide" class:list={["keen-slider__slide"]}>
-      <div id="spacer"></div>
+      
+      <div id="ProjectInfoSlideWrapper">
+        <div id="spacer"></div>
+          
         <BracketOpenV strokewidth="0.5px"/>
 
-          <div class:list={"ProjectInfoWrapper"}>
-            <Fragment set:html={marked.parse(galleryProject.data.projectDescription) } />
-          </div>
+        <div class:list={"ProjectInfoWrapper"}>
+          <Fragment set:html={marked.parse(galleryProject.data.projectDescription) } />
+        </div>
 
-          <div class:list={"DetailsInfoWrapper"}>
-            <Fragment set:html={marked.parse(galleryProject.data.credits)} />
-          </div>
+        <div class:list={"DetailsInfoWrapper"}>
+          <Fragment set:html={marked.parse(galleryProject.data.credits)} />
+        </div>
 
         <BracketCloseV strokewidth="0.5px" />
+        
         <div id="spacer"></div>
       </div>
+    </div>
     
   </div>
 
@@ -127,7 +133,7 @@ const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a uniqu
 </div>
  
 
-
+<!-- KeenSlider -->
 <script>
 
 import KeenSlider from 'keen-slider'
@@ -283,9 +289,11 @@ const updateSlideVisibility = (sliderInstance) => {
 });
 </script>
 
+<!-- PhotoSwipe -->
 <script>
 
     import PhotoSwipeLightbox from 'photoswipe/lightbox';
+    import PhotoSwipeDynamicCaption  from 'photoswipe-dynamic-caption-plugin';
     
     const leftArrowSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 155 139" "width="39" height="35"><path d="m0 69 69 69 14-12-45-46h116V58H38l44-44L69 0 0 69Z" style="fill-rule:nonzero"/></svg>';
     const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 139 139" "width="139" height="139"><path d="m69 83-56 55-13-12 56-57L0 14 13 0l56 56 56-56 13 14-55 55 55 57-13 12-56-55Z"/></svg>';
@@ -344,6 +352,36 @@ const updateSlideVisibility = (sliderInstance) => {
         
        
         const lightbox = new PhotoSwipeLightbox(options);
+
+        lightbox.on('uiRegister', function() {
+          lightbox.pswp.ui.registerElement({
+            name: 'custom-caption',
+            order: 9,
+            isButton: false,
+            appendTo: 'wrapper',
+            html: 'Caption text',
+            onInit: (el, pswp) => {
+              lightbox.pswp.on('change', () => {
+                const currSlideElement = lightbox.pswp.currSlide.data.element;
+                console.log('Current Slide Element:', currSlideElement);
+                let captionHTML = '';
+
+                if (currSlideElement) {
+            
+                    // Get the description from data-description attribute
+                    const description = currSlideElement.getAttribute('data-description');
+                    if (description) {
+                      captionHTML = description;
+                    }
+
+                }
+
+                el.innerHTML = captionHTML || 'HelloThere';
+              });
+            }
+
+          });
+        });
     
         lightbox.init(); // Initialize the lightbox
         console.log (`${imageElements.id}`)
@@ -351,7 +389,8 @@ const updateSlideVisibility = (sliderInstance) => {
     
     
       }); 
-    
+
+  
     
     });
     
@@ -375,10 +414,18 @@ const updateSlideVisibility = (sliderInstance) => {
 .SlidesContainer {
   position: relative;
   width: 100%;
-  height: min-content;
+  height: 100%;
   box-shadow: 0px 0px 22px #988f821b;
 }
 
+#ProjectInfoSlideWrapper {
+  display: grid;
+  width: min(70%, 66ch);
+  height: 100%;
+  grid-template-rows:   auto min-content min-content min-content min-content auto;
+  align-items: center;
+  margin: 0 auto; /* Add this line to center horizontally */
+}
 
 .Filter {
   position: absolute;
@@ -399,6 +446,18 @@ const updateSlideVisibility = (sliderInstance) => {
 
 
 /*   Image Info */
+
+
+
+.ImageInfoWrapper {
+  display: grid;
+  width: min(88%, 66ch);
+  height: 90%;
+  grid-template-rows:   1fr min-content  min-content min-content 1fr;
+  align-items: center;
+
+}
+
 
 .ImageInfo {
   position: absolute;
@@ -442,14 +501,6 @@ const updateSlideVisibility = (sliderInstance) => {
   transition: opacity 0.3s, backdrop-filter 0.3s ease;
 }
 
-.ImageInfoWrapper {
-  display: grid;
-  width: min(88%, 66ch);
-  height: 90%;
-  grid-template-rows:   1fr min-content  min-content min-content 1fr;
-  align-items: center;
-
-}
 
 .ImageDescriptionWrapper, .ProjectInfoWrapper, .DetailsInfoWrapper {
 
@@ -475,7 +526,7 @@ const updateSlideVisibility = (sliderInstance) => {
   width: 100%;
   opacity: 1;
   height: fit-content;
-  grid-template-columns: 1.5ch minmax(min-content, 3fr) 3ch minmax(min-content, 13ch) 3ch 3.5ch 1.5ch;
+  grid-template-columns: 1.5ch minmax(min-content, 2fr) 3ch minmax(min-content, 21ch) 3ch 3.5ch 1.5ch;
   justify-content: center;
   align-items: center;
   transition: opacity 1.5s ease-in;
