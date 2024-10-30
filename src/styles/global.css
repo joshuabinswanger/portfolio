@@ -148,3 +148,13 @@
   right: 30px !important;
 }
 
+.pswp__custom-caption {
+  font-size: 11px;
+  color: #000000;
+  background: #fbf9f422;
+  padding: 3px 7px;
+  max-width: 44ch;
+  bottom: 4%;
+  position: absolute;
+  left: 15px;
+}
