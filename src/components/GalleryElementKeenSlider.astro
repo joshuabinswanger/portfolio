@@ -403,6 +403,8 @@ const updateSlideVisibility = (sliderInstance) => {
 
 <style>
 
+@import "../styles/global.css";
+
 .GalleryElement {
   display: grid;
   grid-template-rows: 1fr auto;
@@ -423,6 +425,15 @@ const updateSlideVisibility = (sliderInstance) => {
   grid-template-rows:   auto min-content min-content min-content min-content auto;
   align-items: center;
   margin: 0 auto; /* Add this line to center horizontally */
+
+  @media (--bp-mobile) {
+    font-size: 12px;
+  }
+
+  @media (--bp-tablet) {
+    font-size: 12px;
+  }
+
 }
 
 .Filter {
@@ -524,7 +535,7 @@ const updateSlideVisibility = (sliderInstance) => {
   width: 100%;
   opacity: 1;
   height: fit-content;
-  grid-template-columns: 1.5ch minmax(min-content, 2fr) 3ch minmax(min-content, 21ch) 3ch 3.5ch 1.5ch;
+  grid-template-columns: 1.5ch minmax(min-content, 2fr) 3ch minmax(9ch, 1.5fr) 3ch 3.5ch 1.5ch;
   justify-content: center;
   align-items: center;
   transition: opacity 1.5s ease-in;

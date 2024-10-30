@@ -176,6 +176,11 @@ declare module 'astro:content' {
   data: InferEntrySchema<"gallery">
 };
 };
+"projects": Record<string, {
+  id: string;
+  collection: "projects";
+  data: any;
+}>;
 
 	};
 
