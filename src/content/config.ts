@@ -4,6 +4,9 @@ import { z } from 'zod';
 import { glob } from 'astro/loaders';
 import { cldAssetsLoader } from 'astro-cloudinary/loaders';
 
+const cloudName = import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME;
+
+
 
 export const collections = { 
   galleryImages: defineCollection({
