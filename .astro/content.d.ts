@@ -160,8 +160,8 @@ declare module 'astro:content' {
   collection: "gallery";
   data: InferEntrySchema<"gallery">
 };
-"4_gamedesign101-gallery": {
-	id: "4_gamedesign101-gallery";
+"4_gamedesign-gallery": {
+	id: "4_gamedesign-gallery";
   collection: "gallery";
   data: InferEntrySchema<"gallery">
 };
@@ -229,6 +229,11 @@ declare module 'astro:content' {
 };
   rendered?: RenderedContent;
   filePath?: string;
+}>;
+"projects": Record<string, {
+  id: string;
+  collection: "projects";
+  data: any;
 }>;
 
 	};

@@ -26,16 +26,14 @@ interface Props {
 const instanceId = Math.random().toString(36).slice(2, 11);  
 
 // Fetch the specific gallery project by the project name (slug)
-const galleryProject = await getEntry('gallery', Astro.props.project + "-gallery"); // Use the `project` prop
+const galleryProject = await getEntry('gallery', `${Astro.props.project}-gallery`);
 
 if (!galleryProject) {
-  throw new Error(`Project with slug "${Astro.props.project + "-gallery"}" not found.`);  
+  throw new Error(`Project with slug "${Astro.props.project}-gallery" not found.`);  
 }
 
-
-
-//Turn Prop into string this is it
-const targetProject = String(project).split('_')[1]; 
+// Turn Prop into string
+const targetProject = String(project).split('_')[1];
 console.log(`${targetProject}`);
 
 // Use getCollection with a filter function to only retrieve images with a matching project
@@ -43,67 +41,54 @@ const galleryImages = await getCollection('galleryImages', ({ data }) => {
   return data.metadata?.project === targetProject;
 });
 
+// Sort galleryImages by public_id
+galleryImages.sort((a, b) => a.data.public_id.localeCompare(b.data.public_id));
 
 // Log the filtered results
 galleryImages.forEach((entry) => {
-  const projectValue =  entry.data.metadata?.project;
-  console.log(`${projectValue}`); // Should only log entries matching the target project
+  console.log(entry.data); // Logs entries sorted by public_id
 });
 
-const imagesAmount = 5 /* galleryImages.data.metadata?.project.value */;
-
-
+const imagesAmount = galleryImages.length;
+console.log(`Number of images: ${imagesAmount}`);
 ---
 
-<div id={`slider-${instanceId}`} class:list={"GalleryElement "}  data-instanceId={instanceId} data-imagesAmount={imagesAmount} data-galleryProject={galleryProject} >
+<div id={`slider-${instanceId}`} class:list={"GalleryElement "} data-instanceId={instanceId} data-imagesAmount={imagesAmount} data-galleryProject={galleryProject}>
   
-  <div class:list={"SlidesContainer keen-slider"} >
+  <div class:list={"SlidesContainer keen-slider"}>
 
-    {galleryProject.data.images.map((image, index) => (
-      
-
-        <div id={`ImageContainer-${index}`} class:list={["keen-slider__slide"]}>
-
-          <div class:list={ "ImageInfo"}>
-
-          {<div class:list={"ImageInfoWrapper"}>
+    {galleryImages.map((image, index) => (
+      <div id={`ImageContainer-${index}`} class:list={["keen-slider__slide"]}>
+        <div class:list={"ImageInfo"}>
+          <div class:list={"ImageInfoWrapper"}>
             <div id="spacer"></div>
             <BracketOpenV strokewidth="0.5px"/>
-
-              <div class:list={"ImageDescriptionWrapper"}>
-                {galleryImages[index] &&  (
-                  <p><strong>{galleryImages[index].data.metadata?.description_title}</strong></p>
-                  <p>{galleryImages[index].data.metadata?.description_text}</p>
-                  )
-                }
-              
-              </div>
-
+            <div class:list={"ImageDescriptionWrapper"}>
+              {image.data.metadata && (
+                <>
+                  <p><strong>{image.data.metadata?.description_title}</strong></p>
+                  <p>{image.data.metadata?.description_text}</p>
+                </>
+              )}
+            </div>
             <BracketCloseV strokewidth="0.5px" />
             <div id="spacer"></div>
-          </div>}
-
-          
-
           </div>
-
-          <div class:list={"Filter"}>
-          </div>
-
-
-          <div id="Image" class:list={["ImageElement", index >= 2 ? 'hidden-image' : '']}>
-              {galleryImages[index] &&  (
-                  <CldImage
-                  src={galleryImages[index].data.public_id}
-                  width={galleryImages[index].data.width}
-                  height={galleryImages[index].data.height}
-                  alt=""
-                  />
-                )
-              }
-          </div>
-
         </div>
+        
+        <div class:list={"Filter"}></div>
+
+        <div id="Image" class:list={["ImageElement", index >= 2 ? 'hidden-image' : '']}>
+          {image.data && (
+            <CldImage
+              src={image.data.public_id}
+              width={image.data.width}
+              height={image.data.height}
+              alt=""
+            />
+          )}
+        </div>
+      </div>
     ))}
 
     <div id="ProjectInfoSlide" class:list={["keen-slider__slide"]}>
@@ -114,7 +99,7 @@ const imagesAmount = 5 /* galleryImages.data.metadata?.project.value */;
         <BracketOpenV strokewidth="0.5px"/>
 
         <div class:list={"ProjectInfoWrapper"}>
-          <Fragment set:html={marked.parse(galleryProject.data.projectDescription) } />
+          <Fragment set:html={marked.parse(galleryProject.data.projectDescription)} />
         </div>
 
         <div class:list={"DetailsInfoWrapper"}>
@@ -157,7 +142,6 @@ const imagesAmount = 5 /* galleryImages.data.metadata?.project.value */;
   </div>
  
 </div>
- 
 
 <!-- KeenSlider -->
 <script>

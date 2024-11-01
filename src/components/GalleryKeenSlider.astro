@@ -6,6 +6,9 @@ import { getCollection } from 'astro:content';
 
 const galleryProjects = await getCollection('gallery');
 
+// Sort galleryProjects by projectName
+galleryProjects.sort((a, b) => a.data.projectName.localeCompare(b.data.projectName));
+
 // Log the filtered results
 galleryProjects.forEach((entry) => {
 	const project = entry.data.projectName;
