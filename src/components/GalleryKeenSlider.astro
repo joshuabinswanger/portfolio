@@ -6,15 +6,21 @@ import { getCollection } from 'astro:content';
 
 const galleryProjects = await getCollection('gallery');
 
+// Log the filtered results
+galleryProjects.forEach((entry) => {
+	const project = entry.data.projectName;
+  	console.log(`${project}`); // Should only log entries matching the target project
+});
+
 const {projectName} = Astro.props;
 ---
 
 <TopWrapper>
   <GridLayout>
-    {galleryProjects.map((project) => (
+    {galleryProjects.map((entry) => (
       <div class="GalleryElementWrapper">
         <GalleryElement
-          project={project.data.projectName}
+          project={entry.data.projectName}
         />
       </div>
     ))}

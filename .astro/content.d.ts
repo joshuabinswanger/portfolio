@@ -230,11 +230,6 @@ declare module 'astro:content' {
   rendered?: RenderedContent;
   filePath?: string;
 }>;
-"projects": Record<string, {
-  id: string;
-  collection: "projects";
-  data: any;
-}>;
 
 	};
 

@@ -13,7 +13,7 @@ import { CldImage } from 'astro-cloudinary';
 
 import 'keen-slider/keen-slider.min.css';
 import "photoswipe/style.css";
-/* import { marked } from 'marked'; */
+import { marked } from 'marked';
 
 // Get component props from Astro.props
 const { project } = Astro.props;
@@ -32,10 +32,25 @@ if (!galleryProject) {
   throw new Error(`Project with slug "${Astro.props.project + "-gallery"}" not found.`);  
 }
 
-// Fetch all gallery projects
-const galleryImages = await getCollection('galleryImages');
 
-const imagesAmount = 5 /* galleryImages.data.images.length */;
+
+//Turn Prop into string
+const targetProject = String(project).split('_')[1]; 
+console.log(`${targetProject}`);
+
+// Use getCollection with a filter function to only retrieve images with a matching project
+const galleryImages = await getCollection('galleryImages', ({ data }) => {
+  return data.metadata?.project === targetProject;
+});
+
+
+// Log the filtered results
+galleryImages.forEach((entry) => {
+  const projectValue =  entry.data.metadata?.project;
+  console.log(`${projectValue}`); // Should only log entries matching the target project
+});
+
+const imagesAmount = 5 /* galleryImages.data.metadata?.project.value */;
 
 
 ---
@@ -56,7 +71,12 @@ const imagesAmount = 5 /* galleryImages.data.images.length */;
             <BracketOpenV strokewidth="0.5px"/>
 
               <div class:list={"ImageDescriptionWrapper"}>
-               {/*  <Fragment set:html={marked.parse(image.description)} /> */}
+                {galleryImages[index] &&  (
+                  <p><strong>{galleryImages[index].data.metadata?.description_title}</strong></p>
+                  <p>{galleryImages[index].data.metadata?.description_text}</p>
+                  )
+                }
+              
               </div>
 
             <BracketCloseV strokewidth="0.5px" />
@@ -72,20 +92,15 @@ const imagesAmount = 5 /* galleryImages.data.images.length */;
 
 
           <div id="Image" class:list={["ImageElement", index >= 2 ? 'hidden-image' : '']}>
-            <ul>
-              {galleryImages.map(asset => {
-      return (
-      <li>
-        <CldImage
-          src={asset.data.public_id}
-          width={asset.data.width}
-          height={asset.data.height}
-          alt=""
-        />
-      </li>
-      )
-    })}
-            </ul>
+              {galleryImages[index] &&  (
+                  <CldImage
+                  src={galleryImages[index].data.public_id}
+                  width={galleryImages[index].data.width}
+                  height={galleryImages[index].data.height}
+                  alt=""
+                  />
+                )
+              }
           </div>
 
         </div>
@@ -99,11 +114,11 @@ const imagesAmount = 5 /* galleryImages.data.images.length */;
         <BracketOpenV strokewidth="0.5px"/>
 
         <div class:list={"ProjectInfoWrapper"}>
-         <!--  <Fragment set:html={marked.parse(galleryProject.data.projectDescription) } /> -->
+          <Fragment set:html={marked.parse(galleryProject.data.projectDescription) } />
         </div>
 
         <div class:list={"DetailsInfoWrapper"}>
-         <!--  <Fragment set:html={marked.parse(galleryProject.data.credits)} /> -->
+          <Fragment set:html={marked.parse(galleryProject.data.credits)} />
         </div>
 
         <BracketCloseV strokewidth="0.5px" />
