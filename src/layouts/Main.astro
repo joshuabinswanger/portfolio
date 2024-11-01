@@ -1,6 +1,6 @@
 ---
 import Footer from "../components/Footer.astro"
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter  } from 'astro:transitions';
 import { fade } from 'astro:transitions';
 import Backdrop from "../components/Background.astro";
 import { AstroFont } from "astro-font";
@@ -82,7 +82,7 @@ const myFade = {
     <meta name="generator" content={Astro.generator} />
 
     <meta name="description" content={description} />
-    <ViewTransitions />
+    <ClientRouter  />
  
     <title>{title}</title>
   </head>

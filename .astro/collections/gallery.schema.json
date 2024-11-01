@@ -33,15 +33,6 @@
           "items": {
             "type": "object",
             "properties": {
-              "src": {
-                "type": "string"
-              },
-              "alt": {
-                "type": "string"
-              },
-              "width": {
-                "type": "string"
-              },
               "loading": {
                 "type": "string",
                 "enum": [
@@ -51,22 +42,8 @@
               },
               "to": {
                 "type": "string"
-              },
-              "description": {
-                "type": "string"
-              },
-              "imageTags": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
               }
             },
-            "required": [
-              "src",
-              "alt",
-              "description"
-            ],
             "additionalProperties": false
           }
         },

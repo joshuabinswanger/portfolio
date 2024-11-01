@@ -1,5 +1,6 @@
 ---
 import SquareBracketV from "./SquareBracket_V.astro";
+import { getCollection } from "astro:content";
 // imports all files that end with `.astro' in `./src/pages/projects/`
 /* const projects = await Astro.glob('../pages/projects/*.astro')
 
@@ -9,6 +10,8 @@ const pageTitles = projects.map(page => {
   return { title: projectTitle, url: page.url };
 });
  */
+
+
 ---
 
   <ul>
