@@ -188,7 +188,7 @@ Sliders.forEach((item, index) => {
 
     // Mark the current, previous, and next slide as loaded
     loaded[slideIdx] = true;
-    /* loaded[(slideIdx - 1 + totalSlides) % totalSlides] = true;  */// Previous slide, wrapping around
+    loaded[(slideIdx - 1 + totalSlides) % totalSlides] = true; // Previous slide, wrapping around
     loaded[(slideIdx + 1) % totalSlides] = true; // Next slide, wrapping around
 
     s.slides.forEach((element, idx) => {
