@@ -167,7 +167,6 @@ console.log(`Number of images: ${imagesAmount}`);
 <!-- KeenSlider -->
 <script>
 
-import { imageService } from '@unpic/astro/service';
 import KeenSlider from 'keen-slider'
 
 document.addEventListener('astro:page-load', () => {
@@ -193,7 +192,7 @@ Sliders.forEach((item, index) => {
 
     s.slides.forEach((element, idx) => {
       if (loaded[idx]) {
-        const imageElement = element.querySelector('.ImageElement');
+        const imageElement = element.children[2];
         console.log (`there is an imageContainer: ${imageElement}`)
           if (imageElement) {
             imageElement.style.display = "block";
