@@ -1,110 +1,34 @@
 ---
 import type { ImageMetadata } from 'astro';
-import { Picture } from 'astro:assets';
 import { getEntry } from 'astro:content';
-import { marked } from 'marked';
-
-import "../styles/global.css";
+import { CldImage } from 'astro-cloudinary';
+import { string } from 'astro:schema';
+import { getCldImageUrl } from 'astro-cloudinary/helpers';
 
 interface Props {
-    project: string;
-    margin_top?: string;
-    width?: string;
-    height?: string;
-    aspectratio?: string;
+    src: string;
+    datasrc: string;
+    width?: number;
+    height?: number;
+    sizes?: string;
+    alt: string;
     loading?: 'eager' | 'lazy';
-    to?: string;
-    altText: string;
-    imagePath: string;
-    onhover_imagePath?: string;
-    viewtransition_name?: string;
     
   };
   
 // Get component props from Astro.props
-const { margin_top = '0px', to, width = "100%", height = 'auto', aspectratio = 'auto', loading = 'lazy',altText = "Joshua Binswanger Scientific Illustration", imagePath, onhover_imagePath, viewtransition_name, project } = Astro.props;
+const { src, datasrc, width = "100%", height = 'auto', sizes = "100vw", loading = 'lazy', alt = "Joshua Binswanger Scientific Illustration", imagePath, onhover_imagePath, viewtransition_name, project } = Astro.props;
 
-
-const galleryProjectImages = await getEntry('gallery', Astro.props.project + "-gallery");
-
-if (!galleryProjectImages) {
-  throw new Error(`Project with slug "${Astro.props.project + "-gallery"}" not found.`);
-}
-
-
-//Import all images from collection to check against the passed in strings (for later use of tags i.e.
-const images = galleryProjectImages.data.images;
-
-const imageData = galleryProjectImages.data.images.find(img => img.src === imagePath);
-const imageDescription = "hello" /* imageData ? marked.parse(imageData.description) : "" */;
-             
-
-//import this specific image with astro.glob so we can actually use it
-const allImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/projects/**/*.{jpeg,jpg,png,gif,webp}');
-const myImage = await allImages[imagePath]();
-
-// If the `to` prop is passed, it will override the imageUrl
-const linkUrl = to ?? imagePath;
-
+const url = getCldImageUrl({ src: src });
+/* const galleryProjectImages = await getEntry('gallery', Astro.props.project + "-gallery"); */
 ---
-<a 
-class:list="photo-link"
-href={myImage.default.src}
-data-pswp-width={myImage.default.width}
-data-pswp-height={myImage.default.height}
-target="_blank"
-data-description={imageDescription}
->
+<CldImage 
+  src=
+  data-src={datasrc}   
+  width={width}
+  height={height}
+  sizes={sizes}
+  alt={alt}
+>   
+  
 
-    <Picture  
-    src={allImages[imagePath]()} 
-    formats={['avif', 'webp']}
-    widths={[240, 540, 720, myImage.default.width]}
-    sizes={`(max-width: 360px) 240px, (max-width: 720px) 540px, (max-width: 1600px) 720px, ${myImage.default.width}px`}
-    alt={altText} 
-    loading={loading}
-    style={`
-    width: ${width}; 
-    height: ${height}; 
-    object-fit: cover; 
-    aspect-ratio: ${aspectratio}
-    `}>   
-    
-</a> 
-
-
-
-
-
-<style define:vars={{margin_top }}>
-
-@import "../styles/global.css";
-
-/*Fade */
-
-.hidden{
-  opacity: 0.22;
-  filter: contrast(0.66) sepia(.8) blur(2px) grayscale(0.8);
-  transition: all 1s ease;
-  transform: translateY(10%);
-}
-
-.show {
-  opacity: 1;
-  filter:  contrast(1) brightness(1) sepia(0) blur(0px) grayscale(0);
-  transform: translateY(0);
-}
-
-#Image {
-  pointer-events: auto;
-}
-
-a {
-  height: 100%;
-}
-img {
-  vertical-align: top; /* or middle, top, depending on the desired effect */
-}
-
-
-</style>

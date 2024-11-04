@@ -20,13 +20,34 @@ const {projectName} = Astro.props;
 
 <TopWrapper>
   <GridLayout>
-    {galleryProjects.map((entry) => (
-      <div class="GalleryElementWrapper">
-        <GalleryElement
-          project={entry.data.projectName}
-        />
-      </div>
-    ))}
+    {galleryProjects.map((entry, index) => {
+		  
+		if (index > 2) {
+			
+		return(
+		<div class:list={["observer restrain"]}>
+			<div class:list={["GalleryElementWrapper hidden"]} >
+				<GalleryElement
+				project={entry.data.projectName}
+				
+				/>
+			</div>
+		</div>
+		);
+	
+		}  else {
+		return(
+		<div class:list={["observer restrain"]}>
+			<div class:list={["GalleryElementWrapper"]} >
+				<GalleryElement
+				project={entry.data.projectName}
+				
+				/>
+			</div>
+		</div>
+		);
+	}
+	})}
   </GridLayout>
 </TopWrapper>
 
@@ -46,28 +67,53 @@ imageElements.forEach((image, index) => {
 	if (index >= 2) { // index starts from 0, so 2 is the 3rd element
 		image.classList.add('fade');
 	}
-});
+	}
+); 
 
  // IntersectionObserver options
- let optionsFade = {
-         rootMargin: "800px 0px -200px 0px",
-     };
- 
-     // Define the IntersectionObserver
-     const observerFade = new IntersectionObserver((entries) => {  
-         entries.forEach((entry) => {
-             console.log(entry);
-             if (entry.isIntersecting) {
-                 entry.target.classList.add("show");
-             } else {
-                 entry.target.classList.remove("show");
-             }
-         });
-     }, optionsFade);
- 
+	let optionsFade = {
+			rootMargin: "150px 0px -200px 0px",
+		};
+	
+	// Define the IntersectionObserver
+	const observerFade = new IntersectionObserver((entries) => {  
+		entries.forEach((entry) => {
+			console.log(entry);
+			if (entry.isIntersecting) {
+				entry.target.firstElementChild.classList.add("show");
+				entry.target.classList.remove("restrain");
+			} else {
+				entry.target.firstElementChild.classList.remove("show");
+			}
+		});
+	}, optionsFade);
+
+	 // IntersectionObserver hidden options
+	 let optionsHidden = {
+			rootMargin: "700px",
+		};
+	
+	// Define the IntersectionObserver
+	const observerHidden = new IntersectionObserver((entries) => {  
+		entries.forEach((entry) => {
+			console.log(entry);
+			if (entry.isIntersecting) {
+				entry.target.firstElementChild.classList.remove("hidden");
+			} 
+		});
+	}, optionsHidden);
+
+
+
+
+
+
      // Select elements to observe and start observing them
-     const fadeElements = document.querySelectorAll(".fade");
+     const fadeElements = document.querySelectorAll(".observer");
      fadeElements.forEach((el) => observerFade.observe(el));
+
+	 const hiddenElements = document.querySelectorAll(".observer");
+	 hiddenElements.forEach((el) => observerHidden.observe(el));
 
 
 
@@ -80,7 +126,16 @@ imageElements.forEach((image, index) => {
 <style>
 @import "../styles/global.css";
 /*Fade */
-
+.observer {
+	display: grid;
+	height: fit-content;
+}
+.restrain {
+	opacity: 0.1;
+	overflow: hidden;
+	height: 70vh;
+	width: 25vw;
+}
 .fade{
   opacity: 0.22;
   filter: contrast(0.66) sepia(.8) blur(5px) grayscale(0.8);
@@ -96,13 +151,14 @@ imageElements.forEach((image, index) => {
 
 
 .GalleryElementWrapper {
-	display: grid;
-	height: fit-content;
+
 }
 
+.hidden {
+	display: none;
+}
 
-
-.GalleryElementWrapper:nth-of-type(1) {
+.observer:nth-of-type(1) {
 	grid-column-start: 1; 
 	grid-column-end: span 8; 
 	grid-row-start: 1;
@@ -110,95 +166,95 @@ imageElements.forEach((image, index) => {
 }
 
 	
-.GalleryElementWrapper:nth-of-type(2) {
+.observer:nth-of-type(2) {
 	grid-column-start: 11; 
 	grid-column-end: span 6; 
 	grid-row-start: 7;
 
 }
 
-.GalleryElementWrapper:nth-of-type(3) {
+.observer:nth-of-type(3) {
 	grid-column-start: 2;
 	grid-column-end: span 7; 
 	grid-row-start: 11;
 	
 }
-.GalleryElementWrapper:nth-of-type(4) {
+.observer:nth-of-type(4) {
 	grid-column-start: 12;
 	grid-column-end: span 7; 
 	grid-row-start: 17;
 
 }
-.GalleryElementWrapper:nth-of-type(5) {
+.observer:nth-of-type(5) {
 	grid-column-start: 1;
 		grid-column-end: span 7; 
 		grid-row-start: 21;
 
 }
-.GalleryElementWrapper:nth-of-type(6) {
+.observer:nth-of-type(6) {
 	grid-column-start: 10; 
 	grid-column-end: span 7; 
 	grid-row-start: 27;
 
 }
-.GalleryElementWrapper:nth-of-type(7) {
+.observer:nth-of-type(7) {
 	grid-column-start: 1; 
 	grid-column-end: span 5; 
 	grid-row-start: 41;
 
 }
-.GalleryElementWrapper:nth-of-type(8) {
+.observer:nth-of-type(8) {
 	grid-column-start: 8; 
 	grid-column-end: span 9; 
 	grid-row-start: 45;
 
 	
 }
-.GalleryElementWrapper:nth-of-type(9) {
+.observer:nth-of-type(9) {
 	grid-column-start: 2; 
 	grid-column-end: span 5; 
 	grid-row-start: 55;
 
 }
-.GalleryElementWrapper:nth-of-type(10) {
+.observer:nth-of-type(10) {
 	grid-column-start: 12; 
 	grid-column-end: span 6; 
 	grid-row-start: 53;
 
 }
-.GalleryElementWrapper:nth-of-type(11) {
+.observer:nth-of-type(11) {
 	grid-column-start: 12; 
 	grid-column-end: span 6; 
 	grid-row-start: 60;
 }
-.GalleryElementWrapper:nth-of-type(12) {
+.observer:nth-of-type(12) {
 	grid-column-start: 12; 
 	grid-column-end: span 6; 
 	grid-row-start: 66;
 }
-.GalleryElementWrapper:nth-of-type(13) {
+.observer:nth-of-type(13) {
 	grid-column-start: 12; 
 	grid-column-end: span 6; 
 	grid-row-start: 71;
 
 }
-.GalleryElementWrapper:nth-of-type(14) {
+.observer:nth-of-type(14) {
 	grid-column-start: 12; 
 	grid-column-end: span 6; 
 	grid-row-start: 77;
 
 }
-.GalleryElementWrapper:nth-of-type(15) {
+.observer:nth-of-type(15) {
 	grid-column-start: 12; 
 	grid-column-end: span 6; 
 	grid-row-start: 81;
 }
-.GalleryElementWrapper:nth-of-type(16) {
+.observer:nth-of-type(16) {
 	grid-column-start: 12; 
 	grid-column-end: span 6; 
 	grid-row-start: 86;
 }
-.GalleryElementWrapper:nth-of-type(17) {
+.observer:nth-of-type(17) {
 	grid-column-start: 12; 
 	grid-column-end: span 6; 
 	grid-row-start: 92;
@@ -208,17 +264,17 @@ imageElements.forEach((image, index) => {
 
 @media (--bp-mobile) {
 
-	.GalleryElementWrapper:nth-of-type(odd) {
+	.observer:nth-of-type(odd) {
 		grid-column-start: 1; 
 		grid-column-end: span 6; 
 	}
 
-	.GalleryElementWrapper:nth-of-type(even) {
+	.observer:nth-of-type(even) {
 		grid-column-start: 2; 
 		grid-column-end: span 6; 
 	}
 
-	.GalleryElementWrapper {
+	.observer {
 		margin-bottom: 5rem;
 	}
 
@@ -226,84 +282,84 @@ imageElements.forEach((image, index) => {
 
 @media (--bp-tablet) {
 
-.GalleryElementWrapper:nth-of-type(1) {
+.observer:nth-of-type(1) {
 	grid-column-start: 1; 
 	grid-column-end: span 5; 
 }
 
-.GalleryElementWrapper:nth-of-type(2) {
+.observer:nth-of-type(2) {
 	grid-column-start: 3; 
 	grid-column-end: span 5; 
 }
 
-.GalleryElementWrapper:nth-of-type(3) {
+.observer:nth-of-type(3) {
 	grid-column-start: 2; 
 	grid-column-end: span 5; 
 }
 
-.GalleryElementWrapper:nth-of-type(4) {
+.observer:nth-of-type(4) {
 	grid-column-start: 1; 
 	grid-column-end: span 5; 
 }
 
-.GalleryElementWrapper:nth-of-type(5) {
+.observer:nth-of-type(5) {
 	grid-column-start: 2; 
 	grid-column-end: span 5; 
 }
 
-.GalleryElementWrapper:nth-of-type(6) {
+.observer:nth-of-type(6) {
 	grid-column-start: 3; 
 	grid-column-end: span 5; 
 }
 
-.GalleryElementWrapper:nth-of-type(7) {
+.observer:nth-of-type(7) {
 	grid-column-start: 1; 
 	grid-column-end: span 5; 
 }
 
-.GalleryElementWrapper:nth-of-type(8) {
+.observer:nth-of-type(8) {
 	grid-column-start: 2; 
 	grid-column-end: span 5; 
 }
 
-.GalleryElementWrapper:nth-of-type(9) {
+.observer:nth-of-type(9) {
 	grid-column-start: 3; 
 	grid-column-end: span 5; 
 }
-.GalleryElementWrapper:nth-of-type(10) {
+.observer:nth-of-type(10) {
 	grid-column-start: 1; 
 	grid-column-end: span 5; 
 }
-.GalleryElementWrapper:nth-of-type(11) {
+.observer:nth-of-type(11) {
 	grid-column-start: 2; 
 	grid-column-end: span 5; 
 }
-.GalleryElementWrapper:nth-of-type(12) {
+.observer:nth-of-type(12) {
 	grid-column-start: 3; 
 	grid-column-end: span 5; 
 }
-.GalleryElementWrapper:nth-of-type(13) {
+.observer:nth-of-type(13) {
 	grid-column-start: 1; 
 	grid-column-end: span 5; 
 }
-.GalleryElementWrapper:nth-of-type(14) {
+.observer:nth-of-type(14) {
 	grid-column-start: 2; 
 	grid-column-end: span 5; 
 }
-.GalleryElementWrapper:nth-of-type(15) {
+.observer:nth-of-type(15) {
 	grid-column-start: 3; 
 	grid-column-end: span 5; 
 }
-.GalleryElementWrapper:nth-of-type(16) {
+.observer:nth-of-type(16) {
 	grid-column-start: 1; 
 	grid-column-end: span 5; 
 }
-.GalleryElementWrapper:nth-of-type(17) {
+.observer:nth-of-type(17) {
 	grid-column-start: 2; 
 	grid-column-end: span 5; 
 }
 
-.GalleryElementWrapper {
+.observer {
 	margin-bottom: 5rem;
 }
 

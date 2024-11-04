@@ -6,11 +6,9 @@ import BracketOpenV from "./BracketOpenV.astro";
 import BracketCloseV from "./BracketCloseV.astro";
 import BracketMiddleV from "./BracketMiddleV.astro";
 import Icon from "./Icon.astro";
-import ImageElement from './ImageElementCloudinary.astro';
 import { getEntry } from 'astro:content';
 import { getCollection } from "astro:content";
 import { CldImage } from 'astro-cloudinary';
-import { getCldImageUrl } from 'astro-cloudinary/helpers';
 
 import 'keen-slider/keen-slider.min.css';
 import "photoswipe/style.css";
@@ -61,10 +59,9 @@ console.log(`Number of images: ${imagesAmount}`);
 
     {galleryImages.map((image, index) =>  {
 
-      const url = getCldImageUrl({ src: image.data.public_id }); // Generate the Cloudinary URL
       
         return (
-          <div id={`ImageContainer-${index}`} class:list={["keen-slider__slide"]}>
+          <div id={`ImageContainer-${index}`} class:list={["keen-slider__slide"]} >
             <div class:list={"ImageInfo"}>
               <div class:list={"ImageInfoWrapper"}>
                 <div id="spacer"></div>
@@ -85,28 +82,28 @@ console.log(`Number of images: ${imagesAmount}`);
             <div class:list={"Filter"}></div>
               
 
-            <div id="Image" class:list={["ImageElement"]}>
-              {image.data && (
-                index < 2 ? (
-                  // For the first two images, set both src and data-src
+            <div id="Image" class:list={["ImageElement"]} style={index > 1 ? 'display: none;' : ''}>
+              <a class:list={["photo-link"]}
+                href={image.data.secure_url}  
+                data-pswp-width={image.data.width}
+                data-pswp-height={image.data.height}
+                target="_blank"
+                data-description_title={image.data.metadata?.description_title}
+                data-description_text={image.data.metadata?.description_text}
+                >
+           
                   <CldImage
                     src={image.data.public_id}
-                    data-src={url}   
+                    data-src={image.data.secure_url}   
                     width={image.data.width}
                     height={image.data.height}
-                    alt=""
+                    sizes="(max-width: 650px) 90vw, (max-width: 1200px) 50vw, 33vw"
+                    alt={image.data.metadata?.description_title}
+                    format="avif"
+                  
                   />
-                ) : (
-                  // For other images, only set data-src for lazy loading
-                  <CldImage
-                    data-src={url}    
-                    src="https://res.cloudinary.com/rhizomech/image/upload/v1730499844/My%20Brand/Clay_ZoomIn_oacuzj.png"
-                    width={image.data.width}
-                    height={image.data.height}
-                    alt=""
-                  />
-                )
-              )}
+            
+              </a>
             </div>
           </div>
         )
@@ -150,7 +147,9 @@ console.log(`Number of images: ${imagesAmount}`);
 
     <div id="ArrowWrapper">
       <button class:list={["ArrowLeft"]}>&larr;</button>
-      <div class:list={"CounterContainer"}></div>
+      <div class:list={"CounterContainer"}>
+        1 / {imagesAmount + 1}
+      </div>
       <button class:list={["ArrowRight"]}>&rarr;</button>
     </div>
 
@@ -175,32 +174,11 @@ document.addEventListener('astro:page-load', () => {
 
 const Sliders = document.querySelectorAll('.GalleryElement')
 
+Sliders.forEach((item, index) => {
+  console.log(`This is the slider at index ${index} with ID: ${item.id}`);
 
-
-  Sliders.forEach((item, index) => {
-    console.log(`This is the slider at index ${index} with ID: ${item.id}`);
-
-  //create images array
-  var images = []
-
+  
   const slides = item.querySelectorAll('.keen-slider__slide');
-
-  slides.forEach((slide, index) => {
-    const imageDiv = slide.querySelector('.ImageElement');
-    if (imageDiv) {
-      const imageElement = imageDiv.querySelector('img'); // Find the img element
-      if (imageElement) {
-        // Set src from data-src and add it to the images array
-        imageElement.src = imageElement.getAttribute('data-src');
-        images.push(imageElement.src); // Add the src to the images array
-      }
-    }
-  });
-
-  // Log images array for verification
-  console.log(images);
-
-    
 
   var loaded = []
 
@@ -210,27 +188,31 @@ const Sliders = document.querySelectorAll('.GalleryElement')
 
     // Mark the current, previous, and next slide as loaded
     loaded[slideIdx] = true;
-    loaded[(slideIdx - 1 + totalSlides) % totalSlides] = true; // Previous slide, wrapping around
+    /* loaded[(slideIdx - 1 + totalSlides) % totalSlides] = true;  */// Previous slide, wrapping around
     loaded[(slideIdx + 1) % totalSlides] = true; // Next slide, wrapping around
 
     s.slides.forEach((element, idx) => {
       if (loaded[idx]) {
-        const imageDiv = element.querySelector('.ImageElement');
-        console.log (`there is an imageDiv: ${imageDiv}`)
-          if (imageDiv) {
-            const imageElement = imageDiv.querySelector('img'); // Find the img element
-            if (imageElement) {
-              imageElement.setAttribute("src", images[idx]);
-              imageElement.setAttribute("srcset", images[idx]);
-              console.log (`imageElement: ${imageElement.srcset}`)
+        const imageElement = element.querySelector('.ImageElement');
+        console.log (`there is an imageContainer: ${imageElement}`)
+          if (imageElement) {
+            imageElement.style.display = "block";
             }
-          }
       } 
     })
   }
 
+  function updateCounter(s) {
+  const counterContainer = item.querySelector('.CounterContainer');
+    if (counterContainer) {
+      const currentSlide = s.track.details.rel + 1; // Add 1 because index is zero-based
+      const totalSlides = s.track.details.slides.length;
+      counterContainer.textContent = `${currentSlide} / ${totalSlides}`;
+    }
+  }
     var slider = new KeenSlider(item, {
         dragStarted: loadImages,
+        slideChanged: updateCounter,
         created: loadImages,
         slides: {
           spacing: 15,
@@ -239,19 +221,6 @@ const Sliders = document.querySelectorAll('.GalleryElement')
         initial: 0,
         
       })
-
-
-      const updateCounter = (sliderInstance) => {
-      const counterContainer = item.querySelector('.CounterContainer');
-      if (counterContainer) {
-        const currentSlide = sliderInstance.track.details.rel + 1; // Add 1 because index is zero-based
-        const totalSlides = sliderInstance.track.details.slides.length;
-        counterContainer.textContent = `${currentSlide} / ${totalSlides}`;
-      }
-    };
-
-    // Initial counter update when the slider is first loaded
-    updateCounter(slider);
 
 
     // Add click event listeners to the arrow buttons
@@ -271,115 +240,74 @@ const Sliders = document.querySelectorAll('.GalleryElement')
     }
 
 
-    // Function to toggle image info visibility
-    let imageInfoVisible = false; // Initial state
+// Function to toggle image info visibility
+let imageInfoVisible = false; // Initial state
 
-    const toggleImageInfoVisibility = () => {
-      // Get the current active slide
-      const currentSlideIndex = slider.track.details.rel;
-      const slides = item.querySelectorAll('.keen-slider__slide');
-      const currentSlide = slides[currentSlideIndex];
-
-      if (currentSlide) {
-        const imageInfo = currentSlide.querySelector('.ImageInfo');
-        if (imageInfo) {
-          if (imageInfoVisible) {
-            imageInfo.classList.remove('InfoVisible');
-          } else {
-            imageInfo.classList.add('InfoVisible');
-          }
-          imageInfoVisible = !imageInfoVisible; // Toggle the state
-        }
-      }
-    };
-
-    // Function to hide image info (when slide changes)
-    const hideImageInfo = () => {
-      if (imageInfoVisible) {
-        const slides = item.querySelectorAll('.keen-slider__slide');
-        slides.forEach((slide) => {
-          const imageInfo = slide.querySelector('.ImageInfo');
-          if (imageInfo) {
-            imageInfo.classList.remove('InfoVisible');
-          }
-        });
-        imageInfoVisible = false;
-      }
-    };
-
-    // Add click event listener to the #Info div of this specific gallery
-    const infoDiv = item.querySelector('#Info');
-    if (infoDiv) {
-      infoDiv.addEventListener('click', toggleImageInfoVisibility);
-    } else {
-      console.error(`Info div not found for selector: ${item.id}`);
-    }
-
-
-// Function to update slide visibility
-const updateSlideVisibility = (sliderInstance) => {
-  const totalSlides = sliderInstance.track.details.slides.length;
-  const currentSlideIndex = sliderInstance.track.details.rel;
+const toggleImageInfoVisibility = () => {
+  // Get the current active slide
+  const currentSlideIndex = slider.track.details.rel;
   const slides = item.querySelectorAll('.keen-slider__slide');
+  const currentSlide = slides[currentSlideIndex];
 
-  slides.forEach((slide, index) => {
-    const imageDiv = slide.querySelector('.ImageElement');
-
-    if (imageDiv) {
-      //select img 
-      const imageElement = imageDiv.querySelector('img'); // Select the img element
-      /* console.log(`this is ${imageElement.src} tag of ${index}`)
- */
-       // Calculate indices to show, wrapping around using modulo
-      const indicesToShow = [
-        (currentSlideIndex - 1 + totalSlides) % totalSlides,
-        currentSlideIndex,
-        (currentSlideIndex + 1) % totalSlides,
-      ];
-
-      if (indicesToShow.includes(index)) {
-
-        // Set src from data-src if not already set, triggering lazy load
-        if (imageElement && !imageElement.src) {
-          imageElement.src = imageElement.getAttribute('data-src'); // Set the actual src for lazy loading
-        }
-        } else {
-          // Remove src to stop loading when the image is out of view
-          imageElement.removeAttribute('src');
-        }
+  if (currentSlide) {
+    const imageInfo = currentSlide.querySelector('.ImageInfo');
+    if (imageInfo) {
+      if (imageInfoVisible) {
+        imageInfo.classList.remove('InfoVisible');
+      } else {
+        imageInfo.classList.add('InfoVisible');
+      }
+      imageInfoVisible = !imageInfoVisible; // Toggle the state
     }
-  });
-
-  // Refresh the slider to apply the updated visibility settings
-  sliderInstance.update(undefined, index);
+  }
 };
 
-    // Observer to detect when hidden images become visible
-    const hiddenImages = item.querySelectorAll('.ImageElement.hidden-image');
-    const options = {
-      rootMargin: '200px 0px',
-      threshold: 0.01,
-    };
+// Function to hide image info (when slide changes)
+const hideImageInfo = () => {
+  if (imageInfoVisible) {
+    const slides = item.querySelectorAll('.keen-slider__slide');
+    slides.forEach((slide) => {
+      const imageInfo = slide.querySelector('.ImageInfo');
+      if (imageInfo) {
+        imageInfo.classList.remove('InfoVisible');
+      }
+    });
+    imageInfoVisible = false;
+  }
+};
 
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const imageDiv = entry.target;
-          imageDiv.classList.remove('hidden-image');
-          // Update slider to account for the new visible slide
-          slider.update();
-          observer.unobserve(imageDiv);
-        }
-      });
-    }, options);
+// Add click event listener to the #Info div of this specific gallery
+const infoDiv = item.querySelector('#Info');
+if (infoDiv) {
+  infoDiv.addEventListener('click', toggleImageInfoVisibility);
+} else {
+  console.error(`Info div not found for selector: ${item.id}`);
+}
+   // IntersectionObserver hidden options
+ let optionsHidden = {
+			rootMargin: "400px",
+		};
+	
+	// Define the IntersectionObserver
+	const observerSlider = new IntersectionObserver((entries) => {  
+		entries.forEach((entry) => {
+			console.log(entry);
+			if (entry.isIntersecting) {
+        entry.target.classList.remove("restrain");
+				slider.update();
+			} 
+		});
+	}, optionsHidden);
 
-    hiddenImages.forEach((img) => imageObserver.observe(img));
-
-    
+  const hiddenElements = document.querySelectorAll(".observer");
+  hiddenElements.forEach((el) => observerSlider.observe(el));
     
   }); 
 
 });
+
+ 
+
 </script>
 
 <!-- PhotoSwipe -->
@@ -461,14 +389,15 @@ const updateSlideVisibility = (sliderInstance) => {
                 if (currSlideElement) {
             
                     // Get the description from data-description attribute
-                    const description = currSlideElement.getAttribute('data-description');
-                    if (description) {
-                      captionHTML = description;
+                    const description_title = currSlideElement.getAttribute('data-description_title');
+                    const description_text = currSlideElement.getAttribute('data-description_text')
+                    if (description_title) {
+                      captionHTML = `<p><strong>${description_title}</strong></p><p>${description_text}</p>`;
                     }
 
                 }
 
-                el.innerHTML = captionHTML || 'HelloThere';
+                el.innerHTML = captionHTML || '';
               });
             }
 
