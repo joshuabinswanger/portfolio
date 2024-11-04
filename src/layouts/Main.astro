@@ -40,11 +40,6 @@ const myFade = {
         src: [
           {
             style: 'normal',
-            weight: '100',
-            path: '/fonts/PowerGrotesk/power-grotesk-ultra-light/webfonts/power-grotesk-ultra-light.woff2'
-          },
-          {
-            style: 'normal',
             weight: '200',
             path: '/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-light.woff2'
           },
@@ -55,25 +50,41 @@ const myFade = {
           },
           {
             style: 'normal',
-            weight: '400',
-            path: '/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.woff2'
-          },
-          {
-            style: 'normal',
             weight: '500',
             path: '/fonts/PowerGrotesk/power-grotesk-medium/webfonts/power-grotesk-medium.woff2'
           },
-          {
-            style: 'normal',
-            weight: '600',
-            path: '/fonts/PowerGrotesk/power-grotesk-bold/webfonts/power-grotesk-bold.woff2'
-          }
+
         ],
         preload: true,
         display: "swap",
         selector: "body",
         fallback: "sans-serif",
       },
+      {
+        name: "PowerGrotesk",
+        src: [
+            {
+              style: 'normal',
+              weight: '100',
+              path: '/fonts/PowerGrotesk/power-grotesk-ultra-light/webfonts/power-grotesk-ultra-light.woff2'
+            },
+            {
+            style: 'normal',
+            weight: '600',
+            path: '/fonts/PowerGrotesk/power-grotesk-bold/webfonts/power-grotesk-bold.woff2'
+          },
+          {
+            style: 'normal',
+            weight: '400',
+            path: '/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.woff2'
+          },
+      ],
+        preload: false,
+        display: "swap",
+        selector: "body",
+        fallback: "sans-serif",
+      },
+    
     ]}
   />
     <meta charset="utf-8" />
