@@ -57,8 +57,7 @@
         "subtitle",
         "tags",
         "projectDescription",
-        "credits",
-        "images"
+        "credits"
       ],
       "additionalProperties": false
     }

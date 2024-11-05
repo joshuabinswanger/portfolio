@@ -175,6 +175,11 @@ declare module 'astro:content' {
   collection: "gallery";
   data: InferEntrySchema<"gallery">
 };
+"7_microbiome-gallery": {
+	id: "7_microbiome-gallery";
+  collection: "gallery";
+  data: InferEntrySchema<"gallery">
+};
 };
 "galleryImages": Record<string, {
   id: string;
