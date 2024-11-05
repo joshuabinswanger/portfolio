@@ -421,6 +421,42 @@ if (infoDiv) {
     
     </script>
 
+<!-- <script>
+document.addEventListener('astro:page-load', () => {
+  const Sliders = document.querySelectorAll('.GalleryElement');
+
+  Sliders.forEach((el) => { 
+    // Select the #Image element inside #ImageContainer-0
+    const imageContainer = el.querySelector('#ImageContainer-0 #Image');
+      
+    // Select the ProjectInfoSlideWrapper element
+    const projectInfoSlide = el.querySelector('#ProjectInfoSlideWrapper');
+
+    function setMaxHeightToProjectInfoSlide() {
+      // Check if both elements exist
+      if (imageContainer && projectInfoSlide) {
+        // Use requestAnimationFrame to ensure DOM is fully rendered
+        requestAnimationFrame(() => {
+          // Get the computed height of the ImageContainer
+          const imageContainerHeight = window.getComputedStyle(imageContainer).height;
+          console.log(`Computed height of ImageContainer: ${imageContainerHeight}`);
+
+          // Set the max-height of ProjectInfoSlide to the ImageContainer's height
+          projectInfoSlide.style.maxHeight = imageContainerHeight;
+          console.log(`Max height set on ProjectInfoSlide: ${projectInfoSlide.style.maxHeight}`);
+        });
+      } else {
+        console.error('One of the elements (#ImageContainer or #ProjectInfoSlide) is missing.');
+      }
+    }
+
+    setMaxHeightToProjectInfoSlide();
+    window.addEventListener('resize', setMaxHeightToProjectInfoSlide);
+  });
+});
+
+
+</script> -->
 
 
 <style>
@@ -450,10 +486,10 @@ img {
 #ProjectInfoSlideWrapper {
   display: grid;
   width: min(70%, 66ch);
-  height: 100%;
   grid-template-rows:   auto min-content min-content min-content min-content auto;
   align-items: center;
   margin: 0 auto; /* Add this line to center horizontally */
+  overflow-x: hidden;
 
   @media (--bp-mobile) {
     font-size: 12px;
