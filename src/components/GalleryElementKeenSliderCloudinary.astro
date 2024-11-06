@@ -176,31 +176,39 @@ const Sliders = document.querySelectorAll('.GalleryElement')
 Sliders.forEach((item, index) => {
   console.log(`This is the slider at index ${index} with ID: ${item.id}`);
 
-  
+  // Select all Sliders
   const slides = item.querySelectorAll('.keen-slider__slide');
+  // Select the ProjectInfoSlideWrapper within this slider
+  const projectInfoSlideWrapper = item.querySelector('.ProjectInfoSlideWrapper');
 
   var loaded = []
 
+  //Loading Function  
   function loadImages(s) {
     const slideIdx = s.track.details.rel;
     const totalSlides = s.track.details.slides.length;
 
     // Mark the current, previous, and next slide as loaded
     loaded[slideIdx] = true;
-    loaded[(slideIdx - 1 + totalSlides) % totalSlides] = true; // Previous slide, wrapping around
+    loaded[(slideIdx + totalSlides) % totalSlides] = true; // Previous slide, wrapping around
     loaded[(slideIdx + 1) % totalSlides] = true; // Next slide, wrapping around
 
     s.slides.forEach((element, idx) => {
-      if (loaded[idx]) {
-        const imageElement = element.children[2];
-        console.log (`there is an imageContainer: ${imageElement}`)
+        if (loaded[idx]) {
+          // Use querySelector to find the .ImageElement div
+          const imageElement = element.querySelector('.ImageElement');
+          console.log(`ImageElement found:`, imageElement);
+
           if (imageElement) {
             imageElement.style.display = "block";
-            }
-      } 
-    })
+          } else {
+            console.warn(`.ImageElement not found in slide index ${idx}`);
+          }
+        } 
+      })
   }
 
+  //Counter Function
   function updateCounter(s) {
   const counterContainer = item.querySelector('.CounterContainer');
     if (counterContainer) {
@@ -209,17 +217,38 @@ Sliders.forEach((item, index) => {
       counterContainer.textContent = `${currentSlide} / ${totalSlides}`;
     }
   }
+
+   //MaxHeight Function
+  function setMaxHeight (s) {
+    const activeSlide = s.track.details.rel;
+    const height = s.size;
+    console.log(`the slide has height: ${height}`)
+    const projectInfoSlide = s.slides[s.slides.length - 1];
+    console.log(`projectInfoSlide at index: ${projectInfoSlide.id}`)
+    const projectInfoSlideWrapper = projectInfoSlide.querySelector('#ProjectInfoSlideWrapper');
+
+    projectInfoSlideWrapper.style.maxHeight = `${height}px`;
+  }
+
+
+
+
     var slider = new KeenSlider(item, {
-        dragStarted: loadImages,
-        slideChanged: updateCounter,
-        created: loadImages,
-        slides: {
-          spacing: 15,
-        },
-        loop: true,
-        initial: 0,
-        
-      })
+      created: (s) => {
+        loadImages(s);
+        setMaxHeight(s);
+      },
+      slideChanged: loadImages,
+      animationEnded: updateCounter,
+      updated: setMaxHeight,
+    
+      slides: {
+        spacing: 15,
+      },
+      loop: true,
+      initial: 0,
+      
+    })
 
 
     // Add click event listeners to the arrow buttons
@@ -302,6 +331,8 @@ if (infoDiv) {
   hiddenElements.forEach((el) => observerSlider.observe(el));
     
   }); 
+
+  
 
 });
 
@@ -420,43 +451,7 @@ if (infoDiv) {
       });
     
     </script>
-
-<!-- <script>
-document.addEventListener('astro:page-load', () => {
-  const Sliders = document.querySelectorAll('.GalleryElement');
-
-  Sliders.forEach((el) => { 
-    // Select the #Image element inside #ImageContainer-0
-    const imageContainer = el.querySelector('#ImageContainer-0 #Image');
-      
-    // Select the ProjectInfoSlideWrapper element
-    const projectInfoSlide = el.querySelector('#ProjectInfoSlideWrapper');
-
-    function setMaxHeightToProjectInfoSlide() {
-      // Check if both elements exist
-      if (imageContainer && projectInfoSlide) {
-        // Use requestAnimationFrame to ensure DOM is fully rendered
-        requestAnimationFrame(() => {
-          // Get the computed height of the ImageContainer
-          const imageContainerHeight = window.getComputedStyle(imageContainer).height;
-          console.log(`Computed height of ImageContainer: ${imageContainerHeight}`);
-
-          // Set the max-height of ProjectInfoSlide to the ImageContainer's height
-          projectInfoSlide.style.maxHeight = imageContainerHeight;
-          console.log(`Max height set on ProjectInfoSlide: ${projectInfoSlide.style.maxHeight}`);
-        });
-      } else {
-        console.error('One of the elements (#ImageContainer or #ProjectInfoSlide) is missing.');
-      }
-    }
-
-    setMaxHeightToProjectInfoSlide();
-    window.addEventListener('resize', setMaxHeightToProjectInfoSlide);
-  });
-});
-
-
-</script> -->
+  
 
 
 <style>
@@ -481,6 +476,11 @@ a {
 }
 img {
   vertical-align: top; /* or middle, top, depending on the desired effect */
+}
+
+#ProjectInfoSlide {
+  /* max-height: min-content; */
+  align-content: center;
 }
 
 #ProjectInfoSlideWrapper {
