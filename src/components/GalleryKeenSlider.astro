@@ -20,6 +20,7 @@ const {projectName} = Astro.props;
 
 <TopWrapper>
   <GridLayout>
+	
     {galleryProjects.map((entry, index) => {
 		  
 		if (index > 2) {
@@ -147,14 +148,11 @@ imageElements.forEach((image, index) => {
   transform: translateY(0);
 }
 
-
-.GalleryElementWrapper {
-
-}
-
 .hidden {
 	display: none;
 }
+
+
 
 .observer:nth-of-type(1) {
 	grid-column-start: 1; 
@@ -178,7 +176,7 @@ imageElements.forEach((image, index) => {
 	
 }
 .observer:nth-of-type(4) {
-	grid-column-start: 12;
+	grid-column-start: 11;
 	grid-column-end: span 7; 
 	grid-row-start: 17;
 
