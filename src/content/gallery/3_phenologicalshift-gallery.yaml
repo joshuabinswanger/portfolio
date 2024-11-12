@@ -11,14 +11,14 @@ tags:
 bgcolor: "#DFE2D8cc"
 
 projectDescription: |
-        **Xylopedia** is an app for explorative learning of micro-anatomical wood structures. 
-        Students at the University for Sustainable Development in Eberswalde, Germany, now have the app to help them understand the complex anatomy of wood. 
-        Based on microCT scans from the Helmholtz Centre Hereon, we created novel 3D models for real-time exploration.
-
+    **Alpine Plant Phenology Monitoring** tracks 25 years of data on climate change effects on Alpine vegetation. Using ultrasonic measurements, this study shows increased plant growth and earlier growing seasons at higher elevations, highlighting elevation-dependent warming impacts.  
+    **[Learn More](https://www.slf.ch/en/staff/zehnderm/)**
+       
 credits: |
-    **Client:** HNE Eberswalde *br*
-    **Team:** S. Scherrer, J. Hammel, J. Lauströer, J. Stuhrmann, S. Lautner, M. Möhring*br*
-    **Tools:** Unity, Blender, Cinema 4D*br*
+    **Client:** Michael Zehnder
+    **Tools:** Houdini, Quixel Megascans, Blender, Affinity Suite, Photoshop
+    **Citation**: Zehnder, M., Pfund, B., Alexander, J., Hille Ris Lambers, J., and Rixen, C.: Elevation-dependent advance of Alpine plant phenology ,
+     EGU General Assembly 2023, Vienna, Austria, 24–28 Apr 2023, EGU23-5743, https://doi.org/10.5194/egusphere-egu23-5743, 2023.
 
 
 images:
