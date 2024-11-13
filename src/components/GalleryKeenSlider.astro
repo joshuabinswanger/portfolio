@@ -22,12 +22,15 @@ const {projectName} = Astro.props;
   <GridLayout>
 	
     {galleryProjects.map((entry, index) => {
+
+		 // Optionally sanitize the project name for a valid ID
+		 const projectId = entry.data.projectName.replace(/\s+/g, '-').toLowerCase();
 		  
 		if (index > 2) {
 			
 		return(
 		<div class:list={["observer restrain"]}>
-			<div class:list={["GalleryElementWrapper hidden"]} >
+			<div class:list={["GalleryElementWrapper hidden"]} id={projectId}>
 				<GalleryElement
 				project={entry.data.projectName}
 				
@@ -39,7 +42,7 @@ const {projectName} = Astro.props;
 		}  else {
 		return(
 		<div class:list={["observer restrain"]}>
-			<div class:list={["GalleryElementWrapper"]} >
+			<div class:list={["GalleryElementWrapper"]} id={projectId}>
 				<GalleryElement
 				project={entry.data.projectName}
 				
@@ -124,6 +127,22 @@ imageElements.forEach((image, index) => {
 
 <style>
 @import "../styles/global.css";
+
+.GalleryElementWrapper {
+	scroll-margin-top: var(--padding-desktop);
+	
+	@media (--bp-mobile) {
+		scroll-margin-top: var(--padding-mobile);
+	}
+
+	@media (--bp-tablet) {
+		scroll-margin-top: var(--padding-tablet);
+	}
+
+	@media (--bp-desktop-wide) {	
+		scroll-margin-top: var(--padding-desktop-wide);
+	}
+}
 /*Fade */
 .observer {
 	display: grid;

@@ -1,25 +1,30 @@
 ---
 import SquareBracketV from "./SquareBracket_V.astro";
-import { getCollection } from "astro:content";
-// imports all files that end with `.astro' in `./src/pages/projects/`
-/* const projects = await Astro.glob('../pages/projects/*.astro')
+import { getCollection } from 'astro:content';
 
-// Extract projectTitle from each page
-const pageTitles = projects.map(page => {
-  const { projectTitle } = page;
-  return { title: projectTitle, url: page.url };
+const galleryProjects = await getCollection('gallery');
+
+// Sort galleryProjects by projectName
+galleryProjects.sort((a, b) => a.data.projectName.localeCompare(b.data.projectName));
+
+// Log the filtered results
+galleryProjects.forEach((entry) => {
+	const project = entry.data.projectName;
+  	console.log(`${project}`); // Should only log entries matching the target project
 });
- */
-
 
 ---
 
   <ul>
-    <a href="/">Gallery</a>
-<!--     <div>&nbsp;&nbsp;</div>
-    {pageTitles.map(page => (
-        <li><a href={page.url}>{page.title}</a></li>
-    ))} -->
+    <a href={`#${galleryProjects[0].data.projectName}`}>Gallery</a>
+    {galleryProjects.map((page) => {
+      const projectId = page.data.projectName;
+      return (
+        <li key={projectId}>
+          <a href={`#${projectId}`}>{page.data.title}</a>
+        </li>
+      );
+    })}
   </ul>
 
 
@@ -29,30 +34,20 @@ const pageTitles = projects.map(page => {
 
 
 ul {
-  font-size: var(--font-size-dekstop);
+  font-size: var(--font-size-dekstop-h1);
   padding: 0.2rem 0.2rem;
   text-align: center;
-  margin: 0px;
+  margin: 0;
   
-
-  @media (--bp-mobile){
-      font-size: var(--font-size-mobile);
-      padding: 0.7rem 0.2rem
-    }
-
-    @media (--bp-tablet){
-      font-size: var(--font-size-tablet);
-      padding: 0.7rem 0.2rem;
-    }
-
-    @media (--bp-desktop-wide){
-      font-size: var(--font-size-desktop-wide);
-    }
 }
 
+
 li {
+  font-size: var(--font-size-dekstop);
   list-style: none;
-  margin: 0.5rem 0 0.5rem 0; 
+  margin: 0.6rem 0 0.6rem 0; 
+  text-align: left;
+  padding: 0px 15%;
 }
 
 a {

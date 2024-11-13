@@ -487,6 +487,7 @@ img {
 
 #ProjectInfoSlideWrapper {
   display: grid;
+  font-size: var(--font-size-dekstop);
   width: min(70%, 66ch);
   grid-template-rows:   auto min-content min-content 2rem min-content min-content auto;
   align-items: center;
@@ -494,11 +495,15 @@ img {
   overflow-x: hidden;
 
   @media (--bp-mobile) {
-    font-size: 12px;
+    font-size: var(--font-size-mobile);
   }
 
   @media (--bp-tablet) {
-    font-size: 12px;
+    font-size: var(--font-size-tablet);
+  }
+
+  @media (--bp-desktop-wide) {
+    font-size: var(--font-size-desktop-wide);
   }
 
 }
@@ -556,17 +561,21 @@ img {
   /* Add transition for backdrop-filter */
   transition: backdrop-filter ease-in-out 0.3s, opacity 0.3s ease-in-out;
 
-  font-size: 0.8rem;
+  font-size: var(--font-size-dekstop);
   hyphens: auto;
 
   overflow: hidden;
 
   @media (--bp-mobile) {
-    font-size: 0.6rem;
+    font-size: var(--font-size-mobile);
+  }
+
+  @media (--bp-tablet) {
+    font-size: var(--font-size-tablet);
   }
 
   @media (--bp-desktop-wide) {
-    font-size: 1rem;
+    font-size: var(--font-size-dekstop-wide);
     line-height: 1.33;
   }
 }
@@ -630,11 +639,11 @@ button {
 .CounterContainer {
   text-align: center;
   width: 5ch;
-  font-size: 1rem;
+  font-size: 19px;
   padding: 0.5rem 0.5%;
 
   @media (--bp-mobile) {
-    font-size: 0.8rem;
+    font-size: 15px;
   }
 }
 
@@ -649,7 +658,7 @@ h1 {
   font-family: PowerGrotesk-Medium;
   font-weight: 600;
   font-style: normal;
-  font-size: 1rem;
+  font-size: 19px;
   letter-spacing: 0.7px;
   margin: 0px;
   white-space: nowrap;
@@ -657,20 +666,19 @@ h1 {
   text-overflow: ellipsis;
 
   @media (--bp-mobile) {
-  font-size: 0.6rem;
+  font-size: 15px;
   }
 }
 
 h2 {
   font-family: PowerGrotesk-Light;
   font-weight: 200;
-  font-style: italic;
-  font-size: 0.8rem;
+  font-size: 14px;
   letter-spacing: 0.5px;
   margin: 0px;
 
   @media (--bp-mobile) {
-  font-size: 0.6rem;
+  font-size: 12px;
   }
 
 }
