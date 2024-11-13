@@ -77,8 +77,8 @@
   --margin-left-dekstop: calc(3vw -70px);
   --margin-right-desktop: 3vw ;
 
-  --margin-left-mobile: 25px;
-  --margin-right-mobile: 25px;
+  --margin-left-mobile: 3px;
+  --margin-right-mobile: 3px;
   
   --margin-left-tablet: 0px;
   --margin-right-tablet: 60px;

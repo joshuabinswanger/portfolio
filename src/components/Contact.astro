@@ -40,8 +40,13 @@ import BracketMiddleH from "./BracketMiddleH.astro";
         }
       
         @media (--bp-mobile) {
-            padding-left: 0;
-            padding-right: 0;
+            padding-top: calc(var(--padding-mobile) + 22vh);
+            
+        }
+
+        @media (--bp-tablet) {
+            padding-top: calc(var(--padding-tablet) + 22vh);
+            
         }
 
         @media (--bp-desktop-wide) {

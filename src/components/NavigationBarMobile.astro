@@ -35,19 +35,19 @@ import "../styles/global.css"
 
     <BracketMiddleV />
 
-      <a href="/info" id="MenuItems">
+      <a href="/info" class:list={["MenuItems"]}>
         <p>Info</p>
       </a>
     
     <BracketMiddleV />
 
-      <a href="/contact" id="MenuItems">
+      <a href="/contact" class:list={["MenuItems"]}>
         <p>Contact</p>
       </a>
     
     <BracketMiddleV />
 
-      <a href="/links" id="MenuItems">
+      <a href="/links" class:list={["MenuItems"]}>
         <p>Links</p>
       </a>
 
@@ -60,6 +60,29 @@ import "../styles/global.css"
 
 
 </nav>
+
+<!-- <script>
+  document.addEventListener('astro:page-load', () => {
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuLinks = document.querySelectorAll('.menu-item');
+      const navToggle = document.getElementById('nav-toggle');
+
+      menuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          if (navToggle.checked) {
+            navToggle.checked = false;
+          }
+
+          // Remove 'active' class from all links
+          menuLinks.forEach(link => link.classList.remove('active'));
+
+          // Add 'active' class to the clicked link
+          link.classList.add('active');
+        });
+      });
+    });
+});
+</script> -->
 
 <style>
 @import "../styles/global.css";
@@ -107,7 +130,7 @@ import "../styles/global.css"
 
 }
 
-#MenuItems {
+.MenuItems {
   width: 100%; /* Ensure each menu item takes full width */
   display: flex;
   justify-content: center; /* Center the content inside */
@@ -241,6 +264,9 @@ input:checked{
 
 
 </style>
+
+
+
 
 
 
