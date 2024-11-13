@@ -10,11 +10,21 @@ tags:
 bgcolor: "#111111cc"
 
 projectDescription: |
-       Visual Identity created for the Events Series **"Game Design 101"** at the MEEET Lab of the University of Zurich. With a porcedrual system in Houdini that lets you create a fully art-directable growth animation, making it possible to have high-end visuals for a series of events.  
+  Stability, lightness, and durability make wood a natural miracle material. But where do these properties come from? They are made possible by the fascinating structures within the wood, which are explored in these illustrations.
+
+
 
 credits: |
-    **Client:** MEEET Lab, University of Zurich*br*
-    **Tools:** Houdini, Octane, Blender, Davinci, Affinty Suite *br*
+    <table>
+        <tr>
+          <th>Client:</th>
+          <td>ETH, Wood Materials Science</td>
+        </tr>
+                <tr>
+          <th>Tools:</th>
+          <td>ZBrush, Keyshot, Adobe Suite</td>
+        </tr>
+    </table>
 
 
 images:

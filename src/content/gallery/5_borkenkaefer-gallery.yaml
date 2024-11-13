@@ -11,10 +11,19 @@ bgcolor: "#111111cc"
 
 projectDescription: |
        The European Spruce Bark Beetle (Ips typographus) and the Engraver Beetle (Pityogenes chalcographus) are two of the most destructive pests in modern forestry. Their infestations cause extensive damage to spruce forests, particularly under warmer conditions that accelerate beetle populations. These outbreaks pose significant challenges for sustainable forest management and highlight the need for proactive pest control measures in the face of climate change.
-       To educate foresters the LWF contacted me to create large posters to be used for workshops.
+       To educate foresters the LWF contacted me to create large posters to be used for workshops.<br>
+       <br>**<a href="https://borkenkaefer.org" target="_blank" style="pointer-events: auto; color: black;">Borkenkaefer.org</a>**
 credits: |
-    **Client:** Bayerischen Landesanstalt für Wald und Forstwirtschaft<br>
-    **Tools:** Adobe Photoshop, InDesgin, Illustrator
+    <table>
+        <tr>
+          <th>Client:</th>
+          <td>Bayerischen Landesanstalt für Wald und Forstwirtschaft</td>
+        </tr>
+                <tr>
+          <th>Tools:</th>
+          <td>Adobe Photoshop, InDesgin, Illustrator</td>
+        </tr>
+      </table>
 
 
 images:

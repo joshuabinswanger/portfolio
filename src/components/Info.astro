@@ -12,9 +12,9 @@ import Footer from "./Footer.astro";
 
 <TopWrapper>
     <GridLayout>
-        <div id="ProfilePic">
+<!--         <div id="ProfilePic">
 
-        </div>
+        </div> -->
 
         <div id="AboutText">
 
@@ -27,10 +27,11 @@ import Footer from "./Footer.astro";
 @import "../styles/global.css";
 
 #AboutText {
-    padding-top: calc(var(--padding-desktop) + 1rem);
-    grid-column-start: 3;
-    grid-column-end: span 12;
+   /*  padding-top: calc(var(--padding-desktop)); */
+    grid-column-start: 1;
+    grid-column-end: span 6;
     letter-spacing: 2px;
+    
 
     @media (--bp-mobile) {
         grid-column-start: 1;
@@ -43,8 +44,8 @@ import Footer from "./Footer.astro";
     }
 
     @media (--bp-desktop-wide) {
-        grid-column-start: 5;
-        grid-column-end: span 8;
+        grid-column-start: 4;
+        grid-column-end: span 9;
     }
 }
 
