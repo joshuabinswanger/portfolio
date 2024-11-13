@@ -13,13 +13,22 @@ projectDescription: |
         **Xylopedia** is an app for explorative learning of micro-anatomical wood structures. 
 
         Students at the University for Sustainable Development in Eberswalde, Germany, now have the app to help them understand the complex anatomy of wood. Based on microCT scans from the Helmholtz Centre Hereon, we created novel 3D models for real-time exploration.  
-        **<a href="https://ms.hereon.de/xylopedia/index.php.en" target="_blank" style="pointer-events: auto; color: black;">Visit Xylopedia</a>** 
+        <br>**<a href="https://ms.hereon.de/xylopedia/index.php.en" target="_blank" style="pointer-events: auto; color: black;">Visit Xylopedia</a>** 
 credits: |
-  
-    **Client:** HNE Eberswalde
-    **Team:** S. Scherrer, J. Hammel, J. Lauströer, J. Stuhrmann, S. Lautner, M. Möhring
-    **Tools:** Unity, Blender, Cinema 4D
-
+      <table>
+      <tr>
+        <th>Client:</th>
+        <td>HNE Eberswalde</td>
+      </tr>
+      <tr>
+        <th>Team:</th>
+        <td>S. Scherrer, J. Hammel, J. Lauströer, J. Stuhrmann, S. Lautner, M. Möhring</td>
+      </tr>
+      <tr>
+        <th>Tools:</th>
+        <td>Unity, Blender, Cinema 4D</td>
+      </tr>
+      </table>
 
 images:
   - src: "/src/assets/projects/xylopedia/Xylopedia_Gallery_1.webp"

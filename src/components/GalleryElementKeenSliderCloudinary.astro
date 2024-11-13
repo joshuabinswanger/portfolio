@@ -121,6 +121,8 @@ console.log(`Number of images: ${imagesAmount}`);
           <Fragment set:html={marked.parse(galleryProject.data.projectDescription)} />
         </div>
 
+        <div id="spacer"></div>
+
         <div class:list={"DetailsInfoWrapper"}>
           <Fragment set:html={marked.parse(galleryProject.data.credits)} />
         </div>
@@ -486,7 +488,7 @@ img {
 #ProjectInfoSlideWrapper {
   display: grid;
   width: min(70%, 66ch);
-  grid-template-rows:   auto min-content min-content min-content min-content auto;
+  grid-template-rows:   auto min-content min-content 2rem min-content min-content auto;
   align-items: center;
   margin: 0 auto; /* Add this line to center horizontally */
   overflow-x: hidden;
@@ -568,6 +570,8 @@ img {
     line-height: 1.33;
   }
 }
+
+
 
 .InfoVisible {
   opacity: 1;

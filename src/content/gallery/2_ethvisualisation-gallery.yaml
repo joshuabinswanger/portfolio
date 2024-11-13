@@ -15,8 +15,16 @@ projectDescription: |
       Collaborating and accurately depicting these processes is always an interesting challenge and often creates an engaging dialogue between scientist and designer. 
 
 credits: |
-    **Client:** ETH
-    **Tools:** Houdini, Blender, Adobe Suite, Affinity Suite
+    <table>
+      <tr>
+        <th>Client:</th>
+        <td>ETH</td>
+      </tr>
+      <tr>
+        <th>Tools:</th>
+        <td>Houdini, Blender, Adobe Suite, Affinity Suite</td>
+      </tr>
+    </table>
 
 
 images:

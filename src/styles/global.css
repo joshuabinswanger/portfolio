@@ -162,3 +162,13 @@
 .pswp__img {
 
 }
+
+.DetailsInfoWrapper th {
+  vertical-align: top;
+  text-align: left;
+  padding-bottom: 10px;
+}
+.DetailsInfoWrapper td {
+  padding-left: 20px;
+  padding-bottom: 10px;
+}
