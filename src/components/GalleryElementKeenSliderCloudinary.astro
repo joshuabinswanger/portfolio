@@ -45,9 +45,9 @@ const galleryImages = await getCollection('galleryImages', ({ data }) => {
 galleryImages.sort((a, b) => a.data.public_id.localeCompare(b.data.public_id));
 
 // Log the filtered results
-galleryImages.forEach((entry) => {
+/* galleryImages.forEach((entry) => {
   console.log(entry.data); // Logs entries sorted by public_id
-});
+}); */
 
 const imagesAmount = galleryImages.length;
 console.log(`Number of images: ${imagesAmount}`);
