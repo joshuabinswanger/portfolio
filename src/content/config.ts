@@ -6,6 +6,7 @@ import { cldAssetsLoader } from 'astro-cloudinary/loaders';
 
 
 export const collections = { 
+
   galleryImages: defineCollection({
     loader: cldAssetsLoader({
       context: true,
@@ -33,6 +34,14 @@ export const collections = {
           to: z.string().optional(),
         })
       ).optional(),
+    }),
+  }),
+
+  links: defineCollection({ 
+    loader: glob({ pattern: '**\/[^_]*.yaml', base: "./src/content/links" }),
+    schema: z.object({
+      text: z.string(),
+      link: z.string(),
     }),
   }),
 
