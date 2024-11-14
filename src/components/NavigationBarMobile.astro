@@ -61,28 +61,61 @@ import "../styles/global.css"
 
 </nav>
 
-<!-- <script>
+<script>
+  // Wait for the page to fully load all DOM content
   document.addEventListener('astro:page-load', () => {
-    document.addEventListener('DOMContentLoaded', () => {
-      const menuLinks = document.querySelectorAll('.menu-item');
-      const navToggle = document.getElementById('nav-toggle');
+   
+    const menuLinks = document.querySelectorAll('.menuLinks');
 
-      menuLinks.forEach(link => {
-        link.addEventListener('click', () => {
-          if (navToggle.checked) {
-            navToggle.checked = false;
-          }
+    const projectLinks = document.querySelectorAll('.projectLinks');
 
-          // Remove 'active' class from all links
-          menuLinks.forEach(link => link.classList.remove('active'));
+    const observers = document.querySelectorAll('.observer');
+    // Get the checkbox input element that controls the nav toggle
+    const navToggle = document.getElementById('input');
 
-          // Add 'active' class to the clicked link
-          link.classList.add('active');
-        });
+    //set menuLinks visible
+    projectLinks.forEach(link => {
+        link.classList.remove("linkHidden")
+        link.classList.add("linkShow")
+      }
+    );
+
+    // Add event listener to toggle the navigation
+    navToggle.addEventListener('click', () => {
+      console.log('NavBar Toggled');
+      
+      // For each observer element, modify its first child's classes
+      observers.forEach(observer => {
+        console.log(observer.firstElementChild); // Log the first child of the observer
+        observer.firstElementChild.classList.remove("hidden"); // Remove 'hidden' class
+        observer.firstElementChild.classList.add("show"); // Add 'show' class
       });
     });
-});
-</script> -->
+
+    // Add click event listeners to each menu link
+    menuLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        // If the navigation toggle is checked, uncheck it
+        if (navToggle.checked) {
+          navToggle.checked = false;
+        }
+      });
+    });
+
+    if (window.location.pathname !== '/') {
+      console.log('Not on the root page');
+      //hide projectLinks
+      projectLinks.forEach(link => {
+        link.classList.remove("linkShow")
+        link.classList.add("linkHidden")
+      }
+    )
+
+
+    }
+  });
+</script>
+
 
 <style>
 @import "../styles/global.css";
@@ -131,6 +164,7 @@ import "../styles/global.css"
 }
 
 .MenuItems {
+  font-size: var(--font-size-dekstop-h1);
   width: 100%; /* Ensure each menu item takes full width */
   display: flex;
   justify-content: center; /* Center the content inside */
@@ -146,7 +180,7 @@ a {
 } 
 
 p {
-  font-size: var(--font-size-mobile);
+  font-size: var(--font-size-mobile-h1);
   margin: 0px;
   text-align: center;
 }

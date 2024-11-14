@@ -575,7 +575,7 @@ img {
   }
 
   @media (--bp-desktop-wide) {
-    font-size: var(--font-size-dekstop-wide);
+    font-size: var(--font-size-desktop-wide);
     line-height: 1.33;
   }
 }
@@ -673,12 +673,20 @@ h1 {
 h2 {
   font-family: PowerGrotesk-Light;
   font-weight: 200;
-  font-size: 14px;
+  font-size: var(--font-size-dekstop);
   letter-spacing: 0.5px;
   margin: 0px;
 
   @media (--bp-mobile) {
-  font-size: 12px;
+			font-size: var(--font-size-mobile);
+  }
+
+  @media (--bp-tablet) {
+    font-size: var(--font-size-tablet);
+  }
+
+  @media (--bp-desktop-wide) {
+    font-size: var(--font-size-desktop-wide);
   }
 
 }
