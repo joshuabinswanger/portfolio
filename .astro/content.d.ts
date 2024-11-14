@@ -144,29 +144,7 @@ declare module 'astro:content' {
 	};
 
 	type DataEntryMap = {
-		"Links": {
-"1_Instagram": {
-	id: "1_Instagram";
-  collection: "Links";
-  data: any
-};
-"2_GitHub": {
-	id: "2_GitHub";
-  collection: "Links";
-  data: any
-};
-"3_BlenderCourse": {
-	id: "3_BlenderCourse";
-  collection: "Links";
-  data: any
-};
-"4_3DResources": {
-	id: "4_3DResources";
-  collection: "Links";
-  data: any
-};
-};
-"gallery": {
+		"gallery": {
 "1_xylopedia-gallery": {
 	id: "1_xylopedia-gallery";
   collection: "gallery";
@@ -257,14 +235,28 @@ declare module 'astro:content' {
   rendered?: RenderedContent;
   filePath?: string;
 }>;
-"links": Record<string, {
-  id: string;
-  body?: string;
+"links": {
+"1_Instagram": {
+	id: "1_Instagram";
   collection: "links";
-  data: InferEntrySchema<"links">;
-  rendered?: RenderedContent;
-  filePath?: string;
-}>;
+  data: InferEntrySchema<"links">
+};
+"2_GitHub": {
+	id: "2_GitHub";
+  collection: "links";
+  data: InferEntrySchema<"links">
+};
+"3_BlenderCourse": {
+	id: "3_BlenderCourse";
+  collection: "links";
+  data: InferEntrySchema<"links">
+};
+"4_3DResources": {
+	id: "4_3DResources";
+  collection: "links";
+  data: InferEntrySchema<"links">
+};
+};
 
 	};
 

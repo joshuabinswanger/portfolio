@@ -38,7 +38,7 @@ export const collections = {
   }),
 
   links: defineCollection({ 
-    loader: glob({ pattern: '**\/[^_]*.yaml', base: "./src/content/links" }),
+    loader: glob({ pattern: '**.yaml', base: "./src/content/links" }),
     schema: z.object({
       text: z.string(),
       link: z.string(),
