@@ -107,7 +107,18 @@ const myFade = {
   <Backdrop transition:animate="none" transition:persist />
 </html>
 
+<script>
 
+function _calculateScrollbarWidth() {
+  document.documentElement.style.setProperty('--scrollbar-width', (window.innerWidth - document.documentElement.clientWidth) + "px");
+}
+// recalculate on resize
+window.addEventListener('resize', _calculateScrollbarWidth, false);
+// recalculate on dom load
+document.addEventListener('DOMContentLoaded', _calculateScrollbarWidth, false); 
+// recalculate on load (assets loaded as well)
+window.addEventListener('load', _calculateScrollbarWidth);
+</script>
 
 
 <style>
@@ -120,7 +131,7 @@ body {
   display: grid; 
   grid-template-rows: 1fr auto; 
   font-family: PowerGrotesk-Light;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
 
   @media (--bp-mobile){
     grid-template-rows: 0px 1fr auto; 
