@@ -29,18 +29,18 @@ import Index from './Index.astro';
 
     <BracketMiddleV />
 
-      <a href="/info" id="MenuItems">
+      <a href="/info" class:list={["MenuItems"]}>
         <p>Info</p>
       </a>
 
     <BracketMiddleV />
 
-      <a href="/contact" id="MenuItems">
+      <a href="/contact" class:list={["MenuItems"]}>
         <p>Contact</p>
       </a>
     <BracketMiddleV />
 
-        <a href="/links" id="MenuItems">
+        <a href="/links" class:list={["MenuItems"]}>
           <p>Links</p>
         </a>
       <BracketCloseV />
@@ -121,6 +121,11 @@ import Index from './Index.astro';
   place-content: center;
 }
 
+.MenuItems {
+  font-family: PowerGrotesk-Light;
+  font-weight: 200;
+  
+}
 a {
   text-decoration: none; /* Removes underline */
   color: inherit; /* Inherits the color from the parent element */
