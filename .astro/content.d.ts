@@ -236,23 +236,23 @@ declare module 'astro:content' {
   filePath?: string;
 }>;
 "links": {
-"1_Instagram": {
-	id: "1_Instagram";
+"3DResources": {
+	id: "3DResources";
   collection: "links";
   data: InferEntrySchema<"links">
 };
-"2_GitHub": {
-	id: "2_GitHub";
+"BlenderCourse": {
+	id: "BlenderCourse";
   collection: "links";
   data: InferEntrySchema<"links">
 };
-"3_BlenderCourse": {
-	id: "3_BlenderCourse";
+"GitHub": {
+	id: "GitHub";
   collection: "links";
   data: InferEntrySchema<"links">
 };
-"4_3DResources": {
-	id: "4_3DResources";
+"Instagram": {
+	id: "Instagram";
   collection: "links";
   data: InferEntrySchema<"links">
 };

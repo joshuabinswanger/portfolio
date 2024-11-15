@@ -40,6 +40,7 @@ export const collections = {
   links: defineCollection({ 
     loader: glob({ pattern: '**.yaml', base: "./src/content/links" }),
     schema: z.object({
+      sortOrder: z.number(),
       text: z.string(),
       link: z.string(),
     }),

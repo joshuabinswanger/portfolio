@@ -4,6 +4,9 @@
     "links": {
       "type": "object",
       "properties": {
+        "sortOrder": {
+          "type": "number"
+        },
         "text": {
           "type": "string"
         },
@@ -15,6 +18,7 @@
         }
       },
       "required": [
+        "sortOrder",
         "text",
         "link"
       ],

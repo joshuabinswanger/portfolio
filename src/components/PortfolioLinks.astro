@@ -11,6 +11,9 @@ import { getCollection } from "astro:content";
 // get all links
 const links = await getCollection('links');
 
+// Sort galleryImages by sortOrder
+links.sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+
 
 ---
 

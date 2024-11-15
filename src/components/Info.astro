@@ -11,7 +11,6 @@ import Footer from "./Footer.astro";
 ---
 
 <TopWrapper>
-    <GridLayout>
 <!--         <div id="ProfilePic">
 
         </div> -->
@@ -21,7 +20,6 @@ import Footer from "./Footer.astro";
             Joshua Bisnwanger is a scientific illustrator and designer based in Zurich. He enjoys blending nature’s beauty with technology to create visuals that are both accurate and appealing. Inspired by the natural world, Joshua works on projects ranging from digital art to 3D models, aiming to make complex science more accessible and engaging. With strong communication skills, a diverse technical skill set, and a curious mind, he collaborates with experts to produce work that sparks curiosity and highlights the wonders of our world.        
     
         </p>
-    </GridLayout>    
 </TopWrapper>
 
 
@@ -29,29 +27,34 @@ import Footer from "./Footer.astro";
 @import "../styles/global.css";
 
 #AboutText {
-   /*  padding-top: calc(var(--padding-desktop)); */
-    grid-column-start: 1;
-    grid-column-end: span 6;
+    grid-column-start: 2;
+    font-size: var(--font-size-dekstop);
+    max-width: 111ch;
+    justify-self: center;
     letter-spacing: 2px;
     font-family: PowerGrotesk-Light;
     font-weight: 200;
     
+    margin-top: calc(var(--padding-desktop) + 48px + 0.2rem);
+    
 
     @media (--bp-mobile) {
-        grid-column-start: 1;
-        grid-column-end: span 7;
-        padding: 1rem 2rem;
+        font-size: var(--font-size-mobile);
+        padding: 0 7px;
+        margin-top: var(--padding-mobile);
     }
 
     @media (--bp-tablet) {
         grid-column-start: 2;
-        grid-column-end: 7;
+        font-size: var(--font-size-tablet);
+        margin-top: calc(var(--padding-tablet) + 36px + 0.2rem);
     }
 
     @media (--bp-desktop-wide) {
-        grid-column-start: 6;
-        grid-column-end: span 7;
-        padding-top: 3rem;
+        grid-column-start: 2;
+
+        font-size: var(--font-size-desktop-wide);
+        margin-top: calc(var(--padding-desktop-wide) + 48px + 0.2rem);
     }
 }
 
