@@ -89,11 +89,13 @@
   /* Font Sizes */
   --font-size-dekstop: 14px;
   --font-size-mobile: 13px;
+  --font-size-mobile-small: 11px;
   --font-size-tablet: 13px;
   --font-size-desktop-wide: 13px;
 
   --font-size-dekstop-h1: 19px;
   --font-size-mobile-h1: 19px;
+  --font-size-mobile-small-h1: 13px;
   --font-size-tablet-h1: 17px;
   --font-size-desktop-wide-h1: 19px;
   
@@ -110,6 +112,7 @@
   --grid-template-columns-desktop-wide: 200px 1fr;
 }
 /* Media Queries Breakpoints*/
+@custom-media --bp-mobile-small (width <= 375px);
 @custom-media --bp-mobile (width <= 650px);
 @custom-media --bp-tablet (650px <= width <= 1200px);
 @custom-media --bp-desktop (1200px <= width <= 1800px);
