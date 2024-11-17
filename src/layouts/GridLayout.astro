@@ -15,28 +15,28 @@
 #GridContainer {
     display: grid; 			
 	height: max-content;
-	grid-template-columns: repeat(17, calc((100vw - 3vw - 200px - 3vw + 70px - 2rem) / 17));
+	grid-template-columns: repeat(17, calc((100vw - 3vw - 200px - 3vw + 70px - 2rem - calc(var(--scrollbar-width) * 2)) / 17));
 	grid-auto-rows: 6vw	;
 	padding-top: var(--padding-desktop); 
 	padding-bottom: 44lvh; 
 	margin-bottom: 0; 
 
 	@media (--bp-mobile) {
-		grid-template-columns: repeat(7, calc((100vw - 3px - 3px) / 7));
+		grid-template-columns: repeat(7, calc((100vw - 3px - 3px - var(--scrollbar-width)) / 7));
 		grid-auto-rows: auto;
 		padding-top: var(--padding-mobile); 
 		padding-bottom: 2lvh; 
 	}
 
 	@media (--bp-tablet) {
-		grid-template-columns: repeat(7, calc((100vw - 150px - 60px - 2rem) / 7));
+		grid-template-columns: repeat(7, calc((100vw - 150px - 60px - calc(var(--scrollbar-width) * 2)) / 7));
 		grid-auto-rows: auto;
 		padding-top: var(--padding-tablet); 
 		padding-bottom: 0lvh; 
 	}
 
 	@media (--bp-desktop-wide) {
-		grid-template-columns: repeat(17, calc((100vw - 13vw - 200px - 13vw + 120px - 2rem) / 17));
+		grid-template-columns: repeat(17, calc((100vw - 13vw - 200px - 13vw + 120px - calc(var(--scrollbar-width) * 2)) / 17));
 		padding-top: var(--padding-desktop-wide);
 		grid-auto-rows: 5vw; 
 		padding-bottom: 55lvh; 

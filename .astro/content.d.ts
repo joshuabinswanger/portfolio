@@ -144,7 +144,14 @@ declare module 'astro:content' {
 	};
 
 	type DataEntryMap = {
-		"gallery": {
+		"Links": {
+"Links": {
+	id: "Links";
+  collection: "Links";
+  data: any
+};
+};
+"gallery": {
 "1_xylopedia-gallery": {
 	id: "1_xylopedia-gallery";
   collection: "gallery";
@@ -234,11 +241,6 @@ declare module 'astro:content' {
 };
   rendered?: RenderedContent;
   filePath?: string;
-}>;
-"projects": Record<string, {
-  id: string;
-  collection: "projects";
-  data: any;
 }>;
 
 	};

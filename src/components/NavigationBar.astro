@@ -48,6 +48,38 @@ import Index from './Index.astro';
 
 </nav>
 
+
+<script>
+  // Wait for the page to fully load all DOM content
+  document.addEventListener('astro:page-load', () => {
+   
+    const menuLinks = document.querySelectorAll('.menuLinks');
+
+    const projectLinks = document.querySelectorAll('.projectLinks');
+
+    const observers = document.querySelectorAll('.observer');
+    // Get the checkbox input element that controls the nav toggle
+    const navToggle = document.getElementById('input');
+
+    
+
+    // Add click event listeners to each menu link
+    menuLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        
+              // For each observer element, modify its first child's classes
+      observers.forEach(observer => {
+        console.log(observer.firstElementChild); // Log the first child of the observer
+        observer.firstElementChild.classList.remove("hidden"); // Remove 'hidden' class
+        observer.firstElementChild.classList.add("show"); // Add 'show' class
+      });
+    
+      });
+    });
+
+  });
+</script>
+
 <style>
 @import "../styles/global.css";
 
