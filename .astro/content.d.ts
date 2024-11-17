@@ -180,6 +180,11 @@ declare module 'astro:content' {
   collection: "gallery";
   data: InferEntrySchema<"gallery">
 };
+"8_gjermundbu-gallery": {
+	id: "8_gjermundbu-gallery";
+  collection: "gallery";
+  data: InferEntrySchema<"gallery">
+};
 };
 "galleryImages": Record<string, {
   id: string;
@@ -258,6 +263,11 @@ declare module 'astro:content' {
 };
 "Instagram": {
 	id: "Instagram";
+  collection: "links";
+  data: InferEntrySchema<"links">
+};
+"Sketchfab": {
+	id: "Sketchfab";
   collection: "links";
   data: InferEntrySchema<"links">
 };
