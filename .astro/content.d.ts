@@ -241,6 +241,11 @@ declare module 'astro:content' {
   collection: "links";
   data: InferEntrySchema<"links">
 };
+"ArtStation": {
+	id: "ArtStation";
+  collection: "links";
+  data: InferEntrySchema<"links">
+};
 "BlenderCourse": {
 	id: "BlenderCourse";
   collection: "links";
