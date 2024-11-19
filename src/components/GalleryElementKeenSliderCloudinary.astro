@@ -44,10 +44,44 @@ const galleryImages = await getCollection('galleryImages', ({ data }) => {
 // Sort galleryImages by public_id
 galleryImages.sort((a, b) => a.data.public_id.localeCompare(b.data.public_id));
 
-// Log the filtered results
-/* galleryImages.forEach((entry) => {
-  console.log(entry.data); // Logs entries sorted by public_id
-}); */
+// Check if any image has metadata.highres_public_id
+const hasHighRes = galleryImages.some(image => image.data?.metadata?.highres_public_id);
+console.log(hasHighRes)
+
+const highResData = [];
+
+for (const image of galleryImages) {
+  // Initialize a default high-resolution entry object
+  let highResEntry = null;
+
+  // Check if highres_public_id is present and fetch the entry if available
+  if (image.data.metadata?.highres_public_id) {
+    try {
+      highResEntry = await getEntry('highResImages', image.data.metadata.highres_public_id);
+      console.log(highResEntry.data.secure_url);
+    } catch (error) {
+      console.error(`Failed to fetch highResImages for ${image.data.metadata.highres_public_id}:`, error);
+    }
+      // Push the final data, merging base and high-resolution details
+      highResData.push({
+        ...image.data, // Include existing image data
+        highResWidth: highResEntry.data.width,
+        highResHeight: highResEntry.data.height,
+        highResSecureUrl: highResEntry.data.secure_url,
+  });
+  }
+
+  else {
+      highResData.push({
+      ...image.data, // Include existing image data
+      highResWidth: image.data.width,
+      highResHeight: image.data.height,
+      highResSecureUrl: image.data.secure_url,
+    });
+  }
+
+}
+
 
 const imagesAmount = galleryImages.length;
 console.log(`Number of images: ${imagesAmount}`);
@@ -59,7 +93,8 @@ console.log(`Number of images: ${imagesAmount}`);
 
     {galleryImages.map((image, index) =>  {
 
-      
+      console.log(highResData[index].highResSecureUrl)
+
         return (
           <div id={`ImageContainer-${index}`} class:list={["keen-slider__slide Slide"]}>
             <div class:list={"ImageInfo"}>
@@ -84,9 +119,9 @@ console.log(`Number of images: ${imagesAmount}`);
 
             <div id="Image" class:list={["ImageElement"]} style={index > 1 ? 'display: none;' : ''}>
               <a class:list={["photo-link"]}
-                href={image.data.secure_url}  
-                data-pswp-width={image.data.width}
-                data-pswp-height={image.data.height}
+                href={highResData[index].highResSecureUrl}  
+                data-pswp-width={highResData[index].highResWidth}
+                data-pswp-height={highResData[index].highResHeight}
                 target="_blank"
                 data-description_title={image.data.metadata?.description_title}
                 data-description_text={image.data.metadata?.description_text}

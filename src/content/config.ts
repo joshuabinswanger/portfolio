@@ -17,6 +17,16 @@ export const collections = {
     })
   }),
 
+  highResImages: defineCollection({
+    loader: cldAssetsLoader({
+      context: true,
+      folder: 'Portfolio/HighRes',
+      tags: true,
+      metadata: true,
+      limit: 45,
+    })
+  }),
+
   gallery: defineCollection({ 
     loader: glob({ pattern: '**\/[^_]*.yaml', base: "./src/content/gallery" }),
     schema: z.object({
