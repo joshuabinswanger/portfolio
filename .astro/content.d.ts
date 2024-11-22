@@ -240,6 +240,60 @@ declare module 'astro:content' {
   rendered?: RenderedContent;
   filePath?: string;
 }>;
+"highResImages": Record<string, {
+  id: string;
+  body?: string;
+  collection: "highResImages";
+  data: {
+    access_mode?: (("public" | "authenticated") | (string & {})) | undefined;
+    access_control?: string[] | undefined;
+    asset_id: string;
+    backup?: boolean | undefined;
+    bytes: number;
+    context?: {
+        custom: {
+            alt?: string | undefined;
+            caption?: string | undefined;
+        } & {
+            [x: string]: string | undefined;
+        };
+    } | undefined;
+    colors?: [
+        string,
+        number
+    ][] | undefined;
+    coordinates?: {} | undefined;
+    created_at: string;
+    derived?: string[] | undefined;
+    display_name?: string | undefined;
+    exif?: {} | undefined;
+    faces?: number[][] | undefined;
+    folder: string;
+    format: string;
+    height: number;
+    image_metadata?: {} | undefined;
+    info?: {} | undefined;
+    media_metadata?: {} | undefined;
+    metadata?: {} | undefined;
+    moderation?: ({} | string[]) | undefined;
+    pages?: number | undefined;
+    phash?: string | undefined;
+    placeholder?: boolean | undefined;
+    predominant?: {} | undefined;
+    public_id: string;
+    quality_analysis?: number | undefined;
+    resource_type: ("image" | "video" | "raw" | "auto") | (string & {});
+    secure_url: string;
+    signature?: string | undefined;
+    tags?: string[] | undefined;
+    type: ("animoto" | "asset" | "authenticated" | "dailymotion" | "facebook" | "fetch" | "gravatar" | "hulu" | "instagram" | "list" | "multi" | "private" | "text" | "twitter" | "twitter_name" | "upload" | "vimeo" | "worldstarhiphop" | "youtube") | (string & {});
+    url: string;
+    version: number;
+    width: number;
+};
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
 "links": {
 "3DResources": {
 	id: "3DResources";
@@ -272,11 +326,6 @@ declare module 'astro:content' {
   data: InferEntrySchema<"links">
 };
 };
-"projects": Record<string, {
-  id: string;
-  collection: "projects";
-  data: any;
-}>;
 
 	};
 
