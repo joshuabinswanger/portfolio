@@ -326,6 +326,11 @@ declare module 'astro:content' {
   data: InferEntrySchema<"links">
 };
 };
+"projects": Record<string, {
+  id: string;
+  collection: "projects";
+  data: any;
+}>;
 
 	};
 
