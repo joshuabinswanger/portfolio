@@ -1,0 +1,299 @@
+{
+  "$ref": "#/definitions/highResImages",
+  "definitions": {
+    "highResImages": {
+      "type": "object",
+      "properties": {
+        "access_mode": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "public",
+                "authenticated"
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "properties": {}
+                }
+              ]
+            }
+          ]
+        },
+        "access_control": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "asset_id": {
+          "type": "string"
+        },
+        "backup": {
+          "type": "boolean"
+        },
+        "bytes": {
+          "type": "number"
+        },
+        "context": {
+          "type": "object",
+          "properties": {
+            "custom": {
+              "allOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "alt": {
+                      "type": "string"
+                    },
+                    "caption": {
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": {
+                    "anyOf": [
+                      {
+                        "not": {}
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "custom"
+          ],
+          "additionalProperties": false
+        },
+        "colors": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          }
+        },
+        "coordinates": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": true
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "derived": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "display_name": {
+          "type": "string"
+        },
+        "exif": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": true
+        },
+        "faces": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          }
+        },
+        "folder": {
+          "type": "string"
+        },
+        "format": {
+          "type": "string"
+        },
+        "height": {
+          "type": "number"
+        },
+        "image_metadata": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": true
+        },
+        "info": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": true
+        },
+        "media_metadata": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": true
+        },
+        "metadata": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": true
+        },
+        "moderation": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": true
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "pages": {
+          "type": "number"
+        },
+        "phash": {
+          "type": "string"
+        },
+        "placeholder": {
+          "type": "boolean"
+        },
+        "predominant": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": true
+        },
+        "public_id": {
+          "type": "string"
+        },
+        "quality_analysis": {
+          "type": "number"
+        },
+        "resource_type": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "image",
+                "video",
+                "raw",
+                "auto"
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "properties": {}
+                }
+              ]
+            }
+          ]
+        },
+        "secure_url": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "type": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "animoto",
+                "asset",
+                "authenticated",
+                "dailymotion",
+                "facebook",
+                "fetch",
+                "gravatar",
+                "hulu",
+                "instagram",
+                "list",
+                "multi",
+                "private",
+                "text",
+                "twitter",
+                "twitter_name",
+                "upload",
+                "vimeo",
+                "worldstarhiphop",
+                "youtube"
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "properties": {}
+                }
+              ]
+            }
+          ]
+        },
+        "url": {
+          "type": "string"
+        },
+        "version": {
+          "type": "number"
+        },
+        "width": {
+          "type": "number"
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "asset_id",
+        "bytes",
+        "created_at",
+        "folder",
+        "format",
+        "height",
+        "public_id",
+        "resource_type",
+        "secure_url",
+        "type",
+        "url",
+        "version",
+        "width"
+      ],
+      "additionalProperties": true
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

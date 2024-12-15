@@ -92,7 +92,9 @@ declare module 'astro:content' {
 		collection: C,
 		id: E,
 	): E extends keyof DataEntryMap[C]
-		? Promise<DataEntryMap[C][E]>
+		? string extends keyof DataEntryMap[C]
+			? Promise<DataEntryMap[C][E]> | undefined
+			: Promise<DataEntryMap[C][E]>
 		: Promise<CollectionEntry<C> | undefined>;
 
 	/** Resolve an array of entry references from the same collection */
@@ -144,48 +146,14 @@ declare module 'astro:content' {
 	};
 
 	type DataEntryMap = {
-		"gallery": {
-"1_xylopedia-gallery": {
-	id: "1_xylopedia-gallery";
+		"gallery": Record<string, {
+  id: string;
+  body?: string;
   collection: "gallery";
-  data: InferEntrySchema<"gallery">
-};
-"2_ethvisualisation-gallery": {
-	id: "2_ethvisualisation-gallery";
-  collection: "gallery";
-  data: InferEntrySchema<"gallery">
-};
-"3_phenologicalshift-gallery": {
-	id: "3_phenologicalshift-gallery";
-  collection: "gallery";
-  data: InferEntrySchema<"gallery">
-};
-"4_gamedesign-gallery": {
-	id: "4_gamedesign-gallery";
-  collection: "gallery";
-  data: InferEntrySchema<"gallery">
-};
-"5_borkenkaefer-gallery": {
-	id: "5_borkenkaefer-gallery";
-  collection: "gallery";
-  data: InferEntrySchema<"gallery">
-};
-"6_structureofwood-gallery": {
-	id: "6_structureofwood-gallery";
-  collection: "gallery";
-  data: InferEntrySchema<"gallery">
-};
-"7_microbiome-gallery": {
-	id: "7_microbiome-gallery";
-  collection: "gallery";
-  data: InferEntrySchema<"gallery">
-};
-"8_gjermundbu-gallery": {
-	id: "8_gjermundbu-gallery";
-  collection: "gallery";
-  data: InferEntrySchema<"gallery">
-};
-};
+  data: InferEntrySchema<"gallery">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
 "galleryImages": Record<string, {
   id: string;
   body?: string;
@@ -294,38 +262,14 @@ declare module 'astro:content' {
   rendered?: RenderedContent;
   filePath?: string;
 }>;
-"links": {
-"3DResources": {
-	id: "3DResources";
+"links": Record<string, {
+  id: string;
+  body?: string;
   collection: "links";
-  data: InferEntrySchema<"links">
-};
-"ArtStation": {
-	id: "ArtStation";
-  collection: "links";
-  data: InferEntrySchema<"links">
-};
-"BlenderCourse": {
-	id: "BlenderCourse";
-  collection: "links";
-  data: InferEntrySchema<"links">
-};
-"GitHub": {
-	id: "GitHub";
-  collection: "links";
-  data: InferEntrySchema<"links">
-};
-"Instagram": {
-	id: "Instagram";
-  collection: "links";
-  data: InferEntrySchema<"links">
-};
-"Sketchfab": {
-	id: "Sketchfab";
-  collection: "links";
-  data: InferEntrySchema<"links">
-};
-};
+  data: InferEntrySchema<"links">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
 
 	};
 
