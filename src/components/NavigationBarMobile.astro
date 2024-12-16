@@ -27,34 +27,36 @@ import "../styles/global.css"
     
   </div> 
   
-  <div id="MenuWrapper">
+  <div id="Menu">
+    <div id="MenuWrapper">
 
-    <BracketOpenV />
+      <BracketOpenV />
+        
+        <a href="/" class:list={["MenuItems"]}>
+          <p>Gallery</p>
+        </a>
+
+      <BracketMiddleV />
+
+        <a href="/info" class:list={["MenuItems"]}>
+          <p>Info</p>
+        </a>
       
-      <a href="/" class:list={["MenuItems"]}>
-        <p>Gallery</p>
-      </a>
+      <BracketMiddleV />
 
-    <BracketMiddleV />
+        <a href="/contact" class:list={["MenuItems"]}>
+          <p>Contact</p>
+        </a>
+      
+      <BracketMiddleV />
 
-      <a href="/info" class:list={["MenuItems"]}>
-        <p>Info</p>
-      </a>
-    
-    <BracketMiddleV />
+        <a href="/links" class:list={["MenuItems"]}>
+          <p>Links</p>
+        </a>
 
-      <a href="/contact" class:list={["MenuItems"]}>
-        <p>Contact</p>
-      </a>
-    
-    <BracketMiddleV />
-
-      <a href="/links" class:list={["MenuItems"]}>
-        <p>Links</p>
-      </a>
-
-    <BracketCloseV />
-  </div>  
+      <BracketCloseV />
+    </div>  
+  </div>
 
 
 
@@ -144,26 +146,31 @@ import "../styles/global.css"
   margin: 0px;
 }
 
-#MenuWrapper {
+#Menu {
   position: fixed;
+  z-index: 1001;
+  width: 100vw;
+  height: 100lvh;
+  display: grid;
+  place-items: center; /* centers #MenuWrapper both horizontally and vertically */
   visibility: hidden;
-  top: 0;
-  left: 0;
-  padding-top: 15vh;
+}
+
+#MenuWrapper {
+  visibility: hidden;
+  opacity: 0;
   width: calc(min-content + 5vw);
-  min-width: 30vw;
-  padding: 35vw;
-  max-height: min-content;
+  min-width: 44vw;
+  padding: 0vw 28vw;
+  height: min-content;
   display: grid;
   grid-gap: 0;
   grid-template-columns: 1fr; /* Make all elements stretch to 100% width */
   grid-auto-flow: row;
   justify-items: stretch; /* Ensure all children stretch horizontally */
-  z-index: 1000;
   pointer-events: none;
-  opacity: 0;
+  z-index: 1002;
   transition: opacity 1s cubic-bezier(0.33, 1, 0.68, 1)  0.2s;
-
 }
 
 .MenuItems {
@@ -255,7 +262,7 @@ p {
   cursor: pointer;
   
   opacity: 0; /* hide this */
-  z-index: 1001; /* and place it over the hamburger */
+  z-index: 1003; /* and place it over the hamburger */
   
   -webkit-touch-callout: none;
 }
@@ -288,11 +295,21 @@ input:checked {
 }
 
 input:checked{
-    ~ #MenuWrapper{
+    ~ #Menu{
       visibility: visible;
-      opacity: 1;
     }
 }
+
+input:checked {
+  ~ #Menu{
+   > #MenuWrapper{
+        visibility: visible;
+        opacity: 1;
+      }
+  }
+}
+
+
 
 
 

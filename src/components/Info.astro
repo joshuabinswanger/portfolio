@@ -34,14 +34,15 @@ import Footer from "./Footer.astro";
     letter-spacing: 2px;
     font-family: PowerGrotesk-Light;
     font-weight: 200;
-    
+    height: min-content;
+    place-items: center; /* centers #MenuWrapper both horizontally and vertically */
     margin-top: calc(var(--padding-desktop) + 48px + 0.2rem);
     
 
     @media (--bp-mobile) {
         font-size: var(--font-size-mobile);
         padding: 0 7px;
-        margin-top: var(--padding-mobile);
+        margin: auto 10px;
     }
 
     @media (--bp-tablet) {
@@ -52,7 +53,6 @@ import Footer from "./Footer.astro";
 
     @media (--bp-desktop-wide) {
         grid-column-start: 2;
-
         font-size: var(--font-size-desktop-wide);
         margin-top: calc(var(--padding-desktop-wide) + 48px + 0.2rem);
     }

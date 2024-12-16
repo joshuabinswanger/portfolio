@@ -18,40 +18,41 @@ import BracketMiddleH from "./BracketMiddleH.astro";
 <style>
 @import "../styles/global.css";
 
-    #email {
-        display: grid;
-        font-family: PowerGrotesk-Light;
-        font-weight: 200;
-        letter-spacing: 3px;
-        font-size: 21px;
-        padding-top: calc(var(--padding-desktop));
-        text-align: center;
-        top: 15vh;
-        height: fit-content;
-        grid-template-columns: 1ch min-content 1ch;
-        justify-content: center;
-        align-items: center;
-        gap: 1rem;
+#email {
+    display: grid;
+    font-family: PowerGrotesk-Light;
+    font-weight: 200;
+    letter-spacing: 3px;
+    font-size: 21px;
+    padding-top: calc(var(--padding-desktop));
+    text-align: center;
+    height: fit-content;
+    grid-template-columns: 1ch min-content 1ch;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
 
-        p {
-            margin: 0;
-            width: min-content;
-        
-        }
-      
-        @media (--bp-mobile) {
-            padding-top: calc(var(--padding-mobile) + 22vh);
-            
-        }
-
-        @media (--bp-tablet) {
-            padding-top: calc(var(--padding-tablet) + 22vh);
-            
-        }
-
-        @media (--bp-desktop-wide) {
-        height: 30vh;
-    }   
+    p {
+        margin: 0;
+        width: min-content;
     
     }
+    
+    @media (--bp-tablet) {
+        padding-top: calc(var(--padding-tablet) + 22vh);
+        
+    }
+
+    @media (--bp-desktop-wide) {
+    height: 30vh;
+    }   
+}
+
+@media (--bp-mobile) {
+    #email{
+        padding-top: 0;
+        margin: auto 0;
+    }
+}
+
 </style>
