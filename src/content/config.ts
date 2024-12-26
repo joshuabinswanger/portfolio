@@ -13,7 +13,7 @@ export const collections = {
       folder: 'Portfolio/Gallery',
       tags: true,
       metadata: true,
-      limit: 45,
+      limit: 110,
     })
   }),
 
