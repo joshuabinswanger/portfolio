@@ -1,4 +1,4 @@
-projectName: "1_xylopedia"
+projectName: "01_xylopedia"
 title: "Xylopedia"
 subtitle: "3D Learning App"
 
@@ -14,6 +14,7 @@ projectDescription: |
 
         Students at the University for Sustainable Development in Eberswalde, Germany, now have the app to help them understand the complex anatomy of wood. Based on microCT scans from the Helmholtz Centre Hereon, we created novel 3D models for real-time exploration.  
         <br>**<a href="https://ms.hereon.de/xylopedia/index.php.en" target="_blank" style="pointer-events: auto; color: black;">Visit Xylopedia</a>** 
+
 credits: |
       <table>
       <tr>

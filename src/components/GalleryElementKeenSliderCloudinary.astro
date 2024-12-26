@@ -41,6 +41,11 @@ const galleryImages = await getCollection('galleryImages', ({ data }) => {
   return data.metadata?.project === targetProject;
 });
 
+/* const galleryImages = await getCollection('galleryImages', ({ data }) => {
+  return data.metadata?.project === 'xylopedia';
+});
+console.log(galleryImages); */
+
 // Sort galleryImages by public_id
 galleryImages.sort((a, b) => a.data.public_id.localeCompare(b.data.public_id));
 
