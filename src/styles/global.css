@@ -74,8 +74,8 @@
   --padding-desktop-wide: 3rem;
 
   /* Margins */
-  --margin-left-dekstop: calc(3vw - 70px);
-  --margin-right-desktop: 3vw;
+  --margin-left-dekstop: calc(1vw - 70px);
+  --margin-right-desktop: 1vw;
 
   --margin-left-mobile: 3px;
   --margin-right-mobile: 3px;
