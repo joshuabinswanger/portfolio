@@ -23,7 +23,7 @@ export const collections = {
       folder: 'Portfolio/HighRes',
       tags: true,
       metadata: true,
-      limit: 45,
+      limit: 110,
     })
   }),
 
