@@ -1,0 +1,25 @@
+projectName: "11_misc3D"
+title: "3D Visualisation"
+subtitle: "Varoius 3D Projects"
+
+tags:
+  - 2D
+  - interactive
+  - rive
+  - digitalhumanities
+  - socialscience
+  - ai
+
+bgcolor: "#0A0523"
+
+projectDescription: |
+  Various 3D Projects focusing mainly on modeling, texturing and rendering.
+ 
+credits: |
+
+    <table>
+        <tr>
+          <th>Tools:</th>
+          <td>Houdini, ZBrush, Blender, Substance</td>
+        </tr>
+    </table>
