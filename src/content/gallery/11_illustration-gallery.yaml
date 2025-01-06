@@ -1,0 +1,25 @@
+projectName: "12_illustration"
+title: "Illustration"
+subtitle: "Varoius Illustrations"
+
+tags:
+  - 2D
+  - interactive
+  - rive
+  - digitalhumanities
+  - socialscience
+  - ai
+
+bgcolor: "#0A0523"
+
+projectDescription: |
+  Some illustrations done over the years.
+ 
+credits: |
+
+    <table>
+        <tr>
+          <th>Tools:</th>
+          <td>Houdini, ZBrush, Blender, Substance</td>
+        </tr>
+    </table>
