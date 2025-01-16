@@ -20,7 +20,7 @@ const tags = Array.from(
   <div class:list="ArchiveWrapper" id="ArchiveWrapper">
     <!-- Button Group for Tags -->
     <div class="button-group filters-button-group" id="filter-list">
-      <button class="filter-button is-checked" data-filter="*">show all</button>
+      <button class="filter-button is-checked" data-filter="*">All</button>
       {tags.map((tag) => (
         <button class="filter-button" data-filter={`.${tag}`} key={tag}>
             {tag}
