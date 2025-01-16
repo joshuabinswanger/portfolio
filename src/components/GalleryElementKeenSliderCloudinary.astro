@@ -34,7 +34,7 @@ if (!galleryProject) {
 
 // Turn Prop into string
 const targetProject = String(project).split('_')[1];
-console.log(`${targetProject}`);
+/* console.log(`${targetProject}`); */
 
 // Use getCollection with a filter function to only retrieve images with a matching project
 const galleryImages = await getCollection('galleryImages', ({ data }) => {
@@ -51,7 +51,7 @@ galleryImages.sort((a, b) => a.data.public_id.localeCompare(b.data.public_id));
 
 // Check if any image has metadata.highres_public_id
 const hasHighRes = galleryImages.some(image => image.data?.metadata?.highres_public_id);
-console.log(hasHighRes)
+/* console.log(hasHighRes) */
 
 const highResData = [];
 
@@ -63,7 +63,7 @@ for (const image of galleryImages) {
   if (image.data.metadata?.highres_public_id) {
     try {
       highResEntry = await getEntry('highResImages', image.data.metadata.highres_public_id);
-      console.log(highResEntry.data.secure_url);
+      /* console.log(highResEntry.data.secure_url); */
     } catch (error) {
       console.error(`Failed to fetch highResImages for ${image.data.metadata.highres_public_id}:`, error);
     }
@@ -89,7 +89,7 @@ for (const image of galleryImages) {
 
 
 const imagesAmount = galleryImages.length;
-console.log(`Number of images: ${imagesAmount}`);
+/* console.log(`Number of images: ${imagesAmount}`); */
 ---
 
 <div id={`slider-${instanceId}`} class:list={"GalleryElement "} data-instanceId={instanceId} data-imagesAmount={imagesAmount} data-galleryProject={galleryProject}>
@@ -98,7 +98,7 @@ console.log(`Number of images: ${imagesAmount}`);
 
     {galleryImages.map((image, index) =>  {
 
-      console.log(highResData[index].highResSecureUrl)
+      /* console.log(highResData[index].highResSecureUrl) */
 
         return (
           <div id={`ImageContainer-${index}`} class:list={["keen-slider__slide Slide"]}>

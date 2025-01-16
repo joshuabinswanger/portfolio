@@ -1,0 +1,177 @@
+---
+import TopWrapper from "../layouts/TopWrapper.astro";
+import GridLayout from "../layouts/GridLayout.astro";
+import ArchiveElement from "./ArchiveElementIsotope.astro";
+import { getCollection } from "astro:content";
+
+// Filter the collection to include only items with metadata.archive === "include"
+const archiveImages = await getCollection('galleryImages', ({ data }) => {
+  return data.metadata?.archive === "include";
+});
+
+// Extract and deduplicate tags
+const tags = Array.from(
+  new Set(archiveImages.flatMap((image) => image.data.tags || []))
+);
+
+---
+
+<TopWrapper>
+  <div class:list="ArchiveWrapper" id="ArchiveWrapper">
+    <!-- Button Group for Tags -->
+    <div class="button-group filters-button-group" id="filter-list">
+      <button class="filter-button is-checked" data-filter="*">show all</button>
+      {tags.map((tag) => (
+        <button class="filter-button" data-filter={`.${tag}`} key={tag}>
+          {tag}
+        </button>
+      ))}
+    </div>
+
+    <div class:list={["grid"]} id="Archive">
+        {archiveImages.map((image, index) => (
+      
+                <ArchiveElement
+                    public_id={image.data.public_id} // Ensure `public_id` exists
+                    index={index}
+                />
+
+        ))}
+    </div>
+  </div>
+</TopWrapper>
+
+<script>
+import Isotope from 'isotope-layout';
+import imagesloaded from 'imagesloaded';
+import cellsByRow from 'isotope-cells-by-row';
+
+
+document.addEventListener('astro:page-load', () => {
+
+  var grid = document.querySelector('.grid');
+  var iso;
+  let imagesLoaded;
+  let cellsByRow;
+
+  var iso = new Isotope( grid, {
+    layoutMode: 'cellsByRow',
+    itemSelector: '.grid-item',
+    percentPosition: true,
+    cellsByRow: {
+      columnWidth: '.grid-item',
+      rowHeight: '.grid-item'
+    }
+  });
+
+  imagesloaded( grid ).on( 'progress', function() {
+    // layout Isotope after each image loads
+    iso.layout();
+  });
+
+  var filterFns = {};
+
+    // bind filter button click
+  var filtersElem = document.querySelector('.filters-button-group');
+  filtersElem.addEventListener( 'click', function( event ) {
+    // only work with buttons
+ /*    if ( !matchesSelector( event.target, 'button' ) ) {
+      return;
+    } */
+    var filterValue = event.target.getAttribute('data-filter');
+    // use matching filter function
+    filterValue = filterFns[ filterValue ] || filterValue;
+    iso.arrange({ filter: filterValue });
+  });
+
+  // change is-checked class on buttons
+  var buttonGroups = document.querySelectorAll('.button-group');
+  for ( var i=0, len = buttonGroups.length; i < len; i++ ) {
+    var buttonGroup = buttonGroups[i];
+    radioButtonGroup( buttonGroup );
+  }
+
+  function radioButtonGroup( buttonGroup ) {
+    buttonGroup.addEventListener( 'click', function( event ) {
+/*       // only work with buttons
+      if ( !matchesSelector( event.target, 'button' ) ) {
+        return;
+      } */
+      buttonGroup.querySelector('.is-checked').classList.remove('is-checked');
+      event.target.classList.add('is-checked');
+    });
+  }
+
+})
+
+</script>
+
+
+<style>
+
+@import "../styles/global.css";
+
+
+#ArchiveWrapper {
+  padding-top: var(--padding-desktop);
+  display: grid;
+  grid-template-rows: min-content 1fr;
+
+  @media (--bp-mobile) {
+		padding-top: var(--padding-mobile); 
+
+	}
+
+	@media (--bp-tablet) {
+
+		padding-top: var(--padding-tablet); 
+
+	}
+
+	@media (--bp-desktop-wide) {
+
+		padding-top: var(--padding-desktop-wide);
+
+	 
+	}
+}
+
+#filter-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15%, 1fr));
+  row-gap: 1rem;
+  height: min-content;
+  width: 93%;
+  padding: 3.5%;
+
+  @media (--bp-mobile) {
+    width:80%;
+    padding: 0 10%;
+	}
+
+	@media (--bp-tablet) {
+    width: 92%;
+    padding: 0 4%;
+
+	}
+
+	@media (--bp-desktop-wide) {
+    width: 93%;
+    padding: 0 3.25%;
+	}
+
+}
+
+.filter-button {
+  font-family: PowerGrotesk-Light;
+  letter-spacing: 0.6px;
+  border: 0px;
+  background-color: transparent;
+}
+
+.filter-button.is-checked {
+  color: var(--bg-color);
+  background-color: black;
+}
+
+</style>

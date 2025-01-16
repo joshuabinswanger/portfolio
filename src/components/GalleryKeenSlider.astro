@@ -12,7 +12,7 @@ galleryProjects.sort((a, b) => a.data.projectName.localeCompare(b.data.projectNa
 // Log the filtered results
 galleryProjects.forEach((entry) => {
 	const project = entry.data.projectName;
-  	console.log(`${project}`); // Should only log entries matching the target project
+  	/* console.log(`${project}`); // Should only log entries matching the target project */
 });
 
 const {projectName} = Astro.props;

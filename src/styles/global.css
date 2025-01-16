@@ -65,6 +65,7 @@
   --bg-color: #fbf9f4;
   --bg-color-trans: #fbf9f4b1;
   --bg-light: #FBF9F4;
+  --bg-color-accent: #ecd8c9;
 
 
   /* Top Padding */
@@ -74,7 +75,7 @@
   --padding-desktop-wide: 3rem;
 
   /* Margins */
-  --margin-left-dekstop: calc(1vw - 70px);
+  --margin-left-dekstop: 1vw;
   --margin-right-desktop: 1vw;
 
   --margin-left-mobile: 3px;
@@ -169,7 +170,7 @@
 }
 
 .pswp__img {
-
+/*   background: var(--bg-color); */
 }
 
 .DetailsInfoWrapper th {
