@@ -23,7 +23,8 @@ const tags = Array.from(
       <button class="filter-button is-checked" data-filter="*">show all</button>
       {tags.map((tag) => (
         <button class="filter-button" data-filter={`.${tag}`} key={tag}>
-          {tag}
+            {tag}
+
         </button>
       ))}
     </div>
@@ -46,8 +47,51 @@ import Isotope from 'isotope-layout';
 import imagesloaded from 'imagesloaded';
 import cellsByRow from 'isotope-cells-by-row';
 
+const gridElement = document.querySelector('.grid');
+const filterListElement = document.querySelector('#filter-list');
+const gridItem = document.querySelector('.grid-item'); 
+const filterButtons = document.querySelectorAll('.filter-button');
+
+
+/////////////////////
+///set padding etc///
+/////////////////////
+
+// Function to apply styles based on screen size
+function updateFilterButtonStyles() {
+  const isMobile = window.matchMedia('(width <= 650px)').matches;
+
+  if (gridElement && filterListElement && gridItem) {
+    if (isMobile) {
+      // Explicitly set padding for mobile
+      filterButtons.forEach((button) => {
+        button.style.padding = '0';
+      });
+    } else {
+      // Calculate padding dynamically for larger screens
+      const computedStyle = window.getComputedStyle(gridItem);
+      const paddingRight = parseFloat(computedStyle.paddingRight) || 0;
+
+      filterButtons.forEach((button) => {
+        button.style.padding = `0 ${paddingRight}px`;
+      });
+
+      // Calculate the archive width
+      const archiveWidth = gridElement.offsetWidth;
+
+      // Set the --archive-width CSS variable dynamically
+      filterListElement.style.setProperty('--archive-width', `${archiveWidth}px`);
+    }
+  }
+}
 
 document.addEventListener('astro:page-load', () => {
+  
+  updateFilterButtonStyles();
+
+  /////////////////////
+  ///////Isotope//////
+  /////////////////////
 
   var grid = document.querySelector('.grid');
   var iso;
@@ -104,6 +148,8 @@ document.addEventListener('astro:page-load', () => {
 
 })
 
+window.addEventListener('resize', updateFilterButtonStyles);
+
 </script>
 
 
@@ -112,14 +158,14 @@ document.addEventListener('astro:page-load', () => {
 @import "../styles/global.css";
 
 
+
 #ArchiveWrapper {
   padding-top: var(--padding-desktop);
   display: grid;
   grid-template-rows: min-content 1fr;
 
   @media (--bp-mobile) {
-		padding-top: var(--padding-mobile); 
-
+		padding-top: 2rem; 
 	}
 
 	@media (--bp-tablet) {
@@ -136,28 +182,43 @@ document.addEventListener('astro:page-load', () => {
 	}
 }
 
+#Archive {
+  padding-top: 2rem;
+}
+
 #filter-list {
+    /* Set width to grid width - navbar - margin */
+  --archive-width: 50%;
+  --filter-number: 5;
+  position: fixed;
+  background-color: var(--bg-color-trans);
+  z-index: 2;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15%, 1fr));
+  grid-template-columns: repeat(var(--filter-number), calc(var(--archive-width) / var(--filter-number)));
+  grid-auto-rows: auto;
   row-gap: 1rem;
   height: min-content;
-  width: 93%;
-  padding: 3.5%;
+  width: var(--archive-width);
 
   @media (--bp-mobile) {
-    width:80%;
-    padding: 0 10%;
+    font-size: var(--font-size-mobile-small);
+    left: 0;
+    --filter-number: 4;
+    width:100%;
+    bottom: 0;
+    row-gap: .25rem;
+    grid-template-columns: repeat(auto-fill, minmax(25%, 1fr));
 	}
 
 	@media (--bp-tablet) {
+    --filter-number: 4;
     width: 92%;
     padding: 0 4%;
 
 	}
 
 	@media (--bp-desktop-wide) {
-    width: 93%;
-    padding: 0 3.25%;
+    --filter-number: 6;
 	}
 
 }
@@ -167,6 +228,7 @@ document.addEventListener('astro:page-load', () => {
   letter-spacing: 0.6px;
   border: 0px;
   background-color: transparent;
+  padding: 0 0;
 }
 
 .filter-button.is-checked {
