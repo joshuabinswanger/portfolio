@@ -203,11 +203,11 @@ window.addEventListener('resize', updateFilterButtonStyles);
   @media (--bp-mobile) {
     font-size: var(--font-size-mobile-small);
     left: 0;
-    --filter-number: 4;
+    --filter-number: 5;
     width:100%;
     bottom: 0;
     row-gap: .25rem;
-    grid-template-columns: repeat(auto-fill, minmax(25%, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(20%, 1fr));
 	}
 
 	@media (--bp-tablet) {
@@ -228,7 +228,7 @@ window.addEventListener('resize', updateFilterButtonStyles);
   letter-spacing: 0.6px;
   border: 0px;
   background-color: transparent;
-  padding: 0 0;
+  padding: 2px 0px 4px 0px;
 }
 
 .filter-button.is-checked {
