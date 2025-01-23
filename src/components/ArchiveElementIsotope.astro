@@ -24,6 +24,37 @@ const archiveImage = await getEntry('galleryImages', `${Astro.props.public_id}`)
 
 
 ///////////////////////////
+/////  CREATE TAGS ///////
+//////////////////////////
+
+// Helper function to ensure we get an array from any input
+function ensureArray(value) {
+  if (!value) return [];
+  if (Array.isArray(value)) return value;
+  return value.split(',').map(item => item.trim()); // Split by comma and trim spaces
+}
+
+const tags = [
+  ...ensureArray(archiveImage.data.metadata?.role),
+  ...ensureArray(archiveImage.data.metadata?.program),
+  ...ensureArray(archiveImage.data.metadata?.topic)
+];
+
+// Convert numbers to string because CSS Classes cant start with numbers
+const tagConversion = {
+  "2D": "twoD",
+  "3D": "threeD"
+};
+
+// Convert the tags in the allowed list using a mapping object
+const convertedTags = tags.map(tag => tagConversion[tag] || tag);
+
+// Join tags into a space-separated string
+const tagClassString = convertedTags.join(' ');
+
+
+
+///////////////////////////
 //  HIGH RES IMAGE ADD ///
 //////////////////////////
 // Check if any image has metadata.highres_public_id
@@ -66,7 +97,7 @@ if (archiveImage?.data.metadata?.highres_public_id) {
 
 --- 
 
-<div class:list={[`archiveElementWrapper grid-item ${archiveImage.data.tags.join(' ')}`]} id={`archiveElement-${Astro.props.index}`}>
+<div class:list={[`archiveElementWrapper grid-item ${tagClassString}`]} id={`archiveElement-${Astro.props.index}`}>
   
   <div id="Image" class:list={["ImageElement"]}>
     <a class:list={["photo-link"]}
@@ -196,7 +227,7 @@ img {
 
   @media (--bp-mobile) {
     width: 30%;
-    padding: 10%;
+    padding: 9%;
 	}
 
 	@media (--bp-tablet) {

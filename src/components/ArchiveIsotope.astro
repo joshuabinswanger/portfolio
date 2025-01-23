@@ -1,4 +1,7 @@
 ---
+import BracketOpenH from "./BracketOpenH.astro";
+import BracketMiddleH from "./BracketMiddleH.astro";
+import BracketCloseH from "./BracketCloseH.astro";
 import TopWrapper from "../layouts/TopWrapper.astro";
 import GridLayout from "../layouts/GridLayout.astro";
 import ArchiveElement from "./ArchiveElementIsotope.astro";
@@ -9,25 +12,162 @@ const archiveImages = await getCollection('galleryImages', ({ data }) => {
   return data.metadata?.archive === "include";
 });
 
-// Extract and deduplicate tags
-const tags = Array.from(
-  new Set(archiveImages.flatMap((image) => image.data.tags || []))
+
+
+//////////////////
+///// TAGS ///////
+//////////////////
+
+
+// Helper function to ensure we get an array from any input
+function ensureArray(value) {
+  if (!value) return [];
+  if (Array.isArray(value)) return value;
+  return value.split(',').map(item => item.trim()); // Split by comma and trim spaces
+}
+
+
+
+//// Role /////
+
+/// extract role tags
+const role = Array.from(
+  new Set(archiveImages.flatMap((image) => ensureArray(image.data.metadata?.role) || []))
 );
+
+console.log("Role Array:", role); // Log the array to the console
+
+//Filter the tags so only those in `AllowedList` remain
+const roleAllowedList = ["2D", "3D", "Dev"];
+const roleListLength = roleAllowedList.length;
+const roleListLengthString = roleListLength.toString();
+
+const roleAllowed = role.filter(tag => roleAllowedList.includes(tag));
+
+//covnert to CSS conform tags
+const roleConversionCSS = {
+  "2D": "twoD",
+  "3D": "threeD"
+};
+
+const roleConversionName = {
+};
+
+
+const roleConvertedCSS = roleAllowed.map(tag => roleConversionCSS[tag] || tag);
+const roleConvertedName = roleAllowed.map(tag => roleConversionName[tag] || tag);
+
+
+//// PROGRAM /////
+
+/// extract role tags
+const program = Array.from(
+  new Set(archiveImages.flatMap((image) => ensureArray(image.data.metadata?.program) || []))
+);
+
+console.log("Program Array:", program); // Log the array to the console
+
+//Filter the tags so only those in `AllowedList` remain
+const programAllowedList = ["Houdini", "Blender", "ZBrush", "Rive", "SubstancePainter"];
+const programListLength = programAllowedList.length;
+const programListLengthString = programListLength.toString();
+
+const programAllowed = program.filter(tag => programAllowedList.includes(tag));
+
+//covnert to CSS conform tags
+const programConversionCSS = {
+};
+
+const programConversionName = {
+  "SubstancePainter" : "Substance Painter"
+};
+
+
+const programConvertedCSS = programAllowed.map(tag => programConversionCSS[tag] || tag);
+const programConvertedName= programAllowed.map(tag => programConversionName[tag] || tag);
+
+
+
+
+
+//// TOPIC /////
+
+/// extract role tags
+const topic = Array.from(
+  new Set(archiveImages.flatMap((image) => ensureArray(image.data.metadata?.topic) || []))
+);
+
+console.log("Topic Array:", topic); // Log the array to the console
+
+//Filter the tags so only those in `AllowedList` remain
+const topicAllowedList = ['Poster', 'Tutorial', 'SciCom', 'MoGraph', 'Real-time', 'Wood', 'Character', 'Proceduralism', 'Creature'];
+const topicListLength = topicAllowedList.length;
+const topicListLengthString = topicListLength.toString();
+
+const topicAllowed = topic.filter(tag => topicAllowedList.includes(tag));
+
+//covnert to CSS conform tags
+const topicConversionCSS = {
+};
+const topicConversionName = {
+  "MoGraph" : "Motion Graphics",
+  "SciCom" : "Science Communication"
+};
+
+const topicConvertedCSS = topicAllowed.map(tag => topicConversionCSS[tag] || tag);
+const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || tag);
+
 
 ---
 
 <TopWrapper>
-  <div class:list="ArchiveWrapper" id="ArchiveWrapper">
-    <!-- Button Group for Tags -->
-    <div class="button-group filters-button-group" id="filter-list">
+  <div class:list={["ArchiveWrapper"]} id="ArchiveWrapper">
+  <!-- Filter Buttons-->
+  <div id="filter-top-wrapper" >
+
+    <!-- Role -->
+    <div class:list={[`filters-button-group`]} id="role-buttons-wrapper" data-filter-group="role">
+      <BracketOpenH />
+
+      <button class:list={["filter-button is-checked"]} data-filter="*">All</button>
+      {roleConvertedCSS.map((tag, index) => (
+        <button class:list={[`filter-button ${tag}`]}  data-filter={`.${tag}`}>
+            {roleConvertedName[index]}
+        </button>
+      ))}
+
+      <BracketCloseH />
+    </div>
+
+    <!-- Program -->
+    <div class:list={[`filters-button-group`]} id="program-buttons-wrapper" data-filter-group="program">
+      <BracketOpenH />
+
       <button class="filter-button is-checked" data-filter="*">All</button>
-      {tags.map((tag) => (
-        <button class="filter-button" data-filter={`.${tag}`} key={tag}>
-            {tag}
+      {programConvertedCSS.map((tag, index) => (
+        <button class:list={[`filter-button ${tag}`]}  data-filter={`.${tag}`}>
+            {programConvertedName[index]}
 
         </button>
       ))}
+      <BracketCloseH />
     </div>
+
+    <!-- Topic -->
+    <div class:list={[`filters-button-group`]} id="topic-buttons-wrapper" data-filter-group="topic">
+      <BracketOpenH />
+
+      <button class="filter-button is-checked" data-filter="*">All</button>
+      {topicConvertedCSS.map((tag, index) => (
+        <button class:list={[`filter-button ${tag}`]}  data-filter={`.${tag}`}>
+            {topicConvertedName[index]}
+
+        </button>
+      ))}
+      <BracketCloseH />
+    </div>
+
+  </div>
 
     <div class:list={["grid"]} id="Archive">
         {archiveImages.map((image, index) => (
@@ -39,7 +179,7 @@ const tags = Array.from(
 
         ))}
     </div>
-  </div>
+ 
 </TopWrapper>
 
 <script>
@@ -48,10 +188,9 @@ import imagesloaded from 'imagesloaded';
 import cellsByRow from 'isotope-cells-by-row';
 
 const gridElement = document.querySelector('.grid');
-const filterListElement = document.querySelector('#filter-list');
+const filterTopWrapperElement = document.querySelector('#filter-top-wrapper');
 const gridItem = document.querySelector('.grid-item'); 
 const filterButtons = document.querySelectorAll('.filter-button');
-
 
 /////////////////////
 ///set padding etc///
@@ -61,7 +200,7 @@ const filterButtons = document.querySelectorAll('.filter-button');
 function updateFilterButtonStyles() {
   const isMobile = window.matchMedia('(width <= 650px)').matches;
 
-  if (gridElement && filterListElement && gridItem) {
+/*   if (gridElement && filterListElement && gridItem) {
     if (isMobile) {
       // Explicitly set padding for mobile
       filterButtons.forEach((button) => {
@@ -74,19 +213,20 @@ function updateFilterButtonStyles() {
 
       filterButtons.forEach((button) => {
         button.style.padding = `0 ${paddingRight}px`;
-      });
+      }); */
 
       // Calculate the archive width
       const archiveWidth = gridElement.offsetWidth;
 
       // Set the --archive-width CSS variable dynamically
-      filterListElement.style.setProperty('--archive-width', `${archiveWidth}px`);
+      filterTopWrapperElement.style.setProperty('--archive-width', `${archiveWidth}px`);
     }
-  }
-}
+  
+
+
 
 document.addEventListener('astro:page-load', () => {
-  
+
   updateFilterButtonStyles();
 
   /////////////////////
@@ -98,6 +238,12 @@ document.addEventListener('astro:page-load', () => {
   let imagesLoaded;
   let cellsByRow;
 
+  // Filter Functions
+  var filterFns = {};
+
+  // store filter for each group
+  var filters = {};
+
   var iso = new Isotope( grid, {
     layoutMode: 'cellsByRow',
     itemSelector: '.grid-item',
@@ -105,7 +251,42 @@ document.addEventListener('astro:page-load', () => {
     cellsByRow: {
       columnWidth: '.grid-item',
       rowHeight: '.grid-item'
+    },
+
+    filter: function(itemElem) {
+      // Assume the item matches by default
+      var isMatched = true;
+
+      // Loop through each property in the `filters` object
+      for (var prop in filters) {
+        var filter = filters[prop]; // Get the filter value for the current property
+
+        // If the filter is a function defined in `filterFns`, use it. Otherwise, use the raw filter value.
+        filter = filterFns[filter] || filter;
+
+        // Check the type of the filter to determine how to apply it
+        var filterType = typeof filter;
+
+        // If the filter is a function, call it and pass `itemElem` to test if it matches
+        if (filter && filterType == 'function') {
+          isMatched = filter(itemElem); // Apply the filter function
+        }
+        // If the filter is not a function but is a valid value, check if `itemElem` matches the selector
+        else if (filter) {
+          isMatched = itemElem.matches(filter); // Use Element.matches() to test if the item matches the filter
+        }
+
+        // If the item does not match the current filter, break out of the loop early
+        if (!isMatched) {
+          break; // No need to check other filters if this one fails
+        }
+      }
+
+      // Return true if the item matched all filters, false otherwise
+      return isMatched;
+
     }
+    
   });
 
   imagesloaded( grid ).on( 'progress', function() {
@@ -113,23 +294,35 @@ document.addEventListener('astro:page-load', () => {
     iso.layout();
   });
 
-  var filterFns = {};
 
-    // bind filter button click
-  var filtersElem = document.querySelector('.filters-button-group');
-  filtersElem.addEventListener( 'click', function( event ) {
+
+
+
+// bind filter button click
+  var filtersElem = document.querySelectorAll('.filters-button-group');
+  filtersElem.forEach(element => {
+    element.addEventListener( 'click', function( event ) {
     // only work with buttons
- /*    if ( !matchesSelector( event.target, 'button' ) ) {
+    if (!event.target.matches('button')) {
       return;
-    } */
-    var filterValue = event.target.getAttribute('data-filter');
-    // use matching filter function
-    filterValue = filterFns[ filterValue ] || filterValue;
-    iso.arrange({ filter: filterValue });
-  });
+    }
+    
+    // get group key
+    var buttonGroup = event.target.parentNode;
+    var filterGroup = buttonGroup.getAttribute('data-filter-group');
 
-  // change is-checked class on buttons
-  var buttonGroups = document.querySelectorAll('.button-group');
+
+    filters[ filterGroup ] = event.target.getAttribute('data-filter');
+
+    // use matching filter function
+    iso.arrange();
+  });
+});
+  
+
+
+// change is-checked class on buttons
+  var buttonGroups = document.querySelectorAll('.filters-button-group');
   for ( var i=0, len = buttonGroups.length; i < len; i++ ) {
     var buttonGroup = buttonGroups[i];
     radioButtonGroup( buttonGroup );
@@ -137,10 +330,10 @@ document.addEventListener('astro:page-load', () => {
 
   function radioButtonGroup( buttonGroup ) {
     buttonGroup.addEventListener( 'click', function( event ) {
-/*       // only work with buttons
-      if ( !matchesSelector( event.target, 'button' ) ) {
+      // only work with buttons
+      if (!event.target.matches('button')) {
         return;
-      } */
+      }
       buttonGroup.querySelector('.is-checked').classList.remove('is-checked');
       event.target.classList.add('is-checked');
     });
@@ -153,7 +346,7 @@ window.addEventListener('resize', updateFilterButtonStyles);
 </script>
 
 
-<style>
+<style define:vars={{ roleListLengthString, programListLengthString, topicListLengthString }}>
 
 @import "../styles/global.css";
 
@@ -184,52 +377,85 @@ window.addEventListener('resize', updateFilterButtonStyles);
 
 #Archive {
   padding-top: 2rem;
+
+  @media (--bp-mobile) {
+		padding-top: 0rem; 
+	}
+
 }
 
-#filter-list {
-    /* Set width to grid width - navbar - margin */
-  --archive-width: 50%;
-  --filter-number: 5;
-  position: fixed;
+#filter-top-wrapper {
+  display: grid;
+  z-index: 2;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: min-content min-content;
+  row-gap: 0.25rem;
+  --archive-width: 100%;
+  width: var(--archive-width);
+  column-gap: 1rem;
+
+  @media (--bp-mobile) {
+    display: grid;
+    position: fixed;
+    bottom: 0;
+    column-gap: 0rem;
+    width: calc(var(--archive-width) - 4px);
+    overflow: scroll;
+  }
+
+
+}
+
+
+#role-buttons-wrapper, #program-buttons-wrapper, #topic-buttons-wrapper {
+  /* Set width to grid width - navbar - margin */
+  display: grid;
+  grid-column-start: 1;
+  grid-row-start: 1;
+  --filter-number: 6;
   background-color: var(--bg-color-trans);
   z-index: 2;
-  display: grid;
-  grid-template-columns: repeat(var(--filter-number), calc(var(--archive-width) / var(--filter-number)));
-  grid-auto-rows: auto;
-  row-gap: 1rem;
-  height: min-content;
-  width: var(--archive-width);
+  grid-template-columns: 0 repeat(var(--filter-number), 1fr) 0;
+  grid-auto-rows: min-content;
+  column-gap: 0rem;
 
   @media (--bp-mobile) {
     font-size: var(--font-size-mobile-small);
-    left: 0;
-    --filter-number: 5;
-    width:100%;
-    bottom: 0;
-    row-gap: .25rem;
-    grid-template-columns: repeat(auto-fill, minmax(20%, 1fr));
-	}
-
-	@media (--bp-tablet) {
-    --filter-number: 4;
-    width: 92%;
-    padding: 0 4%;
-
-	}
-
-	@media (--bp-desktop-wide) {
-    --filter-number: 6;
-	}
-
+    padding: 0px 1px;
+    grid-auto-rows: 2rem;
+  }
 }
+
+
+/* set in frontmatter */
+#role-buttons-wrapper{
+  grid-template-columns: 0 7ch repeat(var(--roleListLengthString), 1fr) 0;
+}
+
+#program-buttons-wrapper {
+  grid-column-start: 2;
+  grid-template-columns: 0 7ch repeat(var(--programListLengthString), 1fr) 0;
+    
+}  
+
+#topic-buttons-wrapper {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-template-columns: 0 7ch repeat(var(--topicListLengthString), 1fr) 0;
+  
+
+
+}  
+
 
 .filter-button {
   font-family: PowerGrotesk-Light;
   letter-spacing: 0.6px;
   border: 0px;
   background-color: transparent;
-  padding: 0;
-  height: 1.5rem;
+  padding: 0 0.5rem;
+  height: auto;
 }
 
 .filter-button.is-checked {
