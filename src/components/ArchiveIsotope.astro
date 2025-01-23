@@ -248,6 +248,7 @@ document.addEventListener('astro:page-load', () => {
     layoutMode: 'cellsByRow',
     itemSelector: '.grid-item',
     percentPosition: true,
+    sortBy : 'random'
     cellsByRow: {
       columnWidth: '.grid-item',
       rowHeight: '.grid-item'
@@ -398,6 +399,7 @@ window.addEventListener('resize', updateFilterButtonStyles);
     display: grid;
     position: fixed;
     bottom: 0;
+    grid-template-columns: min-content min-content min-content;
     column-gap: 0rem;
     width: calc(var(--archive-width) - 4px);
     overflow: scroll;
@@ -429,6 +431,7 @@ window.addEventListener('resize', updateFilterButtonStyles);
 
 /* set in frontmatter */
 #role-buttons-wrapper{
+grid-column-start: 2;
   grid-template-columns: 0 7ch repeat(var(--roleListLengthString), 1fr) 0;
 }
 
@@ -439,9 +442,7 @@ window.addEventListener('resize', updateFilterButtonStyles);
 }  
 
 #topic-buttons-wrapper {
-  grid-column-start: 1;
-  grid-column-end: 3;
-  grid-row-start: 2;
+  grid-column-start: 3;
   grid-template-columns: 0 7ch repeat(var(--topicListLengthString), 1fr) 0;
   
 
