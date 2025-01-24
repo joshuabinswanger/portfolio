@@ -4,7 +4,7 @@ import GridLayout from "../layouts/GridLayout.astro";
 import GalleryElement from "./GalleryElementKeenSliderCloudinary.astro";
 import { getCollection } from 'astro:content';
 
-const galleryProjects = await getCollection('gallery');
+const galleryProjects = await getCollection('projects');
 
 // Sort galleryProjects by projectName
 galleryProjects.sort((a, b) => a.data.projectName.localeCompare(b.data.projectName));

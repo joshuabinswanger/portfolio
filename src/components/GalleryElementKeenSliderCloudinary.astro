@@ -26,7 +26,7 @@ interface Props {
 const instanceId = Math.random().toString(36).slice(2, 11);  
 
 // Fetch the specific gallery project by the project name (slug)
-const galleryProject = await getEntry('gallery', `${Astro.props.project}-gallery`);
+const galleryProject = await getEntry('projects', `${Astro.props.project}-gallery`);
 
 if (!galleryProject) {
   throw new Error(`Project with slug "${Astro.props.project}-gallery" not found.`);  

@@ -27,8 +27,8 @@ export const collections = {
     })
   }),
 
-  gallery: defineCollection({ 
-    loader: glob({ pattern: '**\/[^_]*.yaml', base: "./src/content/gallery" }),
+  projects: defineCollection({ 
+    loader: glob({ pattern: '**\/[^_]*.yaml', base: "./src/content/projects" }),
     schema: z.object({
       projectName: z.string(),
       title: z.string(),

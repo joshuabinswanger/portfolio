@@ -10,7 +10,7 @@ import BracketMiddleH from "./BracketMiddleH.astro";
 <TopWrapper>
     
     <div id="email">
-        <BracketOpenH /><p>info@rhizome.ch</p><BracketCloseH />
+        <BracketOpenH /><p><a href="mailto:info@rhizome.ch">info@rhizome.ch</a></p><BracketCloseH />
     </div>
 
 </TopWrapper>
@@ -21,16 +21,23 @@ import BracketMiddleH from "./BracketMiddleH.astro";
 
 #email {
     display: grid;
+    height: min-content;
     font-family: PowerGrotesk-Light;
     font-weight: 200;
     letter-spacing: 3px;
     font-size: 21px;
+    color: black;
     margin-top: calc(var(--padding-desktop));
     text-align: center;
     grid-template-columns: 1ch min-content 1ch;
     justify-content: center;
     align-items: center;
     gap: 1rem;
+
+    a {
+        text-decoration: none;
+        color: black;
+    }
 
     p {
         margin: 0;
@@ -44,7 +51,7 @@ import BracketMiddleH from "./BracketMiddleH.astro";
     }
 
     @media (--bp-desktop-wide) {
-    height: 30vh;
+        margin-top: var(--padding-desktop-wide);
     }   
 }
 
