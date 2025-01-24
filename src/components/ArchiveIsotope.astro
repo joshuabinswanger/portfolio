@@ -424,7 +424,7 @@ window.addEventListener('resize', updateFilterButtonStyles);
   width: var(--archive-width);
   column-gap: 1rem;
   overflow: visible;
-
+  
   @media (--bp-mobile) {
     display: grid;
     position: fixed;
@@ -432,7 +432,8 @@ window.addEventListener('resize', updateFilterButtonStyles);
     grid-template-columns: min-content min-content min-content;
     column-gap: 0rem;
     width: calc(var(--archive-width) - 4px);
-    overflow: scroll;
+    overflow-y: hidden;
+    overflow-x: scroll;
   }
 
 
