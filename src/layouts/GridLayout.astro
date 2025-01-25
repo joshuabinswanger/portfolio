@@ -32,18 +32,18 @@
 	}
 
 	@media (--bp-tablet) {
-		grid-template-columns: repeat(7, calc((100vw - 150px - 60px - calc(var(--scrollbar-width) * 2)) / 7));
+		grid-template-columns: repeat(7, calc((100vw - 150px - 0.5rem var(--margin-right-tablet) - calc(var(--scrollbar-width) * 2)) / 7));
 		grid-auto-rows: auto;
 		padding-top: var(--padding-tablet); 
 		padding-bottom: 0lvh;
-		max-width: calc(100vw - 150px - 60px - calc(var(--scrollbar-width) * 2)); 
+		max-width: calc(100vw - 150px - 0.5rem - var(--margin-right-tablet) - calc(var(--scrollbar-width) * 2)); 
 	}
 
 	@media (--bp-desktop-wide) {
-		grid-template-columns: repeat(17, calc((100vw - 13vw - 200px - 13vw + 120px - calc(var(--scrollbar-width) * 2)) / 17));
+		grid-template-columns: repeat(17, calc((100vw - 13vw - 200px - 13vw - 2rem + 120px - calc(var(--scrollbar-width) * 2)) / 17));
 		padding-top: var(--padding-desktop-wide);
 		grid-auto-rows: 5vw; 
-		max-width: calc(100vw - 13vw - 200px - 13vw + 120px - calc(var(--scrollbar-width) * 2));
+		max-width: calc(100vw - 13vw - 200px - 13vw - 2rem + 120px - calc(var(--scrollbar-width) * 2));
 	 
 	}
 }
