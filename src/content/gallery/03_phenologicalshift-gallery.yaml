@@ -1,0 +1,62 @@
+projectName: "03_phenologicalshift"
+title: "Phenological Shift"
+subtitle: "3D Learning App"
+
+tags:
+  - Science2Science
+  - 3D
+  - ClimateChange
+  - Houdini
+
+bgcolor: "#DFE2D8cc"
+
+projectDescription: |
+    **Alpine Plant Phenology Monitoring** tracks 25 years of data on climate change effects on Alpine vegetation. Using ultrasonic measurements, this study shows increased plant growth and earlier growing seasons at higher elevations, highlighting elevation-dependent warming impacts.  <br>
+    <br>**<a style="color: black;" href="https://www.slf.ch/en/staff/zehnderm/" target="_blank" style="pointer-events: auto; color: black;">Michael Zehnder</a>**
+       
+credits: |
+    <table>
+        <tr>
+          <th>Client:</th>
+          <td>SLF, Michael Zehnder</td>
+        </tr>
+                <tr>
+          <th>Tools:</th>
+          <td>Houdini, Quixel Megascans, Blender, Affinity Suite, Photoshop</td>
+        </tr>
+        <tr>
+          <th>Citation:</th>
+          <td>Zehnder, M., Pfund, B., Alexander, J., Hille Ris Lambers, J., and Rixen, C.: Elevation-dependent advance of Alpine plant phenology, <a style="color: black;" href="https://doi.org/10.5194/egusphere-egu23-5743" target="_blank">Abstract</a></td>
+        </tr>
+      </table>
+
+
+images:
+  - src: "/src/assets/projects/phenologicalshift/Phenological Shift_GalleryImage_1.webp"
+    alt: "CT Image Rendering of Oak Wood 300microns"
+    loading: "eager"
+    to: "/"
+    description:  |
+        **CT scan rendering of oak wood (Quercus robur) ~300 microns (0.3mm)** *br*   
+        Tool: Houdini, Rendering and custom import tool for image stacks
+
+  - src: "/src/assets/projects/phenologicalshift/Phenological Shift_GalleryImage_2.webp"
+    alt: "Xylopedia App iOS"
+    to: "/"
+    description:  |
+        **App on Ipad; Screenshot from Web App** *br*   
+         Tool: App developed in Unity (Dev: Jochen Stuhrmann)
+
+  - src: "/src/assets/projects/phenologicalshift/Phenological Shift_GalleryImage_3.webp"
+    alt: "Xylopedia App iOS"
+    to: "/"
+    description:  |
+        **Screenshots from Web App** *br*   
+         Tool: App developed in Unity (Dev: Jochen Stuhrmann)
+
+  - src: "/src/assets/projects/phenologicalshift/Phenological Shift_GalleryImage_4.webp"
+    alt: "Xylopedia App iOS"
+    to: "/"
+    description:  |
+        **3D model of axial (red) and radial (green) parenchyma cells in oak wood (Quercus robur)** *br*   
+         Tool: Houdini

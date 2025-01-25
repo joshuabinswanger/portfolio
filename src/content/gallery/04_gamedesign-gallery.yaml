@@ -1,0 +1,92 @@
+projectName: "04_gamedesign"
+title: "Game Design 101"
+subtitle: "Motion Graphics"
+tags:
+  - MotionGraphics
+  - 3D
+  - Procedural
+  - VEX
+  - Houdini
+
+bgcolor: "#ffffffcc"
+
+projectDescription: |
+       Visual Identity created for the Events Series **"Game Design 101"** at the MEEET Lab of the University of Zurich. With a porcedrual system in Houdini that lets you create a fully art-directable growth animation, making it possible to have high-end visuals for a series of events.<br>
+       <br>**<a style="color: black;" href="https://www.meeetlab.uzh.ch/en.html" target="_blank" style="pointer-events: auto; color: black;">MEEET Lab</a>**
+
+credits: |
+    <table>
+        <tr>
+          <th>Client:</th>
+          <td>MEEET Lab, University of Zurich</td>
+        </tr>
+                <tr>
+          <th>Tools:</th>
+          <td>Houdini, Octane, Blender, Davinci, Affinty Suite</td>
+        </tr>
+      </table>
+
+
+images:
+  - src: "/src/assets/projects/gamedesign101/GameDesign101_GalleryImages_1.webp"
+    alt: "Houdini procedurally generated 3D Blood Vessels representing a Nintendo 64 Controller"
+    loading: "eager"
+    description:  |
+        **N64 Controller** *br*   
+        Tool: Houdini, Octane, Blender, Davinci
+    imageTags: 
+      - houdini
+      - 3D
+      - octane
+      - procedural
+      - mograph
+      
+
+  - src: "/src/assets/projects/gamedesign101/GameDesign101_GalleryImages_2.webp"
+    alt: "Houdini procedurally generated 3D Blood Vessels representing a Nintendo 64 Close Up"
+    description:  |
+        **N64 Controller Close Up** *br*   
+         Tool:  Houdini, Octane, Blender, Davinci
+    imageTags:
+      - houdini
+      - 3D
+      - octane
+      - procedural
+      - mograph
+
+  - src: "/src/assets/projects/gamedesign101/GameDesign101_GalleryImages_3.webp"
+    alt: "Poster showing Houdini procedurally generated 3D Blood Vessels representing a Nintendo 64"
+    description:  |
+        **Poster for Event Series** *br*   
+         Tool:  Houdini, Octane, Blender, Affinity Suite, Davinci
+    imageTags:
+      - houdini
+      - 3D
+      - octane
+      - procedural
+      - mograph
+      - graphicdesign
+
+  - src: "/src/assets/projects/gamedesign101/GameDesign101_GalleryImages_4.webp"
+    alt: "Houdini procedurally generated 3D Blood Vessels representing a Joystick"
+    description:  |
+        **Joystick** *br*   
+         Tool: Houdini, Blender
+    imageTags:
+      - houdini
+      - 3D
+      - octane
+      - procedural
+      - mograph
+
+  - src: "/src/assets/projects/gamedesign101/GameDesign101_GalleryImages_5.webp"
+    alt: "Houdini procedurally generated 3D Blood Vessels representing a Keyboard"
+    description:  |
+        **Keyboard** *br*   
+        Tool: Houdini, Houdini Modeler
+    imageTags:
+      - houdini
+      - 3D
+      - octane
+      - procedural
+      - mograph
