@@ -113,10 +113,14 @@ if (archiveImage?.data.metadata?.highres_public_id) {
         src={archiveImage.data.public_id}
         data-src={archiveImage.data.secure_url}   
         width={archiveImage.data.width}
-        height={archiveImage.data.height}
-        sizes="(max-width: 650px) 90vw, (max-width: 1200px) 50vw, 33vw"
+        height={archiveImage.data.width}
+        sizes="(max-width: 650px) 45vw, (max-width: 1200px) 20vw, 25vw"
         alt={archiveImage.data.metadata?.description_title}
         format="avif"
+        gravity="auto"
+        crop={{
+          type: "fill",
+        }}
       
       />
 
