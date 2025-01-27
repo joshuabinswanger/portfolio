@@ -411,7 +411,6 @@ var filtersElem = document.querySelectorAll('.filters-button-group');
   position: fixed;
   z-index: 2;
   grid-template-columns: 1fr 2fr;
-  grid-template-rows: min-content min-content;
   row-gap: 0.25rem;
   --archive-width: 100%;
   width: var(--archive-width);
@@ -423,9 +422,11 @@ var filtersElem = document.querySelectorAll('.filters-button-group');
   @media (--bp-mobile) {
     display: grid;
     bottom: 10px;
+    left: 0px;
     grid-template-columns: auto auto auto;
-    column-gap: 0.5rem;
-    width: calc(var(--archive-width) - 4px);
+    grid-template-rows: auto;
+    column-gap: 0.25rem;
+    width: 100vw;
     overflow-y: hidden;
     overflow-x: scroll;
     
@@ -445,8 +446,7 @@ var filtersElem = document.querySelectorAll('.filters-button-group');
 
   @media (--bp-mobile) {
     font-size: var(--font-size-mobile-small);
-    margin: 0px 1px;
-    margin: 0px 1px;
+    margin: 0;
   }
 }
 
@@ -454,7 +454,7 @@ var filtersElem = document.querySelectorAll('.filters-button-group');
 /* set in frontmatter */
 #role-buttons-wrapper{
 grid-column-start: 1;
-  grid-template-columns: 0 7.5ch repeat(var(--roleListLengthString), 1fr) 0;
+  grid-template-columns: 0 9ch repeat(var(--roleListLengthString), 1fr) 0;
 
   
   @media (--bp-mobile) {
@@ -466,7 +466,7 @@ grid-column-start: 1;
 #program-buttons-wrapper {
   grid-column-start: 2;
   grid-column-end: 3;
-  grid-template-columns: 0 6.5ch repeat(var(--programListLengthString), 1fr) 0;
+  grid-template-columns: 0 9ch repeat(var(--programListLengthString), 1fr) 0;
 
   @media (--bp-mobile) {
     grid-column-start: 2;
@@ -479,7 +479,7 @@ grid-column-start: 1;
   grid-column-start: 1;
   grid-column-end: 3;
   grid-row-start: 2;
-  grid-template-columns: 0 8ch repeat(var(--topicListLengthString), 1fr) 0;
+  grid-template-columns: 0 9ch repeat(var(--topicListLengthString), 1fr) 0;
 
   @media (--bp-mobile) {
     grid-column-start: 3;
@@ -496,12 +496,11 @@ grid-column-start: 1;
   letter-spacing: 0.6px;
   border: 0px;
   background-color: transparent;
-  padding: 0 0.5rem;
+  padding: 0 0.7rem;
   height: 1.3rem;
 
   
   @media (--bp-mobile) {
-    height: 3rem;
     height: 3rem;
   }
 
