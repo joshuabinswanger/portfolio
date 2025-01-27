@@ -409,7 +409,6 @@ var filtersElem = document.querySelectorAll('.filters-button-group');
 #filter-top-wrapper {
   display: grid;
   position: fixed;
-  position: fixed;
   z-index: 2;
   grid-template-columns: 1fr 2fr;
   grid-template-rows: min-content min-content;
@@ -423,10 +422,7 @@ var filtersElem = document.querySelectorAll('.filters-button-group');
   
   @media (--bp-mobile) {
     display: grid;
-    position: fixed;
     bottom: 10px;
-    grid-template-columns: auto auto auto;
-    column-gap: 0.5rem;
     grid-template-columns: auto auto auto;
     column-gap: 0.5rem;
     width: calc(var(--archive-width) - 4px);
@@ -458,7 +454,7 @@ var filtersElem = document.querySelectorAll('.filters-button-group');
 /* set in frontmatter */
 #role-buttons-wrapper{
 grid-column-start: 1;
-  grid-template-columns: 0 7.5ch repeat(var(--roleListLengthString), 1fr) min-content;
+  grid-template-columns: 0 7.5ch repeat(var(--roleListLengthString), 1fr) 0;
 
   
   @media (--bp-mobile) {
@@ -470,7 +466,7 @@ grid-column-start: 1;
 #program-buttons-wrapper {
   grid-column-start: 2;
   grid-column-end: 3;
-  grid-template-columns: min-content 6.5ch repeat(var(--programListLengthString), 1fr) 0;
+  grid-template-columns: 0 6.5ch repeat(var(--programListLengthString), 1fr) 0;
 
   @media (--bp-mobile) {
     grid-column-start: 2;
