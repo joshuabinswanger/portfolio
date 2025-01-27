@@ -10,11 +10,12 @@ import BracketCloseV from './BracketCloseV.astro';
 import "../styles/global.css"
 
 ---
-<div id="Logo">
-  <RhizomLogoComponent/ >
-</div>
+
 
 <nav id="NavBarMobile">
+  <div id="Logo">
+    <RhizomLogoComponent/ >
+  </div>
 
   <input id="input" type="checkbox"></input>
 
@@ -141,7 +142,10 @@ import "../styles/global.css"
 }
 
 #Logo {
-  height: 100svh;
+  position: fixed;
+  top: 11px;
+  width: 27%;
+  height: auto;
   pointer-events: auto;
 } 
 
@@ -223,15 +227,15 @@ p {
 
 #Hamburger {
   position: fixed;
-  top: 15px;
-  right: 20px;
+  top: 11px;
+  right: 11px;
   z-index: 999;
 
   span  {
     display: block;
-    width: 30px;
+    width: 33px;
     height: 2px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     position: relative;
     background: #000000;
     /* transform-origin: 4px 0px; */
