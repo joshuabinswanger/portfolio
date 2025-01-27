@@ -230,23 +230,12 @@ updateFilterButtonStyles();
 
     // Filter Functions
     var filterFns = {};
-    // Filter Functions
-    var filterFns = {};
+
 
     // store filter for each group
     var filters = {};
-    // store filter for each group
-    var filters = {};
 
-    var iso = new Isotope( grid, {
-      layoutMode: 'cellsByRow',
-      itemSelector: '.grid-item',
-      percentPosition: true,
-      sortBy : 'random',
-      cellsByRow: {
-        columnWidth: '.grid-item',
-        rowHeight: '.grid-item'
-      },
+
     var iso = new Isotope( grid, {
       layoutMode: 'cellsByRow',
       itemSelector: '.grid-item',
@@ -260,24 +249,14 @@ updateFilterButtonStyles();
       filter: function(itemElem) {
         // Assume the item matches by default
         var isMatched = true;
-      filter: function(itemElem) {
-        // Assume the item matches by default
-        var isMatched = true;
 
-        // Loop through each property in the `filters` object
-        for (var prop in filters) {
-          var filter = filters[prop]; // Get the filter value for the current property
-        // Loop through each property in the `filters` object
         for (var prop in filters) {
           var filter = filters[prop]; // Get the filter value for the current property
 
           // If the filter is a function defined in `filterFns`, use it. Otherwise, use the raw filter value.
           filter = filterFns[filter] || filter;
-          // If the filter is a function defined in `filterFns`, use it. Otherwise, use the raw filter value.
-          filter = filterFns[filter] || filter;
 
-          // Check the type of the filter to determine how to apply it
-          var filterType = typeof filter;
+
           // Check the type of the filter to determine how to apply it
           var filterType = typeof filter;
 
@@ -289,20 +268,8 @@ updateFilterButtonStyles();
           else if (filter) {
             isMatched = itemElem.matches(filter); // Use Element.matches() to test if the item matches the filter
           }
-          // If the filter is a function, call it and pass `itemElem` to test if it matches
-          if (filter && filterType == 'function') {
-            isMatched = filter(itemElem); // Apply the filter function
-          }
-          // If the filter is not a function but is a valid value, check if `itemElem` matches the selector
-          else if (filter) {
-            isMatched = itemElem.matches(filter); // Use Element.matches() to test if the item matches the filter
-          }
+      
 
-          // If the item does not match the current filter, break out of the loop early
-          if (!isMatched) {
-            break; // No need to check other filters if this one fails
-          }
-        }
           // If the item does not match the current filter, break out of the loop early
           if (!isMatched) {
             break; // No need to check other filters if this one fails
@@ -311,29 +278,25 @@ updateFilterButtonStyles();
 
         // Return true if the item matched all filters, false otherwise
         return isMatched;
-        // Return true if the item matched all filters, false otherwise
-        return isMatched;
 
       }
-      
-    });
-      }
-      
-    });
 
-    imagesloaded( grid ).on( 'progress', function() {
-      // layout Isotope after each image loads
-      iso.layout();
-    });
-    imagesloaded( grid ).on( 'progress', function() {
-      // layout Isotope after each image loads
-      iso.layout();
-    });
 
-   // bind filter button click
-   var filtersElem = document.querySelectorAll('.filters-button-group');
-    filtersElem.forEach(element => {
-      element.addEventListener( 'click', function( event ) {
+
+    });
+      
+
+
+
+imagesloaded( grid ).on( 'progress', function() {
+  // layout Isotope after each image loads
+  iso.layout();
+});
+
+// bind filter button click
+var filtersElem = document.querySelectorAll('.filters-button-group');
+  filtersElem.forEach(element => {
+    element.addEventListener( 'click', function( event ) {
       // only work with buttons
       if (!event.target.matches('button')) {
         return;
@@ -350,12 +313,9 @@ updateFilterButtonStyles();
       // use matching filter function
       iso.arrange();
     });
+
   });
-    
-      // use matching filter function
-      iso.arrange();
-    });
-  });
+
     
 
 
@@ -365,19 +325,7 @@ updateFilterButtonStyles();
       var buttonGroup = buttonGroups[i];
       radioButtonGroup( buttonGroup );
     }
-  // change is-checked class on buttons
-    var buttonGroups = document.querySelectorAll('.filters-button-group');
-    for ( var i=0, len = buttonGroups.length; i < len; i++ ) {
-      var buttonGroup = buttonGroups[i];
-      radioButtonGroup( buttonGroup );
-    }
 
-    function radioButtonGroup(buttonGroup) {
-    buttonGroup.addEventListener('click', function (event) {
-      // Only proceed if the target is a button
-      if (!event.target.matches('button')) {
-        return;
-      }
     function radioButtonGroup(buttonGroup) {
     buttonGroup.addEventListener('click', function (event) {
       // Only proceed if the target is a button
@@ -392,17 +340,7 @@ updateFilterButtonStyles();
         if (allFilterButton) {
           buttonGroup.querySelector('.is-checked').classList.remove('is-checked');
           allFilterButton.classList.add('is-checked');
-      // If the clicked button is already checked
-      if (event.target.classList.contains('is-checked')) {
-        // Set the `data-filter="*"` button as checked
-        const allFilterButton = buttonGroup.querySelector('button[data-filter="*"]');
-        if (allFilterButton) {
-          buttonGroup.querySelector('.is-checked').classList.remove('is-checked');
-          allFilterButton.classList.add('is-checked');
 
-          // Update the filter group to reset the filter
-          const filterGroup = buttonGroup.getAttribute('data-filter-group');
-          filters[filterGroup] = '*';
           // Update the filter group to reset the filter
           const filterGroup = buttonGroup.getAttribute('data-filter-group');
           filters[filterGroup] = '*';
@@ -417,21 +355,6 @@ updateFilterButtonStyles();
           // Trigger Isotope filtering
           iso.arrange();
         }
-      } else {
-        // Normal behavior: switch the `is-checked` class
-        buttonGroup.querySelector('.is-checked').classList.remove('is-checked');
-        event.target.classList.add('is-checked');
-
-        // Update the filter group with the new filter
-        const filterGroup = buttonGroup.getAttribute('data-filter-group');
-        filters[filterGroup] = event.target.getAttribute('data-filter');
-        // Update the filter group with the new filter
-        const filterGroup = buttonGroup.getAttribute('data-filter-group');
-        filters[filterGroup] = event.target.getAttribute('data-filter');
-
-        // Trigger Isotope filtering
-        iso.arrange();
-      }
     });
   }
 
