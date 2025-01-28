@@ -131,7 +131,7 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
     <fieldset class:list={[`filters-button-group`]} id="role-buttons-wrapper" data-filter-group>
       <BracketOpenH />
 
-      <button  type="button" class:list={["filter-button mixitup-control-active"]}>Art</button>
+      <button  type="reset" class:list={["filter-button mixitup-control-active"]}>Art</button>
       {roleConvertedCSS.map((tag, index) => (
         <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
             {roleConvertedName[index]}
@@ -145,7 +145,7 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
     <fieldset class:list={[`filters-button-group`]} id="program-buttons-wrapper" data-filter-group>
       <BracketOpenH />
 
-      <button  type="button" class="filter-button mixitup-control-active">Tool</button>
+      <button  type="reset" class="filter-button mixitup-control-active">Tool</button>
       {programConvertedCSS.map((tag, index) => (
         <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
             {programConvertedName[index]}
@@ -159,7 +159,7 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
     <fieldset class:list={[`filters-button-group`]} id="topic-buttons-wrapper" data-filter-group="topic">
       <BracketOpenH />
 
-      <button  type="button" class="filter-button mixitup-control-active">Topic</button>
+      <button  type="reset" class="filter-button mixitup-control-active">Topic</button>
       {topicConvertedCSS.map((tag, index) => (
         <button type="button"class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
             {topicConvertedName[index]}
