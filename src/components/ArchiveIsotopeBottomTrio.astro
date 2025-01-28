@@ -421,15 +421,16 @@ var filtersElem = document.querySelectorAll('.filters-button-group');
   
   @media (--bp-mobile) {
     display: grid;
-    bottom: 0px;
+    /* padding bot plus height */
+    bottom: calc(2px + 3rem);
+    padding: 0 3px 2px 3px;
     left: 0px;
     grid-template-columns: auto auto auto;
     grid-template-rows: auto;
-    column-gap: 0.25rem;
+    column-gap: 0.2rem;
     width: 100vw;
     overflow-y: hidden;
     overflow-x: scroll;
-    padding: 11px;
     
   }
 
