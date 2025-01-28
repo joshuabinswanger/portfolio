@@ -20,72 +20,72 @@ const archiveImages = await getCollection('galleryImages', ({ data }) => {
 
 
 // Helper function to ensure we get an array from any input
-function ensureArray(value) {
-  if (!value) return [];
-  if (Array.isArray(value)) return value;
-  return value.split(',').map(item => item.trim()); // Split by comma and trim spaces
-}
+  function ensureArray(value) {
+    if (!value) return [];
+    if (Array.isArray(value)) return value;
+    return value.split(',').map(item => item.trim()); // Split by comma and trim spaces
+  }
 
 
 
 //// Role /////
 
-/// extract role tags
-const role = Array.from(
-  new Set(archiveImages.flatMap((image) => ensureArray(image.data.metadata?.role) || []))
-);
+  /// extract role tags
+  const role = Array.from(
+    new Set(archiveImages.flatMap((image) => ensureArray(image.data.metadata?.role) || []))
+  );
 
-console.log("Role Array:", role); // Log the array to the console
+  console.log("Role Array:", role); // Log the array to the console
 
-//Filter the tags so only those in `AllowedList` remain
-const roleAllowedList = ["2D", "3D", "Dev"];
-const roleListLength = roleAllowedList.length;
-const roleListLengthString = roleListLength.toString();
+  //Filter the tags so only those in `AllowedList` remain
+  const roleAllowedList = ["2D", "3D", "Dev"];
+  const roleListLength = roleAllowedList.length;
+  const roleListLengthString = roleListLength.toString();
 
-const roleAllowed = role.filter(tag => roleAllowedList.includes(tag));
+  const roleAllowed = role.filter(tag => roleAllowedList.includes(tag));
 
-//covnert to CSS conform tags
-const roleConversionCSS = {
-  "2D": "twoD",
-  "3D": "threeD"
-};
+  //covnert to CSS conform tags
+  const roleConversionCSS = {
+    "2D": "twoD",
+    "3D": "threeD"
+  };
 
-const roleConversionName = {
-  "Dev": "Tech",
-};
+  const roleConversionName = {
+    "Dev": "Tech",
+  };
 
 
-const roleConvertedCSS = roleAllowed.map(tag => roleConversionCSS[tag] || tag);
-const roleConvertedName = roleAllowed.map(tag => roleConversionName[tag] || tag);
+  const roleConvertedCSS = roleAllowed.map(tag => roleConversionCSS[tag] || tag);
+  const roleConvertedName = roleAllowed.map(tag => roleConversionName[tag] || tag);
 
 
 //// PROGRAM /////
 
-/// extract role tags
-const program = Array.from(
-  new Set(archiveImages.flatMap((image) => ensureArray(image.data.metadata?.program) || []))
-);
+  /// extract role tags
+  const program = Array.from(
+    new Set(archiveImages.flatMap((image) => ensureArray(image.data.metadata?.program) || []))
+  );
 
-console.log("Program Array:", program); // Log the array to the console
+  console.log("Program Array:", program); // Log the array to the console
 
-//Filter the tags so only those in `AllowedList` remain
-const programAllowedList = ["Houdini", "Blender", "ZBrush", "Rive", "SubstancePainter"];
-const programListLength = programAllowedList.length;
-const programListLengthString = programListLength.toString();
+  //Filter the tags so only those in `AllowedList` remain
+  const programAllowedList = ["Houdini", "Blender", "ZBrush", "Rive", "SubstancePainter"];
+  const programListLength = programAllowedList.length;
+  const programListLengthString = programListLength.toString();
 
-const programAllowed = program.filter(tag => programAllowedList.includes(tag));
+  const programAllowed = program.filter(tag => programAllowedList.includes(tag));
 
-//covnert to CSS conform tags
-const programConversionCSS = {
-};
+  //covnert to CSS conform tags
+  const programConversionCSS = {
+  };
 
-const programConversionName = {
-  "SubstancePainter" : "Substance Painter"
-};
+  const programConversionName = {
+    "SubstancePainter" : "Substance Painter"
+  };
 
 
-const programConvertedCSS = programAllowed.map(tag => programConversionCSS[tag] || tag);
-const programConvertedName= programAllowed.map(tag => programConversionName[tag] || tag);
+  const programConvertedCSS = programAllowed.map(tag => programConversionCSS[tag] || tag);
+  const programConvertedName= programAllowed.map(tag => programConversionName[tag] || tag);
 
 
 
@@ -93,31 +93,31 @@ const programConvertedName= programAllowed.map(tag => programConversionName[tag]
 
 //// TOPIC /////
 
-/// extract role tags
-const topic = Array.from(
-  new Set(archiveImages.flatMap((image) => ensureArray(image.data.metadata?.topic) || []))
-);
+  /// extract role tags
+  const topic = Array.from(
+    new Set(archiveImages.flatMap((image) => ensureArray(image.data.metadata?.topic) || []))
+  );
 
-console.log("Topic Array:", topic); // Log the array to the console
+  console.log("Topic Array:", topic); // Log the array to the console
 
-//Filter the tags so only those in `AllowedList` remain
-const topicAllowedList = ['Poster', 'Tutorial', 'SciCom', 'MoGraph', 'Real-time', 'Wood', 'Character', 'Proceduralism', 'Creature'];
-const topicListLength = topicAllowedList.length;
-const topicListLengthString = topicListLength.toString();
+  //Filter the tags so only those in `AllowedList` remain
+  const topicAllowedList = ['Poster', 'Tutorial', 'SciCom', 'MoGraph', 'Real-time', 'Wood', 'Character', 'Proceduralism', 'Creature'];
+  const topicListLength = topicAllowedList.length;
+  const topicListLengthString = topicListLength.toString();
 
-const topicAllowed = topic.filter(tag => topicAllowedList.includes(tag));
+  const topicAllowed = topic.filter(tag => topicAllowedList.includes(tag));
 
-//covnert to CSS conform tags
-const topicConversionCSS = {
-};
-const topicConversionName = {
-  "MoGraph" : "Motion",
-  "SciCom" : "Science",
-  "Proceduralism" : "Procedural" 
-};
+  //covnert to CSS conform tags
+  const topicConversionCSS = {
+  };
+  const topicConversionName = {
+    "MoGraph" : "Motion",
+    "SciCom" : "Science",
+    "Proceduralism" : "Procedural" 
+  };
 
-const topicConvertedCSS = topicAllowed.map(tag => topicConversionCSS[tag] || tag);
-const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || tag);
+  const topicConvertedCSS = topicAllowed.map(tag => topicConversionCSS[tag] || tag);
+  const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || tag);
 
 
 ---
@@ -421,15 +421,16 @@ var filtersElem = document.querySelectorAll('.filters-button-group');
   
   @media (--bp-mobile) {
     display: grid;
-    bottom: 0px;
+    /* padding bot plus height */
+    bottom: calc(2px + 3rem);
+    padding: 0 3px 2px 3px;
     left: 0px;
     grid-template-columns: auto auto auto;
     grid-template-rows: auto;
-    column-gap: 0.25rem;
+    column-gap: 0.2rem;
     width: 100vw;
     overflow-y: hidden;
     overflow-x: scroll;
-    padding-bottom: 11px;
     
   }
 
@@ -502,7 +503,7 @@ grid-column-start: 1;
 
   
   @media (--bp-mobile) {
-    height: 3rem;
+    height: 2rem;
   }
 
 }

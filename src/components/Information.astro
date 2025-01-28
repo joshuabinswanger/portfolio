@@ -11,17 +11,15 @@ import Footer from "./Footer.astro";
 ---
 
 <TopWrapper>
-    <div id="Wrapper">
+    <div id="InfoWrapper">
         <!--         
         <div id="ProfilePic">
         </div> -->
 
         <p id="AboutText">
             Joshua Binswanger is a scientific illustrator and designer based in Zurich, Switzerland, dedicated to blending visuals with knowledge to make complex topics both engaging and visually appealing. Leveraging a diverse array of design tools, he transforms scientific concepts into captivating, accessible visuals. Driven by curiosity and an inquisitive mindset, Joshua fosters meaningful dialogue with his collaborators, enriching the creative process.
-<br><br>
-Beyond his design work, Joshua is passionate about teaching and sharing his expertise. He combines his love for nature and storytelling by illustrating imaginative characters and creatures, showcasing his affinity for merging creativity with science.
-
-
+        <br><br>
+        Beyond his design work, Joshua is passionate about teaching and sharing his expertise. He combines his love for nature and storytelling by illustrating imaginative characters and creatures, showcasing his affinity for merging creativity with science.
         </p>
 
         <p id="SelectedClients">
@@ -42,6 +40,15 @@ Beyond his design work, Joshua is passionate about teaching and sharing his expe
             Infographics<br>
             Workshops<br>
         </p>
+
+        <p id="Contact">
+            <strong>Contact:</strong>
+        </p>
+
+        <p id="Email">
+            <a href="mailto:info@rhizome.ch">info@rhizome.ch</a>
+        </p>
+
     </div>
 </TopWrapper>
 
@@ -66,18 +73,17 @@ p {
     }
 }
 
-#Wrapper{
+#InfoWrapper{
     display: grid;
     grid-template-columns: 1fr 56ch 55ch 1fr;
-    grid-auto-rows: min-content auto;
-    grid-row-gap: 10vh;
+    grid-auto-rows: auto;
     margin-top: calc(var(--padding-desktop));
-    max-height: 66vh;
+    max-height: 90vh;
 
     @media (--bp-mobile) {
         margin: auto 2px;
         grid-template-columns: 1fr 50% 50% 1fr;
-        grid-auto-rows: auto;
+        grid-template-rows: 6fr 3fr 1fr;
     }
 
 
@@ -151,5 +157,35 @@ p {
         font-size: calc(var(--font-size-desktop-wide) - 2px);
     }
 }
+
+#Contact {
+    grid-column-start: 2;
+    grid-row-start: 3;
+    max-width: 33ch;
+    align-self: start;
+    font-size: calc(var(--font-size-dekstop) - 2px);
+    letter-spacing: 2px;
+    line-height: 1rem;
+    height: min-content;
+
+    
+}
+
+#Email {
+    grid-column-start: 3;
+    grid-row-start: 3;
+    max-width: 33ch;
+    align-self: start;
+    font-size: calc(var(--font-size-dekstop) - 2px);
+    letter-spacing: 2px;
+    line-height: 1rem;
+    height: min-content;
+    
+    a {
+        text-decoration: none;
+        color: black;
+    }
+}
+
 
 </style>

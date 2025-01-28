@@ -1,0 +1,446 @@
+---
+import BracketOpenH from "./BracketOpenH.astro";
+import BracketMiddleH from "./BracketMiddleH.astro";
+import BracketCloseH from "./BracketCloseH.astro";
+import TopWrapper from "../layouts/TopWrapper.astro";
+import GridLayout from "../layouts/GridLayout.astro";
+import ArchiveElement from "./ArchiveElementMixItUp.astro";
+import { getCollection } from "astro:content";
+
+// Filter the collection to include only items with metadata.archive === "include"
+const archiveImages = await getCollection('galleryImages', ({ data }) => {
+  return data.metadata?.archive === "include";
+});
+
+
+
+//////////////////
+///// TAGS ///////
+//////////////////
+
+
+// Helper function to ensure we get an array from any input
+function ensureArray(value) {
+  if (!value) return [];
+  if (Array.isArray(value)) return value;
+  return value.split(',').map(item => item.trim()); // Split by comma and trim spaces
+}
+
+
+
+//// Role /////
+
+/// extract role tags
+const role = Array.from(
+  new Set(archiveImages.flatMap((image) => ensureArray(image.data.metadata?.role) || []))
+);
+
+console.log("Role Array:", role); // Log the array to the console
+
+//Filter the tags so only those in `AllowedList` remain
+const roleAllowedList = ["2D", "3D", "Dev"];
+const roleListLength = roleAllowedList.length;
+const roleListLengthString = roleListLength.toString();
+
+const roleAllowed = role.filter(tag => roleAllowedList.includes(tag));
+
+//covnert to CSS conform tags
+const roleConversionCSS = {
+  "2D": "twoD",
+  "3D": "threeD"
+};
+
+const roleConversionName = {
+  "Dev": "Tech",
+};
+
+
+const roleConvertedCSS = roleAllowed.map(tag => roleConversionCSS[tag] || tag);
+const roleConvertedName = roleAllowed.map(tag => roleConversionName[tag] || tag);
+
+
+//// PROGRAM /////
+
+/// extract role tags
+const program = Array.from(
+  new Set(archiveImages.flatMap((image) => ensureArray(image.data.metadata?.program) || []))
+);
+
+console.log("Program Array:", program); // Log the array to the console
+
+//Filter the tags so only those in `AllowedList` remain
+const programAllowedList = ["Houdini", "Blender", "ZBrush", "Rive", "SubstancePainter"];
+const programListLength = programAllowedList.length;
+const programListLengthString = programListLength.toString();
+
+const programAllowed = program.filter(tag => programAllowedList.includes(tag));
+
+//covnert to CSS conform tags
+const programConversionCSS = {
+};
+
+const programConversionName = {
+  "SubstancePainter" : "Substance Painter"
+};
+
+
+const programConvertedCSS = programAllowed.map(tag => programConversionCSS[tag] || tag);
+const programConvertedName= programAllowed.map(tag => programConversionName[tag] || tag);
+
+
+
+
+
+//// TOPIC /////
+
+/// extract role tags
+const topic = Array.from(
+  new Set(archiveImages.flatMap((image) => ensureArray(image.data.metadata?.topic) || []))
+);
+
+console.log("Topic Array:", topic); // Log the array to the console
+
+//Filter the tags so only those in `AllowedList` remain
+const topicAllowedList = ['Poster', 'Tutorial', 'SciCom', 'MoGraph', 'Real-time', 'Wood', 'Character', 'Proceduralism', 'Creature'];
+const topicListLength = topicAllowedList.length;
+const topicListLengthString = topicListLength.toString();
+
+const topicAllowed = topic.filter(tag => topicAllowedList.includes(tag));
+
+//covnert to CSS conform tags
+const topicConversionCSS = {
+};
+const topicConversionName = {
+  "MoGraph" : "Motion",
+  "SciCom" : "Science",
+  "Proceduralism" : "Procedural" 
+};
+
+const topicConvertedCSS = topicAllowed.map(tag => topicConversionCSS[tag] || tag);
+const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || tag);
+
+
+---
+
+<TopWrapper>
+  <div class:list={["ArchiveWrapper"]} id="ArchiveWrapper">
+  <!-- Filter Buttons-->
+  <form id="filter-top-wrapper" >
+
+    <!-- Role -->
+    <fieldset class:list={[`filters-button-group`]} id="role-buttons-wrapper" data-filter-group>
+      <BracketOpenH />
+
+      <button  type="button" class:list={["filter-button mixitup-control-active"]}>Art</button>
+      {roleConvertedCSS.map((tag, index) => (
+        <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
+            {roleConvertedName[index]}
+        </button>
+      ))}
+
+      <BracketCloseH />
+    </fieldset>
+
+    <!-- Program -->
+    <fieldset class:list={[`filters-button-group`]} id="program-buttons-wrapper" data-filter-group>
+      <BracketOpenH />
+
+      <button  type="button" class="filter-button mixitup-control-active">Tool</button>
+      {programConvertedCSS.map((tag, index) => (
+        <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
+            {programConvertedName[index]}
+
+        </button>
+      ))}
+      <BracketCloseH />
+    </fieldset>
+
+    <!-- Topic -->
+    <fieldset class:list={[`filters-button-group`]} id="topic-buttons-wrapper" data-filter-group="topic">
+      <BracketOpenH />
+
+      <button  type="button" class="filter-button mixitup-control-active">Topic</button>
+      {topicConvertedCSS.map((tag, index) => (
+        <button type="button"class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
+            {topicConvertedName[index]}
+
+        </button>
+      ))}
+      <BracketCloseH />
+    </fieldset>
+
+  </form>
+
+    <div class:list={["container"]} id="Archive">
+        {archiveImages.map((image, index) => (
+      
+                <ArchiveElement
+                    public_id={image.data.public_id} // Ensure `public_id` exists
+                    index={index}
+                />
+
+        ))}
+    </div>
+  </div>
+ 
+</TopWrapper>
+
+<script>
+import mixitup from 'mixitup';
+import mixitupMultifilter from 'mixitup-multifilter';
+
+
+  
+
+
+
+document.addEventListener('astro:page-load', () => {
+
+  mixitup.use(mixitupMultifilter);
+  const mix= document.querySelector('.container'); 
+  const filterButtons = document.querySelectorAll('.filter-button');
+  const containerEl = document.querySelector('.ArchiveWrapper');
+  const filterTopWrapperElement = document.querySelector('#filter-top-wrapper');
+
+
+  ////////////////////
+  ////Filter Width///
+  ////////////////////
+
+  function updateFilterButtonWidth() {
+    // Calculate the archive width
+    const archiveWidth = mix.offsetWidth;
+
+    // Set the --archive-width CSS variable dynamically
+    filterTopWrapperElement.style.setProperty('--archive-width', `${archiveWidth}px`);
+
+
+    
+  }
+  updateFilterButtonWidth();
+
+  window.addEventListener('resize', updateFilterButtonWidth);
+
+  /////////////////////
+  ///////MixItUp//////
+  /////////////////////
+
+  var mixer = mixitup(containerEl, {
+    selectors: {
+        target: '.mix'
+    },
+    animation: {
+        duration: 300
+    },
+    multifilter: {
+        enable: true // enable the multifilter extension for the mixer
+    },
+    debug: {
+        enable: true
+    },
+
+    callbacks: {
+        onMixStart: function(state, futureState) {
+            console.log(futureState.activeFilter.selector);
+        }
+    }
+});
+
+
+})
+
+
+
+</script>
+
+
+<style define:vars={{ roleListLengthString, programListLengthString, topicListLengthString }}>
+
+@import "../styles/global.css";
+
+
+
+#ArchiveWrapper {
+  display: grid;
+  grid-template-rows: min-content 1fr;
+
+
+}
+
+#Archive {
+  padding-top: calc(var(--padding-desktop) + 6rem);
+
+  @media (--bp-mobile) {
+		padding-top: 6rem; 
+	}
+
+  @media (--bp-tablet) {
+
+  padding-top: var(--padding-tablet); 
+
+  }
+
+  @media (--bp-desktop-wide) {
+
+  padding-top: var(--padding-desktop-wide);
+
+
+  }
+
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(5, 13%);
+  grid-row-gap: 5rem;
+  grid-auto-rows: auto;
+  justify-content: space-evenly;
+
+
+  @media (--bp-mobile) {
+    grid-template-columns: 30% 30%;
+    grid-row-gap: 5rem;
+	}
+
+	@media (--bp-tablet) {
+
+    grid-template-columns: repeat(3, 20%);
+    grid-row-gap: 5rem;
+
+	}
+
+	@media (--bp-desktop-wide) {
+    grid-template-columns: repeat(7, 10%);
+	 
+	}
+}
+
+
+#filter-top-wrapper {
+  display: grid;
+  position: fixed;
+  z-index: 2;
+  grid-template-columns: 1fr 2fr;
+  padding-top: var(--padding-desktop);
+  row-gap: 0.25rem;
+  --archive-width: 100%;
+  width: var(--archive-width);
+  column-gap: 1rem;
+  overflow: visible;
+  padding: 0;
+  background-color: var(--bg-color);
+  
+  @media (--bp-mobile) {
+    display: grid;
+    /* padding bot plus height */
+    bottom: calc(2px + 3rem);
+    padding: 0 3px 2px 3px;
+    padding-top: 2rem; 
+    left: 0px;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto;
+    column-gap: 0.2rem;
+    width: calc(100vw - var(--scrollbar-width) - 6px);
+    overflow-y: hidden;
+    overflow-x: scroll;
+    
+  }
+
+	@media (--bp-tablet) {
+
+		padding-top: var(--padding-tablet); 
+
+	}
+
+	@media (--bp-desktop-wide) {
+
+		padding-top: var(--padding-desktop-wide);
+
+	 
+	}
+}
+
+
+.filters-button-group {
+  display: grid; /* Keeps the grid layout */
+  grid-row-start: 1;
+  column-gap: 0rem;
+  z-index: 2;
+  border: none; /* Remove the default fieldset border */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
+
+  @media (--bp-mobile) {
+    font-size: var(--font-size-mobile-small);
+    margin: 0;
+  }
+}
+
+fieldset {
+  border: none; /* Ensure fieldset behaves like a div */
+  margin: 0;
+  padding: 0;
+}
+
+
+/* set in frontmatter */
+#role-buttons-wrapper{
+grid-column-start: 1;
+  grid-template-columns: 0 9ch repeat(var(--roleListLengthString), 1fr) 0;
+
+  
+  @media (--bp-mobile) {
+    grid-column-start: 1;
+  }
+
+}
+
+#program-buttons-wrapper {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-template-columns: 0 9ch repeat(var(--programListLengthString), 1fr) 0;
+
+  @media (--bp-mobile) {
+    grid-column-start: 2;
+  }
+
+    
+}  
+
+#topic-buttons-wrapper {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-template-columns: 0 9ch repeat(var(--topicListLengthString), 1fr) 0;
+
+  @media (--bp-mobile) {
+    grid-column-start: 3;
+    grid-row-start: 1;
+  }
+
+}  
+
+
+.filter-button {
+  font-family: PowerGrotesk-Light;
+  color: black;
+  font-size: 11px;
+  letter-spacing: 0.6px;
+  border: 0px;
+  background-color: transparent;
+  padding: 0 0.7rem;
+  height: 1.3rem;
+
+  
+  @media (--bp-mobile) {
+    height: 2rem;
+  }
+
+}
+
+.filter-button.mixitup-control-active {
+  color: var(--bg-color);
+  background-color: black;
+}
+
+</style>

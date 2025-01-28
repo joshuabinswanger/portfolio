@@ -112,12 +112,12 @@
   --grid-template-columns-tablet:       150px 1fr;
   --grid-template-columns-desktop-wide: 200px 1fr;
 }
-/* Media Queries Breakpoints*/
-@custom-media --bp-mobile-small (width <= 375px);
-@custom-media --bp-mobile (width <= 650px);
-@custom-media --bp-tablet (650px <= width <= 1200px);
-@custom-media --bp-desktop (1200px <= width <= 1800px);
-@custom-media --bp-desktop-wide (width >= 1800px);
+  /* Media Queries Breakpoints*/
+  @custom-media --bp-mobile-small (width <= 375px);
+  @custom-media --bp-mobile (width <= 650px);
+  @custom-media --bp-tablet (650px <= width <= 1200px);
+  @custom-media --bp-desktop (1200px <= width <= 1800px);
+  @custom-media --bp-desktop-wide (width >= 1800px);
 
 
 /* View Transitions */

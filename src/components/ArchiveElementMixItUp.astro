@@ -48,6 +48,9 @@ const tagConversion = {
 
 // Convert the tags in the allowed list using a mapping object
 const convertedTags = tags.map(tag => tagConversion[tag] || tag);
+// Convert the tags in the allowed list using a mapping object
+const role =  [...ensureArray(archiveImage.data.metadata?.role)];
+const convertedRole = role.map(tag => tagConversion[tag] || tag);
 
 // Join tags into a space-separated string
 const tagClassString = convertedTags.join(' ');
@@ -97,7 +100,7 @@ if (archiveImage?.data.metadata?.highres_public_id) {
 
 --- 
 
-<div class:list={[`archiveElementWrapper grid-item ${tagClassString}`]} id={`archiveElement-${Astro.props.index}`}>
+<div class:list={[`archiveElementWrapper mix ${tagClassString}`]} id={`archiveElement-${Astro.props.index}`} data-role={convertedRole} data-program={archiveImage.data.metadata?.program} data-topic={archiveImage.data.metadata?.topic}>
   
   <div id="Image" class:list={["ImageElement"]}>
     <a class:list={["photo-link"]}
@@ -108,7 +111,6 @@ if (archiveImage?.data.metadata?.highres_public_id) {
     data-description_title={archiveImage.data.metadata?.description_title}
     data-description_text={archiveImage.data.metadata?.description_text}
     >
-
       <CldImage
         src={archiveImage.data.public_id}
         data-src={archiveImage.data.secure_url}   
@@ -117,12 +119,10 @@ if (archiveImage?.data.metadata?.highres_public_id) {
         sizes="(max-width: 650px) 45vw, (max-width: 1200px) 20vw, 25vw"
         alt={archiveImage.data.metadata?.description_title}
         format="avif"
-        gravity="auto"
         crop={{
           type: "pad",
 
         }}
-      
       />
 
     </a>
@@ -216,35 +216,24 @@ if (archiveImage?.data.metadata?.highres_public_id) {
 <style>
 @import "../styles/global.css";
 
-
 a {
   height: 100%;
+  grid-column-start: 1;
 }
+
 img {
-  vertical-align: top; /* or middle, top, depending on the desired effect */
+
 }
 
-.grid-item {
-  float: left;
-  width: 13%;
-  padding: 3.3%;
-  background: var(--bg-light);
+#Image {
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
 
-  @media (--bp-mobile) {
-    width: 30%;
-    padding: 9%;
-	}
+.mix {
 
-	@media (--bp-tablet) {
-    width: 20%;
-    padding: 6.5%;
-
-	}
-
-	@media (--bp-desktop-wide) {
-    width: 9%;
-    padding: 3.8%;
-	}
 }
 
 </style>

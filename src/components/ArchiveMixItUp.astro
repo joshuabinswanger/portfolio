@@ -4,7 +4,7 @@ import BracketMiddleH from "./BracketMiddleH.astro";
 import BracketCloseH from "./BracketCloseH.astro";
 import TopWrapper from "../layouts/TopWrapper.astro";
 import GridLayout from "../layouts/GridLayout.astro";
-import ArchiveElement from "./ArchiveElementIsotope.astro";
+import ArchiveElement from "./ArchiveElementMixItUp.astro";
 import { getCollection } from "astro:content";
 
 // Filter the collection to include only items with metadata.archive === "include"
@@ -125,53 +125,53 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
 <TopWrapper>
   <div class:list={["ArchiveWrapper"]} id="ArchiveWrapper">
   <!-- Filter Buttons-->
-  <div id="filter-top-wrapper" >
+  <form id="filter-top-wrapper" >
 
     <!-- Role -->
-    <div class:list={[`filters-button-group`]} id="role-buttons-wrapper" data-filter-group="role">
+    <fieldset class:list={[`filters-button-group`]} id="role-buttons-wrapper" data-filter-group>
       <BracketOpenH />
 
-      <button class:list={["filter-button is-checked"]} data-filter="*">Role</button>
+      <button  type="button" class:list={["filter-button mixitup-control-active"]}>Role</button>
       {roleConvertedCSS.map((tag, index) => (
-        <button class:list={[`filter-button ${tag}`]}  data-filter={`.${tag}`}>
+        <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
             {roleConvertedName[index]}
         </button>
       ))}
 
       <BracketCloseH />
-    </div>
+    </fieldset>
 
     <!-- Program -->
-    <div class:list={[`filters-button-group`]} id="program-buttons-wrapper" data-filter-group="program">
+    <fieldset class:list={[`filters-button-group`]} id="program-buttons-wrapper" data-filter-group>
       <BracketOpenH />
 
-      <button class="filter-button is-checked" data-filter="*">Tool</button>
+      <button  type="button" class="filter-button mixitup-control-active">Tool</button>
       {programConvertedCSS.map((tag, index) => (
-        <button class:list={[`filter-button ${tag}`]}  data-filter={`.${tag}`}>
+        <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
             {programConvertedName[index]}
 
         </button>
       ))}
       <BracketCloseH />
-    </div>
+    </fieldset>
 
     <!-- Topic -->
-    <div class:list={[`filters-button-group`]} id="topic-buttons-wrapper" data-filter-group="topic">
+    <fieldset class:list={[`filters-button-group`]} id="topic-buttons-wrapper" data-filter-group="topic">
       <BracketOpenH />
 
-      <button class="filter-button is-checked" data-filter="*">Topic</button>
+      <button  type="button" class="filter-button mixitup-control-active">Topic</button>
       {topicConvertedCSS.map((tag, index) => (
-        <button class:list={[`filter-button ${tag}`]}  data-filter={`.${tag}`}>
+        <button type="button"class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
             {topicConvertedName[index]}
 
         </button>
       ))}
       <BracketCloseH />
-    </div>
+    </fieldset>
 
-  </div>
+  </form>
 
-    <div class:list={["grid"]} id="Archive">
+    <div class:list={["container"]} id="Archive">
         {archiveImages.map((image, index) => (
       
                 <ArchiveElement
@@ -181,23 +181,14 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
 
         ))}
     </div>
+  </div>
  
 </TopWrapper>
 
 <script>
-import Isotope from 'isotope-layout';
-import imagesloaded from 'imagesloaded';
-import cellsByRow from 'isotope-cells-by-row';
+import mixitup from 'mixitup';
+import mixitupMultifilter from 'mixitup-multifilter';
 
-
-const gridItem = document.querySelector('.grid-item'); 
-const filterButtons = document.querySelectorAll('.filter-button');
-
-/////////////////////
-///set padding etc///
-/////////////////////
-
-// Function to apply styles based on screen size
 
   
 
@@ -205,161 +196,56 @@ const filterButtons = document.querySelectorAll('.filter-button');
 
 document.addEventListener('astro:page-load', () => {
 
-const gridElement = document.querySelector('.grid');
-const filterTopWrapperElement = document.querySelector('#filter-top-wrapper');
-
-function updateFilterButtonStyles() {
-      // Calculate the archive width
-      const archiveWidth = gridElement.offsetWidth;
-
-      // Set the --archive-width CSS variable dynamically
-      filterTopWrapperElement.style.setProperty('--archive-width', `${archiveWidth}px`);
-    }
-
-updateFilterButtonStyles();
-
-    /////////////////////
-  ///////Isotope//////
-  /////////////////////
+  mixitup.use(mixitupMultifilter);
+  const mix= document.querySelector('.container'); 
+  const filterButtons = document.querySelectorAll('.filter-button');
+  const containerEl = document.querySelector('.ArchiveWrapper');
+  const filterTopWrapperElement = document.querySelector('#filter-top-wrapper');
 
 
-  var grid = document.querySelector('.grid');
-    var iso;
-    let imagesLoaded;
-    let cellsByRow;
+  ////////////////////
+  ////Filter Width///
+  ////////////////////
 
-    // Filter Functions
-    var filterFns = {};
+  function updateFilterButtonWidth() {
+    // Calculate the archive width
+    const archiveWidth = mix.offsetWidth;
 
+    // Set the --archive-width CSS variable dynamically
+    filterTopWrapperElement.style.setProperty('--archive-width', `${archiveWidth}px`);
 
-    // store filter for each group
-    var filters = {};
-
-
-    var iso = new Isotope( grid, {
-      layoutMode: 'cellsByRow',
-      itemSelector: '.grid-item',
-      percentPosition: true,
-      sortBy : 'random',
-      cellsByRow: {
-        columnWidth: '.grid-item',
-        rowHeight: '.grid-item'
-      },
-
-      filter: function(itemElem) {
-        // Assume the item matches by default
-        var isMatched = true;
-
-        for (var prop in filters) {
-          var filter = filters[prop]; // Get the filter value for the current property
-
-          // If the filter is a function defined in `filterFns`, use it. Otherwise, use the raw filter value.
-          filter = filterFns[filter] || filter;
-
-
-          // Check the type of the filter to determine how to apply it
-          var filterType = typeof filter;
-
-          // If the filter is a function, call it and pass `itemElem` to test if it matches
-          if (filter && filterType == 'function') {
-            isMatched = filter(itemElem); // Apply the filter function
-          }
-          // If the filter is not a function but is a valid value, check if `itemElem` matches the selector
-          else if (filter) {
-            isMatched = itemElem.matches(filter); // Use Element.matches() to test if the item matches the filter
-          }
-      
-
-          // If the item does not match the current filter, break out of the loop early
-          if (!isMatched) {
-            break; // No need to check other filters if this one fails
-          }
-        }
-
-        // Return true if the item matched all filters, false otherwise
-        return isMatched;
-
-      }
-
-
-
-    });
-      
-
-
-
-imagesloaded( grid ).on( 'progress', function() {
-  // layout Isotope after each image loads
-  iso.layout();
-});
-
-// bind filter button click
-var filtersElem = document.querySelectorAll('.filters-button-group');
-  filtersElem.forEach(element => {
-    element.addEventListener( 'click', function( event ) {
-      // only work with buttons
-      if (!event.target.matches('button')) {
-        return;
-      }
-      
-      // get group key
-      var buttonGroup = event.target.parentNode;
-      var filterGroup = buttonGroup.getAttribute('data-filter-group');
-
-
-      filters[ filterGroup ] = event.target.getAttribute('data-filter');
-      filters[ filterGroup ] = event.target.getAttribute('data-filter');
-
-      // use matching filter function
-      iso.arrange();
-    });
-
-  });
 
     
-
-
-  // change is-checked class on buttons
-    var buttonGroups = document.querySelectorAll('.filters-button-group');
-    for ( var i=0, len = buttonGroups.length; i < len; i++ ) {
-      var buttonGroup = buttonGroups[i];
-      radioButtonGroup( buttonGroup );
-    }
-
-    function radioButtonGroup(buttonGroup) {
-    buttonGroup.addEventListener('click', function (event) {
-      // Only proceed if the target is a button
-      if (!event.target.matches('button')) {
-        return;
-      }
-
-      // If the clicked button is already checked
-      if (event.target.classList.contains('is-checked')) {
-        // Set the `data-filter="*"` button as checked
-        const allFilterButton = buttonGroup.querySelector('button[data-filter="*"]');
-        if (allFilterButton) {
-          buttonGroup.querySelector('.is-checked').classList.remove('is-checked');
-          allFilterButton.classList.add('is-checked');
-
-          // Update the filter group to reset the filter
-          const filterGroup = buttonGroup.getAttribute('data-filter-group');
-          filters[filterGroup] = '*';
-
-          // Trigger Isotope filtering
-          iso.arrange();
-        }
-      } else {
-        // Normal behavior: switch the `is-checked` class
-        buttonGroup.querySelector('.is-checked').classList.remove('is-checked');
-        event.target.classList.add('is-checked');
-          // Trigger Isotope filtering
-          iso.arrange();
-        }
-    });
   }
+  updateFilterButtonWidth();
 
-  window.addEventListener('resize', iso.layout);
-  window.addEventListener('resize', updateFilterButtonStyles);
+  window.addEventListener('resize', updateFilterButtonWidth);
+
+  /////////////////////
+  ///////MixItUp//////
+  /////////////////////
+
+  var mixer = mixitup(containerEl, {
+    selectors: {
+        target: '.mix'
+    },
+    animation: {
+        duration: 300
+    },
+    multifilter: {
+        enable: true // enable the multifilter extension for the mixer
+    },
+    debug: {
+        enable: true
+    },
+
+    callbacks: {
+        onMixStart: function(state, futureState) {
+            console.log(futureState.activeFilter.selector);
+        }
+    }
+});
+
 
 })
 
@@ -406,6 +292,34 @@ var filtersElem = document.querySelectorAll('.filters-button-group');
 
 }
 
+.container {
+  display: grid;
+  grid-template-columns: repeat(5, 13%);
+  grid-row-gap: 5rem;
+  grid-auto-rows: auto;
+  justify-content: space-evenly;
+
+
+  @media (--bp-mobile) {
+    grid-template-columns: 30% 30%;
+    grid-row-gap: 5rem;
+	}
+
+	@media (--bp-tablet) {
+
+    grid-template-columns: repeat(3, 20%);
+    grid-row-gap: 5rem;
+
+	}
+
+	@media (--bp-desktop-wide) {
+    grid-template-columns: repeat(7, 10%);
+	 
+	}
+}
+
+
+
 #filter-top-wrapper {
   display: grid;
   position: fixed;
@@ -430,25 +344,31 @@ var filtersElem = document.querySelectorAll('.filters-button-group');
     overflow-y: hidden;
     overflow-x: scroll;
     padding-bottom: 11px;
-    
   }
 
 
 }
 
 
-#role-buttons-wrapper, #program-buttons-wrapper, #topic-buttons-wrapper {
-  /* Set width to grid width - navbar - margin */
-  display: grid;
+.filters-button-group {
+  display: grid; /* Keeps the grid layout */
   grid-row-start: 1;
   column-gap: 0rem;
   z-index: 2;
-
+  border: none; /* Remove the default fieldset border */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
 
   @media (--bp-mobile) {
     font-size: var(--font-size-mobile-small);
     margin: 0;
   }
+}
+
+fieldset {
+  border: none; /* Ensure fieldset behaves like a div */
+  margin: 0;
+  padding: 0;
 }
 
 
@@ -507,7 +427,7 @@ grid-column-start: 1;
 
 }
 
-.filter-button.is-checked {
+.filter-button.mixitup-control-active {
   color: var(--bg-color);
   background-color: black;
 }
