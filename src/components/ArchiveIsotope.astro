@@ -425,7 +425,7 @@ var filtersElem = document.querySelectorAll('.filters-button-group');
     left: 0px;
     grid-template-columns: auto auto auto;
     grid-template-rows: auto;
-    column-gap: 0.25rem;
+    column-gap: 0.33rem;
     width: 100vw;
     overflow-y: hidden;
     overflow-x: scroll;
@@ -455,7 +455,7 @@ var filtersElem = document.querySelectorAll('.filters-button-group');
 /* set in frontmatter */
 #role-buttons-wrapper{
 grid-column-start: 1;
-  grid-template-columns: 0 9ch repeat(var(--roleListLengthString), 1fr) 0;
+  grid-template-columns: 0px 9ch repeat(var(--roleListLengthString), 1fr) 0px;
 
   
   @media (--bp-mobile) {
@@ -467,7 +467,7 @@ grid-column-start: 1;
 #program-buttons-wrapper {
   grid-column-start: 2;
   grid-column-end: 3;
-  grid-template-columns: 0 9ch repeat(var(--programListLengthString), 1fr) 0;
+  grid-template-columns: 0px 9ch repeat(var(--programListLengthString), 1fr) 0px;
 
   @media (--bp-mobile) {
     grid-column-start: 2;
@@ -480,7 +480,7 @@ grid-column-start: 1;
   grid-column-start: 1;
   grid-column-end: 3;
   grid-row-start: 2;
-  grid-template-columns: 0 9ch repeat(var(--topicListLengthString), 1fr) 0;
+  grid-template-columns: 0px 9ch repeat(var(--topicListLengthString), 1fr) 0px;
 
   @media (--bp-mobile) {
     grid-column-start: 3;
