@@ -1,6 +1,6 @@
 ---
 import NavigationBarMobile from "../components/NavigationBarMobileBottomTrio.astro"
-import NavigationBar from "../components/NavigationBar.astro"
+import NavigationBar from "../components/NavigationBarTrio.astro"
 ---
 <div id="NavMobile">
 	<NavigationBarMobile />
@@ -31,7 +31,7 @@ import NavigationBar from "../components/NavigationBar.astro"
 	grid-template-columns: var(--grid-template-columns-desktop);
 	margin-left: var(--margin-left-dekstop);
 	margin-right: var(--margin-right-desktop);
-	grid-column-gap: 2rem;
+	grid-column-gap: 0.5rem;
 	grid-template-rows: auto; /* Automatically adjust row heights based on content */
 
 	@media (--bp-mobile) {

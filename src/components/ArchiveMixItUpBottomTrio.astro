@@ -126,12 +126,17 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
   <div class:list={["ArchiveWrapper"]} id="ArchiveWrapper">
   <!-- Filter Buttons-->
   <form id="filter-top-wrapper" >
+    
+     <!-- Filter Reset -->
+    <fieldset class:list={[`filters-button-group`]} id="filter-reset-wrapper">
+      <button type="reset" class:list={["filter-button mixitup-control-active"]} id="filter-reset-all" >Filter &rarr;</button>
+    </fieldset>
 
     <!-- Role -->
     <fieldset class:list={[`filters-button-group`]} id="role-buttons-wrapper" data-filter-group>
       <BracketOpenH />
 
-      <button  type="reset" class:list={["filter-button mixitup-control-active"]}>Art</button>
+      <button  type="button" class:list={["filter-button reset-sub-filter"]} data-filter={roleConvertedCSS.map(tag => `.${tag}`).join(', ')} >Art</button>
       {roleConvertedCSS.map((tag, index) => (
         <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
             {roleConvertedName[index]}
@@ -145,7 +150,7 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
     <fieldset class:list={[`filters-button-group`]} id="program-buttons-wrapper" data-filter-group>
       <BracketOpenH />
 
-      <button  type="reset" class="filter-button mixitup-control-active">Tool</button>
+      <button  type="button" class="filter-button reset-sub-filter"  id="reset-filter-program" data-filter={programConvertedCSS.map(tag => `.${tag}`).join(', ')} >Tool</button>
       {programConvertedCSS.map((tag, index) => (
         <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
             {programConvertedName[index]}
@@ -156,10 +161,10 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
     </fieldset>
 
     <!-- Topic -->
-    <fieldset class:list={[`filters-button-group`]} id="topic-buttons-wrapper" data-filter-group="topic">
+    <fieldset class:list={[`filters-button-group`]} id="topic-buttons-wrapper" data-filter-group>
       <BracketOpenH />
 
-      <button  type="reset" class="filter-button mixitup-control-active">Topic</button>
+      <button  type="button" class="filter-button reset-sub-filter" data-filter={topicConvertedCSS.map(tag => `.${tag}`).join(', ')} >Topic</button>
       {topicConvertedCSS.map((tag, index) => (
         <button type="button"class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
             {topicConvertedName[index]}
@@ -186,21 +191,22 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
 </TopWrapper>
 
 <script>
+import { use } from 'marked';
 import mixitup from 'mixitup';
 import mixitupMultifilter from 'mixitup-multifilter';
 
 
-  
 
 
-
-document.addEventListener('astro:page-load', () => {
-
-  mixitup.use(mixitupMultifilter);
-  const mix= document.querySelector('.container'); 
-  const filterButtons = document.querySelectorAll('.filter-button');
-  const containerEl = document.querySelector('.ArchiveWrapper');
-  const filterTopWrapperElement = document.querySelector('#filter-top-wrapper');
+function getFreshElements() {
+  return {
+    mix: document.querySelector('.container'),
+    filterButtons: document.querySelectorAll('.filter-button'),
+    containerEl: document.querySelector('.ArchiveWrapper'),
+    filterTopWrapperElement: document.querySelector('#filter-top-wrapper'),
+    resetFilterProgram: document.querySelectorAll('.reset-sub-filter'),
+  };
+}
 
 
   ////////////////////
@@ -208,46 +214,114 @@ document.addEventListener('astro:page-load', () => {
   ////////////////////
 
   function updateFilterButtonWidth() {
+    // get elements
+    const { mix, filterTopWrapperElement } = getFreshElements();
+
     // Calculate the archive width
     const archiveWidth = mix.offsetWidth;
 
     // Set the --archive-width CSS variable dynamically
     filterTopWrapperElement.style.setProperty('--archive-width', `${archiveWidth}px`);
-
-
+    
+    console.log(`${archiveWidth}px`);
     
   }
-  updateFilterButtonWidth();
 
-  window.addEventListener('resize', updateFilterButtonWidth);
+
+
+  //////////////////////////
+  ////toggleAllMainButtons///
+  //////////////////////////
+  function toggle(button) {
+  if (button.value == "OFF") {
+    button.value = "ON";
+    console.log(button);
+  } else {
+    button.value = "OFF";
+  }
+}
+
+function toggleAllMainButtons() {
+  const mainButtons = document.querySelectorAll('.reset-sub-filter');
+  console.log(mainButtons);
+  mainButtons.forEach((btn) => {
+    btn.click();
+  });
+}
+
+
+
+
+
 
   /////////////////////
   ///////MixItUp//////
   /////////////////////
 
-  var mixer = mixitup(containerEl, {
-    selectors: {
-        target: '.mix'
-    },
-    animation: {
-        duration: 300
-    },
-    multifilter: {
-        enable: true // enable the multifilter extension for the mixer
-    },
-    debug: {
-        enable: true
-    },
+  let mixer = undefined;
 
-    callbacks: {
+
+
+  document.addEventListener("astro:page-load", () => {
+
+
+    updateFilterButtonWidth();
+    window.addEventListener('resize', updateFilterButtonWidth);
+
+
+
+    console.log("Event: astro:page-load");
+    const { containerEl } = getFreshElements();
+
+    console.log("Creating mixer");
+    mixitup.use(mixitupMultifilter);
+
+    mixer = mixitup(containerEl, {
+      selectors: {
+          target: '.mix'
+      },
+      animation: {
+          duration: 300
+      },
+      multifilter: {
+          enable: true // enable the multifilter extension for the mixer
+      },
+      debug: {
+          enable: true
+      },
+
+      load: {
+        sort: 'random',
+        
+      },
+
+      callbacks: {
         onMixStart: function(state, futureState) {
             console.log(futureState.activeFilter.selector);
         }
-    }
-});
+      }
+    });
+
+    console.log(mixer.getState().totalTargets);
+
+    toggleAllMainButtons();
 
 
-})
+  })
+
+
+
+  document.addEventListener("astro:before-swap", () => {
+    
+    console.log("Destroying mixer");
+    
+    window.removeEventListener('resize', updateFilterButtonWidth);
+    
+    mixer?.destroy();
+    mixer = undefined;
+    
+  
+  });
 
 
 
@@ -263,6 +337,7 @@ document.addEventListener('astro:page-load', () => {
 #ArchiveWrapper {
   display: grid;
   grid-template-rows: min-content 1fr;
+  padding-bottom: 11rem;
 
 
 }
@@ -327,16 +402,16 @@ document.addEventListener('astro:page-load', () => {
   width: var(--archive-width);
   column-gap: 1rem;
   overflow: visible;
-  padding: 0;
   background-color: var(--bg-color);
   
   @media (--bp-mobile) {
     display: grid;
     /* padding bot plus height */
-    bottom: calc(2px + 3rem);
-    padding: 0 3px 2px 3px;
+    bottom: calc(3rem);
+    padding: 1px;
+    padding-bottom: 0.7rem;
     left: 0px;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: 7ch auto auto auto;
     grid-template-rows: auto;
     column-gap: 0.2rem;
     width: calc(100vw - var(--scrollbar-width) - 6px);
@@ -382,14 +457,24 @@ fieldset {
 }
 
 
-/* set in frontmatter */
-#role-buttons-wrapper{
+
+#filter-reset-wrapper {
+
+
+  @media (--bp-mobile) {
+    grid-column-start: 1;
+  }
+}
+
+
+
+#role-buttons-wrapper {
 grid-column-start: 1;
   grid-template-columns: 0 9ch repeat(var(--roleListLengthString), 1fr) 0;
 
   
   @media (--bp-mobile) {
-    grid-column-start: 1;
+    grid-column-start: 2;
   }
 
 }
@@ -400,7 +485,7 @@ grid-column-start: 1;
   grid-template-columns: 0 9ch repeat(var(--programListLengthString), 1fr) 0;
 
   @media (--bp-mobile) {
-    grid-column-start: 2;
+    grid-column-start: 3;
   }
 
     
@@ -413,7 +498,8 @@ grid-column-start: 1;
   grid-template-columns: 0 9ch repeat(var(--topicListLengthString), 1fr) 0;
 
   @media (--bp-mobile) {
-    grid-column-start: 3;
+    grid-column-start: 4;
+    grid-column-end: 5;
     grid-row-start: 1;
   }
 
@@ -428,7 +514,7 @@ grid-column-start: 1;
   border: 0px;
   background-color: transparent;
   padding: 0 0.7rem;
-  height: 1.3rem;
+  height: 2rem;
 
   
   @media (--bp-mobile) {
