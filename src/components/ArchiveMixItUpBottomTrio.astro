@@ -129,14 +129,21 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
     
      <!-- Filter Reset -->
     <fieldset class:list={[`filters-button-group`]} id="filter-reset-wrapper">
-      <button type="reset" class:list={["filter-button mixitup-control-active"]} id="filter-reset-all" >Filter &rarr;</button>
+      <button type="reset" class:list={["filter-button mixitup-control-active"]} id="filter-reset-all" >Filter</button>
     </fieldset>
 
+
+    <!-- Filter Reset -->
+    <fieldset class:list={[`filters-button-group`]} id="sort-wrapper">
+      <button type="button" class:list={["filter-button mixitup-control-active"]} id="sort-button" >Sort</button>
+    </fieldset>
+
+
     <!-- Role -->
-    <fieldset class:list={[`filters-button-group`]} id="role-buttons-wrapper" data-filter-group>
+    <fieldset class:list={[`filters-button-group`]} id="role-buttons-wrapper" data-filter-group="role">
       <BracketOpenH />
 
-      <button  type="button" class:list={["filter-button reset-sub-filter"]} data-filter={roleConvertedCSS.map(tag => `.${tag}`).join(', ')} >Art</button>
+<!--       <button  type="button" class:list={["filter-button reset-sub-filter"]} data-toggle={roleConvertedCSS.map(tag => `.${tag}`).join(', ')} >Art</button> -->
       {roleConvertedCSS.map((tag, index) => (
         <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
             {roleConvertedName[index]}
@@ -147,10 +154,10 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
     </fieldset>
 
     <!-- Program -->
-    <fieldset class:list={[`filters-button-group`]} id="program-buttons-wrapper" data-filter-group>
+    <fieldset class:list={[`filters-button-group`]} id="program-buttons-wrapper" data-filter-group="program">
       <BracketOpenH />
 
-      <button  type="button" class="filter-button reset-sub-filter"  id="reset-filter-program" data-filter={programConvertedCSS.map(tag => `.${tag}`).join(', ')} >Tool</button>
+      <!-- <button  type="button" class="filter-button reset-sub-filter"  id="reset-filter-program" data-toggle={programConvertedCSS.map(tag => `.${tag}`).join(', ')} >Tool</button> -->
       {programConvertedCSS.map((tag, index) => (
         <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
             {programConvertedName[index]}
@@ -161,10 +168,10 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
     </fieldset>
 
     <!-- Topic -->
-    <fieldset class:list={[`filters-button-group`]} id="topic-buttons-wrapper" data-filter-group>
+    <fieldset class:list={[`filters-button-group`]} id="topic-buttons-wrapper" data-filter-group="topic">
       <BracketOpenH />
 
-      <button  type="button" class="filter-button reset-sub-filter" data-filter={topicConvertedCSS.map(tag => `.${tag}`).join(', ')} >Topic</button>
+<!--       <button  type="button" class="filter-button reset-sub-filter" data-toggle={topicConvertedCSS.map(tag => `.${tag}`).join(', ')} >Topic</button> -->
       {topicConvertedCSS.map((tag, index) => (
         <button type="button"class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
             {topicConvertedName[index]}
@@ -191,6 +198,7 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
 </TopWrapper>
 
 <script>
+import { deselectScripts } from 'astro/virtual-modules/transitions-swap-functions.js';
 import { use } from 'marked';
 import mixitup from 'mixitup';
 import mixitupMultifilter from 'mixitup-multifilter';
@@ -199,12 +207,35 @@ import mixitupMultifilter from 'mixitup-multifilter';
 
 
 function getFreshElements() {
+  const roleFilterButton = document.querySelector("#role-buttons-wrapper button"); 
+  const roleDataFilterValue = roleFilterButton.getAttribute("data-filter");
+
+  console.log(`roleFilterValue:${roleDataFilterValue}`)
+
+  const programFilterButton = document.querySelector("#program-buttons-wrapper button"); 
+  const programDataFilterValue = programFilterButton.getAttribute("data-filter");
+
+  console.log(`programFilterValue:${programDataFilterValue}`)
+
+  const topicFilterButton = document.querySelector("#topic-buttons-wrapper button"); 
+  const topicDataFilterValue = topicFilterButton.getAttribute("data-filter");
+
+  console.log(`topicFilterValue:${topicDataFilterValue}`)
+
+
   return {
     mix: document.querySelector('.container'),
     filterButtons: document.querySelectorAll('.filter-button'),
     containerEl: document.querySelector('.ArchiveWrapper'),
     filterTopWrapperElement: document.querySelector('#filter-top-wrapper'),
     resetFilterProgram: document.querySelectorAll('.reset-sub-filter'),
+    roleFilterButton: roleFilterButton,
+    programFilterButton: programFilterButton,
+    topicFilterButton: topicFilterButton,
+    roleDataFilterValue: roleDataFilterValue,
+    programDataFilterValue: programDataFilterValue,
+    topicDataFilterValue: topicDataFilterValue
+
   };
 }
 
@@ -271,7 +302,7 @@ function toggleAllMainButtons() {
 
 
     console.log("Event: astro:page-load");
-    const { containerEl } = getFreshElements();
+    const { containerEl, roleFilterButton,programFilterButton, topicFilterButton, roleDataFilterValue, programDataFilterValue, topicDataFilterValue } = getFreshElements();
 
     console.log("Creating mixer");
     mixitup.use(mixitupMultifilter);
@@ -281,7 +312,7 @@ function toggleAllMainButtons() {
           target: '.mix'
       },
       animation: {
-          duration: 300
+          enable: false,
       },
       multifilter: {
           enable: true // enable the multifilter extension for the mixer
@@ -302,9 +333,62 @@ function toggleAllMainButtons() {
       }
     });
 
-    console.log(mixer.getState().totalTargets);
+    mixer.configure({
+    animation: {
+        enable: true,
+        duration: 300
+    }});
+    
+    let resetButton = document.querySelector(`#filter-reset-all`);
+    resetButton.addEventListener(`click`, () => {
+      mixer.show();
+    });
 
-    toggleAllMainButtons();
+
+    //////////////////
+    /////Sorting//////
+    /////////////////
+
+    let sortButton = document.querySelector(`#sort-button`);
+    let clicks = 0;
+
+    // Construct object for setting sorting types in MixItUp
+    let sortingTypes = {
+      Random: 'random',
+      Project: 'project:desc',
+    };
+
+    // Convert object keys and values into arrays
+    let sortingKeys = Object.keys(sortingTypes);
+    let sortingValues = Object.values(sortingTypes);
+
+    function onClick() {
+      clicks = (clicks + 1) % sortingKeys.length; // Loop through keys cyclically
+      let currentKey = sortingKeys[clicks]; // Get the key
+      let currentValue = sortingValues[clicks]; // Get the value (sorting string)
+
+      // Update button text to show the current sorting type name
+      sortButton.innerHTML = `${currentKey}`;
+
+      // Call MixItUp sorting with the correct value
+      mixer.sort(currentValue);
+      console.log(currentValue);
+    }
+
+    // Add event listener correctly
+    sortButton.addEventListener(`click`, onClick);
+
+
+
+    let filterButton = document.querySelector("#filter-reset-all");
+
+    filterButton.addEventListener("mouseenter", function() {
+      filterButton.textContent = "Reset";
+    });
+
+    filterButton.addEventListener("mouseleave", function() {
+      filterButton.textContent = "Filter";
+    });
 
 
   })
@@ -351,13 +435,14 @@ function toggleAllMainButtons() {
 
   @media (--bp-tablet) {
 
-  padding-top: var(--padding-tablet); 
+    padding-top: calc(var(--padding-desktop) + 5rem);
+
 
   }
 
   @media (--bp-desktop-wide) {
 
-  padding-top: var(--padding-desktop-wide);
+    padding-top: calc(var(--padding-desktop) + 7rem);
 
 
   }
@@ -395,7 +480,8 @@ function toggleAllMainButtons() {
   display: grid;
   position: fixed;
   z-index: 2;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 9ch 1fr 2fr;
+  grid-template-rows: min-content min-content;
   padding-top: var(--padding-desktop);
   row-gap: 0.25rem;
   --archive-width: 100%;
@@ -442,7 +528,7 @@ function toggleAllMainButtons() {
   z-index: 2;
   border: none; /* Remove the default fieldset border */
   margin: 0; /* Remove default margin */
-  padding: 0; /* Remove default padding */
+  padding: 1px; /* Remove default padding */
 
   @media (--bp-mobile) {
     font-size: var(--font-size-mobile-small);
@@ -459,47 +545,67 @@ fieldset {
 
 
 #filter-reset-wrapper {
-
+  grid-column-start: 1;
+  grid-row-start: 1;
+  grid-row-end: 2;
 
   @media (--bp-mobile) {
     grid-column-start: 1;
   }
 }
 
+#filter-reset-all:hover {
+  background-color: var(--background-color); /* Example: Change background color */
+  color: rgb(0, 0, 0); /* Change text color */
+  border: solid;
+  border-width: 1px;
+}
+
+#sort-wrapper {
+  grid-column-start: 1;
+  grid-row-start: 2;
+  grid-row-end: 3;
+
+  @media (--bp-mobile) {
+    grid-column-start: 2;
+    grid-row-start: 1;
+  }
+}
+
 
 
 #role-buttons-wrapper {
-grid-column-start: 1;
-  grid-template-columns: 0 9ch repeat(var(--roleListLengthString), 1fr) 0;
+grid-column-start: 2;
+  grid-template-columns: 0 repeat(var(--roleListLengthString), 1fr) 0;
 
   
   @media (--bp-mobile) {
-    grid-column-start: 2;
+    grid-column-start: 3;
   }
 
 }
 
 #program-buttons-wrapper {
-  grid-column-start: 2;
-  grid-column-end: 3;
-  grid-template-columns: 0 9ch repeat(var(--programListLengthString), 1fr) 0;
+  grid-column-start: 3;
+  grid-column-end: 4;
+  grid-template-columns: 0 repeat(var(--programListLengthString), 1fr) 0;
 
   @media (--bp-mobile) {
-    grid-column-start: 3;
+    grid-column-start: 4;
   }
 
     
 }  
 
 #topic-buttons-wrapper {
-  grid-column-start: 1;
-  grid-column-end: 3;
+  grid-column-start: 2;
+  grid-column-end: 4;
   grid-row-start: 2;
-  grid-template-columns: 0 9ch repeat(var(--topicListLengthString), 1fr) 0;
+  grid-template-columns: 0 repeat(var(--topicListLengthString), 1fr) 0;
 
   @media (--bp-mobile) {
-    grid-column-start: 4;
-    grid-column-end: 5;
+    grid-column-start: 5;
+    grid-column-end: 6;
     grid-row-start: 1;
   }
 
@@ -514,13 +620,18 @@ grid-column-start: 1;
   border: 0px;
   background-color: transparent;
   padding: 0 0.7rem;
-  height: 2rem;
+  height: 1.25rem;
 
   
   @media (--bp-mobile) {
     height: 2rem;
   }
 
+  @media (--bp-tablet) {
+
+    height: 1rem;
+
+  }
 }
 
 .filter-button.mixitup-control-active {

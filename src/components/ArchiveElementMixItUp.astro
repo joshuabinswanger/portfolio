@@ -100,7 +100,7 @@ if (archiveImage?.data.metadata?.highres_public_id) {
 
 --- 
 
-<div class:list={[`archiveElementWrapper mix ${tagClassString}`]} id={`archiveElement-${Astro.props.index}`} data-role={convertedRole} data-program={archiveImage.data.metadata?.program} data-topic={archiveImage.data.metadata?.topic}>
+<div class:list={[`archiveElementWrapper mix ${tagClassString}`]} id={`archiveElement-${Astro.props.index}`} data-role={convertedRole} data-program={archiveImage.data.metadata?.program} data-project={archiveImage.data.metadata?.project || "aaa_noproject"} >
   
   <div id="Image" class:list={["ImageElement"]}>
     <a class:list={["photo-link"]}
