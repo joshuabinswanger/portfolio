@@ -59,23 +59,25 @@ links.sort((a, b) => a.data.sortOrder - b.data.sortOrder);
             </p>
         </div>
 
+        <div id="links-top-wrapper">
+
+            {links.map((entry) => {
+    
+                return(
+                    <div class:list={["link"]}> 
+                        <BracketOpenH />
+                            <div> <a href={entry.data.link} target="_blank">{entry.data.text}</a></div> 
+                        <BracketCloseH />
+                    </div>
+                );  
+    
+            })}
+    
+        </div>
+
     </div>
 
-    <div id="links-top-wrapper">
 
-        {links.map((entry) => {
-
-            return(
-                <div class:list={["link"]}> 
-                    <BracketOpenH />
-                        <div> <a href={entry.data.link} target="_blank">{entry.data.text}</a></div> 
-                    <BracketCloseH />
-                </div>
-            );  
-
-        })}
-
-    </div>
 </TopWrapper>
 
 
@@ -102,22 +104,25 @@ p {
 #InfoWrapper{
     display: grid;
     align-items: center;
-    grid-template-columns: 1fr 56ch 55ch 1fr;
-    grid-auto-rows: auto;
+    grid-template-columns: 17ch 1.5fr 1.5fr 17ch 1fr;
+    grid-template-rows: 2fr 2fr 1fr;
+    column-gap: 0.5rem;
     margin-top: calc(var(--padding-desktop));
-    max-height: calc(100vh - var(--padding-desktop));
+    max-height: calc(60vh - var(--padding-desktop));
+
 
     @media (--bp-mobile) {
         align-self: center;
         max-height: calc(90svh - 3rem -  var(--padding-mobile));
         margin: 0 2px;
-        grid-template-columns: 1fr 50% 50% 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
+        margin-top: 0;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
     }
 
 
     @media (--bp-tablet) {
-        grid-template-columns: 1fr 50% 50% 1fr;
+        grid-template-columns: auto 1fr 1fr min-content auto;
         grid-auto-rows: min-content auto;
         grid-column-start: 2;
         margin-top: calc(var(--padding-tablet));
@@ -135,11 +140,19 @@ p {
     max-width: 111ch;
     max-height: min-content;
     justify-self: left;
+    align-self: start;
     letter-spacing: 2px;
     margin: 0;
+    padding-bottom: 3rem;
+
+    
+    @media (--bp-mobile) {
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
 
     @media (--bp-tablet) {
-       
+       padding-right: 1rem;
     }
 }
 
@@ -147,12 +160,17 @@ p {
     grid-column-start: 2;
     max-width: 23ch;
     font-size: calc(var(--font-size-dekstop) - 2px);
+    align-self: start;
     letter-spacing: 2px;
     line-height: 1rem;
     height: min-content;
+    padding-bottom: 2rem;
 
     @media (--bp-mobile) {
         font-size: calc(var(--font-size-mobile) - 2px);
+        grid-column-start: 1;
+        grid-column-end: 2;
+
     }
 
     @media (--bp-tablet) {
@@ -167,6 +185,7 @@ p {
 #Services {
     grid-column-start: 3;
     max-width: 33ch;
+    align-self: start;
     font-size: calc(var(--font-size-dekstop) - 2px);
     letter-spacing: 2px;
     line-height: 1rem;
@@ -174,10 +193,13 @@ p {
 
     @media (--bp-mobile) {
         font-size: calc(var(--font-size-mobile) - 2px);
+        grid-column-start: 2;
+        grid-column-end: 3;
     }
 
     @media (--bp-tablet) {
         font-size: calc(var(--font-size-tablet) - 2px);
+        padding-right: 1rem;
     }
 
     @media (--bp-desktop-wide) {
@@ -190,6 +212,13 @@ p {
     grid-row-start: 3;
     max-width: 33ch;
     height: min-content;
+    align-self: end;
+
+
+    @media (--bp-mobile) {
+        grid-column-start: 1;
+        align-self: start;
+        }
 
     p {
         font-size: calc(var(--font-size-dekstop) - 2px);
@@ -221,61 +250,80 @@ p {
 
 
 #links-top-wrapper {
-  display: grid;
-  position: fixed;
-  z-index: 2;
-  grid-template-columns: auto;
-  padding-top: var(--padding-desktop);
-  row-gap: 0.25rem;
-  --archive-width: 100%;
-  width: var(--archive-width);
-  column-gap: 1rem;
-  overflow: visible;
-  padding: 0;
-  background-color: var(--bg-color);
+
+    display: grid;
+    z-index: 2;
+    grid-template-columns: 1fr;
+    grid-row-start: 1;
+    grid-row-end: 4;
+    grid-column-start: 4;
+    --archive-width: 100%;
+    height: 100%;
+    overflow: visible;
+    padding: 0;
+    background-color: var(--bg-color);
+    align-content: space-between;
+    justify-content: center;
+
   
   @media (--bp-mobile) {
     display: grid;
-    /* padding bot plus height */
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-auto-rows: auto;
     bottom: calc(2px + 3rem);
     padding: 0 3px 2px 3px;
-    grid-auto-columns: auto;
-    column-gap: 0.2rem;
-    width: calc(100vw - var(--scrollbar-width) - 6px);
+    grid-row-start: 4;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    column-gap: 1rem;
+    row-gap: 1rem;
+    align-content: space-evenly;
     overflow-y: hidden;
-    overflow-x: scroll;
+    overflow-x: hidden;
     
   }
 
 	@media (--bp-tablet) {
 
-		padding-top: var(--padding-tablet); 
 
 	}
 
 	@media (--bp-desktop-wide) {
+       
 
-		padding-top: var(--padding-desktop-wide);
 
 	 
 	}
 }
 
 .link {
-    grid-row-start: 1;
+
     display: grid;
-    height: 2rem;
+    font-size: calc(var(--font-size-tablet) - 2px);
+    letter-spacing: 2px;
+    height: min-content;
     grid-template-columns: 1ch 17ch 1ch;
     text-align: center;
     align-items: center;   
+    justify-content: center;
 
-    @media (--bp-mobile) {
-        font-size: calc(var(--font-size-mobile) - 2px);
-    }
 
     a{
         text-decoration: none;
         color: black;
+    }
+
+
+    @media (--bp-mobile) {    
+        font-size: calc(var(--font-size-mobile) - 2px);
+    }
+
+    @media (--bp-tablet) {
+        font-size: calc(var(--font-size-tablet) - 2px);
+    }
+
+    @media (--bp-desktop-wide) {
+        font-size: calc(var(--font-size-desktop-wide) - 2px);
     }
 
 }
