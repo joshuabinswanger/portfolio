@@ -60,7 +60,6 @@ links.sort((a, b) => a.data.sortOrder - b.data.sortOrder);
         </div>
 
         <div id="links-top-wrapper">
-        <div id="links-top-wrapper">
 
             {links.map((entry) => {
     
@@ -78,22 +77,6 @@ links.sort((a, b) => a.data.sortOrder - b.data.sortOrder);
 
     </div>
 
-
-            {links.map((entry) => {
-    
-                return(
-                    <div class:list={["link"]}> 
-                        <BracketOpenH />
-                            <div> <a href={entry.data.link} target="_blank">{entry.data.text}</a></div> 
-                        <BracketCloseH />
-                    </div>
-                );  
-    
-            })}
-    
-        </div>
-
-    </div>
 
 
 </TopWrapper>
@@ -125,9 +108,6 @@ p {
     grid-template-columns: 17ch 1.5fr 1.5fr 17ch 1fr;
     grid-template-rows: 2fr 2fr 1fr;
     column-gap: 0.5rem;
-    grid-template-columns: 17ch 1.5fr 1.5fr 17ch 1fr;
-    grid-template-rows: 2fr 2fr 1fr;
-    column-gap: 0.5rem;
     margin-top: calc(var(--padding-desktop));
     max-height: calc(60vh - var(--padding-desktop));
 
@@ -145,7 +125,6 @@ p {
 
 
     @media (--bp-tablet) {
-        grid-template-columns: auto 1fr 1fr min-content auto;
         grid-template-columns: auto 1fr 1fr min-content auto;
         grid-auto-rows: min-content auto;
         grid-column-start: 2;
@@ -165,7 +144,6 @@ p {
     max-height: min-content;
     justify-self: left;
     align-self: start;
-    align-self: start;
     letter-spacing: 2px;
     margin: 0;
     padding-bottom: 3rem;
@@ -177,7 +155,6 @@ p {
     }
 
     @media (--bp-tablet) {
-       padding-right: 1rem;
        padding-right: 1rem;
     }
 }
@@ -297,8 +274,6 @@ p {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-auto-rows: auto;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-auto-rows: auto;
     bottom: calc(2px + 3rem);
     padding: 0 3px 2px 3px;
     grid-row-start: 4;
@@ -308,7 +283,6 @@ p {
     row-gap: 1rem;
     align-content: space-evenly;
     overflow-y: hidden;
-    overflow-x: hidden;
     overflow-x: hidden;
     
   }
