@@ -206,6 +206,7 @@ const imagesAmount = galleryImages.length;
  
 </div>
 
+
 <!-- KeenSlider -->
 <script>
 
@@ -213,64 +214,64 @@ import KeenSlider from 'keen-slider'
 
 document.addEventListener('astro:page-load', () => {
 
-const Sliders = document.querySelectorAll('.GalleryElement')
+  const Sliders = document.querySelectorAll('.GalleryElement')
 
-Sliders.forEach((item, index) => {
-  console.log(`This is the slider at index ${index} with ID: ${item.id}`);
+  Sliders.forEach((item, index) => {
+    console.log(`This is the slider at index ${index} with ID: ${item.id}`);
 
-  // Select all Sliders
-  const slides = item.querySelectorAll('.keen-slider__slide');
-  // Select the ProjectInfoSlideWrapper within this slider
-  const projectInfoSlideWrapper = item.querySelector('.ProjectInfoSlideWrapper');
+    // Select all Slides
+    const slides = item.querySelectorAll('.keen-slider__slide');
+    // Select the ProjectInfoSlideWrapper within this slider
+    const projectInfoSlideWrapper = item.querySelector('.ProjectInfoSlideWrapper');
 
-  var loaded = []
+    let loaded = []
 
-  //Loading Function  
-  function loadImages(s) {
-    const slideIdx = s.track.details.rel;
-    const totalSlides = s.track.details.slides.length;
-
-    // Mark the current, previous, and next slide as loaded
-    loaded[slideIdx] = true;
-    loaded[(slideIdx + totalSlides) % totalSlides] = true; // Previous slide, wrapping around
-    loaded[(slideIdx + 1) % totalSlides] = true; // Next slide, wrapping around
-
-    s.slides.forEach((element, idx) => {
-        if (loaded[idx]) {
-          // Use querySelector to find the .ImageElement div
-          const imageElement = element.querySelector('.ImageElement');
-          console.log(`ImageElement found:`, imageElement);
-
-          if (imageElement) {
-            imageElement.style.display = "block";
-          } else {
-            console.warn(`.ImageElement not found in slide index ${idx}`);
-          }
-        } 
-      })
-  }
-
-  //Counter Function
-  function updateCounter(s) {
-  const counterContainer = item.querySelector('.CounterContainer');
-    if (counterContainer) {
-      const currentSlide = s.track.details.rel + 1; // Add 1 because index is zero-based
+    //Loading Function  
+    function loadImages(s) {
+      const slideIdx = s.track.details.rel;
       const totalSlides = s.track.details.slides.length;
-      counterContainer.textContent = `${currentSlide} / ${totalSlides}`;
+
+      // Mark the current, previous, and next slide as loaded
+      loaded[slideIdx] = true;
+      loaded[(slideIdx + totalSlides) % totalSlides] = true; // Previous slide, wrapping around
+      loaded[(slideIdx + 1) % totalSlides] = true; // Next slide, wrapping around
+
+      s.slides.forEach((element, idx) => {
+          if (loaded[idx]) {
+            // Use querySelector to find the .ImageElement div
+            const imageElement = element.querySelector('.ImageElement');
+            console.log(`ImageElement found:`, imageElement);
+
+            if (imageElement) {
+              imageElement.style.display = "block";
+            } else {
+              console.warn(`.ImageElement not found in slide index ${idx}`);
+            }
+          } 
+        })
     }
-  }
 
-  //MaxHeight Function
-function setMaxHeight (s) {
-    const activeSlide = s.track.details.rel;
-    const height = s.size;
-    console.log(`the slide has height: ${height}`)
-    const projectInfoSlide = s.slides[s.slides.length - 1];
-    console.log(`projectInfoSlide at index: ${projectInfoSlide.id}`)
-    const projectInfoSlideWrapper = projectInfoSlide.querySelector('#ProjectInfoSlideWrapper');
+    //Counter Function
+    function updateCounter(s) {
+    const counterContainer = item.querySelector('.CounterContainer');
+      if (counterContainer) {
+        const currentSlide = s.track.details.rel + 1; // Add 1 because index is zero-based
+        const totalSlides = s.track.details.slides.length;
+        counterContainer.textContent = `${currentSlide} / ${totalSlides}`;
+      }
+    }
 
-    projectInfoSlideWrapper.style.maxHeight = `${height}px`;
-  }
+    //MaxHeight Function
+    function setMaxHeight (s) {
+      const activeSlide = s.track.details.rel;
+      const height = s.size;
+      console.log(`the slide has height: ${height}`)
+      const projectInfoSlide = s.slides[s.slides.length - 1];
+      console.log(`projectInfoSlide at index: ${projectInfoSlide.id}`)
+      const projectInfoSlideWrapper = projectInfoSlide.querySelector('#ProjectInfoSlideWrapper');
+
+      projectInfoSlideWrapper.style.maxHeight = `${height}px`;
+    }
 
 
 
@@ -290,8 +291,68 @@ function setMaxHeight (s) {
       loop: true,
       initial: 0,
       
-    })
+    });
 
+
+
+
+
+
+    /////////////////
+    ////INFO DIV/////
+    ////////////////
+
+    // Function to toggle image info visibility
+    let imageInfoVisible = false; // Initial state
+
+    const toggleImageInfoVisibility = () => {
+
+      // Get the current active slide
+      const currentSlideIndex = slider.track.details.rel;
+      const slides = item.querySelectorAll('.keen-slider__slide');
+      const currentSlide = slides[currentSlideIndex];
+
+      if (currentSlide) {
+        const imageInfo = currentSlide.querySelector('.ImageInfo');
+        if (imageInfo) {
+          if (imageInfoVisible) {
+            imageInfo.classList.remove('InfoVisible');
+          } else {
+            imageInfo.classList.add('InfoVisible');
+          }
+          imageInfoVisible = !imageInfoVisible; // Toggle the state
+        }
+      }
+    };
+
+    // Function to hide image info (when slide changes)
+    const hideImageInfo = () => {
+      if (imageInfoVisible) {
+        const slides = item.querySelectorAll('.keen-slider__slide');
+          slides.forEach((slide) => {
+            const imageInfo = slide.querySelector('.ImageInfo');
+            if (imageInfo) {
+              imageInfo.classList.remove('InfoVisible');
+            }
+          });
+          imageInfoVisible = false;
+        }
+    };
+
+    // Add click event listener to the #Info div of this specific gallery
+    const infoDiv = item.querySelector('#Info');
+    if (infoDiv) {
+      infoDiv.addEventListener('click', toggleImageInfoVisibility);
+    } else {
+      console.error(`Info div not found for selector: ${item.id}`);
+    }
+
+
+
+
+    /////////////////
+    ////Arrows/////
+    ////////////////
 
     // Add click event listeners to the arrow buttons
     const arrowLeft = item.querySelector('.ArrowLeft');
@@ -300,78 +361,59 @@ function setMaxHeight (s) {
     if (arrowLeft) {
       arrowLeft.addEventListener('click', () => {
         slider.prev();
+        hideImageInfo();
       });
     }
 
     if (arrowRight) {
       arrowRight.addEventListener('click', () => {
         slider.next();
+        hideImageInfo();
+      });
+    }
+
+    /////////////////////
+    ////Title Click/////
+    ////////////////////
+
+
+    const titleElement = item.querySelector("#TextWrapper");
+    const maxIdx = slider.slides.length - 1;
+
+    if (titleElement) {
+      titleElement.addEventListener('click', () => {
+        slider.moveToIdx(maxIdx, false); 
       });
     }
 
 
-// Function to toggle image info visibility
-let imageInfoVisible = false; // Initial state
 
-const toggleImageInfoVisibility = () => {
-  // Get the current active slide
-  const currentSlideIndex = slider.track.details.rel;
-  const slides = item.querySelectorAll('.keen-slider__slide');
-  const currentSlide = slides[currentSlideIndex];
 
-  if (currentSlide) {
-    const imageInfo = currentSlide.querySelector('.ImageInfo');
-    if (imageInfo) {
-      if (imageInfoVisible) {
-        imageInfo.classList.remove('InfoVisible');
-      } else {
-        imageInfo.classList.add('InfoVisible');
-      }
-      imageInfoVisible = !imageInfoVisible; // Toggle the state
-    }
-  }
-};
 
-// Function to hide image info (when slide changes)
-const hideImageInfo = () => {
-  if (imageInfoVisible) {
-    const slides = item.querySelectorAll('.keen-slider__slide');
-    slides.forEach((slide) => {
-      const imageInfo = slide.querySelector('.ImageInfo');
-      if (imageInfo) {
-        imageInfo.classList.remove('InfoVisible');
-      }
-    });
-    imageInfoVisible = false;
-  }
-};
+    /////////////////////
+    ////Intersection/////
+    ////////////////////
 
-// Add click event listener to the #Info div of this specific gallery
-const infoDiv = item.querySelector('#Info');
-if (infoDiv) {
-  infoDiv.addEventListener('click', toggleImageInfoVisibility);
-} else {
-  console.error(`Info div not found for selector: ${item.id}`);
-}
-   // IntersectionObserver hidden options
- let optionsHidden = {
-			rootMargin: "400px",
-		};
-	
-	// Define the IntersectionObserver
-	const observerSlider = new IntersectionObserver((entries) => {  
-		entries.forEach((entry) => {
-			console.log(entry);
-			if (entry.isIntersecting) {
-        entry.target.classList.remove("restrain");
-				slider.update();
-			} 
-		});
-	}, optionsHidden);
-
-  const hiddenElements = document.querySelectorAll(".observer");
-  hiddenElements.forEach((el) => observerSlider.observe(el));
+    // IntersectionObserver hidden options
+  let optionsHidden = {
+        rootMargin: "400px",
+    };
     
+
+    // Define the IntersectionObserver
+    const observerSlider = new IntersectionObserver((entries) => {  
+      entries.forEach((entry) => {
+        console.log(entry);
+        if (entry.isIntersecting) {
+          entry.target.classList.remove("restrain");
+          slider.update();
+        } 
+      });
+    }, optionsHidden);
+
+    const hiddenElements = document.querySelectorAll(".observer");
+    hiddenElements.forEach((el) => observerSlider.observe(el));
+      
   }); 
 
   
@@ -696,18 +738,27 @@ button {
 .CounterContainer {
   text-align: center;
   width: 5ch;
-  font-size: 19px;
+  font-size: var(--font-size-dekstop-h1);
   font-family: PowerGrotesk-Regular;
   font-weight: 400;
   padding: 0.5rem 0.5%;
 
   @media (--bp-mobile) {
-    font-size: 15px;
+			font-size: var(--font-size-mobile-h1);
+  }
+
+  @media (--bp-tablet) {
+    font-size: var(--font-size-tablet-h1);
+  }
+
+  @media (--bp-desktop-wide) {
+    font-size: var(--font-size-desktop-wide-h1);
   }
 }
 
 /* Text Elements */
 #TextContainer {
+  cursor: pointer;
   width: auto;
   max-width: 40vw;
   overflow-x: hidden;
@@ -718,7 +769,7 @@ button {
 h1 {
   font-family: PowerGrotesk-Regular;
   font-weight: 400;
-  font-size: 19px;
+  font-size: var(--font-size-dekstop-h1);
   letter-spacing: 0.7px;
   margin: 0px;
   white-space: nowrap;
@@ -726,8 +777,17 @@ h1 {
   text-overflow: ellipsis;
 
   @media (--bp-mobile) {
-  font-size: 15px;
+    font-size: var(--font-size-mobile-h1);
   }
+
+  @media (--bp-tablet) {
+    font-size: var(--font-size-tablet-h1);
+  }
+
+  @media (--bp-desktop-wide) {
+    font-size: var(--font-size-desktop-wide-h1);
+  }
+  
 }
 
 h2 {

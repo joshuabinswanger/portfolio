@@ -88,17 +88,17 @@
   --margin-right-desktop-wide: 13vw;
 
   /* Font Sizes */
-  --font-size-dekstop: 14px;
+  --font-size-dekstop: 13px;
   --font-size-mobile: 13px;
   --font-size-mobile-small: 11px;
   --font-size-tablet: 13px;
   --font-size-desktop-wide: 13px;
 
-  --font-size-dekstop-h1: 19px;
-  --font-size-mobile-h1: 19px;
+  --font-size-dekstop-h1: 17px;
+  --font-size-mobile-h1: 17px;
   --font-size-mobile-small-h1: 13px;
   --font-size-tablet-h1: 17px;
-  --font-size-desktop-wide-h1: 19px;
+  --font-size-desktop-wide-h1: 17px;
   
 
     letter-spacing: 0.6px;
