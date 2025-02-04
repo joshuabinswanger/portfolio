@@ -79,23 +79,23 @@ import "../styles/global.css"
 #Menu {
   position: fixed;
   z-index: 1001;
-  width: 100%;
+  width: 100vw;
   height: auto;
   display: grid;
   bottom: 0;
   background-color: var(--bg-color);
   padding-bottom: 2px;
+  justify-content:stretch;
   
 }
 
 #MainWrapper {
-  max-width: calc(100vw - var(--scrollbar-width) - 6px);
   height: 3rem;
   display: grid;
-  padding: 1px;
+  padding: 1px 3px;
   grid-gap: 0;
   grid-template-columns: 0.75rem 1fr 1.5rem 1fr 1.5rem 1fr 0.75rem;
-  justify-items: stretch; /* Ensure all children stretch horizontally */
+  justify-items: center; /* Ensure all children stretch horizontally */
   z-index: 1002;
   
 }

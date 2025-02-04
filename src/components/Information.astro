@@ -78,6 +78,7 @@ links.sort((a, b) => a.data.sortOrder - b.data.sortOrder);
     </div>
 
 
+
 </TopWrapper>
 
 
@@ -110,13 +111,16 @@ p {
     margin-top: calc(var(--padding-desktop));
     max-height: calc(60vh - var(--padding-desktop));
 
+    max-height: calc(60vh - var(--padding-desktop));
+
 
     @media (--bp-mobile) {
         align-self: center;
         max-height: calc(90svh - 3rem -  var(--padding-mobile));
         margin: 0 2px;
-        grid-template-columns: 1fr 50% 50% 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
+        margin-top: 0;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
     }
 
 
@@ -142,6 +146,13 @@ p {
     align-self: start;
     letter-spacing: 2px;
     margin: 0;
+    padding-bottom: 3rem;
+
+    
+    @media (--bp-mobile) {
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
 
     @media (--bp-tablet) {
        padding-right: 1rem;
@@ -152,12 +163,17 @@ p {
     grid-column-start: 2;
     max-width: 23ch;
     font-size: calc(var(--font-size-dekstop) - 2px);
+    align-self: start;
     letter-spacing: 2px;
     line-height: 1rem;
     height: min-content;
+    padding-bottom: 2rem;
 
     @media (--bp-mobile) {
         font-size: calc(var(--font-size-mobile) - 2px);
+        grid-column-start: 1;
+        grid-column-end: 2;
+
     }
 
     @media (--bp-tablet) {
@@ -172,6 +188,7 @@ p {
 #Services {
     grid-column-start: 3;
     max-width: 33ch;
+    align-self: start;
     font-size: calc(var(--font-size-dekstop) - 2px);
     letter-spacing: 2px;
     line-height: 1rem;
@@ -179,10 +196,13 @@ p {
 
     @media (--bp-mobile) {
         font-size: calc(var(--font-size-mobile) - 2px);
+        grid-column-start: 2;
+        grid-column-end: 3;
     }
 
     @media (--bp-tablet) {
         font-size: calc(var(--font-size-tablet) - 2px);
+        padding-right: 1rem;
         padding-right: 1rem;
     }
 
@@ -200,8 +220,8 @@ p {
 
 
     @media (--bp-mobile) {
-        grid-column-start: 2;
-        align-self: center;
+        grid-column-start: 1;
+        align-self: start;
         }
 
     p {
@@ -235,19 +255,19 @@ p {
 
 #links-top-wrapper {
 
-  display: grid;
-  z-index: 2;
-  grid-template-columns: 1fr;
+    display: grid;
+    z-index: 2;
+    grid-template-columns: 1fr;
     grid-row-start: 1;
     grid-row-end: 4;
     grid-column-start: 4;
-  --archive-width: 100%;
-  height: 100%;
-  overflow: visible;
-  padding: 0;
-  background-color: var(--bg-color);
-  align-content: space-between;
-  justify-content: center;
+    --archive-width: 100%;
+    height: 100%;
+    overflow: visible;
+    padding: 0;
+    background-color: var(--bg-color);
+    align-content: space-between;
+    justify-content: center;
 
   
   @media (--bp-mobile) {
@@ -257,8 +277,8 @@ p {
     bottom: calc(2px + 3rem);
     padding: 0 3px 2px 3px;
     grid-row-start: 4;
-    grid-column-start: 2;
-    grid-column-end: 4;
+    grid-column-start: 1;
+    grid-column-end: 3;
     column-gap: 1rem;
     row-gap: 1rem;
     align-content: space-evenly;
