@@ -129,7 +129,7 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
     
      <!-- Filter Reset -->
     <fieldset class:list={[`filters-button-group`]} id="filter-reset-wrapper">
-      <button type="reset" class:list={["filter-button mixitup-control-active"]} id="filter-reset-all" >Filter</button>
+      <button type="reset" class:list={["filter-button mixitup-control-active filter-reset-all-active"]} id="filter-reset-all" >Filter</button>
     </fieldset>
 
 
@@ -327,9 +327,21 @@ function toggleAllMainButtons() {
       },
 
       callbacks: {
-        onMixStart: function(state, futureState) {
+        onMixStart: function(futureState) {
             console.log(futureState.activeFilter.selector);
-        }
+        },
+        onMixEnd: function(state) {
+           
+          console.log(state.activeFilter.selector);
+
+            // If the active filter is the default (e.g. '*'), we consider it "not filtered"
+            if (state.activeFilter.selector === '.mix') {
+                filterButton.textContent = 'Filter';
+            } else {
+                // Anything else means a specific filter is active
+                filterButton.textContent = 'Reset';
+            }
+        },
       }
     });
 
@@ -373,6 +385,12 @@ function toggleAllMainButtons() {
       // Call MixItUp sorting with the correct value
       mixer.sort(currentValue);
       console.log(currentValue);
+
+      //scroll to top
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     }
 
     // Add event listener correctly
@@ -382,14 +400,13 @@ function toggleAllMainButtons() {
 
     let filterButton = document.querySelector("#filter-reset-all");
 
-    filterButton.addEventListener("mouseenter", function() {
+    filterButton.addEventListener("mousedown", function() {
       filterButton.textContent = "Reset";
     });
 
-    filterButton.addEventListener("mouseleave", function() {
+    filterButton.addEventListener("mouseup", function() {
       filterButton.textContent = "Filter";
     });
-
 
   })
 
@@ -520,6 +537,32 @@ function toggleAllMainButtons() {
 	}
 }
 
+.filter-button {
+  font-family: PowerGrotesk-Light;
+  color: black;
+  font-size: 11px;
+  letter-spacing: 0.6px;
+  border: 0px;
+  background-color: transparent;
+  padding: 0 0.7rem;
+  height: 1.25rem;
+
+  
+  @media (--bp-mobile) {
+    height: 2rem;
+  }
+
+  @media (--bp-tablet) {
+
+    height: 1rem;
+
+  }
+}
+
+.filter-button.mixitup-control-active {
+  color: var(--bg-color);
+  background-color: black;
+}
 
 .filters-button-group {
   display: grid; /* Keeps the grid layout */
@@ -554,7 +597,7 @@ fieldset {
   }
 }
 
-#filter-reset-all:hover {
+.filter-reset-all-active {
   background-color: var(--background-color); /* Example: Change background color */
   color: rgb(0, 0, 0); /* Change text color */
   border: solid;
@@ -612,31 +655,6 @@ grid-column-start: 2;
 }  
 
 
-.filter-button {
-  font-family: PowerGrotesk-Light;
-  color: black;
-  font-size: 11px;
-  letter-spacing: 0.6px;
-  border: 0px;
-  background-color: transparent;
-  padding: 0 0.7rem;
-  height: 1.25rem;
 
-  
-  @media (--bp-mobile) {
-    height: 2rem;
-  }
-
-  @media (--bp-tablet) {
-
-    height: 1rem;
-
-  }
-}
-
-.filter-button.mixitup-control-active {
-  color: var(--bg-color);
-  background-color: black;
-}
 
 </style>
