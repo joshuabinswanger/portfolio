@@ -136,50 +136,56 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
     
      <!-- Filter Reset -->
     <fieldset class:list={[`filters-button-group`]} id="filter-reset-wrapper">
-      <button type="reset" class:list={["filter-button mixitup-control-active filter-reset-all-active"]} id="filter-reset-all" >Filter</button>
+      <button type="reset" class:list={["filter-button"]} id="filter-reset-all" >Filter</button>
     </fieldset>
 
-    <!-- Role -->
-    <fieldset class:list={[`filters-button-group`]} id="role-buttons-wrapper" data-filter-group="role">
-      <BracketOpenH />
 
-<!--       <button  type="button" class:list={["filter-button reset-sub-filter"]} data-toggle={roleConvertedCSS.map(tag => `.${tag}`).join(', ')} >Art</button> -->
-      {roleConvertedCSS.map((tag, index) => (
-        <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
-            {roleConvertedName[index]}
-        </button>
-      ))}
+  <!-- Filter Buttosn in a Group  --> 
 
-      <BracketCloseH />
-    </fieldset>
+    <div id="filter-button-group-wrapper">
+      <!-- Role -->
+      <fieldset class:list={[`filters-button-group`]} id="role-buttons-wrapper" data-filter-group="role">
+        <BracketOpenH />
 
-    <!-- Program -->
-    <fieldset class:list={[`filters-button-group`]} id="program-buttons-wrapper" data-filter-group="program">
-      <BracketOpenH />
+        <!--       <button  type="button" class:list={["filter-button reset-sub-filter"]} data-toggle={roleConvertedCSS.map(tag => `.${tag}`).join(', ')} >Art</button> -->
+        {roleConvertedCSS.map((tag, index) => (
+          <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
+              {roleConvertedName[index]}
+          </button>
+        ))}
 
-      <!-- <button  type="button" class="filter-button reset-sub-filter"  id="reset-filter-program" data-toggle={programConvertedCSS.map(tag => `.${tag}`).join(', ')} >Tool</button> -->
-      {programConvertedCSS.map((tag, index) => (
-        <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
-            {programConvertedName[index]}
+        <BracketCloseH />
+      </fieldset>
 
-        </button>
-      ))}
-      <BracketCloseH />
-    </fieldset>
+      <!-- Program -->
+      <fieldset class:list={[`filters-button-group`]} id="program-buttons-wrapper" data-filter-group="program">
+        <BracketOpenH />
 
-    <!-- Topic -->
-    <fieldset class:list={[`filters-button-group`]} id="topic-buttons-wrapper" data-filter-group="topic">
-      <BracketOpenH />
+        <!-- <button  type="button" class="filter-button reset-sub-filter"  id="reset-filter-program" data-toggle={programConvertedCSS.map(tag => `.${tag}`).join(', ')} >Tool</button> -->
+        {programConvertedCSS.map((tag, index) => (
+          <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
+              {programConvertedName[index]}
 
-<!--       <button  type="button" class="filter-button reset-sub-filter" data-toggle={topicConvertedCSS.map(tag => `.${tag}`).join(', ')} >Topic</button> -->
-      {topicConvertedCSS.map((tag, index) => (
-        <button type="button"class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
-            {topicConvertedName[index]}
+          </button>
+        ))}
+        <BracketCloseH />
+      </fieldset>
 
-        </button>
-      ))}
-      <BracketCloseH />
-    </fieldset>
+      <!-- Topic -->
+      <fieldset class:list={[`filters-button-group`]} id="topic-buttons-wrapper" data-filter-group="topic">
+        <BracketOpenH />
+
+        <!--       <button  type="button" class="filter-button reset-sub-filter" data-toggle={topicConvertedCSS.map(tag => `.${tag}`).join(', ')} >Topic</button> -->
+        {topicConvertedCSS.map((tag, index) => (
+          <button type="button"class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
+              {topicConvertedName[index]}
+
+          </button>
+        ))}
+        <BracketCloseH />
+      </fieldset>
+
+  </div>
 
   </form>
 
@@ -337,9 +343,11 @@ function toggleAllMainButtons() {
             // If the active filter is the default (e.g. '*'), we consider it "not filtered"
             if (state.activeFilter.selector === '.mix') {
                 filterButton.textContent = 'Filter';
+                filterButton.classList.remove('filter-reset-all-active');
             } else {
                 // Anything else means a specific filter is active
                 filterButton.textContent = 'Reset';
+                filterButton.classList.add('filter-reset-all-active');
             }
         },
       }
@@ -475,7 +483,7 @@ function toggleAllMainButtons() {
 
 
   @media (--bp-mobile) {
-    grid-template-columns: 30% 30%;
+    grid-template-columns: 40% 40%;
     grid-row-gap: 5rem;
 	}
 
@@ -497,7 +505,7 @@ function toggleAllMainButtons() {
   display: grid;
   position: fixed;
   z-index: 2;
-  grid-template-columns: 9ch 1fr 2fr;
+  grid-template-columns: 9ch 1fr;
   grid-template-rows: min-content min-content;
   padding-top: var(--padding-desktop);
   row-gap: 0.25rem;
@@ -514,12 +522,12 @@ function toggleAllMainButtons() {
     padding: 1px;
     padding-bottom: 0.7rem;
     left: 0px;
-    grid-template-columns: 7ch auto auto auto;
+    grid-template-columns: 7ch 7ch auto;
     grid-template-rows: auto;
     column-gap: 0.2rem;
     width: calc(100vw - var(--scrollbar-width) - 6px);
     overflow-y: hidden;
-    overflow-x: scroll;
+    overflow-x: hidden;
     
   }
 
@@ -537,31 +545,22 @@ function toggleAllMainButtons() {
 	}
 }
 
-.filter-button {
-  font-family: PowerGrotesk-Light;
-  color: black;
-  font-size: 11px;
-  letter-spacing: 0.6px;
-  border: 0px;
-  background-color: transparent;
-  padding: 0 0.7rem;
-  height: 1.25rem;
+#filter-button-group-wrapper {
+  display: grid; /* Keeps the grid layout */
+  grid-template-columns: auto;
+  grid-template-rows: min-content min-content;
+  row-gap: 0.25rem;
+  grid-row-start: 1;
+  grid-row-end: 3;
+  grid-column-start: 2;
 
-  
+
   @media (--bp-mobile) {
-    height: 2rem;
+    font-size: var(--font-size-mobile-small);
+    margin: 0;
+    overflow-x: scroll;
+    grid-column-start: 3;
   }
-
-  @media (--bp-tablet) {
-
-    height: 1rem;
-
-  }
-}
-
-.filter-button.mixitup-control-active {
-  color: var(--bg-color);
-  background-color: black;
 }
 
 .filters-button-group {
@@ -594,11 +593,17 @@ fieldset {
 
   @media (--bp-mobile) {
     grid-column-start: 2;
+    grid-row-start: 1;
   }
 }
 
-.filter-reset-all-active {
-  background-color: var(--background-color); /* Example: Change background color */
+#filter-reset-all {
+  color: var(--bg-color);
+  background-color: black;
+}
+
+#filter-reset-all.filter-reset-all-active {
+  background-color: var(--bg-color-accent); /* Example: Change background color */
   color: rgb(0, 0, 0); /* Change text color */
   border: solid;
   border-width: 1px;
@@ -618,7 +623,7 @@ fieldset {
 
 
 #role-buttons-wrapper {
-  grid-column-start: 2;
+  grid-column-start: 1;
   grid-template-columns: 0 repeat(var(--roleListLengthString), 1fr) 0;
 
   
@@ -629,7 +634,7 @@ fieldset {
 }
 
 #program-buttons-wrapper {
-  grid-column-start: 3;
+  grid-column-start: 2;
   grid-column-end: 4;
   grid-template-columns: 0 repeat(var(--programListLengthString), 1fr) 0;
 
@@ -641,7 +646,7 @@ fieldset {
 }  
 
 #topic-buttons-wrapper {
-  grid-column-start: 2;
+  grid-column-start: 1;
   grid-column-end: 4;
   grid-row-start: 2;
   grid-template-columns: 0 repeat(var(--topicListLengthString), 1fr) 0;
@@ -652,7 +657,35 @@ fieldset {
     grid-row-start: 1;
   }
 
-}  
+}
+
+.filter-button {
+  font-family: PowerGrotesk-Light;
+  color: black;
+  font-size: 11px;
+  letter-spacing: 0.6px;
+  border: 0px;
+  background-color: transparent;
+  padding: 0 0.7rem;
+  height: 1.25rem;
+
+  
+  @media (--bp-mobile) {
+    height: 2rem;
+  }
+
+  @media (--bp-tablet) {
+
+    height: 1rem;
+
+  }
+}
+
+.filter-button.mixitup-control-active {
+  color: var(--bg-color);
+  background-color: black;
+}
+
 
 
 

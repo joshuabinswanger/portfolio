@@ -11,7 +11,7 @@ const { strokewidth = "1px", strokecolor = "black" } = Astro.props;
     <svg xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 50 200" preserveAspectRatio="xMidYMid">
         <path 
         vector-effect="non-scaling-stroke"
-        d="M 48 2 H 2 V 196 H 46">
+        d="M 45 5 H 5 V 195 H 45">
     </svg>
 </div>
 
@@ -26,12 +26,11 @@ const { strokewidth = "1px", strokecolor = "black" } = Astro.props;
     justify-items: start;         /* Aligns the SVG to the right */
     align-items: center;        /* Centers the SVG vertically */        
     width: 100%;  
+
     }
 
 /* SVG styling */
 svg {
-    overflow: visible;
-    width: auto;
     height:  100%;
     display: block; /* Removes inline spacing */
 }
