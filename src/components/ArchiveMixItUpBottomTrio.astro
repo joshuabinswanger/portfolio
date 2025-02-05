@@ -126,18 +126,18 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
   <div class:list={["ArchiveWrapper"]} id="ArchiveWrapper">
   <!-- Filter Buttons-->
   <form id="filter-top-wrapper" >
+
+
+    <!-- Filter Sort -->
+    <fieldset class:list={[`filters-button-group`]} id="sort-wrapper">
+      <button type="button" class:list={["filter-button mixitup-control-active"]} id="sort-button" >Sort</button>
+    </fieldset>
+    
     
      <!-- Filter Reset -->
     <fieldset class:list={[`filters-button-group`]} id="filter-reset-wrapper">
       <button type="reset" class:list={["filter-button mixitup-control-active filter-reset-all-active"]} id="filter-reset-all" >Filter</button>
     </fieldset>
-
-
-    <!-- Filter Reset -->
-    <fieldset class:list={[`filters-button-group`]} id="sort-wrapper">
-      <button type="button" class:list={["filter-button mixitup-control-active"]} id="sort-button" >Sort</button>
-    </fieldset>
-
 
     <!-- Role -->
     <fieldset class:list={[`filters-button-group`]} id="role-buttons-wrapper" data-filter-group="role">
@@ -589,11 +589,11 @@ fieldset {
 
 #filter-reset-wrapper {
   grid-column-start: 1;
-  grid-row-start: 1;
-  grid-row-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 3;
 
   @media (--bp-mobile) {
-    grid-column-start: 1;
+    grid-column-start: 2;
   }
 }
 
@@ -606,11 +606,11 @@ fieldset {
 
 #sort-wrapper {
   grid-column-start: 1;
-  grid-row-start: 2;
-  grid-row-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 2;
 
   @media (--bp-mobile) {
-    grid-column-start: 2;
+    grid-column-start: 1;
     grid-row-start: 1;
   }
 }
@@ -618,7 +618,7 @@ fieldset {
 
 
 #role-buttons-wrapper {
-grid-column-start: 2;
+  grid-column-start: 2;
   grid-template-columns: 0 repeat(var(--roleListLengthString), 1fr) 0;
 
   
