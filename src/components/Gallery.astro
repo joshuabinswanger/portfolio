@@ -1,0 +1,697 @@
+---
+import TopWrapper from "../layouts/TopWrapper.astro";
+import GridLayout from "../layouts/GridLayout.astro";
+import GalleryElement from "./GalleryElementV1.astro";
+import { getCollection } from 'astro:content';
+
+const galleryProjects = await getCollection('projects');
+
+// Sort galleryProjects by projectName
+galleryProjects.sort((a, b) => a.data.projectName.localeCompare(b.data.projectName));
+
+// Log the filtered results
+galleryProjects.forEach((entry) => {
+	const project = entry.data.projectName;
+  	/* console.log(`${project}`); // Should only log entries matching the target project */
+});
+
+const {projectName} = Astro.props;
+---
+
+<TopWrapper>
+  <GridLayout>
+	
+    {galleryProjects.map((entry, index) => {
+
+		 // Optionally sanitize the project name for a valid ID
+		 const projectId = entry.data.projectName.replace(/\s+/g, '-').toLowerCase();
+		  
+		if (index > 2) {
+			
+		return(
+		<div class:list={["observer restrain"]}>
+			<div class:list={["GalleryElementWrapper hidden"]} id={projectId}>
+				<GalleryElement
+				project={entry.data.projectName}
+				
+				/>
+			</div>
+		</div>
+		);
+	
+		}  else {
+		return(
+		<div class:list={["observer restrain"]}>
+			<div class:list={["GalleryElementWrapper"]} id={projectId}>
+				<GalleryElement
+				project={entry.data.projectName}
+				
+				/>
+			</div>
+		</div>
+		);
+	}
+	})}
+  </GridLayout>
+</TopWrapper>
+
+
+<script>
+
+document.addEventListener('astro:page-load', ev => {
+
+
+// Select all ImageElement components
+const imageElements = document.querySelectorAll('.GalleryElementWrapper');
+
+// Loop through the ImageElement NodeList and start adding the fade class from the 3rd element onwards
+imageElements.forEach((image, index) => {
+	if (index >= 2) { // index starts from 0, so 2 is the 3rd element
+		image.classList.add('fade');
+	}
+	}
+); 
+
+ // IntersectionObserver options
+	let optionsFade = {
+			rootMargin: "150px 0px -200px 0px",
+		};
+	
+	// Define the IntersectionObserver
+	const observerFade = new IntersectionObserver((entries) => {  
+		entries.forEach((entry) => {
+			console.log(entry);
+			if (entry.isIntersecting) {
+				entry.target.firstElementChild.classList.add("show");
+				entry.target.classList.remove("restrain");
+			} else {
+				entry.target.firstElementChild.classList.remove("show");
+			}
+		});
+	}, optionsFade);
+
+	 // IntersectionObserver hidden options
+	 let optionsHidden = {
+			rootMargin: "700px",
+		};
+	
+	// Define the IntersectionObserver
+	const observerHidden = new IntersectionObserver((entries) => {  
+		entries.forEach((entry) => {
+			console.log(entry);
+			if (entry.isIntersecting) {
+				entry.target.firstElementChild.classList.remove("hidden");
+			} 
+		});
+	}, optionsHidden);
+
+
+
+
+
+
+     // Select elements to observe and start observing them
+     const fadeElements = document.querySelectorAll(".observer");
+     fadeElements.forEach((el) => observerFade.observe(el));
+
+	 const hiddenElements = document.querySelectorAll(".observer");
+	 hiddenElements.forEach((el) => observerHidden.observe(el));
+
+
+
+  });
+</script>
+
+<!-- KeenSlider -->
+<script>
+
+	import KeenSlider from 'keen-slider'
+	
+	document.addEventListener('astro:page-load', () => {
+	
+	  const Sliders = document.querySelectorAll('.GalleryElement')
+	
+	  Sliders.forEach((item, index) => {
+		console.log(`This is the slider at index ${index} with ID: ${item.id}`);
+	
+		// Select all Slides
+		const slides = item.querySelectorAll('.keen-slider__slide');
+		// Select the ProjectInfoSlideWrapper within this slider
+		const projectInfoSlideWrapper = item.querySelector('.ProjectInfoSlideWrapper');
+	
+		let loaded = []
+	
+		//Loading Function  
+		function loadImages(s) {
+		  const slideIdx = s.track.details.rel;
+		  const totalSlides = s.track.details.slides.length;
+	
+		  // Mark the current, previous, and next slide as loaded
+		  loaded[slideIdx] = true;
+		  loaded[(slideIdx + totalSlides) % totalSlides] = true; // Previous slide, wrapping around
+		  loaded[(slideIdx + 1) % totalSlides] = true; // Next slide, wrapping around
+	
+		  s.slides.forEach((element, idx) => {
+			  if (loaded[idx]) {
+				// Use querySelector to find the .ImageElement div
+				const imageElement = element.querySelector('.ImageElement');
+				console.log(`ImageElement found:`, imageElement);
+	
+				if (imageElement) {
+				  imageElement.style.display = "block";
+				} else {
+				  console.warn(`.ImageElement not found in slide index ${idx}`);
+				}
+			  } 
+			})
+		}
+	
+		//Counter Function
+		function updateCounter(s) {
+		const counterContainer = item.querySelector('.CounterContainer');
+		  if (counterContainer) {
+			const currentSlide = s.track.details.rel + 1; // Add 1 because index is zero-based
+			const totalSlides = s.track.details.slides.length;
+			counterContainer.textContent = `${currentSlide} / ${totalSlides}`;
+		  }
+		}
+	
+		//MaxHeight Function
+		function setMaxHeight (s) {
+		  const activeSlide = s.track.details.rel;
+		  const height = s.size;
+		  console.log(`the slide has height: ${height}`)
+		  const projectInfoSlide = s.slides[s.slides.length - 1];
+		  console.log(`projectInfoSlide at index: ${projectInfoSlide.id}`)
+		  const projectInfoSlideWrapper = projectInfoSlide.querySelector('#ProjectInfoSlideWrapper');
+	
+		  projectInfoSlideWrapper.style.maxHeight = `${height}px`;
+		}
+	
+	
+	
+	
+		var slider = new KeenSlider(item, {
+		  created: (s) => {
+			loadImages(s);
+			setMaxHeight(s);
+		  },
+		  slideChanged: loadImages,
+		  animationEnded: updateCounter,
+		  updated: setMaxHeight,
+		
+		  slides: {
+			spacing: 15,
+		  },
+		  loop: true,
+		  initial: 0,
+		  
+		});
+	
+	
+	
+	
+	
+	
+		/////////////////
+		////INFO DIV/////
+		////////////////
+	
+		// Function to toggle image info visibility
+		let imageInfoVisible = false; // Initial state
+	
+		const toggleImageInfoVisibility = () => {
+	
+		  // Get the current active slide
+		  const currentSlideIndex = slider.track.details.rel;
+		  const slides = item.querySelectorAll('.keen-slider__slide');
+		  const currentSlide = slides[currentSlideIndex];
+	
+		  if (currentSlide) {
+			const imageInfo = currentSlide.querySelector('.ImageInfo');
+			if (imageInfo) {
+			  if (imageInfoVisible) {
+				imageInfo.classList.remove('InfoVisible');
+			  } else {
+				imageInfo.classList.add('InfoVisible');
+			  }
+			  imageInfoVisible = !imageInfoVisible; // Toggle the state
+			}
+		  }
+		};
+	
+		// Function to hide image info (when slide changes)
+		const hideImageInfo = () => {
+		  if (imageInfoVisible) {
+			const slides = item.querySelectorAll('.keen-slider__slide');
+			  slides.forEach((slide) => {
+				const imageInfo = slide.querySelector('.ImageInfo');
+				if (imageInfo) {
+				  imageInfo.classList.remove('InfoVisible');
+				}
+			  });
+			  imageInfoVisible = false;
+			}
+		};
+	
+		// Add click event listener to the #Info div of this specific gallery
+		const infoDiv = item.querySelector('#Info');
+		if (infoDiv) {
+		  infoDiv.addEventListener('click', toggleImageInfoVisibility);
+		} else {
+		  console.error(`Info div not found for selector: ${item.id}`);
+		}
+	
+	
+	
+	
+		/////////////////
+		////Arrows/////
+		////////////////
+	
+		// Add click event listeners to the arrow buttons
+		const arrowLeft = item.querySelector('.ArrowLeft');
+		const arrowRight = item.querySelector('.ArrowRight');
+	
+		if (arrowLeft) {
+		  arrowLeft.addEventListener('click', () => {
+			slider.prev();
+			hideImageInfo();
+		  });
+		}
+	
+		if (arrowRight) {
+		  arrowRight.addEventListener('click', () => {
+			slider.next();
+			hideImageInfo();
+		  });
+		}
+	
+		/////////////////////
+		////Title Click/////
+		////////////////////
+	
+	
+		const titleElement = item.querySelector("#TextWrapper");
+		const maxIdx = slider.slides.length - 1;
+	
+		if (titleElement) {
+		  titleElement.addEventListener('click', () => {
+			slider.moveToIdx(maxIdx, false); 
+		  });
+		}
+	
+	
+	
+	
+	
+		/////////////////////
+		////Intersection/////
+		////////////////////
+	
+		// IntersectionObserver hidden options
+	  let optionsHidden = {
+			rootMargin: "400px",
+		};
+		
+	
+		// Define the IntersectionObserver
+		const observerSlider = new IntersectionObserver((entries) => {  
+		  entries.forEach((entry) => {
+			console.log(entry);
+			if (entry.isIntersecting) {
+			  entry.target.classList.remove("restrain");
+			  slider.update();
+			} 
+		  });
+		}, optionsHidden);
+	
+		const hiddenElements = document.querySelectorAll(".observer");
+		hiddenElements.forEach((el) => observerSlider.observe(el));
+		  
+	  }); 
+	
+	  
+	
+	});
+	
+	 
+	
+	</script>
+	
+<!-- PhotoSwipe -->
+<script>
+	
+	import PhotoSwipeLightbox from 'photoswipe/lightbox';
+	
+	const leftArrowSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 155 139" "width="39" height="35"><path d="m0 69 69 69 14-12-45-46h116V58H38l44-44L69 0 0 69Z" style="fill-rule:nonzero"/></svg>';
+	const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 139 139" "width="139" height="139"><path d="m69 83-56 55-13-12 56-57L0 14 13 0l56 56 56-56 13 14-55 55 55 57-13 12-56-55Z"/></svg>';
+	
+	
+	
+	function isPhonePortrait() {
+			return window.matchMedia('(max-width: 650px) and (orientation: portrait)').matches;
+		}
+	
+	
+	
+	
+	document.addEventListener('astro:page-load', () => {
+	
+		
+		let lightbox;
+	
+		const galleryElements = document.querySelectorAll(".GalleryElement");
+	
+	
+		galleryElements.forEach((el, index) => {
+	
+		const instanceId = el.getAttribute('data-instanceid');
+		const imageElements = document.querySelectorAll(`.ImageElement a`);
+	
+	
+		const options = {
+			arrowPrevSVG: leftArrowSVGString,
+			arrowNextSVG: leftArrowSVGString,
+			closeSVG: CloseSVGString,
+	
+			initialZoomLevel: `fit`,
+			bgOpacity: 0.95,
+			zoom: false,
+			
+			// to apply styles just to this instance of PhotoSwipe
+			mainClass: 'pswp--custom-bg pswp--custom-icon-colors',
+	
+			paddingFn: () => {
+			if (isPhonePortrait()) {
+				return { top: 0, bottom: 0, left: 10, right: 10  }  
+			}
+			else {
+				return { top: 20, bottom: 40, left: 100, right: 100 }
+			};
+			},
+	
+			showHideAnimationType: 'fade',
+	
+	
+			gallery: `#slider-${instanceId}`,
+			children: imageElements,
+			pswpModule: () => import('photoswipe'), // Import the PhotoSwipe module dynamically
+		};
+		
+		
+		const lightbox = new PhotoSwipeLightbox(options);
+
+		lightbox.on('uiRegister', function() {
+			lightbox.pswp.ui.registerElement({
+			name: 'custom-caption',
+			order: 9,
+			isButton: false,
+			appendTo: 'wrapper',
+			html: 'Caption text',
+			onInit: (el, pswp) => {
+				lightbox.pswp.on('change', () => {
+				const currSlideElement = lightbox.pswp.currSlide.data.element;
+				console.log('Current Slide Element:', currSlideElement);
+				let captionHTML = '';
+
+				if (currSlideElement) {
+			
+					// Get the description from data-description attribute
+					const description_title = currSlideElement.getAttribute('data-description_title');
+					const description_text = currSlideElement.getAttribute('data-description_text')
+					if (description_title) {
+						captionHTML = `<p><strong>${description_title}</strong></p><p>${description_text}</p>`;
+					}
+
+				}
+
+				el.innerHTML = captionHTML || '';
+				});
+			}
+
+			});
+		});
+	
+		lightbox.init(); // Initialize the lightbox
+		/* console.log (`${imageElements.id}`) */
+		console.log(`lightbox instance: ${el.id}`)
+	
+	
+		}); 
+
+	
+	
+	});
+	
+	document.addEventListener("astro:before-swap", () => {
+		const lightbox = new PhotoSwipeLightbox;
+			lightbox.destroy();
+		});
+	
+	</script>
+
+
+
+
+<style>
+@import "../styles/global.css";
+
+.GalleryElementWrapper {
+	scroll-margin-top: var(--padding-desktop);
+	
+	@media (--bp-mobile) {
+		scroll-margin-top: var(--padding-mobile);
+	}
+
+	@media (--bp-tablet) {
+		scroll-margin-top: var(--padding-tablet);
+	}
+
+	@media (--bp-desktop-wide) {	
+		scroll-margin-top: var(--padding-desktop-wide);
+	}
+}
+/*Fade */
+.observer {
+	display: grid;
+	height: fit-content;
+}
+.restrain {
+	opacity: 0.1;
+	overflow: hidden;
+	height: 70vh;
+	width: 25vw;
+}
+.fade{
+  opacity: 0.22;
+  filter: contrast(0.66) sepia(.8) blur(5px) grayscale(0.8);
+  transition: all 1s ease;
+  transform: translateY(10%);
+}
+
+.show {
+  opacity: 1;
+  filter:  contrast(1) brightness(1) sepia(0) blur(0px) grayscale(0);
+  transform: translateY(0);
+}
+
+.hidden {
+	display: none;
+}
+
+
+
+.observer:nth-of-type(1) {
+	grid-column-start: 1; 
+	grid-column-end: span 8; 
+	grid-row-start: 1;
+	
+}
+
+	
+.observer:nth-of-type(2) {
+	grid-column-start: 11; 
+	grid-column-end: span 6; 
+	grid-row-start: 7;
+
+}
+
+.observer:nth-of-type(3) {
+	grid-column-start: 2;
+	grid-column-end: span 7; 
+	grid-row-start: 11;
+	
+}
+.observer:nth-of-type(4) {
+	grid-column-start: 11;
+	grid-column-end: span 7; 
+	grid-row-start: 17;
+
+}
+.observer:nth-of-type(5) {
+	grid-column-start: 1;
+		grid-column-end: span 7; 
+		grid-row-start: 21;
+
+}
+.observer:nth-of-type(6) {
+	grid-column-start: 10; 
+	grid-column-end: span 7; 
+	grid-row-start: 27;
+
+}
+.observer:nth-of-type(7) {
+	grid-column-start: 2; 
+	grid-column-end: span 6; 
+	grid-row-start: 32
+
+}
+.observer:nth-of-type(8) {
+	grid-column-start: 11; 
+	grid-column-end: span 7; 
+	grid-row-start: 36;
+
+	
+}
+.observer:nth-of-type(9) {
+	grid-column-start: 1; 
+	grid-column-end: span 7; 
+	grid-row-start: 42;
+
+}
+.observer:nth-of-type(10) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 47;
+
+}
+.observer:nth-of-type(11) {
+	grid-column-start: 3; 
+	grid-column-end: span 6; 
+	grid-row-start: 52;
+}
+.observer:nth-of-type(12) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 57;
+}
+.observer:nth-of-type(13) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 63;
+
+}
+.observer:nth-of-type(14) {
+	grid-column-start: 12; 
+	grid-column-end: span 6; 
+	grid-row-start: 66;
+}
+
+
+@media (--bp-mobile) {
+
+	.observer:nth-of-type(odd) {
+		grid-column-start: 1; 
+		grid-column-end: span 6; 
+	}
+
+	.observer:nth-of-type(even) {
+		grid-column-start: 2; 
+		grid-column-end: span 6; 
+	}
+
+	.observer {
+		margin-bottom: 5rem;
+	}
+
+}
+
+@media (--bp-tablet) {
+
+.observer:nth-of-type(1) {
+	grid-column-start: 1; 
+	grid-column-end: span 5; 
+}
+
+.observer:nth-of-type(2) {
+	grid-column-start: 3; 
+	grid-column-end: span 5; 
+}
+
+.observer:nth-of-type(3) {
+	grid-column-start: 2; 
+	grid-column-end: span 5; 
+}
+
+.observer:nth-of-type(4) {
+	grid-column-start: 1; 
+	grid-column-end: span 5; 
+}
+
+.observer:nth-of-type(5) {
+	grid-column-start: 2; 
+	grid-column-end: span 5; 
+}
+
+.observer:nth-of-type(6) {
+	grid-column-start: 3; 
+	grid-column-end: span 5; 
+}
+
+.observer:nth-of-type(7) {
+	grid-column-start: 1; 
+	grid-column-end: span 5; 
+}
+
+.observer:nth-of-type(8) {
+	grid-column-start: 2; 
+	grid-column-end: span 5; 
+}
+
+.observer:nth-of-type(9) {
+	grid-column-start: 3; 
+	grid-column-end: span 5; 
+}
+.observer:nth-of-type(10) {
+	grid-column-start: 1; 
+	grid-column-end: span 5; 
+}
+.observer:nth-of-type(11) {
+	grid-column-start: 2; 
+	grid-column-end: span 5; 
+}
+.observer:nth-of-type(12) {
+	grid-column-start: 3; 
+	grid-column-end: span 5; 
+}
+.observer:nth-of-type(13) {
+	grid-column-start: 1; 
+	grid-column-end: span 5; 
+}
+.observer:nth-of-type(14) {
+	grid-column-start: 2; 
+	grid-column-end: span 5; 
+}
+.observer:nth-of-type(15) {
+	grid-column-start: 3; 
+	grid-column-end: span 5; 
+}
+.observer:nth-of-type(16) {
+	grid-column-start: 1; 
+	grid-column-end: span 5; 
+}
+.observer:nth-of-type(17) {
+	grid-column-start: 2; 
+	grid-column-end: span 5; 
+}
+
+.observer {
+	margin-bottom: 5rem;
+}
+
+}
+
+
+
+</style>

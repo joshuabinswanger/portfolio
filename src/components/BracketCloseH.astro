@@ -9,10 +9,10 @@ const { strokewidth = "1px", strokecolor = "black" } = Astro.props;
 
 
 <div class="svg-container">
-    <svg xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 50 200" preserveAspectRatio="xMinYMid">
+    <svg xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 50 200" preserveAspectRatio="xMidYMid">
         <path 
         vector-effect="non-scaling-stroke"
-        d="M2 2 H48 V198 H2"/>
+        d="M5 5 H45 V195 H5"/>
     </svg>
 </div>
 
@@ -24,7 +24,7 @@ const { strokewidth = "1px", strokecolor = "black" } = Astro.props;
     display: grid;
     grid-template-columns: 1fr; /* One column spanning the full width */
     grid-template-rows: 1fr;    /* One row spanning the full height */
-    justify-items: right;         /* Aligns the SVG to the right */
+    justify-items: end;         /* Aligns the SVG to the right */
     align-items: center;        /* Centers the SVG vertically */              /* Ensures the container fills its parent's height */
     width: 100%;  
     overflow: visible;
@@ -32,7 +32,6 @@ const { strokewidth = "1px", strokecolor = "black" } = Astro.props;
 
 /* SVG styling */
 svg {
-    overflow: visible;
     width: auto;
     height: 100%;
     display: block; /* Removes inline spacing */

@@ -1,0 +1,497 @@
+---
+import BracketOpenH from "./BracketOpenH.astro";
+import BracketCloseH from "./BracketCloseH.astro";
+import BracketMiddleH from "./BracketMiddleH.astro";
+import BracketOpenV from "./BracketOpenV.astro";
+import BracketCloseV from "./BracketCloseV.astro";
+import BracketMiddleV from "./BracketMiddleV.astro";
+import Icon from "./Icon.astro";
+import { getEntry } from 'astro:content';
+import { getCollection } from "astro:content";
+import { CldImage } from 'astro-cloudinary';
+
+import 'keen-slider/keen-slider.min.css';
+import "photoswipe/style.css";
+import { marked } from 'marked';
+
+
+// Get component props from Astro.props 
+const { project } = Astro.props;
+
+interface Props {
+  project: string;
+}
+
+// Generate a unique ID for each instance
+const instanceId = Math.random().toString(36).slice(2, 11);  
+
+// Fetch the specific gallery project by the project name (slug)
+const galleryProject = await getEntry('projects', `${Astro.props.project}-gallery`);
+
+if (!galleryProject) {
+  throw new Error(`Project with slug "${Astro.props.project}-gallery" not found.`);  
+}
+
+// Turn Prop into string
+const targetProject = String(project).split('_')[1];
+/* console.log(`${targetProject}`); */
+
+// Use getCollection with a filter function to only retrieve images with a matching project
+const galleryImages = await getCollection('galleryImages', ({ data }) => {
+  return data.metadata?.project === targetProject;
+});
+
+/* const galleryImages = await getCollection('galleryImages', ({ data }) => {
+  return data.metadata?.project === 'xylopedia';
+});
+console.log(galleryImages); */
+
+// Sort galleryImages by public_id
+galleryImages.sort((a, b) => a.data.public_id.localeCompare(b.data.public_id));
+
+// Check if any image has metadata.highres_public_id
+const hasHighRes = galleryImages.some(image => image.data?.metadata?.highres_public_id);
+/* console.log(hasHighRes) */
+
+const highResData = [];
+
+for (const image of galleryImages) {
+  // Initialize a default high-resolution entry object
+  let highResEntry = null;
+
+  // Check if highres_public_id is present and fetch the entry if available
+  if (image.data.metadata?.highres_public_id) {
+    try {
+      highResEntry = await getEntry('highResImages', image.data.metadata.highres_public_id);
+      /* console.log(highResEntry.data.secure_url); */
+    } catch (error) {
+      console.error(`Failed to fetch highResImages for ${image.data.metadata.highres_public_id}:`, error);
+    }
+      // Push the final data, merging base and high-resolution details
+      highResData.push({
+        ...image.data, // Include existing image data
+        highResWidth: highResEntry.data.width,
+        highResHeight: highResEntry.data.height,
+        highResSecureUrl: highResEntry.data.secure_url,
+  });
+  }
+
+  else {
+      highResData.push({
+      ...image.data, // Include existing image data
+      highResWidth: image.data.width,
+      highResHeight: image.data.height,
+      highResSecureUrl: image.data.secure_url,
+    });
+  }
+
+}
+
+
+const imagesAmount = galleryImages.length;
+/* console.log(`Number of images: ${imagesAmount}`); */
+---
+
+<div id={`slider-${instanceId}`} class:list={"GalleryElement "} data-instanceId={instanceId} data-imagesAmount={imagesAmount} data-galleryProject={galleryProject}>
+  
+  <div class:list={"SlidesContainer keen-slider"}>
+
+    {galleryImages.map((image, index) =>  {
+
+      /* console.log(highResData[index].highResSecureUrl) */
+
+        return (
+          <div id={`ImageContainer-${index}`} class:list={["keen-slider__slide Slide"]}>
+            <div class:list={"ImageInfo"}>
+              <div class:list={"ImageInfoWrapper"}>
+                <div id="spacer"></div>
+                <BracketOpenV strokewidth="0.5px"/>
+                <div class:list={"ImageDescriptionWrapper"}>
+                  {image.data.metadata && (
+                    <>
+                      <p><strong>{image.data.metadata?.description_title}</strong></p>
+                      <p>{image.data.metadata?.description_text}</p>
+                    </>
+                  )}
+                </div>
+                <BracketCloseV strokewidth="0.5px" />
+                <div id="spacer"></div>
+              </div>
+            </div>
+            
+            <div class:list={"Filter"}></div>
+              
+
+            <div id="Image" class:list={["ImageElement"]} style={index > 1 ? 'display: none;' : ''}>
+              <a class:list={["photo-link"]}
+                href={highResData[index].highResSecureUrl}  
+                data-pswp-width={highResData[index].highResWidth}
+                data-pswp-height={highResData[index].highResHeight}
+                target="_blank"
+                data-description_title={image.data.metadata?.description_title}
+                data-description_text={image.data.metadata?.description_text}
+                >
+           
+                  <CldImage
+                    src={image.data.public_id}
+                    data-src={image.data.secure_url}   
+                    width={image.data.width}
+                    height={image.data.height}
+                    sizes="(max-width: 650px) 90vw, (max-width: 1200px) 50vw, 33vw"
+                    alt={image.data.metadata?.description_title}
+                    format="avif"
+                  
+                  />
+            
+              </a>
+            </div>
+          </div>
+        )
+      }
+    )}
+
+    <div id="ProjectInfoSlide" class:list={["keen-slider__slide"]}>
+      
+      <div id="ProjectInfoSlideWrapper">
+        <div id="spacer"></div>
+          
+        <BracketOpenV strokewidth="0.5px"/>
+
+        <div class:list={"ProjectInfoWrapper"}>
+          <Fragment set:html={marked.parse(galleryProject.data.projectDescription)} />
+        </div>
+
+        <div id="spacer"></div>
+
+        <div class:list={"DetailsInfoWrapper"}>
+          <Fragment set:html={marked.parse(galleryProject.data.credits)} />
+        </div>
+
+        <BracketCloseV strokewidth="0.5px" />
+        
+        <div id="spacer"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="GalleryDescriptionWrapper">
+    <BracketOpenH />
+
+    <div id="TextContainer">
+      <div id="TextWrapper">
+        <h1>{galleryProject.data.title}</h1>
+        <h2>{galleryProject.data.subtitle}</h2>
+      </div>
+    </div>
+
+   <BracketMiddleH />
+
+    <div id="ArrowWrapper">
+      <button class:list={["ArrowLeft"]}>&larr;</button>
+      <div class:list={"CounterContainer"}>
+        1 / {imagesAmount + 1}
+      </div>
+      <button class:list={["ArrowRight"]}>&rarr;</button>
+    </div>
+
+   <BracketMiddleH /> 
+
+    <div id="Info">
+      <Icon icon="Info" width="77%" />
+    </div>
+
+    <BracketCloseH />
+  </div>
+ 
+</div>
+
+
+
+  
+
+
+<style>
+
+@import "../styles/global.css";
+
+.GalleryElement {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 3px;
+  max-width: calc(100vw - 3px - 3px);
+  overflow: hidden;
+}
+
+.SlidesContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0px 0px 22px #988f821b;
+
+}
+
+a {
+  height: 100%;
+}
+img {
+  vertical-align: top; /* or middle, top, depending on the desired effect */
+}
+
+#ProjectInfoSlide {
+  /* max-height: min-content; */
+  align-content: center;
+}
+
+#ProjectInfoSlideWrapper {
+  display: grid;
+  font-size: var(--font-size-dekstop);
+  width: min(70%, 66ch);
+  grid-template-rows:   auto min-content min-content 2rem min-content min-content auto;
+  align-items: center;
+  margin: 0 auto; /* Add this line to center horizontally */
+  overflow-x: hidden;
+
+  @media (--bp-mobile) {
+    font-size: var(--font-size-mobile);
+  }
+
+  @media (--bp-tablet) {
+    font-size: var(--font-size-tablet);
+  }
+
+  @media (--bp-desktop-wide) {
+    font-size: var(--font-size-desktop-wide);
+  }
+
+}
+
+.Filter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #fbf9f400;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(0px);
+  z-index: 11;
+  transition: backdrop-filter ease-in-out 0.2s, background-color ease-in-out 0.2s;
+  pointer-events: none;
+}
+
+.hidden-image {
+    display: none;
+  }
+
+
+/*   Image Info */
+
+
+
+.ImageInfoWrapper {
+  display: grid;
+  width: min(88%, 66ch);
+  height: 90%;
+  grid-template-rows:   1fr min-content  min-content min-content 1fr;
+  align-items: center;
+
+}
+
+
+.ImageInfo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10; /* Ensure it appears above the image */
+  display: grid;
+  justify-items: center;
+  align-items: center;
+
+  pointer-events: none; /* Prevent interaction with the description if needed */
+  background-color: var(--bg-color-trans); /* Example style */
+  
+  /* Start with no blur (initial state) */
+  backdrop-filter: blur(0px);
+
+  /* Add transition for backdrop-filter */
+  transition: backdrop-filter ease-in-out 0.3s, opacity 0.3s ease-in-out;
+
+  font-size: var(--font-size-dekstop);
+  hyphens: auto;
+
+  overflow: hidden;
+
+  @media (--bp-mobile) {
+    font-size: var(--font-size-mobile);
+  }
+
+  @media (--bp-tablet) {
+    font-size: var(--font-size-tablet);
+  }
+
+  @media (--bp-desktop-wide) {
+    font-size: var(--font-size-desktop-wide);
+    line-height: 1.33;
+  }
+}
+
+
+
+.InfoVisible {
+  opacity: 1;
+  backdrop-filter: blur(22px);
+  transition: opacity 0.3s, backdrop-filter 0.3s ease;
+}
+
+
+.ImageDescriptionWrapper, .ProjectInfoWrapper, .DetailsInfoWrapper {
+
+  width: 80%;           /* Ensure it takes full width */
+  justify-self: center; /* Centers items horizontally */
+ 
+
+  span {
+    font-family: PowerGrotesk-Medium;
+  }
+
+  @media (--bp-mobile) {
+    width: 85%;
+    }
+
+}
+
+
+/* Image Element */
+/* .ImageElement {
+  min-width: 100%;
+}
+
+
+ */
+
+/*  .Slide {
+min-width: 80vw !important;
+max-width: 80vw !important;
+} */
+/* GalleryDescription */
+
+#GalleryDescriptionWrapper {
+  display: grid;
+  width: 100%;
+  max-width: calc(100vw - 3px - 3px);
+  overflow: visible;
+  opacity: 1;
+  height: fit-content;
+  grid-template-columns: 1.5ch minmax(min-content, 2fr) 3ch minmax(7ch, 1.5fr) 3ch 3.5ch 1.5ch;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 1.5s ease-in;
+}
+
+#ArrowWrapper {
+  display: grid;
+  width: 100%;
+  grid-template-columns: auto min-content auto;
+  place-items: center;
+}
+
+button {
+  all: unset;
+  text-justify: center;
+  text-align: center;
+  width: stretch;
+  cursor: pointer;
+  padding: 0.5rem 0.5%;
+
+}
+
+.CounterContainer {
+  text-align: center;
+  width: 5ch;
+  font-size: var(--font-size-dekstop-h1);
+  font-family: PowerGrotesk-Regular;
+  font-weight: 400;
+  padding: 0.5rem 0.5%;
+
+  @media (--bp-mobile) {
+			font-size: var(--font-size-mobile-h1);
+  }
+
+  @media (--bp-tablet) {
+    font-size: var(--font-size-tablet-h1);
+  }
+
+  @media (--bp-desktop-wide) {
+    font-size: var(--font-size-desktop-wide-h1);
+  }
+}
+
+/* Text Elements */
+#TextContainer {
+  cursor: pointer;
+  width: auto;
+  max-width: 40vw;
+  overflow-x: hidden;
+  display: grid;
+  place-items: center;
+}
+
+h1 {
+  font-family: PowerGrotesk-Regular;
+  font-weight: 400;
+  font-size: var(--font-size-dekstop-h1);
+  letter-spacing: 0.7px;
+  margin: 0px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @media (--bp-mobile) {
+    font-size: var(--font-size-mobile-h1);
+  }
+
+  @media (--bp-tablet) {
+    font-size: var(--font-size-tablet-h1);
+  }
+
+  @media (--bp-desktop-wide) {
+    font-size: var(--font-size-desktop-wide-h1);
+  }
+  
+}
+
+h2 {
+  font-family: PowerGrotesk-Light;
+  font-weight: 200;
+  font-size: var(--font-size-dekstop);
+  letter-spacing: 0.5px;
+  margin: 0px;
+
+  @media (--bp-mobile) {
+			font-size: var(--font-size-mobile);
+  }
+
+  @media (--bp-tablet) {
+    font-size: var(--font-size-tablet);
+  }
+
+  @media (--bp-desktop-wide) {
+    font-size: var(--font-size-desktop-wide);
+  }
+
+}
+
+#Info {
+  display: grid;
+  place-items: center;
+  cursor: pointer; /* Ensure it looks clickable */
+  pointer-events: auto;
+  margin: 0 -5px;
+}
+
+
+  
+</style>

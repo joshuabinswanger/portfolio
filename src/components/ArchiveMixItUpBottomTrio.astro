@@ -126,60 +126,66 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
   <div class:list={["ArchiveWrapper"]} id="ArchiveWrapper">
   <!-- Filter Buttons-->
   <form id="filter-top-wrapper" >
-    
-     <!-- Filter Reset -->
-    <fieldset class:list={[`filters-button-group`]} id="filter-reset-wrapper">
-      <button type="reset" class:list={["filter-button mixitup-control-active"]} id="filter-reset-all" >Filter</button>
-    </fieldset>
 
 
-    <!-- Filter Reset -->
+    <!-- Filter Sort -->
     <fieldset class:list={[`filters-button-group`]} id="sort-wrapper">
       <button type="button" class:list={["filter-button mixitup-control-active"]} id="sort-button" >Sort</button>
     </fieldset>
-
-
-    <!-- Role -->
-    <fieldset class:list={[`filters-button-group`]} id="role-buttons-wrapper" data-filter-group="role">
-      <BracketOpenH />
-
-<!--       <button  type="button" class:list={["filter-button reset-sub-filter"]} data-toggle={roleConvertedCSS.map(tag => `.${tag}`).join(', ')} >Art</button> -->
-      {roleConvertedCSS.map((tag, index) => (
-        <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
-            {roleConvertedName[index]}
-        </button>
-      ))}
-
-      <BracketCloseH />
+    
+    
+     <!-- Filter Reset -->
+    <fieldset class:list={[`filters-button-group`]} id="filter-reset-wrapper">
+      <button type="reset" class:list={["filter-button"]} id="filter-reset-all" >Filter</button>
     </fieldset>
 
-    <!-- Program -->
-    <fieldset class:list={[`filters-button-group`]} id="program-buttons-wrapper" data-filter-group="program">
-      <BracketOpenH />
 
-      <!-- <button  type="button" class="filter-button reset-sub-filter"  id="reset-filter-program" data-toggle={programConvertedCSS.map(tag => `.${tag}`).join(', ')} >Tool</button> -->
-      {programConvertedCSS.map((tag, index) => (
-        <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
-            {programConvertedName[index]}
+  <!-- Filter Buttosn in a Group  --> 
 
-        </button>
-      ))}
-      <BracketCloseH />
-    </fieldset>
+    <div id="filter-button-group-wrapper">
+      <!-- Role -->
+      <fieldset class:list={[`filters-button-group`]} id="role-buttons-wrapper" data-filter-group="role">
+        <BracketOpenH />
 
-    <!-- Topic -->
-    <fieldset class:list={[`filters-button-group`]} id="topic-buttons-wrapper" data-filter-group="topic">
-      <BracketOpenH />
+        <!--       <button  type="button" class:list={["filter-button reset-sub-filter"]} data-toggle={roleConvertedCSS.map(tag => `.${tag}`).join(', ')} >Art</button> -->
+        {roleConvertedCSS.map((tag, index) => (
+          <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
+              {roleConvertedName[index]}
+          </button>
+        ))}
 
-<!--       <button  type="button" class="filter-button reset-sub-filter" data-toggle={topicConvertedCSS.map(tag => `.${tag}`).join(', ')} >Topic</button> -->
-      {topicConvertedCSS.map((tag, index) => (
-        <button type="button"class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
-            {topicConvertedName[index]}
+        <BracketCloseH />
+      </fieldset>
 
-        </button>
-      ))}
-      <BracketCloseH />
-    </fieldset>
+      <!-- Program -->
+      <fieldset class:list={[`filters-button-group`]} id="program-buttons-wrapper" data-filter-group="program">
+        <BracketOpenH />
+
+        <!-- <button  type="button" class="filter-button reset-sub-filter"  id="reset-filter-program" data-toggle={programConvertedCSS.map(tag => `.${tag}`).join(', ')} >Tool</button> -->
+        {programConvertedCSS.map((tag, index) => (
+          <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
+              {programConvertedName[index]}
+
+          </button>
+        ))}
+        <BracketCloseH />
+      </fieldset>
+
+      <!-- Topic -->
+      <fieldset class:list={[`filters-button-group`]} id="topic-buttons-wrapper" data-filter-group="topic">
+        <BracketOpenH />
+
+        <!--       <button  type="button" class="filter-button reset-sub-filter" data-toggle={topicConvertedCSS.map(tag => `.${tag}`).join(', ')} >Topic</button> -->
+        {topicConvertedCSS.map((tag, index) => (
+          <button type="button"class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
+              {topicConvertedName[index]}
+
+          </button>
+        ))}
+        <BracketCloseH />
+      </fieldset>
+
+  </div>
 
   </form>
 
@@ -197,11 +203,13 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
  
 </TopWrapper>
 
+<!-- MixItUp -->
 <script>
 import { deselectScripts } from 'astro/virtual-modules/transitions-swap-functions.js';
 import { use } from 'marked';
 import mixitup from 'mixitup';
 import mixitupMultifilter from 'mixitup-multifilter';
+import PhotoSwipeLightbox from 'photoswipe/lightbox';
 
 
 
@@ -260,31 +268,6 @@ function getFreshElements() {
 
 
 
-  //////////////////////////
-  ////toggleAllMainButtons///
-  //////////////////////////
-  function toggle(button) {
-  if (button.value == "OFF") {
-    button.value = "ON";
-    console.log(button);
-  } else {
-    button.value = "OFF";
-  }
-}
-
-function toggleAllMainButtons() {
-  const mainButtons = document.querySelectorAll('.reset-sub-filter');
-  console.log(mainButtons);
-  mainButtons.forEach((btn) => {
-    btn.click();
-  });
-}
-
-
-
-
-
-
   /////////////////////
   ///////MixItUp//////
   /////////////////////
@@ -293,9 +276,36 @@ function toggleAllMainButtons() {
 
 
 
+  ////////////////////////////////////////////////////////////
+  ///////////////     PHOTOSWIPE ////////////////////////////
+  ///////////////////////////////////////////////////////////
+    
+  
+  // Create an array to hold the image data for PhotoSwipe
+  let imageDataSource = [];
+
+  let imageElements = document.querySelectorAll('.photo-link');
+
+  // SVG strings for the arrow and close icons
+    const leftArrowSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 155 139" width="39" height="35"><path d="m0 69 69 69 14-12-45-46h116V58H38l44-44L69 0 0 69Z" style="fill-rule:nonzero"/></svg>';
+  const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 139 139" width="139" height="139"><path d="m69 83-56 55-13-12 56-57L0 14 13 0l56 56 56-56 13 14-55 55 55 57-13 12-56-55Z"/></svg>';
+
+  // Utility function to detect phone portrait mode
+  function isPhonePortrait() {
+    return window.matchMedia('(max-width: 650px) and (orientation: portrait)').matches;
+  }
+
+  // Declare lightbox variable in an outer scope so that it's accessible in multiple event listeners
+    let lightbox = null;
+
+
+
+
   document.addEventListener("astro:page-load", () => {
 
-
+    /////////////////////
+    ///////MixItUp//////
+    /////////////////////
     updateFilterButtonWidth();
     window.addEventListener('resize', updateFilterButtonWidth);
 
@@ -327,11 +337,29 @@ function toggleAllMainButtons() {
       },
 
       callbacks: {
-        onMixStart: function(state, futureState) {
+        onMixStart: function(futureState) {
             console.log(futureState.activeFilter.selector);
-        }
+        },
+        onMixEnd: function(state) {
+
+          createPhotoSwipeDataSource();
+           
+          console.log(state.activeFilter.selector);
+
+            // If the active filter is the default (e.g. '*'), we consider it "not filtered"
+            if (state.activeFilter.selector === '.mix') {
+                filterButton.textContent = 'Filter';
+                filterButton.classList.remove('filter-reset-all-active');
+            } else {
+                // Anything else means a specific filter is active
+                filterButton.textContent = 'Reset';
+                filterButton.classList.add('filter-reset-all-active');
+            }
+        },
       }
     });
+
+    createPhotoSwipeDataSource();
 
     mixer.configure({
     animation: {
@@ -372,7 +400,13 @@ function toggleAllMainButtons() {
 
       // Call MixItUp sorting with the correct value
       mixer.sort(currentValue);
-      console.log(currentValue);
+  /*     console.log(currentValue); */
+
+      //scroll to top
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     }
 
     // Add event listener correctly
@@ -382,20 +416,137 @@ function toggleAllMainButtons() {
 
     let filterButton = document.querySelector("#filter-reset-all");
 
-    filterButton.addEventListener("mouseenter", function() {
+    filterButton.addEventListener("mousedown", function() {
       filterButton.textContent = "Reset";
     });
 
-    filterButton.addEventListener("mouseleave", function() {
+    filterButton.addEventListener("mouseup", function() {
       filterButton.textContent = "Filter";
     });
 
 
+
+
+    ////////////////////////////////////////////////////////////
+    ///////////////     PHOTOSWIPE ////////////////////////////
+    ///////////////////////////////////////////////////////////
+
+
+    // Function to build the image data source array by reading attributes from each .photo-link element
+    function createPhotoSwipeDataSource() {
+
+      imageDataSource.length = 0;
+ 
+      
+      // Select all .photo-link elements and convert NodeList to an array
+      const allLinks = Array.from(document.querySelectorAll('.photo-link'));
+      
+      // Filter out only the visible links (an element is visible if its offsetParent is not null)
+      const dataSources = allLinks.filter(link => link.offsetParent !== null);
+
+      // Attach a click event listener to each photo-link element.
+      // The index of the clicked element is used to open the corresponding slide.
+      dataSources.forEach((link, index) => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault(); // Prevent the default link behavior
+          lightbox.loadAndOpen(index);
+        });
+      });
+
+
+      dataSources.forEach(link => {
+        const img = link.querySelector('img'); // Find the nested img element
+
+        // Extract attributes from the img and link elements
+    /*         const srcset = img.getAttribute('srcset'); */
+        const src = link.getAttribute('href');
+        const width = link.getAttribute('data-pswp-width');
+        const height = link.getAttribute('data-pswp-height');
+        const alt = img.getAttribute('alt');
+        const description_title = link.getAttribute('data-description_title');
+        const description_text = link.getAttribute('data-description_text');
+
+        // Push an object with the extracted data into the imageDataSource array
+        imageDataSource.push({
+    /*           srcset: srcset, */
+          src: src,
+          width: parseInt(width, 10),
+          height: parseInt(height, 10),
+          alt: alt,
+          description_title: description_title,
+          description_text: description_text
+        });
+      });
+ /*      console.log(imageDataSource); */
+
+    }
+
+
+
+
+    // If the lightbox is not yet initialized, create it
+    if (!lightbox) {
+      // Assign to the outer scoped variable (do not use "const" here)
+      lightbox = new PhotoSwipeLightbox({
+        dataSource: imageDataSource,
+        arrowPrevSVG: leftArrowSVGString,
+        arrowNextSVG: leftArrowSVGString,
+        closeSVG: CloseSVGString,
+        initialZoomLevel: `fit`,
+        bgOpacity: 0.95,
+        zoom: false,
+        mainClass: 'pswp--custom-bg pswp--custom-icon-colors',
+        paddingFn: () => {
+          return isPhonePortrait()
+            ? { top: 0, bottom: 0, left: 10, right: 10 }
+            : { top: 20, bottom: 40, left: 100, right: 100 };
+        },
+        showHideAnimationType: 'fade',
+        pswpModule: () => import('photoswipe'),
+      });
+
+      // Initialize the PhotoSwipe lightbox
+      lightbox.init();
+
+      // Register a custom caption element
+      lightbox.on('uiRegister', function () {
+        lightbox.pswp.ui.registerElement({
+          name: 'custom-caption',
+          order: 9,
+          isButton: false,
+          appendTo: 'wrapper',
+          html: '',
+          onInit: (el, pswp) => {
+            lightbox.pswp.on('change', () => {
+              const currSlideElement = lightbox.pswp.currSlide?.data?.element;
+              let captionHTML = '';
+              if (currSlideElement) {
+                const description_title = currSlideElement.getAttribute('data-description_title');
+                const description_text = currSlideElement.getAttribute('data-description_text');
+                if (description_title) {
+                  captionHTML = `<p><strong>${description_title}</strong></p><p>${description_text}</p>`;
+                }
+              }
+              el.innerHTML = captionHTML || '';
+            });
+          },
+        });
+      });
+
+
+
+
+    }
   })
 
 
 
   document.addEventListener("astro:before-swap", () => {
+
+    /////////////////////
+    ///////MixItUp//////
+    /////////////////////
+
     
     console.log("Destroying mixer");
     
@@ -403,14 +554,43 @@ function toggleAllMainButtons() {
     
     mixer?.destroy();
     mixer = undefined;
+
+    ////////////////////////////////////////////////////////////
+    ///////////////     PHOTOSWIPE ////////////////////////////
+    ///////////////////////////////////////////////////////////
+
+
+    if (lightbox) {
+      lightbox.destroy();
+      lightbox = null;
+    };
     
-  
+   
   });
+
+
+
+
 
 
 
 </script>
 
+
+<!-- PhotoSwipe -->
+<script>
+ 
+
+
+
+  // Before swapping Astro pages, destroy the lightbox if it exists
+  document.addEventListener('astro:before-swap', () => {
+    if (lightbox) {
+      lightbox.destroy();
+      lightbox = null;
+    }
+  });
+</script>
 
 <style define:vars={{ roleListLengthString, programListLengthString, topicListLengthString }}>
 
@@ -458,7 +638,7 @@ function toggleAllMainButtons() {
 
 
   @media (--bp-mobile) {
-    grid-template-columns: 30% 30%;
+    grid-template-columns: 40% 40%;
     grid-row-gap: 5rem;
 	}
 
@@ -480,7 +660,7 @@ function toggleAllMainButtons() {
   display: grid;
   position: fixed;
   z-index: 2;
-  grid-template-columns: 9ch 1fr 2fr;
+  grid-template-columns: 9ch 1fr;
   grid-template-rows: min-content min-content;
   padding-top: var(--padding-desktop);
   row-gap: 0.25rem;
@@ -497,12 +677,12 @@ function toggleAllMainButtons() {
     padding: 1px;
     padding-bottom: 0.7rem;
     left: 0px;
-    grid-template-columns: 7ch auto auto auto;
+    grid-template-columns: 7ch 7ch auto;
     grid-template-rows: auto;
     column-gap: 0.2rem;
     width: calc(100vw - var(--scrollbar-width) - 6px);
     overflow-y: hidden;
-    overflow-x: scroll;
+    overflow-x: hidden;
     
   }
 
@@ -520,6 +700,23 @@ function toggleAllMainButtons() {
 	}
 }
 
+#filter-button-group-wrapper {
+  display: grid; /* Keeps the grid layout */
+  grid-template-columns: auto;
+  grid-template-rows: min-content min-content;
+  row-gap: 0.25rem;
+  grid-row-start: 1;
+  grid-row-end: 3;
+  grid-column-start: 2;
+
+
+  @media (--bp-mobile) {
+    font-size: var(--font-size-mobile-small);
+    margin: 0;
+    overflow-x: scroll;
+    grid-column-start: 3;
+  }
+}
 
 .filters-button-group {
   display: grid; /* Keeps the grid layout */
@@ -546,23 +743,6 @@ fieldset {
 
 #filter-reset-wrapper {
   grid-column-start: 1;
-  grid-row-start: 1;
-  grid-row-end: 2;
-
-  @media (--bp-mobile) {
-    grid-column-start: 1;
-  }
-}
-
-#filter-reset-all:hover {
-  background-color: var(--background-color); /* Example: Change background color */
-  color: rgb(0, 0, 0); /* Change text color */
-  border: solid;
-  border-width: 1px;
-}
-
-#sort-wrapper {
-  grid-column-start: 1;
   grid-row-start: 2;
   grid-row-end: 3;
 
@@ -572,10 +752,33 @@ fieldset {
   }
 }
 
+#filter-reset-all {
+  color: var(--bg-color);
+  background-color: black;
+}
+
+#filter-reset-all.filter-reset-all-active {
+  background-color: var(--bg-color-accent); /* Example: Change background color */
+  color: rgb(0, 0, 0); /* Change text color */
+  border: solid;
+  border-width: 1px;
+}
+
+#sort-wrapper {
+  grid-column-start: 1;
+  grid-row-start: 1;
+  grid-row-end: 2;
+
+  @media (--bp-mobile) {
+    grid-column-start: 1;
+    grid-row-start: 1;
+  }
+}
+
 
 
 #role-buttons-wrapper {
-grid-column-start: 2;
+  grid-column-start: 1;
   grid-template-columns: 0 repeat(var(--roleListLengthString), 1fr) 0;
 
   
@@ -586,7 +789,7 @@ grid-column-start: 2;
 }
 
 #program-buttons-wrapper {
-  grid-column-start: 3;
+  grid-column-start: 2;
   grid-column-end: 4;
   grid-template-columns: 0 repeat(var(--programListLengthString), 1fr) 0;
 
@@ -598,7 +801,7 @@ grid-column-start: 2;
 }  
 
 #topic-buttons-wrapper {
-  grid-column-start: 2;
+  grid-column-start: 1;
   grid-column-end: 4;
   grid-row-start: 2;
   grid-template-columns: 0 repeat(var(--topicListLengthString), 1fr) 0;
@@ -609,8 +812,7 @@ grid-column-start: 2;
     grid-row-start: 1;
   }
 
-}  
-
+}
 
 .filter-button {
   font-family: PowerGrotesk-Light;
@@ -638,5 +840,9 @@ grid-column-start: 2;
   color: var(--bg-color);
   background-color: black;
 }
+
+
+
+
 
 </style>
