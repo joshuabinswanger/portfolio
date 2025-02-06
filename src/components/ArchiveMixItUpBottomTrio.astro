@@ -346,15 +346,18 @@ function getFreshElements() {
            
           console.log(state.activeFilter.selector);
 
-            // If the active filter is the default (e.g. '*'), we consider it "not filtered"
-            if (state.activeFilter.selector === '.mix') {
-                filterButton.textContent = 'Filter';
-                filterButton.classList.remove('filter-reset-all-active');
-            } else {
-                // Anything else means a specific filter is active
-                filterButton.textContent = 'Reset';
-                filterButton.classList.add('filter-reset-all-active');
-            }
+          // If the active filter is the default (e.g. '*'), we consider it "not filtered"
+          if (state.activeFilter.selector === '.mix') {
+              filterButton.textContent = 'Filter';
+              filterButton.classList.remove('filter-reset-all-active');
+          } else {
+              // Anything else means a specific filter is active
+              filterButton.textContent = 'Reset';
+              filterButton.classList.add('filter-reset-all-active');
+          }
+
+          // Scroll to the top of the page smoothly after the mix operation
+          window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
         },
       }
     });
@@ -370,6 +373,7 @@ function getFreshElements() {
     let resetButton = document.querySelector(`#filter-reset-all`);
     resetButton.addEventListener(`click`, () => {
       mixer.show();
+
     });
 
 
@@ -401,12 +405,6 @@ function getFreshElements() {
       // Call MixItUp sorting with the correct value
       mixer.sort(currentValue);
   /*     console.log(currentValue); */
-
-      //scroll to top
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
     }
 
     // Add event listener correctly
