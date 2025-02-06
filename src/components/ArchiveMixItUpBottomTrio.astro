@@ -147,43 +147,43 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
       <fieldset class:list={[`filters-button-group`]} id="role-buttons-wrapper" data-filter-group="role">
         <BracketOpenH />
 
-        <!--       <button  type="button" class:list={["filter-button reset-sub-filter"]} data-toggle={roleConvertedCSS.map(tag => `.${tag}`).join(', ')} >Art</button> -->
-        {roleConvertedCSS.map((tag, index) => (
-          <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
-              {roleConvertedName[index]}
-          </button>
-        ))}
+                <!--       <button  type="button" class:list={["filter-button reset-sub-filter"]} data-toggle={roleConvertedCSS.map(tag => `.${tag}`).join(', ')} >Art</button> -->
+          {roleConvertedCSS.map((tag, index) => (
+            <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
+                {roleConvertedName[index]}
+            </button>
+          ))}
 
-        <BracketCloseH />
-      </fieldset>
+          <BracketCloseH />
+        </fieldset>
 
       <!-- Program -->
       <fieldset class:list={[`filters-button-group`]} id="program-buttons-wrapper" data-filter-group="program">
         <BracketOpenH />
 
-        <!-- <button  type="button" class="filter-button reset-sub-filter"  id="reset-filter-program" data-toggle={programConvertedCSS.map(tag => `.${tag}`).join(', ')} >Tool</button> -->
-        {programConvertedCSS.map((tag, index) => (
-          <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
-              {programConvertedName[index]}
+          <!-- <button  type="button" class="filter-button reset-sub-filter"  id="reset-filter-program" data-toggle={programConvertedCSS.map(tag => `.${tag}`).join(', ')} >Tool</button> -->
+          {programConvertedCSS.map((tag, index) => (
+            <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
+                {programConvertedName[index]}
 
-          </button>
-        ))}
-        <BracketCloseH />
-      </fieldset>
+            </button>
+          ))}
+          <BracketCloseH />
+        </fieldset>
 
-      <!-- Topic -->
-      <fieldset class:list={[`filters-button-group`]} id="topic-buttons-wrapper" data-filter-group="topic">
-        <BracketOpenH />
+        <!-- Topic -->
+        <fieldset class:list={[`filters-button-group`]} id="topic-buttons-wrapper" data-filter-group="topic">
+          <BracketOpenH />
 
-        <!--       <button  type="button" class="filter-button reset-sub-filter" data-toggle={topicConvertedCSS.map(tag => `.${tag}`).join(', ')} >Topic</button> -->
-        {topicConvertedCSS.map((tag, index) => (
-          <button type="button"class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
-              {topicConvertedName[index]}
+                <!--       <button  type="button" class="filter-button reset-sub-filter" data-toggle={topicConvertedCSS.map(tag => `.${tag}`).join(', ')} >Topic</button> -->
+          {topicConvertedCSS.map((tag, index) => (
+            <button type="button"class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`}>
+                {topicConvertedName[index]}
 
-          </button>
-        ))}
-        <BracketCloseH />
-      </fieldset>
+            </button>
+          ))}
+          <BracketCloseH />
+        </fieldset>
 
   </div>
 
