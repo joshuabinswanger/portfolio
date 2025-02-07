@@ -4,18 +4,37 @@ import GridLayout from "../layouts/GridLayout.astro";
 import GalleryElement from "./GalleryElementV1.astro";
 import { getCollection } from 'astro:content';
 
-const galleryProjects = await getCollection('projects');
+// Get props
+interface Props {
+  portfolio: boolean;
+}
 
-// Sort galleryProjects by projectName
-galleryProjects.sort((a, b) => a.data.projectName.localeCompare(b.data.projectName));
+const { portfolio } = Astro.props;
 
-// Log the filtered results
+// Declare a single array or variable for your data
+let galleryProjects = [];
+
+// Conditionally fetch the items you want
+if (portfolio) {
+  // Only fetch items with data.portfolio === true
+  galleryProjects = await getCollection('projects', ({ data }) => data.portfolio === true);
+} else {
+  // Otherwise fetch all
+  galleryProjects = await getCollection('projects', ({ data }) => data.portfolio !== true);
+}
+
+// Sort
+galleryProjects.sort((a, b) =>
+  a.data.projectName.localeCompare(b.data.projectName)
+);
+
+// Optionally log them
 galleryProjects.forEach((entry) => {
-	const project = entry.data.projectName;
-  	/* console.log(`${project}`); // Should only log entries matching the target project */
+  // console.log(entry.data.projectName);
 });
 
-const {projectName} = Astro.props;
+
+
 ---
 
 <TopWrapper>
@@ -55,7 +74,7 @@ const {projectName} = Astro.props;
   </GridLayout>
 </TopWrapper>
 
-
+<!-- Intersection Observer -->
 <script>
 
 document.addEventListener('astro:page-load', ev => {

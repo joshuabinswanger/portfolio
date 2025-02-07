@@ -1,6 +1,13 @@
 projectName: "09_freedom"
 title: "Freedom"
 subtitle: "MS Wissenschaft Exhibit"
+year: "2024"
+client: "UZH, Prof. Dr. Noah Bubenhofer"
+collaborators: "Prof. Dr. Noah Bubenhofer, Davide Ventre, Sonja Huber"
+role: "Design"
+
+
+portfolio: true
 
 tags:
   - 2D
@@ -27,7 +34,7 @@ credits: |
         </tr>
         <tr>
           <th>Project Coordinator:</th>
-          <td>Prof. Noah Bubenhofer, Davide Ventre</td>
+          <td>Prof. Dr. Noah Bubenhofer, Davide Ventre</td>
         </tr>        
         <tr>
           <th>Tools:</th>

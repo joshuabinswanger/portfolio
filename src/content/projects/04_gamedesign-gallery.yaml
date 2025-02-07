@@ -1,6 +1,13 @@
 projectName: "04_gamedesign"
 title: "Game Design 101"
 subtitle: "Motion Graphics"
+year: "2024"
+client: "University Library Zurich"
+collaborators: ""
+role: "3D Design"
+
+portfolio: true
+
 tags:
   - MotionGraphics
   - 3D

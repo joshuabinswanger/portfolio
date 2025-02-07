@@ -1,6 +1,14 @@
 projectName: "08_gjermundbu"
 title: "Gjermundbu Helmet"
 subtitle: "3D Reconstruction"
+year: "2024"
+client: "University Library Zurich"
+collaborators: ""
+role: "3D Design"
+
+
+
+portfolio: true
 
 tags:
   - 3D

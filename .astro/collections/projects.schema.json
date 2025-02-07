@@ -13,6 +13,9 @@
         "subtitle": {
           "type": "string"
         },
+        "portfolio": {
+          "type": "boolean"
+        },
         "tags": {
           "type": "array",
           "items": {
@@ -55,6 +58,7 @@
         "projectName",
         "title",
         "subtitle",
+        "portfolio",
         "tags",
         "projectDescription",
         "credits"

@@ -1,0 +1,71 @@
+---
+import TopWrapper from "../layouts/TopWrapper.astro";
+import GridLayout from "../layouts/GridLayout.astro";
+import GalleryElement from "./GalleryElementV1.astro";
+import { getCollection } from 'astro:content';
+
+
+
+const projects = await getCollection('projects');
+
+
+// Sort
+projects.sort((a, b) =>
+  a.data.year.localeCompare(b.data.projectName)
+);
+
+
+
+---
+
+<TopWrapper>
+	
+    {projects.map((entry, index) => {
+
+		// Optionally sanitize the project name for a valid ID
+		const projectId = entry.data.projectName.replace(/\s+/g, '-').toLowerCase();
+		  
+		<div class:list={["ListElementWrapper"]} id={projectId}>
+
+			<div id="project-name"> </div>
+			<div id="project-description"> </div>
+			<div id="year"> </div>
+			<div id="client"> </div>
+			<div id="collaborators"> </div>
+			<div id="role"> </div>
+			<div id="tools"> </div>
+
+		</div>
+
+
+	})}
+
+</TopWrapper>
+
+
+
+
+
+
+<style>
+@import "../styles/global.css";
+
+.ListElementWrapper {
+	scroll-margin-top: var(--padding-desktop);
+	
+	@media (--bp-mobile) {
+		scroll-margin-top: var(--padding-mobile);
+	}
+
+	@media (--bp-tablet) {
+		scroll-margin-top: var(--padding-tablet);
+	}
+
+	@media (--bp-desktop-wide) {	
+		scroll-margin-top: var(--padding-desktop-wide);
+	}
+}
+
+
+
+</style>

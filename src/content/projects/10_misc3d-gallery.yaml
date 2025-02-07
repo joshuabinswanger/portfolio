@@ -1,6 +1,12 @@
-projectName: "11_illustration"
-title: "Illustration"
-subtitle: "Varoius Illustrations"
+projectName: "10_misc3d"
+title: "3D Visualisation"
+subtitle: "Varoius 3D Projects"
+year: "2020 - 2024"
+client: ""
+collaborators: ""
+role: "3D Design"
+
+portfolio: false
 
 tags:
   - 2D
@@ -13,7 +19,7 @@ tags:
 bgcolor: "#0A0523"
 
 projectDescription: |
-  Some illustrations done over the years.
+  Various 3D Projects focusing mainly on modeling, texturing and rendering.
  
 credits: |
 
