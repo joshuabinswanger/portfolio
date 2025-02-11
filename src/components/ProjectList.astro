@@ -3,6 +3,9 @@ import TopWrapper from "../layouts/TopWrapper.astro";
 import GridLayout from "../layouts/GridLayout.astro";
 import GalleryElement from "./GalleryElementV1.astro";
 import { getCollection } from 'astro:content';
+import { marked } from 'marked';
+import ThreeImageSlide from "./ThreeImageSlide.astro";
+import 'keen-slider/keen-slider.min.css';
 
 
 
@@ -11,7 +14,7 @@ const projects = await getCollection('projects');
 
 // Sort
 projects.sort((a, b) =>
-  a.data.year.localeCompare(b.data.projectName)
+  a.data.year.localeCompare(b.data.year)
 );
 
 
@@ -19,53 +22,231 @@ projects.sort((a, b) =>
 ---
 
 <TopWrapper>
-	
+
+	<div id="list-wrapper">
     {projects.map((entry, index) => {
 
 		// Optionally sanitize the project name for a valid ID
 		const projectId = entry.data.projectName.replace(/\s+/g, '-').toLowerCase();
 		  
-		<div class:list={["ListElementWrapper"]} id={projectId}>
+		return(
+		<Fragment>
+			<div class:list={["ListElementWrapper"]} id={projectId}>
 
-			<div id="project-name"> </div>
-			<div id="year"> </div>
-			<div id="client"> </div>
-			<div id="project-description"> </div>
-			<div id="role"> </div>
-			<div id="tools"> </div>
-			<div id="collaborators"> </div>
+				<div class:list={["column1"]}>
+					<div class:list={["year"]}> <p>{entry.data.year} | {entry.data.client}</p> </div>
+				</div>
 
-		</div>
+				<div class:list={["column2"]}>
+					<div class:list={["project-title"]}> <p>{entry.data.title}</p> </div>
+				</div>
+
+				<div class:list={["column3"]}>
+					<div class:list={["role"]}> {entry.data.role}&ensp;|&ensp;{entry.data.tools}</div>
+				</div>
 
 
-	})}
+			<div class:list={["flip-out"]}>
+				<div class:list={["project-images"]}>
+					<ThreeImageSlide project={entry.data.projectName}/>
+				</div>
+{/* 				<button class:list={["more-button"]}>
+					more &rarr;
+				</button> */}
+			</div>
+
+
+
+			</div>
+			
+			<hr />
+		</Fragment>
+	)})}
+
+	</div>
 
 </TopWrapper>
 
+<script>
+import KeenSlider from 'keen-slider';
+import 'keen-slider/keen-slider.min.css';
+
+document.addEventListener('astro:page-load', () => {
+  const listElements = document.querySelectorAll('.ListElementWrapper');
+
+  listElements.forEach(listEl => {
+
+	const flipOut = document.querySelectorAll('.flip-out');
+
+	const sliderContainer = listEl.querySelector('.project-images');
+
+	listEl.addEventListener('click', () => {
 
 
 
+        // First, close all other open sliders
+        listElements.forEach(el => {
+          if (el !== listEl && el.classList.contains('open')) {
+            // Remove the open state (this triggers the CSS transition)
+            el.classList.remove('open');
+          }
+        });
 
+
+	  // Toggle the clicked slider:
+	  if (listEl.classList.contains('open')) {
+
+		listEl.classList.remove('open');
+
+		setTimeout(() => {
+			sliderContainer.style.display = "";
+		}, 500);
+
+
+	  } else {
+
+		sliderContainer.style.display = "block";
+
+		// Otherwise, open the element
+		listEl.classList.add('open');
+
+
+
+		
+		if (sliderContainer && !sliderContainer.dataset.keenSliderInitialized) {
+		  new KeenSlider(sliderContainer, {
+			loop: true,
+			slides: {
+			  // Default settings for larger screens
+			  perView: 3,
+			  spacing: 30,
+			},
+			breakpoints: {
+			  '(max-width: 375px)': {
+				slides: { perView: 1, spacing: 15 },
+			  },
+			  '(max-width: 650px)': {
+				slides: { perView: 2, spacing: 20 },
+			  },
+			  '(min-width: 651px) and (max-width: 1200px)': {
+				slides: { perView: 3, spacing: 30 },
+			  },
+			  '(min-width: 1201px) and (max-width: 1800px)': {
+				slides: { perView: 4, spacing: 30 },
+			  },
+			  '(min-width: 1801px)': {
+				slides: { perView: 5, spacing: 30 },
+			  },
+			}
+		  });
+		  sliderContainer.dataset.keenSliderInitialized = "true";
+		}
+	  }
+	});
+  });
+});
+</script>
 
 <style>
 @import "../styles/global.css";
 
+#list-wrapper {
+  display: grid;
+  grid-auto-rows: min-content min-content;
+  grid-column-start: 2;
+  margin: 1rem 0;
+  align-items: center;
+  margin-top: var(--padding-desktop);
+
+  @media (--bp-mobile) {
+    margin-top: var(--padding-mobile);
+  }
+  @media (--bp-tablet) {
+    margin-top: var(--padding-tablet);
+  }
+  @media (--bp-desktop-wide) {  
+    margin-top: var(--padding-desktop-wide);
+  }
+}
+
 .ListElementWrapper {
-	scroll-margin-top: var(--padding-desktop);
-	
-	@media (--bp-mobile) {
-		scroll-margin-top: var(--padding-mobile);
-	}
+  display: grid;
+  grid-template-columns: 1.3fr 2.5fr 1fr;
+  grid-template-rows: 3rem auto;
+  column-gap: 2rem;
+  transition: all 0.5s ease; /* Default transition for opening */
+  cursor: pointer;
 
-	@media (--bp-tablet) {
-		scroll-margin-top: var(--padding-tablet);
-	}
+  @media (--bp-mobile) {
+    grid-template-columns: 1fr 2.5fr 1fr;
+  }
+}
 
-	@media (--bp-desktop-wide) {	
-		scroll-margin-top: var(--padding-desktop-wide);
-	}
+/* The animated container */
+.flip-out {
+  margin: 0.25rem 0.25rem 0 0.25rem;
+  grid-column-start: 1;
+  grid-column-end: 4;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.5s ease;
+}
+
+.project-images {
+  /* No display toggle—its parent (.flip-out) will handle the animation */
+  display: none;
+}
+
+/* When open, expand the container */
+.ListElementWrapper.open .flip-out {
+  max-height: 700px; /* Adjust as needed if your content height is known */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 
+/* Other styles remain unchanged */
+hr {
+  align-self: center;
+  margin: 0;
+  width: 100%;
+}
+
+p {
+  margin: 0;
+}
+
+.column1 {
+  grid-column-start: 1;
+  font-size: 9px;
+  display: grid;
+  align-items: center;
+}
+
+.column2 {
+  grid-column-start: 2;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 1rem;
+}
+
+.project-title {
+  display: grid;
+  align-items: center;
+  font-family: PowerGrotesk-Medium;
+  font-size: 21px;
+
+  @media (--bp-mobile) {
+    font-size: 19px;
+  }
+}
+
+.column3 {
+  grid-column-start: 3;
+  font-size: 9px;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+}
 
 </style>

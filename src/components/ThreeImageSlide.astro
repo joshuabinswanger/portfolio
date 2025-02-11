@@ -1,0 +1,67 @@
+---
+import { CldImage } from "astro-cloudinary";
+import { getEntry } from 'astro:content';
+import { getCollection } from "astro:content";
+import 'keen-slider/keen-slider.min.css';
+
+// Get component props from Astro.props 
+const { project } = Astro.props;
+
+interface Props {
+  project: string;
+}
+
+// Generate a unique ID for each instance
+const instanceId = Math.random().toString(36).slice(2, 11);  
+
+// Fetch the specific gallery project by the project name (slug)
+const galleryProject = await getEntry('projects', `${Astro.props.project}-gallery`);
+
+if (!galleryProject) {
+  throw new Error(`Project with slug "${Astro.props.project}-gallery" not found.`);  
+}
+
+// Turn Prop into string
+const targetProject = String(project).split('_')[1];
+
+
+// Use getCollection with a filter function to only retrieve images with a matching project
+const galleryImages = await getCollection('galleryImages', ({ data }) => {
+  return data.metadata?.project === targetProject;
+});
+
+// Sort galleryImages by public_id
+galleryImages.sort((a, b) => a.data.public_id.localeCompare(b.data.public_id));
+
+
+---
+<div id={instanceId} data-slider-instance={instanceId} class:list={["image-slide keen-slider"]}>
+  {galleryImages.map((image, index) =>  {
+
+    return(
+      <div class:list={["keen-slider__slide"]}>
+        <CldImage
+            src={image.data.public_id}
+            data-src={image.data.secure_url}   
+            width={image.data.width}
+            height={image.data.height}
+            sizes="(max-width: 650px) 90vw, (max-width: 1200px) 50vw, 33vw"
+            alt={image.data.metadata?.description_title}
+            format="avif"
+        />
+      </div>
+    )}
+  )};
+
+</div>
+
+    
+
+
+
+
+
+<style>
+  .image-slide {
+  }
+</style>

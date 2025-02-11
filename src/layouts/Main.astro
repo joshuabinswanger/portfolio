@@ -9,25 +9,8 @@ import "../styles/global.css";
 
 const { title, description } = Astro.props;
 
-/* const anim = {
-  old: {
-    name: 'fadeIn',
-    duration: '1s',
-    easing: 'ease-in',
-    fillMode: 'forwards',
-  },
-  new: {
-    name: 'fadeOut',
-    duration: '1s',
-    easing: 'ease-out',
-    fillMode: 'backwards',
-  }
-};
+const isProd = import.meta.env.PROD;
 
-const myFade = {
-  forwards: anim,
-  backwards: anim,
-}; */
 
 ---
 <html lang="en" style="height: 100%; margin: 0; padding: 0		-webkit-font-smoothing: auto;
@@ -97,7 +80,9 @@ const myFade = {
  
     <title>{title}</title>
 
-    <script defer src="https://cloud.umami.is/script.js" data-website-id="b091eee1-ced0-4ae9-bc1d-033243c323cc"></script>
+     <!-- Only include this script when in production -->
+     {isProd && <script defer src="https://cloud.umami.is/script.js" data-website-id="b091eee1-ced0-4ae9-bc1d-033243c323cc"></script>}
+    
   </head>
   <body>
     
