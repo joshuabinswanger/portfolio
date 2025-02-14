@@ -16,7 +16,7 @@ import Index from './Index.astro';
 
 
 
-<nav id="NavBar" transition:persist>
+<nav id="NavBarDesktop" transition:persist>
 
   <div id="MainWrapper">
     <div style="pointer-events: auto;">
@@ -79,7 +79,7 @@ import Index from './Index.astro';
 <style>
 @import "../styles/global.css";
 
-#NavBar {
+#NavBarDesktop {
 	position: sticky;
   display: grid;
   justify-items: center;
@@ -119,6 +119,7 @@ import Index from './Index.astro';
 .main-button {
   height: 2.5rem;
   align-content: center;
+  z-index: 1001;
 }
 
 a {
@@ -213,71 +214,71 @@ p {
 <script>
   import { navigate } from 'astro:transitions/client';
 
-// AFTER-SWAP: Update the active state based on the current URL
-document.addEventListener("astro:after-swap", () => {
-  const currentUrl = window.location.pathname;
-  const mainButtons = document.querySelectorAll('.main-button');
+  // AFTER-SWAP: Update the active state based on the current URL
+  document.addEventListener("astro:after-swap", () => {
+    const currentUrl = window.location.pathname;
+    const navBar = document.getElementById("NavBarDesktop");
+    const mainButtons = navBar.querySelectorAll('.main-button');
 
-  // Remove active class from all buttons first
-  mainButtons.forEach(button => {
-    button.classList.remove('active');
-  });
-
-  // Then add active class to the one matching the current URL
-  mainButtons.forEach(button => {
-    if (button.getAttribute('data-href') === currentUrl) {
-      button.classList.add('active');
-    }
-  });
-});
-
-// BEFORE-SWAP: Trigger the exit animation and delay the swap until it's complete.
-document.addEventListener("astro:before-preperation", (event) => {
-  const currentUrl = window.location.pathname;
-  const mainButtons = document.querySelectorAll('.main-button');
-  let activeFound = false;
-
-  // For the active button, remove the active class to trigger the exit animation.
-  mainButtons.forEach(button => {
-    if (button.getAttribute('data-href') === currentUrl && button.classList.contains('active')) {
-      activeFound = true;
+    // Remove active class from all buttons first
+    mainButtons.forEach(button => {
       button.classList.remove('active');
+    });
+
+    // Then add active class to the one matching the current URL
+    mainButtons.forEach(button => {
+      if (button.getAttribute('data-href') === currentUrl) {
+        button.classList.add('active');
+      }
+    });
+  });
+
+  // BEFORE-SWAP: Trigger the exit animation and delay the swap until it's complete.
+  document.addEventListener("astro:before-preperation", (event) => {
+    const currentUrl = window.location.pathname;
+    const navBar = document.getElementById("NavBarDesktop");
+    const mainButtons = navBar.querySelectorAll('.main-button');
+    let activeFound = false;
+
+    // For the active button, remove the active class to trigger the exit animation.
+    mainButtons.forEach(button => {
+      if (button.getAttribute('data-href') === currentUrl && button.classList.contains('active')) {
+        activeFound = true;
+        button.classList.remove('active');
+      }
+    });
+
+    // If an active button was found, prevent the swap and continue after 800ms.
+    if (activeFound) {
+      event.preventDefault();
+      setTimeout(() => {
+        event.detail.continue();
+      }, 800);
     }
   });
 
-  // If an active button was found, prevent the swap and continue after 500ms.
-  if (activeFound) {
-    event.preventDefault();
-    setTimeout(() => {
-      event.detail.continue();
-    }, 800);
-  }
-});
+  // On page load, ensure the active state is set
+  document.addEventListener("astro:page-load", () => {
+    const currentUrl = window.location.pathname;
+    const navBar = document.getElementById("NavBarDesktop");
+    const mainButtons = navBar.querySelectorAll('.main-button');
 
-// Archive subitems onchange event
-document.addEventListener("astro:page-load", () => {
+    mainButtons.forEach(button => {
+      if (button.getAttribute('data-href') === currentUrl && !button.classList.contains('active')) {
+        button.classList.add('active');
+      }
+    });
 
-  const currentUrl = window.location.pathname;
-  const mainButtons = document.querySelectorAll('.main-button');
-
-  // For the active button, remove the active class to trigger the exit animation.
-  mainButtons.forEach(button => {
-    if (button.getAttribute('data-href') === currentUrl && !button.classList.contains('active')) {
-      button.classList.add('active');
+    // Navigation on archive subitems
+    const archiveSubitems = navBar.querySelector('.archive-subitems');
+    if (archiveSubitems) {
+      archiveSubitems.onchange = (event) => {
+        const href = event.target.value;
+        navigate(href);
+      };
     }
   });
-
-
-  //navigation on archive subitems
-  const archiveSubitems = document.querySelector('.archive-subitems');
-  if (archiveSubitems) {
-    archiveSubitems.onchange = (event) => {
-      const href = event.target.value;
-      navigate(href);
-    };
-  }
-});
-
 </script>
+
 
 

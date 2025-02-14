@@ -1,13 +1,10 @@
 ---
-import RhizomLogoComponent from "../components/Logo.astro"
+import RhizomLogoComponent from "../components/Logo.astro";
 import Index from './Index.astro';
 import BracketOpenH from './BracketOpenH.astro';
 import BracketMiddleH from './BracketMiddleH.astro';
 import BracketCloseH from './BracketCloseH.astro';
-import BracketOpenV from './BracketOpenV.astro';
-import BracketMiddleV from './BracketMiddleV.astro';
-import BracketCloseV from './BracketCloseV.astro';
-import "../styles/global.css"
+import "../styles/global.css";
 ---
 
 <nav id="NavBarMobile" transition:persist>
@@ -19,22 +16,21 @@ import "../styles/global.css"
     <div id="MainWrapper">
       <BracketOpenH />
 
-      <!-- Menu item using a div with a data-href and an onclick -->
+      <!-- Menu item: Portfolio -->
       <a 
-        class:list={["menu-items main-button"]} 
-        href="/"
+        class:list={["menu-items", "main-button"]} 
+        href="/" 
         data-href="/">
         Portfolio
       </a>
 
       <BracketMiddleH />
 
-      <!-- For items with submenus, wrap them in a container -->
-      <div  id="archive" >
-        
+      <!-- Archive submenu -->
+      <div id="archive">
         <a       
           id="archive-main"
-          class:list={["menu-items main-button"]}
+          class:list={["menu-items", "main-button"]}
           href="/archive-gallery"          
           data-href="/archive-gallery">
           Archive
@@ -63,9 +59,10 @@ import "../styles/global.css"
 
       <BracketMiddleH />
 
+      <!-- Menu item: Information -->
       <a 
-        class:list={["menu-items main-button"]} 
-        href="/info"
+        class:list={["menu-items", "main-button"]} 
+        href="/info" 
         data-href="/info">
         Information
       </a>
@@ -74,9 +71,6 @@ import "../styles/global.css"
     </div>
   </div>
 </nav>
-
-
-
 
 <style>
 @import "../styles/global.css";
@@ -114,14 +108,15 @@ import "../styles/global.css"
   z-index: 1002;
 }
 
+/* Main button styling and active animation */
 .main-button {
   position: relative;
   overflow: hidden;
   width: 100%;
-  /* Transition for the text color */
   transition: color 0.5s ease;
 }
 
+/* The ::after pseudo-element creates the black bar that grows from the bottom */
 .main-button::after {
   content: "";
   position: absolute;
@@ -130,12 +125,10 @@ import "../styles/global.css"
   width: 100%;
   height: 0%;
   background-color: black;
-  /* Transition for the bar sliding in */
   transition: height 0.75s ease;
   z-index: -1;
 }
 
-/* When active, change text color and animate the black bar into place */
 .main-button.active {
   color: var(--bg-color);
 }
@@ -144,7 +137,7 @@ import "../styles/global.css"
   height: 100%;
 }
 
-/* Style all menu items as clickable divs */
+/* General menu-items styling */
 .menu-items {
   font-size: var(--font-size-dekstop-h1);
   font-family: PowerGrotesk-Light;
@@ -154,7 +147,6 @@ import "../styles/global.css"
   align-items: center;
   background-color: transparent;
   cursor: pointer;
-  /* transition: background-color 0.3s, color 0.3s; */
 }
 
 a {
@@ -164,14 +156,12 @@ a {
   height: 100%;
 }
 
+/* Archive submenu styling */
 #archive {
   display: grid;
   width: 100%;
-  grid-template-columns: 1fr  min-content;
+  grid-template-columns: 1fr min-content;
   align-items: center;
-}
-
-#archive-main {
 }
 
 #archive-select {
@@ -184,8 +174,6 @@ a {
   height: 100%;
 }
 
-
-/* Archive subitems can be styled separately */
 .archive-subitems {
   font-size: 11px;
   cursor: pointer;
@@ -193,82 +181,66 @@ a {
   width: 100%;
   height: 100%;
 }
-
-
 </style>
-
-
 
 <script>
   import { navigate } from 'astro:transitions/client';
 
-// AFTER-SWAP: Update the active state based on the current URL
-document.addEventListener("astro:after-swap", () => {
-  const currentUrl = window.location.pathname;
-  const mainButtons = document.querySelectorAll('.main-button');
+  // Get the NavBarMobile container so that our queries are scoped.
+  const navMobile = document.getElementById("NavBarMobile");
 
-  // Remove active class from all buttons first
-  mainButtons.forEach(button => {
-    button.classList.remove('active');
+  // AFTER-SWAP: Update active state based on the current URL.
+  document.addEventListener("astro:after-swap", () => {
+    const currentUrl = window.location.pathname;
+    const mainButtons = navMobile.querySelectorAll('.main-button');
+
+    mainButtons.forEach(button => button.classList.remove('active'));
+    mainButtons.forEach(button => {
+      if (button.getAttribute('data-href') === currentUrl) {
+        button.classList.add('active');
+      }
+    });
   });
 
-  // Then add active class to the one matching the current URL
-  mainButtons.forEach(button => {
-    if (button.getAttribute('data-href') === currentUrl) {
-      button.classList.add('active');
-    }
-  });
-});
+  // BEFORE-SWAP: Trigger exit animation and delay the swap until it's complete.
+  document.addEventListener("astro:before-preperation", (event) => {
+    const currentUrl = window.location.pathname;
+    const mainButtons = navMobile.querySelectorAll('.main-button');
+    let activeFound = false;
 
-// BEFORE-SWAP: Trigger the exit animation and delay the swap until it's complete.
-document.addEventListener("astro:before-preperation", (event) => {
-  const currentUrl = window.location.pathname;
-  const mainButtons = document.querySelectorAll('.main-button');
-  let activeFound = false;
+    mainButtons.forEach(button => {
+      if (button.getAttribute('data-href') === currentUrl && button.classList.contains('active')) {
+        activeFound = true;
+        button.classList.remove('active');
+      }
+    });
 
-  // For the active button, remove the active class to trigger the exit animation.
-  mainButtons.forEach(button => {
-    if (button.getAttribute('data-href') === currentUrl && button.classList.contains('active')) {
-      activeFound = true;
-      button.classList.remove('active');
-    }
-  });
-
-  // If an active button was found, prevent the swap and continue after 500ms.
-  if (activeFound) {
-    event.preventDefault();
-    setTimeout(() => {
-      event.detail.continue();
-    }, 800);
-  }
-});
-
-// Archive subitems onchange event
-document.addEventListener("astro:page-load", () => {
-
-  const currentUrl = window.location.pathname;
-  const mainButtons = document.querySelectorAll('.main-button');
-
-  // For the active button, remove the active class to trigger the exit animation.
-  mainButtons.forEach(button => {
-    if (button.getAttribute('data-href') === currentUrl && !button.classList.contains('active')) {
-      button.classList.add('active');
+    if (activeFound) {
+      event.preventDefault();
+      setTimeout(() => {
+        event.detail.continue();
+      }, 800);
     }
   });
 
+  // On page load: Ensure active state is set.
+  document.addEventListener("astro:page-load", () => {
+    const currentUrl = window.location.pathname;
+    const mainButtons = navMobile.querySelectorAll('.main-button');
 
-  //navigation on archive subitems
-  const archiveSubitems = document.querySelector('.archive-subitems');
-  if (archiveSubitems) {
-    archiveSubitems.onchange = (event) => {
-      const href = event.target.value;
-      navigate(href);
-    };
-  }
-});
+    mainButtons.forEach(button => {
+      if (button.getAttribute('data-href') === currentUrl && !button.classList.contains('active')) {
+        button.classList.add('active');
+      }
+    });
 
+    // Archive subitems onchange event
+    const archiveSubitems = navMobile.querySelector('.archive-subitems');
+    if (archiveSubitems) {
+      archiveSubitems.onchange = (event) => {
+        const href = event.target.value;
+        navigate(href);
+      };
+    }
+  });
 </script>
-
-
-
-
