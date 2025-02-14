@@ -186,53 +186,81 @@ a {
 <script>
   import { navigate } from 'astro:transitions/client';
 
-  // Get the NavBarMobile container so that our queries are scoped.
+  // Scope our selectors to the NavBarMobile container.
   const navMobile = document.getElementById("NavBarMobile");
 
-  // AFTER-SWAP: Update active state based on the current URL.
-  document.addEventListener("astro:after-swap", () => {
-    const currentUrl = window.location.pathname;
-    const mainButtons = navMobile.querySelectorAll('.main-button');
-
-    mainButtons.forEach(button => button.classList.remove('active'));
-    mainButtons.forEach(button => {
-      if (button.getAttribute('data-href') === currentUrl) {
-        button.classList.add('active');
-      }
+  // DEV code: In development mode, simply use window.location.pathname.
+  if (import.meta.env.DEV) {
+    document.addEventListener("astro:page-load", () => {
+      const currentUrl = window.location.pathname;
+      const mainButtons = navMobile.querySelectorAll('.main-button');
+      mainButtons.forEach(button => {
+        if (button.getAttribute('data-href') === currentUrl) {
+          button.classList.add('active');
+        } else {
+          button.classList.remove('active');
+        }
+      });
     });
-  });
+  }
 
-  // BEFORE-SWAP: Trigger exit animation and delay the swap until it's complete.
-  document.addEventListener("astro:before-preperation", (event) => {
-    const currentUrl = window.location.pathname;
-    const mainButtons = navMobile.querySelectorAll('.main-button');
+  // PROD code: In production, use Astro's navigation events and a global variable.
+  if (import.meta.env.PROD) {
+    let currentRoute = window.location.pathname;
 
-    mainButtons.forEach(button => {
-      if (button.getAttribute('data-href') === currentUrl && button.classList.contains('active')) {
-        button.classList.remove('active');
-      }
-    });
-
-  });
-
-  // On page load: Ensure active state is set.
-  document.addEventListener("astro:page-load", () => {
-    const currentUrl = window.location.pathname;
-    const mainButtons = navMobile.querySelectorAll('.main-button');
-
-    mainButtons.forEach(button => {
-      if (button.getAttribute('data-href') === currentUrl && !button.classList.contains('active')) {
-        button.classList.add('active');
+    // Update currentRoute on navigation events.
+    document.addEventListener("astro:navigate", (event) => {
+      if (event.detail && event.detail.url) {
+        currentRoute = event.detail.url.pathname;
       }
     });
 
-    // Archive subitems onchange event
-    const archiveSubitems = navMobile.querySelector('.archive-subitems');
-    if (archiveSubitems) {
-      archiveSubitems.onchange = (event) => {
-        const href = event.target.value;
-        navigate(href);
-      };
-    }
-  });
+    // AFTER-SWAP: Update the active state based on currentRoute.
+    document.addEventListener("astro:after-swap", () => {
+      const mainButtons = navMobile.querySelectorAll('.main-button');
+      mainButtons.forEach(button => button.classList.remove('active'));
+      mainButtons.forEach(button => {
+        if (button.getAttribute('data-href') === currentRoute) {
+          button.classList.add('active');
+        }
+      });
+    });
+
+    // BEFORE-SWAP: Trigger exit animation and delay the swap if needed.
+    document.addEventListener("astro:before-preperation", (event) => {
+      const mainButtons = navMobile.querySelectorAll('.main-button');
+      let activeFound = false;
+      mainButtons.forEach(button => {
+        if (button.getAttribute('data-href') === currentRoute && button.classList.contains('active')) {
+          activeFound = true;
+          button.classList.remove('active');
+        }
+      });
+      if (activeFound) {
+        event.preventDefault();
+        setTimeout(() => {
+          event.detail.continue();
+        }, 800);
+      }
+    });
+
+    // On page load: Ensure active state is set.
+    document.addEventListener("astro:page-load", () => {
+      const mainButtons = navMobile.querySelectorAll('.main-button');
+      mainButtons.forEach(button => {
+        if (button.getAttribute('data-href') === currentRoute && !button.classList.contains('active')) {
+          button.classList.add('active');
+        }
+      });
+
+      // Archive subitems onchange event
+      const archiveSubitems = navMobile.querySelector('.archive-subitems');
+      if (archiveSubitems) {
+        archiveSubitems.onchange = (event) => {
+          const href = event.target.value;
+          navigate(href);
+        };
+      }
+    });
+  }
 </script>

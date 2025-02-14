@@ -6,18 +6,14 @@ import SquareBracketV from './SquareBracket_V.astro';
 import BracketOpenV from './BracketOpenV.astro';
 import BracketMiddleV from './BracketMiddleV.astro';
 import BracketCloseV from './BracketCloseV.astro';
-import "../styles/global.css"
+import "../styles/global.css";
 
 const logoPath = "/assets/Rhizome_Test2.riv";
 
 import Index from './Index.astro';
-
 ---
 
-
-
 <nav id="NavBarDesktop" transition:persist>
-
   <div id="MainWrapper">
     <div style="pointer-events: auto;">
       <Logo />
@@ -25,79 +21,143 @@ import Index from './Index.astro';
 
     <BracketOpenV />
 
-      <a href="/" class:list={["MenuItems main-button"]} data-href="/">
-        <p>Portfolio</p>
-      </a>
+    <a href="/" class:list={["MenuItems", "main-button"]} data-href="/">
+      <p>Portfolio</p>
+    </a>
 
     <BracketMiddleV />
 
-    
-      <!-- For items with submenus, wrap them in a container -->
-      <div  id="archive" >
-
-        <a href="/archive-gallery" class:list={["MenuItems main-button"]} data-href="/archive-gallery">
-          <p>Archive</p>
+    <!-- For items with submenus, wrap them in a container -->
+    <div id="archive">
+      <a href="/archive-gallery" class:list={["MenuItems", "main-button"]} data-href="/archive-gallery">
+        <p>Archive</p>
+      </a>
+      <div id="archive-select">
+        <a class:list={["archive-subitems"]} href="/archive-gallery" data-href="/archive-gallery">
+          Gallery
         </a>
-        <div id="archive-select">
-          <a 
-            class:list={["archive-subitems"]} 
-            href="/archive-gallery"
-            data-href="/archive-gallery">
-            Gallery
-          </a>
-          <a 
-            class:list={["archive-subitems"]} 
-            href="/archive-project-list"
-            data-href="/archive-project-list">
-            List
-          </a>
-          <a 
-            class:list={["archive-subitems"]} 
-            href="/archive-projects"
-            data-href="/archive-projects">
-            Projects
-          </a>
-        </div>
+        <a class:list={["archive-subitems"]} href="/archive-project-list" data-href="/archive-project-list">
+          List
+        </a>
+        <a class:list={["archive-subitems"]} href="/archive-projects" data-href="/archive-projects">
+          Projects
+        </a>
       </div>
+    </div>
 
     <BracketMiddleV />
 
-      <a href="/info" class:list={["MenuItems main-button"]} data-href="/info">
-        <p>Information</p>
-      </a>
+    <a href="/info" class:list={["MenuItems", "main-button"]} data-href="/info">
+      <p>Information</p>
+    </a>
 
     <BracketCloseV />
   </div>
-
 </nav>
 
-
 <script>
+  import { navigate } from 'astro:transitions/client';
 
+  // DEV code: when running in development, simply use window.location.pathname.
+  if (import.meta.env.DEV) {
+    document.addEventListener("astro:page-load", () => {
+      const currentUrl = window.location.pathname;
+      const navBar = document.getElementById("NavBarDesktop");
+      const mainButtons = navBar.querySelectorAll('.main-button');
+
+      mainButtons.forEach(button => {
+        if (button.getAttribute('data-href') === currentUrl) {
+          button.classList.add('active');
+        } else {
+          button.classList.remove('active');
+        }
+      });
+    });
+  }
+
+  // PROD code: use Astro's navigation events to update a global variable.
+  if (import.meta.env.PROD) {
+    let currentRoute = window.location.pathname;
+
+    // Update currentRoute on navigation.
+    document.addEventListener("astro:navigate", (event) => {
+      if (event.detail && event.detail.url) {
+        currentRoute = event.detail.url.pathname;
+      }
+    });
+
+    // AFTER-SWAP: update active state based on currentRoute.
+    document.addEventListener("astro:after-swap", () => {
+      const navBar = document.getElementById("NavBarDesktop");
+      const mainButtons = navBar.querySelectorAll('.main-button');
+      mainButtons.forEach(button => button.classList.remove('active'));
+      mainButtons.forEach(button => {
+        if (button.getAttribute('data-href') === currentRoute) {
+          button.classList.add('active');
+        }
+      });
+    });
+
+    // BEFORE-SWAP: trigger exit animation by removing the active state.
+    document.addEventListener("astro:before-preperation", (event) => {
+      const navBar = document.getElementById("NavBarDesktop");
+      const mainButtons = navBar.querySelectorAll('.main-button');
+      let activeFound = false;
+      mainButtons.forEach(button => {
+        if (button.getAttribute('data-href') === currentRoute && button.classList.contains('active')) {
+          activeFound = true;
+          button.classList.remove('active');
+        }
+      });
+      if (activeFound) {
+        event.preventDefault();
+        setTimeout(() => {
+          event.detail.continue();
+        }, 800);
+      }
+    });
+
+    // On page load: ensure the active state is set.
+    document.addEventListener("astro:page-load", () => {
+      const navBar = document.getElementById("NavBarDesktop");
+      const mainButtons = navBar.querySelectorAll('.main-button');
+      mainButtons.forEach(button => {
+        if (button.getAttribute('data-href') === currentRoute && !button.classList.contains('active')) {
+          button.classList.add('active');
+        }
+      });
+
+      // Archive subitems onchange event
+      const archiveSubitems = navBar.querySelector('.archive-subitems');
+      if (archiveSubitems) {
+        archiveSubitems.onchange = (event) => {
+          const href = event.target.value;
+          navigate(href);
+        };
+      }
+    });
+  }
 </script>
 
 <style>
 @import "../styles/global.css";
 
 #NavBarDesktop {
-	position: sticky;
+  position: sticky;
   display: grid;
   justify-items: center;
   grid-auto-rows: auto;
   top: var(--padding-desktop);
 
-		@media (--bp-mobile) {
-			display: none;
-		}
-
-    @media (--bp-tablet) {
+  @media (--bp-mobile) {
+    display: none;
+  }
+  @media (--bp-tablet) {
     top: var(--padding-tablet);
-  	}
-
-		@media (--bp-desktop-wide) {
-      top: var(--padding-desktop-wide);
-		}
-
+  }
+  @media (--bp-desktop-wide) {
+    top: var(--padding-desktop-wide);
+  }
 }
 
 * {
@@ -114,37 +174,35 @@ import Index from './Index.astro';
   height: min-content;
   font-family: PowerGrotesk-Light;
   font-weight: 200;
-  
 }
+
 .main-button {
   height: 2.5rem;
   align-content: center;
   z-index: 1001;
+  position: relative;
 }
 
 a {
-  text-decoration: none; /* Removes underline */
-  color: inherit; /* Inherits the color from the parent element */
-  background: none; /* Removes background if any */
-  border: none; /* Removes border if any */
+  text-decoration: none;
+  color: inherit;
+  background: none;
+  border: none;
   pointer-events: auto;
   font-size: var(--font-size-dekstop-h1);
-  margin: 0px;
+  margin: 0;
   text-align: center;
 
   @media (--bp-mobile) {
     font-size: var(--font-size-mobile-h1);
   }
-
   @media (--bp-tablet) {
     font-size: var(--font-size-tablet-h1);
   }
-
   @media (--bp-desktop-wide) {
-    font-size:  var(--font-size-dekstop-h1);
-    
+    font-size: var(--font-size-dekstop-h1);
   }
-} 
+}
 
 p {
   height: 100%;
@@ -152,6 +210,8 @@ p {
   padding: 0;
   align-content: center;
 }
+
+/* The ::before pseudo-element creates a black bar that slides in from the bottom */
 .main-button::before {
   content: "";
   position: absolute;
@@ -159,16 +219,14 @@ p {
   width: 0%;
   height: 2.55rem;
   background-color: black;
-  /* Transition for the bar sliding in */
   transition: width 0.75s ease;
   z-index: -1;
 }
 
-/* When active, change text color and animate the black bar into place */
+/* When active, change text color and expand the black bar */
 .main-button.active {
   color: var(--bg-color);
 }
-
 .main-button.active::before {
   width: 100%;
 }
@@ -176,11 +234,8 @@ p {
 #archive {
   display: grid;
   width: 100%;
-  grid-template-rows: 1fr  min-content;
+  grid-template-rows: 1fr min-content;
   align-items: center;
-}
-
-#archive-main {
 }
 
 #archive-select {
@@ -194,8 +249,6 @@ p {
   margin-bottom: 1rem;
 }
 
-
-/* Archive subitems can be styled separately */
 .archive-subitems {
   font-size: 11px;
   cursor: pointer;
@@ -203,72 +256,4 @@ p {
   width: 100%;
   height: 100%;
 }
-
-
-
-
-
 </style>
-
-
-<script>
-  import { navigate } from 'astro:transitions/client';
-
-  // AFTER-SWAP: Update the active state based on the current URL
-  document.addEventListener("astro:after-swap", () => {
-    const currentUrl = window.location.pathname;
-    const navBar = document.getElementById("NavBarDesktop");
-    const mainButtons = navBar.querySelectorAll('.main-button');
-
-    // Remove active class from all buttons first
-    mainButtons.forEach(button => {
-      button.classList.remove('active');
-    });
-
-    // Then add active class to the one matching the current URL
-    mainButtons.forEach(button => {
-      if (button.getAttribute('data-href') === currentUrl) {
-        button.classList.add('active');
-      }
-    });
-  });
-
-  // BEFORE-SWAP: Trigger the exit animation and delay the swap until it's complete.
-  document.addEventListener("astro:before-preperation", (event) => {
-    const currentUrl = window.location.pathname;
-    const navBar = document.getElementById("NavBarDesktop");
-    const mainButtons = navBar.querySelectorAll('.main-button');
-
-    // For the active button, remove the active class to trigger the exit animation.
-    mainButtons.forEach(button => {
-      if (button.getAttribute('data-href') === currentUrl && button.classList.contains('active')) {
-        button.classList.remove('active');
-      }
-    });
-  });
-
-  // On page load, ensure the active state is set
-  document.addEventListener("astro:page-load", () => {
-    const currentUrl = window.location.pathname;
-    const navBar = document.getElementById("NavBarDesktop");
-    const mainButtons = navBar.querySelectorAll('.main-button');
-
-    mainButtons.forEach(button => {
-      if (button.getAttribute('data-href') === currentUrl && !button.classList.contains('active')) {
-        button.classList.add('active');
-      }
-    });
-
-    // Navigation on archive subitems
-    const archiveSubitems = navBar.querySelector('.archive-subitems');
-    if (archiveSubitems) {
-      archiveSubitems.onchange = (event) => {
-        const href = event.target.value;
-        navigate(href);
-      };
-    }
-  });
-</script>
-
-
-
