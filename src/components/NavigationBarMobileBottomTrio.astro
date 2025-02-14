@@ -186,54 +186,43 @@ a {
 <script>
   import { navigate } from 'astro:transitions/client';
 
-  // Scope our selectors to the NavBarMobile container.
   const navMobile = document.getElementById("NavBarMobile");
 
-  // DEV code: In development mode, simply use window.location.pathname.
+  // DEV code: simply use window.location.pathname
   if (import.meta.env.DEV) {
     document.addEventListener("astro:page-load", () => {
-      const currentUrl = window.location.pathname;
-      const mainButtons = navMobile.querySelectorAll('.main-button');
-      mainButtons.forEach(button => {
-        if (button.getAttribute('data-href') === currentUrl) {
-          button.classList.add('active');
-        } else {
-          button.classList.remove('active');
-        }
-      });
+      updateActiveState(window.location.pathname);
+    });
+    navMobile.addEventListener("click", (e) => {
+      const btn = e.target.closest('.main-button');
+      if (btn) {
+        updateActiveState(btn.getAttribute('data-href'));
+      }
     });
   }
 
-  // PROD code: In production, use Astro's navigation events and a global variable.
+  // PROD code: update currentRoute using astro:before-swap
   if (import.meta.env.PROD) {
     let currentRoute = window.location.pathname;
 
-    // Update currentRoute on navigation events.
-    document.addEventListener("astro:navigate", (event) => {
+    // Update currentRoute on navigation using astro:before-swap's detail.
+    document.addEventListener("astro:before-swap", (event) => {
       if (event.detail && event.detail.url) {
         currentRoute = event.detail.url.pathname;
       }
     });
 
-    // AFTER-SWAP: Update the active state based on currentRoute.
     document.addEventListener("astro:after-swap", () => {
-      const mainButtons = navMobile.querySelectorAll('.main-button');
-      mainButtons.forEach(button => button.classList.remove('active'));
-      mainButtons.forEach(button => {
-        if (button.getAttribute('data-href') === currentRoute) {
-          button.classList.add('active');
-        }
-      });
+      updateActiveState(currentRoute);
     });
 
-    // BEFORE-SWAP: Trigger exit animation and delay the swap if needed.
     document.addEventListener("astro:before-preperation", (event) => {
-      const mainButtons = navMobile.querySelectorAll('.main-button');
+      const buttons = navMobile.querySelectorAll('.main-button');
       let activeFound = false;
-      mainButtons.forEach(button => {
-        if (button.getAttribute('data-href') === currentRoute && button.classList.contains('active')) {
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-href') === currentRoute && btn.classList.contains('active')) {
           activeFound = true;
-          button.classList.remove('active');
+          btn.classList.remove('active');
         }
       });
       if (activeFound) {
@@ -244,16 +233,8 @@ a {
       }
     });
 
-    // On page load: Ensure active state is set.
     document.addEventListener("astro:page-load", () => {
-      const mainButtons = navMobile.querySelectorAll('.main-button');
-      mainButtons.forEach(button => {
-        if (button.getAttribute('data-href') === currentRoute && !button.classList.contains('active')) {
-          button.classList.add('active');
-        }
-      });
-
-      // Archive subitems onchange event
+      updateActiveState(currentRoute);
       const archiveSubitems = navMobile.querySelector('.archive-subitems');
       if (archiveSubitems) {
         archiveSubitems.onchange = (event) => {
@@ -262,5 +243,25 @@ a {
         };
       }
     });
+
+    navMobile.addEventListener("click", (e) => {
+      const btn = e.target.closest('.main-button');
+      if (btn) {
+        updateActiveState(btn.getAttribute('data-href'));
+      }
+    });
+  }
+
+  // Helper function to update the active class.
+  function updateActiveState(route) {
+    const buttons = navMobile.querySelectorAll('.main-button');
+    buttons.forEach(btn => {
+      if (btn.getAttribute('data-href') === route) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
   }
 </script>
+

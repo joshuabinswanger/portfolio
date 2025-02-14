@@ -58,7 +58,7 @@ import Index from './Index.astro';
 <script>
   import { navigate } from 'astro:transitions/client';
 
-  // DEV code: when running in development, simply use window.location.pathname.
+  // DEV code: Simply use window.location.pathname.
   if (import.meta.env.DEV) {
     document.addEventListener("astro:page-load", () => {
       const currentUrl = window.location.pathname;
@@ -75,12 +75,12 @@ import Index from './Index.astro';
     });
   }
 
-  // PROD code: use Astro's navigation events to update a global variable.
+  // PROD code: Use Astro's view-transition events.
   if (import.meta.env.PROD) {
     let currentRoute = window.location.pathname;
 
-    // Update currentRoute on navigation.
-    document.addEventListener("astro:navigate", (event) => {
+    // Update currentRoute using the before-swap event.
+    document.addEventListener("astro:before-swap", (event) => {
       if (event.detail && event.detail.url) {
         currentRoute = event.detail.url.pathname;
       }
@@ -98,7 +98,7 @@ import Index from './Index.astro';
       });
     });
 
-    // BEFORE-SWAP: trigger exit animation by removing the active state.
+    // BEFORE-PREPARATION: remove the active state to trigger an exit animation.
     document.addEventListener("astro:before-preperation", (event) => {
       const navBar = document.getElementById("NavBarDesktop");
       const mainButtons = navBar.querySelectorAll('.main-button');
@@ -117,7 +117,7 @@ import Index from './Index.astro';
       }
     });
 
-    // On page load: ensure the active state is set.
+    // On page load: ensure the active state is set using currentRoute.
     document.addEventListener("astro:page-load", () => {
       const navBar = document.getElementById("NavBarDesktop");
       const mainButtons = navBar.querySelectorAll('.main-button');
@@ -138,6 +138,7 @@ import Index from './Index.astro';
     });
   }
 </script>
+
 
 <style>
 @import "../styles/global.css";
