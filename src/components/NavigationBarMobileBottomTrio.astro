@@ -206,21 +206,13 @@ a {
   document.addEventListener("astro:before-preperation", (event) => {
     const currentUrl = window.location.pathname;
     const mainButtons = navMobile.querySelectorAll('.main-button');
-    let activeFound = false;
 
     mainButtons.forEach(button => {
       if (button.getAttribute('data-href') === currentUrl && button.classList.contains('active')) {
-        activeFound = true;
         button.classList.remove('active');
       }
     });
 
-    if (activeFound) {
-      event.preventDefault();
-      setTimeout(() => {
-        event.detail.continue();
-      }, 800);
-    }
   });
 
   // On page load: Ensure active state is set.

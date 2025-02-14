@@ -238,23 +238,13 @@ p {
     const currentUrl = window.location.pathname;
     const navBar = document.getElementById("NavBarDesktop");
     const mainButtons = navBar.querySelectorAll('.main-button');
-    let activeFound = false;
 
     // For the active button, remove the active class to trigger the exit animation.
     mainButtons.forEach(button => {
       if (button.getAttribute('data-href') === currentUrl && button.classList.contains('active')) {
-        activeFound = true;
         button.classList.remove('active');
       }
     });
-
-    // If an active button was found, prevent the swap and continue after 800ms.
-    if (activeFound) {
-      event.preventDefault();
-      setTimeout(() => {
-        event.detail.continue();
-      }, 800);
-    }
   });
 
   // On page load, ensure the active state is set
