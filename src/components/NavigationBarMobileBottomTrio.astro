@@ -1,135 +1,273 @@
 ---
-import type { ImageMetadata } from 'astro';
-import { Picture } from 'astro:assets';
-import RhizomLogo from "../assets/Logo_V6_Dark.png"
 import RhizomLogoComponent from "../components/Logo.astro"
 import Index from './Index.astro';
-import BracketOpenV from './BracketOpenV.astro';
-import BracketMiddleV from './BracketMiddleV.astro';
-import BracketCloseV from './BracketCloseV.astro';
 import BracketOpenH from './BracketOpenH.astro';
 import BracketMiddleH from './BracketMiddleH.astro';
 import BracketCloseH from './BracketCloseH.astro';
+import BracketOpenV from './BracketOpenV.astro';
+import BracketMiddleV from './BracketMiddleV.astro';
+import BracketCloseV from './BracketCloseV.astro';
 import "../styles/global.css"
-
 ---
 
-
-<nav id="NavBarMobile">
+<nav id="NavBarMobile" transition:persist>
   <div id="Logo">
-    <RhizomLogoComponent/ >
+    <RhizomLogoComponent/>
   </div>
 
-  
-  <div id="Menu" transition:persist>
+  <div id="Menu">
     <div id="MainWrapper">
-
       <BracketOpenH />
-        
-        <a href="/" class:list={["MenuItems"]}>
-          <p>Portfolio</p>
-        </a>
 
-        <BracketMiddleH />
-
-        <a href="/archive-gallery" class:list={["MenuItems"]}>
-          <p>Archive</p>
-        </a>
+      <!-- Menu item using a div with a data-href and an onclick -->
+      <a 
+        class:list={["menu-items main-button"]} 
+        href="/"
+        data-href="/">
+        Portfolio
+      </a>
 
       <BracketMiddleH />
 
-        <a href="/info" class:list={["MenuItems"]}>
-          <p>Information</p>
+      <!-- For items with submenus, wrap them in a container -->
+      <div  id="archive" >
+        
+        <a       
+          id="archive-main"
+          class:list={["menu-items main-button"]}
+          href="/archive-gallery"          
+          data-href="/archive-gallery">
+          Archive
         </a>
-      
+        <div id="archive-select">
+          <a 
+            class:list={["archive-subitems"]} 
+            href="/archive-gallery"
+            data-href="/archive-gallery">
+            Gallery
+          </a>
+          <a 
+            class:list={["archive-subitems"]} 
+            href="/archive-project-list"
+            data-href="/archive-project-list">
+            List
+          </a>
+          <a 
+            class:list={["archive-subitems"]} 
+            href="/archive-projects"
+            data-href="/archive-projects">
+            Projects
+          </a>
+        </div>
+      </div>
+
+      <BracketMiddleH />
+
+      <a 
+        class:list={["menu-items main-button"]} 
+        href="/info"
+        data-href="/info">
+        Information
+      </a>
+
       <BracketCloseH />
-    </div>  
+    </div>
   </div>
-
-
-
 </nav>
+
 
 
 
 <style>
 @import "../styles/global.css";
 
-
 #NavBarMobile {
   display: block;
   position: fixed;
   z-index: 1000;
-  left: 0px;
-  top: 0px;
+  left: 0;
+  top: 0;
 }
 
 #Logo {
   position: fixed;
   top: 11px;
   width: 27%;
-  height: auto;
-  position: fixed;
-  top: 11px;
-  width: 27%;
-  height: auto;
   pointer-events: auto;
-} 
+}
 
 #Menu {
   position: fixed;
-  z-index: 1001;
-  width: 100vw;
-  height: auto;
-  display: grid;
   bottom: 0;
+  width: 100vw;
   background-color: var(--bg-color);
+  z-index: 1001;
   padding-bottom: 2px;
-  justify-content:stretch;
-  
 }
 
 #MainWrapper {
   height: 3rem;
   display: grid;
-  padding: 1px 3px;
   grid-gap: 0;
-  grid-template-columns: 0.75rem 1fr 1.5rem 1fr 1.5rem 1fr 0.75rem;
-  justify-items: center; /* Ensure all children stretch horizontally */
+  grid-template-columns: 0 1fr 0 1fr 0 1fr 0;
+  justify-items: center;
   z-index: 1002;
-  
 }
 
-.MenuItems {
+.main-button {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  /* Transition for the text color */
+  transition: color 0.5s ease;
+}
+
+.main-button::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 0%;
+  background-color: black;
+  /* Transition for the bar sliding in */
+  transition: height 0.75s ease;
+  z-index: -1;
+}
+
+/* When active, change text color and animate the black bar into place */
+.main-button.active {
+  color: var(--bg-color);
+}
+
+.main-button.active::after {
+  height: 100%;
+}
+
+/* Style all menu items as clickable divs */
+.menu-items {
   font-size: var(--font-size-dekstop-h1);
   font-family: PowerGrotesk-Light;
   font-weight: 200;
-  width: 100%; /* Ensure each menu item takes full width */
   display: flex;
-  justify-content: center; /* Center the content inside */
-  align-items: center; /* Vertically center the content */
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  cursor: pointer;
+  /* transition: background-color 0.3s, color 0.3s; */
 }
 
 a {
-  text-decoration: none; /* Removes underline */
-  color: inherit; /* Inherits the color from the parent element */
-  background: none; /* Removes background if any */
-  border: none; /* Removes border if any */
-  pointer-events: auto;
-} 
-
-p {
-  font-size: var(--font-size-mobile-h1);
-  margin: 0px;
-  text-align: center;
+  text-decoration: none;
+  color: black;
+  width: 100%;
+  height: 100%;
 }
 
+#archive {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr  min-content;
+  align-items: center;
+}
+
+#archive-main {
+}
+
+#archive-select {
+  display: none;
+  justify-content: center;
+  align-content: center;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding-right: 3vw;
+  width: 100%;
+  height: 100%;
+}
+
+
+/* Archive subitems can be styled separately */
+.archive-subitems {
+  font-size: 11px;
+  cursor: pointer;
+  padding: 0 1vw;
+  width: 100%;
+  height: 100%;
+}
 
 
 </style>
 
 
 
+<script>
+  import { navigate } from 'astro:transitions/client';
+
+// AFTER-SWAP: Update the active state based on the current URL
+document.addEventListener("astro:after-swap", () => {
+  const currentUrl = window.location.pathname;
+  const mainButtons = document.querySelectorAll('.main-button');
+
+  // Remove active class from all buttons first
+  mainButtons.forEach(button => {
+    button.classList.remove('active');
+  });
+
+  // Then add active class to the one matching the current URL
+  mainButtons.forEach(button => {
+    if (button.getAttribute('data-href') === currentUrl) {
+      button.classList.add('active');
+    }
+  });
+});
+
+// BEFORE-SWAP: Trigger the exit animation and delay the swap until it's complete.
+document.addEventListener("astro:before-preperation", (event) => {
+  const currentUrl = window.location.pathname;
+  const mainButtons = document.querySelectorAll('.main-button');
+  let activeFound = false;
+
+  // For the active button, remove the active class to trigger the exit animation.
+  mainButtons.forEach(button => {
+    if (button.getAttribute('data-href') === currentUrl && button.classList.contains('active')) {
+      activeFound = true;
+      button.classList.remove('active');
+    }
+  });
+
+  // If an active button was found, prevent the swap and continue after 500ms.
+  if (activeFound) {
+    event.preventDefault();
+    setTimeout(() => {
+      event.detail.continue();
+    }, 800);
+  }
+});
+
+// Archive subitems onchange event
+document.addEventListener("astro:page-load", () => {
+
+  const currentUrl = window.location.pathname;
+  const mainButtons = document.querySelectorAll('.main-button');
+
+  // For the active button, remove the active class to trigger the exit animation.
+  mainButtons.forEach(button => {
+    if (button.getAttribute('data-href') === currentUrl && !button.classList.contains('active')) {
+      button.classList.add('active');
+    }
+  });
+
+
+  //navigation on archive subitems
+  const archiveSubitems = document.querySelector('.archive-subitems');
+  if (archiveSubitems) {
+    archiveSubitems.onchange = (event) => {
+      const href = event.target.value;
+      navigate(href);
+    };
+  }
+});
+
+</script>
 
 
 

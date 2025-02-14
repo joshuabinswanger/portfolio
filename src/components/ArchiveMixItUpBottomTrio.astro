@@ -124,6 +124,7 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
 
 <TopWrapper>
   <div class:list={["ArchiveWrapper"]} id="ArchiveWrapper">
+    
   <!-- Filter Buttons-->
   <form id="filter-top-wrapper" >
 
@@ -216,17 +217,17 @@ import PhotoSwipeLightbox from 'photoswipe/lightbox';
 
 function getFreshElements() {
   const roleFilterButton = document.querySelector("#role-buttons-wrapper button"); 
-  const roleDataFilterValue = roleFilterButton.getAttribute("data-filter");
+  const roleDataFilterValue = roleFilterButton.getAttribute("data-toggle");
 
   console.log(`roleFilterValue:${roleDataFilterValue}`)
 
   const programFilterButton = document.querySelector("#program-buttons-wrapper button"); 
-  const programDataFilterValue = programFilterButton.getAttribute("data-filter");
+  const programDataFilterValue = programFilterButton.getAttribute("data-toggle");
 
   console.log(`programFilterValue:${programDataFilterValue}`)
 
   const topicFilterButton = document.querySelector("#topic-buttons-wrapper button"); 
-  const topicDataFilterValue = topicFilterButton.getAttribute("data-filter");
+  const topicDataFilterValue = topicFilterButton.getAttribute("data-toggle");
 
   console.log(`topicFilterValue:${topicDataFilterValue}`)
 
@@ -287,7 +288,7 @@ function getFreshElements() {
   let imageElements = document.querySelectorAll('.photo-link');
 
   // SVG strings for the arrow and close icons
-    const leftArrowSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 155 139" width="39" height="35"><path d="m0 69 69 69 14-12-45-46h116V58H38l44-44L69 0 0 69Z" style="fill-rule:nonzero"/></svg>';
+  const leftArrowSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 155 139" width="39" height="35"><path d="m0 69 69 69 14-12-45-46h116V58H38l44-44L69 0 0 69Z" style="fill-rule:nonzero"/></svg>';
   const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 139 139" width="139" height="139"><path d="m69 83-56 55-13-12 56-57L0 14 13 0l56 56 56-56 13 14-55 55 55 57-13 12-56-55Z"/></svg>';
 
   // Utility function to detect phone portrait mode
@@ -553,6 +554,8 @@ function getFreshElements() {
     mixer?.destroy();
     mixer = undefined;
 
+    imageDataSource.length = 0;
+
     ////////////////////////////////////////////////////////////
     ///////////////     PHOTOSWIPE ////////////////////////////
     ///////////////////////////////////////////////////////////
@@ -673,7 +676,7 @@ function getFreshElements() {
     /* padding bot plus height */
     bottom: calc(3rem);
     padding: 1px;
-    padding-bottom: 0.7rem;
+    padding-bottom: 0.33rem;
     left: 0px;
     grid-template-columns: 7ch 7ch auto;
     grid-template-rows: auto;
@@ -824,7 +827,7 @@ fieldset {
 
   
   @media (--bp-mobile) {
-    height: 2rem;
+    height: 2.3rem;
   }
 
   @media (--bp-tablet) {

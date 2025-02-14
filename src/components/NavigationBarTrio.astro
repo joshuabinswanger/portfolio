@@ -18,26 +18,51 @@ import Index from './Index.astro';
 
 <nav id="NavBar" transition:persist>
 
-  <div id="MenuWrapper">
+  <div id="MainWrapper">
     <div style="pointer-events: auto;">
       <Logo />
     </div>
 
     <BracketOpenV />
 
-      <a href="/" class:list={["MenuItems"]}>
+      <a href="/" class:list={["MenuItems main-button"]} data-href="/">
         <p>Portfolio</p>
       </a>
 
     <BracketMiddleV />
 
-    <a href="/archive-gallery" class:list={["MenuItems"]}>
-      <p>Archive</p>
-    </a>
+    
+      <!-- For items with submenus, wrap them in a container -->
+      <div  id="archive" >
+
+        <a href="/archive-gallery" class:list={["MenuItems main-button"]} data-href="/archive-gallery">
+          <p>Archive</p>
+        </a>
+        <div id="archive-select">
+          <a 
+            class:list={["archive-subitems"]} 
+            href="/archive-gallery"
+            data-href="/archive-gallery">
+            Gallery
+          </a>
+          <a 
+            class:list={["archive-subitems"]} 
+            href="/archive-project-list"
+            data-href="/archive-project-list">
+            List
+          </a>
+          <a 
+            class:list={["archive-subitems"]} 
+            href="/archive-projects"
+            data-href="/archive-projects">
+            Projects
+          </a>
+        </div>
+      </div>
 
     <BracketMiddleV />
 
-      <a href="/info" class:list={["MenuItems"]}>
+      <a href="/info" class:list={["MenuItems main-button"]} data-href="/info">
         <p>Information</p>
       </a>
 
@@ -48,34 +73,7 @@ import Index from './Index.astro';
 
 
 <script>
-  // Wait for the page to fully load all DOM content
-  document.addEventListener('astro:page-load', () => {
-   
-    const menuLinks = document.querySelectorAll('.menuLinks');
 
-    const projectLinks = document.querySelectorAll('.projectLinks');
-
-    const observers = document.querySelectorAll('.observer');
-    // Get the checkbox input element that controls the nav toggle
-    const navToggle = document.getElementById('input');
-
-    
-
-    // Add click event listeners to each menu link
-    menuLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        
-              // For each observer element, modify its first child's classes
-      observers.forEach(observer => {
-        console.log(observer.firstElementChild); // Log the first child of the observer
-        observer.firstElementChild.classList.remove("hidden"); // Remove 'hidden' class
-        observer.firstElementChild.classList.add("show"); // Add 'show' class
-      });
-    
-      });
-    });
-
-  });
 </script>
 
 <style>
@@ -87,7 +85,6 @@ import Index from './Index.astro';
   justify-items: center;
   grid-auto-rows: auto;
   top: var(--padding-desktop);
-  height: max-content;
 
 		@media (--bp-mobile) {
 			display: none;
@@ -102,37 +99,34 @@ import Index from './Index.astro';
 		}
 
 }
-/* 
-#shift {
-  margin-top: calc(var(--border-size) * -1.5);
-} */
 
 * {
   letter-spacing: 0.8px;
 }
 
-#MenuWrapper {
-  width: 80%;
-  display: grid;
-  grid-template-rows: auto;
+#MainWrapper {
   width: 100%;
-  place-content: center;
+  display: grid;
+  grid-template-rows: min-content 0 min-content 0 min-content 0 min-content 0;
 }
 
 .MenuItems {
+  height: min-content;
   font-family: PowerGrotesk-Light;
   font-weight: 200;
   
 }
+.main-button {
+  height: 2.5rem;
+  align-content: center;
+}
+
 a {
   text-decoration: none; /* Removes underline */
   color: inherit; /* Inherits the color from the parent element */
   background: none; /* Removes background if any */
   border: none; /* Removes border if any */
   pointer-events: auto;
-} 
-
-p {
   font-size: var(--font-size-dekstop-h1);
   margin: 0px;
   text-align: center;
@@ -149,7 +143,66 @@ p {
     font-size:  var(--font-size-dekstop-h1);
     
   }
+} 
+
+p {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  align-content: center;
 }
+.main-button::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 0%;
+  height: 2.55rem;
+  background-color: black;
+  /* Transition for the bar sliding in */
+  transition: width 0.75s ease;
+  z-index: -1;
+}
+
+/* When active, change text color and animate the black bar into place */
+.main-button.active {
+  color: var(--bg-color);
+}
+
+.main-button.active::before {
+  width: 100%;
+}
+
+#archive {
+  display: grid;
+  width: 100%;
+  grid-template-rows: 1fr  min-content;
+  align-items: center;
+}
+
+#archive-main {
+}
+
+#archive-select {
+  display: none;
+  justify-content: center;
+  align-content: center;
+  grid-template-rows: 1fr 1fr 1fr;
+  width: 100%;
+  height: 100%;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+
+/* Archive subitems can be styled separately */
+.archive-subitems {
+  font-size: 11px;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  width: 100%;
+  height: 100%;
+}
+
 
 
 
@@ -157,5 +210,74 @@ p {
 </style>
 
 
+<script>
+  import { navigate } from 'astro:transitions/client';
+
+// AFTER-SWAP: Update the active state based on the current URL
+document.addEventListener("astro:after-swap", () => {
+  const currentUrl = window.location.pathname;
+  const mainButtons = document.querySelectorAll('.main-button');
+
+  // Remove active class from all buttons first
+  mainButtons.forEach(button => {
+    button.classList.remove('active');
+  });
+
+  // Then add active class to the one matching the current URL
+  mainButtons.forEach(button => {
+    if (button.getAttribute('data-href') === currentUrl) {
+      button.classList.add('active');
+    }
+  });
+});
+
+// BEFORE-SWAP: Trigger the exit animation and delay the swap until it's complete.
+document.addEventListener("astro:before-preperation", (event) => {
+  const currentUrl = window.location.pathname;
+  const mainButtons = document.querySelectorAll('.main-button');
+  let activeFound = false;
+
+  // For the active button, remove the active class to trigger the exit animation.
+  mainButtons.forEach(button => {
+    if (button.getAttribute('data-href') === currentUrl && button.classList.contains('active')) {
+      activeFound = true;
+      button.classList.remove('active');
+    }
+  });
+
+  // If an active button was found, prevent the swap and continue after 500ms.
+  if (activeFound) {
+    event.preventDefault();
+    setTimeout(() => {
+      event.detail.continue();
+    }, 800);
+  }
+});
+
+// Archive subitems onchange event
+document.addEventListener("astro:page-load", () => {
+
+  const currentUrl = window.location.pathname;
+  const mainButtons = document.querySelectorAll('.main-button');
+
+  // For the active button, remove the active class to trigger the exit animation.
+  mainButtons.forEach(button => {
+    if (button.getAttribute('data-href') === currentUrl && !button.classList.contains('active')) {
+      button.classList.add('active');
+    }
+  });
+
+
+  //navigation on archive subitems
+  const archiveSubitems = document.querySelector('.archive-subitems');
+  if (archiveSubitems) {
+    archiveSubitems.onchange = (event) => {
+      const href = event.target.value;
+      navigate(href);
+    };
+  }
+});
+
+</script>
 
 

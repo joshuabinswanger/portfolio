@@ -8,7 +8,7 @@ const { strokewidth = "1px", strokecolor = "black" } = Astro.props;
 ---
 
 
-<div class:list="svg-container">
+<div class:list={["svg-container"]}>
     <svg xmlns="http://www.w3.org/2000/svg"    viewBox="-50 0 100 200" preserveAspectRatio="xMidYMid">
         <path 
         vector-effect="non-scaling-stroke"
@@ -24,7 +24,8 @@ const { strokewidth = "1px", strokecolor = "black" } = Astro.props;
     display: grid;
     grid-template-columns: 1fr; /* One column spanning the full width */
     grid-template-rows: 1fr;    /* One row spanning the full height */
-    justify-items: center;         /* Aligns the SVG to the right */
+    justify-content: center;   /* it need both justify content and justify-items to work in firefox and chrome    */
+    justify-items: center;       /* Aligns the SVG to the right */
     align-items: center;        /* Centers the SVG vertically */
     width: 100%; 
     }

@@ -99,7 +99,7 @@ imageElements.forEach((image, index) => {
 	// Define the IntersectionObserver
 	const observerFade = new IntersectionObserver((entries) => {  
 		entries.forEach((entry) => {
-			console.log(entry);
+			/* console.log(entry); */
 			if (entry.isIntersecting) {
 				entry.target.firstElementChild.classList.add("show");
 				entry.target.classList.remove("restrain");
@@ -117,7 +117,7 @@ imageElements.forEach((image, index) => {
 	// Define the IntersectionObserver
 	const observerHidden = new IntersectionObserver((entries) => {  
 		entries.forEach((entry) => {
-			console.log(entry);
+			/* console.log(entry); */
 			if (entry.isIntersecting) {
 				entry.target.firstElementChild.classList.remove("hidden");
 			} 
@@ -151,7 +151,7 @@ imageElements.forEach((image, index) => {
 	  const Sliders = document.querySelectorAll('.GalleryElement')
 	
 	  Sliders.forEach((item, index) => {
-		console.log(`This is the slider at index ${index} with ID: ${item.id}`);
+		/* console.log(`This is the slider at index ${index} with ID: ${item.id}`); */
 	
 		// Select all Slides
 		const slides = item.querySelectorAll('.keen-slider__slide');
@@ -174,7 +174,7 @@ imageElements.forEach((image, index) => {
 			  if (loaded[idx]) {
 				// Use querySelector to find the .ImageElement div
 				const imageElement = element.querySelector('.ImageElement');
-				console.log(`ImageElement found:`, imageElement);
+				/* console.log(`ImageElement found:`, imageElement); */
 	
 				if (imageElement) {
 				  imageElement.style.display = "block";
@@ -199,9 +199,9 @@ imageElements.forEach((image, index) => {
 		function setMaxHeight (s) {
 		  const activeSlide = s.track.details.rel;
 		  const height = s.size;
-		  console.log(`the slide has height: ${height}`)
+		  /* console.log(`the slide has height: ${height}`) */
 		  const projectInfoSlide = s.slides[s.slides.length - 1];
-		  console.log(`projectInfoSlide at index: ${projectInfoSlide.id}`)
+		 /*  console.log(`projectInfoSlide at index: ${projectInfoSlide.id}`) */
 		  const projectInfoSlideWrapper = projectInfoSlide.querySelector('#ProjectInfoSlideWrapper');
 	
 		  projectInfoSlideWrapper.style.maxHeight = `${height}px`;
@@ -337,7 +337,7 @@ imageElements.forEach((image, index) => {
 		// Define the IntersectionObserver
 		const observerSlider = new IntersectionObserver((entries) => {  
 		  entries.forEach((entry) => {
-			console.log(entry);
+		/* 	console.log(entry); */
 			if (entry.isIntersecting) {
 			  entry.target.classList.remove("restrain");
 			  slider.update();
@@ -431,7 +431,7 @@ imageElements.forEach((image, index) => {
 			onInit: (el, pswp) => {
 				lightbox.pswp.on('change', () => {
 				const currSlideElement = lightbox.pswp.currSlide.data.element;
-				console.log('Current Slide Element:', currSlideElement);
+			/* 	console.log('Current Slide Element:', currSlideElement); */
 				let captionHTML = '';
 
 				if (currSlideElement) {
@@ -454,7 +454,7 @@ imageElements.forEach((image, index) => {
 	
 		lightbox.init(); // Initialize the lightbox
 		/* console.log (`${imageElements.id}`) */
-		console.log(`lightbox instance: ${el.id}`)
+	/* 	console.log(`lightbox instance: ${el.id}`) */
 	
 	
 		}); 
