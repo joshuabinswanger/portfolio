@@ -6,5 +6,11 @@ import robotsTxt from "astro-robots-txt";
 export default defineConfig({
   site: 'https://rhizome.ch',
   integrations: [robotsTxt()],
+  vite: {
+    build: {
+      assetsInlineLimit: 0,
+    },
+  },
 });
+
 

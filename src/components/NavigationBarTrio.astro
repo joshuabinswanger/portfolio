@@ -15,13 +15,13 @@ import Index from './Index.astro';
 
 <nav id="NavBarDesktop" transition:persist>
   <div id="MainWrapper">
-    <div style="pointer-events: auto;">
+    <div style="pointer-events: auto;" data-animation="in">
       <Logo />
     </div>
 
     <BracketOpenV />
 
-    <a href="/" class:list={["MenuItems", "main-button"]} data-href="/" data-animation="in">
+    <a href="/" class:list={["MenuItems main-button"]} data-href="/" data-animation="in">
       <p>Portfolio</p>
     </a>
 
@@ -29,7 +29,7 @@ import Index from './Index.astro';
 
     <!-- For items with submenus, wrap them in a container -->
     <div id="archive">
-      <a href="/archive-gallery" class:list={["MenuItems", "main-button"]} data-href="/archive-gallery" data-animation="out">
+      <a href="/archive-gallery" class:list={["MenuItems main-button"]} data-href="/archive-gallery" data-animation="out">
         <p>Archive</p>
       </a>
       <div id="archive-select">
@@ -47,7 +47,7 @@ import Index from './Index.astro';
 
     <BracketMiddleV />
 
-    <a href="/info" class:list={["MenuItems", "main-button"]} data-href="/info" data-animation="out">
+    <a href="/info" class:list={["MenuItems main-button"]} data-href="/info" data-animation="out">
       <p>Information</p>
     </a>
 
@@ -74,7 +74,7 @@ import Index from './Index.astro';
   // When a button is clicked, if it’s marked "out",
   // set all other buttons with "in" to "out", and set the clicked one to "in"
   function handleButtonClick(clickedBtn, buttons) {
-    setTimeout(() => {
+
       if (clickedBtn.getAttribute('data-animation') === "out") {
         buttons.forEach(btn => {
           if (btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
@@ -83,7 +83,6 @@ import Index from './Index.astro';
         });
         clickedBtn.setAttribute('data-animation', "in");
       }
-    }, 300);
   }
 
   // Create event listeners on each button
