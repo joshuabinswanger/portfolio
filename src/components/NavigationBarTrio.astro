@@ -21,7 +21,7 @@ import Index from './Index.astro';
 
     <BracketOpenV />
 
-    <a href="/" class:list={["MenuItems", "main-button"]} data-href="/">
+    <a href="/" class:list={["MenuItems", "main-button"]} data-href="/" data-animation="in">
       <p>Portfolio</p>
     </a>
 
@@ -29,11 +29,11 @@ import Index from './Index.astro';
 
     <!-- For items with submenus, wrap them in a container -->
     <div id="archive">
-      <a href="/archive-gallery" class:list={["MenuItems", "main-button"]} data-href="/archive-gallery">
+      <a href="/archive-gallery" class:list={["MenuItems", "main-button"]} data-href="/archive-gallery" data-animation="out">
         <p>Archive</p>
       </a>
       <div id="archive-select">
-        <a class:list={["archive-subitems"]} href="/archive-gallery" data-href="/archive-gallery">
+        <a class:list={["archive-subitems"]} href="/archive-gallery" data-href="/archive-gallery" >
           Gallery
         </a>
         <a class:list={["archive-subitems"]} href="/archive-project-list" data-href="/archive-project-list">
@@ -47,7 +47,7 @@ import Index from './Index.astro';
 
     <BracketMiddleV />
 
-    <a href="/info" class:list={["MenuItems", "main-button"]} data-href="/info">
+    <a href="/info" class:list={["MenuItems", "main-button"]} data-href="/info" data-animation="out">
       <p>Information</p>
     </a>
 
@@ -58,85 +58,61 @@ import Index from './Index.astro';
 <script>
   import { navigate } from 'astro:transitions/client';
 
-  // DEV code: Simply use window.location.pathname.
-  if (import.meta.env.DEV) {
-    document.addEventListener("astro:page-load", () => {
-      const currentUrl = window.location.pathname;
-      const navBar = document.getElementById("NavBarDesktop");
-      const mainButtons = navBar.querySelectorAll('.main-button');
+  // Update visual state (for example, adding an "active" class)
+  function updateAnimationState(buttons) {
+    buttons.forEach(btn => {
+      if (btn.getAttribute('data-animation') === "in") {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+  }
 
-      mainButtons.forEach(button => {
-        if (button.getAttribute('data-href') === currentUrl) {
-          button.classList.add('active');
-        } else {
-          button.classList.remove('active');
+  // When a button is clicked, if it’s marked "out",
+  // set all other buttons with "in" to "out", and set the clicked one to "in"
+  function handleButtonClick(clickedBtn, buttons) {
+    if (clickedBtn.getAttribute('data-animation') === "out") {
+      buttons.forEach(btn => {
+        if (btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
+          btn.setAttribute('data-animation', "out");
         }
+      });
+      clickedBtn.setAttribute('data-animation', "in");
+      updateAnimationState(buttons);
+    }
+  }
+
+  // Create event listeners on each button
+  function createEventListeners(buttons) {
+    buttons.forEach(btn => {
+      btn.addEventListener('click', (event) => {
+        // Use event.currentTarget to get the clicked button
+        handleButtonClick(event.currentTarget, buttons);
       });
     });
   }
 
-  // PROD code: Use Astro's view-transition events.
-  if (import.meta.env.PROD) {
-    let currentRoute = window.location.pathname;
+  // On page load, update animation state and attach click listeners.
+  document.addEventListener("astro:page-load", () => {
+    const navBar = document.getElementById("NavBarDesktop");
+    const mainButtons = navBar.querySelectorAll('.main-button');
+    
+    updateAnimationState(mainButtons);
+    createEventListeners(mainButtons);
+  });
 
-    // Update currentRoute using the before-swap event.
-    document.addEventListener("astro:before-swap", (event) => {
-      if (event.detail && event.detail.url) {
-        currentRoute = event.detail.url.pathname;
-      }
-    });
-
-    // AFTER-SWAP: update active state based on currentRoute.
-    document.addEventListener("astro:after-swap", () => {
-      const navBar = document.getElementById("NavBarDesktop");
-      const mainButtons = navBar.querySelectorAll('.main-button');
-      mainButtons.forEach(button => button.classList.remove('active'));
-      mainButtons.forEach(button => {
-        if (button.getAttribute('data-href') === currentRoute) {
-          button.classList.add('active');
-        }
-      });
-    });
-
-    // BEFORE-PREPARATION: remove the active state to trigger an exit animation.
-    document.addEventListener("astro:before-preperation", (event) => {
-      const navBar = document.getElementById("NavBarDesktop");
-      const mainButtons = navBar.querySelectorAll('.main-button');
-      let activeFound = false;
-      mainButtons.forEach(button => {
-        if (button.getAttribute('data-href') === currentRoute && button.classList.contains('active')) {
-          activeFound = true;
-          button.classList.remove('active');
-        }
-      });
-      if (activeFound) {
-        event.preventDefault();
-        setTimeout(() => {
-          event.detail.continue();
-        }, 800);
-      }
-    });
-
-    // On page load: ensure the active state is set using currentRoute.
-    document.addEventListener("astro:page-load", () => {
-      const navBar = document.getElementById("NavBarDesktop");
-      const mainButtons = navBar.querySelectorAll('.main-button');
-      mainButtons.forEach(button => {
-        if (button.getAttribute('data-href') === currentRoute && !button.classList.contains('active')) {
-          button.classList.add('active');
-        }
-      });
-
-      // Archive subitems onchange event
-      const archiveSubitems = navBar.querySelector('.archive-subitems');
-      if (archiveSubitems) {
-        archiveSubitems.onchange = (event) => {
-          const href = event.target.value;
-          navigate(href);
-        };
-      }
-    });
-  }
+  // Archive subitems onchange event (if applicable)
+  document.addEventListener("astro:page-load", () => {
+    const navBar = document.getElementById("NavBarDesktop");
+    const archiveSubitems = navBar.querySelector('.archive-subitems');
+    if (archiveSubitems) {
+      archiveSubitems.onchange = (event) => {
+        const href = event.target.value;
+        navigate(href);
+      };
+    }
+  });
 </script>
 
 

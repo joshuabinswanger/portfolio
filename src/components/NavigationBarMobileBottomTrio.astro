@@ -20,7 +20,8 @@ import "../styles/global.css";
       <a 
         class:list={["menu-items", "main-button"]} 
         href="/" 
-        data-href="/">
+        data-href="/"
+        data-animation="in">
         Portfolio
       </a>
 
@@ -32,7 +33,7 @@ import "../styles/global.css";
           id="archive-main"
           class:list={["menu-items", "main-button"]}
           href="/archive-gallery"          
-          data-href="/archive-gallery">
+          data-href="/archive-gallery" data-animation="out">
           Archive
         </a>
         <div id="archive-select">
@@ -63,7 +64,8 @@ import "../styles/global.css";
       <a 
         class:list={["menu-items", "main-button"]} 
         href="/info" 
-        data-href="/info">
+        data-href="/info"
+        data-animation="out">
         Information
       </a>
 
@@ -186,82 +188,60 @@ a {
 <script>
   import { navigate } from 'astro:transitions/client';
 
-  const navMobile = document.getElementById("NavBarMobile");
-
-  // DEV code: simply use window.location.pathname
-  if (import.meta.env.DEV) {
-    document.addEventListener("astro:page-load", () => {
-      updateActiveState(window.location.pathname);
-    });
-    navMobile.addEventListener("click", (e) => {
-      const btn = e.target.closest('.main-button');
-      if (btn) {
-        updateActiveState(btn.getAttribute('data-href'));
-      }
-    });
-  }
-
-  // PROD code: update currentRoute using astro:before-swap
-  if (import.meta.env.PROD) {
-    let currentRoute = window.location.pathname;
-
-    // Update currentRoute on navigation using astro:before-swap's detail.
-    document.addEventListener("astro:before-swap", (event) => {
-      if (event.detail && event.detail.url) {
-        currentRoute = event.detail.url.pathname;
-      }
-    });
-
-    document.addEventListener("astro:after-swap", () => {
-      updateActiveState(currentRoute);
-    });
-
-    document.addEventListener("astro:before-preperation", (event) => {
-      const buttons = navMobile.querySelectorAll('.main-button');
-      let activeFound = false;
-      buttons.forEach(btn => {
-        if (btn.getAttribute('data-href') === currentRoute && btn.classList.contains('active')) {
-          activeFound = true;
-          btn.classList.remove('active');
-        }
-      });
-      if (activeFound) {
-        event.preventDefault();
-        setTimeout(() => {
-          event.detail.continue();
-        }, 800);
-      }
-    });
-
-    document.addEventListener("astro:page-load", () => {
-      updateActiveState(currentRoute);
-      const archiveSubitems = navMobile.querySelector('.archive-subitems');
-      if (archiveSubitems) {
-        archiveSubitems.onchange = (event) => {
-          const href = event.target.value;
-          navigate(href);
-        };
-      }
-    });
-
-    navMobile.addEventListener("click", (e) => {
-      const btn = e.target.closest('.main-button');
-      if (btn) {
-        updateActiveState(btn.getAttribute('data-href'));
-      }
-    });
-  }
-
-  // Helper function to update the active class.
-  function updateActiveState(route) {
-    const buttons = navMobile.querySelectorAll('.main-button');
+  // Update visual state (for example, adding an "active" class)
+  function updateAnimationState(buttons) {
     buttons.forEach(btn => {
-      if (btn.getAttribute('data-href') === route) {
+      if (btn.getAttribute('data-animation') === "in") {
         btn.classList.add('active');
       } else {
         btn.classList.remove('active');
       }
     });
   }
+
+  // When a button is clicked, if it’s marked "out",
+  // set all other buttons with "in" to "out", and set the clicked one to "in"
+  function handleButtonClick(clickedBtn, buttons) {
+    if (clickedBtn.getAttribute('data-animation') === "out") {
+      buttons.forEach(btn => {
+        if (btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
+          btn.setAttribute('data-animation', "out");
+        }
+      });
+      clickedBtn.setAttribute('data-animation', "in");
+      updateAnimationState(buttons);
+    }
+  }
+
+  // Create event listeners on each button
+  function createEventListeners(buttons) {
+    buttons.forEach(btn => {
+      btn.addEventListener('click', (event) => {
+        // Use event.currentTarget to get the clicked button
+        handleButtonClick(event.currentTarget, buttons);
+      });
+    });
+  }
+
+  // On page load, update animation state and attach click listeners.
+  document.addEventListener("astro:page-load", () => {
+    const navBar = document.getElementById("NavBarMobile");
+    const mainButtons = navBar.querySelectorAll('.main-button');
+    
+    updateAnimationState(mainButtons);
+    createEventListeners(mainButtons);
+  });
+
+  // Archive subitems onchange event (if applicable)
+  document.addEventListener("astro:page-load", () => {
+    const navBar = document.getElementById("NavBarMobile");
+    const archiveSubitems = navBar.querySelector('.archive-subitems');
+    if (archiveSubitems) {
+      archiveSubitems.onchange = (event) => {
+        const href = event.target.value;
+        navigate(href);
+      };
+    }
+  });
 </script>
 
