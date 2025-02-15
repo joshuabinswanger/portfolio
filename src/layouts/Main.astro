@@ -76,7 +76,7 @@ const isProd = import.meta.env.PROD;
     <meta name="generator" content={Astro.generator} />
 
     <meta name="description" content={description} />
-    <ClientRouter  />
+    <ClientRouter fallback="swap" />
  
     <title>{title}</title>
 
