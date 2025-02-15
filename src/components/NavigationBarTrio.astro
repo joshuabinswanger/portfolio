@@ -72,15 +72,17 @@ import Index from './Index.astro';
   // When a button is clicked, if it’s marked "out",
   // set all other buttons with "in" to "out", and set the clicked one to "in"
   function handleButtonClick(clickedBtn, buttons) {
-    if (clickedBtn.getAttribute('data-animation') === "out") {
-      buttons.forEach(btn => {
-        if (btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
-          btn.setAttribute('data-animation', "out");
-        }
-      });
-      clickedBtn.setAttribute('data-animation', "in");
-      updateAnimationState(buttons);
-    }
+    setTimeout(() => {
+      if (clickedBtn.getAttribute('data-animation') === "out") {
+        buttons.forEach(btn => {
+          if (btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
+            btn.setAttribute('data-animation', "out");
+          }
+        });
+        clickedBtn.setAttribute('data-animation', "in");
+        updateAnimationState(buttons);
+      }
+    }, 600);
   }
 
   // Create event listeners on each button
