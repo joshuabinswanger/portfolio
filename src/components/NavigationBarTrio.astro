@@ -60,13 +60,15 @@ import Index from './Index.astro';
 
   // Update visual state (for example, adding an "active" class)
   function updateAnimationState(buttons) {
-    buttons.forEach(btn => {
-      if (btn.getAttribute('data-animation') === "in") {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
+    setTimeout(() => {
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-animation') === "in") {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }, 600);
   }
 
   // When a button is clicked, if it’s marked "out",
@@ -80,9 +82,8 @@ import Index from './Index.astro';
           }
         });
         clickedBtn.setAttribute('data-animation', "in");
-        updateAnimationState(buttons);
       }
-    }, 600);
+    }, 300);
   }
 
   // Create event listeners on each button
