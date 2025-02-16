@@ -438,9 +438,10 @@ imageElements.forEach((image, index) => {
 			
 					// Get the description from data-description attribute
 					const description_title = currSlideElement.getAttribute('data-description_title');
-					const description_text = currSlideElement.getAttribute('data-description_text')
+					const description_text = currSlideElement.getAttribute('data-description_text');
+					const link = currSlideElement.getAttribute('data-link');
 					if (description_title) {
-						captionHTML = `<p><strong>${description_title}</strong></p><p>${description_text}</p>`;
+						captionHTML = `<p><strong>${description_title}</strong></p><p>${description_text}</p><p><a href="${link}">external Link</a></p>`;
 					}
 
 				}
