@@ -22,7 +22,7 @@ import Index from './Index.astro';
     <BracketOpenV />
 
     <a id="portfolio" href="/" class:list={["MenuItems main-button animation"]} data-href="/" data-animation="in">
-      Portfolio
+      <p>Portfolio</p>
     </a>
 
     <BracketMiddleV />
@@ -30,7 +30,7 @@ import Index from './Index.astro';
     <!-- For items with submenus, wrap them in a container -->
     <div id="archive">
       <a href="/archive-gallery" class:list={["MenuItems main-button animation"]} data-href="/archive-gallery" data-animation="out">
-        Archive
+        <p>Archive</p>
       </a>
       <div id="archive-select">
         <a class:list={["archive-subitems"]} href="/archive-gallery" data-href="/archive-gallery" >
@@ -48,7 +48,7 @@ import Index from './Index.astro';
     <BracketMiddleV />
 
     <a href="/info" class:list={["MenuItems main-button animation"]} data-href="/info" data-animation="out">
-      Information
+      <p>Information</p>
     </a>
 
     <BracketCloseV />
@@ -238,6 +238,7 @@ import Index from './Index.astro';
   align-content: center;
   align-items: center;
   z-index: 1001;
+
 }
 
 a {
@@ -266,6 +267,7 @@ p {
   margin: 0;
   padding: 0;
   align-content: center;
+  align-items: center;
 }
 
 /* The ::before pseudo-element creates a black bar that slides in from the bottom */
