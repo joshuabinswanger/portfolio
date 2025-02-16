@@ -3,9 +3,9 @@ import { Picture } from "astro:assets"
 import RhizomLogo from "../assets/Logo_BGColor.png"
 ---
 
-<div id="Logo" transition:persist>
+<div id="Logo-Wrapper">
 
-    <a href="/"><Picture src={RhizomLogo} id="Picture" alt="Rhizom Logo" loading="eager"></a>
+    <a id="Logo" href="/" class:list={["animation"]} data-href="/" data-animation="out"><Picture src={RhizomLogo}  id="Picture" alt="Rhizom Logo" loading="eager"></a>
 
 </div>
 
@@ -13,16 +13,25 @@ import RhizomLogo from "../assets/Logo_BGColor.png"
 <style>
 @import "../styles/global.css";
 
-#Logo{
+#Logo-Wrapper {
     z-index: 1003;
     width: 100%;
     aspect-ratio: auto;
+    
 
 
 @media (--bp-mobile){
 
+  padding-top: 0.7rem;
+  display: block;
+  width: 27%;
 
   }
+}
+
+#Logo {
+  display: block;
+  height: 100%;
 }
 
 

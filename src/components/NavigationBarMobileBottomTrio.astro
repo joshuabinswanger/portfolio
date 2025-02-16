@@ -1,5 +1,5 @@
 ---
-import RhizomLogoComponent from "../components/Logo.astro";
+import Logo from "../components/Logo.astro";
 import Index from './Index.astro';
 import BracketOpenH from './BracketOpenH.astro';
 import BracketMiddleH from './BracketMiddleH.astro';
@@ -8,9 +8,10 @@ import "../styles/global.css";
 ---
 
 <nav id="NavBarMobile" transition:persist>
-  <div id="Logo"  style="pointer-events: auto;" >
-    <RhizomLogoComponent/>
-  </div>
+
+  <!-- Convert logo container to a clickable anchor (matching desktop) -->
+
+    <Logo />
 
   <div id="Menu">
     <div id="MainWrapper">
@@ -18,7 +19,8 @@ import "../styles/global.css";
 
       <!-- Menu item: Portfolio -->
       <a 
-        class:list={["menu-items", "main-button"]} 
+        id="portfolio"
+        class:list={["menu-items main-button animation"]} 
         href="/" 
         data-href="/"
         data-animation="in">
@@ -31,7 +33,7 @@ import "../styles/global.css";
       <div id="archive">
         <a       
           id="archive-main"
-          class:list={["menu-items", "main-button"]}
+          class:list={["menu-items main-button animation"]}
           href="/archive-gallery"          
           data-href="/archive-gallery" data-animation="out">
           Archive
@@ -62,7 +64,7 @@ import "../styles/global.css";
 
       <!-- Menu item: Information -->
       <a 
-        class:list={["menu-items", "main-button"]} 
+        class:list={["menu-items main-button animation"]} 
         href="/info" 
         data-href="/info"
         data-animation="out">
@@ -85,20 +87,16 @@ import "../styles/global.css";
   top: 0;
 }
 
-#Logo {
-  position: fixed;
-  top: 11px;
-  width: 27%;
-  pointer-events: auto;
-}
 
 #Menu {
   position: fixed;
   bottom: 0;
-  width: 100vw;
+  width: calc(100vw - 4px - var(--scrollbar-width));
   background-color: var(--bg-color);
   z-index: 1001;
   padding-bottom: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
 }
 
 #MainWrapper {
@@ -118,7 +116,6 @@ import "../styles/global.css";
   transition: color 0.5s ease;
 }
 
-/* The ::after pseudo-element creates the black bar that grows from the bottom */
 .main-button::after {
   content: "";
   position: absolute;
@@ -186,65 +183,74 @@ a {
 </style>
 
 <script>
-  import { navigate } from 'astro:transitions/client';
+import { navigate } from 'astro:transitions/client';
 
-  // Update visual state (for example, adding an "active" class)
-  function updateAnimationState(buttons) {
-    setTimeout(() => {
+// Update visual state (e.g., add or remove the "active" class)
+function updateAnimationState(buttons) {
+  setTimeout(() => {
+    buttons.forEach(btn => {
+      if (btn.getAttribute('data-animation') === "in") {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+  }, 600);
+}
+
+// When a button is clicked, if it's marked "out",
+// set all others (with data-animation="in") to "out" and the clicked one to "in".
+function handleButtonClick(clickedBtn, buttons) {
+  // Special check: if the clicked element is the logo, force Portfolio active.
+  if (clickedBtn.id === "Logo") {
+    const portfolioBtn = Array.from(buttons).find(btn => btn.id === "portfolio");
+    buttons.forEach(btn => {
+      if (btn.id !== "portfolio" && btn.id !== clickedBtn.id) {
+        btn.setAttribute('data-animation', "out");
+      }
+    });
+    if (portfolioBtn) {
+      portfolioBtn.setAttribute('data-animation', "in");
+    }
+    clickedBtn.setAttribute('data-animation', "in");
+  } else {
+    if (clickedBtn.getAttribute('data-animation') === "out") {
       buttons.forEach(btn => {
-        if (btn.getAttribute('data-animation') === "in") {
-          btn.classList.add('active');
-        } else {
-          btn.classList.remove('active');
+        if (btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
+          btn.setAttribute('data-animation', "out");
         }
       });
-    }, 600);
-  }
-
-  // When a button is clicked, if it’s marked "out",
-  // set all other buttons with "in" to "out", and set the clicked one to "in"
-  function handleButtonClick(clickedBtn, buttons) {
-    setTimeout(() => {
-      if (clickedBtn.getAttribute('data-animation') === "out") {
-        buttons.forEach(btn => {
-          if (btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
-            btn.setAttribute('data-animation', "out");
-          }
-        });
-        clickedBtn.setAttribute('data-animation', "in");
-      }
-    }, 300);
-  }
-
-  // Create event listeners on each button
-  function createEventListeners(buttons) {
-    buttons.forEach(btn => {
-      btn.addEventListener('click', (event) => {
-        // Use event.currentTarget to get the clicked button
-        handleButtonClick(event.currentTarget, buttons);
-      });
-    });
-  }
-
-  // On page load, update animation state and attach click listeners.
-  document.addEventListener("astro:page-load", () => {
-    const navBar = document.getElementById("NavBarMobile");
-    const mainButtons = navBar.querySelectorAll('.main-button');
-    
-    updateAnimationState(mainButtons);
-    createEventListeners(mainButtons);
-  });
-
-  // Archive subitems onchange event (if applicable)
-  document.addEventListener("astro:page-load", () => {
-    const navBar = document.getElementById("NavBarMobile");
-    const archiveSubitems = navBar.querySelector('.archive-subitems');
-    if (archiveSubitems) {
-      archiveSubitems.onchange = (event) => {
-        const href = event.target.value;
-        navigate(href);
-      };
+      clickedBtn.setAttribute('data-animation', "in");
     }
-  });
-</script>
+  }
+}
 
+// Attach click event listeners to each button
+function createEventListeners(buttons) {
+  buttons.forEach(btn => {
+    btn.addEventListener('click', (event) => {
+      handleButtonClick(event.currentTarget, buttons);
+    });
+  });
+}
+
+// On page load, update visual state and attach event listeners
+document.addEventListener("astro:page-load", () => {
+  const navBar = document.getElementById("NavBarMobile");
+  const mainButtons = navBar.querySelectorAll('.animation');
+  updateAnimationState(mainButtons);
+  createEventListeners(mainButtons);
+});
+
+// Archive subitems onchange event (if applicable)
+document.addEventListener("astro:page-load", () => {
+  const navBar = document.getElementById("NavBarMobile");
+  const archiveSubitems = navBar.querySelector('.archive-subitems');
+  if (archiveSubitems) {
+    archiveSubitems.onchange = (event) => {
+      const href = event.target.value;
+      navigate(href);
+    };
+  }
+});
+</script>

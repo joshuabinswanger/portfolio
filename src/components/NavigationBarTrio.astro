@@ -7,6 +7,7 @@ import BracketOpenV from './BracketOpenV.astro';
 import BracketMiddleV from './BracketMiddleV.astro';
 import BracketCloseV from './BracketCloseV.astro';
 import "../styles/global.css";
+import RhizomLogo from "../assets/Logo_BGColor.png"
 
 const logoPath = "/assets/Rhizome_Test2.riv";
 
@@ -15,13 +16,12 @@ import Index from './Index.astro';
 
 <nav id="NavBarDesktop" transition:persist>
   <div id="MainWrapper">
-    <div style="pointer-events: auto;" data-animation="in">
-      <Logo />
-    </div>
+
+  <Logo />
 
     <BracketOpenV />
 
-    <a href="/" class:list={["MenuItems main-button"]} data-href="/" data-animation="in">
+    <a id="portfolio" href="/" class:list={["MenuItems main-button animation"]} data-href="/" data-animation="in">
       <p>Portfolio</p>
     </a>
 
@@ -29,7 +29,7 @@ import Index from './Index.astro';
 
     <!-- For items with submenus, wrap them in a container -->
     <div id="archive">
-      <a href="/archive-gallery" class:list={["MenuItems main-button"]} data-href="/archive-gallery" data-animation="out">
+      <a href="/archive-gallery" class:list={["MenuItems main-button animation"]} data-href="/archive-gallery" data-animation="out">
         <p>Archive</p>
       </a>
       <div id="archive-select">
@@ -47,7 +47,7 @@ import Index from './Index.astro';
 
     <BracketMiddleV />
 
-    <a href="/info" class:list={["MenuItems main-button"]} data-href="/info" data-animation="out">
+    <a href="/info" class:list={["MenuItems main-button animation"]} data-href="/info" data-animation="out">
       <p>Information</p>
     </a>
 
@@ -64,26 +64,77 @@ import Index from './Index.astro';
       buttons.forEach(btn => {
         if (btn.getAttribute('data-animation') === "in") {
           btn.classList.add('active');
-        } else {
+        } 
+        else {
           btn.classList.remove('active');
         }
       });
     }, 600);
   }
 
-  // When a button is clicked, if it’s marked "out",
-  // set all other buttons with "in" to "out", and set the clicked one to "in"
   function handleButtonClick(clickedBtn, buttons) {
+  console.log("handleButtonClick invoked");
+  console.log("Clicked element id:", clickedBtn.id, "data-animation:", clickedBtn.getAttribute('data-animation'));
 
-      if (clickedBtn.getAttribute('data-animation') === "out") {
-        buttons.forEach(btn => {
-          if (btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
-            btn.setAttribute('data-animation', "out");
-          }
-        });
-        clickedBtn.setAttribute('data-animation', "in");
+  // Special check: if the clicked element is the logo container, force Portfolio active.
+  if (clickedBtn.id === "Logo") { // or "logo-container" if that's the actual id
+    console.log("Clicked element is recognized as the Logo");
+    // Instead of relying on a reference, find the portfolio button from the list by ID:
+    const portfolioBtn = Array.from(buttons).find(btn => btn.id === "portfolio");
+    if (!portfolioBtn) {
+      console.error("Portfolio button not found!");
+    } else {
+      console.log("Portfolio button found with id:", portfolioBtn.id, "current data-animation:", portfolioBtn.getAttribute('data-animation'));
+    }
+
+    buttons.forEach(btn => {
+      console.log("Examining button id:", btn.id, "current data-animation:", btn.getAttribute('data-animation'));
+      if (btn.id !== "portfolio" && btn.id !== clickedBtn.id) {
+        console.log("Setting button id", btn.id, "data-animation to 'out'");
+        btn.setAttribute('data-animation', "out");
+      } else {
+        console.log("Skipping button id", btn.id, "because it is either the portfolio or the clicked logo");
       }
+    });
+
+    console.log("Setting portfolio button's data-animation to 'in'");
+    portfolioBtn.setAttribute('data-animation', "in");
+
+    console.log("Setting clicked logo's data-animation to 'in'");
+    clickedBtn.setAttribute('data-animation', "in");
+
+  } else {
+    const currentAnimation = clickedBtn.getAttribute('data-animation');
+    console.log("Non-logo element clicked with current data-animation:", currentAnimation);
+
+    if (currentAnimation === "out") {
+      console.log("Button is marked 'out'; updating other buttons marked 'in' to 'out'");
+      buttons.forEach(btn => {
+        if (btn !== clickedBtn) {
+          console.log("Examining button id:", btn.id, "current data-animation:", btn.getAttribute('data-animation'));
+          if (btn.getAttribute('data-animation') === "in") {
+            console.log("Setting button id", btn.id, "data-animation to 'out'");
+            btn.setAttribute('data-animation', "out");
+          } else {
+            console.log("No change for button id", btn.id, "because its data-animation is not 'in'");
+          }
+        }
+      });
+      console.log("Setting clicked button's data-animation to 'in'");
+      clickedBtn.setAttribute('data-animation', "in");
+    } else {
+      console.log("Clicked button is already 'in'; no changes needed.");
+    }
   }
+
+  // Log the final state of all buttons after processing
+  console.log("Final state of all buttons:");
+  buttons.forEach(btn => {
+    console.log("Button id:", btn.id, "data-animation:", btn.getAttribute('data-animation'));
+  });
+}
+
+
 
   // Create event listeners on each button
   function createEventListeners(buttons) {
@@ -98,10 +149,13 @@ import Index from './Index.astro';
   // On page load, update animation state and attach click listeners.
   document.addEventListener("astro:page-load", () => {
     const navBar = document.getElementById("NavBarDesktop");
-    const mainButtons = navBar.querySelectorAll('.main-button');
+    const mainButtons = navBar.querySelectorAll('.animation');
+    console.log(mainButtons)
     
     updateAnimationState(mainButtons);
     createEventListeners(mainButtons);
+
+
   });
 
   // Archive subitems onchange event (if applicable)
@@ -143,6 +197,30 @@ import Index from './Index.astro';
   letter-spacing: 0.8px;
 }
 
+#Logo-Wrapper {
+    z-index: 1003;
+    width: 100%;
+    aspect-ratio: auto;
+    
+
+
+@media (--bp-mobile){
+
+
+  }
+}
+
+#Logo {
+  display: block;
+  height: 100%;
+}
+
+
+#Picture{
+  width: 100%;
+  height: auto;
+}
+
 #MainWrapper {
   width: 100%;
   display: grid;
@@ -160,7 +238,6 @@ import Index from './Index.astro';
   align-content: center;
   align-items: center;
   z-index: 1001;
-  position: relative;
 }
 
 a {
