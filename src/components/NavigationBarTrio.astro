@@ -22,7 +22,7 @@ import Index from './Index.astro';
     <BracketOpenV />
 
     <a id="portfolio" href="/" class:list={["MenuItems main-button animation"]} data-href="/" data-animation="in">
-      <p>Portfolio</p>
+      Portfolio
     </a>
 
     <BracketMiddleV />
@@ -30,7 +30,7 @@ import Index from './Index.astro';
     <!-- For items with submenus, wrap them in a container -->
     <div id="archive">
       <a href="/archive-gallery" class:list={["MenuItems main-button animation"]} data-href="/archive-gallery" data-animation="out">
-        <p>Archive</p>
+        Archive
       </a>
       <div id="archive-select">
         <a class:list={["archive-subitems"]} href="/archive-gallery" data-href="/archive-gallery" >
@@ -48,7 +48,7 @@ import Index from './Index.astro';
     <BracketMiddleV />
 
     <a href="/info" class:list={["MenuItems main-button animation"]} data-href="/info" data-animation="out">
-      <p>Information</p>
+      Information
     </a>
 
     <BracketCloseV />
@@ -249,9 +249,11 @@ a {
   pointer-events: auto;
   font-size: var(--font-size-dekstop-h1);
   margin: 0;
-  text-align: center;
-  align-content: center;
+  height: 100%;
+  display: flex;
   align-items: center;
+  justify-content: center;
+ 
 
   @media (--bp-mobile) {
     font-size: var(--font-size-mobile-h1);
@@ -264,12 +266,7 @@ a {
   }
 }
 
-p {
-  margin: 0;
-  padding: 0;
-  align-content: center;
-  align-items: center;
-}
+
 
 /* The ::before pseudo-element creates a black bar that slides in from the bottom */
 .main-button::before {
