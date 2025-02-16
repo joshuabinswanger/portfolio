@@ -21,7 +21,7 @@ import Index from './Index.astro';
 
     <BracketOpenV />
 
-    <a id="portfolio" href="/" class:list={["MenuItems main-button animation"]} data-href="/" data-animation="in">
+    <a id="portfolio" href="/" class:list={["MenuItems button animation"]} data-href="/" data-animation="in">
       Portfolio
     </a>
 
@@ -29,17 +29,17 @@ import Index from './Index.astro';
 
     <!-- For items with submenus, wrap them in a container -->
     <div id="archive">
-      <a href="/archive-gallery" class:list={["MenuItems main-button animation"]} data-href="/archive-gallery" data-animation="out">
+      <a id="archive-main" href="/archive-gallery" class:list={["MenuItems button animation"]} data-href="/archive-gallery" data-animation="out">
         Archive
       </a>
       <div id="archive-select">
-        <a class:list={["archive-subitems"]} href="/archive-gallery" data-href="/archive-gallery" >
+        <a id="archive-gallery" class:list={["archive-subitems button"]} href="/archive-gallery" data-href="/archive-gallery" data-animation="out">
           Gallery
         </a>
-        <a class:list={["archive-subitems"]} href="/archive-project-list" data-href="/archive-project-list">
+        <a id="archive-project-list" class:list={["archive-subitems button"]} href="/archive-project-list" data-href="/archive-project-list" data-animation="out">
           List
         </a>
-        <a class:list={["archive-subitems"]} href="/archive-projects" data-href="/archive-projects">
+        <a id="archive-projects" class:list={["archive-subitems button"]} href="/archive-projects" data-href="/archive-projects" data-animation="out">
           Projects
         </a>
       </div>
@@ -47,7 +47,7 @@ import Index from './Index.astro';
 
     <BracketMiddleV />
 
-    <a href="/info" class:list={["MenuItems main-button animation"]} data-href="/info" data-animation="out">
+    <a href="/info" class:list={["MenuItems button animation"]} data-href="/info" data-animation="out">
       Information
     </a>
 
@@ -56,12 +56,11 @@ import Index from './Index.astro';
 </nav>
 
 <script>
-  import { navigate } from 'astro:transitions/client';
 
   // Update visual state (for example, adding an "active" class)
-  function updateAnimationState(buttons) {
+  function updateAnimationState(mainButtons) {
     setTimeout(() => {
-      buttons.forEach(btn => {
+      mainButtons.forEach(btn => {
         if (btn.getAttribute('data-animation') === "in") {
           btn.classList.add('active');
         } 
@@ -69,79 +68,85 @@ import Index from './Index.astro';
           btn.classList.remove('active');
         }
       });
-    }, 600);
+    }, 300);
+
   }
 
+
+  //handle Button click function
   function handleButtonClick(clickedBtn, buttons) {
-  console.log("handleButtonClick invoked");
-  console.log("Clicked element id:", clickedBtn.id, "data-animation:", clickedBtn.getAttribute('data-animation'));
 
-  // Special check: if the clicked element is the logo container, force Portfolio active.
-  if (clickedBtn.id === "Logo") { // or "logo-container" if that's the actual id
-    console.log("Clicked element is recognized as the Logo");
-    // Instead of relying on a reference, find the portfolio button from the list by ID:
-    const portfolioBtn = Array.from(buttons).find(btn => btn.id === "portfolio");
-    if (!portfolioBtn) {
-      console.error("Portfolio button not found!");
-    } else {
-      console.log("Portfolio button found with id:", portfolioBtn.id, "current data-animation:", portfolioBtn.getAttribute('data-animation'));
-    }
+    const archiveSubitems = document.querySelectorAll('.archive-subitems');
 
-    buttons.forEach(btn => {
-      console.log("Examining button id:", btn.id, "current data-animation:", btn.getAttribute('data-animation'));
-      if (btn.id !== "portfolio" && btn.id !== clickedBtn.id) {
-        console.log("Setting button id", btn.id, "data-animation to 'out'");
-        btn.setAttribute('data-animation', "out");
-      } else {
-        console.log("Skipping button id", btn.id, "because it is either the portfolio or the clicked logo");
-      }
-    });
+    // Special branch for the Archive main button:
+    if (clickedBtn.id === "archive-main") {
+      // Set the Archive main button active
+      clickedBtn.setAttribute('data-animation', "in");
 
-    console.log("Setting portfolio button's data-animation to 'in'");
-    portfolioBtn.setAttribute('data-animation', "in");
-
-    console.log("Setting clicked logo's data-animation to 'in'");
-    clickedBtn.setAttribute('data-animation', "in");
-
-  } else {
-    const currentAnimation = clickedBtn.getAttribute('data-animation');
-    console.log("Non-logo element clicked with current data-animation:", currentAnimation);
-
-    if (currentAnimation === "out") {
-      console.log("Button is marked 'out'; updating other buttons marked 'in' to 'out'");
+      // Set all buttons (in this group) that are NOT the Archive main button to "out"
       buttons.forEach(btn => {
-        if (btn !== clickedBtn) {
-          console.log("Examining button id:", btn.id, "current data-animation:", btn.getAttribute('data-animation'));
-          if (btn.getAttribute('data-animation') === "in") {
-            console.log("Setting button id", btn.id, "data-animation to 'out'");
-            btn.setAttribute('data-animation', "out");
-          } else {
-            console.log("No change for button id", btn.id, "because its data-animation is not 'in'");
-          }
+        if (btn.id !== "archive-main") {
+          btn.setAttribute('data-animation', "out");
         }
       });
-      console.log("Setting clicked button's data-animation to 'in'");
-      clickedBtn.setAttribute('data-animation', "in");
-    } else {
-      console.log("Clicked button is already 'in'; no changes needed.");
-    }
-  }
+      
+      // Update the archive subitems: force the "Gallery" subitem active, others inactive.
+      archiveSubitems.forEach(btn => {
+        if (btn.id === "archive-gallery") {
+          btn.setAttribute('data-animation', "in");
+        } else {
+          btn.setAttribute('data-animation', "out");
+        }
+      });
 
-  // Log the final state of all buttons after processing
-  console.log("Final state of all buttons:");
-  buttons.forEach(btn => {
-    console.log("Button id:", btn.id, "data-animation:", btn.getAttribute('data-animation'));
-  });
-}
+
+
+      return; // exit so the rest of the function doesn’t run
+    }
+
+    // Special check: if the clicked element is the logo container, force Portfolio active.
+    else if (clickedBtn.id === "Logo") { 
+      const portfolioBtn = Array.from(buttons).find(btn => btn.id === "portfolio");
+      buttons.forEach(btn => {
+        if (btn.id !== "portfolio" && btn.id !== clickedBtn.id) {
+          btn.setAttribute('data-animation', "out");
+        }
+      });
+      portfolioBtn.setAttribute('data-animation', "in");
+      clickedBtn.setAttribute('data-animation', "in");
+    } 
+    
+    else if (clickedBtn.id === "archive-gallery" || clickedBtn.id === "archive-project-list" || clickedBtn.id === "archive-projects"){
+        archiveSubitems.forEach(btn => {
+        if (clickedBtn === btn) {
+          btn.setAttribute('data-animation', "in");
+        } else {
+          btn.setAttribute('data-animation', "out");
+        }
+      });
+    }
+
+    else {
+      const currentAnimation = clickedBtn.getAttribute('data-animation');
+      if (currentAnimation === "out") {
+        buttons.forEach(btn => {
+          if (btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
+            btn.setAttribute('data-animation', "out");
+          }
+        });
+        clickedBtn.setAttribute('data-animation', "in");
+      }
+    }
+  };
 
 
 
   // Create event listeners on each button
-  function createEventListeners(buttons) {
-    buttons.forEach(btn => {
+  function createEventListeners(mainButtons) {
+    mainButtons.forEach(btn => {
       btn.addEventListener('click', (event) => {
         // Use event.currentTarget to get the clicked button
-        handleButtonClick(event.currentTarget, buttons);
+        handleButtonClick(event.currentTarget, mainButtons);
       });
     });
   }
@@ -149,7 +154,7 @@ import Index from './Index.astro';
   // On page load, update animation state and attach click listeners.
   document.addEventListener("astro:page-load", () => {
     const navBar = document.getElementById("NavBarDesktop");
-    const mainButtons = navBar.querySelectorAll('.animation');
+    const mainButtons = navBar.querySelectorAll('.button');
     console.log(mainButtons)
     
     updateAnimationState(mainButtons);
@@ -158,17 +163,6 @@ import Index from './Index.astro';
 
   });
 
-  // Archive subitems onchange event (if applicable)
-  document.addEventListener("astro:page-load", () => {
-    const navBar = document.getElementById("NavBarDesktop");
-    const archiveSubitems = navBar.querySelector('.archive-subitems');
-    if (archiveSubitems) {
-      archiveSubitems.onchange = (event) => {
-        const href = event.target.value;
-        navigate(href);
-      };
-    }
-  });
 </script>
 
 
@@ -231,10 +225,10 @@ import Index from './Index.astro';
   height: min-content;
   font-family: PowerGrotesk-Light;
   font-weight: 200;
-}
+} 
 
-.main-button {
-  height: 2.5rem;
+.button {
+  height: 3rem;
   align-content: center;
   align-items: center;
   z-index: 1001;
@@ -269,48 +263,75 @@ a {
 
 
 /* The ::before pseudo-element creates a black bar that slides in from the bottom */
-.main-button::before {
+.button::before {
   content: "";
   position: absolute;
   left: 0;
   width: 0%;
-  height: 2.55rem;
+  height: 3rem;
   background-color: black;
-  transition: width 0.75s ease;
+  transition: width 0.6s ease;
   z-index: -1;
 }
 
 /* When active, change text color and expand the black bar */
-.main-button.active {
+.button.active {
   color: var(--bg-color);
 }
-.main-button.active::before {
+.button.active::before {
   width: 100%;
 }
 
 #archive {
   display: grid;
   width: 100%;
-  grid-template-rows: 1fr min-content;
-  align-items: center;
+  height: 3rem;
+  grid-template-rows: 1fr auto;
+  align-items: start;
+  transition: height 0.75s ease;
+  overflow: hidden;
 }
 
 #archive-select {
-  display: none;
+  display: grid;
+  height: 6.5rem;
   justify-content: center;
-  align-content: center;
+  align-content: start;
+  grid-template-columns: 1fr;
   grid-template-rows: 1fr 1fr 1fr;
   width: 100%;
-  height: 100%;
-  margin-top: 1rem;
+  margin-top: 0.25rem;
   margin-bottom: 1rem;
+
+}
+
+#archive:has(a.active)  {
+  height: 9.5rem;
 }
 
 .archive-subitems {
   font-size: 11px;
   cursor: pointer;
   padding: 0.25rem 0;
+  height: 1.25rem;
+}
+
+/* The ::before pseudo-element creates a black bar that slides in from the bottom */
+.archive-subitems::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 0%;
+  height: 2rem;
+  background-color: black;
+  transition: width 0.6s ease;
+  z-index: -1;
+}
+
+.archive-subitems.active {
+  color: var(--bg-color);
+}
+.archive-subitems.active::before {
   width: 100%;
-  height: 100%;
 }
 </style>
