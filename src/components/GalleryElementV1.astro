@@ -13,6 +13,7 @@ import { CldImage } from 'astro-cloudinary';
 import 'keen-slider/keen-slider.min.css';
 import "photoswipe/style.css";
 import { marked } from 'marked';
+import { intersection } from "astro:schema";
 
 
 // Get component props from Astro.props 
@@ -20,6 +21,8 @@ const { project } = Astro.props;
 
 interface Props {
   project: string;
+  startIndex: number;
+  slidesCount: number;
 }
 
 // Generate a unique ID for each instance
@@ -83,12 +86,11 @@ for (const image of galleryImages) {
 
 }
 
-
 const imagesAmount = galleryImages.length;
-/* console.log(`Number of images: ${imagesAmount}`); */
+
 ---
 
-<div id={`slider-${instanceId}`} class:list={"GalleryElement "} data-instanceId={instanceId} data-imagesAmount={imagesAmount} data-galleryProject={galleryProject}>
+<div id={`slider-${instanceId}`} class:list={"GalleryElement "} data-instanceId={instanceId} data-slidesCount={Astro.props.slidesCount} data-gallery-project={galleryProject.data.title}>
   
   <div class:list={"SlidesContainer keen-slider"}>
 
@@ -96,8 +98,11 @@ const imagesAmount = galleryImages.length;
 
       /* console.log(highResData[index].highResSecureUrl) */
 
+      // Compute index: startIndex + 1 offset plus the current image index
+      const computedIndex = Astro.props.startIndex + 1 + index;
+
         return (
-          <div id={`ImageContainer-${index}`} class:list={["keen-slider__slide Slide"]}>
+          <div id={`ImageContainer-${index}`} class:list={["keen-slider__slide Slide"]} data-index={computedIndex}>
             <div class:list={"ImageInfo"}>
               <div class:list={"ImageInfoWrapper"}>
                 <div id="spacer"></div>
@@ -119,7 +124,8 @@ const imagesAmount = galleryImages.length;
               
 
             <div id="Image" class:list={["ImageElement"]} style={index > 1 ? 'display: none;' : ''}>
-              <a class:list={["photo-link"]}
+              <a onclick={`pswpLightbox.loadAndOpen(${computedIndex}); return false;`}
+                class:list={["photo-link photoswipeData"]}
                 href={highResData[index].highResSecureUrl}  
                 data-pswp-width={highResData[index].highResWidth}
                 data-pswp-height={highResData[index].highResHeight}
@@ -147,7 +153,7 @@ const imagesAmount = galleryImages.length;
       }
     )}
 
-    <div id="ProjectInfoSlide" class:list={["keen-slider__slide"]}>
+    <div id="ProjectInfoSlide" class:list={["photoswipeData keen-slider__slide"]} data-index={Astro.props.startIndex + Astro.props.slidesCount + 1}>
       
       <div id="ProjectInfoSlideWrapper">
         <div id="spacer"></div>

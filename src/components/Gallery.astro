@@ -28,11 +28,52 @@ galleryProjects.sort((a, b) =>
   a.data.projectName.localeCompare(b.data.projectName)
 );
 
-// Optionally log them
-galleryProjects.forEach((entry) => {
-  // console.log(entry.data.projectName);
-});
+////////////////////////////////////////////////
+//// Constructing enrichedProject Data ////////
+/////So we can pass the slide Amount to the GalleryElement
 
+
+let globalIndex = 0;
+const enrichedProjects = [];
+
+for (const entry of galleryProjects) {
+  // Sanitize project name for a valid ID
+  const projectId = entry.data.projectName.replace(/\s+/g, '-').toLowerCase();
+
+  // Save the starting index for this project
+  const startIndex = globalIndex;
+
+  // Construct the targetProject from entry.data.meta (or any other property)
+  // For example, if entry.data.meta is "Gallery_projectName", we split on "_"
+  const targetProject = String(projectId).split('_')[1];
+
+  // Fetch galleryImages filtered by the targetProject
+  const galleryImages = await getCollection('galleryImages', ({ data }) => {
+	/* console.log('Image project:', data.metadata?.project, 'Target:', targetProject); */
+    return data.metadata?.project === targetProject;
+  });
+
+  // Determine the number of slides
+  const slidesCount = galleryImages.length;
+
+  // Update globalIndex – here we assume:
+  // 1 for the name, slidesCount for the slides, and 1 for the description.
+  globalIndex += slidesCount + 2;
+
+  // Add all computed values to our enrichedProjects array
+  enrichedProjects.push({
+    entry,
+    projectId,
+    startIndex,
+    galleryImages,
+    slidesCount
+  });
+}
+
+enrichedProjects.sort((a, b) => a.startIndex - b.startIndex);
+
+
+console.log(enrichedProjects);
 
 
 ---
@@ -40,19 +81,17 @@ galleryProjects.forEach((entry) => {
 <TopWrapper>
   <GridLayout>
 	
-    {galleryProjects.map((entry, index) => {
-
-		 // Optionally sanitize the project name for a valid ID
-		 const projectId = entry.data.projectName.replace(/\s+/g, '-').toLowerCase();
-		  
+    {enrichedProjects.map(({ entry, projectId, startIndex, slidesCount }, index) => {
+			
 		if (index > 2) {
 			
 		return(
 		<div class:list={["observer restrain"]}>
-			<div class:list={["GalleryElementWrapper hidden"]} id={projectId}>
+			<div class:list={["GalleryElementWrapper hidden"]} id={projectId} data-gallery-index={index}>
 				<GalleryElement
 				project={entry.data.projectName}
-				
+				startIndex={startIndex}
+				slidesCount={slidesCount}
 				/>
 			</div>
 		</div>
@@ -61,10 +100,11 @@ galleryProjects.forEach((entry) => {
 		}  else {
 		return(
 		<div class:list={["observer restrain"]}>
-			<div class:list={["GalleryElementWrapper"]} id={projectId}>
+			<div class:list={["GalleryElementWrapper"]} id={projectId} data-gallery-index={index}>
 				<GalleryElement
 				project={entry.data.projectName}
-				
+				startIndex={startIndex}
+				slidesCount={slidesCount}
 				/>
 			</div>
 		</div>
@@ -361,113 +401,215 @@ imageElements.forEach((image, index) => {
 <!-- PhotoSwipe -->
 <script>
 	
-	import PhotoSwipeLightbox from 'photoswipe/lightbox';
-	
-	const leftArrowSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 155 139" "width="39" height="35"><path d="m0 69 69 69 14-12-45-46h116V58H38l44-44L69 0 0 69Z" style="fill-rule:nonzero"/></svg>';
-	const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 139 139" "width="139" height="139"><path d="m69 83-56 55-13-12 56-57L0 14 13 0l56 56 56-56 13 14-55 55 55 57-13 12-56-55Z"/></svg>';
-	
-	
-	
-	function isPhonePortrait() {
-			return window.matchMedia('(max-width: 650px) and (orientation: portrait)').matches;
-		}
-	
-	
-	
-	
-	document.addEventListener('astro:page-load', () => {
-	
-		
-		let lightbox;
-	
-		const galleryElements = document.querySelectorAll(".GalleryElement");
-	
-	
-		galleryElements.forEach((el, index) => {
-	
-		const instanceId = el.getAttribute('data-instanceid');
-		const imageElements = document.querySelectorAll(`.ImageElement a`);
-	
-	
-		const options = {
-			arrowPrevSVG: leftArrowSVGString,
-			arrowNextSVG: leftArrowSVGString,
-			closeSVG: CloseSVGString,
-	
-			initialZoomLevel: `fit`,
-			bgOpacity: 0.95,
-			zoom: false,
-			
-			// to apply styles just to this instance of PhotoSwipe
-			mainClass: 'pswp--custom-bg pswp--custom-icon-colors',
-	
-			paddingFn: () => {
-			if (isPhonePortrait()) {
-				return { top: 0, bottom: 0, left: 10, right: 10  }  
-			}
-			else {
-				return { top: 20, bottom: 40, left: 100, right: 100 }
-			};
-			},
-	
-			showHideAnimationType: 'fade',
-	
-	
-			gallery: `#slider-${instanceId}`,
-			children: imageElements,
-			pswpModule: () => import('photoswipe'), // Import the PhotoSwipe module dynamically
-		};
-		
-		
-		const lightbox = new PhotoSwipeLightbox(options);
+import PhotoSwipeLightbox from 'photoswipe/lightbox';
 
-		lightbox.on('uiRegister', function() {
-			lightbox.pswp.ui.registerElement({
+const leftArrowSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 155 139" "width="39" height="35"><path d="m0 69 69 69 14-12-45-46h116V58H38l44-44L69 0 0 69Z" style="fill-rule:nonzero"/></svg>';
+const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 139 139" "width="139" height="139"><path d="m69 83-56 55-13-12 56-57L0 14 13 0l56 56 56-56 13 14-55 55 55 57-13 12-56-55Z"/></svg>';
+
+
+
+function isPhonePortrait() {
+		return window.matchMedia('(max-width: 650px) and (orientation: portrait)').matches;
+	}
+
+
+
+
+document.addEventListener('astro:page-load', () => {
+
+	
+
+	// Global array to hold the custom data for each gallery
+	let photoswipeCustomData = [];
+
+	// Select all gallery elements (each gallery container should have the class "GalleryElement")
+	const galleryElements = document.querySelectorAll(".GalleryElement");
+
+	//////////////////////////////////////////////////////////
+	/////////////// Loop over each element ///////////////////
+	//////////////////////////////////////////////////////////
+	galleryElements.forEach(galleryEl => {
+
+		// Create a new array for this gallery's data items
+		let galleryData = [];
+	
+		// ----- 1. Add a custom element BEFORE the image gallery: Project Name ----- //
+		// Assume the gallery element stores the project title in a data attribute (for example, "data-project-title")
+		const projectTitle = galleryEl.getAttribute('data-gallery-project') || 'Default Project Title';
+
+		//style with title slide
+		const projectNameElement = {
+		html: `<div class="pswp__project-title-slide photoswipeData"><p class="project-name">${projectTitle}</p><div class="additional-content"></div></div>`,
+		};
+
+		galleryData.push(projectNameElement);
+
+
+		
+		// ----- 2. Add all the image elements ----- //
+		// Here we assume each image link is contained in a child with class "ImageElement"
+		// We use galleryEl.querySelectorAll so we only search within the current gallery.
+
+		const imageLinks = galleryEl.querySelectorAll(".ImageElement a");
+		
+		imageLinks.forEach(imgLink => {
+
+			const photoswipeImageData = {
+
+				src:  imgLink.getAttribute('href'),
+				width: imgLink.getAttribute('data-pswp-width'),
+				height: imgLink.getAttribute('data-pswp-height'),
+				alt: imgLink.getAttribute('data-description_text'),
+				description_title: imgLink.getAttribute('data-description_title'),
+				description_text: imgLink.getAttribute('data-description_text'),
+				link: imgLink.getAttribute('data-link')
+				
+
+			}
+
+
+			galleryData.push(photoswipeImageData);
+		});
+	
+
+		// ----- 3. Add a custom element AFTER the images: ProjectInfoSlideWrapper ----- //
+
+		// get the description
+		const ProjectInfoWrapper = galleryEl.querySelector('.ProjectInfoWrapper');
+		const projectDescription = ProjectInfoWrapper.innerHTML;
+
+		// get the Details
+		const DetailsInfoWrapper = galleryEl.querySelector('.DetailsInfoWrapper');
+		const projectDetails = DetailsInfoWrapper.innerHTML;
+
+		const bracketOpenVEl = galleryEl.querySelector('.bracket-open-v');
+		const bracketOpenV = bracketOpenVEl.innerHTML;
+
+		const bracketCloseVEl = galleryEl.querySelector('.bracket-close-v');
+		const bracketCloseV = bracketCloseVEl.innerHTML;
+
+		const projectInfoEl = {
+			html: 	`<div
+					class="pswp__project-info-slide-wrapper photoswipeData keen-slider__slide"
+					>
+
+					<div class="pswp__project-info-slide">
+
+						<div class="pswp__project-slide-spacer"></div>
+						
+						${bracketOpenV}
+						
+						<div class="pswp__project-info">
+							${projectDescription}
+						</div>
+						
+						<div class="pswp__project-slide-spacer"></div>
+						
+						<div class="pswp__project-details">
+							${projectDetails}
+						</div>
+
+						${bracketCloseV}
+
+						<div class="pswp__project-slide-spacer"></div>
+
+					</div>
+					</div>`
+		};
+
+		if (projectInfoEl) {
+			galleryData.push(projectInfoEl);
+		}
+		
+		// Finally, add this gallery's data array to the global photoswipeCustomData array.
+		photoswipeCustomData.push(galleryData);
+	});
+
+	const flatData = photoswipeCustomData.flat();
+	console.log(flatData);
+
+	const options = {
+		arrowPrevSVG: leftArrowSVGString,
+		arrowNextSVG: leftArrowSVGString,
+		closeSVG: CloseSVGString,
+
+		dataSource: flatData,
+
+		initialZoomLevel: `fit`,
+		bgOpacity: 0.95,
+		zoom: false,
+		
+		
+		// to apply styles just to this instance of PhotoSwipe
+		mainClass: 'pswp--custom-bg pswp--custom-icon-colors',
+
+		paddingFn: () => {
+		if (isPhonePortrait()) {
+			return { top: 0, bottom: 0, left: 10, right: 10  }  
+		}
+		else {
+			return { top: 20, bottom: 40, left: 100, right: 100 }
+		};
+		},
+
+		showHideAnimationType: 'fade',
+
+		pswpModule: () => import('photoswipe'), // Import the PhotoSwipe module dynamically
+	};
+
+	const lightbox = new PhotoSwipeLightbox(options);
+
+	lightbox.on('uiRegister', function() {
+		lightbox.pswp.ui.registerElement({
 			name: 'custom-caption',
 			order: 9,
 			isButton: false,
 			appendTo: 'wrapper',
 			html: 'Caption text',
 			onInit: (el, pswp) => {
-				lightbox.pswp.on('change', () => {
-				const currSlideElement = lightbox.pswp.currSlide.data.element;
-			/* 	console.log('Current Slide Element:', currSlideElement); */
+			lightbox.pswp.on('change', () => {
+				// Retrieve the DOM element attached to the current slide
+				const currSlideElement = pswp.currSlide.data.element;
 				let captionHTML = '';
 
 				if (currSlideElement) {
-			
-					// Get the description from data-description attribute
-					const description_title = currSlideElement.getAttribute('data-description_title');
-					const description_text = currSlideElement.getAttribute('data-description_text');
-					const link = currSlideElement.getAttribute('data-link');
-					if (description_title) {
-						captionHTML = `<p><strong>${description_title}</strong></p><p>${description_text}</p><p><a href="${link}">external Link</a></p>`;
-					}
+				const description_title = currSlideElement.getAttribute('data-description_title');
+				const description_text = currSlideElement.getAttribute('data-description_text');
+				const link = currSlideElement.getAttribute('data-link');
 
+				if (description_title && link) {
+					captionHTML = `
+					<p><strong>${description_title}</strong></p>
+					<p>${description_text}</p>
+					<p><a href="${link}">external Link</a></p>
+					`;
+				} else if (description_title) {
+					captionHTML = `
+					<p><strong>${description_title}</strong></p>
+					<p>${description_text}</p>
+					`;
+				}
 				}
 
 				el.innerHTML = captionHTML || '';
-				});
-			}
-
 			});
+			}
 		});
-	
-		lightbox.init(); // Initialize the lightbox
-		/* console.log (`${imageElements.id}`) */
-	/* 	console.log(`lightbox instance: ${el.id}`) */
-	
-	
-		}); 
-
-	
-	
 	});
-	
-	document.addEventListener("astro:before-swap", () => {
-		const lightbox = new PhotoSwipeLightbox;
-			lightbox.destroy();
-		});
+
+
+	lightbox.init(); // Initialize the lightbox
+
+	window.pswpLightbox = lightbox;
+
+
+
+});
+
+document.addEventListener("astro:before-swap", () => {
+	const lightbox = new PhotoSwipeLightbox;
+		lightbox.destroy();
+	});
 	
 	</script>
 
@@ -492,6 +634,8 @@ imageElements.forEach((image, index) => {
 		scroll-margin-top: var(--padding-desktop-wide);
 	}
 }
+
+
 /*Fade */
 .observer {
 	display: grid;
@@ -521,6 +665,10 @@ imageElements.forEach((image, index) => {
 }
 
 
+
+
+
+/* Gallery Styling */
 
 .observer:nth-of-type(1) {
 	grid-column-start: 1; 
