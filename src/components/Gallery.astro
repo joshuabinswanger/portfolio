@@ -88,14 +88,14 @@ console.log(enrichedProjects);
 		return(
 		<div class:list={["observer restrain"]}>
 			<div class:list={["GalleryElementWrapper hidden"]} id={projectId} data-gallery-index={index}>
+				<div class:list={["gallery-placeholder"]}>
+					<img src="/src/assets/ImagePlaceholder.jpg" alt="Gallery Preview" loading="eager" />
+				</div>
 				<GalleryElement
 				project={entry.data.projectName}
 				startIndex={startIndex}
 				slidesCount={slidesCount}
 				/>
-				<div id="gallery-placeholder" class="gallery-placeholder">
-					<img src="/src/assets/ImagePlaceholder.jpg" alt="Gallery Preview" />
-				</div>
 			</div>
 		</div>
 		);
@@ -104,14 +104,14 @@ console.log(enrichedProjects);
 		return(
 		<div class:list={["observer restrain"]}>
 			<div class:list={["GalleryElementWrapper"]} id={projectId} data-gallery-index={index}>
+				<div class:list={["gallery-placeholder"]}>
+					<img src="/src/assets/ImagePlaceholder.jpg" alt="Gallery Preview" loading="eager" />				</div>
 				<GalleryElement
 				project={entry.data.projectName}
 				startIndex={startIndex}
 				slidesCount={slidesCount}
 				/>
-				<div id="gallery-placeholder" class="gallery-placeholder">
-					<img src="/src/assets/ImagePlaceholder.jpg" alt="Gallery Preview" />
-				</div>
+				
 			</div>
 		</div>
 		);
@@ -256,9 +256,9 @@ imageElements.forEach((image, index) => {
 		//Placeholder Image
 		function hideGalleryPlaceholder(sliderElement) {
 
-			const placeholder = sliderElement.nextElementSibling;
+			const placeholder = sliderElement.previousElementSibling;
 			if (placeholder && placeholder.classList.contains('gallery-placeholder')) {
-				placeholder.classList.add('hidden');
+				placeholder.classList.add('placeholder-hidden');
 			}
 		}
 		
@@ -658,24 +658,25 @@ document.addEventListener("astro:before-swap", () => {
   top: 0;
   left: 0;
   width: 100%;   /* fill the width of the parent */
-  height: 100%;  /* fill the height of the parent */
+  height: 100%; /* fill the height of the parent */
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 1;
-  background: var(--bg-color); /* or another fallback background */
-  transition: opacity 5s ease;
+  background: var(--bg-color-accent); /* or another fallback background */
+  transition: opacity 0.5s ease;
 }
 
 
 .gallery-placeholder img {
 	width: auto;
+	opacity: 0.2;
 }
 
 
-.gallery-placeholder.hidden {
-  opacity: 0;
+.gallery-placeholder.placeholder-hidden {
+	opacity: 0;
   pointer-events: none;
 }
 
