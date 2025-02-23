@@ -89,7 +89,6 @@ console.log(enrichedProjects);
 		<div class:list={["observer restrain"]}>
 			<div class:list={["GalleryElementWrapper hidden"]} id={projectId} data-gallery-index={index}>
 				<div class:list={["gallery-placeholder"]}>
-					<img src="/src/assets/ImagePlaceholder.jpg" alt="Gallery Preview" loading="eager" />
 				</div>
 				<GalleryElement
 				project={entry.data.projectName}
@@ -105,7 +104,7 @@ console.log(enrichedProjects);
 		<div class:list={["observer restrain"]}>
 			<div class:list={["GalleryElementWrapper"]} id={projectId} data-gallery-index={index}>
 				<div class:list={["gallery-placeholder"]}>
-					<img src="/src/assets/ImagePlaceholder.jpg" alt="Gallery Preview" loading="eager" />				</div>
+					{/* <img src="/src/assets/ImagePlaceholder.jpg" alt="Gallery Preview" loading="eager" /> */}				</div>
 				<GalleryElement
 				project={entry.data.projectName}
 				startIndex={startIndex}
@@ -668,11 +667,11 @@ document.addEventListener("astro:before-swap", () => {
   transition: opacity 0.5s ease;
 }
 
-
+/* 
 .gallery-placeholder img {
 	width: auto;
 	opacity: 0.03;
-}
+} */
 
 
 .gallery-placeholder.placeholder-hidden {
