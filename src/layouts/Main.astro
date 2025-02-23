@@ -27,11 +27,6 @@ const isProd = import.meta.env.PROD;
             path: '/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-light.woff2'
           },
           {
-            style: 'italic',
-            weight: '200',
-            path: '/fonts/PowerGrotesk/power-grotesk-light-italic/webfonts/power-grotesk-light-italic.woff2'
-          },
-          {
             style: 'normal',
             weight: '500',
             path: '/fonts/PowerGrotesk/power-grotesk-medium/webfonts/power-grotesk-medium.woff2'
@@ -51,6 +46,11 @@ const isProd = import.meta.env.PROD;
               weight: '100',
               path: '/fonts/PowerGrotesk/power-grotesk-ultra-light/webfonts/power-grotesk-ultra-light.woff2'
             },
+            {
+            style: 'italic',
+            weight: '200',
+            path: '/fonts/PowerGrotesk/power-grotesk-light-italic/webfonts/power-grotesk-light-italic.woff2'
+          },
             {
             style: 'normal',
             weight: '600',
@@ -72,7 +72,7 @@ const isProd = import.meta.env.PROD;
   />
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preload" href="/src/assets/ImagePlaceholder.jpg" as="image" />
+ 
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
 

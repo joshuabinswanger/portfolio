@@ -153,9 +153,9 @@ const imagesAmount = galleryImages.length;
       }
     )}
 
-    <div id="ProjectInfoSlide" class:list={["photoswipeData keen-slider__slide"]} data-index={Astro.props.startIndex + Astro.props.slidesCount + 1}>
+    <div class:list={["photoswipeData keen-slider__slide project-info-slide-wrapper"]} data-index={Astro.props.startIndex + Astro.props.slidesCount + 1}>
       
-      <div id="ProjectInfoSlideWrapper">
+      <div class:list={["project-info-slide"]}>
         <div id="spacer"></div>
           
         <BracketOpenV strokewidth="0.5px"/>
@@ -243,17 +243,18 @@ img {
   vertical-align: top; /* or middle, top, depending on the desired effect */
 }
 
-#ProjectInfoSlide {
+.project-info-slide-wrapper {
   /* max-height: min-content; */
   align-content: center;
   align-items: center;
+  height: 100%;
 }
 
-#ProjectInfoSlideWrapper {
+.project-info-slide {
   display: grid;
   font-size: var(--font-size-dekstop);
   width: min(70%, 66ch);
-  grid-template-rows:   auto min-content min-content 2rem min-content min-content auto;
+  grid-template-rows:   auto 0 auto 2rem auto 0 auto;
   align-items: center;
   margin: 0 auto; /* Add this line to center horizontally */
   overflow-x: hidden;
@@ -367,6 +368,14 @@ img {
     width: 85%;
     }
 
+}
+
+.ProjectInfoWrapper {
+  padding-top: 3rem;
+}
+
+.DetailsInfoWrapper {
+  padding-bottom: 3rem;
 }
 
 
