@@ -93,6 +93,9 @@ console.log(enrichedProjects);
 				startIndex={startIndex}
 				slidesCount={slidesCount}
 				/>
+				<div id="gallery-placeholder" class="gallery-placeholder">
+					<img src="/src/assets/ImagePlaceholder.jpg" alt="Gallery Preview" />
+				</div>
 			</div>
 		</div>
 		);
@@ -106,6 +109,9 @@ console.log(enrichedProjects);
 				startIndex={startIndex}
 				slidesCount={slidesCount}
 				/>
+				<div id="gallery-placeholder" class="gallery-placeholder">
+					<img src="/src/assets/ImagePlaceholder.jpg" alt="Gallery Preview" />
+				</div>
 			</div>
 		</div>
 		);
@@ -247,13 +253,22 @@ imageElements.forEach((image, index) => {
 		  projectInfoSlideWrapper.style.maxHeight = `${height}px`;
 		}
 	
-	
+		//Placeholder Image
+		function hideGalleryPlaceholder(sliderElement) {
+
+			const placeholder = sliderElement.nextElementSibling;
+			if (placeholder && placeholder.classList.contains('gallery-placeholder')) {
+				placeholder.classList.add('hidden');
+			}
+		}
+		
 	
 	
 		var slider = new KeenSlider(item, {
 		  created: (s) => {
 			loadImages(s);
 			setMaxHeight(s);
+			hideGalleryPlaceholder(item);
 		  },
 		  slideChanged: loadImages,
 		  animationEnded: updateCounter,
@@ -621,6 +636,8 @@ document.addEventListener("astro:before-swap", () => {
 
 .GalleryElementWrapper {
 	scroll-margin-top: var(--padding-desktop);
+	position: relative;
+	display: grid;
 	
 	@media (--bp-mobile) {
 		scroll-margin-top: var(--padding-mobile);
@@ -633,6 +650,33 @@ document.addEventListener("astro:before-swap", () => {
 	@media (--bp-desktop-wide) {	
 		scroll-margin-top: var(--padding-desktop-wide);
 	}
+}
+
+.gallery-placeholder {
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  width: 100%;   /* fill the width of the parent */
+  height: 100%;  /* fill the height of the parent */
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  background: var(--bg-color); /* or another fallback background */
+  transition: opacity 5s ease;
+}
+
+
+.gallery-placeholder img {
+	width: auto;
+}
+
+
+.gallery-placeholder.hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 
