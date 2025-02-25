@@ -453,7 +453,7 @@ document.addEventListener('astro:page-load', () => {
 
 		//style with title slide
 		const projectNameElement = {
-		html: `<div class="pswp__project-title-slide photoswipeData"><p class="project-name">${projectTitle}</p><div class="additional-content"></div></div>`,
+		html: `<div class="pswp__project-title-slide photoswipeData"><p class="pswp__project-title ">${projectTitle}</p></div>`,
 		};
 
 		galleryData.push(projectNameElement);
@@ -509,7 +509,6 @@ document.addEventListener('astro:page-load', () => {
 
 					<div class="pswp__project-info-slide">
 
-						<div class="pswp__project-slide-spacer"></div>
 						
 						${bracketOpenV}
 						
@@ -517,15 +516,12 @@ document.addEventListener('astro:page-load', () => {
 							${projectDescription}
 						</div>
 						
-						<div class="pswp__project-slide-spacer"></div>
 						
 						<div class="pswp__project-details">
 							${projectDetails}
 						</div>
 
 						${bracketCloseV}
-
-						<div class="pswp__project-slide-spacer"></div>
 
 					</div>
 					</div>`

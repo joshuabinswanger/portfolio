@@ -156,7 +156,6 @@ const imagesAmount = galleryImages.length;
     <div class:list={["photoswipeData keen-slider__slide project-info-slide-wrapper"]} data-index={Astro.props.startIndex + Astro.props.slidesCount + 1}>
       
       <div class:list={["project-info-slide"]}>
-        <div id="spacer"></div>
           
         <BracketOpenV strokewidth="0.5px"/>
 
@@ -164,15 +163,12 @@ const imagesAmount = galleryImages.length;
           <Fragment set:html={marked.parse(galleryProject.data.projectDescription)} />
         </div>
 
-        <div id="spacer"></div>
-
         <div class:list={"DetailsInfoWrapper"}>
           <Fragment set:html={marked.parse(galleryProject.data.credits)} />
         </div>
 
         <BracketCloseV strokewidth="0.5px" />
         
-        <div id="spacer"></div>
       </div>
     </div>
 
@@ -246,7 +242,6 @@ img {
 .project-info-slide-wrapper {
   /* max-height: min-content; */
   align-content: center;
-  align-items: center;
   height: 100%;
 }
 
@@ -254,7 +249,7 @@ img {
   display: grid;
   font-size: var(--font-size-dekstop);
   width: min(70%, 66ch);
-  grid-template-rows:   auto 0 auto 2rem auto 0 auto;
+  grid-auto-rows: auto;
   align-items: center;
   margin: 0 auto; /* Add this line to center horizontally */
   overflow-x: hidden;
@@ -371,11 +366,12 @@ img {
 }
 
 .ProjectInfoWrapper {
-  padding-top: 3rem;
+  padding-top: 0.5rem;
 }
 
 .DetailsInfoWrapper {
-  padding-bottom: 3rem;
+  padding-top: 2rem;
+  padding-bottom: 0.5rem;
 }
 
 

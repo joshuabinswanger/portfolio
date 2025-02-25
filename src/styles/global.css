@@ -205,7 +205,8 @@
 
 /* Photoswipe ProjectSlide Wrapper */
 .pswp__project-title-slide{
-  align-content: center;
+  display: grid;
+  align-items: center;
   height: 100%;
 }
 .pswp__project-title-slide p {
@@ -231,10 +232,11 @@
 	display: grid;
 	font-size: var(--font-size-dekstop);
 	width: min(70%, 66ch);
-	grid-template-rows:   auto min-content min-content 2rem min-content min-content auto;
+	grid-auto-rows: auto;
 	align-items: center;
 	margin: 0 auto; /* Add this line to center horizontally */
 	overflow-x: hidden;
+
 
 	@media (--bp-mobile) {
 		font-size: var(--font-size-mobile);
@@ -249,14 +251,11 @@
 	}
 }
 
-.pswp__project-slide-spacer {
-
-}
 
 .pswp__project-info, .pswp__project-details {
 	width: 80%;           /* Ensure it takes full width */
   justify-self: center; /* Centers items horizontally */
- 
+  
 
   span {
     font-family: PowerGrotesk-Medium;
@@ -267,4 +266,14 @@
     }
 
 
+}
+
+.pswp__project-info {
+
+  padding-top: 0.5rem;
+}
+
+.pswp__project-details {
+  padding-top: 2rem;
+  padding-bottom:0.5rem;
 }
