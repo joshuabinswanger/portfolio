@@ -220,10 +220,9 @@
 
 /* Photoswipe ProjectSlide Wrapper */
 .pswp__project-info-slide-wrapper {
-
-	/* max-height: min-content; */
-	align-content: center;
   height: 100%;
+  display: grid;
+  place-items: center;
 	
 }
 
@@ -234,7 +233,6 @@
 	width: min(70%, 66ch);
 	grid-auto-rows: auto;
 	align-items: center;
-	margin: 0 auto; /* Add this line to center horizontally */
 	overflow-x: hidden;
 
 
