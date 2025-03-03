@@ -229,9 +229,11 @@ import Index from './Index.astro';
 
 .button {
   height: 3rem;
+  color: black;
   align-content: center;
   align-items: center;
   z-index: 1001;
+  transition: color 0.3s ease 0.15s;
 
 }
 
@@ -288,13 +290,13 @@ a {
   height: 3rem;
   grid-template-rows: 1fr auto;
   align-items: start;
-  transition: height 0.75s ease;
+  transition: height 0.6s ease;
   overflow: hidden;
 }
 
 #archive-select {
   display: grid;
-  height: 6.5rem;
+  height: 0rem;
   justify-content: center;
   align-content: start;
   grid-template-columns: 1fr;
@@ -302,7 +304,12 @@ a {
   width: 100%;
   margin-top: 0.25rem;
   margin-bottom: 1rem;
+  transition: height 0.3s ease;
 
+}
+
+#archive-select:has(a.active) {
+  height: 6.5rem;
 }
 
 #archive:has(a.active)  {
@@ -313,26 +320,29 @@ a {
   font-size: 11px;
   font-family: PowerGrotesk-UltraLight;
   cursor: pointer;
-  padding: 0.25rem 0;
-  height: 1.25rem;
+  height: 2rem;
 }
+
 
 /* The ::before pseudo-element creates a black bar that slides in from the bottom */
 .archive-subitems::before {
   content: "";
   position: absolute;
   left: 0;
+  align-self: flex-start;
   width: 0%;
-  height: 2rem;
+  height: 0rem;
   background-color: black;
-  transition: width 0.6s ease;
+  transition: width 0.4s ease 0.3s, height 0.3s ease;
   z-index: -1;
 }
 
-.archive-subitems.active {
-  color: var(--bg-color);
-}
+
 .archive-subitems.active::before {
   width: 100%;
 }
+#archive:has(a.active) .archive-subitems::before {
+  height: 2rem;
+}
+
 </style>
