@@ -23,15 +23,25 @@ links.sort((a, b) => a.data.sortOrder - b.data.sortOrder);
 
 <TopWrapper>
     <div id="InfoWrapper">
-        <!--         
-        <div id="ProfilePic">
-        </div> -->
+            
 
-        <p id="AboutText">
-            Joshua Binswanger is a scientific illustrator and designer based in Zurich, Switzerland, dedicated to blending visuals with knowledge to make complex topics both engaging and visually appealing. Leveraging a diverse array of design tools, he transforms scientific concepts into captivating, accessible visuals. Driven by curiosity and an inquisitive mindset, Joshua fosters meaningful dialogue with his collaborators, enriching the creative process.
-        <br><br>
-        Beyond his design work, Joshua is passionate about teaching and sharing his expertise. He combines his love for nature and storytelling by illustrating imaginative characters and creatures, showcasing his affinity for merging creativity with science.
-        </p>
+
+        <div id="AboutText">
+            
+            <p>My name is Joshua Binswanger, I'm a designer and scientific illustrator.  </p>
+           
+            <p>Working primarily at the intersection of knowledge transfer and visual storytelling, I strive to communicate complex information through engaging imagery and clear design. 
+                I thrive in an environment where I can learn, question and discuss new topics and combine them with my design aesthetic and technical expertise. </p>
+            
+            <p>A fascination with the intricacies of the natural world has guided my professional and personal work towards the fields of science and character & creature design.</p>
+            
+            <p>With a strong focus on learning, I am constantly exploring art, design and technology. I also strive to share my knowledge through courses, workshops and online platforms.</p>
+            
+            <p>Don't hesitate to contact me for collaboration or other enquiries: <a href="mailto:info@rhizome.ch" id="Email" >info@rhizome.ch</a></p>
+        </div>
+
+        <div id="ProfilePic">
+        </div> 
 
         <p id="SelectedClients">
             <strong>Selected Clients:</strong><br><br>
@@ -52,14 +62,14 @@ links.sort((a, b) => a.data.sortOrder - b.data.sortOrder);
             Workshops<br>
         </p>
 
-        <div id="Contact">
+<!--         <div id="Contact">
             <p><strong>Contact:</strong></p>
             <p id="Email">  
-                <a href="mailto:info@rhizome.ch">info@rhizome.ch</a>
+                
             </p>
         </div>
-
-        <div id="links-top-wrapper">
+ -->
+<!--         <div id="links-top-wrapper">
 
             {links.map((entry) => {
     
@@ -74,7 +84,7 @@ links.sort((a, b) => a.data.sortOrder - b.data.sortOrder);
             })}
     
         </div>
-
+ -->
     </div>
 
 
@@ -88,6 +98,7 @@ p {
     font-size: var(--font-size-dekstop);
     letter-spacing: 2px;
     height: min-content;
+    margin-top: 0;
 
     @media (--bp-mobile) {
         font-size: var(--font-size-mobile);
@@ -105,9 +116,9 @@ p {
 #InfoWrapper{
     display: grid;
     align-items: center;
-    grid-template-columns: 17ch 1.5fr 1.5fr 17ch 1fr;
+    grid-template-columns: 7ch 1fr 1fr 1fr 7ch;
     grid-template-rows: 2fr 2fr 1fr;
-    column-gap: 0.5rem;
+    column-gap: 1.5rem;
     margin-top: calc(var(--padding-desktop));
     max-height: calc(60vh - var(--padding-desktop));
 
@@ -157,6 +168,18 @@ p {
     @media (--bp-tablet) {
        padding-right: 1rem;
     }
+}
+
+#ProfilePic {
+    height: 100%;
+    max-height: 300px;
+    aspect-ratio: 3 / 4;
+    align-self: flex-start;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    grid-column-start: 4;
+    grid-column-end: 5;
+    background-color: var(--bg-color-accent);
 }
 
 #SelectedClients {
@@ -245,11 +268,7 @@ p {
 }
 
 #Email {
-    a{
-        text-decoration: none;
         color: black;
-    }
-
 }
 
 
