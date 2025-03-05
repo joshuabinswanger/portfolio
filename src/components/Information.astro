@@ -163,6 +163,8 @@ p {
     @media (--bp-mobile) {
         grid-column-start: 1;
         grid-column-end: 3;
+        grid-row-start: 1;
+        grid-row-end: 2;
     }
 
     @media (--bp-tablet) {
@@ -180,6 +182,14 @@ p {
     grid-column-start: 4;
     grid-column-end: 5;
     background-color: var(--bg-color-accent);
+
+  @media (--bp-mobile) {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row-start: 2;
+        grid-row-end: 3
+    }
+
 }
 
 #SelectedClients {
