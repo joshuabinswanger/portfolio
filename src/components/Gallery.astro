@@ -579,19 +579,19 @@ document.addEventListener('astro:page-load', () => {
 			onInit: (el, pswp) => {
 			lightbox.pswp.on('change', () => {
 				// Retrieve the DOM element attached to the current slide
-				const currSlideElement = pswp.currSlide.data.element;
+				const currSlide = pswp.currSlide.data;
 				let captionHTML = '';
 
-				if (currSlideElement) {
-				const description_title = currSlideElement.getAttribute('data-description_title');
-				const description_text = currSlideElement.getAttribute('data-description_text');
-				const link = currSlideElement.getAttribute('data-link');
+				if (currSlide) {
+				const description_title = currSlide.description_title;
+				const description_text = currSlide.description_text;
+				const link = currSlide.link;
 
 				if (description_title && link) {
 					captionHTML = `
 					<p><strong>${description_title}</strong></p>
 					<p>${description_text}</p>
-					<p><a href="${link}">external Link</a></p>
+					<p><a href="${link}">External Link</a></p>
 					`;
 				} else if (description_title) {
 					captionHTML = `
