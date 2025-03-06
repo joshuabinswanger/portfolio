@@ -57,115 +57,6 @@ import Index from './Index.astro';
   </div>
 </nav>
 
-<!-- <script>
-
-  // Update visual state (for example, adding an "active" class)
-  function updateAnimationState(mainButtons) {
-    setTimeout(() => {
-      mainButtons.forEach(btn => {
-        if (btn.getAttribute('data-animation') === "in") {
-          btn.classList.add('active');
-        } 
-        else {
-          btn.classList.remove('active');
-        }
-      });
-    }, 300);
-
-  }
-
-
-  //handle Button click function
-  function handleButtonClick(clickedBtn, buttons) {
-
-    const archiveSubitems = document.querySelectorAll('.archive-subitems');
-
-    // Special branch for the Archive main button:
-    if (clickedBtn.id === "archive-main") {
-      // Set the Archive main button active
-      clickedBtn.setAttribute('data-animation', "in");
-
-      // Set all buttons (in this group) that are NOT the Archive main button to "out"
-      buttons.forEach(btn => {
-        if (btn.id !== "archive-main") {
-          btn.setAttribute('data-animation', "out");
-        }
-      });
-      
-      // Update the archive subitems: force the "Gallery" subitem active, others inactive.
-      archiveSubitems.forEach(btn => {
-        if (btn.id === "archive-gallery") {
-          btn.setAttribute('data-animation', "in");
-        } else {
-          btn.setAttribute('data-animation', "out");
-        }
-      });
-
-
-
-      return; // exit so the rest of the function doesn’t run
-    }
-
-    // Special check: if the clicked element is the logo container, force Portfolio active.
-    else if (clickedBtn.id === "Logo") { 
-      const portfolioBtn = Array.from(buttons).find(btn => btn.id === "portfolio");
-      buttons.forEach(btn => {
-        if (btn.id !== "portfolio" && btn.id !== clickedBtn.id) {
-          btn.setAttribute('data-animation', "out");
-        }
-      });
-      portfolioBtn.setAttribute('data-animation', "in");
-      clickedBtn.setAttribute('data-animation', "in");
-    } 
-    
-    else if (clickedBtn.id === "archive-gallery" || clickedBtn.id === "archive-project-list" || clickedBtn.id === "archive-projects"){
-        archiveSubitems.forEach(btn => {
-        if (clickedBtn === btn) {
-          btn.setAttribute('data-animation', "in");
-        } else {
-          btn.setAttribute('data-animation', "out");
-        }
-      });
-    }
-
-    else {
-      const currentAnimation = clickedBtn.getAttribute('data-animation');
-      if (currentAnimation === "out") {
-        buttons.forEach(btn => {
-          if (btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
-            btn.setAttribute('data-animation', "out");
-          }
-        });
-        clickedBtn.setAttribute('data-animation', "in");
-      }
-    }
-  };
-
-
-
-  // Create event listeners on each button
-  function createEventListeners(mainButtons) {
-    mainButtons.forEach(btn => {
-      btn.addEventListener('click', (event) => {
-        // Use event.currentTarget to get the clicked button
-        handleButtonClick(event.currentTarget, mainButtons);
-      });
-    });
-  }
-
-  // On page load, update animation state and attach click listeners.
-  document.addEventListener("astro:page-load", () => {
-    const navBar = document.getElementById("NavBarDesktop");
-    const mainButtons = navBar.querySelectorAll('.button');
-    console.log(mainButtons)
-    
-    updateAnimationState(mainButtons);
-    createEventListeners(mainButtons);
-
-
-  });
-
-</script> -->
 
 <script>
   import { navigate } from 'astro:transitions/client';
@@ -342,7 +233,7 @@ import Index from './Index.astro';
 }
 
 #MainWrapper:has(#archive-main.active) {
-grid-template-rows: 0 3rem 0 10.5rem 0 3rem 0;
+grid-template-rows: 0 3rem 0 9.5rem 0 3rem 0;
 }
 
 .MenuItems {
@@ -435,7 +326,7 @@ a {
 #archive-select:has(a.active) {
   grid-template-rows: 2rem 2rem 2rem;
   margin-top: 0.25rem;
-  margin-bottom: .5rem;
+  margin-bottom: 0.25rem;
 
 }
 
@@ -451,7 +342,7 @@ a {
 .archive-subitems::before {
   content: "";
   position: absolute;
-  left: 0;
+  left: 2%;
   align-self: flex-start;
   width: 0%;
   height: 2rem;
@@ -464,7 +355,7 @@ a {
 
 
 .archive-subitems.active::before {
-  width: 100%;
+  width: 96%;
   opacity: 1;
 }
 
