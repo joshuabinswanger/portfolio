@@ -15,9 +15,11 @@ import Index from './Index.astro';
 ---
 
 <nav id="NavBarDesktop" transition:persist>
-  <div id="MainWrapper">
+
 
   <Logo />
+
+  <div id="MainWrapper">
 
     <BracketOpenV />
 
@@ -218,7 +220,12 @@ import Index from './Index.astro';
 #MainWrapper {
   width: 100%;
   display: grid;
-  grid-template-rows: min-content 0 min-content 0 min-content 0 min-content 0;
+  grid-template-rows: 0 3rem 0 3rem 0 3rem 0;
+  transition: grid-template-columns 0.6s ease;
+}
+
+#MainWrapper:has(#archive-main.active) {
+grid-template-rows: 0 3rem 0 10.75rem 0 3rem 0;
 }
 
 .MenuItems {
@@ -228,7 +235,7 @@ import Index from './Index.astro';
 } 
 
 .button {
-  height: 3rem;
+  height: 100%;
   color: black;
   align-content: center;
   align-items: center;
@@ -287,40 +294,39 @@ a {
 #archive {
   display: grid;
   width: 100%;
-  height: 3rem;
-  grid-template-rows: 1fr auto;
+  height: 100%;
+  grid-template-rows: 3rem auto;
   align-items: start;
-  transition: height 0.6s ease;
   overflow: hidden;
 }
 
 #archive-select {
   display: grid;
-  height: 0rem;
+  height: 100%;
   justify-content: center;
   align-content: start;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: 0rem 0rem 0rem;
   width: 100%;
-  margin-top: 0.25rem;
-  margin-bottom: 1rem;
-  transition: height 0.3s ease;
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+  transition: grid-template-rows 0.4s ease;
+  overflow: hidden;
 
 }
 
 #archive-select:has(a.active) {
-  height: 6.5rem;
-}
+  grid-template-rows: 2rem 2rem 2rem;
+  margin-top: 0.25rem;
+  margin-bottom: 1rem;
 
-#archive:has(a.active)  {
-  height: 9.5rem;
 }
 
 .archive-subitems {
   font-size: 11px;
   font-family: PowerGrotesk-UltraLight;
   cursor: pointer;
-  height: 2rem;
+  height: 100%;
 }
 
 
@@ -331,18 +337,18 @@ a {
   left: 0;
   align-self: flex-start;
   width: 0%;
-  height: 0rem;
+  height: 2rem;
   background-color: black;
-  transition: width 0.4s ease 0.3s, height 0.3s ease;
+  transition: width 0.4s ease 0.2s;
   z-index: -1;
+  opacity: 0;
+
 }
 
 
 .archive-subitems.active::before {
   width: 100%;
-}
-#archive:has(a.active) .archive-subitems::before {
-  height: 2rem;
+  opacity: 1;
 }
 
 </style>
