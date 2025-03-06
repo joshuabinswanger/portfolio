@@ -35,13 +35,13 @@ import Index from './Index.astro';
         Archive
       </a>
       <div id="archive-select">
-        <a id="archive-gallery" class:list={["archive-subitems button"]} href="/archive-gallery" data-href="/archive-gallery" data-animation="out">
+        <a id="archive-gallery" class:list={["archive-subitems button animation"]} href="/archive-gallery" data-href="/archive-gallery" data-animation="out">
           Gallery
         </a>
-        <a id="archive-project-list" class:list={["archive-subitems button"]} href="/archive-project-list" data-href="/archive-project-list" data-animation="out">
+        <a id="archive-project-list" class:list={["archive-subitems button animation"]} href="/archive-project-list" data-href="/archive-project-list" data-animation="out">
           List
         </a>
-        <a id="archive-projects" class:list={["archive-subitems button"]} href="/archive-projects" data-href="/archive-projects" data-animation="out">
+        <a id="archive-projects" class:list={["archive-subitems button animation"]} href="/archive-projects" data-href="/archive-projects" data-animation="out">
           Projects
         </a>
       </div>
@@ -57,7 +57,7 @@ import Index from './Index.astro';
   </div>
 </nav>
 
-<script>
+<!-- <script>
 
   // Update visual state (for example, adding an "active" class)
   function updateAnimationState(mainButtons) {
@@ -165,7 +165,124 @@ import Index from './Index.astro';
 
   });
 
-</script>
+</script> -->
+
+<script>
+  import { navigate } from 'astro:transitions/client';
+  
+  // Update visual state (add/remove active class)
+  function updateAnimationState(buttons) {
+    setTimeout(() => {
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-animation') === "in") {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }, 300);
+  }
+  
+  // Handle button click for all buttons
+  function handleButtonClick(clickedBtn, buttons) {
+    // Special branch for Archive main button:
+    if (clickedBtn.id === "archive-main") {
+      // Activate the Archive main button
+      clickedBtn.setAttribute('data-animation', "in");
+
+      // Optionally, set any other buttons in this group to "out"
+      buttons.forEach(btn => {
+        if (btn.id !== "archive-main") {
+          btn.setAttribute('data-animation', "out");
+        }
+      });
+  
+      // Find all archive subitems and force "Gallery" active, others inactive.
+      const archiveSubitems = document.querySelectorAll('.archive-subitems');
+      archiveSubitems.forEach(btn => {
+        if (btn.id === "archive-gallery") {
+          btn.setAttribute('data-animation', "in");
+        } else {
+          btn.setAttribute('data-animation', "out");
+        }
+      });
+
+      return;
+    }
+    
+    // Special check: if clicked is Logo, force Portfolio active.
+    if (clickedBtn.id === "Logo") {
+      const portfolioBtn = Array.from(buttons).find(btn => btn.id === "portfolio");
+      buttons.forEach(btn => {
+        if (btn.id !== "portfolio" && btn.id !== clickedBtn.id) {
+          btn.setAttribute('data-animation', "out");
+        }
+      });
+      if (portfolioBtn) {
+        portfolioBtn.setAttribute('data-animation', "in");
+      }
+      clickedBtn.setAttribute('data-animation', "in");
+      return;
+    }
+    
+    // For Archive subitems (Gallery, List, Projects):
+    if (
+      clickedBtn.id === "archive-gallery" ||
+      clickedBtn.id === "archive-project-list" ||
+      clickedBtn.id === "archive-projects"
+    ) {
+      const archiveSubitems = document.querySelectorAll('.archive-subitems');
+      archiveSubitems.forEach(btn => {
+        if (btn === clickedBtn) {
+          btn.setAttribute('data-animation', "in");
+        } else {
+          btn.setAttribute('data-animation', "out");
+        }
+      });
+      return;
+    }
+    
+    // Default behavior: if button is currently "out", switch it "in" and set others "out"
+    if (clickedBtn.getAttribute('data-animation') === "out") {
+      buttons.forEach(btn => {
+        if (btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
+          btn.setAttribute('data-animation', "out");
+        }
+      });
+      clickedBtn.setAttribute('data-animation', "in");
+    }
+  }
+  
+  // Attach event listeners to buttons
+  function createEventListeners(buttons) {
+    buttons.forEach(btn => {
+      btn.addEventListener('click', event => {
+        handleButtonClick(event.currentTarget, buttons);
+      });
+    });
+  }
+  
+  // On page load, update visual state and attach click listeners.
+  document.addEventListener("astro:page-load", () => {
+    const navBar = document.getElementById("NavBarDesktop");
+    const mainButtons = navBar.querySelectorAll('.animation');
+    updateAnimationState(mainButtons);
+    createEventListeners(mainButtons);
+  });
+  
+  // Archive subitems onchange event (if needed)
+  document.addEventListener("astro:page-load", () => {
+    const navBar = document.getElementById("NavBarDesktop");
+    const archiveSubitem = navBar.querySelector('.archive-subitems');
+    if (archiveSubitem) {
+      archiveSubitem.onchange = event => {
+        const href = event.target.value;
+        navigate(href);
+      };
+    }
+  });
+  </script>
+
 
 
 <style>
@@ -225,7 +342,7 @@ import Index from './Index.astro';
 }
 
 #MainWrapper:has(#archive-main.active) {
-grid-template-rows: 0 3rem 0 10.25rem 0 3rem 0;
+grid-template-rows: 0 3rem 0 10.5rem 0 3rem 0;
 }
 
 .MenuItems {
