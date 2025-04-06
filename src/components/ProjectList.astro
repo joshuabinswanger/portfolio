@@ -211,13 +211,13 @@ document.addEventListener('astro:before-swap', () => {
   overflow: hidden;
 
   @media (--bp-mobile) {
-    grid-template-columns: 5ch 2.5fr 0px 48px;
+    grid-template-columns: 5ch 1fr 0px 48px;
   }
 }
 
 /* The animated container */
 .flip-out {
-  margin: 0.25rem 0.25rem 0 0.25rem;
+  margin: 0px 0px 0px 0px;
   grid-column-start: 1;
   grid-column-end: 6;
   max-height: 0;
@@ -234,6 +234,7 @@ document.addEventListener('astro:before-swap', () => {
 
 /* When open, expand the container */
 .ListElementWrapper.open .flip-out {
+  margin: 8px 0px 16px 0px;
   max-height: 700px; /* Adjust as needed if your content height is known */
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -273,14 +274,10 @@ p {
 
 .column2 {
   grid-column-start: 2;
-  display: grid;
-  grid-template-columns: max-content 1fr;
-  column-gap: 1rem;
+  align-content: center;
 }
 
 .project-title {
-  display: grid;
-  align-items: center;
   font-family: PowerGrotesk-Medium;
   font-size: 21px;
 
