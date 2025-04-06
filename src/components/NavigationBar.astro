@@ -181,19 +181,23 @@ import Index from './Index.astro';
 
 #NavBarDesktop {
   position: sticky;
+  height: min-content;
   display: grid;
   justify-items: center;
-  grid-auto-rows: auto;
-  top: var(--padding-desktop);
+  grid-template-rows: 40px 1fr;
+  top: var(--padding-top-desktop);
+  row-gap: 4px;
 
   @media (--bp-mobile) {
     display: none;
   }
   @media (--bp-tablet) {
-    top: var(--padding-tablet);
+    top: var(--padding-top-tablet);
+    grid-template-rows: 36px 1fr;
   }
   @media (--bp-desktop-wide) {
-    top: var(--padding-desktop-wide);
+    top: var(--padding-top-desktop-wide);
+    grid-template-rows: 40px 1fr;
   }
 }
 
@@ -201,35 +205,19 @@ import Index from './Index.astro';
   letter-spacing: 0.8px;
 }
 
-#Logo-Wrapper {
-    z-index: 1003;
-    width: 100%;
-    aspect-ratio: auto;
-    
-
-
-@media (--bp-mobile){
-
-
-  }
-}
-
-#Logo {
-  display: block;
-  height: 100%;
-}
-
-
-#Picture{
-  width: 100%;
-  height: auto;
-}
 
 #MainWrapper {
   width: 100%;
   display: grid;
-  grid-template-rows: 0 3rem 0 3rem 0 3rem 0;
+  grid-template-rows: 0 48px 0 48px 0 48px 0;
   transition: grid-template-columns 0.6s ease;
+
+  @media (--bp-tablet) {
+    grid-template-rows: 0 40px 0 40px 0 40px 0;
+  } 
+    
+
+
 }
 
 #MainWrapper:has(#archive-main.active) {
@@ -273,7 +261,7 @@ a {
     font-size: var(--font-size-tablet-h1);
   }
   @media (--bp-desktop-wide) {
-    font-size: var(--font-size-dekstop-h1);
+    font-size: var(--font-size-desktop-wide-h1);
   }
 }
 
@@ -285,10 +273,14 @@ a {
   position: absolute;
   left: 0;
   width: 0%;
-  height: 3rem;
+  height: 48px;
   background-color: black;
   transition: width 0.6s ease;
   z-index: -1;
+
+  @media (--bp-tablet) {
+    height: 40px;
+  } 
 }
 
 /* When active, change text color and expand the black bar */
@@ -331,7 +323,7 @@ a {
 }
 
 .archive-subitems {
-  font-size: 11px;
+  font-size: 13px;
   font-family: PowerGrotesk-UltraLight;
   cursor: pointer;
   height: 100%;

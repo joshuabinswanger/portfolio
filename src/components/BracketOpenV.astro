@@ -2,9 +2,12 @@
 interface Props {
  strokewidth?: string;
  strokecolor?: string;
+ height?: string;
+ width?: string;
+ overflow?: string;
 }
 
-const { strokewidth = "1px", strokecolor = "black" } = Astro.props;
+const { strokewidth = "1px", strokecolor = "black", height = "100%", width = "100%", overflow = "visible" } = Astro.props;
 ---
 
 
@@ -17,24 +20,22 @@ const { strokewidth = "1px", strokecolor = "black" } = Astro.props;
 </div>
 
 
-<style define:vars={{strokewidth, strokecolor}}>
+<style define:vars={{strokewidth, strokecolor, height, width, overflow}}>
 
 /* SVG container */
 .svg-container {
-    display: grid;
-    grid-template-columns: 1fr; /* One column spanning the full width */
-    grid-template-rows: 1fr;    /* One row spanning the full height */
-    justify-items: center;         /* Aligns the SVG to the right */
-    align-items: start;        /* Centers the SVG vertically */        
-    height: 100%;  
-
+    overflow: var(--overflow);
+    height: var(--height);        /* Centers the SVG vertically */        
+    width: var(--width);  
+    align-self: start;
     }
 
 /* SVG styling */
 svg {
-    overflow: visible;
+    overflow: var(--overflow);
     width: 100%;
     display: block; /* Removes inline spacing */
+    align-self: start;
 }
 
 /* Keep stroke width constant */

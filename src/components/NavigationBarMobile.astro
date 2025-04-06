@@ -73,7 +73,7 @@ import "../styles/global.css";
         href="/info" 
         data-href="/info"
         data-animation="out">
-        Information
+        Info
       </a>
 
       <BracketCloseH />
@@ -105,7 +105,7 @@ import "../styles/global.css";
 }
 
 #MainWrapper {
-  height: 3rem;
+  height: 52px;
   display: grid;
   grid-gap: 0;
   grid-template-columns: 0 1fr 0 1fr 0 1fr 0;
@@ -115,7 +115,7 @@ import "../styles/global.css";
 }
 
 #MainWrapper:has(#archive-main.active) {
-  grid-template-columns: 0 1fr 0 2.5fr 0 1fr 0;
+  grid-template-columns: 0 1fr 0 3fr 0 .75fr 0;
 } 
 
 /* Main button styling and active animation */
@@ -187,13 +187,13 @@ a {
   grid-template-rows: 1fr ;
   column-gap: 1px;
   width: 0ch;
-  height: 100%;
+  height: calc(100% - 4px);
   overflow: hidden;
   transition: width 0.6s ease;
 }
 
 #archive-main.active ~ #archive-select {
-  width: 33vw;
+  width: 19ch;
 }
 
 .archive-subitems {

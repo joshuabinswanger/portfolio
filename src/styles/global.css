@@ -69,55 +69,80 @@
 
 
   /* Top Padding */
-  --padding-desktop: 3rem;
-  --padding-mobile: 5.5rem;
-  --padding-tablet: 1rem;
-  --padding-desktop-wide: 3rem;
+  --padding-top-mobile-small: 80px;
+  --padding-top-mobile: 90px;
+  --padding-top-tablet: 48px;
+  --padding-top-desktop: 56px;
+  --padding-top-desktop-wide: 76px;
+
+  /* Bottom Padding */
+  --padding-bot-mobile-small: 80px;
+  --padding-bot-mobile: 90px;
+  --padding-bot-ablet: 96px;
+  --padding-bot-desktop: calc(9 * 56px);
+  --padding-bot-desktop-wide: calc(9 * 88px);
 
   /* Margins */
-  --margin-left-dekstop: 1vw;
-  --margin-right-desktop: 1vw;
-
-  --margin-left-mobile: 3px;
-  --margin-right-mobile: 3px;
+  --margin-left-mobile: 2px;
+  --margin-right-mobile: 2px;
   
   --margin-left-tablet: 0px;
   --margin-right-tablet: 20px;
 
-  --margin-left-desktop-wide: calc(13vw - 120px);
-  --margin-right-desktop-wide: 13vw;
+  --margin-left-dekstop: auto;
+  --margin-right-desktop: auto;
+
+  --margin-left-desktop-wide: auto;
+  --margin-right-desktop-wide: auto;
 
   /* Font Sizes */
-  --font-size-dekstop: 13px;
-  --font-size-mobile: 13px;
-  --font-size-mobile-small: 11px;
-  --font-size-tablet: 13px;
-  --font-size-desktop-wide: 13px;
 
-  --font-size-dekstop-h1: 17px;
-  --font-size-mobile-h1: 17px;
-  --font-size-mobile-small-h1: 13px;
-  --font-size-tablet-h1: 17px;
-  --font-size-desktop-wide-h1: 17px;
-  
+  --font-size-mobile: 12px;
+  --font-size-mobile-small: 10px;
+  --font-size-tablet: 14px;
+  --font-size-dekstop: 14px;
+  --font-size-desktop-wide: 14px;
 
-    letter-spacing: 0.6px;
+
+  --font-size-mobile-h1: 14px;
+  --font-size-mobile-small-h1: 14px;
+  --font-size-tablet-h1: 18px;
+  --font-size-dekstop-h1: 18px;
+  --font-size-desktop-wide-h1: 18px;
+
+  letter-spacing: 0.6px;
 
   /* border size */
   --border-size: 0.5px;
 
   /* Columns: Nav Main */
-  --grid-template-columns-desktop:      200px 1fr;
-  --grid-template-columns-mobile:       1fr;
-  --grid-template-columns-tablet:       150px 1fr;
-  --grid-template-columns-desktop-wide: 200px 1fr;
+  --nav-main-layout-mobile-small: 1fr;
+  --nav-main-layout-mobile:       1fr;
+  --nav-main-layout-tablet:       144px 1fr;
+  --nav-main-layout-desktop:      160px 952px;
+  --nav-main-layout-desktop-wide: 160px 1496px;
+
+  
+    /* Grid Layout*/
+    /* grid template columns: 17 Columns = 100vw - margin right - NavBar - margin left - column gap - scrollbar-wdith*(2) / 17*/
+
+  --grid-layout-columns-mobile-small: repeat(7, calc((100vw - 2px - 2px - var(--scrollbar-width)) / 7));
+  --grid-layout-columns-mobile: repeat(7, calc((100vw - 2px - 2px - var(--scrollbar-width)) / 7));
+  --grid-layout-columns-tablet: repeat(11, calc((100vw - 124px - 20px - calc(var(--scrollbar-width) * 2)) / 11));
+  --grid-layout-columns-desktop: repeat(17, 56px);
+  --grid-layout-columns-desktop-wide: repeat(17, 88px);
+
+
 }
+
+
+
   /* Media Queries Breakpoints*/
   @custom-media --bp-mobile-small (width <= 375px);
-  @custom-media --bp-mobile (width <= 650px);
-  @custom-media --bp-tablet (650px <= width <= 1200px);
-  @custom-media --bp-desktop (1200px <= width <= 1800px);
-  @custom-media --bp-desktop-wide (width >= 1800px);
+  @custom-media --bp-mobile (width <= 767px);
+  @custom-media --bp-tablet (768px <= width <= 1119px);
+  @custom-media --bp-desktop (1120px <= width <= 1699px);
+  @custom-media --bp-desktop-wide (width >= 1700px);
 
 
 /* Photoswipe Styles */
@@ -276,3 +301,5 @@
   padding-top: 2rem;
   padding-bottom:0.5rem;
 }
+
+

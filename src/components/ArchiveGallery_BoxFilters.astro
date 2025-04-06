@@ -1,0 +1,1500 @@
+---
+import BracketOpenH from "./BracketOpenH.astro";
+import BracketMiddleH from "./BracketMiddleH.astro";
+import BracketCloseH from "./BracketCloseH.astro";
+import BracketOpenV from "./BracketOpenV.astro";
+import BracketMiddleV from "./BracketMiddleV.astro";
+import BracketCloseV from "./BracketCloseV.astro";
+import TopWrapper from "../layouts/TopWrapper.astro";
+import GridLayout from "../layouts/GridLayout.astro";
+import ArchiveElement from "./ArchiveGalleryElement.astro";
+import { getCollection } from "astro:content";
+
+// Filter the collection to include only items with metadata.archive === "include"
+const archiveImages = await getCollection('galleryImages', ({ data }) => {
+  return data.metadata?.archive === "include";
+});
+
+
+
+//////////////////
+///// TAGS ///////
+//////////////////
+
+
+// Helper function to ensure we get an array from any input
+function ensureArray(value) {
+  if (!value) return [];
+  if (Array.isArray(value)) return value;
+  return value.split(',').map(item => item.trim()); // Split by comma and trim spaces
+}
+
+
+
+//// Role /////
+
+/// extract role tags
+const role = Array.from(
+  new Set(archiveImages.flatMap((image) => ensureArray(image.data.metadata?.role) || []))
+);
+
+console.log("Role Array:", role); // Log the array to the console
+
+//Filter the tags so only those in `AllowedList` remain
+const roleAllowedList = ["2D", "3D", "Dev"];
+const roleListLength = roleAllowedList.length;
+const roleListLengthString = roleListLength.toString();
+
+const roleAllowed = role.filter(tag => roleAllowedList.includes(tag));
+
+//covnert to CSS conform tags
+const roleConversionCSS = {
+  "2D": "twoD",
+  "3D": "threeD"
+};
+
+const roleConversionName = {
+  "Dev": "Tech",
+};
+
+
+const roleConvertedCSS = roleAllowed.map(tag => roleConversionCSS[tag] || tag);
+const roleConvertedName = roleAllowed.map(tag => roleConversionName[tag] || tag);
+
+
+
+//// PROGRAM /////
+
+/// extract role tags
+const program = Array.from(
+  new Set(archiveImages.flatMap((image) => ensureArray(image.data.metadata?.program) || []))
+);
+
+console.log("Program Array:", program); // Log the array to the console
+
+//Filter the tags so only those in `AllowedList` remain
+const programAllowedList = ["Houdini", "Blender", "ZBrush", "Rive", "SubstancePainter"];
+const programListLength = programAllowedList.length;
+const programListLengthString = programListLength.toString();
+
+const programAllowed = program.filter(tag => programAllowedList.includes(tag));
+
+//covnert to CSS conform tags
+const programConversionCSS = {
+};
+
+const programConversionName = {
+  "SubstancePainter" : "Substance Painter"
+};
+
+
+const programConvertedCSS = programAllowed.map(tag => programConversionCSS[tag] || tag);
+const programConvertedName= programAllowed.map(tag => programConversionName[tag] || tag);
+
+
+
+
+
+//// TOPIC /////
+
+/// extract role tags
+const topic = Array.from(
+  new Set(archiveImages.flatMap((image) => ensureArray(image.data.metadata?.topic) || []))
+);
+
+console.log("Topic Array:", topic); // Log the array to the console
+
+//Filter the tags so only those in `AllowedList` remain
+const topicAllowedList = ['Poster', 'Tutorial', 'SciCom', 'MoGraph', 'Real-time', 'Wood', 'Character', 'Proceduralism', 'Creature'];
+const topicListLength = topicAllowedList.length;
+const topicListLengthString = topicListLength.toString();
+
+const topicAllowed = topic.filter(tag => topicAllowedList.includes(tag));
+
+//covnert to CSS conform tags
+const topicConversionCSS = {
+};
+const topicConversionName = {
+  "MoGraph" : "Motion",
+  "SciCom" : "Science",
+  "Proceduralism" : "Procedural" 
+};
+
+const topicConvertedCSS = topicAllowed.map(tag => topicConversionCSS[tag] || tag);
+const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || tag);
+
+
+---
+
+<TopWrapper>
+  
+    <div class:list={[""]} id="archive-wrapper">
+      
+      <!-- Filter Buttons-->
+      <form id="filter-sort-wrapper" >
+        
+      <!-- Filter Buttosn in a Group  --> 
+      <div id="sort-wrapper">
+        <button type="button" class:list={["expand-button main-button"]} id="sort">Sort</button>
+
+        <fieldset id="sort-buttons" class:list={[`sort-group`]} >
+
+          <BracketOpenV />
+
+          <button type="button" class:list={["sort-button mixitup-control-active"]} id="sort-random" data-sort="random"><p>Random</p></button>
+        
+          <BracketMiddleV />
+
+          <button type="button" class:list={["sort-button "]} id="sort-project" data-sort="project:asc"> <p>Project</p></button>
+    
+          <BracketMiddleV />
+
+          <button type="button" class:list={["sort-button "]} id="sort-date" data-sort="date:asc"><p>Date</p></button>
+
+          <BracketCloseV />
+        </fieldset>
+
+      </div>
+      
+      <div id="filter-wrapper">
+
+        <button  id="filter" class:list={[`main-button`]} type="button">
+          <span id="filter-span"> Filter &ensp;</span> <span class:list={["chevron"]} >&rarr;</span> 
+        </button>
+
+        <div id="filter-box" class:list={[``]}>
+
+          <div class:list={["bracket-h bracket-start"]}> 
+          </div>
+          
+          <div id="group-wrapper">
+
+            <!-- Role -->
+            <fieldset class:list={[`filter-group`]} id="role-buttons-wrapper" data-filter-group="role" >
+
+              <div class:list={[`filter-title`]}>
+                Role
+              </div>
+
+              <div class:list={["bracket-v"]}>
+                <BracketOpenV />
+              </div>
+            
+                {roleConvertedCSS.map((tag, index) => {
+
+                  	if (index === 0) {
+                      return(
+                      <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`} data-index={`${index}`} data-filter-name={`${roleConvertedName[index]}`}>
+                          <p>{roleConvertedName[index]}</p>
+                      </button>
+                      );
+                    }
+
+                    
+                  	else {
+                      return(
+                      <div class:list={["bracket-v"]}>
+                        <BracketMiddleV />
+                      </div>
+
+                      <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`} data-index={`${index}`} data-filter-name={`${roleConvertedName[index]}`}>
+                          <p>{roleConvertedName[index]} </p>
+                      </button>
+                      );
+                    };
+
+                })}
+
+                <div class:list={["bracket-v"]}>
+                  <BracketCloseV />
+                </div>
+
+            </fieldset>
+
+            <!-- Program -->
+            <fieldset class:list={[`filter-group`]} id="program-buttons-wrapper" data-filter-group="program">
+
+              <div class:list={[`filter-title`]}>
+                Tool
+              </div>
+
+              <div class:list={["bracket-v"]}>
+                <BracketOpenV />
+              </div>
+
+                {programConvertedCSS.map((tag, index) => {
+
+
+
+                if (index === 0) {
+                  return(
+                  <button  type="button" class:list={[`filter-button ${tag} `]}  data-toggle={`.${tag}`} data-filter-name={`${programConvertedName[index]}`}>
+                      <p>{programConvertedName[index]}</p>
+                  </button>
+                  );
+
+                } else {
+
+                  return(
+                  <div class:list={["bracket-v"]}>
+                   <BracketMiddleV />
+                  </div>
+
+                  <button  type="button" class:list={[`filter-button ${tag} `]}  data-toggle={`.${tag}`} data-filter-name={`${programConvertedName[index]}`}>
+                      <p>{programConvertedName[index]}</p>
+        
+                  </button>
+                  );
+
+                };
+
+
+
+                })}
+
+                <div class:list={["bracket-v"]}>
+                  <BracketCloseV />
+                </div>
+
+            </fieldset>
+        
+            <!-- Topic -->
+            <fieldset class:list={[`filter-group`]} id="topic-buttons-wrapper" data-filter-group="topic" >
+              
+              <div class:list={[`filter-title`]}>
+                Topic
+              </div>
+
+              <div class:list={["bracket-v"]}>
+                <BracketOpenV />
+              </div>
+
+              {topicConvertedCSS.map((tag, index) => {
+
+
+                if (index === 0) {
+                  return(
+                    <button type="button"class:list={[`filter-button ${tag} `]}  data-toggle={`.${tag}`} data-filter-name={`${topicConvertedName[index]}`}>
+                      <p>{topicConvertedName[index]}</p>
+                      
+                    </button>
+                    );
+
+                } else {
+                  return(
+
+                  <div class:list={["bracket-v"]}>
+                    <BracketMiddleV />
+                  </div>
+
+                  <button type="button"class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`} data-filter-name={`${topicConvertedName[index]}`}>
+                      <p>{topicConvertedName[index]}</p>
+                      
+                    </button>
+                  
+                  )
+                }
+
+      
+                
+
+
+              })}
+
+              <div class:list={["bracket-v"]}>
+                <BracketCloseV />
+              </div>
+
+
+            </fieldset>
+
+            <!-- Filter Reset -->
+            <fieldset class:list={[``]} id="filter-reset-wrapper">
+              <button type="reset" class:list={["filter-button"]} id="filter-reset-all"><p>Reset</p></button>
+            </fieldset>
+                    
+
+          </div>
+
+          <div id="active-filters-list">
+          </div>
+
+          <div class:list={["bracket-h bracket-end"]}> 
+          </div>
+
+        </div>
+
+      </div>
+
+        
+
+
+
+      </form>
+
+    <!-- Archive Gallery-->
+    <div class:list={["container"]} id="archive">
+      <GridLayout customClass={"archive-grid"}>
+        {archiveImages.map((image, index) => (
+            
+                <ArchiveElement
+                    public_id={image.data.public_id} // Ensure `public_id` exists
+                    index={index}
+                />
+
+        ))}
+        </GridLayout>
+    </div>
+  </div>
+</TopWrapper>
+
+<script>
+import { deselectScripts } from 'astro/virtual-modules/transitions-swap-functions.js';
+import { use } from 'marked';
+import mixitup from 'mixitup';
+import mixitupMultifilter from 'mixitup-multifilter';
+import PhotoSwipeLightbox from 'photoswipe/lightbox';
+
+
+
+//////////////////////////////
+///////MixItUp FUNCTIONS//////
+//////////////////////////////
+
+let mixer = undefined;
+
+
+function getFreshElements() {
+  
+  const roleFilterButton = document.querySelector("#role-buttons-wrapper button"); 
+  const roleDataFilterValue = roleFilterButton.getAttribute("data-toggle");
+
+  console.log(`roleFilterValue:${roleDataFilterValue}`)
+
+  const programFilterButton = document.querySelector("#program-buttons-wrapper button"); 
+  const programDataFilterValue = programFilterButton.getAttribute("data-toggle");
+
+  console.log(`programFilterValue:${programDataFilterValue}`)
+
+  const topicFilterButton = document.querySelector("#topic-buttons-wrapper button"); 
+  const topicDataFilterValue = topicFilterButton.getAttribute("data-toggle");
+
+  console.log(`topicFilterValue:${topicDataFilterValue}`)
+
+
+  return {
+    mix: document.querySelector('#filter-sort-wrapper'),
+    filterButtons: document.querySelectorAll('.filter-button'),
+    containerEl: document.querySelector('#archive-wrapper'),
+    filterTopWrapperElement: document.querySelector('#filter-sort-wrapper'),
+    /* resetFilterProgram: document.querySelectorAll('.reset-sub-filter'), */
+    roleFilterButton: roleFilterButton,
+    programFilterButton: programFilterButton,
+    topicFilterButton: topicFilterButton,
+    roleDataFilterValue: roleDataFilterValue,
+    programDataFilterValue: programDataFilterValue,
+    topicDataFilterValue: topicDataFilterValue
+
+  };
+}
+
+ // Function to build the image data source array by reading attributes from each .photo-link element
+// Updates Active Filters List on MixItUp end
+function updateActiveFiltersList() {
+  const activeFiltersContainer = document.getElementById("active-filters-list");
+
+  // Clear current filters
+  activeFiltersContainer.innerHTML = '';
+
+  // Select active filter buttons
+  const activeButtons = document.querySelectorAll('.filter-button.mixitup-control-active');
+
+  // Retrieve Astro scoped attribute from the container or existing element
+  const astroScopedAttr = activeFiltersContainer.attributes;
+  let astroCidAttr = '';
+  
+  for (let attr of astroScopedAttr) {
+    if (attr.name.startsWith('data-astro-cid-')) {
+      astroCidAttr = attr.name;
+      break;
+    }
+  }
+
+  // Generate active filter divs with Astro scoped ID
+  activeButtons.forEach(button => {
+    const filterName = button.getAttribute('data-filter-name') || button.textContent.trim();
+    const filterClass = button.getAttribute('data-toggle').replace('.', '');
+
+    // Create div element
+    const div = document.createElement('div');
+    div.classList.add('active-filter');
+
+    // Add Astro scoped attribute if found
+    if (astroCidAttr) {
+      div.setAttribute(astroCidAttr, '');
+    }
+
+    div.textContent = filterName;
+    div.dataset.filterClass = filterClass;
+
+    // Add click-to-remove event handler
+    div.addEventListener('click', removeActiveFilter);
+
+    activeFiltersContainer.appendChild(div);
+  });
+
+  // Update CSS variable for dynamic column count
+  activeFiltersContainer.style.setProperty('--active-filters-list-length', activeButtons.length);
+}
+
+// Function to handle removing filters on click
+function removeActiveFilter(event) {
+  const filterClass = event.currentTarget.dataset.filterClass;
+
+  // Find corresponding button and simulate a click to deactivate it
+  const correspondingButton = document.querySelector(`.filter-button[data-toggle=".${filterClass}"].mixitup-control-active`);
+  
+  if (correspondingButton) {
+    correspondingButton.click();
+  }
+}
+
+function updateFilterButtonAvailability() {
+
+  // Select visible archive items (assuming items hidden by filtering have 'display: none')
+  const visibleItems = document.querySelectorAll(
+    '#grid-container .archiveElement:not([style*="display: none"])'
+  );
+  // Get all filter buttons (adjust the selector as needed)
+  const filterButtons = document.querySelectorAll('.filter-group .filter-button');
+
+  filterButtons.forEach(button => {
+    // Remove the leading dot if present (or adjust as needed)
+    const filterValue = button.getAttribute('data-toggle').replace('.', '');
+    // Check if any visible element has this filter value as a class.
+    let hasMatch = false;
+    visibleItems.forEach(item => {
+      if (item.classList.contains(filterValue)) {
+        hasMatch = true;
+      }
+    });
+    // Update the button's state based on whether there's a match.
+    if (!hasMatch) {
+      button.classList.add('filter-disabled');
+      button.disabled = true;
+    } else {
+      button.classList.remove('filter-disabled');
+      button.disabled = false;
+    }
+  });
+
+    
+}
+
+
+///////////////////////////////////////////////////////
+/////////////// PHOTOSWIPE FUNCTIONS //////////////////
+//////////////////////////////////////////////////////
+
+  // Declare lightbox variable in an outer scope so that it's accessible in multiple event listeners
+  let lightbox = null;
+
+    
+  // Function to build the image data source array by reading attributes from each .photo-link element
+  function createPhotoSwipeDataSource() {
+
+  imageDataSource.length = 0;
+
+
+  // Select all .photo-link elements and convert NodeList to an array
+  const allLinks = Array.from(document.querySelectorAll('.photo-link'));
+
+  // Filter out only the visible links (an element is visible if its offsetParent is not null)
+  const dataSources = allLinks.filter(link => link.offsetParent !== null);
+
+  // Attach a click event listener to each photo-link element.
+  // The index of the clicked element is used to open the corresponding slide.
+  dataSources.forEach((link, index) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault(); // Prevent the default link behavior
+      lightbox.loadAndOpen(index);
+    });
+  });
+
+
+  dataSources.forEach(link => {
+    const img = link.querySelector('img'); // Find the nested img element
+
+    // Extract attributes from the img and link elements
+  /*         const srcset = img.getAttribute('srcset'); */
+    const src = link.getAttribute('href');
+    const width = link.getAttribute('data-pswp-width');
+    const height = link.getAttribute('data-pswp-height');
+    const alt = img.getAttribute('alt');
+    const description_title = link.getAttribute('data-description_title');
+    const description_text = link.getAttribute('data-description_text');
+
+    // Push an object with the extracted data into the imageDataSource array
+    imageDataSource.push({
+  /*           srcset: srcset, */
+      src: src,
+      width: parseInt(width, 10),
+      height: parseInt(height, 10),
+      alt: alt,
+      description_title: description_title,
+      description_text: description_text
+    });
+  });
+  /*      console.log(imageDataSource); */
+
+  }
+
+
+  // Create an array to hold the image data for PhotoSwipe
+  let imageDataSource = [];
+
+  let imageElements = document.querySelectorAll('.photo-link');
+
+  // SVG strings for the arrow and close icons
+  const leftArrowSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 155 139" width="39" height="35"><path d="m0 69 69 69 14-12-45-46h116V58H38l44-44L69 0 0 69Z" style="fill-rule:nonzero"/></svg>';
+  const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 139 139" width="139" height="139"><path d="m69 83-56 55-13-12 56-57L0 14 13 0l56 56 56-56 13 14-55 55 55 57-13 12-56-55Z"/></svg>';
+
+  // Utility function to detect phone portrait mode
+  function isPhonePortrait() {
+    return window.matchMedia('(max-width: 650px) and (orientation: portrait)').matches;
+  }
+
+
+
+
+
+
+
+
+/////////////////////////////////////////
+////////////// page load ////////////////
+////////////////////////////////////////
+
+document.addEventListener("astro:page-load", () => {
+
+    // --- START: Add Mutual Exclusivity Logic ---
+      const filterButton = document.getElementById('filter');
+      const sortButton = document.getElementById('sort');
+
+      if (filterButton && sortButton) { // Ensure buttons exist
+          filterButton.addEventListener('click', () => {
+              const currentlyActive = filterButton.classList.contains('active');
+              // If activating filter, deactivate sort first
+              if (!currentlyActive) {
+                  sortButton.classList.remove('active');
+              }
+              // Now toggle filter's state
+              filterButton.classList.toggle('active');
+          });
+
+          sortButton.addEventListener('click', () => {
+              const currentlyActive = sortButton.classList.contains('active');
+              // If activating sort, deactivate filter first
+              if (!currentlyActive) {
+                  filterButton.classList.remove('active');
+              }
+              // Now toggle sort's state
+              sortButton.classList.toggle('active');
+          });
+      } else {
+          console.error("Could not find filter or sort button elements.");
+      }
+    // --- END: Add Mutual Exclusivity Logic ---
+  
+  
+  
+  
+    /////////////////////
+    ///////MixItUp//////
+    /////////////////////
+
+
+
+    console.log("Event: astro:page-load");
+    const { containerEl, roleFilterButton, programFilterButton, topicFilterButton, roleDataFilterValue, programDataFilterValue, topicDataFilterValue } = getFreshElements();
+
+    console.log("Creating mixer");
+    mixitup.use(mixitupMultifilter);
+
+    mixer = mixitup(containerEl, {
+      selectors: {
+          target: '.mix'
+      },
+      animation: {
+          enable: false,
+      },
+      multifilter: {
+          enable: true // enable the multifilter extension for the mixer
+      },
+      debug: {
+          enable: true
+      },
+
+      load: {
+        sort: 'random',
+        
+      },
+
+      callbacks: {
+        onMixStart: function(futureState) {
+            console.log(futureState.activeFilter.selector);
+        },
+        onMixEnd: function(state) {
+
+          createPhotoSwipeDataSource();
+          updateActiveFiltersList(); // <-- Add this call
+          updateFilterButtonAvailability()
+          console.log(state.activeFilter.selector);
+
+          
+
+          // Scroll to the top of the page smoothly after the mix operation
+          window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        },
+      }
+    });
+
+    createPhotoSwipeDataSource();
+
+    mixer.configure({
+    animation: {
+        enable: true,
+        duration: 300
+    }});
+    
+
+
+    let filterResetButton = document.querySelector(`#filter-reset-all`);
+    filterResetButton.addEventListener(`click`, () => {
+      mixer.show();
+    });
+
+
+
+
+  ////////////////////////////////////////////////////////////
+  ///////////////     PHOTOSWIPE ////////////////////////////
+  ///////////////////////////////////////////////////////////
+
+  // If the lightbox is not yet initialized, create it
+  if (!lightbox) {
+
+    // Assign to the outer scoped variable (do not use "const" here)
+    lightbox = new PhotoSwipeLightbox({
+      dataSource: imageDataSource,
+      arrowPrevSVG: leftArrowSVGString,
+      arrowNextSVG: leftArrowSVGString,
+      closeSVG: CloseSVGString,
+      initialZoomLevel: `fit`,
+      bgOpacity: 0.95,
+      zoom: false,
+      mainClass: 'pswp--custom-bg pswp--custom-icon-colors',
+      paddingFn: () => {
+        return isPhonePortrait()
+          ? { top: 0, bottom: 0, left: 10, right: 10 }
+          : { top: 20, bottom: 40, left: 100, right: 100 };
+      },
+      showHideAnimationType: 'fade',
+      pswpModule: () => import('photoswipe'),
+    });
+
+    // Initialize the PhotoSwipe lightbox
+    lightbox.init();
+
+    // Register a custom caption element
+    lightbox.on('uiRegister', function () {
+      lightbox.pswp.ui.registerElement({
+        name: 'custom-caption',
+        order: 9,
+        isButton: false,
+        appendTo: 'wrapper',
+        html: '',
+        onInit: (el, pswp) => {
+          lightbox.pswp.on('change', () => {
+            const currSlideElement = lightbox.pswp.currSlide?.data?.element;
+            let captionHTML = '';
+            if (currSlideElement) {
+              const description_title = currSlideElement.getAttribute('data-description_title');
+              const description_text = currSlideElement.getAttribute('data-description_text');
+              if (description_title) {
+                captionHTML = `<p><strong>${description_title}</strong></p><p>${description_text}</p>`;
+              }
+            }
+            el.innerHTML = captionHTML || '';
+          });
+        },
+      });
+    });
+
+  }
+
+})
+
+
+
+  ///////////////////////////////////
+  ///////before swap clean up //////
+  ///////////////////////////////////
+
+  document.addEventListener("astro:before-swap", () => {
+
+    /////////////////////
+    ///////MixItUp//////
+    /////////////////////
+
+    
+    console.log("Destroying mixer");
+    
+    mixer?.destroy();
+    mixer = undefined;
+
+    imageDataSource.length = 0;
+
+    ////////////////////////////////////////////////////////////
+    ///////////////     PHOTOSWIPE ////////////////////////////
+    ///////////////////////////////////////////////////////////
+
+
+    if (lightbox) {
+      lightbox.destroy();
+      lightbox = null;
+    };
+    
+   
+  });
+
+
+
+
+
+
+
+
+
+
+</script>
+
+<style define:vars={{ roleFilters: roleListLength, programFilters: programListLength, topicFilters: topicListLength}}>
+
+@import "../styles/global.css";
+
+:root {
+  --active-filters-list-length: 5;
+}
+
+#archive-wrapper {
+  display: grid;
+  grid-template-rows: 40px 1fr;
+  padding-bottom: 11rem;
+  margin-top: var(--padding-desktop);
+
+  @media (--bp-mobile) {
+    grid-template-rows: 1fr;
+    grid-row-start: 1;
+    margin-top: 0rem; 
+  }
+
+  @media (--bp-tablet) {
+  margin-top: var(--padding-desktop);
+  }
+
+  @media (--bp-desktop-wide) {
+  margin-top: var(--padding-desktop);
+  }
+}
+
+#archive {
+  padding-top: 0px;
+  height: 100%;
+  grid-row-start: 2;
+
+  @media (--bp-mobile) {
+		margin-top: 0rem; 
+    grid-row-start: 1;
+	}
+
+  @media (--bp-tablet) {
+    margin-top: ;
+  }
+
+  @media (--bp-desktop-wide) {
+    margin-top: ;
+  }
+}
+
+
+
+/* filter sort wrapper */
+
+#filter-sort-wrapper {
+  display: grid;
+  position: fixed;
+  grid-template-columns: 56px auto;
+  z-index: 2;
+  --archive-width: 100%;
+  grid-row-start: 1;
+  width: 952px;
+  overflow: hidden;
+  transition:  grid-template-columns 0.25s ease 0.25s;
+  
+  @media (--bp-mobile) {
+    bottom: 52px;
+    padding-bottom: 4px;
+    left: 0px;
+    grid-template-columns: 56px auto;
+    grid-template-rows: auto;
+    width: 100%;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    
+  }
+
+	@media (--bp-tablet) {
+		padding-top: var(--padding-tablet); 
+	}
+
+  @media (--bp-desktop-wide) {
+    grid-template-columns: 80px auto;
+    width: 1496px;
+  }
+
+}
+
+#filter-sort-wrapper:has(#filter.active) {
+    grid-template-columns: 56px auto;
+    transition:  grid-template-columns 0.25s ease 0s;
+
+  @media (--bp-mobile) {
+    grid-template-columns: 56px auto;
+
+  }
+
+  @media (--bp-desktop-wide) {
+    grid-template-columns: 80px auto;
+  }
+}
+
+#filter-sort-wrapper:has(#sort.active)  {
+
+  grid-template-columns: 224px auto;
+  transition:  grid-template-columns 0.25s ease 0s;
+ 
+
+  @media (--bp-mobile) {
+    grid-template-columns: 224px auto;
+
+  }
+  
+  @media (--bp-desktop-wide) {
+    grid-template-columns: 240px auto;
+  
+  }
+}
+
+
+/* Main Button Styling */
+
+.main-button {
+  height: 40px;
+  grid-column-start: 1;
+  grid-column-end: span 1;
+  font-family: PowerGrotesk-Light;
+  color: var(--bg-color);
+  font-size: 14px;
+  letter-spacing: 0.6px;
+  border: 0px;
+  background-color: black;
+  padding: 0 8px;
+  margin-right: 4px;
+  cursor: pointer;
+  z-index: 1011;
+
+}
+
+
+fieldset {
+  border: none; /* Ensure fieldset behaves like a div */
+  margin: 0;
+  padding: 0;
+}
+
+
+
+/* Sort  */
+/* Sort  */
+/* Sort  */
+
+#sort-wrapper {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  align-self: flex-start;
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: min-content min-content;
+
+  @media (--bp-mobile) {
+    align-self: flex-end;
+    grid-column-start: 1;
+    grid-row-start: 1;
+  }
+}
+ 
+#sort  {
+  width: 54px;
+  grid-column-start: 1;
+  transition:  width 0.25s ease 0.25s;
+  align-self: flex-start;
+  margin-right: 2px;
+
+
+  @media (--bp-mobile) {
+    align-self: flex-end;
+  }
+
+  @media (--bp-desktop-wide) {
+    width: 78px;
+  }
+}
+
+#sort.active {
+  transition:  width 0.25s ease 0s;
+}
+
+#filter-sort-wrapper:has(#filter.active) #sort-wrapper #sort {
+  width: 54px;
+  transition:  width 0.25s ease 0s;
+
+  @media (--bp-mobile) {
+    width: 54px;
+  }
+
+  @media (--bp-desktop-wide) {
+    width: 78px;
+  }
+}
+
+#filter-sort-wrapper:has(#filter.active) #sort-wrapper #sort-buttons .sort-button {
+  transition: width 0.25s ease 0s, height 0.25s ease 0s;
+}
+
+
+/* sort-buttons */
+
+#sort-buttons {
+  grid-column-start: 2;
+  display: grid;
+  grid-template-rows: repeat(3, 0 min-content) 0px;
+  background-color: var(--bg-color);
+
+}
+
+.sort-button {
+  height: 0px;
+  width: 0px;
+  font-family: PowerGrotesk-Light;
+  color: black;
+  display: grid;
+  font-size: var(--font-size-dekstop);
+  letter-spacing: 0.6px;
+  border: 0px;
+  background-color: transparent;
+  overflow: hidden;
+  cursor: pointer;
+  z-index: 1011;
+  padding: 0;
+  transition: width 0.25s ease 0.25s, height 0.25s ease 0s;
+
+  @media (--bp-mobile) {
+    font-size: var(--font-size-mobile-h1);
+  }
+
+}
+
+
+
+.sort-button > p {
+  margin: auto;
+  grid-column-start: 1;
+  grid-row-start: 1;
+}
+
+.sort-button.mixitup-control-active > p {
+  color: var(--bg-color);
+}
+
+#sort.active ~ #sort-buttons .sort-button {
+  width: 168px;
+  height: 40px;
+  transition: width 0.25s ease 0s, height 0.25s ease 0.25s;
+
+  @media (--bp-desktop-wide) {
+    width: 160px;
+  }
+
+}
+
+.sort-button::before {
+  content: "";
+  grid-column-start: 1;
+  grid-row-start: 1;
+  width: 0%;
+  color: var(--bg-color);
+  background-color: black;
+  transition: width 1s ease;
+  height: 40px;
+}
+
+.sort-button.mixitup-control-active::before {
+  width: 100%;
+}
+
+.sort-button.mixitup-control-active {
+  color: var(--bg-color);
+  height: 40px;
+}
+
+
+
+/* filter */
+/* filter */
+/* filter */
+
+
+
+#filter-wrapper {
+
+display: grid; /* Keeps the grid layout */
+grid-template-columns: min-content  min-content;
+grid-column-start: 2;
+width: auto;
+
+  @media (--bp-mobile) {
+    font-size: var(--font-size-mobile-small);
+    grid-template-columns: min-content min-content min-content;
+    margin: 0;
+    overflow-x: scroll;
+    grid-column-start: 2;
+    grid-row-start: 1;
+    align-items: end;
+  }
+
+}
+
+#filter {
+  display: grid;
+  width: 110px;
+  margin-left: 2px;
+  place-items: center;
+  grid-column-start: 1;
+  grid-column-end: 2;
+
+  @media (--bp-mobile) {
+  
+  }
+
+  @media (--bp-desktop-wide) {
+    width: 120px;
+  }
+  
+}
+
+#filter-span {
+  grid-column-start: 1;
+}
+
+.chevron {
+  place-self: center;
+  grid-column-start: 2;
+  font-size: 16px;
+  transform: rotateZ(0);
+  transition: transform 0.25s ease 0.25s;
+}
+
+#filter.active .chevron {
+  transform: rotateZ(180deg);
+}
+
+
+
+
+
+/* filter buttons */
+
+.filter-title {
+  font-size: var(--font-size-desktop-h1);
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  align-self: center;
+  overflow: hidden;
+
+  @media (--bp-mobile) {
+    font-size: var(--font-size-mobile-h1);
+  }
+
+}
+
+.filter-button {
+  font-family: PowerGrotesk-Light;
+  color: black;
+  display: grid;
+  width: 168px;
+  height: 0px;
+  font-size: var(--font-size-dekstop);
+  letter-spacing: 0.6px;
+  border: 0px;
+  background-color: transparent;
+  overflow: hidden;
+  cursor: pointer;
+  z-index: 1011;
+  padding: 0;
+  transition: width 0.5s ease 0s, height 0.5s ease 0s;
+
+  @media (--bp-mobile) {
+    font-size: var(--font-size-mobile-h1);
+  }
+
+  @media (--bp-desktop-wide) {
+    width: 168px;
+  }
+
+}
+
+#filter.active + #filter-box .filter-button {
+  height: 32px;
+  transition: height 0.75s ease 0.375s;
+}
+
+#filter.active + #filter-box:has(.filter-button.mixitup-control-active) .filter-button  {
+  transition: height 0.5s ease 0.5s;
+}
+
+.filter-button > p {
+  margin: auto;
+  grid-column-start: 1;
+  grid-row-start: 1;
+}
+
+.filter-button.mixitup-control-active > p {
+  color: var(--bg-color);
+}
+
+.filter-button::before {
+  content: "";
+  grid-column-start: 1;
+  grid-row-start: 1;
+  width: 0%;
+  color: var(--bg-color);
+  background-color: black;
+  transition: width 1s ease;
+  height: 32px;
+}
+
+.filter-button.mixitup-control-active::before {
+  width: 100%;
+}
+
+.filter-disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+
+/* filter reset  */
+
+#filter-reset-wrapper {
+  @media (--bp-mobile) {
+    grid-column-start: 1;
+    grid-row-start: 4;
+  }
+}
+
+#filter-reset-all {
+
+  background-color: black;
+}
+
+#filter-reset-all > p {
+  color: var(--bg-color);
+}
+
+
+
+
+
+
+
+
+/* filter-box  */
+
+ #filter-box {
+  display: grid;
+  width: auto;
+  grid-template-columns: 0px 0px 0px 0px;
+  height: min-content;
+  grid-column: 2 / 3;
+  background-color: var(--bg-color);
+  transition: grid-template-columns 0.25s ease 0.25s, height 0.5s ease 0.75s;
+
+}
+
+/* filter-box active */
+#filter.active + #filter-box {
+  grid-template-columns: 10px min-content  0px 10px;
+  transition: grid-template-columns 0.25s ease 0s, height 0.75s ease 0.25s;
+
+}
+
+
+
+/* one of the many filter-button active */
+#filter:not(.active) + #filter-box:has(.filter-button.mixitup-control-active)  {
+  grid-template-columns: 4px min-content min-content 4px;
+  /* makes the transition smoother */
+  transition: grid-template-columns 0.25s ease 0.25s;
+}
+
+
+/* this makes sure the active filter transitions smoothly*/
+#filter.active + #filter-box:has(.filter-button.mixitup-control-active)  {
+  grid-template-columns: 10px min-content min-content 10px;
+  transition: grid-template-columns 0.5s ease 0.25s;
+}
+
+
+
+
+/* group wrapper  */
+/* group wrapper  */
+/* the var are defined in the front matter  */
+
+
+#group-wrapper {
+  --roleFiltersHeight: calc(var(--roleFilters) * 32px + 40px );
+  --programFiltersHeight: calc(var(--programFilters) * 32px + 40px);
+  --topicFiltersHeight: calc(var(--topicFilters) * 32px + 8px);
+  display: grid;
+  grid-template-rows: var(--roleFiltersHeight) var(--programFiltersHeight) var(--topicFiltersHeight) 40px;
+  grid-template-columns: 168px;
+  place-content: flex-start;
+  width: 0px;
+  transition: 
+    opacity 0.125s ease 0.125s,
+    grid-template-rows 0.25s ease 0s,
+    width 0.25s ease 0.25s;
+}
+
+#filter.active + #filter-box #group-wrapper {
+  opacity: 1;
+  width: 168px;
+  transition:
+    opacity 0.5s ease 0.5s,
+    grid-template-rows 0.5s ease 0.25s,
+    width 0.25s ease 0s;
+
+}
+
+#filter:not(.active) + #filter-box #group-wrapper {
+  grid-template-rows: 0px 0px 0px 0px;
+  width: 0px;
+  opacity: 0;
+}  
+
+#filter.active + #filter-box:has(.filter-button.mixitup-control-active) #group-wrapper{
+  width: 168px;
+  transition: 
+    opacity 0.125s ease 0.5s,
+    grid-template-rows 0.25s ease 0.5s,
+    width 0.25s ease 0.25s;
+}
+
+
+
+
+
+/* filter-group: Role Tool Topic  */
+/* filter-group: Role Tool Topic  */
+/* filter-group: Role Tool Topic  */
+
+
+.filter-group {
+  display: grid;
+  grid-auto-columns: min-content;
+  grid-column-gap: 8px;
+  height: fit-content;
+  grid-template-rows: 0px;
+  grid-auto-rows: 0px min-content;
+  place-content: space-between;
+  overflow: hidden;
+  opacity: 0;
+  transition: grid-template-rows 0.25s ease 0s, opacity 0.125s ease 0s ;
+}
+
+#filter.active + #filter-box .filter-group {
+  grid-template-rows: 28px;
+  opacity: 1;
+  transition: grid-template-rows 0.25s ease 0.375s, opacity 0.125s ease 0.375s ;
+},
+
+#filter:not(.active) + #filter-box .filter-group:has(.filter-button.mixitup-control-active) {
+  transition: grid-template-rows 0.25s ease 0s, opacity 0.125s ease 0s ;
+}
+
+#filter.active + #filter-box .filter-group:has(.filter-button.mixitup-control-active) {
+  transition: grid-template-rows 0.25s ease 0.5s, opacity 0.125s ease .5s ;
+}
+
+
+
+
+
+
+
+
+/* brackets */
+
+.bracket-start {
+  width: 20px;
+  border-top: 1.5px solid black;
+  border-bottom: 1.5px solid black;
+  border-left: 1.5px solid black;
+  opacity: 1;
+  transition: opacity 0.5s ease 0.75s;
+}
+
+#filter.active + #filter-box .bracket-start {
+  transition: opacity 0.2s ease 0.1s;
+}
+
+.bracket-end {
+  width: 20px;
+  position: relative;
+  left: -16px;
+  border-top: 1.5px solid black;
+  border-bottom: 1.5px solid black;
+  border-right: 1.5px solid black;
+  opacity: 1;
+  transition: opacity 0.5s ease 0.75s;
+}
+
+#filter.active + #filter-box .bracket-end {
+  transition: opacity 0.2s ease 0.1s;
+  left: -10px;
+}
+
+#filter:not(.active) + #filter-box:not(:has(.filter-button.mixitup-control-active)) .bracket-start {
+  opacity: 0;
+  transition: opacity 0.25s ease 0.25s;
+}
+
+#filter:not(.active) + #filter-box:not(:has(.filter-button.mixitup-control-active)) .bracket-end {
+  opacity: 0;
+  transition: opacity 0.25s ease 0.25s;
+}
+
+
+
+.bracket-v {
+  opacity: 0;
+}
+
+#filter.active + #filter-box .bracket-v {
+  opacity: 1;
+}
+
+ + #filter-box .group-wrapper .filter-group {
+  grid-column-start: 1;
+} 
+
+
+
+
+
+
+/* actve filter list  */
+
+#active-filters-list {
+  height: 40px;
+  width: 100%; 
+  min-width: 0px;
+  display: grid;
+  overflow: hidden;
+  grid-template-columns: repeat(var(--active-filters-list-length), 0px);
+  grid-gap: 0px;
+  justify-content: start; /* Align columns to left */
+  transition: min-width 0.125s ease 0.375s, grid-template-columns 0.5s ease 0.5s, grid-gap 0.5s ease 0.5s;
+}
+
+#filter:not(.active) + #filter-box #active-filters-list:has(div) {
+  min-width: 10px;
+  grid-template-columns: repeat(var(--active-filters-list-length), 168px);
+  grid-gap: 8px;
+
+  @media (--bp-mobile) {
+    grid-template-columns: repeat(var(--active-filters-list-length), 116px);
+  }
+
+}
+
+#filter.active + #filter-box #active-filters-list:has(div) {
+  min-width: 0px;
+  grid-template-columns: repeat(var(--active-filters-list-length), 0px);
+  grid-gap: 0px;
+  transition: min-width 0.125s ease 0s, grid-template-columns 0.25s ease 0s, grid-gap 0.25s ease 0s;
+}
+
+
+
+.active-filter {
+  font-family: PowerGrotesk-Light;
+  color: var(--bg-color);
+  display: grid;
+  width: 168px;
+  height: 32px;
+  font-size: 11px;
+  letter-spacing: 0.6px;
+  border: 0px;
+  background-color: black;
+  overflow: hidden;
+  cursor: pointer;
+  z-index: 1011;
+  text-align: center;
+  padding: 0;
+  margin: auto;
+  align-content: center;
+
+  
+  @media (--bp-mobile) {
+   width: 116px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</style>

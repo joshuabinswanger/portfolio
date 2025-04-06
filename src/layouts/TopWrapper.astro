@@ -8,10 +8,10 @@ import NavigationBar from "../components/NavigationBar.astro"
 
 
 <div id="TopWrapper">
-
-	<div id="Nav">
+	<div>
 		<NavigationBar />
 	</div>
+	
 
     <slot />
 
@@ -28,31 +28,42 @@ import NavigationBar from "../components/NavigationBar.astro"
 #TopWrapper{
 
     display: grid; 
-	grid-template-columns: var(--grid-template-columns-desktop);
+	grid-template-columns: var(--nav-main-layout-desktop);
+	padding-top: var(--padding-top-desktop);
+	padding-bottom: var(--padding-bot-desktop);
 	margin-left: var(--margin-left-dekstop);
 	margin-right: var(--margin-right-desktop);
-	grid-column-gap: 0.5rem;
+	grid-column-gap: 4px;
 	grid-template-rows: auto; /* Automatically adjust row heights based on content */
 
 	@media (--bp-mobile) {
-		grid-template-columns: var(--grid-template-columns-mobile);
+		grid-template-columns: var(--nav-main-layout-mobile);
+		padding-top: var(--padding-top-mobile);
+		padding-bottom: var(--padding-bot-mobile);
 		margin-left: var(--margin-left-mobile);
 		margin-right: var(--margin-right-mobile);
-		grid-column-gap: 0rem;
+		grid-column-gap: 0px;
 		height: 100svh;
 	}
 
 	@media (--bp-tablet){
-		grid-template-columns: var(--grid-template-columns-tablet);
+		grid-template-columns: var(--nav-main-layout-tablet);
+		padding-top: var(--padding-top-tablet);
+		padding-bottom: var(--padding-bot-tablet);
 		margin-left: var(--margin-left-tablet);
 		margin-right: var(--margin-right-tablet);
-		grid-column-gap: 0.5rem;
+		padding-right: 80px;
+		grid-column-gap: 4px;
 	}
 
 	@media (--bp-desktop-wide) {
-		grid-template-columns: var(--grid-template-columns-desktop-wide);
+		grid-template-columns: var(--nav-main-layout-desktop-wide);
+		padding-top: var(--padding-top-desktop-wide);
+		padding-bottom: var(--padding-bot-desktop-wide);
 		margin-left: var(--margin-left-desktop-wide);
 		margin-right: var(--margin-right-desktop-wide);
+		padding-right: 96px;
+		grid-column-gap: 4px;
 	}
 
 
@@ -61,6 +72,7 @@ import NavigationBar from "../components/NavigationBar.astro"
 #Nav {
 	@media (--bp-mobile) {
 		display: none;
+		position: fixed;
 	}
 }
 

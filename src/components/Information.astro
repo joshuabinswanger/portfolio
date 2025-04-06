@@ -27,21 +27,27 @@ links.sort((a, b) => a.data.sortOrder - b.data.sortOrder);
 
 
         <div id="AboutText">
+            <p id="rhizome">[ Rhizome (/'raɪˌzoʊm/) refers to an underground plant stem from which roots and shoots grow. ]</p>
+
+            <br/ >
             
-            <p>My name is Joshua Binswanger, I'm a designer and scientific illustrator.  </p>
+            <p>My name is Joshua Binswanger, I'm a designer and scientific illustrator.  </p>         
+            
+<!--             <div id="ProfilePic">
+            </div>  -->
            
-            <p>Working primarily at the intersection of knowledge transfer and visual storytelling, I strive to communicate complex information through engaging imagery and clear design. 
-                I thrive in an environment where I can learn, question and discuss new topics and combine them with my design aesthetic and technical expertise. </p>
+            <p>Working primarily at the intersection of knowledge transfer and visual storytelling, I strive to communicate complex information through engaging imagery. 
+                I thrive in an environment where I can learn, question and discuss new topics and combine them with my visual aesthetic and technical expertise.</p>
             
-            <p>A fascination with the intricacies of the natural world has guided my professional and personal work towards the fields of science and character & creature design.</p>
+            <p>A fascination with the intricacies of the natural world has guided my professional and personal work towards the fields of natural science and character design.</p>
             
-            <p>With a strong focus on learning, I am constantly exploring art, design and technology. I also strive to share my knowledge through courses, workshops and online platforms.</p>
+            <p>I also enjoy exploring new skills in art, design and technology as much as sharing my know-how through courses, workshops and online platforms.</p>
             
             <p>For collaboration or other inquiries, don't hesitate to contact me: <a href="mailto:info@rhizome.ch" id="Email" >info@rhizome.ch</a></p>
-        </div>
 
-        <div id="ProfilePic">
-        </div> 
+
+
+        </div>
 
         <p id="SelectedClients">
             <strong>Selected Clients:</strong><br><br>
@@ -61,6 +67,9 @@ links.sort((a, b) => a.data.sortOrder - b.data.sortOrder);
             Infographics<br>
             Workshops<br>
         </p>
+
+        
+        
 
 <!--         <div id="Contact">
             <p><strong>Contact:</strong></p>
@@ -116,9 +125,9 @@ p {
 #InfoWrapper{
     display: grid;
     align-items: center;
-    grid-template-columns: 7ch 1fr 1fr 1fr 7ch;
+    grid-template-columns: 16px 1fr 1fr 1fr 16px;
     grid-template-rows: 2fr 2fr 1fr;
-    column-gap: 1.5rem;
+    column-gap: 16px;
     margin-top: calc(var(--padding-desktop));
     max-height: calc(60vh - var(--padding-desktop));
 
@@ -145,6 +154,7 @@ p {
     @media (--bp-desktop-wide) {
         grid-column-start: 2;
         margin-top: calc(var(--padding-desktop-wide));
+        align-items: start;
     }
 }
 
@@ -173,14 +183,12 @@ p {
 }
 
 #ProfilePic {
+    position: relative;
     height: 100%;
-    max-height: 300px;
+    max-height: 200px;
     aspect-ratio: 3 / 4;
-    align-self: flex-start;
-    grid-row-start: 1;
-    grid-row-end: 3;
-    grid-column-start: 4;
-    grid-column-end: 5;
+    right: 0;
+    top: 0;
     background-color: var(--bg-color-accent);
 
   @media (--bp-mobile) {
@@ -281,6 +289,12 @@ p {
         color: black;
 }
 
+#rhizome {
+    font-size: 11px;
+    font-family: PowerGrotesk-Light;
+    font-style: italic;
+    opacity: 0.3;
+}
 
 #links-top-wrapper {
 

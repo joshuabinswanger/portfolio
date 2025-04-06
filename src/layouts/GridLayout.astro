@@ -1,8 +1,8 @@
 ---
-
+const { customClass = '', customStyle = '' } = Astro.props;
 ---
 
-<div id="GridContainer">
+<div id="grid-container" class:list={["grid-container", customClass]}>
     <slot />
    
 </div>
@@ -13,39 +13,56 @@
 @import "../styles/global.css";
 
 /* grid template columns: 17 Columns = 100vw - margin right - NavBar - margin left - column gap - scrollbar-wdith*(2) / 17*/
-#GridContainer {
+.grid-container {
     display: grid; 			
 	height: max-content;
-	grid-template-columns: repeat(17, calc((100vw - 1vw - 200px - 1vw - 0.5rem - calc(var(--scrollbar-width) * 2)) / 17));
-	grid-auto-rows: 6vw	;
-	padding-top: var(--padding-desktop); 
-	padding-bottom: 66lvh; 
+	grid-template-columns: var(--grid-layout-columns-desktop);
+	grid-auto-rows: 56px;
 	margin-bottom: 0; 
-	max-width: calc(100vw - 1vw - 200px - 1vw - 2rem - calc(var(--scrollbar-width) * 2));
 
 	@media (--bp-mobile) {
-		grid-template-columns: repeat(7, calc((100vw - 3px - 3px - var(--scrollbar-width)) / 7));
+		grid-template-columns: var(--grid-layout-columns-mobile);
 		grid-auto-rows: auto;
-		padding-top: var(--padding-mobile); 
 		padding-bottom: 2lvh; 
-		max-width: calc(100vw - 3px - 3px - var(--scrollbar-width));
 	}
 
 	@media (--bp-tablet) {
-		grid-template-columns: repeat(7, calc((100vw - 150px - 0.5rem var(--margin-right-tablet) - calc(var(--scrollbar-width) * 2)) / 7));
+		grid-template-columns: var(--grid-layout-columns-tablet);
 		grid-auto-rows: auto;
-		padding-top: var(--padding-tablet); 
 		padding-bottom: 0lvh;
-		max-width: calc(100vw - 150px - 0.5rem - var(--margin-right-tablet) - calc(var(--scrollbar-width) * 2)); 
 	}
 
 	@media (--bp-desktop-wide) {
-		grid-template-columns: repeat(17, calc((100vw - 13vw - 200px - 13vw - 2rem + 120px - calc(var(--scrollbar-width) * 2)) / 17));
-		padding-top: var(--padding-desktop-wide);
-		grid-auto-rows: 5vw; 
-		max-width: calc(100vw - 13vw - 200px - 13vw - 2rem + 120px - calc(var(--scrollbar-width) * 2));
-	 
+		grid-template-columns: var(--grid-layout-columns-desktop-wide);
+		grid-auto-rows: 88px; 
 	}
 }
+
+.archive-grid {
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	column-gap: 56px;
+  	grid-auto-rows: calc(6 * 56px);
+  
+	@media (--bp-mobile) {
+		grid-template-columns: 1fr 1fr;
+		column-gap: 16px;
+		row-gap: 16px;
+  		grid-auto-rows: auto;
+	}
+
+	@media (--bp-tablet) {
+		grid-template-columns: 1fr 1fr 1fr;
+		column-gap: 56px;
+  		grid-auto-rows: calc(6 * 56px);
+	}
+
+	@media (--bp-desktop-wide) {
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+		column-gap: 56px;
+  		grid-auto-rows: calc(6 * 56px);
+	}
+}
+
+
 
 </style>

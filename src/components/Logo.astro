@@ -1,43 +1,33 @@
 ---
-import { Picture } from "astro:assets"
-import RhizomLogo from "../assets/Logo_BGColor.png"
+import { Image } from "astro:assets"
+import RhizomLogo from "../assets/Rhizome_Logo_208h.jpg"
 ---
 
-<div id="Logo-Wrapper">
-
-    <a id="Logo" href="/" class:list={["animation"]} data-href="/" data-animation="out"><Picture src={RhizomLogo}  id="Picture" alt="Rhizom Logo" loading="eager"></a>
-
-</div>
+    <a id="Logo" href="/" class:list={["animation"]} data-href="/" data-animation="out"><Image src={RhizomLogo}  id="Image" alt="Rhizom Logo" loading="eager"></a>
 
 
 <style>
 @import "../styles/global.css";
 
-#Logo-Wrapper {
-    z-index: 1003;
-    width: 100%;
-    aspect-ratio: auto;
-    
-
-
-@media (--bp-mobile){
-
-  padding-top: 0.7rem;
-  display: block;
-  width: 27%;
-
-  }
-}
 
 #Logo {
   display: block;
   height: 100%;
+
+  @media (--bp-mobile){
+
+    padding-top: 32px;
+    display: block;
+    height: 36px;
+    width: 144px;
+
+  }
 }
 
 
-#Picture{
+#Image {
+  height: min-content;
   width: 100%;
-  height: auto;
 }
 
 </style>
