@@ -186,10 +186,12 @@ document.addEventListener('astro:before-swap', () => {
   padding-left: 16px;
   align-items: center;
   margin-top: var(--padding-desktop);
+  width: 100%;
 
   @media (--bp-mobile) {
     margin-top: var(--padding-mobile);
     padding-left: 0px;
+    grid-column-start: 1;
   }
   @media (--bp-tablet) {
     margin-top: var(--padding-tablet);

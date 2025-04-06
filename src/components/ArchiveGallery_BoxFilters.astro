@@ -606,8 +606,27 @@ document.addEventListener("astro:page-load", () => {
       }
     // --- END: Add Mutual Exclusivity Logic ---
   
-  
-  
+
+    // --- START: NEW - Close Sort dropdown when an option is clicked ---
+    const sortOptionButtons = document.querySelectorAll('#sort-buttons .sort-button'); // Get specific sort option buttons
+
+    if (sortButton && sortOptionButtons.length > 0) {
+        sortOptionButtons.forEach(optionBtn => {
+            optionBtn.addEventListener('click', () => {
+                // When a sort option like 'Random', 'Project', 'Date' is clicked...
+                // ...remove the 'active' class from the main Sort button to close the dropdown
+                setTimeout(() => {
+                sortButton.classList.remove('active');
+                // console.log('Sort option clicked, closing dropdown.'); // Optional debug log
+                }, 500);
+            });
+        });
+    } else {
+        if (!sortButton) console.error("Main sort button (#sort) not found for close logic.");
+        if (sortOptionButtons.length === 0) console.error("Sort option buttons not found for close logic.");
+    }
+    // --- END: NEW - Close Sort dropdown ---
+
   
     /////////////////////
     ///////MixItUp//////
@@ -715,18 +734,32 @@ document.addEventListener("astro:page-load", () => {
         appendTo: 'wrapper',
         html: '',
         onInit: (el, pswp) => {
-          lightbox.pswp.on('change', () => {
-            const currSlideElement = lightbox.pswp.currSlide?.data?.element;
-            let captionHTML = '';
-            if (currSlideElement) {
-              const description_title = currSlideElement.getAttribute('data-description_title');
-              const description_text = currSlideElement.getAttribute('data-description_text');
-              if (description_title) {
-                captionHTML = `<p><strong>${description_title}</strong></p><p>${description_text}</p>`;
-              }
-            }
-            el.innerHTML = captionHTML || '';
-          });
+				lightbox.pswp.on('change', () => {
+					// Retrieve the DOM element attached to the current slide
+					const currSlide = pswp.currSlide.data;
+					let captionHTML = '';
+
+					if (currSlide) {
+					const description_title = currSlide.description_title;
+					const description_text = currSlide.description_text;
+					const link = currSlide.link;
+
+					if (description_title && link) {
+						captionHTML = `
+						<p><strong>${description_title}</strong></p>
+						<p>${description_text}</p>
+						<p><a href="${link}">External Link</a></p>
+						`;
+					} else if (description_title) {
+						captionHTML = `
+						<p><strong>${description_title}</strong></p>
+						<p>${description_text}</p>
+						`;
+					}
+					}
+
+					el.innerHTML = captionHTML || '';
+				});
         },
       });
     });
@@ -845,7 +878,7 @@ document.addEventListener("astro:page-load", () => {
   @media (--bp-mobile) {
     bottom: 52px;
     padding-bottom: 4px;
-    left: 0px;
+    left: 2px;
     grid-template-columns: 56px auto;
     grid-template-rows: auto;
     width: 100%;
@@ -1048,7 +1081,7 @@ fieldset {
   width: 0%;
   color: var(--bg-color);
   background-color: black;
-  transition: width 1s ease;
+  transition: width 0.5s ease;
   height: 40px;
 }
 
