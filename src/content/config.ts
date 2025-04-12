@@ -27,6 +27,34 @@ export const collections = {
     })
   }),
 
+  portfolio: defineCollection({ 
+    loader: glob({ pattern: '**\/[^_]*.yaml', base: "./src/content/portfolio" }),
+    schema: z.object({
+      portfolioElementName: z.string(),
+      title: z.string(),
+      subtitle: z.string(),
+      shortDescription: z.string().optional(),
+      year: z.string(),
+      client: z.string().optional(),
+      collaborators: z.string().optional(),
+      role: z.string().optional(),
+      tools: z.string().optional(),
+      portfolio: z.boolean(),
+      tags: z.array(z.string()),
+      bgcolor: z.string().optional(),
+      projectDescription: z.string(),
+      credits: z.string(),
+      containedProjects: z.string().optional(),
+  
+      images: z.array(
+        z.object({
+          loading: z.enum(['eager', 'lazy']).optional(), // Define 'loading' as a Zod enum
+          to: z.string().optional(),
+        })
+      ).optional(),
+    }),
+  }),
+
   projects: defineCollection({ 
     loader: glob({ pattern: '**\/[^_]*.yaml', base: "./src/content/projects" }),
     schema: z.object({

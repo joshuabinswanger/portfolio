@@ -16,6 +16,7 @@ import Index from './Index.astro';
 
 <nav id="NavBarDesktop" transition:persist>
 
+
   <Logo />
 
   <div id="MainWrapper">
@@ -28,10 +29,23 @@ import Index from './Index.astro';
 
     <BracketMiddleV />
 
-    {/* Updated Archive link - now a direct link */}
-    <a id="archive-main" href="/projects" class:list={["MenuItems button animation"]} data-href="/archive-projects" data-animation="out">
-      Projects
-    </a>
+    <!-- For items with submenus, wrap them in a container -->
+    <div id="archive">
+      <a id="archive-main" href="/archive-gallery" class:list={["MenuItems button animation"]} data-href="/archive-gallery" data-animation="out">
+        Archive
+      </a>
+      <div id="archive-select">
+        <a id="archive-gallery" class:list={["archive-subitems button animation"]} href="/archive-gallery" data-href="/archive-gallery" data-animation="out">
+          Gallery
+        </a>
+        <a id="archive-project-list" class:list={["archive-subitems button animation"]} href="/archive-project-list" data-href="/archive-project-list" data-animation="out">
+          List
+        </a>
+        <a id="archive-projects" class:list={["archive-subitems button animation"]} href="/archive-projects" data-href="/archive-projects" data-animation="out">
+          Projects
+        </a>
+      </div>
+    </div>
 
     <BracketMiddleV />
 
@@ -46,7 +60,7 @@ import Index from './Index.astro';
 
 <script>
   import { navigate } from 'astro:transitions/client';
-
+  
   // Update visual state (add/remove active class)
   function updateAnimationState(buttons) {
     setTimeout(() => {
@@ -59,14 +73,38 @@ import Index from './Index.astro';
       });
     }, 300);
   }
-
+  
   // Handle button click for all buttons
   function handleButtonClick(clickedBtn, buttons) {
+    // Special branch for Archive main button:
+    if (clickedBtn.id === "archive-main") {
+      // Activate the Archive main button
+      clickedBtn.setAttribute('data-animation', "in");
+
+      // Optionally, set any other buttons in this group to "out"
+      buttons.forEach(btn => {
+        if (btn.id !== "archive-main") {
+          btn.setAttribute('data-animation', "out");
+        }
+      });
+  
+      // Find all archive subitems and force "Gallery" active, others inactive.
+      const archiveSubitems = document.querySelectorAll('.archive-subitems');
+      archiveSubitems.forEach(btn => {
+        if (btn.id === "archive-gallery") {
+          btn.setAttribute('data-animation', "in");
+        } else {
+          btn.setAttribute('data-animation', "out");
+        }
+      });
+
+      return;
+    }
+    
     // Special check: if clicked is Logo, force Portfolio active.
     if (clickedBtn.id === "Logo") {
       const portfolioBtn = Array.from(buttons).find(btn => btn.id === "portfolio");
       buttons.forEach(btn => {
-        // Also ensure archive-main is set to 'out' if Logo is clicked
         if (btn.id !== "portfolio" && btn.id !== clickedBtn.id) {
           btn.setAttribute('data-animation', "out");
         }
@@ -74,57 +112,69 @@ import Index from './Index.astro';
       if (portfolioBtn) {
         portfolioBtn.setAttribute('data-animation', "in");
       }
-      clickedBtn.setAttribute('data-animation', "in"); // Keep Logo active if needed, or set to out if it shouldn't stay active
-      return; // Exit after handling Logo click
+      clickedBtn.setAttribute('data-animation', "in");
+      return;
     }
-
+    
+    // For Archive subitems (Gallery, List, Projects):
+    if (
+      clickedBtn.id === "archive-gallery" ||
+      clickedBtn.id === "archive-project-list" ||
+      clickedBtn.id === "archive-projects"
+    ) {
+      const archiveSubitems = document.querySelectorAll('.archive-subitems');
+      archiveSubitems.forEach(btn => {
+        if (btn === clickedBtn) {
+          btn.setAttribute('data-animation', "in");
+        } else {
+          btn.setAttribute('data-animation', "out");
+        }
+      });
+      return;
+    }
+    
     // Default behavior: if button is currently "out", switch it "in" and set others "out"
     if (clickedBtn.getAttribute('data-animation') === "out") {
       buttons.forEach(btn => {
-        // Set any other active button to "out"
         if (btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
           btn.setAttribute('data-animation', "out");
         }
       });
-      // Set the clicked button to "in"
       clickedBtn.setAttribute('data-animation', "in");
     }
-    // Note: We don't need to call navigate() here because Astro's View Transitions
-    // handle navigation for standard <a> links automatically when transition:persist is used.
   }
-
+  
   // Attach event listeners to buttons
   function createEventListeners(buttons) {
     buttons.forEach(btn => {
       btn.addEventListener('click', event => {
-         // Prevent default link behavior only if needed for complex transitions,
-         // but for standard Astro View Transitions, let the browser handle it.
-         // event.preventDefault(); // Usually not needed with View Transitions
-
-         // Handle the animation state update
-         handleButtonClick(event.currentTarget, buttons);
-
-         // If NOT using View Transitions for navigation, you'd manually navigate:
-         // const href = event.currentTarget.getAttribute('data-href');
-         // if (href) {
-         //   navigate(href);
-         // }
+        handleButtonClick(event.currentTarget, buttons);
       });
     });
   }
-
+  
   // On page load, update visual state and attach click listeners.
   document.addEventListener("astro:page-load", () => {
     const navBar = document.getElementById("NavBarDesktop");
-    // Select all animatable links directly within MainWrapper
-    const mainButtons = navBar.querySelectorAll('#MainWrapper > a.animation');
+    const mainButtons = navBar.querySelectorAll('.animation');
     updateAnimationState(mainButtons);
     createEventListeners(mainButtons);
   });
+  
+  // Archive subitems onchange event (if needed)
+  document.addEventListener("astro:page-load", () => {
+    const navBar = document.getElementById("NavBarDesktop");
+    const archiveSubitem = navBar.querySelector('.archive-subitems');
+    if (archiveSubitem) {
+      archiveSubitem.onchange = event => {
+        const href = event.target.value;
+        navigate(href);
+      };
+    }
+  });
+  </script>
 
-  // Removed the second astro:page-load listener for archive subitems
 
-</script>
 
 <style>
 @import "../styles/global.css";
@@ -159,22 +209,26 @@ import Index from './Index.astro';
 #MainWrapper {
   width: 100%;
   display: grid;
-  /* Restored original grid rows for 3 main items */
   grid-template-rows: 0 48px 0 48px 0 48px 0;
-  transition: grid-template-rows 0.6s ease; /* Changed from columns to rows */
+  transition: grid-template-columns 0.6s ease;
 
   @media (--bp-tablet) {
     grid-template-rows: 0 40px 0 40px 0 40px 0;
-  }
+  } 
+    
+
+
 }
 
-/* Removed #MainWrapper:has(#archive-main.active) style */
+#MainWrapper:has(#archive-main.active) {
+grid-template-rows: 0 3rem 0 9.5rem 0 3rem 0;
+}
 
 .MenuItems {
   height: min-content;
   font-family: PowerGrotesk-Light;
   font-weight: 200;
-}
+} 
 
 .button {
   height: 100%;
@@ -183,10 +237,7 @@ import Index from './Index.astro';
   align-items: center;
   z-index: 1001;
   transition: color 0.3s ease 0.15s;
-  position: relative; /* Needed for ::before positioning */
-  display: flex; /* Ensure flex properties work */
-  justify-content: center; /* Center text horizontally */
-  align-items: center; /* Center text vertically */
+
 }
 
 a {
@@ -198,8 +249,10 @@ a {
   font-size: var(--font-size-dekstop-h1);
   margin: 0;
   height: 100%;
-  /* Moved display flex properties to .button */
-
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ 
 
   @media (--bp-mobile) {
     font-size: var(--font-size-mobile-h1);
@@ -212,18 +265,22 @@ a {
   }
 }
 
+
+
 /* The ::before pseudo-element creates a black bar that slides in from the bottom */
 .button::before {
   content: "";
   position: absolute;
   left: 0;
-  bottom: 0; /* Align to bottom */
   width: 0%;
-  height: 100%; /* Cover full height */
+  height: 48px;
   background-color: black;
   transition: width 0.6s ease;
   z-index: -1;
 
+  @media (--bp-tablet) {
+    height: 40px;
+  } 
 }
 
 /* When active, change text color and expand the black bar */
@@ -234,6 +291,64 @@ a {
   width: 100%;
 }
 
-/* Removed all styles related to #archive, #archive-select, and .archive-subitems */
+#archive {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-rows: 3rem auto;
+  align-items: start;
+  overflow: hidden;
+}
+
+#archive-select {
+  display: grid;
+  height: 100%;
+  justify-content: center;
+  align-content: start;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0rem 0rem 0rem;
+  width: 100%;
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+  transition: grid-template-rows 0.4s ease;
+  overflow: hidden;
+
+}
+
+#archive-select:has(a.active) {
+  grid-template-rows: 2rem 2rem 2rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+
+}
+
+.archive-subitems {
+  font-size: 13px;
+  font-family: PowerGrotesk-UltraLight;
+  cursor: pointer;
+  height: 100%;
+}
+
+
+/* The ::before pseudo-element creates a black bar that slides in from the bottom */
+.archive-subitems::before {
+  content: "";
+  position: absolute;
+  left: 2%;
+  align-self: flex-start;
+  width: 0%;
+  height: 2rem;
+  background-color: black;
+  transition: width 0.4s ease 0.2s;
+  z-index: -1;
+  opacity: 0;
+
+}
+
+
+.archive-subitems.active::before {
+  width: 96%;
+  opacity: 1;
+}
 
 </style>

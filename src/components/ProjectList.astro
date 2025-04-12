@@ -43,26 +43,29 @@ projects.sort((a, b) =>
 		return(
 		<Fragment>
 			<div class:list={["ListElementWrapper"]} id={projectId}>
+        <div class:list={["list-element-bar"]}>
+          <div class:list={["column1"]}>
+            <div class:list={["year"]}> <p>{entry.data.year}</p> <p>{entry.data.client}</p> </div>
+          </div>
 
-				<div class:list={["column1"]}>
-					<div class:list={["year"]}> <p>{entry.data.year}</p> <p>{entry.data.client}</p> </div>
-				</div>
+          <div class:list={["column2"]}>
+            <div class:list={["project-title"]}> <p>{entry.data.title}</p> </div>
+          </div>
 
-				<div class:list={["column2"]}>
-					<div class:list={["project-title"]}> <p>{entry.data.title}</p> </div>
-				</div>
+          <div class:list={["column3"]}>
+            <div class:list={["role"]}> {entry.data.role}&ensp;|&ensp;{entry.data.tools}</div>
+          </div>
 
-				<div class:list={["column3"]}>
-					<div class:list={["role"]}> {entry.data.role}&ensp;|&ensp;{entry.data.tools}</div>
-				</div>
-
-        
-				<div class:list={["column4"]}>
-					&rarr;
-				</div>
+          
+          <div class:list={["column4"]}>
+            &darr;
+          </div>
+        </div>
 
 
 			<div class:list={["flip-out"]}>
+        <button class:list={["arrow-left"]}>&larr;</button>
+        <button class:list={["arrow-right"]}>&rarr;</button>
 				<div class:list={["project-images"]}>
 					<ThreeImageSlide project={entry.data.projectName}/>
 				</div>
@@ -91,73 +94,95 @@ document.addEventListener('astro:page-load', () => {
 
   listElements.forEach(listEl => {
 
-	const flipOut = document.querySelectorAll('.flip-out');
+    const flipOut = document.querySelectorAll('.flip-out');
 
-	const sliderContainer = listEl.querySelector('.project-images');
+    const sliderContainer = listEl.querySelector('.project-images');
 
-	listEl.addEventListener('click', () => {
+    const listBar = listEl.querySelector('.list-element-bar');
+
+    // click on bar
+    listBar.addEventListener('click', () => {
+
+      // First, close all other open sliders
+      listElements.forEach(el => {
+        if (el !== listEl && el.classList.contains('open')) {
+          // Remove the open state (this triggers the CSS transition)
+          el.classList.remove('open');
+        }
+      });
+
+      // Toggle the clicked slider:
+      if (listEl.classList.contains('open')) {
+
+      listEl.classList.remove('open');
+
+      setTimeout(() => {
+        sliderContainer.style.display = "";
+      }, 500);
 
 
+      } else {
 
-    // First, close all other open sliders
-    listElements.forEach(el => {
-      if (el !== listEl && el.classList.contains('open')) {
-        // Remove the open state (this triggers the CSS transition)
-        el.classList.remove('open');
+      sliderContainer.style.display = "block";
+
+      // Otherwise, open the element
+      listEl.classList.add('open');
+
+      if (sliderContainer && !sliderContainer.dataset.keenSliderInitialized) {
+      
+        var slider = new KeenSlider(sliderContainer, {
+          loop: true,
+          slides: {
+            // Default settings for larger screens
+            perView: 3,
+            spacing: 30,
+          },
+          breakpoints: {
+            '(max-width: 375px)': {
+            slides: { perView: 1, spacing: 15 },
+            },
+            '(max-width: 650px)': {
+            slides: { perView: 2, spacing: 20 },
+            },
+            '(min-width: 651px) and (max-width: 1200px)': {
+            slides: { perView: 3, spacing: 30 },
+            },
+            '(min-width: 1201px)': {
+            slides: { perView: 4, spacing: 30 },
+            },
+          }
+          },
+        );
+
+        
+        // Add click event listeners to the arrow buttons
+        const arrowLeft = listEl.querySelector('.arrow-left');
+        const arrowRight = listEl.querySelector('.arrow-right');
+      
+        if (arrowLeft) {
+          arrowLeft.addEventListener('click', () => {
+          slider.prev();
+          });
+        }
+      
+        if (arrowRight) {
+          arrowRight.addEventListener('click', () => {
+          slider.next();
+          });
+        }
+
+        sliderContainer.dataset.keenSliderInitialized = "true";
+      }
+
+
       }
     });
-
-
-	  // Toggle the clicked slider:
-	  if (listEl.classList.contains('open')) {
-
-		listEl.classList.remove('open');
-
-		setTimeout(() => {
-			sliderContainer.style.display = "";
-		}, 500);
-
-
-	  } else {
-
-		sliderContainer.style.display = "block";
-
-		// Otherwise, open the element
-		listEl.classList.add('open');
-
-
-
-		
-		if (sliderContainer && !sliderContainer.dataset.keenSliderInitialized) {
-		 
-      new KeenSlider(sliderContainer, {
-			loop: true,
-			slides: {
-			  // Default settings for larger screens
-			  perView: 3,
-			  spacing: 30,
-			},
-			breakpoints: {
-			  '(max-width: 375px)': {
-				slides: { perView: 1, spacing: 15 },
-			  },
-			  '(max-width: 650px)': {
-				slides: { perView: 2, spacing: 20 },
-			  },
-			  '(min-width: 651px) and (max-width: 1200px)': {
-				slides: { perView: 3, spacing: 30 },
-			  },
-			  '(min-width: 1201px)': {
-				slides: { perView: 4, spacing: 30 },
-			  },
-			}
-		  }
-    );
-		  sliderContainer.dataset.keenSliderInitialized = "true";
-		}
-	  }
-	});
   });
+
+
+
+  
+
 });
 
 
@@ -183,7 +208,6 @@ document.addEventListener('astro:before-swap', () => {
   grid-auto-rows: min-content min-content;
   grid-column-start: 2;
   margin: 1rem 0;
-  padding-left: 16px;
   align-items: center;
   margin-top: var(--padding-desktop);
   width: 100%;
@@ -203,12 +227,17 @@ document.addEventListener('astro:before-swap', () => {
 
 .ListElementWrapper {
   display: grid;
-  grid-template-columns: 1.5fr 2fr 1fr 48px;
+  grid-template-columns: 1fr;
   grid-template-rows: 52px auto ;
-  column-gap: 16px;
   transition: all 0.5s ease; /* Default transition for opening */
   cursor: pointer;
   overflow: hidden;
+}
+
+.list-element-bar {
+  display: grid;
+  grid-template-columns: 1.5fr 2fr 1fr 48px;
+  column-gap: 16px;
 
   @media (--bp-mobile) {
     grid-template-columns: 5ch 1fr 0px 48px;
@@ -225,15 +254,44 @@ document.addEventListener('astro:before-swap', () => {
   transition: all 0.5s ease;
   display: grid;
   grid-template-rows: 1fr;
+  grid-template-columns: 40px 1fr 40px;
+}
+
+.arrow-left, .arrow-right {
+  all: unset;
+  font-size: 22px;
+  height: 40px;
+  text-justify: center;
+  text-align: center;
+  background-color: #fbf9f44c;
+  width: stretch;
+  cursor: pointer;
+  z-index: 1011;
+  align-self: center;
+}
+
+.arrow-left{
+  grid-row-start: 1;
+  grid-column-start: 1;
+}
+
+.arrow-right {
+  grid-row-start: 1;
+  grid-column-start: 3;
+  justify-self: flex-end;
 }
 
 .project-images {
   /* No display toggle—its parent (.flip-out) will handle the animation */
   display: none;
+  grid-row-start: 1;
+  grid-column-start: 1;
+  grid-column-end: 4;
 }
 
 /* When open, expand the container */
 .ListElementWrapper.open .flip-out {
+  display: grid;
   margin: 8px 0px 16px 0px;
   max-height: 700px; /* Adjust as needed if your content height is known */
   margin-top: 1rem;
@@ -315,8 +373,8 @@ p {
 
 }
 
-.ListElementWrapper.open > .column4 {
-transform: rotatez(90deg) ;
+.ListElementWrapper.open > .list-element-bar > .column4 {
+transform: rotatez(180deg) ;
 }
 
 </style>

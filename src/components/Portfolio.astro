@@ -6,7 +6,7 @@ import { getCollection } from 'astro:content';
 
 // Get props
 interface Props {
-  portfolio: boolean;
+  portfolio?: boolean;
 }
 
 const { portfolio } = Astro.props;
@@ -14,18 +14,12 @@ const { portfolio } = Astro.props;
 // Declare a single array or variable for your data
 let galleryProjects = [];
 
-// Conditionally fetch the items you want
-if (portfolio) {
-  // Only fetch items with data.portfolio === true
-  galleryProjects = await getCollection('projects', ({ data }) => data.portfolio === true);
-} else {
-  // Otherwise fetch all
-  galleryProjects = await getCollection('projects', ({ data }) => data.portfolio !== true);
-}
+galleryProjects = await getCollection('portfolio', ({ data }) => data.portfolio === true);
+
 
 // Sort
 galleryProjects.sort((a, b) =>
-  a.data.projectName.localeCompare(b.data.projectName)
+  a.data.portfolioElementName.localeCompare(b.data.portfolioElementName)
 );
 
 ////////////////////////////////////////////////
@@ -38,13 +32,13 @@ const enrichedProjects = [];
 
 for (const entry of galleryProjects) {
   // Sanitize project name for a valid ID
-  const projectId = entry.data.projectName.replace(/\s+/g, '-').toLowerCase();
+  const projectId = entry.data.portfolioElementName.replace(/\s+/g, '-').toLowerCase();
 
   // Save the starting index for this project
   const startIndex = globalIndex;
 
   // Construct the targetProject from entry.data.meta (or any other property)
-  // For example, if entry.data.meta is "Gallery_projectName", we split on "_"
+  // For example, if entry.data.meta is "Gallery_portfolioElementName", we split on "_"
   const targetProject = String(projectId).split('_')[1];
 
   // Fetch galleryImages filtered by the targetProject
@@ -91,7 +85,7 @@ console.log(enrichedProjects);
 				<div class:list={["gallery-placeholder"]}>
 				</div>
 				<GalleryElement
-				project={entry.data.projectName}
+				project={entry.data.portfolioElementName}
 				startIndex={startIndex}
 				slidesCount={slidesCount}
 				/>
@@ -106,7 +100,7 @@ console.log(enrichedProjects);
 				<div class:list={["gallery-placeholder"]}>
 					{/* <img src="/src/assets/ImagePlaceholder.jpg" alt="Gallery Preview" loading="eager" /> */}				</div>
 				<GalleryElement
-				project={entry.data.projectName}
+				project={entry.data.portfolioElementName}
 				startIndex={startIndex}
 				slidesCount={slidesCount}
 				/>
@@ -450,11 +444,11 @@ imageElements.forEach((image, index) => {
 			const projectTitle = galleryEl.getAttribute('data-gallery-project') || 'Default Project Title';
 
 			//style with title slide
-			const projectNameElement = {
+			const portfolioElementNameElement = {
 			html: `<div class="pswp__project-title-slide photoswipeData"><p class="pswp__project-title ">${projectTitle}</p></div>`,
 			};
 
-			galleryData.push(projectNameElement);
+			galleryData.push(portfolioElementNameElement);
 
 
 			

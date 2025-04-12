@@ -28,14 +28,42 @@ import "../styles/global.css";
       <BracketMiddleH />
 
       <!-- Archive submenu -->
-      <a       
-        id="projects"
-        class:list={["main-button", "button", "animation"]}
-        href="/projects"          
-        data-href="/projects" 
-        data-animation="out">
-        Projects
-      </a>
+      <div id="archive">
+        <a       
+          id="archive-main"
+          class:list={["main-button", "button", "animation"]}
+          href="/archive-gallery"          
+          data-href="/archive-gallery" 
+          data-animation="out">
+          Archive
+        </a>
+        <div id="archive-select">
+          <a 
+            id="archive-gallery"
+            class:list={["archive-subitems", "button", "animation"]} 
+            href="/archive-gallery"
+            data-href="/archive-gallery"
+            data-animation="out">
+            Gallery
+          </a>
+          <a 
+            id="archive-project-list"
+            class:list={["archive-subitems", "button", "animation"]} 
+            href="/archive-project-list"
+            data-href="/archive-project-list"
+            data-animation="out">
+            List
+          </a>
+          <a 
+            id="archive-projects"
+            class:list={["archive-subitems", "button", "animation"]} 
+            href="/archive-projects"
+            data-href="/archive-projects"
+            data-animation="out">
+            Projects
+          </a>
+        </div>
+      </div>
 
       <BracketMiddleH />
 
@@ -86,6 +114,10 @@ import "../styles/global.css";
   transition: grid-template-columns 0.6s ease;
 }
 
+#MainWrapper:has(#archive-main.active) {
+  grid-template-columns: 0 1fr 0 3fr 0 .75fr 0;
+} 
+
 /* Main button styling and active animation */
 .button {
   position: relative;
@@ -134,7 +166,64 @@ a {
   height: 100%;
 }
 
+/* Archive submenu styling */
+#archive {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr min-content;
+  column-gap: 3px;
+  align-items: center;
+  justify-content: left;
+  padding-right: 1vw;
+}
 
+
+
+#archive-select {
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr ;
+  column-gap: 1px;
+  width: 0ch;
+  height: calc(100% - 4px);
+  overflow: hidden;
+  transition: width 0.6s ease;
+}
+
+#archive-main.active ~ #archive-select {
+  width: 19ch;
+}
+
+.archive-subitems {
+  font-size: 11px;
+  font-family: PowerGrotesk-UltraLight;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  align-content: center;
+  text-align: center;
+}
+
+/* The ::before pseudo-element creates a black bar that slides in from the bottom */
+.archive-subitems::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  height: 0%;
+  width: 100%;
+  background-color: black;
+  transition: height 0.6s ease;
+  z-index: -1;
+}
+
+.archive-subitems.active {
+  color: var(--bg-color);
+}
+.archive-subitems.active::before {
+  height: 100%;
+}
 </style>
 
 <script>
@@ -156,13 +245,13 @@ a {
   // Handle button click for all buttons
   function handleButtonClick(clickedBtn, buttons) {
     // Special branch for Archive main button:
-    if (clickedBtn.id === "projects") {
+    if (clickedBtn.id === "archive-main") {
       // Activate the Archive main button
       clickedBtn.setAttribute('data-animation', "in");
 
       // Optionally, set any other buttons in this group to "out"
       buttons.forEach(btn => {
-        if (btn.id !== "projects") {
+        if (btn.id !== "archive-main") {
           btn.setAttribute('data-animation', "out");
         }
       });
