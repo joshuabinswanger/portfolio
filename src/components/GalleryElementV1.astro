@@ -28,28 +28,50 @@ interface Props {
 // Generate a unique ID for each instance
 const instanceId = Math.random().toString(36).slice(2, 11);  
 
-// Fetch the specific gallery project by the project name (slug)
-const galleryProject = await getEntry('projects', `${Astro.props.project}-gallery`);
 
-if (!galleryProject) {
-  throw new Error(`Project with slug "${Astro.props.project}-gallery" not found.`);  
-}
+
+
 
 // Turn Prop into string
-const targetProject = String(project).split('_')[1];
-/* console.log(`${targetProject}`); */
+const targetProject = Astro.props.project;
+console.log(`${targetProject}`);
+
+// Fetch the project entry from the 'portfolio' collection
+// Convert targetProject to lowercase to match the expected slug
+const galleryProject = await getEntry('portfolio', targetProject.toLowerCase());
+console.log(`Gallery Project Fetched: ${galleryProject.data.portfolioElementName} `);
+
+// Check if galleryProject exists before accessing its data
+let containedProjects: string[] = [];
+if (galleryProject && galleryProject.data && galleryProject.data.portfolioElementProjects) {
+  // Create array of elements to check against in the galleryImages
+  containedProjects = galleryProject.data.portfolioElementProjects;
+} else {
+  console.warn(`galleryProject or portfolioElementProjects not found for ${targetProject}. galleryImages filter will not be applied.`);
+}
 
 // Use getCollection with a filter function to only retrieve images with a matching project
+// Filter images based on whether their metadata.project is included in containedProjects array
 const galleryImages = await getCollection('galleryImages', ({ data }) => {
-  return data.metadata?.project === targetProject;
+  // Ensure data.metadata and data.metadata.project exist
+  if (data.metadata && data.metadata?.project) {
+    // Check if the image's project is included in the containedProjects array
+    // Assuming data.metadata.project is a single string
+    return containedProjects.includes(data.metadata?.project);
+  }
+  return false; // Exclude images without metadata or project field
 });
-
 
 // Sort galleryImages by public_id
 galleryImages.sort((a, b) => a.data.public_id.localeCompare(b.data.public_id));
 
+
+
+
+
 // Check if any image has metadata.highres_public_id
 const hasHighRes = galleryImages.some(image => image.data?.metadata?.highres_public_id);
+
 /* console.log(hasHighRes) */
 
 const highResData = [];
@@ -86,11 +108,13 @@ for (const image of galleryImages) {
 
 }
 
+
+//Images Amount
 const imagesAmount = galleryImages.length;
 
 ---
 
-<div id={`slider-${instanceId}`} class:list={"GalleryElement "} data-instanceId={instanceId} data-slidesCount={Astro.props.slidesCount} data-gallery-project={galleryProject.data.title}>
+<div id={`slider-${instanceId}`} class:list={"GalleryElement "} data-instanceId={instanceId} data-slidesCount={Astro.props.slidesCount} data-gallery-project={'test'}>
   
   <div class:list={"SlidesContainer keen-slider"}>
 

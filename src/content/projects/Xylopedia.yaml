@@ -1,0 +1,38 @@
+projectName: "Xylopedia"
+title: "Xylopedia"
+subtitle: "3D Learning App"
+year: "2024"
+client: "HNE Eberswalde"
+collaborators: "S. Scherrer, J. Hammel, J. Lauströer, J. Stuhrmann, S. Lautner, M. Möhring"
+role: "3D Design Lead"
+
+portfolio: true
+
+tags:
+  - nature
+  - photography
+  - art
+
+bgcolor: "#DFE2D8cc"
+
+projectDescription: |
+        **Xylopedia** is an app for explorative learning of micro-anatomical wood structures. 
+
+        Students at the University for Sustainable Development in Eberswalde, Germany, now have the app to help them understand the complex anatomy of wood. Based on microCT scans from the Helmholtz Centre Hereon, we created novel 3D models for real-time exploration.  
+        <br>**<a href="https://ms.hereon.de/xylopedia/index.php.en" target="_blank" style="pointer-events: auto; color: black;">Visit Xylopedia</a>** 
+
+credits: |
+      <table>
+      <tr>
+        <th>Client:</th>
+        <td>HNE Eberswalde</td>
+      </tr>
+      <tr>
+        <th>Team:</th>
+        <td>S. Scherrer, J. Hammel, J. Lauströer, J. Stuhrmann, S. Lautner, M. Möhring</td>
+      </tr>
+      <tr>
+        <th>Tools:</th>
+        <td>Unity, Blender, Cinema 4D</td>
+      </tr>
+      </table>

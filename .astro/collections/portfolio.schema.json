@@ -4,8 +4,17 @@
     "portfolio": {
       "type": "object",
       "properties": {
+        "portfolioElementProjects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "portfolioElementName": {
           "type": "string"
+        },
+        "priority": {
+          "type": "number"
         },
         "title": {
           "type": "string"
@@ -76,7 +85,9 @@
         }
       },
       "required": [
+        "portfolioElementProjects",
         "portfolioElementName",
+        "priority",
         "title",
         "subtitle",
         "year",

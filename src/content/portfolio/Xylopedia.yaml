@@ -1,4 +1,8 @@
-projectName: "01_xylopedia"
+portfolioElementProjects: 
+  - Xylopedia
+portfolioElementName: "Xylopedia"
+priority: 1
+
 title: "Xylopedia"
 subtitle: "3D Learning App"
 year: "2024"

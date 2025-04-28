@@ -1,0 +1,100 @@
+projectName: "Buchdrucker"
+
+title: "Buchdrucker"
+subtitle: "Information Poster"
+year: "2020"
+client: "Bayerischen Landesanstalt für Wald und Forstwirtschaft"
+collaborators: ""
+role: "Illustration"
+
+portfolio: true
+
+tags:
+  - barkbeetle
+  - farming
+  - climatechange
+  - forest
+
+bgcolor: "#111111cc"
+
+projectDescription: |
+       The European Spruce Bark Beetle (Ips typographus) and the Engraver Beetle (Pityogenes chalcographus) are two of the most destructive pests in modern forestry. Their infestations cause extensive damage to spruce forests, particularly under warmer conditions that accelerate beetle populations. These outbreaks pose significant challenges for sustainable forest management and highlight the need for proactive pest control measures in the face of climate change.
+       To educate foresters the LWF contacted me to create large posters to be used for workshops.<br>
+       <br>**<a href="https://borkenkaefer.org" target="_blank" style="pointer-events: auto; color: black;">Borkenkaefer.org</a>**
+
+credits: |
+    <table>
+        <tr>
+          <th>Client:</th>
+          <td>Bayerischen Landesanstalt für Wald und Forstwirtschaft</td>
+        </tr>
+                <tr>
+          <th>Tools:</th>
+          <td>Adobe Photoshop, InDesgin, Illustrator</td>
+        </tr>
+      </table>
+
+
+images:
+  - src: "/src/assets/projects/borkenkaefer/Borkenkaefer_Gallery_1.webp"
+    alt: "Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalcographus)"
+    loading: "eager"
+    description:  |
+        **Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalcographus)** *br*   
+        Tool: Photoshop
+    imageTags: 
+      - houdini
+      - 3D
+      - octane
+      - procedural
+      - mograph
+      
+
+  - src: "/src/assets/projects/borkenkaefer/Borkenkaefer_Gallery_2.webp"
+    alt: "Houdini procedurally generated 3D Blood Vessels representing a Nintendo 64 Close Up"
+    description:  |
+        **N64 Controller Close Up** *br*   
+         Tool:  Houdini, Octane, Blender, Davinci
+    imageTags:
+      - houdini
+      - 3D
+      - octane
+      - procedural
+      - mograph
+
+  - src: "/src/assets/projects/borkenkaefer/Borkenkaefer_Gallery_3.webp"
+    alt: "Poster showing Houdini procedurally generated 3D Blood Vessels representing a Nintendo 64"
+    description:  |
+        **Poster for Event Series** *br*   
+         Tool:  Houdini, Octane, Blender, Affinity Suite, Davinci
+    imageTags:
+      - houdini
+      - 3D
+      - octane
+      - procedural
+      - mograph
+      - graphicdesign
+
+  - src: "/src/assets/projects/borkenkaefer/Borkenkaefer_Gallery_4.webp"
+    alt: "Houdini procedurally generated 3D Blood Vessels representing a Joystick"
+    description:  |
+        **Joystick** *br*   
+         Tool: Houdini, Blender
+    imageTags:
+      - houdini
+      - 3D
+      - octane
+      - procedural
+      - mograph
+
+  - src: "/src/assets/projects/borkenkaefer/Borkenkaefer_Gallery_5.webp"
+    alt: "Houdini procedurally generated 3D Blood Vessels representing a Keyboard"
+    description:  |
+        **Keyboard** *br*   
+        Tool: Houdini, Houdini Modeler
+    imageTags:
+      - houdini
+      - 3D
+      - octane
+      - procedural
+      - mograph

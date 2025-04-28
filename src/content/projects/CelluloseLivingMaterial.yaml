@@ -1,0 +1,37 @@
+projectName: "CelluloseLivingMaterial"
+title: "Cellulose Living Material"
+subtitle: "Process Illustration"
+year: "2023"
+client: "ETH - Complex Materials Group"
+collaborators: ""
+role: "Design"
+
+portfolio: true
+
+tags:
+  - Science2Science
+  - 3D
+  - Blender
+
+bgcolor: "#DFE2D8cc"
+
+projectDescription: |
+    **Directed evolution of material-producing microorganisms** <br>
+    While microorganisms offer a promising route for sustainable material manufacturing, optimizing their production capabilities can be slow. To accelerate this, researchers developed a high-throughput directed evolution platform, using it to enhance cellulose production in bacteria and uncover a key genetic link, highlighting its value for developing new manufacturing strains. <br> 
+    <br>**<a style="color: black;" href="https://doi.org/10.1073/pnas.2403585121" target="_blank" style="pointer-events: auto; color: black;">Research Paper</a>**
+       
+credits: |
+    <table>
+        <tr>
+          <th>Client:</th>
+          <td>ETH - Complex Materials Group</td>
+        </tr>
+                <tr>
+          <th>Tools:</th>
+          <td>Blender, Adobe Suite</td>
+        </tr>
+        <tr>
+          <th>Citation:</th>
+          <td> J.M. Laurent, A. Jain, A. Kan, M. Steinacher, N. Enrriquez Casimiro, S. Stavrakis, A.J. deMello, & A.R. Studart, Directed evolution of material-producing microorganisms, Proc. Natl. Acad. Sci. U.S.A. 121 (31) e2403585121, <a style="color: black;" href="https://doi.org/10.1073/pnas.2403585121" target="_blank" style="pointer-events: auto; color: black;">https://doi.org/10.1073/pnas.2403585121 (2024).</a>
+          </td>
+      </table>

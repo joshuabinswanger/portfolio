@@ -14,61 +14,81 @@ const { portfolio } = Astro.props;
 // Declare a single array or variable for your data
 let galleryProjects = [];
 
-galleryProjects = await getCollection('portfolio', ({ data }) => data.portfolio === true);
+const portfolioProjects = await getCollection('portfolio');
 
 
 // Sort
-galleryProjects.sort((a, b) =>
-  a.data.portfolioElementName.localeCompare(b.data.portfolioElementName)
-);
+portfolioProjects.sort((a, b) => {
+  // Ensure priority exists and is a number
+  const priorityA = Number(a.data.priority);
+  const priorityB = Number(b.data.priority);
 
-////////////////////////////////////////////////
-//// Constructing enrichedProject Data ////////
-/////So we can pass the slide Amount to the GalleryElement
+  return priorityA - priorityB; // Ascending order
+  
+  // For descending order, use: return priorityB - priorityA;
+});
 
+console.log("Logging portfolioElementProjects for each project:");
+portfolioProjects.forEach((entry, index) => {
+  // Assuming each entry has data.portfolioElementProjects
+  console.log(`Project Entry ${index} (ID: ${entry.id}):`, entry.data.portfolioElementProjects);
+});
 
-let globalIndex = 0;
-const enrichedProjects = [];
-
-for (const entry of galleryProjects) {
-  // Sanitize project name for a valid ID
-  const projectId = entry.data.portfolioElementName.replace(/\s+/g, '-').toLowerCase();
-
-  // Save the starting index for this project
-  const startIndex = globalIndex;
-
-  // Construct the targetProject from entry.data.meta (or any other property)
-  // For example, if entry.data.meta is "Gallery_portfolioElementName", we split on "_"
-  const targetProject = String(projectId).split('_')[1];
-
-  // Fetch galleryImages filtered by the targetProject
-  const galleryImages = await getCollection('galleryImages', ({ data }) => {
-	/* console.log('Image project:', data.metadata?.project, 'Target:', targetProject); */
-    return data.metadata?.project === targetProject;
-  });
-
-  // Determine the number of slides
-  const slidesCount = galleryImages.length;
-
-  // Update globalIndex – here we assume:
-  // 1 for the name, slidesCount for the slides, and 1 for the description.
-  globalIndex += slidesCount + 2;
-
-  // Add all computed values to our enrichedProjects array
-  enrichedProjects.push({
-    entry,
-    projectId,
-    startIndex,
-    galleryImages,
-    slidesCount
-  });
-}
-
-enrichedProjects.sort((a, b) => a.startIndex - b.startIndex);
+// Make sure galleryProjects is defined and is an array before this
+console.log(`[DEBUG] Starting loop. Number of galleryProjects: ${portfolioProjects?.length ?? 'undefined'}`); // Log before loop
 
 
-console.log(enrichedProjects);
+let enrichedProjects = []; // Ensure initialized
+let globalIndex = 0;      // Ensure initialized
 
+// Use async function if not already in Astro frontmatter
+// async function processProjects() { // Uncomment if needed
+
+  for (const entry of portfolioProjects) {
+    console.log(`[DEBUG] Loop iteration for entry ID: ${entry.id}`); // Log start of iteration
+
+    const projectName = entry.data.portfolioElementName;
+    const startIndex = globalIndex;
+    const targetProjects = entry.data.portfolioElementProjects;
+
+    console.log(`[DEBUG]   Project Name: ${projectName}`); // Log project name
+    console.log(`[DEBUG]   Target Projects:`, targetProjects); // Log target projects array
+
+    if (!Array.isArray(targetProjects)) {
+      console.warn(`[DEBUG]   Skipping - 'portfolioElementProjects' is not an array.`);
+      continue;
+    }
+
+    // Fetch galleryImages
+    console.log(`[DEBUG]   Fetching galleryImages...`);
+    const galleryImages = await getCollection('galleryImages', ({ data }) => {
+      const imageProject = data.metadata?.project;
+      // Add log inside filter if needed: console.log(`[FILTER] Checking image ${data.public_id} with project ${imageProject}`);
+      return imageProject && targetProjects.includes(imageProject);
+    });
+    console.log(`[DEBUG]   Fetched ${galleryImages.length} galleryImages.`); // Log image count
+
+    const slidesCount = galleryImages.length;
+    const oldGlobalIndex = globalIndex; // Log index change
+    globalIndex += slidesCount + 2;
+    console.log(`[DEBUG]   Slides count: ${slidesCount}. Global index changed from ${oldGlobalIndex} to ${globalIndex}`);
+
+    const projectData = { // Log object being pushed
+      entry, // Maybe log just entry.id for brevity: entryId: entry.id
+      projectName,
+      startIndex,
+      galleryImages, // Maybe log just length: galleryImagesCount: galleryImages.length
+      slidesCount
+    };
+    console.log(`[DEBUG]   Pushing to enrichedProjects:`, { projectName: projectData.projectName, startIndex: projectData.startIndex, slidesCount: projectData.slidesCount });
+    enrichedProjects.push(projectData);
+  }
+
+  console.log(`[DEBUG] Loop finished. Final enrichedProjects count: ${enrichedProjects.length}`); // Log after loop
+  console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
+
+// } // Uncomment if using async function wrapper
+// processProjects(); // Call the function if wrapped
 
 ---
 

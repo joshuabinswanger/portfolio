@@ -1,0 +1,45 @@
+projectName: "Freiheit"
+
+title: "Freedom"
+subtitle: "MS Wissenschaft Exhibit"
+year: "2024"
+client: "UZH, Prof. Dr. Noah Bubenhofer"
+collaborators: "Prof. Dr. Noah Bubenhofer, Davide Ventre, Sonja Huber"
+role: "Design"
+tools: Rive, Houdini, Adobe Suite
+
+
+portfolio: true
+
+tags:
+  - 2D
+  - interactive
+  - rive
+  - digitalhumanities
+  - socialscience
+  - ai
+
+bgcolor: "#0A0523"
+
+projectDescription: |
+  The <strong>Freiheit</strong> exhibit, part of the "Kontroverse Diskurse" project, was featured on the **<a href="https://ms-wissenschaft.de/en/" target="_blank" style="pointer-events: auto; color: black;">MS Wissenschaft</a>** in 2024, exploring the concept of freedom through political language. 
+  Visitors contributed personal associations, which were analyzed alongside data from 500,000 texts to showcase diverse interpretations of freedom.<br>
+  I was responsible for the visual design of the exhibit, creating an engaging and accessible interface to connect visitors with the research.
+  <br>Visit the Desktop Version: **<a href="https://korpuspragmatik.ds.uzh.ch/freiheit/" target="_blank" style="pointer-events: auto; color: black;">Freiheit</a>**<br>
+ 
+credits: |
+
+    <table>
+        <tr>
+          <th>Developers:</th>
+          <td>Sonja Huber, Davide Ventre (Results Visualisation)</td>
+        </tr>
+        <tr>
+          <th>Project Coordinator:</th>
+          <td>Prof. Dr. Noah Bubenhofer, Davide Ventre</td>
+        </tr>        
+        <tr>
+          <th>Tools:</th>
+          <td>Rive, Affinity Suite</td>
+        </tr>
+      </table>

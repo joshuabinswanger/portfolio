@@ -1,0 +1,44 @@
+portfolioElementProjects: 
+  - Microbiome
+portfolioElementName: "Microbiome"
+priority: 7
+
+title: "Microbiome"
+subtitle: "Scientific Poster"
+year: "2020"
+client: "ETH Sustainable Agroecosystems Group"
+collaborators: ""
+role: "Illustration"
+
+portfolio: true
+
+tags:
+  - agriculture
+  - microbiology
+  - art
+  - illustration
+
+bgcolor: "#FBF9F4"
+
+projectDescription: |
+  In partnership with the Sustainable Agroecosystems Group at ETH, we developed a visually captivating poster exploring the **Soil Microbiome**. Designed to balance scientific accuracy with visual appeal, this piece aims to make complex microbiological concepts accessible and engaging.
+  <br>
+  Guided by Martin Hartmann, the poster was crafted to resonate with a broad audience—from curious visitors at OLMA, where it was first showcased, to students at ETH. <br><br>For more in-depth information, please visit Hartmann’s page: 
+  <br>**<a href="https://www.microbiome.ch/" target="_blank" style="pointer-events: auto; color: black;">microbiome.ch</a>**
+
+credits: |
+
+    <table>
+        <tr>
+          <th>Client:</th>
+          <td>ETH, Sustainable Agroecosystems</td>
+        </tr>
+        <tr>
+          <th>Team:</th>
+          <td>M. Hartmann, A. Hofmann, J. Schlaepfer-Miller</td>
+        </tr>
+        <tr>
+          <th>Tools:</th>
+          <td>Photoshop, Indesign</td>
+        </tr>
+      </table>

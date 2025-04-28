@@ -1,4 +1,9 @@
-portfolioElementName: "02_ethvisualisation"
+portfolioElementProjects: 
+  - LivingBricks
+  - Xylopedia
+portfolioElementName: "ETHVisualisation"
+priority: 2
+
 title: "Scientific Illustration ETH"
 subtitle: "Process Illustrations"
 year: "2024"

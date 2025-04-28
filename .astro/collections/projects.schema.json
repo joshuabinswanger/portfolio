@@ -49,25 +49,6 @@
         "credits": {
           "type": "string"
         },
-        "images": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "loading": {
-                "type": "string",
-                "enum": [
-                  "eager",
-                  "lazy"
-                ]
-              },
-              "to": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false
-          }
-        },
         "$schema": {
           "type": "string"
         }

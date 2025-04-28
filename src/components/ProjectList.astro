@@ -6,7 +6,7 @@ import GridLayout from "../layouts/GridLayout.astro";
 import GalleryElement from "./GalleryElementV1.astro";
 import { getCollection } from 'astro:content';
 import { marked } from 'marked';
-import ThreeImageSlide from "./ThreeImageSlide.astro";
+import ImageSlide from "./ImageSlide.astro";
 import 'keen-slider/keen-slider.min.css';
 
 
@@ -20,6 +20,52 @@ projects.sort((a, b) =>
 );
 
 
+// make project keep track of its index, like this it can be used by photoswipe
+
+let enrichedProjects = []; // Ensure initialized
+let globalIndex = 0;      // Ensure initialized
+
+// Use async function if not already in Astro frontmatter
+// async function processProjects() { // Uncomment if needed
+
+  for (const entry of projects) {
+    console.log(`[DEBUG] Loop iteration for entry ID: ${entry.id}`); // Log start of iteration
+
+    const projectName = entry.data.projectName;
+    const startIndex = globalIndex;
+
+    console.log(`[DEBUG]   Project Name: ${projectName}`); // Log project name
+
+    // Fetch galleryImages
+    console.log(`[DEBUG]   Fetching galleryImages...`);
+    const galleryImages = await getCollection('galleryImages', ({ data }) => {
+      const imageProject = data.metadata?.project;
+      // Add log inside filter if needed: console.log(`[FILTER] Checking image ${data.public_id} with project ${imageProject}`);
+      return imageProject && projectName.includes(imageProject);
+    });
+    console.log(`[DEBUG]   Fetched ${galleryImages.length} galleryImages.`); // Log image count
+
+    const slidesCount = galleryImages.length;
+    const oldGlobalIndex = globalIndex; // Log index change
+    globalIndex += slidesCount + 2;
+    console.log(`[DEBUG]   Slides count: ${slidesCount}. Global index changed from ${oldGlobalIndex} to ${globalIndex}`);
+
+    const projectData = { // Log object being pushed
+      entry, // Maybe log just entry.id for brevity: entryId: entry.id
+      projectName,
+      startIndex,
+      slidesCount
+    };
+    console.log(`[DEBUG]   Pushing to enrichedProjects:`, { projectName: projectData.projectName, startIndex: projectData.startIndex, slidesCount: projectData.slidesCount });
+    enrichedProjects.push(projectData);
+    console.log(enrichedProjects);
+
+  }
+
+  console.log(`[DEBUG] Loop finished. Final enrichedProjects count: ${enrichedProjects.length}`); // Log after loop
+  console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
+
+
 
 ---
 
@@ -29,23 +75,18 @@ projects.sort((a, b) =>
 
     <hr />
 
-    {projects.map((entry, index) => {
-
-    // --- Get the image count ---
-    const imageCount = entry.data.images?.length ?? 0; // Use optional chaining and nullish coalescing for safety
+    {enrichedProjects.map(({entry, startIndex, slidesCount}, index) => {
 
     // Log it for debugging (optional)
-    console.log(`Project: ${entry.data.projectName}, Image Count: ${imageCount}`);
+    console.log(`Project: ${entry.data.projectName}`);
 
-		// Optionally sanitize the project name for a valid ID
-		const projectId = entry.data.projectName.replace(/\s+/g, '-').toLowerCase();
-		  
 		return(
 		<Fragment>
-			<div class:list={["ListElementWrapper"]} id={projectId}>
+			<div class:list={["ListElement"]} id={entry.data.projectName} data-project-title={entry.data.title} data-project-credits={entry.data.credits}>
+
         <div class:list={["list-element-bar"]}>
           <div class:list={["column1"]}>
-            <div class:list={["year"]}> <p>{entry.data.year}</p> <p>{entry.data.client}</p> </div>
+            <div class:list={["year"]}> <p>{entry.data.year}</p><p>{/* &mdash;&ensp; */}{entry.data.client}</p> </div>
           </div>
 
           <div class:list={["column2"]}>
@@ -53,7 +94,7 @@ projects.sort((a, b) =>
           </div>
 
           <div class:list={["column3"]}>
-            <div class:list={["role"]}> {entry.data.role}&ensp;|&ensp;{entry.data.tools}</div>
+            <div class:list={["role"]}> {entry.data.role}&ensp;&mdash;&ensp;{entry.data.tools}</div>
           </div>
 
           
@@ -62,13 +103,27 @@ projects.sort((a, b) =>
           </div>
         </div>
 
-
 			<div class:list={["flip-out"]}>
-        <button class:list={["arrow-left"]}>&larr;</button>
-        <button class:list={["arrow-right"]}>&rarr;</button>
-				<div class:list={["project-images"]}>
-					<ThreeImageSlide project={entry.data.projectName}/>
-				</div>
+
+        <div class:list={["project-slider"]}>
+          <button class:list={["arrow-left"]}>&larr;</button>
+          
+          <div class:list={["project-images"]}>
+            <ImageSlide
+              projectName={entry.data.projectName}
+              startIndex={startIndex}
+              slidesCount={slidesCount} />
+          </div>
+
+          <button class:list={["arrow-right"]}>&rarr;</button>
+        </div>
+
+        <div class:list={["project-description"]}>
+        {/*   <div class:list={["title"]}>{entry.data.title} | {entry.data.subtitle}</div> */}
+          <div class:list={["description"]}><Fragment set:html={marked.parse(entry.data.projectDescription)} /></div>
+          {/* <div class:list={["credits"]}><Fragment set:html={marked.parse(entry.data.credits)} /></div>
+ */}
+        </div>
 			</div>
 
 
@@ -82,6 +137,7 @@ projects.sort((a, b) =>
 
 </TopWrapper>
 
+<!-- Keen Slider -->
 <script>
 import KeenSlider from 'keen-slider';
 import 'keen-slider/keen-slider.min.css';
@@ -90,7 +146,7 @@ import 'keen-slider/keen-slider.min.css';
 let keenSlidersStore = {};
 
 document.addEventListener('astro:page-load', () => {
-  const listElements = document.querySelectorAll('.ListElementWrapper');
+  const listElements = document.querySelectorAll('.ListElement');
 
   listElements.forEach(listEl => {
 
@@ -132,23 +188,15 @@ document.addEventListener('astro:page-load', () => {
       
         var slider = new KeenSlider(sliderContainer, {
           loop: true,
-          slides: {
-            // Default settings for larger screens
-            perView: 3,
-            spacing: 30,
-          },
+          slides: { perView: 3, spacing: 50 },
           breakpoints: {
-            '(max-width: 375px)': {
-            slides: { perView: 1, spacing: 15 },
+
+            '(max-width: 1119px)': {
+            slides: { perView: 2, spacing: 40 },
             },
-            '(max-width: 650px)': {
-            slides: { perView: 2, spacing: 20 },
-            },
-            '(min-width: 651px) and (max-width: 1200px)': {
-            slides: { perView: 3, spacing: 30 },
-            },
+
             '(min-width: 1201px)': {
-            slides: { perView: 4, spacing: 30 },
+            slides: { perView: 3, spacing: 80 },
             },
           }
           },
@@ -200,6 +248,213 @@ document.addEventListener('astro:before-swap', () => {
 
 </script>
 
+<!-- PhotoSwipe -->
+<script>
+		
+	import PhotoSwipeLightbox from 'photoswipe/lightbox';
+
+	const leftArrowSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 155 139" "width="39" height="35"><path d="m0 69 69 69 14-12-45-46h116V58H38l44-44L69 0 0 69Z" style="fill-rule:nonzero"/></svg>';
+	const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 139 139" "width="139" height="139"><path d="m69 83-56 55-13-12 56-57L0 14 13 0l56 56 56-56 13 14-55 55 55 57-13 12-56-55Z"/></svg>';
+
+
+
+	function isPhonePortrait() {
+			return window.matchMedia('(max-width: 650px) and (orientation: portrait)').matches;
+		}
+
+
+
+
+	document.addEventListener('astro:page-load', () => {
+
+		
+
+		// Global array to hold the custom data for each gallery
+		let photoswipeCustomData = [];
+
+		// Select all gallery elements (each gallery container should have the class "GalleryElement")
+		const projectElements = document.querySelectorAll(".ListElement");
+
+		//////////////////////////////////////////////////////////
+		/////////////// Loop over each element ///////////////////
+		//////////////////////////////////////////////////////////
+		projectElements.forEach(projectEl => {
+
+			// Create a new array for this gallery's data items
+			let galleryData = [];
+		
+			// ----- 1. Add a custom element BEFORE the image gallery: Project Name ----- //
+			// Assume the gallery element stores the project title in a data attribute (for example, "data-project-title")
+			const projectTitle = projectEl.getAttribute('data-project-title') || 'Default Project Title';
+
+			//style with title slide
+			const portfolioElementNameElement = {
+			html: `<div class="pswp__project-title-slide photoswipeData"><p class="pswp__project-title ">${projectTitle}</p></div>`,
+			};
+
+			galleryData.push(portfolioElementNameElement);
+
+
+			
+			// ----- 2. Add all the image elements ----- //
+			// Here we assume each image link is contained in a child with class "ImageElement"
+			// We use projectEl.querySelectorAll so we only search within the current gallery.
+
+			const imageLinks = projectEl.querySelectorAll(".ImageElement a");
+      console.log(imageLinks);
+			
+			imageLinks.forEach(imgLink => {
+
+				const photoswipeImageData = {
+
+					src:  imgLink.getAttribute('href'),
+					width: imgLink.getAttribute('data-pswp-width'),
+					height: imgLink.getAttribute('data-pswp-height'),
+					alt: imgLink.getAttribute('data-description_text'),
+					description_title: imgLink.getAttribute('data-description_title'),
+					description_text: imgLink.getAttribute('data-description_text'),
+					link: imgLink.getAttribute('data-link')
+					
+
+				}
+
+
+				galleryData.push(photoswipeImageData);
+			});
+      
+		
+
+			// ----- 3. Add a custom element AFTER the images: ProjectInfoSlideWrapper ----- //
+
+			// get the description
+			const ProjectInfoWrapper = projectEl.querySelector('.project-description');
+			const projectDescription = ProjectInfoWrapper.innerHTML;
+
+	    // get the Details
+			const projectCredits =  projectEl.getAttribute('data-project-credits') || '';;
+
+/* 		const bracketOpenV = bracketOpenVEl.innerHTML;
+			const bracketCloseV = bracketCloseVEl.innerHTML; */
+
+			const projectInfoEl = {
+				html: 	`<div
+						class="pswp__project-info-slide-wrapper photoswipeData keen-slider__slide"
+						>
+
+						<div class="pswp__project-info-slide">
+
+							
+								
+							<div class="pswp__project-info">
+							${projectDescription}
+							</div>
+							
+							
+							<div class="pswp__project-details">
+						 ${projectCredits}
+
+          		
+						</div>
+						</div>`
+			};
+
+      galleryData.push(projectInfoEl);
+
+			
+			// Finally, add this gallery's data array to the global photoswipeCustomData array.
+			photoswipeCustomData.push(galleryData);
+
+      console.log(photoswipeCustomData);
+		});
+
+		const flatData = photoswipeCustomData.flat();
+		console.log(flatData);
+
+		const options = {
+			arrowPrevSVG: leftArrowSVGString,
+			arrowNextSVG: leftArrowSVGString,
+			closeSVG: CloseSVGString,
+
+			dataSource: flatData,
+
+			initialZoomLevel: `fit`,
+			bgOpacity: 0.95,
+			zoom: false,
+			
+			
+			// to apply styles just to this instance of PhotoSwipe
+			mainClass: 'pswp--custom-bg pswp--custom-icon-colors',
+
+			paddingFn: () => {
+			if (isPhonePortrait()) {
+				return { top: 0, bottom: 0, left: 10, right: 10  }  
+			}
+			else {
+				return { top: 20, bottom: 40, left: 100, right: 100 }
+			};
+			},
+
+			showHideAnimationType: 'fade',
+
+			pswpModule: () => import('photoswipe'), // Import the PhotoSwipe module dynamically
+		};
+
+		const lightbox = new PhotoSwipeLightbox(options);
+
+		lightbox.on('uiRegister', function() {
+			lightbox.pswp.ui.registerElement({
+				name: 'custom-caption',
+				order: 9,
+				isButton: false,
+				appendTo: 'wrapper',
+				html: 'Caption text',
+				onInit: (el, pswp) => {
+				lightbox.pswp.on('change', () => {
+					// Retrieve the DOM element attached to the current slide
+					const currSlide = pswp.currSlide.data;
+					let captionHTML = '';
+
+					if (currSlide) {
+					const description_title = currSlide.description_title;
+					const description_text = currSlide.description_text;
+					const link = currSlide.link;
+
+					if (description_title && link) {
+						captionHTML = `
+						<p><strong>${description_title}</strong></p>
+						<p>${description_text}</p>
+						<p><a href="${link}">External Link</a></p>
+						`;
+					} else if (description_title) {
+						captionHTML = `
+						<p><strong>${description_title}</strong></p>
+						<p>${description_text}</p>
+						`;
+					}
+					}
+
+					el.innerHTML = captionHTML || '';
+				});
+				}
+			});
+		});
+
+
+		lightbox.init(); // Initialize the lightbox
+
+		window.pswpLightbox = lightbox;
+
+
+
+	});
+
+	document.addEventListener("astro:before-swap", () => {
+		const lightbox = new PhotoSwipeLightbox;
+			lightbox.destroy();
+		});
+		
+</script>
+
 <style>
 @import "../styles/global.css";
 
@@ -225,7 +480,7 @@ document.addEventListener('astro:before-swap', () => {
   }
 }
 
-.ListElementWrapper {
+.ListElement {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 52px auto ;
@@ -240,7 +495,7 @@ document.addEventListener('astro:before-swap', () => {
   column-gap: 16px;
 
   @media (--bp-mobile) {
-    grid-template-columns: 5ch 1fr 0px 48px;
+    grid-template-columns: 9ch 1fr 0px 48px;
   }
 }
 
@@ -253,9 +508,80 @@ document.addEventListener('astro:before-swap', () => {
   overflow: hidden;
   transition: all 0.5s ease;
   display: grid;
+  grid-template-rows: min-content min-content;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.project-slider {
+  margin: 0px 0px 0px 0px;
+  grid-row-start: 1;
+  grid-column-start: 1;
+  grid-column-end: 4;
+  overflow: hidden;
+  transition: all 0.5s ease;
+  display: grid;
   grid-template-rows: 1fr;
   grid-template-columns: 40px 1fr 40px;
 }
+
+.project-description {
+  display: grid;
+  justify-content: center;
+  padding: 40px;
+  margin-top: 16px;
+  grid-row-start: 2;
+  grid-column-start: 1;
+  grid-column-end: 4;
+  grid-template-rows: min-content min-content;
+  column-gap: 80px;
+  grid-template-columns: 660px 1fr;
+
+    @media (--bp-mobile) {
+       grid-template-columns: 1fr;
+    }
+
+}
+
+.title {
+  grid-row-start: 1;
+  grid-column-start: 1;
+}
+
+.subtitle {
+  grid-row-start: 1;
+  grid-column-start: 1;
+}
+
+.description {
+  grid-row-start: 1;
+  grid-column-start: 1;
+}
+
+.credits {
+  grid-row-start: 2;
+  grid-column-start: 1;
+  align-items: start;
+}
+
+table tbody td {
+    /* Align the content vertically to the top */
+    vertical-align: top;
+    /* Add some padding for better spacing */
+    padding: 5px;
+  }
+
+  /* Optional: Add padding to table header cells as well */
+  table th {
+    padding: 5px;
+    text-align: left; /* Align header text to the left */
+    vertical-align: top; /* Also align header text to the top */
+  }
+
+  /* Optional: Style for the table itself */
+  table {
+    border-collapse: collapse; /* Collapse borders if you have them */
+    width: 100%; /* Make table take full width */
+  }
 
 .arrow-left, .arrow-right {
   all: unset;
@@ -285,15 +611,16 @@ document.addEventListener('astro:before-swap', () => {
   /* No display toggle—its parent (.flip-out) will handle the animation */
   display: none;
   grid-row-start: 1;
-  grid-column-start: 1;
-  grid-column-end: 4;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  overflow-x: hidden;
 }
 
 /* When open, expand the container */
-.ListElementWrapper.open .flip-out {
+.ListElement.open .flip-out {
   display: grid;
   margin: 8px 0px 16px 0px;
-  max-height: 700px; /* Adjust as needed if your content height is known */
+  max-height: 800px; /* Adjust as needed if your content height is known */
   margin-top: 1rem;
   margin-bottom: 1rem;
   overflow: visible;
@@ -320,7 +647,11 @@ p {
 
 .year {
   display: grid;
-  grid-template-columns: 5ch auto 48px;
+  grid-template-columns: 40px 1fr;
+}
+
+.year p:nth-child(1) {
+  font-family: PowerGrotesk-Medium;
 }
 
 .year p:nth-child(2) {
@@ -350,7 +681,7 @@ p {
   display: grid;
   grid-template-columns: 1fr;
   align-items: center;
-  justify-items: center;
+  justify-items: end;
 }
 
 .role {
@@ -373,7 +704,7 @@ p {
 
 }
 
-.ListElementWrapper.open > .list-element-bar > .column4 {
+.ListElement.open > .list-element-bar > .column4 {
 transform: rotatez(180deg) ;
 }
 

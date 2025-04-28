@@ -1,0 +1,39 @@
+projectName: "LivingBricks"
+title: "LivingBricks"
+subtitle: "Scientific Figure"
+year: "2024"
+client: "ETH - Complex Materials Group"
+collaborators: ""
+role: "Design"
+
+portfolio: true
+
+tags:
+  - Science2Science
+  - 3D
+  - ClimateChange
+  - Houdini
+
+bgcolor: "#DFE2D8cc"
+
+projectDescription: |
+    **Living Porous Ceramics** for Bacteria-Regulated Gas Sensing and Carbon Capture <br> 
+    <br>
+    Engineered living materials leveraging microorganisms in abiotic porous ceramic structures demonstrate self-regulated carbon capture and genetically programmable gas-sensing capabilities, offering new avenues in mimicking biological systems  <br>
+  
+       
+credits: |
+    <table>
+        <tr>
+          <th>Client:</th>
+          <td>ETH - Complex Materials Group </td>
+        </tr>
+                <tr>
+          <th>Tools:</th>
+          <td>Houdini, ZBrush, Adobe Suite</td>
+        </tr>
+        <tr>
+          <th>Citation:</th>
+          <td>Alessandro Dutto, Anton Kan, Zoubeir Saraw, Aline Maillard, Daniel Zindel, André R. Studart: Elevation-dependent advance of Alpine plant phenology, <a style="color: black;" href="https://doi.org/10.1002/adma.202412555" target="_blank">DOI</a></td>
+        </tr>
+      </table>

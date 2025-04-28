@@ -1,4 +1,9 @@
-projectName: "03_phenologicalshift"
+portfolioElementProjects: 
+  - PhenologicalShift
+  - Xylopedia
+portfolioElementName: "PhenologicalShift"
+priority: 3
+
 title: "Phenological Shift"
 subtitle: "Scientific Illustration"
 year: "2024"

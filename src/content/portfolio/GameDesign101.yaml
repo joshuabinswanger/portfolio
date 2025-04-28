@@ -1,4 +1,9 @@
-projectName: "04_gamedesign"
+portfolioElementProjects: 
+  - GamesDesign101N64
+  - GamesDesign101FlightStick
+portfolioElementName: "GameDesign101"
+priority: 4
+
 title: "Game Design 101"
 subtitle: "Motion Graphics"
 year: "2024"

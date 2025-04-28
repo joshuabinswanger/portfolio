@@ -1,8 +1,12 @@
-projectName: "09_freedom"
+portfolioElementProjects: 
+  - Freiheit
+portfolioElementName: "Freiheit"
+priority: 9
+
 title: "Freedom"
 subtitle: "MS Wissenschaft Exhibit"
 year: "2024"
-client: "UZH, Prof. Bubenhofer"
+client: "UZH, Prof. Dr. Noah Bubenhofer"
 collaborators: "Prof. Dr. Noah Bubenhofer, Davide Ventre, Sonja Huber"
 role: "Design"
 

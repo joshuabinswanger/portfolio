@@ -1,0 +1,36 @@
+projectName: "GamesDesign101N64"
+
+title: "Game Design 101: N64"
+subtitle: "Motion Graphics"
+year: "2024"
+client: "University Library Zurich"
+collaborators: ""
+role: "Design"
+
+portfolio: true
+
+tags:
+  - MotionGraphics
+  - 3D
+  - Procedural
+  - VEX
+  - Houdini
+
+bgcolor: "#ffffffcc"
+
+projectDescription: |
+       Visual Identity created for the Events Series **"Game Design 101"** at the MEEET Lab of the University of Zurich. With a porcedrual system in Houdini that lets you create a fully art-directable growth animation, making it possible to have high-end visuals for a series of events.<br>
+       <br>**<a style="color: black;" href="https://www.meeetlab.uzh.ch/en.html" target="_blank" style="pointer-events: auto; color: black;">MEEET Lab</a>**
+
+credits: |
+    <table>
+        <tr>
+          <th>Client:</th>
+          <td>MEEET Lab, University of Zurich</td>
+        </tr>
+                <tr>
+          <th>Tools:</th>
+          <td>Houdini, Octane, Blender, Davinci, Affinty Suite</td>
+        </tr>
+      </table>
+
