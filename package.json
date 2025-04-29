@@ -37,7 +37,9 @@
     "unpic": "^3.19.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.52.0",
     "@types/glidejs__glide": "^3.6.5",
+    "@types/node": "^22.15.3",
     "astro-robots-txt": "^1.0.0",
     "postcss": "^8.4.45",
     "postcss-nesting": "^13.0.0"

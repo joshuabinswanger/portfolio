@@ -52,3 +52,9 @@ desktop.ini
 # Optional: Include build artifacts if using custom build directories
 .build/
 out/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

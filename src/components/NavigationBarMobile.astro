@@ -25,7 +25,7 @@ import "../styles/global.css";
         Portfolio
       </a>
 
-      <BracketMiddleH />
+      <BracketMiddleH width="24px" />
 
       <!-- Archive submenu -->
       <a       
@@ -37,7 +37,7 @@ import "../styles/global.css";
         Projects
       </a>
 
-      <BracketMiddleH />
+      <BracketMiddleH width="24px" />
 
       <!-- Menu item: Information -->
       <a 
@@ -48,7 +48,7 @@ import "../styles/global.css";
         Info
       </a>
 
-      <BracketCloseH />
+      <BracketCloseH width="12px" />
     </div>
   </div>
 </nav>
@@ -125,6 +125,16 @@ import "../styles/global.css";
   align-items: center;
   background-color: transparent;
   cursor: pointer;
+
+  @media (--bp-mobile) {
+    font-size: var(--font-size-mobile-h1);
+  }
+  @media (--bp-tablet) {
+    font-size: var(--font-size-tablet-h1);
+  }
+  @media (--bp-desktop-wide) {
+    font-size: var(--font-size-desktop-wide-h1);
+  }
 }
 
 a {
