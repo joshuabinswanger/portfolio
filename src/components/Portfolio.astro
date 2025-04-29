@@ -86,6 +86,10 @@ let globalIndex = 0;      // Ensure initialized
 
   console.log(`[DEBUG] Loop finished. Final enrichedProjects count: ${enrichedProjects.length}`); // Log after loop
   console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
+  enrichedProjects.forEach((projectItem, index) => {
+  // Assuming each entry has data.portfolioElementProjects
+  console.log(projectItem.entry.data.title);
+});
 
 // } // Uncomment if using async function wrapper
 // processProjects(); // Call the function if wrapped
@@ -95,13 +99,13 @@ let globalIndex = 0;      // Ensure initialized
 <TopWrapper>
   <GridLayout>
 	
-    {enrichedProjects.map(({ entry, projectId, startIndex, slidesCount }, index) => {
+    {enrichedProjects.map(({entry, projectId, startIndex, slidesCount }, index) => {
 			
 		if (index > 2) {
 			
 		return(
 		<div class:list={["observer restrain"]}>
-			<div class:list={["GalleryElementWrapper hidden"]} id={projectId} data-gallery-index={index}>
+			<div class:list={["GalleryElementWrapper hidden"]} id={projectId} data-gallery-index={index} data-gallery-project={entry.data.title}>
 				<div class:list={["gallery-placeholder"]}>
 				</div>
 				<GalleryElement
@@ -116,7 +120,7 @@ let globalIndex = 0;      // Ensure initialized
 		}  else {
 		return(
 		<div class:list={["observer restrain"]}>
-			<div class:list={["GalleryElementWrapper"]} id={projectId} data-gallery-index={index}>
+			<div class:list={["GalleryElementWrapper"]} id={projectId} data-gallery-index={index} data-gallery-project={entry.data.title}>
 				<div class:list={["gallery-placeholder"]}>
 					{/* <img src="/src/assets/ImagePlaceholder.jpg" alt="Gallery Preview" loading="eager" /> */}				</div>
 				<GalleryElement

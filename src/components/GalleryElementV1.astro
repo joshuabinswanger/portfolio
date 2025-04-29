@@ -114,7 +114,7 @@ const imagesAmount = galleryImages.length;
 
 ---
 
-<div id={`slider-${instanceId}`} class:list={"GalleryElement "} data-instanceId={instanceId} data-slidesCount={Astro.props.slidesCount} data-gallery-project={'test'}>
+<div id={`slider-${instanceId}`} class:list={"GalleryElement "} data-instanceId={instanceId} data-slidesCount={Astro.props.slidesCount} data-gallery-project={galleryProject.data.title}>
   
   <div class:list={"SlidesContainer keen-slider"}>
 
