@@ -1,27 +1,37 @@
-projectName: "UBJahresbericht24"
+portfolioElementProjects: 
+  - UBJahresbericht23
+  - UBJahresbericht24
 
-title: "UB Annual Report 2024"
+portfolioElementName: "UBJahresbericht"
+priority: 9
+
+title: "UB Annual Report"
 subtitle: "Animated Website"
-year: "202504"
+year: "2025"
 client: "University Library Zurich"
-collaborators: ""
+collaborators: "Ladina Tschander, Martin Weiss, Martina Kammermann, Sabine Klein"
 role: "Design & Developement"
-tools: Rive, HTML/CSS/JS, Affinity Suite
+
+portfolio: true
 
 tags:
   - web
+  - report
+  - illustration
   - animation
-  - coding
+  - rive
 
 bgcolor: "#111111cc"
 
 projectDescription: |
-       For the University Library Zurich we created an innovative annual report that consists of an animated "Wimmelbild". My responsibility was to create the Design and code the website. 
+      For the University Library Zurich we created an innovative annual report that consists of an animated "Wimmelbild". My responsibility was to create the Design and code the website. 
        <br>
        <br>**<a href="https://dlsubzh.github.io/ubjahresbericht24/" target="_blank" style="pointer-events: auto; color: black;">UB Annual Report 2024</a>**
+              <br>
+        <br>**<a href="https://dlsubzh.github.io/ubjahresbericht23/" target="_blank" style="pointer-events: auto; color: black;">UB Annual Report 2023</a>**
 
 credits: |
- <table>
+    <table>
         <tr>
           <th>Client:</th>
           <td>University Library Zurich </td>
