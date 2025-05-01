@@ -45,6 +45,7 @@ let globalIndex = 0;      // Ensure initialized
     });
     console.log(`[DEBUG]   Fetched ${galleryImages.length} galleryImages.`); // Log image count
 
+
     const slidesCount = galleryImages.length;
     const oldGlobalIndex = globalIndex; // Log index change
     globalIndex += slidesCount + 2;
@@ -80,13 +81,15 @@ let globalIndex = 0;      // Ensure initialized
     // Log it for debugging (optional)
     console.log(`Project: ${entry.data.projectName}`);
 
+    const year = entry.data.year.slice(0, 4);
+
 		return(
 		<Fragment>
 			<div class:list={["ListElement"]} id={entry.data.projectName} data-project-title={entry.data.title} data-project-credits={entry.data.credits}>
 
         <div class:list={["list-element-bar"]}>
           <div class:list={["column1"]}>
-            <div class:list={["year"]}> <p>{entry.data.year}</p><p>{/* &mdash;&ensp; */}{entry.data.client}</p> </div>
+            <div class:list={["year"]}> <p>{year}</p><p>{/* &mdash;&ensp; */}{entry.data.client}</p> </div>
           </div>
 
           <div class:list={["column2"]}>

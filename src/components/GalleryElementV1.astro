@@ -51,20 +51,34 @@ if (galleryProject && galleryProject.data && galleryProject.data.portfolioElemen
 }
 
 // Use getCollection with a filter function to only retrieve images with a matching project
-// Filter images based on whether their metadata.project is included in containedProjects array
+// AND where showInPortfolioGallery is set to "yes"
 const galleryImages = await getCollection('galleryImages', ({ data }) => {
-  // Ensure data.metadata and data.metadata.project exist
-  if (data.metadata && data.metadata?.project) {
-    // Check if the image's project is included in the containedProjects array
-    // Assuming data.metadata.project is a single string
-    return containedProjects.includes(data.metadata?.project);
-  }
-  return false; // Exclude images without metadata or project field
+  // Combine all checks using && for conciseness and clarity.
+  // The filter will return true only if every condition evaluates to true.
+  return (
+    // Condition 1 & 2: Ensure metadata and metadata.project exist (using optional chaining)
+    data.metadata?.project &&
+    // Condition 3: Check if the image's project is included in the containedProjects array
+    containedProjects.includes(data.metadata.project) &&
+    // Condition 4: NEW - Check if showInPortfolioGallery is explicitly "yes"
+    // We can access showInPortfolioGallery directly now because if the first condition
+    // (data.metadata?.project) passed, we know data.metadata exists.
+    data.metadata.showInPortfolioGallery === "yes"
+  );
+  // If any condition fails (e.g., metadata missing, project missing, project not included,
+  // or showInPortfolioGallery is not "yes"), the && chain will short-circuit
+  // and the function will implicitly return false (or explicitly if any check results in false).
 });
 
-// Sort galleryImages by public_id
-galleryImages.sort((a, b) => a.data.public_id.localeCompare(b.data.public_id));
+//sort by portfolioOrder
+galleryImages.sort((a, b) => {
+  // Use Infinity as default for missing values to place them last in ascending sort
+  const orderA = a.data.metadata?.portfolioOrder ?? Infinity;
+  const orderB = b.data.metadata?.portfolioOrder ?? Infinity;
 
+  // Simple subtraction works for numerical sorting
+  return orderA - orderB;
+});
 
 
 

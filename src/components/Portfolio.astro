@@ -59,13 +59,37 @@ let globalIndex = 0;      // Ensure initialized
       continue;
     }
 
-    // Fetch galleryImages
-    console.log(`[DEBUG]   Fetching galleryImages...`);
-    const galleryImages = await getCollection('galleryImages', ({ data }) => {
-      const imageProject = data.metadata?.project;
-      // Add log inside filter if needed: console.log(`[FILTER] Checking image ${data.public_id} with project ${imageProject}`);
-      return imageProject && targetProjects.includes(imageProject);
-    });
+	// Fetch galleryImages that belong to targetProjects AND are marked for the portfolio gallery
+	console.log(`[DEBUG] Fetching galleryImages for projects in targetProjects list and marked for portfolio...`);
+
+	const galleryImages = await getCollection('galleryImages', ({ data }) => {
+	// Combine all checks using &&. Returns true only if all conditions are met.
+	return (
+		// Check 1: Metadata and project field must exist and be truthy
+		data.metadata?.project && // Use optional chaining for safety
+
+		// Check 2: The image's project must be in the targetProjects array
+		// (Make sure 'targetProjects' is defined and contains the project names you need)
+		targetProjects.includes(data.metadata.project) &&
+
+		// Check 3: The showInPortfolioGallery flag must be explicitly "yes"
+		// (We can access this directly because check 1 ensures data.metadata exists)
+		data.metadata.showInPortfolioGallery === "yes"
+	);
+	// If any condition fails (e.g., missing fields, project not included, flag not "yes"),
+	// the && chain will short-circuit and the function will return false for that image.
+	});
+
+	// Optional: Log the count of fetched images
+	console.log(`[DEBUG] Fetched ${galleryImages.length} galleryImages matching all criteria.`);
+
+
+
+
+
+
+
+
     console.log(`[DEBUG]   Fetched ${galleryImages.length} galleryImages.`); // Log image count
 
     const slidesCount = galleryImages.length;

@@ -13,7 +13,7 @@ export const collections = {
       folder: 'Portfolio/Gallery',
       tags: true,
       metadata: true,
-      limit: 110,
+      limit: 300,
     })
   }),
 
@@ -23,7 +23,7 @@ export const collections = {
       folder: 'Portfolio/HighRes',
       tags: true,
       metadata: true,
-      limit: 110,
+      limit: 300,
     })
   }),
 
@@ -69,7 +69,6 @@ export const collections = {
       collaborators: z.string().optional(),
       role: z.string().optional(),
       tools: z.string().optional(),
-      portfolio: z.boolean(),
       tags: z.array(z.string()),
       bgcolor: z.string().optional(),
       projectDescription: z.string(),

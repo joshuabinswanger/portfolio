@@ -1,0 +1,33 @@
+projectName: "UBJahresbericht24"
+
+title: "UB Annual Report 2024"
+subtitle: "Animated Website"
+year: "202504"
+client: "UNiversity Library Zurich"
+collaborators: ""
+role: "Illustration, Developement"
+
+
+tags:
+  - web
+  - animation
+  - coding
+
+bgcolor: "#111111cc"
+
+projectDescription: |
+       For the University Library Zurich we created an innovative annual report that consists of an animated "Wimmelbild". My responsibility was to create the Design and code the website. 
+       <br>
+       <br>**<a href="https://dlsubzh.github.io/ubjahresbericht24/" target="_blank" style="pointer-events: auto; color: black;">UB Annual Report 2024</a>**
+
+credits: |
+    <table>
+        <tr>
+          <th>Client:</th>
+          <td>University Library Zurich </td>
+        </tr>
+                <tr>
+          <th>Tools:</th>
+          <td>Rive, HTML/CSS/JS, Affinity Suite</td>
+        </tr>
+      </table>
