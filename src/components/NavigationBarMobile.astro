@@ -18,9 +18,9 @@ interface Props {
 }
 
 // Determine the correct href based on the personal prop
-const galleryHref = personal ? "/personal/" : "/projects";
-const projectsHref = personal ? "/personal/projects" : "/projects";
-const infoHref = personal ? "/personal/info" : "/projects";
+const galleryHref = personal ? "/personal/" : "/";
+const projectsHref = personal ? "/personal/projects/" : "/projects/";
+const infoHref = personal ? "/personal/info/" : "/info/";
 
 // Determine the correct text content based on the personal prop
 const galleryText = personal ? "Gallery" : "Portfolio";
@@ -43,10 +43,11 @@ const infoText = personal ? "Info" : "Info";
       <a 
         id="portfolio"
         class:list={["main-button", "button", "animation"]} 
-        href="/" 
-        data-href="/"
+        href={galleryHref} {/* Use the determined href here */}
+        data-href={galleryHref} {/* Update data-href as well if used for animation */}
         data-animation="out">
-        Portfolio
+
+        {galleryText} {/* Use the determined text content here */}
       </a>
 
       <BracketMiddleH />
@@ -69,10 +70,10 @@ const infoText = personal ? "Info" : "Info";
       <!-- Menu item: Information -->
       <a 
         class:list={["main-button", "button", "animation"]} 
-        href="/info" 
-        data-href="/info"
+        href={infoHref} {/* Use the determined href here */}
+        data-href={infoHref} {/* Update data-href as well if used for animation */}
         data-animation="out">
-        Info
+        {infoText} {/* Use the determined text content here */}
       </a>
 
       <BracketCloseH />

@@ -24,8 +24,8 @@ const { personal = false } = Astro.props;
 
 // Determine the correct href based on the personal prop
 const galleryHref = personal ? "/personal/" : "/";
-const projectsHref = personal ? "/personal/projects" : "/projects";
-const infoHref = personal ? "/personal/info" : "/info";
+const projectsHref = personal ? "/personal/projects/" : "/projects/";
+const infoHref = personal ? "/personal/info/" : "/info/";
 
 console.log(projectsHref)
 
