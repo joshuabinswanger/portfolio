@@ -5,11 +5,35 @@ import BracketOpenH from './BracketOpenH.astro';
 import BracketMiddleH from './BracketMiddleH.astro';
 import BracketCloseH from './BracketCloseH.astro';
 import "../styles/global.css";
+import { Image } from "astro:assets"
+import RhizomLogo from "../assets/Rhizome_Logo_208h.jpg"
+
+
+
+// PERSONAL?
+const { personal } = Astro.props;
+
+interface Props {
+  personal?: boolean; // Make personal prop optional as it might not always be passed
+}
+
+// Determine the correct href based on the personal prop
+const galleryHref = personal ? "/personal/" : "/projects";
+const projectsHref = personal ? "/personal/projects" : "/projects";
+const infoHref = personal ? "/personal/info" : "/projects";
+
+// Determine the correct text content based on the personal prop
+const galleryText = personal ? "Gallery" : "Portfolio";
+const projectsText = personal ? "Projects" : "Projects";
+const infoText = personal ? "Info" : "Info";
+
+
+
 ---
 
 <nav id="NavBarMobile" transition:persist>
-  <!-- Logo (if needed, wrap in an anchor or leave as is) -->
-  <Logo />
+
+  <a id="Logo" href="/" class:list={["animation"]} data-href="/" data-animation="out"><Image src={RhizomLogo}  id="Image" alt="Rhizom Logo" loading="eager"></a>
 
   <div id="Menu">
     <div id="MainWrapper">
@@ -21,20 +45,23 @@ import "../styles/global.css";
         class:list={["main-button", "button", "animation"]} 
         href="/" 
         data-href="/"
-        data-animation="in">
+        data-animation="out">
         Portfolio
       </a>
 
       <BracketMiddleH />
 
-      <!-- Archive submenu -->
-      <a       
+      <!-- Projects submenu -->
+      {/* Example of conditionally rendering the href and text for the projects link */}
+      <a
         id="projects"
         class:list={["main-button", "button", "animation"]}
-        href="/projects"          
-        data-href="/projects" 
+        href={projectsHref} {/* Use the determined href here */}
+        data-href={projectsHref} {/* Update data-href as well if used for animation */}
         data-animation="out">
-        Projects
+
+        {projectsText} {/* Use the determined text content here */}
+
       </a>
 
       <BracketMiddleH />
@@ -62,6 +89,27 @@ import "../styles/global.css";
   z-index: 1000;
   left: 0;
   top: 0;
+  width: 100vw;
+}
+
+#Logo {
+  display: block;
+  height: 100%;
+
+  @media (--bp-mobile){
+
+    margin-top: 32px;
+    display: block;
+    height: 36px;
+    width: 144px;
+    padding-left: 2px;
+
+  }
+}
+
+#Image {
+  height: min-content;
+  width: 100%;
 }
 
 
@@ -152,116 +200,163 @@ a {
 
 <script>
   import { navigate } from 'astro:transitions/client';
-  
-  // Update visual state (add/remove active class)
+
+  // Update visual state (add/remove active class) - NO CHANGE
   function updateAnimationState(buttons) {
+    // Using the timeout from your mobile script
     setTimeout(() => {
       buttons.forEach(btn => {
+        if (!btn) return; // Add safety check
         if (btn.getAttribute('data-animation') === "in") {
           btn.classList.add('active');
         } else {
           btn.classList.remove('active');
         }
       });
-    }, 300);
+    }, 50); // Using the 50ms from your mobile script
   }
-  
-  // Handle button click for all buttons
-  function handleButtonClick(clickedBtn, buttons) {
-    // Special branch for Archive main button:
-    if (clickedBtn.id === "projects") {
-      // Activate the Archive main button
-      clickedBtn.setAttribute('data-animation', "in");
 
-      // Optionally, set any other buttons in this group to "out"
-      buttons.forEach(btn => {
-        if (btn.id !== "projects") {
-          btn.setAttribute('data-animation', "out");
-        }
-      });
-  
-      // Find all archive subitems and force "Gallery" active, others inactive.
-      const archiveSubitems = document.querySelectorAll('.archive-subitems');
-      archiveSubitems.forEach(btn => {
-        if (btn.id === "archive-gallery") {
-          btn.setAttribute('data-animation', "in");
-        } else {
-          btn.setAttribute('data-animation', "out");
-        }
-      });
+  // Handle button click for all buttons - ADJUSTED (like Desktop)
+  function handleButtonClick(clickedBtn, allButtonsNodeList) {
+    if (!clickedBtn || !allButtonsNodeList) return; // Safety check
 
-      return;
-    }
-    
-    // Special check: if clicked is Logo, force Portfolio active.
+    const allButtons = Array.from(allButtonsNodeList);
+    // Assuming main buttons are those NOT with id="Logo"
+    const mainButtons = allButtons.filter(btn => btn && btn.id !== 'Logo'); 
+
+    // Special check: if clicked is Logo
     if (clickedBtn.id === "Logo") {
-      const portfolioBtn = Array.from(buttons).find(btn => btn.id === "portfolio");
-      buttons.forEach(btn => {
-        if (btn.id !== "portfolio" && btn.id !== clickedBtn.id) {
-          btn.setAttribute('data-animation', "out");
-        }
+      const portfolioBtn = allButtons.find(btn => btn && btn.id === 'portfolio'); 
+
+      // Deactivate all MAIN buttons
+      mainButtons.forEach(btn => {
+        if (btn) btn.setAttribute('data-animation', 'out');
       });
+
+      // Activate portfolio button
       if (portfolioBtn) {
-        portfolioBtn.setAttribute('data-animation', "in");
+        portfolioBtn.setAttribute('data-animation', 'in');
       }
-      clickedBtn.setAttribute('data-animation', "in");
-      return;
+      
+      // Ensure logo itself remains visually 'out' (or handle its state if needed)
+      clickedBtn.setAttribute('data-animation', 'out'); 
+
+    } else { // Clicked a main button (portfolio, projects, info)
+      
+      // Only proceed if the clicked button is currently "out"
+      if (clickedBtn.getAttribute('data-animation') === "out") {
+        // Deactivate other MAIN buttons that are currently "in"
+        mainButtons.forEach(btn => {
+          if (btn && btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
+            btn.setAttribute('data-animation', "out");
+          }
+        });
+        // Activate the clicked button
+        clickedBtn.setAttribute('data-animation', "in");
+      }
     }
-    
-    // For Archive subitems (Gallery, List, Projects):
-    if (
-      clickedBtn.id === "archive-gallery" ||
-      clickedBtn.id === "archive-project-list" ||
-      clickedBtn.id === "archive-projects"
-    ) {
-      const archiveSubitems = document.querySelectorAll('.archive-subitems');
-      archiveSubitems.forEach(btn => {
-        if (btn === clickedBtn) {
-          btn.setAttribute('data-animation', "in");
-        } else {
-          btn.setAttribute('data-animation', "out");
-        }
-      });
-      return;
-    }
-    
-    // Default behavior: if button is currently "out", switch it "in" and set others "out"
-    if (clickedBtn.getAttribute('data-animation') === "out") {
-      buttons.forEach(btn => {
-        if (btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
-          btn.setAttribute('data-animation', "out");
-        }
-      });
-      clickedBtn.setAttribute('data-animation', "in");
-    }
+
+    // Update the visual state for ALL buttons AFTER any changes
+    updateAnimationState(allButtonsNodeList); 
+
+    // Navigation is handled by the browser/Astro View Transitions
   }
-  
-  // Attach event listeners to buttons
+
+  // Attach event listeners to buttons - Added simple duplicate check
   function createEventListeners(buttons) {
     buttons.forEach(btn => {
-      btn.addEventListener('click', event => {
-        handleButtonClick(event.currentTarget, buttons);
-      });
+       if (!btn) return; // Safety check
+       // Basic check to prevent adding multiple listeners
+       if (!btn.hasClickListener) {
+            btn.addEventListener('click', event => {
+                // event.preventDefault(); // Usually NOT needed with View Transitions
+                
+                // Pass event.currentTarget and the NodeList the listener was added to
+                handleButtonClick(event.currentTarget, buttons); 
+            });
+            btn.hasClickListener = true; // Mark listener as added
+        }
     });
   }
-  
-  // On page load, update visual state and attach click listeners.
+
+  // Consolidated page load logic - REPLACING astro:before-swap listeners
   document.addEventListener("astro:page-load", () => {
     const navBar = document.getElementById("NavBarMobile");
-    const mainButtons = navBar.querySelectorAll('.animation');
-    updateAnimationState(mainButtons);
-    createEventListeners(mainButtons);
+    if (!navBar) return;
+
+    // --- ADJUSTED SELECTOR (Assuming Logo is outside Menu, main buttons inside) ---
+    // Select the Logo (#Logo) AND the direct children 'a.animation' of MainWrapper inside Menu
+    // Adjust selector if your mobile HTML structure is different
+    const allNavButtons = navBar.querySelectorAll('#Logo, #Menu #MainWrapper > a.animation'); 
+    // --- ADJUSTED SELECTOR ---
+
+    if (allNavButtons.length === 0) return;
+
+     // --- START: URL Matching Logic (Applied to Mobile) ---
+     let isActiveAlreadySet = false;
+     allNavButtons.forEach(btn => {
+       if (!btn) return;
+       // Check persisted state via attribute or class
+       if (btn.getAttribute('data-animation') === 'in' || btn.classList.contains('active')) { 
+         isActiveAlreadySet = true;
+       }
+     });
+
+     // If no button is active from persisted state, set based on URL
+     if (!isActiveAlreadySet) {
+       const currentPath = window.location.pathname;
+       let foundMatch = false;
+       let portfolioButton = null; // Reference to the root ('/') button
+
+       allNavButtons.forEach(btn => {
+         if (!btn) return;
+         const buttonHref = btn.getAttribute('data-href');
+         
+         // Remember the portfolio button (adjust ID if different in mobile)
+         if (buttonHref === '/') { 
+             portfolioButton = btn; 
+         }
+
+         // Check for exact path match
+         if (buttonHref === currentPath) {
+           // Set all buttons to 'out' first
+           allNavButtons.forEach(otherBtn => { if(otherBtn) otherBtn.setAttribute('data-animation', 'out')}); 
+           // Set the matched button to 'in'
+           btn.setAttribute('data-animation', 'in');
+           foundMatch = true;
+         } 
+       });
+
+       // Fallback: If no match found and not on root, activate portfolio button
+       if (!foundMatch && currentPath !== '/' && portfolioButton) {
+          allNavButtons.forEach(otherBtn => { if(otherBtn) otherBtn.setAttribute('data-animation', 'out')}); 
+          portfolioButton.setAttribute('data-animation', 'in'); 
+       }
+     }
+    // --- END: URL Matching Logic ---
+
+
+    // Initial visual state update based on URL matching or persisted state
+    updateAnimationState(allNavButtons); 
+
+    // Attach listeners to ALL selected buttons (Logo + Main buttons)
+    createEventListeners(allNavButtons); 
   });
-  
-  // Archive subitems onchange event (if needed)
-  document.addEventListener("astro:page-load", () => {
-    const navBar = document.getElementById("NavBarMobile");
-    const archiveSubitem = navBar.querySelector('.archive-subitems');
-    if (archiveSubitem) {
-      archiveSubitem.onchange = event => {
-        const href = event.target.value;
-        navigate(href);
-      };
-    }
+
+  // Optional: Cleanup listeners before swap (more robust with WeakMap, but this is simpler)
+  document.addEventListener("astro:before-swap", () => {
+      const navBar = document.getElementById("NavBarMobile");
+      if (!navBar) return;
+      // Re-select buttons to potentially remove listeners
+      const allNavButtons = navBar.querySelectorAll('#Logo, #Menu #MainWrapper > a.animation');
+      allNavButtons.forEach(btn => {
+          if (btn) {
+              // Reset the flag so listeners can be re-added after swap
+              btn.hasClickListener = false; 
+              // Note: This doesn't actually *remove* the listener without more complex tracking,
+              // but prevents re-adding in the simple check within createEventListeners.
+          }
+      });
   });
-  </script>
+
+</script>

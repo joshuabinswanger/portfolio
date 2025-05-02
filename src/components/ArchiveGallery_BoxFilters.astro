@@ -12,7 +12,7 @@ import { getCollection } from "astro:content";
 
 // Filter the collection to include only items with metadata.archive === "include"
 const archiveImages = await getCollection('galleryImages', ({ data }) => {
-  return data.metadata?.archive === "include";
+  return data.metadata?.showInIndex === "yes";
 });
 
 
@@ -126,7 +126,7 @@ const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || t
 
 ---
 
-<TopWrapper>
+<TopWrapper personal={true}>
   
     <div class:list={[""]} id="archive-wrapper">
       

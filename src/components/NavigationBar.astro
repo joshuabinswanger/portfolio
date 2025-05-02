@@ -7,36 +7,89 @@ import BracketOpenV from './BracketOpenV.astro';
 import BracketMiddleV from './BracketMiddleV.astro';
 import BracketCloseV from './BracketCloseV.astro';
 import "../styles/global.css";
-import RhizomLogo from "../assets/Logo_BGColor.png"
+import { Image } from "astro:assets"
+import RhizomLogo from "../assets/Rhizome_Logo_208h.jpg"
+
 
 const logoPath = "/assets/Rhizome_Test2.riv";
 
-import Index from './Index.astro';
+// Personal?
+
+
+interface Props {
+  personal?: boolean;
+}
+
+const { personal = false } = Astro.props;
+
+// Determine the correct href based on the personal prop
+const galleryHref = personal ? "/personal/" : "/";
+const projectsHref = personal ? "/personal/projects" : "/projects";
+const infoHref = personal ? "/personal/info" : "/info";
+
+console.log(projectsHref)
+
+// Determine the correct text content based on the personal prop
+const galleryText = personal ? "Gallery" : "Portfolio";
+const projectsText = personal ? "Projects" : "Projects";
+const infoText = personal ? "Info" : "Info";
+
+
+
 ---
 
 <nav id="NavBarDesktop" transition:persist>
 
-  <Logo />
+  <a id="Logo" href="/" class:list={["animation"]} data-href="/" data-animation="out"><Image src={RhizomLogo}  id="Image" alt="Rhizom Logo" loading="eager"></a>
+
 
   <div id="MainWrapper">
 
     <BracketOpenV />
 
-    <a id="portfolio" href="/" class:list={["MenuItems button animation"]} data-href="/" data-animation="in">
-      Portfolio
+    <a
+    id="portfolio"
+    class:list={["main-button", "button", "animation"]}
+    href={galleryHref} {/* Use the determined href here */}
+    data-href={galleryHref} {/* Update data-href as well if used for animation */}
+    data-animation="out">
+
+    {galleryText} {/* Use the determined text content here */}
+
+  </a>
+
+
+    <BracketMiddleV />
+
+
+     <!-- Projects submenu -->
+      {/* Example of conditionally rendering the href and text for the projects link */}
+    <a
+      id="projects"
+      class:list={["main-button", "button", "animation"]}
+      href={projectsHref} {/* Use the determined href here */}
+      data-href={projectsHref} {/* Update data-href as well if used for animation */}
+      data-animation="out">
+
+      {projectsText} {/* Use the determined text content here */}
+
     </a>
 
     <BracketMiddleV />
 
-    {/* Updated Archive link - now a direct link */}
-    <a id="archive-main" href="/projects" class:list={["MenuItems button animation"]} data-href="/archive-projects" data-animation="out">
-      Projects
-    </a>
-
-    <BracketMiddleV />
-
-    <a href="/info" class:list={["MenuItems button animation"]} data-href="/info" data-animation="out">
+<!--     <a href="/info" class:list={["MenuItems button animation"]} data-href="/info" data-animation="out">
       Information
+    </a> -->
+
+      <a
+      id="info"
+      class:list={["main-button", "button", "animation"]}
+      href={infoHref} {/* Use the determined href here */}
+      data-href={infoHref} {/* Update data-href as well if used for animation */}
+      data-animation="out">
+
+      {infoText} {/* Use the determined text content here */}
+
     </a>
 
     <BracketCloseV />
@@ -47,7 +100,7 @@ import Index from './Index.astro';
 <script>
   import { navigate } from 'astro:transitions/client';
 
-  // Update visual state (add/remove active class)
+  // Update visual state (add/remove active class) - NO CHANGE
   function updateAnimationState(buttons) {
     setTimeout(() => {
       buttons.forEach(btn => {
@@ -57,72 +110,123 @@ import Index from './Index.astro';
           btn.classList.remove('active');
         }
       });
-    }, 300);
+    }, 500);
   }
 
-  // Handle button click for all buttons
-  function handleButtonClick(clickedBtn, buttons) {
-    // Special check: if clicked is Logo, force Portfolio active.
+  // Handle button click for all buttons - ADJUSTED
+  function handleButtonClick(clickedBtn, allButtonsNodeList) {
+    // Convert NodeList to Array for easier filtering if needed
+    const allButtons = Array.from(allButtonsNodeList); 
+    const mainButtons = allButtons.filter(btn => btn.id !== 'Logo'); // Exclude logo for some logic
+
+    // Special check: if clicked is Logo
     if (clickedBtn.id === "Logo") {
-      const portfolioBtn = Array.from(buttons).find(btn => btn.id === "portfolio");
-      buttons.forEach(btn => {
-        // Also ensure archive-main is set to 'out' if Logo is clicked
-        if (btn.id !== "portfolio" && btn.id !== clickedBtn.id) {
-          btn.setAttribute('data-animation', "out");
-        }
+      const portfolioBtn = allButtons.find(btn => btn.id === 'portfolio'); // Find portfolio among all buttons
+
+      // Deactivate all MAIN buttons
+      mainButtons.forEach(btn => {
+        btn.setAttribute('data-animation', 'out');
       });
+
+      // Activate portfolio button
       if (portfolioBtn) {
-        portfolioBtn.setAttribute('data-animation', "in");
+        portfolioBtn.setAttribute('data-animation', 'in');
       }
-      clickedBtn.setAttribute('data-animation', "in"); // Keep Logo active if needed, or set to out if it shouldn't stay active
-      return; // Exit after handling Logo click
+      
+      // Ensure logo itself remains visually 'out' (or handle its state if it needs one)
+      clickedBtn.setAttribute('data-animation', 'out'); 
+
+    } else { // Clicked a main button (portfolio, projects, info)
+      
+      // Only proceed if the clicked button is currently "out"
+      if (clickedBtn.getAttribute('data-animation') === "out") {
+        // Deactivate other MAIN buttons that are currently "in"
+        mainButtons.forEach(btn => {
+          if (btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
+            btn.setAttribute('data-animation', "out");
+          }
+        });
+        // Activate the clicked button
+        clickedBtn.setAttribute('data-animation', "in");
+      }
     }
 
-    // Default behavior: if button is currently "out", switch it "in" and set others "out"
-    if (clickedBtn.getAttribute('data-animation') === "out") {
-      buttons.forEach(btn => {
-        // Set any other active button to "out"
-        if (btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
-          btn.setAttribute('data-animation', "out");
-        }
-      });
-      // Set the clicked button to "in"
-      clickedBtn.setAttribute('data-animation', "in");
-    }
-    // Note: We don't need to call navigate() here because Astro's View Transitions
-    // handle navigation for standard <a> links automatically when transition:persist is used.
+    // --- IMPORTANT ---
+    // Update the visual state for ALL buttons AFTER any changes
+    updateAnimationState(allButtonsNodeList); 
+    // --- IMPORTANT ---
+
+    // Navigation is handled by the browser for <a> tags with Astro View Transitions
   }
 
-  // Attach event listeners to buttons
+  // Attach event listeners to buttons - NO CHANGE NEEDED to function itself
   function createEventListeners(buttons) {
     buttons.forEach(btn => {
-      btn.addEventListener('click', event => {
-         // Prevent default link behavior only if needed for complex transitions,
-         // but for standard Astro View Transitions, let the browser handle it.
-         // event.preventDefault(); // Usually not needed with View Transitions
-
-         // Handle the animation state update
-         handleButtonClick(event.currentTarget, buttons);
-
-         // If NOT using View Transitions for navigation, you'd manually navigate:
-         // const href = event.currentTarget.getAttribute('data-href');
-         // if (href) {
-         //   navigate(href);
-         // }
-      });
+       // Basic check to prevent adding multiple listeners if page-load fires rapidly
+       if (!btn.hasClickListener) {
+            btn.addEventListener('click', event => {
+                // Let Astro/browser handle navigation, just update state
+                // event.preventDefault(); // Usually NOT needed
+                
+                // Pass event.currentTarget and the NodeList the listener was added to
+                handleButtonClick(event.currentTarget, buttons); 
+            });
+            btn.hasClickListener = true; // Mark listener as added
+        }
     });
   }
 
-  // On page load, update visual state and attach click listeners.
+  // On page load, update visual state and attach click listeners - ADJUSTED SELECTOR
   document.addEventListener("astro:page-load", () => {
-    const navBar = document.getElementById("NavBarDesktop");
-    // Select all animatable links directly within MainWrapper
-    const mainButtons = navBar.querySelectorAll('#MainWrapper > a.animation');
-    updateAnimationState(mainButtons);
-    createEventListeners(mainButtons);
-  });
 
-  // Removed the second astro:page-load listener for archive subitems
+    const navBar = document.getElementById("NavBarDesktop");
+    if (!navBar) return;
+
+    // --- ADJUSTED SELECTOR ---
+    // Select the Logo (#Logo) AND the direct children 'a.animation' of MainWrapper
+    const allNavButtons = navBar.querySelectorAll('#Logo, #MainWrapper > a.animation'); 
+    // --- ADJUSTED SELECTOR ---
+
+    if (allNavButtons.length === 0) return;
+     // --- START: URL Matching Logic (copied from previous answer, ensure it uses allNavButtons) ---
+     let isActiveAlreadySet = false;
+     allNavButtons.forEach(btn => {
+       if (btn.getAttribute('data-animation') === 'in' || btn.classList.contains('active')) { // Check class too
+         isActiveAlreadySet = true;
+       }
+     });
+
+     if (!isActiveAlreadySet) {
+       const currentPath = window.location.pathname;
+       let foundMatch = false;
+       let portfolioButton = null; 
+
+       allNavButtons.forEach(btn => {
+         const buttonHref = btn.getAttribute('data-href');
+         if (buttonHref === '/') {
+             portfolioButton = btn; 
+         }
+         if (buttonHref === currentPath) {
+           allNavButtons.forEach(otherBtn => otherBtn.setAttribute('data-animation', 'out')); 
+           btn.setAttribute('data-animation', 'in');
+           foundMatch = true;
+         } 
+       });
+
+       if (!foundMatch && currentPath !== '/' && portfolioButton) {
+          allNavButtons.forEach(btn => btn.setAttribute('data-animation', 'out')); 
+          portfolioButton.setAttribute('data-animation', 'in'); 
+       }
+     }
+    // --- END: URL Matching Logic ---
+
+
+    // Initial visual state update based on URL matching or persisted state
+    updateAnimationState(allNavButtons); 
+
+    // Attach listeners to ALL selected buttons (Logo + Main buttons)
+    createEventListeners(allNavButtons); 
+  });
 
 </script>
 
@@ -155,6 +259,26 @@ import Index from './Index.astro';
   letter-spacing: 0.8px;
 }
 
+#Logo {
+  display: block;
+  height: 100%;
+
+  @media (--bp-mobile){
+
+    margin-top: 32px;
+    display: block;
+    height: 36px;
+    width: 144px;
+    padding-left: 2px;
+
+  }
+}
+
+
+#Image {
+  height: min-content;
+  width: 100%;
+}
 
 #MainWrapper {
   width: 100%;
