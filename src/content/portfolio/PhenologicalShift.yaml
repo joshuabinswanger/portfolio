@@ -23,7 +23,7 @@ bgcolor: "#DFE2D8cc"
 
 projectDescription: |
     **Alpine Plant Phenology Monitoring** tracks 25 years of data on climate change effects on Alpine vegetation. Using ultrasonic measurements, this study shows increased plant growth and earlier growing seasons at higher elevations, highlighting elevation-dependent warming impacts.  <br>
-    <br>**<a style="color: black;" href="https://www.slf.ch/en/staff/zehnderm/" target="_blank" style="pointer-events: auto; color: black;">Michael Zehnder</a>**
+    <br>**<a style="color: black;" href="https://doi.org/10.1111/gcb.70195" target="_blank" style="pointer-events: auto; color: black;">Read the Paper</a>**
        
 credits: |
     <table>
