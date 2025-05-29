@@ -250,7 +250,6 @@ document.addEventListener('astro:before-swap', () => {
 
 
 </script>
-
 <!-- PhotoSwipe -->
 <script>
 		
@@ -277,19 +276,19 @@ document.addEventListener('astro:before-swap', () => {
 		let photoswipeCustomData = [];
 
 		// Select all gallery elements (each gallery container should have the class "GalleryElement")
-		const galleryElements = document.querySelectorAll(".GalleryElement");
+		const projectElements = document.querySelectorAll(".ListElement");
 
 		//////////////////////////////////////////////////////////
 		/////////////// Loop over each element ///////////////////
 		//////////////////////////////////////////////////////////
-		galleryElements.forEach(galleryEl => {
+projectElements.forEach(projectEl => {
 
 			// Create a new array for this gallery's data items
 			let galleryData = [];
 		
 			// ----- 1. Add a custom element BEFORE the image gallery: Project Name ----- //
 			// Assume the gallery element stores the project title in a data attribute (for example, "data-project-title")
-			const projectTitle = galleryEl.getAttribute('data-gallery-project') || 'Default Project Title';
+			const projectTitle = projectEl.getAttribute('data-project-title') || 'Default Project Title';
 
 			//style with title slide
 			const portfolioElementNameElement = {
@@ -302,9 +301,10 @@ document.addEventListener('astro:before-swap', () => {
 			
 			// ----- 2. Add all the image elements ----- //
 			// Here we assume each image link is contained in a child with class "ImageElement"
-			// We use galleryEl.querySelectorAll so we only search within the current gallery.
+			// We use projectEl.querySelectorAll so we only search within the current gallery.
 
-			const imageLinks = galleryEl.querySelectorAll(".ImageElement a");
+			const imageLinks = projectEl.querySelectorAll(".ImageElement a");
+      console.log(imageLinks);
 			
 			imageLinks.forEach(imgLink => {
 
@@ -324,23 +324,20 @@ document.addEventListener('astro:before-swap', () => {
 
 				galleryData.push(photoswipeImageData);
 			});
+      
 		
 
 			// ----- 3. Add a custom element AFTER the images: ProjectInfoSlideWrapper ----- //
 
 			// get the description
-			const ProjectInfoWrapper = galleryEl.querySelector('.ProjectInfoWrapper');
+			const ProjectInfoWrapper = projectEl.querySelector('.project-description');
 			const projectDescription = ProjectInfoWrapper.innerHTML;
 
-			// get the Details
-			const DetailsInfoWrapper = galleryEl.querySelector('.DetailsInfoWrapper');
-			const projectDetails = DetailsInfoWrapper.innerHTML;
+	    // get the Details
+			const projectCredits =  projectEl.getAttribute('data-project-credits') || '';;
 
-			const bracketOpenVEl = galleryEl.querySelector('.bracket-open-v');
-			const bracketOpenV = bracketOpenVEl.innerHTML;
-
-			const bracketCloseVEl = galleryEl.querySelector('.bracket-close-v');
-			const bracketCloseV = bracketCloseVEl.innerHTML;
+/* 		const bracketOpenV = bracketOpenVEl.innerHTML;
+			const bracketCloseV = bracketCloseVEl.innerHTML; */
 
 			const projectInfoEl = {
 				html: 	`<div
@@ -350,33 +347,31 @@ document.addEventListener('astro:before-swap', () => {
 						<div class="pswp__project-info-slide">
 
 							
-							${bracketOpenV}
-							
+								
 							<div class="pswp__project-info">
-								${projectDescription}
+							${projectDescription}
 							</div>
 							
 							
 							<div class="pswp__project-details">
-								${projectDetails}
-							</div>
+						 ${projectCredits}
 
-							${bracketCloseV}
-
+          		
 						</div>
 						</div>`
 			};
 
-			if (projectInfoEl) {
-				galleryData.push(projectInfoEl);
-			}
+      galleryData.push(projectInfoEl);
+
 			
 			// Finally, add this gallery's data array to the global photoswipeCustomData array.
 			photoswipeCustomData.push(galleryData);
+
+      console.log(photoswipeCustomData);
 		});
 
 		const flatData = photoswipeCustomData.flat();
-		/* console.log(flatData); */
+		console.log(flatData);
 
 		const options = {
 			arrowPrevSVG: leftArrowSVGString,
@@ -481,6 +476,8 @@ document.addEventListener('astro:before-swap', () => {
 		});
 		
 </script>
+
+
 
 
 <style>
