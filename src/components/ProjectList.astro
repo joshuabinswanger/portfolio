@@ -259,7 +259,8 @@ document.addEventListener('astro:before-swap', () => {
 	const leftArrowSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 155 139" "width="39" height="35"><path d="m0 69 69 69 14-12-45-46h116V58H38l44-44L69 0 0 69Z" style="fill-rule:nonzero"/></svg>';
 	const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 139 139" "width="139" height="139"><path d="m69 83-56 55-13-12 56-57L0 14 13 0l56 56 56-56 13 14-55 55 55 57-13 12-56-55Z"/></svg>';
 
-
+	// Declare lightbox in the outer scope so both event handlers can access it
+    let lightbox = null;
 
 	function isPhonePortrait() {
 			return window.matchMedia('(max-width: 650px) and (orientation: portrait)').matches;
@@ -276,19 +277,19 @@ document.addEventListener('astro:before-swap', () => {
 		let photoswipeCustomData = [];
 
 		// Select all gallery elements (each gallery container should have the class "GalleryElement")
-		const projectElements = document.querySelectorAll(".ListElement");
+		const galleryElements = document.querySelectorAll(".GalleryElement");
 
 		//////////////////////////////////////////////////////////
 		/////////////// Loop over each element ///////////////////
 		//////////////////////////////////////////////////////////
-		projectElements.forEach(projectEl => {
+		galleryElements.forEach(galleryEl => {
 
 			// Create a new array for this gallery's data items
 			let galleryData = [];
 		
 			// ----- 1. Add a custom element BEFORE the image gallery: Project Name ----- //
 			// Assume the gallery element stores the project title in a data attribute (for example, "data-project-title")
-			const projectTitle = projectEl.getAttribute('data-project-title') || 'Default Project Title';
+			const projectTitle = galleryEl.getAttribute('data-gallery-project') || 'Default Project Title';
 
 			//style with title slide
 			const portfolioElementNameElement = {
@@ -301,10 +302,9 @@ document.addEventListener('astro:before-swap', () => {
 			
 			// ----- 2. Add all the image elements ----- //
 			// Here we assume each image link is contained in a child with class "ImageElement"
-			// We use projectEl.querySelectorAll so we only search within the current gallery.
+			// We use galleryEl.querySelectorAll so we only search within the current gallery.
 
-			const imageLinks = projectEl.querySelectorAll(".ImageElement a");
-      console.log(imageLinks);
+			const imageLinks = galleryEl.querySelectorAll(".ImageElement a");
 			
 			imageLinks.forEach(imgLink => {
 
@@ -324,20 +324,23 @@ document.addEventListener('astro:before-swap', () => {
 
 				galleryData.push(photoswipeImageData);
 			});
-      
 		
 
 			// ----- 3. Add a custom element AFTER the images: ProjectInfoSlideWrapper ----- //
 
 			// get the description
-			const ProjectInfoWrapper = projectEl.querySelector('.project-description');
+			const ProjectInfoWrapper = galleryEl.querySelector('.ProjectInfoWrapper');
 			const projectDescription = ProjectInfoWrapper.innerHTML;
 
-	    // get the Details
-			const projectCredits =  projectEl.getAttribute('data-project-credits') || '';;
+			// get the Details
+			const DetailsInfoWrapper = galleryEl.querySelector('.DetailsInfoWrapper');
+			const projectDetails = DetailsInfoWrapper.innerHTML;
 
-/* 		const bracketOpenV = bracketOpenVEl.innerHTML;
-			const bracketCloseV = bracketCloseVEl.innerHTML; */
+			const bracketOpenVEl = galleryEl.querySelector('.bracket-open-v');
+			const bracketOpenV = bracketOpenVEl.innerHTML;
+
+			const bracketCloseVEl = galleryEl.querySelector('.bracket-close-v');
+			const bracketCloseV = bracketCloseVEl.innerHTML;
 
 			const projectInfoEl = {
 				html: 	`<div
@@ -347,31 +350,33 @@ document.addEventListener('astro:before-swap', () => {
 						<div class="pswp__project-info-slide">
 
 							
-								
+							${bracketOpenV}
+							
 							<div class="pswp__project-info">
-							${projectDescription}
+								${projectDescription}
 							</div>
 							
 							
 							<div class="pswp__project-details">
-						 ${projectCredits}
+								${projectDetails}
+							</div>
 
-          		
+							${bracketCloseV}
+
 						</div>
 						</div>`
 			};
 
-      galleryData.push(projectInfoEl);
-
+			if (projectInfoEl) {
+				galleryData.push(projectInfoEl);
+			}
 			
 			// Finally, add this gallery's data array to the global photoswipeCustomData array.
 			photoswipeCustomData.push(galleryData);
-
-      console.log(photoswipeCustomData);
 		});
 
 		const flatData = photoswipeCustomData.flat();
-		console.log(flatData);
+		/* console.log(flatData); */
 
 		const options = {
 			arrowPrevSVG: leftArrowSVGString,
@@ -402,7 +407,13 @@ document.addEventListener('astro:before-swap', () => {
 			pswpModule: () => import('photoswipe'), // Import the PhotoSwipe module dynamically
 		};
 
-		const lightbox = new PhotoSwipeLightbox(options);
+		// Destroy any existing lightbox before creating a new one
+        if (lightbox) {
+            lightbox.destroy();
+            lightbox = null;
+        }
+
+		lightbox = new PhotoSwipeLightbox(options);
 
 		lightbox.on('uiRegister', function() {
 			lightbox.pswp.ui.registerElement({
@@ -412,32 +423,38 @@ document.addEventListener('astro:before-swap', () => {
 				appendTo: 'wrapper',
 				html: 'Caption text',
 				onInit: (el, pswp) => {
-				lightbox.pswp.on('change', () => {
-					// Retrieve the DOM element attached to the current slide
-					const currSlide = pswp.currSlide.data;
-					let captionHTML = '';
+					lightbox.pswp.on('change', () => {
+                        // Check if currSlide exists before accessing its properties
+                        if (!pswp.currSlide || !pswp.currSlide.data) {
+                            el.innerHTML = '';
+                            return;
+                        }
 
-					if (currSlide) {
-					const description_title = currSlide.description_title;
-					const description_text = currSlide.description_text;
-					const link = currSlide.link;
+                        // Retrieve the DOM element attached to the current slide
+                        const currSlide = pswp.currSlide.data;
+                        let captionHTML = '';
 
-					if (description_title && link) {
-						captionHTML = `
-						<p><strong>${description_title}</strong></p>
-						<p>${description_text}</p>
-						<p><a href="${link}">External Link</a></p>
-						`;
-					} else if (description_title) {
-						captionHTML = `
-						<p><strong>${description_title}</strong></p>
-						<p>${description_text}</p>
-						`;
-					}
-					}
+                        if (currSlide) {
+                            const description_title = currSlide.description_title;
+                            const description_text = currSlide.description_text;
+                            const link = currSlide.link;
 
-					el.innerHTML = captionHTML || '';
-				});
+                            if (description_title && link) {
+                                captionHTML = `
+                                <p><strong>${description_title}</strong></p>
+                                <p>${description_text}</p>
+                                <p><a href="${link}">External Link</a></p>
+                                `;
+                            } else if (description_title) {
+                                captionHTML = `
+                                <p><strong>${description_title}</strong></p>
+                                <p>${description_text}</p>
+                                `;
+                            }
+                        }
+
+                        el.innerHTML = captionHTML || '';
+                    });
 				}
 			});
 		});
@@ -452,11 +469,19 @@ document.addEventListener('astro:before-swap', () => {
 	});
 
 	document.addEventListener("astro:before-swap", () => {
-		const lightbox = new PhotoSwipeLightbox;
+		if (lightbox) {
 			lightbox.destroy();
+			lightbox = null;
+        }
+        // Clear global reference too
+        if (window.pswpLightbox) {
+            window.pswpLightbox.destroy();
+            window.pswpLightbox = null;
+        }
 		});
 		
 </script>
+
 
 <style>
 @import "../styles/global.css";

@@ -460,7 +460,8 @@ imageElements.forEach((image, index) => {
 	const leftArrowSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 155 139" "width="39" height="35"><path d="m0 69 69 69 14-12-45-46h116V58H38l44-44L69 0 0 69Z" style="fill-rule:nonzero"/></svg>';
 	const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 139 139" "width="139" height="139"><path d="m69 83-56 55-13-12 56-57L0 14 13 0l56 56 56-56 13 14-55 55 55 57-13 12-56-55Z"/></svg>';
 
-
+	// Declare lightbox in the outer scope so both event handlers can access it
+    let lightbox = null;
 
 	function isPhonePortrait() {
 			return window.matchMedia('(max-width: 650px) and (orientation: portrait)').matches;
@@ -607,7 +608,13 @@ imageElements.forEach((image, index) => {
 			pswpModule: () => import('photoswipe'), // Import the PhotoSwipe module dynamically
 		};
 
-		const lightbox = new PhotoSwipeLightbox(options);
+		// Destroy any existing lightbox before creating a new one
+        if (lightbox) {
+            lightbox.destroy();
+            lightbox = null;
+        }
+
+		lightbox = new PhotoSwipeLightbox(options);
 
 		lightbox.on('uiRegister', function() {
 			lightbox.pswp.ui.registerElement({
@@ -617,32 +624,38 @@ imageElements.forEach((image, index) => {
 				appendTo: 'wrapper',
 				html: 'Caption text',
 				onInit: (el, pswp) => {
-				lightbox.pswp.on('change', () => {
-					// Retrieve the DOM element attached to the current slide
-					const currSlide = pswp.currSlide.data;
-					let captionHTML = '';
+					lightbox.pswp.on('change', () => {
+                        // Check if currSlide exists before accessing its properties
+                        if (!pswp.currSlide || !pswp.currSlide.data) {
+                            el.innerHTML = '';
+                            return;
+                        }
 
-					if (currSlide) {
-					const description_title = currSlide.description_title;
-					const description_text = currSlide.description_text;
-					const link = currSlide.link;
+                        // Retrieve the DOM element attached to the current slide
+                        const currSlide = pswp.currSlide.data;
+                        let captionHTML = '';
 
-					if (description_title && link) {
-						captionHTML = `
-						<p><strong>${description_title}</strong></p>
-						<p>${description_text}</p>
-						<p><a href="${link}">External Link</a></p>
-						`;
-					} else if (description_title) {
-						captionHTML = `
-						<p><strong>${description_title}</strong></p>
-						<p>${description_text}</p>
-						`;
-					}
-					}
+                        if (currSlide) {
+                            const description_title = currSlide.description_title;
+                            const description_text = currSlide.description_text;
+                            const link = currSlide.link;
 
-					el.innerHTML = captionHTML || '';
-				});
+                            if (description_title && link) {
+                                captionHTML = `
+                                <p><strong>${description_title}</strong></p>
+                                <p>${description_text}</p>
+                                <p><a href="${link}">External Link</a></p>
+                                `;
+                            } else if (description_title) {
+                                captionHTML = `
+                                <p><strong>${description_title}</strong></p>
+                                <p>${description_text}</p>
+                                `;
+                            }
+                        }
+
+                        el.innerHTML = captionHTML || '';
+                    });
 				}
 			});
 		});
@@ -657,8 +670,15 @@ imageElements.forEach((image, index) => {
 	});
 
 	document.addEventListener("astro:before-swap", () => {
-		const lightbox = new PhotoSwipeLightbox;
+		if (lightbox) {
 			lightbox.destroy();
+			lightbox = null;
+        }
+        // Clear global reference too
+        if (window.pswpLightbox) {
+            window.pswpLightbox.destroy();
+            window.pswpLightbox = null;
+        }
 		});
 		
 </script>
