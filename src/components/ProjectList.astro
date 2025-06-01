@@ -250,6 +250,7 @@ document.addEventListener('astro:before-swap', () => {
 
 
 </script>
+
 <!-- PhotoSwipe -->
 <script>
 		
@@ -309,7 +310,6 @@ document.addEventListener('astro:before-swap', () => {
 			// We use projectEl.querySelectorAll so we only search within the current gallery.
 
 			const imageLinks = projectEl.querySelectorAll(".ImageElement a");
-      console.log(imageLinks);
 			
 			imageLinks.forEach(imgLink => {
 
@@ -374,7 +374,6 @@ document.addEventListener('astro:before-swap', () => {
 		});
 
 		const flatData = photoswipeCustomData.flat();
-		console.log(flatData);
 
 		const options = {
 			arrowPrevSVG: leftArrowSVGString,
