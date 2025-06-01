@@ -34,11 +34,13 @@ function ensureArray(value) {
   return value.split(',').map(item => item.trim()); // Split by comma and trim spaces
 }
 
-const tags = [
+//here we combine alll meta data with tags, so we can adjust them easily in cloudinary with deduplication
+const tags = Array.from(new Set([
   ...ensureArray(archiveImage.data.metadata?.role),
   ...ensureArray(archiveImage.data.metadata?.program),
-  ...ensureArray(archiveImage.data.metadata?.topic)
-];
+  ...ensureArray(archiveImage.data.metadata?.topic),
+  ...ensureArray(archiveImage.data.tags)
+]));
 
 // Convert numbers to string because CSS Classes cant start with numbers
 const tagConversion = {
@@ -48,6 +50,7 @@ const tagConversion = {
 
 // Convert the tags in the allowed list using a mapping object
 const convertedTags = tags.map(tag => tagConversion[tag] || tag);
+
 // Convert the tags in the allowed list using a mapping object
 const role =  [...ensureArray(archiveImage.data.metadata?.role)];
 const convertedRole = role.map(tag => tagConversion[tag] || tag);
@@ -56,6 +59,7 @@ const convertedRole = role.map(tag => tagConversion[tag] || tag);
 const tagClassString = convertedTags.join(' ');
 
 
+console.log(tagClassString)
 
 ///////////////////////////
 //  HIGH RES IMAGE ADD ///
