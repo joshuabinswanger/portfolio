@@ -167,22 +167,27 @@ let globalIndex = 0;      // Ensure initialized
 document.addEventListener('astro:page-load', ev => {
 
 
-// Select all ImageElement components
-const imageElements = document.querySelectorAll('.GalleryElementWrapper');
 
-// Loop through the ImageElement NodeList and start adding the fade class from the 3rd element onwards
-imageElements.forEach((image, index) => {
-	if (index >= 2) { // index starts from 0, so 2 is the 3rd element
-		image.classList.add('fade');
-	}
-	}
-); 
+	// Select all ImageElement components
+	const imageElements = document.querySelectorAll('.GalleryElementWrapper');
 
- // IntersectionObserver options
+	// Loop through the ImageElement NodeList and start adding the fade class from the 3rd element onwards
+	imageElements.forEach((image, index) => {
+		if (index >= 2) { // index starts from 0, so 2 is the 3rd element
+			image.classList.add('fade');
+		}
+		}
+	); 
+
+
+
+/////// Fade Intersection Observer
+
+ 	// IntersectionObserver options
 	let optionsFade = {
 			rootMargin: "150px 0px -200px 0px",
-		};
-	
+	};
+
 	// Define the IntersectionObserver
 	const observerFade = new IntersectionObserver((entries) => {  
 		entries.forEach((entry) => {
@@ -195,6 +200,11 @@ imageElements.forEach((image, index) => {
 			}
 		});
 	}, optionsFade);
+
+
+
+	
+///// Hidden Intersection Observer
 
 	 // IntersectionObserver hidden options
 	 let optionsHidden = {

@@ -40,26 +40,23 @@ const { customClass = '', customStyle = '' } = Astro.props;
 
 .archive-grid {
 	grid-template-columns: 1fr 1fr 1fr 1fr;
-	column-gap: 56px;
-  	grid-auto-rows: calc(6 * 56px);
+	column-gap: 28px;
+  	grid-auto-rows: auto;
   
 	@media (--bp-mobile) {
 		grid-template-columns: 1fr 1fr;
 		column-gap: 16px;
 		row-gap: 16px;
-  		grid-auto-rows: auto;
 	}
 
 	@media (--bp-tablet) {
 		grid-template-columns: 1fr 1fr 1fr;
 		column-gap: 56px;
-  		grid-auto-rows: calc(6 * 56px);
 	}
 
 	@media (--bp-desktop-wide) {
 		grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
 		column-gap: 56px;
-  		grid-auto-rows: calc(6 * 56px);
 	}
 }
 
