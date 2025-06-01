@@ -8,9 +8,7 @@ import BracketMiddleV from './BracketMiddleV.astro';
 import BracketCloseV from './BracketCloseV.astro';
 import "../styles/global.css";
 import { Image } from "astro:assets"
-import RhizomLogo from "../assets/Rhizome_Logo_208h.jpg"
-
-const logoPath = "/assets/Rhizome_Test2.riv";
+import JoshLogo from "../assets/joshuabinswanger_tempLogo.png"
 
 interface Props {
   personal?: boolean;
@@ -23,12 +21,12 @@ const { personal = false } = Astro.props;
 
   <a 
     id="Logo" 
-    href="/"
-    data-href="/"
+    href="/personal"
+    data-href="/personal"
     class:list={["animation"]} 
     data-animation="out">
     
-    <Image src={RhizomLogo} id="Image" alt="Rhizom Logo" loading="eager">
+    <Image src={JoshLogo} id="Image" alt= "Joshua Binswanger Logo" loading="eager">
   </a>
 
   <div id="MainWrapper">
@@ -38,30 +36,19 @@ const { personal = false } = Astro.props;
     <a
     id="portfolio"
     class:list={["main-button", "button", "animation"]}
-    href="/"
-    data-href="/"
+    href="/personal" 
+    data-href="/personal" 
     data-animation="out">
-    Portfolio
+    Gallery
   </a>
-
-    <BracketMiddleV />
-
-    <a
-      id="projects"
-      class:list={["main-button", "button", "animation"]}
-      href="/projects/"
-      data-href="/projects/"
-      data-animation="out">
-      Projects
-    </a>
 
     <BracketMiddleV />
 
     <a
       id="info"
       class:list={["main-button", "button", "animation"]}
-      href="/info/"
-      data-href="/info/"
+      href="/personal/info"
+      data-href="/personal/info"
       data-animation="out">
       Info
     </a>
@@ -110,7 +97,7 @@ const { personal = false } = Astro.props;
       // Ensure logo itself remains visually 'out' (or handle its state if it needs one)
       clickedBtn.setAttribute('data-animation', 'out'); 
 
-    } else { // Clicked a main button (portfolio, projects, info)
+    } else { // Clicked a main button (gallery, info)
       
       // Only proceed if the clicked button is currently "out"
       if (clickedBtn.getAttribute('data-animation') === "out") {
@@ -179,8 +166,8 @@ const { personal = false } = Astro.props;
        allNavButtons.forEach(btn => {
          const buttonHref = btn.getAttribute('data-href');
 
-         // Set portfolio button reference
-         if (buttonHref === '/') {
+         // Set portfolio button reference for personal site
+         if (buttonHref === '/personal') {
              portfolioButton = btn; 
          }
 
@@ -193,7 +180,7 @@ const { personal = false } = Astro.props;
        });
 
        //if pressed on a different route
-       if (!foundMatch && currentPath !== '/' && portfolioButton) {
+       if (!foundMatch && currentPath !== '/personal' && portfolioButton) {
           allNavButtons.forEach(btn => btn.setAttribute('data-animation', 'out')); 
           portfolioButton.setAttribute('data-animation', 'in'); 
        }
@@ -259,12 +246,12 @@ const { personal = false } = Astro.props;
 #MainWrapper {
   width: 100%;
   display: grid;
-  /* Restored original grid rows for 3 main items */
-  grid-template-rows: 0 48px 0 48px 0 48px 0;
-  transition: grid-template-rows 0.6s ease; /* Changed from columns to rows */
+  /* Grid rows for 2 main items (Gallery and Info) */
+  grid-template-rows: 0 48px 0 48px 0;
+  transition: grid-template-rows 0.6s ease;
 
   @media (--bp-tablet) {
-    grid-template-rows: 0 40px 0 40px 0 40px 0;
+    grid-template-rows: 0 40px 0 40px 0;
   }
 }
 

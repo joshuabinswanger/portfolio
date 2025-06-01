@@ -1,29 +1,36 @@
 ---
 import NavigationBarMobile from "../components/NavigationBarMobile.astro"
 import NavigationBar from "../components/NavigationBar.astro"
+import NavigationBarMobilePersonal from "../components/NavigationBarMobilePersonal.astro";
+import NavigationBarPersonal from "../components/NavigationBarPersonal.astro";
 
 // Get asset with PUBLIC ID
 const { personal = false } = Astro.props;
 
 interface Props {
-	personal?: boolean; // Make personal prop optional as it might not always be passed
+  personal?: boolean;
 }
 
 ---
 
 <div id="NavMobile">
-	 <NavigationBarMobile personal={personal === true ? true : undefined}/>
+	{personal ? (
+	  <NavigationBarMobilePersonal />
+	) : (
+	  <NavigationBarMobile />
+	)}
 </div>
 
-
 <div id="TopWrapper">
-	 <div>
-	 {/* Conditionally pass the personal prop to NavigationBar */}
-	<NavigationBar personal={personal === true ? true : undefined} />
-	 </div>
+	<div>
+		{personal ? (
+		<NavigationBarPersonal />
+		) : (
+		<NavigationBar />
+		)}
+	</div>
 
- <slot />
-
+	<slot />
 </div>
 
 

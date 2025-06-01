@@ -1,12 +1,10 @@
 ---
-import Logo from "../components/Logo.astro";
-import Index from './Index.astro';
 import BracketOpenH from './BracketOpenH.astro';
 import BracketMiddleH from './BracketMiddleH.astro';
 import BracketCloseH from './BracketCloseH.astro';
 import "../styles/global.css";
 import { Image } from "astro:assets"
-import RhizomLogo from "../assets/Rhizome_Logo_208h.jpg"
+import JoshLogo from "../assets/joshuabinswanger_tempLogo.png"
 
 interface Props {
   personal?: boolean;
@@ -17,43 +15,32 @@ const { personal } = Astro.props;
 
 <nav id="NavBarMobile" transition:persist>
 
-  <a id="Logo" href="/" class:list={["animation"]} data-href="/" data-animation="out">
-    <Image src={RhizomLogo} id="Image" alt="Rhizom Logo" loading="eager">
+  <a id="Logo" href="/personal" class:list={["animation"]} data-href="/personal" data-animation="out">
+    <Image src={JoshLogo} id="Image" alt="Joshua Binswanger Logo" loading="eager">
   </a>
 
   <div id="Menu">
     <div id="MainWrapper">
       <BracketOpenH />
 
-      <!-- Menu item: Portfolio -->
+      <!-- Menu item: Gallery -->
       <a 
         id="portfolio"
         class:list={["main-button", "button", "animation"]} 
-        href="/"
-        data-href="/"
+        href="/personal"
+        data-href="/personal"
         data-animation="out">
-        Portfolio
-      </a>
-
-      <BracketMiddleH />
-
-      <!-- Projects submenu -->
-      <a
-        id="projects"
-        class:list={["main-button", "button", "animation"]}
-        href="/projects/"
-        data-href="/projects/"
-        data-animation="out">
-        Projects
+        Gallery
       </a>
 
       <BracketMiddleH />
       
       <!-- Menu item: Information -->
       <a 
+        id="info"
         class:list={["main-button", "button", "animation"]} 
-        href="/info/"
-        data-href="/info/"
+        href="/personal/info"
+        data-href="/personal/info"
         data-animation="out">
         Info
       </a>
@@ -110,7 +97,7 @@ const { personal } = Astro.props;
   height: 52px;
   display: grid;
   grid-gap: 0;
-  grid-template-columns: 12px 1fr 24px 1fr 24px 1fr 12px;
+  grid-template-columns: 12px 1fr 24px 1fr 12px;
   justify-items: center;
   z-index: 1002;
   transition: grid-template-columns 0.6s ease;
@@ -220,7 +207,7 @@ a {
       // Ensure logo itself remains visually 'out'
       clickedBtn.setAttribute('data-animation', 'out'); 
 
-    } else { // Clicked a main button (portfolio, projects, info)
+    } else { // Clicked a main button (gallery, info)
       
       // Only proceed if the clicked button is currently "out"
       if (clickedBtn.getAttribute('data-animation') === "out") {
@@ -283,8 +270,8 @@ a {
          if (!btn) return;
          const buttonHref = btn.getAttribute('data-href');
          
-         // Remember the portfolio button
-         if (buttonHref === '/') { 
+         // Remember the portfolio button (Gallery in personal site)
+         if (buttonHref === '/personal') { 
              portfolioButton = btn; 
          }
 
@@ -298,8 +285,8 @@ a {
          } 
        });
 
-       // Fallback: If no match found and not on root, activate portfolio button
-       if (!foundMatch && currentPath !== '/' && portfolioButton) {
+       // Fallback: If no match found and not on personal root, activate gallery button
+       if (!foundMatch && currentPath !== '/personal' && portfolioButton) {
           allNavButtons.forEach(otherBtn => { if(otherBtn) otherBtn.setAttribute('data-animation', 'out')}); 
           portfolioButton.setAttribute('data-animation', 'in'); 
        }
