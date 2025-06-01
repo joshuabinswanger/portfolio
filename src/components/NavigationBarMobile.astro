@@ -91,6 +91,7 @@ const infoText = personal ? "Info" : "Info";
   left: 0;
   top: 0;
   width: 100vw;
+  width: 100dvw;
 }
 
 #Logo {
@@ -117,8 +118,10 @@ const infoText = personal ? "Info" : "Info";
 #Menu {
   position: fixed;
   bottom: 0;
-  width: calc(100vw - 4px - var(--scrollbar-width));
-  min-width: calc(100vw - 4px - var(--scrollbar-width));
+ /*  width: calc(100vw - 4px - var(--scrollbar-width));
+  min-width: calc(100vw - 4px - var(--scrollbar-width)); */
+  left: 2px;
+  right: 2px;
   background-color: var(--bg-color);
   z-index: 1001;
   padding-bottom: 2px;
