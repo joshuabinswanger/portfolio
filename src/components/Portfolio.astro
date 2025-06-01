@@ -472,13 +472,17 @@ imageElements.forEach((image, index) => {
 
 	document.addEventListener('astro:page-load', () => {
 
-		
+		// Select all gallery elements (each gallery container should have the class "GalleryElement")
+		const galleryElements = document.querySelectorAll(".GalleryElement");
+
+		// Only proceed if we found gallery elements
+		if (galleryElements.length === 0) {
+			return; // Exit early if no elements found
+		}
 
 		// Global array to hold the custom data for each gallery
 		let photoswipeCustomData = [];
 
-		// Select all gallery elements (each gallery container should have the class "GalleryElement")
-		const galleryElements = document.querySelectorAll(".GalleryElement");
 
 		//////////////////////////////////////////////////////////
 		/////////////// Loop over each element ///////////////////
@@ -669,17 +673,6 @@ imageElements.forEach((image, index) => {
 
 	});
 
-	document.addEventListener("astro:before-swap", () => {
-		if (lightbox) {
-			lightbox.destroy();
-			lightbox = null;
-        }
-        // Clear global reference too
-        if (window.pswpLightbox) {
-            window.pswpLightbox.destroy();
-            window.pswpLightbox = null;
-        }
-		});
 		
 </script>
 
