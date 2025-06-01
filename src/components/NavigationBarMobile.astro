@@ -7,6 +7,7 @@ import BracketCloseH from './BracketCloseH.astro';
 import "../styles/global.css";
 import { Image } from "astro:assets"
 import RhizomLogo from "../assets/Rhizome_Logo_208h.jpg"
+import JoshLogo from "../assets/joshuabinswanger_tempLogo.png"
 
 
 
@@ -27,13 +28,17 @@ const galleryText = personal ? "Gallery" : "Portfolio";
 const projectsText = personal ? "Projects" : "Projects";
 const infoText = personal ? "Info" : "Info";
 
-
+// Determine which logo to use based on the personal prop
+const currentLogo = personal ? JoshLogo : RhizomLogo;
+const logoAlt = personal ? "Joshua Binswanger Logo" : "Rhizom Logo";
 
 ---
 
 <nav id="NavBarMobile" transition:persist>
 
-  <a id="Logo" href="/" class:list={["animation"]} data-href="/" data-animation="out"><Image src={RhizomLogo}  id="Image" alt="Rhizom Logo" loading="eager"></a>
+  <a id="Logo" href="/" class:list={["animation"]} data-href="/" data-animation="out">
+    <Image src={currentLogo} id="Image" alt={logoAlt} loading="eager">
+  </a>
 
   <div id="Menu">
     <div id="MainWrapper">

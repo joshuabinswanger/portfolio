@@ -9,6 +9,7 @@ import BracketCloseV from './BracketCloseV.astro';
 import "../styles/global.css";
 import { Image } from "astro:assets"
 import RhizomLogo from "../assets/Rhizome_Logo_208h.jpg"
+import JoshLogo from "../assets/joshuabinswanger_tempLogo.png"
 
 
 const logoPath = "/assets/Rhizome_Test2.riv";
@@ -34,14 +35,23 @@ const galleryText = personal ? "Gallery" : "Portfolio";
 const projectsText = personal ? "Projects" : "Projects";
 const infoText = personal ? "Info" : "Info";
 
-
+// Determine which logo to use based on the personal prop
+const currentLogo = personal ? JoshLogo : RhizomLogo;
+const logoAlt = personal ? "Joshua Binswanger Logo" : "Rhizom Logo";
 
 ---
 
 <nav id="NavBarDesktop" transition:persist>
 
-  <a id="Logo" href="/" class:list={["animation"]} data-href="/" data-animation="out"><Image src={RhizomLogo}  id="Image" alt="Rhizom Logo" loading="eager"></a>
-
+  <a 
+    id="Logo" 
+    href={galleryHref} {/* Use the determined href here */}
+    data-href={galleryHref} {/* Update data-href as well if used for animation */}
+    class:list={["animation"]} 
+    data-animation="out">
+    
+    <Image src={currentLogo} id="Image" alt={logoAlt} loading="eager">
+  </a>
 
   <div id="MainWrapper">
 
@@ -62,24 +72,23 @@ const infoText = personal ? "Info" : "Info";
     <BracketMiddleV />
 
 
-     <!-- Projects submenu -->
-      {/* Example of conditionally rendering the href and text for the projects link */}
-    <a
-      id="projects"
-      class:list={["main-button", "button", "animation"]}
-      href={projectsHref} {/* Use the determined href here */}
-      data-href={projectsHref} {/* Update data-href as well if used for animation */}
-      data-animation="out">
+    {!personal && (
+      <>
 
-      {projectsText} {/* Use the determined text content here */}
+        <!-- Projects submenu -->
+        <a
+          id="projects"
+          class:list={["main-button", "button", "animation"]}
+          href={projectsHref}
+          data-href={projectsHref}
+          data-animation="out">
+          {projectsText}
+        </a>
 
-    </a>
+        <BracketMiddleV />
+      </>
+    )}
 
-    <BracketMiddleV />
-
-<!--     <a href="/info" class:list={["MenuItems button animation"]} data-href="/info" data-animation="out">
-      Information
-    </a> -->
 
       <a
       id="info"
@@ -100,7 +109,7 @@ const infoText = personal ? "Info" : "Info";
 <script>
   import { navigate } from 'astro:transitions/client';
 
-  // Update visual state (add/remove active class) - NO CHANGE
+  // Update visual state (add/remove active class)
   function updateAnimationState(buttons) {
     setTimeout(() => {
       buttons.forEach(btn => {
@@ -113,7 +122,7 @@ const infoText = personal ? "Info" : "Info";
     }, 500);
   }
 
-  // Handle button click for all buttons - ADJUSTED
+  // Handle button click for all buttons 
   function handleButtonClick(clickedBtn, allButtonsNodeList) {
     // Convert NodeList to Array for easier filtering if needed
     const allButtons = Array.from(allButtonsNodeList); 
@@ -159,7 +168,7 @@ const infoText = personal ? "Info" : "Info";
     // Navigation is handled by the browser for <a> tags with Astro View Transitions
   }
 
-  // Attach event listeners to buttons - NO CHANGE NEEDED to function itself
+  // Attach event listeners to buttons 
   function createEventListeners(buttons) {
     buttons.forEach(btn => {
        // Basic check to prevent adding multiple listeners if page-load fires rapidly
@@ -176,24 +185,30 @@ const infoText = personal ? "Info" : "Info";
     });
   }
 
-  // On page load, update visual state and attach click listeners - ADJUSTED SELECTOR
+  // On page load, update visual state and attach click listeners
   document.addEventListener("astro:page-load", () => {
 
     const navBar = document.getElementById("NavBarDesktop");
     if (!navBar) return;
 
-    // --- ADJUSTED SELECTOR ---
     // Select the Logo (#Logo) AND the direct children 'a.animation' of MainWrapper
     const allNavButtons = navBar.querySelectorAll('#Logo, #MainWrapper > a.animation'); 
-    // --- ADJUSTED SELECTOR ---
 
     if (allNavButtons.length === 0) return;
+
+
+
      // --- START: URL Matching Logic (copied from previous answer, ensure it uses allNavButtons) ---
+
      let isActiveAlreadySet = false;
+
+     //check if already an active a element
      allNavButtons.forEach(btn => {
+
        if (btn.getAttribute('data-animation') === 'in' || btn.classList.contains('active')) { // Check class too
          isActiveAlreadySet = true;
        }
+
      });
 
      if (!isActiveAlreadySet) {
@@ -201,11 +216,20 @@ const infoText = personal ? "Info" : "Info";
        let foundMatch = false;
        let portfolioButton = null; 
 
+      // Determine if we're on personal site by checking URL
+      const isPersonalSite = currentPath.startsWith('/personal');
+
+      console.log(`Are we on personl site?: ${isPersonalSite}`);
+
        allNavButtons.forEach(btn => {
          const buttonHref = btn.getAttribute('data-href');
-         if (buttonHref === '/') {
+
+          // Set portfolio button reference based on site type
+          if ((isPersonalSite && buttonHref === '/personal/') || (!isPersonalSite && buttonHref === '/')) {
              portfolioButton = btn; 
          }
+
+         //check if we pressed on the same button
          if (buttonHref === currentPath) {
            allNavButtons.forEach(otherBtn => otherBtn.setAttribute('data-animation', 'out')); 
            btn.setAttribute('data-animation', 'in');
@@ -213,6 +237,7 @@ const infoText = personal ? "Info" : "Info";
          } 
        });
 
+       //if pressed on a different route
        if (!foundMatch && currentPath !== '/' && portfolioButton) {
           allNavButtons.forEach(btn => btn.setAttribute('data-animation', 'out')); 
           portfolioButton.setAttribute('data-animation', 'in'); 
