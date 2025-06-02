@@ -21,7 +21,7 @@ links.sort((a, b) => a.data.sortOrder - b.data.sortOrder);
 
 ---
 
-<TopWrapper>
+<TopWrapper paddingBottom="0rem">
     <div id="InfoWrapper">
             
 
@@ -68,7 +68,9 @@ links.sort((a, b) => a.data.sortOrder - b.data.sortOrder);
             Workshops<br>
         </p>
 
-        
+        <p id="Personal">
+        Browse my comprehensive <a href="/personal">design portfolio</a> featuring personal and experimental projects.
+        </p>
         
 
 <!--         <div id="Contact">
@@ -122,11 +124,16 @@ p {
     }
 }
 
+a {
+    color: black;
+    text-decoration: underline;
+}
+
 #InfoWrapper{
     display: grid;
     align-items: center;
     grid-template-columns: 16px 1fr 1fr 1fr 16px;
-    grid-template-rows: 2fr 2fr;
+    grid-template-rows: 2fr 1fr;
     column-gap: 16px;
     margin-top: calc(var(--padding-desktop));
     max-height: calc(60vh - var(--padding-desktop));
@@ -283,6 +290,16 @@ p {
 
     }   
     
+}
+
+#Personal {
+    grid-column-start: 2;
+    grid-column-end: 4;
+    align-self: center;
+
+    @media (--bp-mobile) {
+        grid-column-start: 1;
+        }
 }
 
 #Email {

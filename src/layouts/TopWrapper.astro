@@ -3,12 +3,14 @@ import NavigationBarMobile from "../components/NavigationBarMobile.astro"
 import NavigationBar from "../components/NavigationBar.astro"
 import NavigationBarMobilePersonal from "../components/NavigationBarMobilePersonal.astro";
 import NavigationBarPersonal from "../components/NavigationBarPersonal.astro";
+import { string } from "astro:schema";
 
 // Get asset with PUBLIC ID
-const { personal = false } = Astro.props;
+const { personal = false, paddingBottom = "" } = Astro.props;
 
 interface Props {
   personal?: boolean;
+  paddingBottom?: string;
 }
 
 ---
@@ -21,7 +23,7 @@ interface Props {
 	)}
 </div>
 
-<div id="TopWrapper">
+<div id="TopWrapper" style={paddingBottom ? `padding-bottom: ${paddingBottom} !important;` : ""}>
 	<div>
 		{personal ? (
 		<NavigationBarPersonal />
@@ -33,16 +35,10 @@ interface Props {
 	<slot />
 </div>
 
-
-
-
-
-
 <style>
 @import "../styles/global.css";
 
 #TopWrapper{
-
     display: grid; 
 	grid-template-columns: var(--nav-main-layout-desktop);
 	padding-top: var(--padding-top-desktop);
@@ -79,8 +75,6 @@ interface Props {
 		margin-right: var(--margin-right-desktop-wide);
 		grid-column-gap: 4px;
 	}
-
-
 }
 
 #Nav {
@@ -91,12 +85,9 @@ interface Props {
 }
 
 #NavMobile {
-
 	display: none;
 	@media (--bp-mobile) {
 		display: block;
 	}
 }
-
-
 </style>
