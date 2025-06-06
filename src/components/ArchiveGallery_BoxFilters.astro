@@ -1284,7 +1284,6 @@ width: auto;
   grid-template-columns: 0px 0px 0px 0px;
   height: min-content;
   grid-column: 2 / 3;
-  overflow: hidden;
   position: relative; /* Add positioning context */
   background-color: var(--bg-color);
   transition: grid-template-columns 0.25s ease 0.25s, height 0.5s ease 0.75s;
@@ -1295,7 +1294,7 @@ width: auto;
 
 /* filter-box active */
 #filter.active + #filter-box {
-  grid-template-columns: 10px min-content  0px 10px;
+  grid-template-columns: 10px min-content 0px 10px;
   transition: grid-template-columns 0.25s ease 0s, height 0.75s ease 0.25s;
 
 }
@@ -1439,7 +1438,7 @@ width: auto;
 
 #filter.active + #filter-box .bracket-end {
   transition: opacity 0.2s ease 0.1s;
-  left: -12px;
+  left: -10px;
 }
 
 #filter:not(.active) + #filter-box:not(:has(.filter-button.mixitup-control-active)) .bracket-start {
