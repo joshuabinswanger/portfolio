@@ -754,20 +754,31 @@ document.addEventListener('astro:page-load', ev => {
   opacity: 0.22;
   filter: contrast(0.66) sepia(.8) grayscale(0.8);
   transition: all 1s ease;
-  transform: translateY(10%);
+  transform: translateY(10%) translateZ(0);
 }
 
 .show {
   opacity: 1;
   filter:  contrast(1) brightness(1) sepia(0) grayscale(0);
-  transform: translateY(0);
+  transform: translateY(0) translateZ(0);
 }
 
 .hidden {
 	display: none;
 }
 
-
+/* iOS-specific overrides */
+@supports (-webkit-touch-callout: none) {
+  .fade {
+    filter: none !important;
+    /* Optionally adjust opacity to compensate for missing filters */
+    opacity: 0.35;
+  }
+  
+  .show {
+    filter: none !important;
+  }
+}
 
 
 
@@ -795,70 +806,23 @@ document.addEventListener('astro:page-load', ev => {
 }
 
 @media (--bp-tablet) {
+  .observer {
+    grid-column-end: span 7;
+    margin-bottom: 5rem;
+  }
 
-.observer {
-	grid-column-end: span 7; 
-	margin-bottom: 5rem;
-}
-
-.observer:nth-of-type(1) {
-	grid-column-start: 1; 
-	
-}
-
-.observer:nth-of-type(2) {
-	grid-column-start: 3; 
-}
-
-.observer:nth-of-type(3) {
-	grid-column-start: 5; 
-
-}
-
-.observer:nth-of-type(4) {
-	grid-column-start: 3; 
-
-}
-
-.observer:nth-of-type(5) {
-	grid-column-start: 1; 
-
-}
-
-.observer:nth-of-type(6) {
-	grid-column-start: 3; 
-
-}
-
-.observer:nth-of-type(7) {
-	grid-column-start: 5; 
-
-}
-
-.observer:nth-of-type(8) {
-	grid-column-start: 3; 
-
-}
-
-.observer:nth-of-type(9) {
-	grid-column-start: 1; 
-
-}
-.observer:nth-of-type(10) {
-	grid-column-start: 3; 
-
-}
-.observer:nth-of-type(11) {
-	grid-column-start: 5; 
-
-}
-.observer:nth-of-type(12) {
-	grid-column-start: 3; 
-
-}
-.observer:nth-of-type(13) {
-	grid-column-start: 1; 
-}
+  /* Use a repeating pattern instead of explicit positioning */
+  .observer:nth-of-type(3n+1) {
+    grid-column-start: 1;
+  }
+  
+  .observer:nth-of-type(3n+2) {
+    grid-column-start: 3;
+  }
+  
+  .observer:nth-of-type(3n) {
+    grid-column-start: 5;
+  }
 }
 
 /*Desktop*/

@@ -1284,8 +1284,12 @@ width: auto;
   grid-template-columns: 0px 0px 0px 0px;
   height: min-content;
   grid-column: 2 / 3;
+  overflow: hidden;
+  position: relative; /* Add positioning context */
   background-color: var(--bg-color);
   transition: grid-template-columns 0.25s ease 0.25s, height 0.5s ease 0.75s;
+  transform: translateZ(0); /* Force hardware acceleration */
+  -webkit-transform: translateZ(0); /* Safari prefix */
 
 }
 
@@ -1404,17 +1408,16 @@ width: auto;
 
 /* brackets */
 
+/* brackets */
 .bracket-start {
   width: 20px;
   border-top: 1.5px solid black;
   border-bottom: 1.5px solid black;
   border-left: 1.5px solid black;
   opacity: 1;
+  position: relative; /* Add positioning */
+  z-index: 1; /* Ensure proper stacking */
   transition: opacity 0.5s ease 0.75s;
-}
-
-#filter.active + #filter-box .bracket-start {
-  transition: opacity 0.2s ease 0.1s;
 }
 
 .bracket-end {
@@ -1425,12 +1428,18 @@ width: auto;
   border-bottom: 1.5px solid black;
   border-right: 1.5px solid black;
   opacity: 1;
+  z-index: 1; /* Ensure proper stacking */
   transition: opacity 0.5s ease 0.75s;
+}
+
+
+#filter.active + #filter-box .bracket-start {
+  transition: opacity 0.2s ease 0.1s;
 }
 
 #filter.active + #filter-box .bracket-end {
   transition: opacity 0.2s ease 0.1s;
-  left: -10px;
+  left: -12px;
 }
 
 #filter:not(.active) + #filter-box:not(:has(.filter-button.mixitup-control-active)) .bracket-start {
