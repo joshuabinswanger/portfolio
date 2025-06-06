@@ -164,7 +164,7 @@ let globalIndex = 0;      // Ensure initialized
 <!-- Intersection Observer -->
 <script>
 
-document.addEventListener('astro:page-load', ev => {
+/* document.addEventListener('astro:page-load', ev => {
 
 
 
@@ -191,7 +191,7 @@ document.addEventListener('astro:page-load', ev => {
 	// Define the IntersectionObserver
 	const observerFade = new IntersectionObserver((entries) => {  
 		entries.forEach((entry) => {
-			/* console.log(entry); */
+
 			if (entry.isIntersecting) {
 				entry.target.firstElementChild.classList.add("show");
 				entry.target.classList.remove("restrain");
@@ -207,19 +207,19 @@ document.addEventListener('astro:page-load', ev => {
 ///// Hidden Intersection Observer
 
 	 // IntersectionObserver hidden options
-/* 	 let optionsHidden = {
+	 let optionsHidden = {
 			rootMargin: "700px",
-		}; */
+		};
 	
 	// Define the IntersectionObserver
-/* 	const observerHidden = new IntersectionObserver((entries) => {  
+	const observerHidden = new IntersectionObserver((entries) => {  
 		entries.forEach((entry) => {
 		
 			if (entry.isIntersecting) {
 				entry.target.firstElementChild.classList.remove("hidden");
 			} 
 		});
-	}, optionsHidden); */
+	}, optionsHidden); 
 
 
 
@@ -230,12 +230,12 @@ document.addEventListener('astro:page-load', ev => {
      const fadeElements = document.querySelectorAll(".observer");
      fadeElements.forEach((el) => observerFade.observe(el));
 
-/* 	 const hiddenElements = document.querySelectorAll(".observer");
-	 hiddenElements.forEach((el) => observerHidden.observe(el)); */
+	 const hiddenElements = document.querySelectorAll(".observer");
+	 hiddenElements.forEach((el) => observerHidden.observe(el));
 
 
 
-  });
+  }); */
 </script>
 
 <!-- KeenSlider -->
