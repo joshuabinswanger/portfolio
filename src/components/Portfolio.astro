@@ -129,7 +129,7 @@ let globalIndex = 0;      // Ensure initialized
 			
 		return(
 		<div class:list={["observer restrain"]}>
-			<div class:list={["GalleryElementWrapper hidden"]} id={projectId} data-gallery-index={index} data-gallery-project={entry.data.title}>
+			<div class:list={["GalleryElementWrapper"]} id={projectId} data-gallery-index={index} data-gallery-project={entry.data.title}>
 				<div class:list={["gallery-placeholder"]}>
 				</div>
 				<GalleryElement
@@ -207,19 +207,19 @@ document.addEventListener('astro:page-load', ev => {
 ///// Hidden Intersection Observer
 
 	 // IntersectionObserver hidden options
-	 let optionsHidden = {
+/* 	 let optionsHidden = {
 			rootMargin: "700px",
-		};
+		}; */
 	
 	// Define the IntersectionObserver
-	const observerHidden = new IntersectionObserver((entries) => {  
+/* 	const observerHidden = new IntersectionObserver((entries) => {  
 		entries.forEach((entry) => {
-			/* console.log(entry); */
+		
 			if (entry.isIntersecting) {
 				entry.target.firstElementChild.classList.remove("hidden");
 			} 
 		});
-	}, optionsHidden);
+	}, optionsHidden); */
 
 
 
@@ -230,8 +230,8 @@ document.addEventListener('astro:page-load', ev => {
      const fadeElements = document.querySelectorAll(".observer");
      fadeElements.forEach((el) => observerFade.observe(el));
 
-	 const hiddenElements = document.querySelectorAll(".observer");
-	 hiddenElements.forEach((el) => observerHidden.observe(el));
+/* 	 const hiddenElements = document.querySelectorAll(".observer");
+	 hiddenElements.forEach((el) => observerHidden.observe(el)); */
 
 
 
@@ -760,25 +760,14 @@ document.addEventListener('astro:page-load', ev => {
 .show {
   opacity: 1;
   filter:  contrast(1) brightness(1) sepia(0) grayscale(0);
-  transform: translateY(0) translateZ(0);
+  transform: translateY(0);
 }
 
 .hidden {
 	display: none;
 }
 
-/* iOS-specific overrides */
-@supports (-webkit-touch-callout: none) {
-  .fade {
-    filter: none !important;
-    /* Optionally adjust opacity to compensate for missing filters */
-    opacity: 0.35;
-  }
-  
-  .show {
-    filter: none !important;
-  }
-}
+
 
 
 
@@ -806,23 +795,24 @@ document.addEventListener('astro:page-load', ev => {
 }
 
 @media (--bp-tablet) {
+  .observer {
+    grid-column-end: span 7;
+    margin-bottom: 5rem;
+  }
 
-.observer:nth-of-type(odd) {
-	grid-column-start: 1; 
-	grid-column-end: span 6; 
+  /* Use a repeating pattern instead of explicit positioning */
+  .observer:nth-of-type(3n+1) {
+    grid-column-start: 1;
+  }
+  
+  .observer:nth-of-type(3n+2) {
+    grid-column-start: 3;
+  }
+  
+  .observer:nth-of-type(3n) {
+    grid-column-start: 5;
+  }
 }
-
-.observer:nth-of-type(even) {
-	grid-column-start: 2; 
-	grid-column-end: span 6; 
-}
-
-.observer {
-	margin-bottom: 5rem;
-}
-
-}
-
 
 /*Desktop*/
 @media (--bp-desktop) {
