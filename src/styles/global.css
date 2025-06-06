@@ -78,7 +78,7 @@
   /* Bottom Padding */
   --padding-bot-mobile-small: 80px;
   --padding-bot-mobile: 90px;
-  --padding-bot-ablet: 96px;
+  --padding-bot-tablet: 96px;
   --padding-bot-desktop: calc(9 * 56px);
   --padding-bot-desktop-wide: calc(9 * 88px);
 

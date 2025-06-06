@@ -806,24 +806,23 @@ document.addEventListener('astro:page-load', ev => {
 }
 
 @media (--bp-tablet) {
-  .observer {
-    grid-column-end: span 7;
-    margin-bottom: 5rem;
-  }
 
-  /* Use a repeating pattern instead of explicit positioning */
-  .observer:nth-of-type(3n+1) {
-    grid-column-start: 1;
-  }
-  
-  .observer:nth-of-type(3n+2) {
-    grid-column-start: 3;
-  }
-  
-  .observer:nth-of-type(3n) {
-    grid-column-start: 5;
-  }
+.observer:nth-of-type(odd) {
+	grid-column-start: 1; 
+	grid-column-end: span 6; 
 }
+
+.observer:nth-of-type(even) {
+	grid-column-start: 2; 
+	grid-column-end: span 6; 
+}
+
+.observer {
+	margin-bottom: 5rem;
+}
+
+}
+
 
 /*Desktop*/
 @media (--bp-desktop) {

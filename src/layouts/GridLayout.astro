@@ -27,10 +27,16 @@ const { customClass = '', customStyle = '' } = Astro.props;
 	}
 
 	@media (--bp-tablet) {
+		grid-template-columns: var(--grid-layout-columns-mobile);
+		grid-auto-rows: auto;
+		padding-bottom: 2lvh; 
+	}
+
+/* 	@media (--bp-tablet) {
 		grid-template-columns: var(--grid-layout-columns-tablet);
 		grid-auto-rows: auto;
 		padding-bottom: 0lvh;
-	}
+	} */
 
 	@media (--bp-desktop-wide) {
 		grid-template-columns: var(--grid-layout-columns-desktop-wide);
@@ -50,9 +56,15 @@ const { customClass = '', customStyle = '' } = Astro.props;
 	}
 
 	@media (--bp-tablet) {
+		grid-template-columns: 1fr 1fr;
+		column-gap: 16px;
+		row-gap: 16px;
+	}
+
+/* 	@media (--bp-tablet) {
 		grid-template-columns: 1fr 1fr 1fr;
 		column-gap: 56px;
-	}
+	} */
 
 	@media (--bp-desktop-wide) {
 		grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
