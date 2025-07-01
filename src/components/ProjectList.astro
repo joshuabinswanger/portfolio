@@ -163,12 +163,12 @@ document.addEventListener('astro:page-load', () => {
     listBar.addEventListener('click', () => {
 
       // First, close all other open sliders
-      listElements.forEach(el => {
+/*       listElements.forEach(el => {
         if (el !== listEl && el.classList.contains('open')) {
           // Remove the open state (this triggers the CSS transition)
           el.classList.remove('open');
         }
-      });
+      }); */
 
       // Toggle the clicked slider:
       if (listEl.classList.contains('open')) {
