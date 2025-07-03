@@ -20,12 +20,12 @@ bgcolor: "#0A0523"
 
 projectDescription: |
   Various 3D Projects focusing mainly on modeling, texturing and rendering.
- 
+
 credits: |
 
-    <table>
-        <tr>
-          <th>Tools:</th>
-          <td>Houdini, ZBrush, Blender, Substance</td>
-        </tr>
-    </table>
+  <table>
+      <tr>
+        <th>Tools:</th>
+        <td>Houdini, ZBrush, Blender, Substance</td>
+      </tr>
+  </table>

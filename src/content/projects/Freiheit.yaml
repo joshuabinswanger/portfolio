@@ -8,7 +8,6 @@ collaborators: "Prof. Dr. Noah Bubenhofer, Davide Ventre, Sonja Huber"
 role: "Design"
 tools: Rive, Houdini, Adobe Suite
 
-
 portfolio: true
 
 tags:
@@ -26,20 +25,20 @@ projectDescription: |
   Visitors contributed personal associations, which were analyzed alongside data from 500,000 texts to showcase diverse interpretations of freedom.<br>
   I was responsible for the visual design of the exhibit, creating an engaging and accessible interface to connect visitors with the research.
   <br>Visit the Desktop Version: **<a href="https://korpuspragmatik.ds.uzh.ch/freiheit/" target="_blank" style="pointer-events: auto; color: black;">Freiheit</a>**<br>
- 
+
 credits: |
 
-    <table>
-        <tr>
-          <th>Developers:</th>
-          <td>Sonja Huber, Davide Ventre (Results Visualisation)</td>
-        </tr>
-        <tr>
-          <th>Project Coordinator:</th>
-          <td>Prof. Dr. Noah Bubenhofer, Davide Ventre</td>
-        </tr>        
-        <tr>
-          <th>Tools:</th>
-          <td>Rive, Affinity Suite</td>
-        </tr>
-      </table>
+  <table>
+      <tr>
+        <th>Developers:</th>
+        <td>Sonja Huber, Davide Ventre (Results Visualisation)</td>
+      </tr>
+      <tr>
+        <th>Project Coordinator:</th>
+        <td>Prof. Dr. Noah Bubenhofer, Davide Ventre</td>
+      </tr>        
+      <tr>
+        <th>Tools:</th>
+        <td>Rive, Affinity Suite</td>
+      </tr>
+    </table>

@@ -6,67 +6,71 @@ import GridLayout from "../layouts/GridLayout.astro";
 import SquareBracketH from "./SquareBracket_H.astro";
 import "../styles/global.css";
 import Footer from "./Footer.astro";
-
-
 ---
 
 <TopWrapper>
-    <div id="Wrapper">
-        <!--         
+  <div id="Wrapper">
+    <!--         
         <div id="ProfilePic">
         </div> -->
 
-        <p id="AboutText">
-            Joshua Binswanger is a scientific illustrator and designer based in Zurich, Switzerland, dedicated to blending visuals with knowledge to make complex topics both engaging and visually appealing. Leveraging a diverse array of design tools, he transforms scientific concepts into captivating, accessible visuals. Driven by curiosity and an inquisitive mindset, Joshua fosters meaningful dialogue with his collaborators, enriching the creative process.
-<br><br>
-Beyond his design work, Joshua is passionate about teaching and sharing his expertise. He combines his love for nature and storytelling by illustrating imaginative characters and creatures, showcasing his affinity for merging creativity with science.
+    <p id="AboutText">
+      Joshua Binswanger is a scientific illustrator and designer based in
+      Zurich, Switzerland, dedicated to blending visuals with knowledge to make
+      complex topics both engaging and visually appealing. Leveraging a diverse
+      array of design tools, he transforms scientific concepts into captivating,
+      accessible visuals. Driven by curiosity and an inquisitive mindset, Joshua
+      fosters meaningful dialogue with his collaborators, enriching the creative
+      process.
+      <br /><br />
+      Beyond his design work, Joshua is passionate about teaching and sharing his
+      expertise. He combines his love for nature and storytelling by illustrating
+      imaginative characters and creatures, showcasing his affinity for merging creativity
+      with science.
+    </p>
 
+    <p id="SelectedClients">
+      <strong>Selected Clients:</strong><br /><br />
+      ETH<br />
+      Hereon @DESY<br />
+      University of Zurich<br />
+      SLF<br />
+      HNE Eberswalde<br />
+      LWF Bayern<br />
+    </p>
 
-        </p>
-
-        <p id="SelectedClients">
-            <strong>Selected Clients:</strong><br><br>
-            ETH<br>
-            Hereon @DESY<br>
-            University of Zurich<br>
-            SLF<br>
-            HNE Eberswalde<br>
-            LWF Bayern<br>
-        </p>
-
-        <p id="Services">
-            <strong>Services:</strong><br><br>
-            Scientific Illustration<br>
-            3D Design & Visualisation<br>
-            Drawing & Illustration<br>
-            Infographics<br>
-            Workshops<br>
-        </p>
-    </div>
+    <p id="Services">
+      <strong>Services:</strong><br /><br />
+      Scientific Illustration<br />
+      3D Design & Visualisation<br />
+      Drawing & Illustration<br />
+      Infographics<br />
+      Workshops<br />
+    </p>
+  </div>
 </TopWrapper>
 
-
 <style>
-@import "../styles/global.css";
-p {
+  @import "../styles/global.css";
+  p {
     font-size: var(--font-size-dekstop);
     letter-spacing: 2px;
     height: min-content;
 
     @media (--bp-mobile) {
-        font-size: var(--font-size-mobile);
+      font-size: var(--font-size-mobile);
     }
 
     @media (--bp-tablet) {
-        font-size: var(--font-size-tablet);
+      font-size: var(--font-size-tablet);
     }
 
     @media (--bp-desktop-wide) {
-        font-size: var(--font-size-desktop-wide);
+      font-size: var(--font-size-desktop-wide);
     }
-}
+  }
 
-#Wrapper{
+  #Wrapper {
     display: grid;
     grid-template-columns: 1fr 56ch 55ch 1fr;
     grid-auto-rows: min-content auto;
@@ -75,27 +79,26 @@ p {
     max-height: 66vh;
 
     @media (--bp-mobile) {
-        margin: auto 2px;
-        grid-template-columns: 1fr 50% 50% 1fr;
-        grid-auto-rows: auto;
-        max-height: 100svh;
+      margin: auto 2px;
+      grid-template-columns: 1fr 50% 50% 1fr;
+      grid-auto-rows: auto;
+      max-height: 100svh;
     }
 
-
     @media (--bp-tablet) {
-        grid-template-columns: 1fr 50% 50% 1fr;
-        grid-auto-rows: min-content auto;
-        grid-column-start: 2;
-        margin-top: calc(var(--padding-tablet));
+      grid-template-columns: 1fr 50% 50% 1fr;
+      grid-auto-rows: min-content auto;
+      grid-column-start: 2;
+      margin-top: calc(var(--padding-tablet));
     }
 
     @media (--bp-desktop-wide) {
-        grid-column-start: 2;
-        margin-top: calc(var(--padding-desktop-wide));
+      grid-column-start: 2;
+      margin-top: calc(var(--padding-desktop-wide));
     }
-}
+  }
 
-#AboutText {
+  #AboutText {
     grid-column-start: 2;
     grid-column-end: 4;
     max-width: 111ch;
@@ -105,11 +108,10 @@ p {
     margin: 0;
 
     @media (--bp-tablet) {
-       
     }
-}
+  }
 
-#SelectedClients {
+  #SelectedClients {
     grid-column-start: 2;
     max-width: 23ch;
     align-self: start;
@@ -119,19 +121,19 @@ p {
     height: min-content;
 
     @media (--bp-mobile) {
-        font-size: calc(var(--font-size-mobile) - 2px);
+      font-size: calc(var(--font-size-mobile) - 2px);
     }
 
     @media (--bp-tablet) {
-        font-size: calc(var(--font-size-tablet) - 2px);
+      font-size: calc(var(--font-size-tablet) - 2px);
     }
 
     @media (--bp-desktop-wide) {
-        font-size: calc(var(--font-size-desktop-wide) - 2px);
+      font-size: calc(var(--font-size-desktop-wide) - 2px);
     }
-}
+  }
 
-#Services {
+  #Services {
     grid-column-start: 3;
     max-width: 33ch;
     align-self: start;
@@ -141,16 +143,15 @@ p {
     height: min-content;
 
     @media (--bp-mobile) {
-        font-size: calc(var(--font-size-mobile) - 2px);
+      font-size: calc(var(--font-size-mobile) - 2px);
     }
 
     @media (--bp-tablet) {
-        font-size: calc(var(--font-size-tablet) - 2px);
+      font-size: calc(var(--font-size-tablet) - 2px);
     }
 
     @media (--bp-desktop-wide) {
-        font-size: calc(var(--font-size-desktop-wide) - 2px);
+      font-size: calc(var(--font-size-desktop-wide) - 2px);
     }
-}
-
+  }
 </style>

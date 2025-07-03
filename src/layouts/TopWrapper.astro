@@ -1,6 +1,6 @@
 ---
-import NavigationBarMobile from "../components/NavigationBarMobile.astro"
-import NavigationBar from "../components/NavigationBar.astro"
+import NavigationBarMobile from "../components/NavigationBarMobile.astro";
+import NavigationBar from "../components/NavigationBar.astro";
 import NavigationBarMobilePersonal from "../components/NavigationBarMobilePersonal.astro";
 import NavigationBarPersonal from "../components/NavigationBarPersonal.astro";
 import { string } from "astro:schema";
@@ -12,84 +12,76 @@ interface Props {
   personal?: boolean;
   paddingBottom?: string;
 }
-
 ---
 
 <div id="NavMobile">
-	{personal ? (
-	  <NavigationBarMobilePersonal />
-	) : (
-	  <NavigationBarMobile />
-	)}
+  {personal ? <NavigationBarMobilePersonal /> : <NavigationBarMobile />}
 </div>
 
-<div id="TopWrapper" style={paddingBottom ? `padding-bottom: ${paddingBottom} !important;` : ""}>
-	<div>
-		{personal ? (
-		<NavigationBarPersonal />
-		) : (
-		<NavigationBar />
-		)}
-	</div>
+<div
+  id="TopWrapper"
+  style={paddingBottom ? `padding-bottom: ${paddingBottom} !important;` : ""}
+>
+  <div>
+    {personal ? <NavigationBarPersonal /> : <NavigationBar />}
+  </div>
 
-	<slot />
+  <slot />
 </div>
 
 <style>
-@import "../styles/global.css";
+  @import "../styles/global.css";
 
-#TopWrapper{
-    display: grid; 
-	grid-template-columns: var(--nav-main-layout-desktop);
-	padding-top: var(--padding-top-desktop);
-	padding-bottom: var(--padding-bot-desktop);
-	margin-left: var(--margin-left-dekstop);
-	margin-right: var(--margin-right-desktop);
-	grid-column-gap: 4px;
-	grid-template-rows: auto; /* Automatically adjust row heights based on content */
+  #TopWrapper {
+    display: grid;
+    grid-template-columns: var(--nav-main-layout-desktop);
+    padding-top: var(--padding-top-desktop);
+    padding-bottom: var(--padding-bot-desktop);
+    margin-left: var(--margin-left-dekstop);
+    margin-right: var(--margin-right-desktop);
+    grid-column-gap: 4px;
+    grid-template-rows: auto; /* Automatically adjust row heights based on content */
 
-	@media (--bp-mobile) {
-		grid-template-columns: var(--nav-main-layout-mobile);
-		padding-top: var(--padding-top-mobile);
-		padding-bottom: var(--padding-bot-mobile);
-		margin-left: var(--margin-left-mobile);
-		margin-right: var(--margin-right-mobile);
-		grid-column-gap: 0px;
-		height: fit-content;
-	}
+    @media (--bp-mobile) {
+      grid-template-columns: var(--nav-main-layout-mobile);
+      padding-top: var(--padding-top-mobile);
+      padding-bottom: var(--padding-bot-mobile);
+      margin-left: var(--margin-left-mobile);
+      margin-right: var(--margin-right-mobile);
+      grid-column-gap: 0px;
+      height: fit-content;
+    }
 
-	
+    @media (--bp-tablet) {
+      grid-template-columns: var(--nav-main-layout-tablet);
+      padding-top: var(--padding-top-tablet);
+      padding-bottom: var(--padding-bot-tablet);
+      margin-left: var(--margin-left-tablet);
+      margin-right: var(--margin-right-tablet);
+      grid-column-gap: 4px;
+    }
 
-	@media (--bp-tablet){
-		grid-template-columns: var(--nav-main-layout-tablet);
-		padding-top: var(--padding-top-tablet);
-		padding-bottom: var(--padding-bot-tablet);
-		margin-left: var(--margin-left-tablet);
-		margin-right: var(--margin-right-tablet);
-		grid-column-gap: 4px;
-	}
+    @media (--bp-desktop-wide) {
+      grid-template-columns: var(--nav-main-layout-desktop-wide);
+      padding-top: var(--padding-top-desktop-wide);
+      padding-bottom: var(--padding-bot-desktop-wide);
+      margin-left: var(--margin-left-desktop-wide);
+      margin-right: var(--margin-right-desktop-wide);
+      grid-column-gap: 4px;
+    }
+  }
 
-	@media (--bp-desktop-wide) {
-		grid-template-columns: var(--nav-main-layout-desktop-wide);
-		padding-top: var(--padding-top-desktop-wide);
-		padding-bottom: var(--padding-bot-desktop-wide);
-		margin-left: var(--margin-left-desktop-wide);
-		margin-right: var(--margin-right-desktop-wide);
-		grid-column-gap: 4px;
-	}
-}
+  #Nav {
+    @media (--bp-mobile) {
+      display: none;
+      position: fixed;
+    }
+  }
 
-#Nav {
-	@media (--bp-mobile) {
-		display: none;
-		position: fixed;
-	}
-}
-
-#NavMobile {
-	display: none;
-	@media (--bp-mobile) {
-		display: block;
-	}
-}
+  #NavMobile {
+    display: none;
+    @media (--bp-mobile) {
+      display: block;
+    }
+  }
 </style>

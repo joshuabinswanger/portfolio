@@ -35,10 +35,7 @@
             "properties": {
               "loading": {
                 "type": "string",
-                "enum": [
-                  "eager",
-                  "lazy"
-                ]
+                "enum": ["eager", "lazy"]
               },
               "to": {
                 "type": "string"

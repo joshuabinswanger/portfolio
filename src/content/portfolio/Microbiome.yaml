@@ -1,6 +1,6 @@
-portfolioElementProjects: 
+portfolioElementProjects:
   - Microbiome
-  
+
 portfolioElementName: "Microbiome"
 priority: 7
 
@@ -29,17 +29,17 @@ projectDescription: |
 
 credits: |
 
-    <table>
-        <tr>
-          <th>Client:</th>
-          <td>ETH, Sustainable Agroecosystems</td>
-        </tr>
-        <tr>
-          <th>Team:</th>
-          <td>M. Hartmann, A. Hofmann, J. Schlaepfer-Miller</td>
-        </tr>
-        <tr>
-          <th>Tools:</th>
-          <td>Photoshop, Indesign</td>
-        </tr>
-      </table>
+  <table>
+      <tr>
+        <th>Client:</th>
+        <td>ETH, Sustainable Agroecosystems</td>
+      </tr>
+      <tr>
+        <th>Team:</th>
+        <td>M. Hartmann, A. Hofmann, J. Schlaepfer-Miller</td>
+      </tr>
+      <tr>
+        <th>Tools:</th>
+        <td>Photoshop, Indesign</td>
+      </tr>
+    </table>

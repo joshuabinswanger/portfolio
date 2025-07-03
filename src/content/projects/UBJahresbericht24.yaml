@@ -16,27 +16,27 @@ tags:
 bgcolor: "#111111cc"
 
 projectDescription: |
-       For the University Library Zurich we created an innovative annual report that consists of an animated "Wimmelbild". My responsibility was to create the Design and code the website. 
-       <br>
-       <br>**<a href="https://dlsubzh.github.io/ubjahresbericht24/" target="_blank" style="pointer-events: auto; color: black;">UB Annual Report 2024</a>**
+  For the University Library Zurich we created an innovative annual report that consists of an animated "Wimmelbild". My responsibility was to create the Design and code the website. 
+  <br>
+  <br>**<a href="https://dlsubzh.github.io/ubjahresbericht24/" target="_blank" style="pointer-events: auto; color: black;">UB Annual Report 2024</a>**
 
 credits: |
- <table>
-        <tr>
-          <th>Client:</th>
-          <td>University Library Zurich </td>
-        </tr>
-        <tr>
-          <th>Team:</th>
-          <td>
-            Coordination & Redaktion: Ladina Tschander, Martina Kammermann & Sabine Klein<br>
-            Design:Joshua Binswanger<br>
-            Programming: Joshua Binswanger<br>
-            Videos:Martin Weiss
-          </td>
-        </tr>
-        <tr>
-          <th>Tools:</th>
-          <td>Rive, HTML/CSS/JS, Affinity Suite</td>
-        </tr>
-      </table>
+  <table>
+         <tr>
+           <th>Client:</th>
+           <td>University Library Zurich </td>
+         </tr>
+         <tr>
+           <th>Team:</th>
+           <td>
+             Coordination & Redaktion: Ladina Tschander, Martina Kammermann & Sabine Klein<br>
+             Design:Joshua Binswanger<br>
+             Programming: Joshua Binswanger<br>
+             Videos:Martin Weiss
+           </td>
+         </tr>
+         <tr>
+           <th>Tools:</th>
+           <td>Rive, HTML/CSS/JS, Affinity Suite</td>
+         </tr>
+       </table>

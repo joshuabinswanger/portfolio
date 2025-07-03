@@ -1,51 +1,57 @@
 ---
 interface Props {
- strokewidth?: string;
- strokecolor?: string;
- height?: string;
- width?: string;
- padding?: string;
+  strokewidth?: string;
+  strokecolor?: string;
+  height?: string;
+  width?: string;
+  padding?: string;
 }
 
-const { strokewidth = "1px", strokecolor = "black", height = "100%", width = "100%", padding = "1px"} = Astro.props;
+const {
+  strokewidth = "1px",
+  strokecolor = "black",
+  height = "100%",
+  width = "100%",
+  padding = "1px",
+} = Astro.props;
 ---
 
-
 <div class:list={["svg-container bracket-middle-h"]}>
-    <svg xmlns="http://www.w3.org/2000/svg"    viewBox="-50 0 100 200" preserveAspectRatio="xMidYMid">
-        <path 
-        vector-effect="non-scaling-stroke"
-        d="M-50 0 H50 M0 0 V200 M-50 200 H50"/>
-    </svg>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="-50 0 100 200"
+    preserveAspectRatio="xMidYMid"
+  >
+    <path
+      vector-effect="non-scaling-stroke"
+      d="M-50 0 H50 M0 0 V200 M-50 200 H50"></path>
+  </svg>
 </div>
 
-
-<style define:vars={{strokewidth, strokecolor, height, width, padding}}>
-
-/* SVG container */
-.svg-container {
+<style define:vars={{ strokewidth, strokecolor, height, width, padding }}>
+  /* SVG container */
+  .svg-container {
     height: calc(var(--height) - 1px);
-    width: calc(var(--width) + 2px); 
+    width: calc(var(--width) + 2px);
     justify-self: center;
     justify-content: center;
+  }
 
-}
-
-/* SVG styling */
-svg {
+  /* SVG styling */
+  svg {
     overflow: visible;
     width: auto;
     padding-top: calc(var(--padding) / 2);
-    height:  100%;
+    height: 100%;
     justify-self: center;
     justify-content: center;
     display: block; /* Removes inline spacing */
-}
+  }
 
-/* Keep stroke width constant */
-path {
+  /* Keep stroke width constant */
+  path {
     fill: none;
     stroke: var(--strokecolor);
     stroke-width: var(--strokewidth);
-}
+  }
 </style>

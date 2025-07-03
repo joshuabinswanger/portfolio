@@ -1,4 +1,3 @@
-
 projectName: "StructureOfWood"
 title: "Structure of Wood"
 subtitle: "Visualisations & 3D Prints"
@@ -20,41 +19,37 @@ bgcolor: "#111111cc"
 projectDescription: |
   Stability, lightness, and durability make wood a natural miracle material. But where do these properties come from? They are made possible by the fascinating structures within the wood, which are explored in these illustrations.
 
-
-
 credits: |
-    <table>
-        <tr>
-          <th>Client:</th>
-          <td>ETH, Wood Materials Science</td>
-        </tr>
-                <tr>
-          <th>Tools:</th>
-          <td>ZBrush, Keyshot, Adobe Suite</td>
-        </tr>
-    </table>
-
+  <table>
+      <tr>
+        <th>Client:</th>
+        <td>ETH, Wood Materials Science</td>
+      </tr>
+              <tr>
+        <th>Tools:</th>
+        <td>ZBrush, Keyshot, Adobe Suite</td>
+      </tr>
+  </table>
 
 images:
   - src: "/src/assets/projects/structureofwood/StructureofWood_Gallery_1.webp"
     alt: "Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalcographus)"
     loading: "eager"
-    description:  |
-        **Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalcographus)** *br*   
-        Tool: Photoshop
-    imageTags: 
+    description: |
+      **Buchdrucker (Ips typographus) und Kupferstecher (Pityogenes chalcographus)** *br*   
+      Tool: Photoshop
+    imageTags:
       - houdini
       - 3D
       - octane
       - procedural
       - mograph
-      
 
   - src: "/src/assets/projects/structureofwood/StructureofWood_Gallery_2.webp"
     alt: "Houdini procedurally generated 3D Blood Vessels representing a Nintendo 64 Close Up"
-    description:  |
-        **N64 Controller Close Up** *br*   
-         Tool:  Houdini, Octane, Blender, Davinci
+    description: |
+      **N64 Controller Close Up** *br*   
+       Tool:  Houdini, Octane, Blender, Davinci
     imageTags:
       - houdini
       - 3D
@@ -64,9 +59,9 @@ images:
 
   - src: "/src/assets/projects/structureofwood/StructureofWood_Gallery_3.webp"
     alt: "Poster showing Houdini procedurally generated 3D Blood Vessels representing a Nintendo 64"
-    description:  |
-        **Poster for Event Series** *br*   
-         Tool:  Houdini, Octane, Blender, Affinity Suite, Davinci
+    description: |
+      **Poster for Event Series** *br*   
+       Tool:  Houdini, Octane, Blender, Affinity Suite, Davinci
     imageTags:
       - houdini
       - 3D
@@ -77,9 +72,9 @@ images:
 
   - src: "/src/assets/projects/structureofwood/StructureofWood_Gallery_4.webp"
     alt: "Houdini procedurally generated 3D Blood Vessels representing a Joystick"
-    description:  |
-        **Joystick** *br*   
-         Tool: Houdini, Blender
+    description: |
+      **Joystick** *br*   
+       Tool: Houdini, Blender
     imageTags:
       - houdini
       - 3D
@@ -89,9 +84,9 @@ images:
 
   - src: "/src/assets/projects/structureofwood/StructureofWood_Gallery_5.webp"
     alt: "Houdini procedurally generated 3D Blood Vessels representing a Keyboard"
-    description:  |
-        **Keyboard** *br*   
-        Tool: Houdini, Houdini Modeler
+    description: |
+      **Keyboard** *br*   
+      Tool: Houdini, Houdini Modeler
     imageTags:
       - houdini
       - 3D

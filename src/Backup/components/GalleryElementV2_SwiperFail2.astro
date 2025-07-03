@@ -6,13 +6,13 @@ import BracketOpenV from "./BracketOpenV.astro";
 import BracketCloseV from "./BracketCloseV.astro";
 import BracketMiddleV from "./BracketMiddleV.astro";
 
-import ImageElement from './ImageElement.astro';
-import { getEntry } from 'astro:content';
+import ImageElement from "./ImageElement.astro";
+import { getEntry } from "astro:content";
 
 import "photoswipe/style.css";
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 // Get component props from Astro.props
 const { project } = Astro.props;
@@ -21,90 +21,86 @@ interface Props {
   project: string;
 }
 
-
-
 // Fetch the specific gallery project by the project name (slug)
-const galleryProject = await getEntry('gallery', Astro.props.project + "-gallery"); // Use the `project` prop
+const galleryProject = await getEntry(
+  "gallery",
+  Astro.props.project + "-gallery",
+); // Use the `project` prop
 
 if (!galleryProject) {
-  throw new Error(`Project with slug "${Astro.props.project + "-gallery"}" not found.`);  
+  throw new Error(
+    `Project with slug "${Astro.props.project + "-gallery"}" not found.`,
+  );
 }
 
 const imagesAmount = galleryProject.data.images.length;
 
-const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a unique ID for each instance
-
-
+const instanceId = Math.random().toString(36).slice(2, 11); // Generate a unique ID for each instance
 ---
 
-<div id={`swiper-${instanceId}`} class:list={"top"}  data-instanceId={instanceId} data-imagesAmount={imagesAmount} data-galleryProject={galleryProject} >
-
-
+<div
+  id={`swiper-${instanceId}`}
+  class:list={"top"}
+  data-instanceId={instanceId}
+  data-imagesAmount={imagesAmount}
+  data-galleryProject={galleryProject}
+>
   <div class:list={"swiper-wrapper"}>
-
-    {galleryProject.data.images.map((image, index) => (
-
-      <div id={`ImageContainer-${index + 1}`} class:list={["swiper-slide"]}>
-
-    
-        <div id="Image">
-          <ImageElement
-            project={project}
-            imagePath={image.src}
-            altText={image.alt}
-            width="100%"
-            loading={index === 0 ? "eager" : "lazy"}
-          />
+    {
+      galleryProject.data.images.map((image, index) => (
+        <div id={`ImageContainer-${index + 1}`} class:list={["swiper-slide"]}>
+          <div id="Image">
+            <ImageElement
+              project={project}
+              imagePath={image.src}
+              altText={image.alt}
+              width="100%"
+              loading={index === 0 ? "eager" : "lazy"}
+            />
+          </div>
         </div>
+      ))
+    }
 
+    <div id="ArrowContainer" class:list={["swiper-button-prev"]}></div>
+    <div id="ArrowContainer" class:list={["swiper-button-next"]}></div>
+  </div>
 
-      </div>
-    ))}
+  <script>
+    // core version + navigation, pagination modules:
+    import Swiper from "swiper";
+    import { Navigation, Pagination } from "swiper/modules";
 
-<div id="ArrowContainer" class:list={["swiper-button-prev"]}></div>
-<div id="ArrowContainer" class:list={["swiper-button-next"]}></div>
-</div>
+    // import Swiper and modules styles
+    import "swiper/css";
+    import "swiper/css/navigation";
 
-<script>
-// core version + navigation, pagination modules:
-import Swiper from 'swiper';
-import { Navigation, Pagination } from 'swiper/modules';
+    document.addEventListener("astro:page-load", () => {
+      document.addEventListener("DOMContentLoaded", function (event) {
+        let Sliders = document.querySelectorAll('[id^="swiper-"]');
+        let prevArrow = document.querySelectorAll(".swiper-button-prev");
+        let nextArrow = document.querySelectorAll(".swiper-button-next");
 
-// import Swiper and modules styles
-import 'swiper/css';
-import 'swiper/css/navigation';
+        Sliders.forEach((slider, index) => {
+          // this bit checks if there's more than 1 slide, if there's only 1 it won't loop
+          let sliderLength = slider.children[0].children.length;
+          let result = sliderLength > 1 ? true : false;
+          const swiper = new Swiper(slider, {
+            direction: "horizontal",
+            loop: result,
+            navigation: {
+              // the 'index' bit below is just the order of the class in the queryselectorAll array, so the first one would be NextArrow[0] etc
+              nextEl: nextArrow[index],
+              prevEl: prevArrow[index],
+            },
+            speed: 1000,
+          });
+        });
+        // your code here
+      });
+    });
 
-
-
-document.addEventListener('astro:page-load', () => {
-  document.addEventListener("DOMContentLoaded", function(event){
-
-    let Sliders = document.querySelectorAll('[id^="swiper-"]') 
-    let prevArrow = document.querySelectorAll('.swiper-button-prev')
-    let nextArrow = document.querySelectorAll('.swiper-button-next')
-
-
-    Sliders.forEach((slider, index)=>{
-      // this bit checks if there's more than 1 slide, if there's only 1 it won't loop
-      let sliderLength = slider.children[0].children.length
-      let result = (sliderLength > 1) ? true : false
-      const swiper = new Swiper(slider, {
-        direction: 'horizontal',
-        loop: result,
-        navigation: {
-          // the 'index' bit below is just the order of the class in the queryselectorAll array, so the first one would be NextArrow[0] etc
-          nextEl: nextArrow[index],
-          prevEl: prevArrow[index],
-        },
-        speed: 1000,
-      });	
-    })
-    // your code here
-  });
-});
-
-
-/* // init Swiper:
+    /* // init Swiper:
 const swiper = new Swiper('.swiper', {
   // configure Swiper to use modules
   modules: [Navigation, Pagination],
@@ -121,45 +117,39 @@ const swiper = new Swiper('.swiper', {
   },
 
 }); */
+  </script>
 
-
-
-</script>
-
-
-
-
-
-<style>
-@import "../styles/global.css";
-@import 'swiper/css';
-/* @import 'swiper/css/navigation';
+  <style>
+    @import "../styles/global.css";
+    @import "swiper/css";
+    /* @import 'swiper/css/navigation';
 @import 'swiper/css/pagination'; */
 
-.top {
-  width: 600px;
-  height: 300px;
-}
+    .top {
+      width: 600px;
+      height: 300px;
+    }
 
-.swiper-button-next {
-    position: absolute;
-    top: 0px;
-    height: 100%;
-    margin: auto;
-    background-color: black;
-    z-index: 4;
-    pointer-events: auto;
-}
+    .swiper-button-next {
+      position: absolute;
+      top: 0px;
+      height: 100%;
+      margin: auto;
+      background-color: black;
+      z-index: 4;
+      pointer-events: auto;
+    }
 
-.swiper-button-prev {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 20px;
-    width: 30px;
-    height: 30px;
-    margin: auto;
-    background-color: black;
-    z-index: 4;
-}
-</style>
+    .swiper-button-prev {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 20px;
+      width: 30px;
+      height: 30px;
+      margin: auto;
+      background-color: black;
+      z-index: 4;
+    }
+  </style>
+</div>

@@ -1,22 +1,23 @@
 ---
-const galleryProjectImages = await getEntry('gallery', Astro.props.project + "-gallery");
+const galleryProjectImages = await getEntry(
+  "gallery",
+  Astro.props.project + "-gallery",
+);
 
 if (!galleryProjectImages) {
-  throw new Error(`Project with slug "${Astro.props.project + "-gallery"}" not found.`);
+  throw new Error(
+    `Project with slug "${Astro.props.project + "-gallery"}" not found.`,
+  );
 }
-
 
 //Import all image paths to check against the passed in strings
 const images = galleryProjectImages.data.images;
-             
-
 
 // Check if the image exists and handle the special case for "//:0"
 let myImage;
 let isFirstImage = false;
 
 if (imagePath === "//:0") {
-
   // Handle the empty image scenario, you could assign a placeholder or empty string.
   myImage = {
     default: {
@@ -24,13 +25,12 @@ if (imagePath === "//:0") {
       alt: "Empty Image",
     },
   };
-
 } else if (!images) {
   //throw error if no images found
-  throw new Error(`"${imagePath}" does not exist in "src/assets/**/*.{jpeg,jpg,png,gif,webp}, add "//:0" for empty image path"`);
-
-
-} 
+  throw new Error(
+    `"${imagePath}" does not exist in "src/assets/**/*.{jpeg,jpg,png,gif,webp}, add "//:0" for empty image path"`,
+  );
+}
 
 /*
 else {

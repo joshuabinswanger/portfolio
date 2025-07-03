@@ -1,10 +1,10 @@
 ---
 import { CldImage } from "astro-cloudinary";
-import { getEntry } from 'astro:content';
+import { getEntry } from "astro:content";
 import { getCollection } from "astro:content";
-import 'keen-slider/keen-slider.min.css';
+import "keen-slider/keen-slider.min.css";
 
-// Get component props from Astro.props 
+// Get component props from Astro.props
 const { projectName } = Astro.props;
 
 interface Props {
@@ -14,28 +14,25 @@ interface Props {
 }
 
 // Generate a unique ID for each instance
-const instanceId = Math.random().toString(36).slice(2, 11);  
-
+const instanceId = Math.random().toString(36).slice(2, 11);
 
 console.log(Astro.props.projectName);
 
 const project = Astro.props.projectName;
-const projectTitle =  Astro.props.projectName;
+const projectTitle = Astro.props.projectName;
 
-const projectImages = await getCollection('galleryImages', ({ data }) => {
+const projectImages = await getCollection("galleryImages", ({ data }) => {
   return data.metadata?.project === project;
 });
 
-
-
 // Use getCollection with a filter function to only retrieve images with a matching project
 // AND where showInPortfolioGallery is set to "yes"
-const galleryImages = await getCollection('galleryImages', ({ data }) => {
+const galleryImages = await getCollection("galleryImages", ({ data }) => {
   // Combine all checks using && for conciseness and clarity.
   // The filter will return true only if every condition evaluates to true.
   return (
     // Condition 1 & 2: Ensure metadata and metadata.project exist (using optional chaining)
-    data.metadata?.project && 
+    data.metadata?.project &&
     // Condition 3: Check if the image's project is included in the containedProjects array
     data.metadata?.project === project &&
     // Condition 4: NEW - Check if showInPortfolioGallery is explicitly "yes"
@@ -58,9 +55,10 @@ projectImages.sort((a, b) => {
   return orderA - orderB;
 });
 
-
 // Check if any image has metadata.highres_public_id
-const hasHighRes = projectImages.some(image => image.data?.metadata?.highres_public_id);
+const hasHighRes = projectImages.some(
+  (image) => image.data?.metadata?.highres_public_id,
+);
 
 /* console.log(hasHighRes) */
 
@@ -73,72 +71,78 @@ for (const image of projectImages) {
   // Check if highres_public_id is present and fetch the entry if available
   if (image.data.metadata?.highres_public_id) {
     try {
-      highResEntry = await getEntry('highResImages', image.data.metadata.highres_public_id);
+      highResEntry = await getEntry(
+        "highResImages",
+        image.data.metadata.highres_public_id,
+      );
       /* console.log(highResEntry.data.secure_url); */
     } catch (error) {
-      console.error(`Failed to fetch highResImages for ${image.data.metadata.highres_public_id}:`, error);
+      console.error(
+        `Failed to fetch highResImages for ${image.data.metadata.highres_public_id}:`,
+        error,
+      );
     }
-      // Push the final data, merging base and high-resolution details
-      highResData.push({
-        ...image.data, // Include existing image data
-        highResWidth: highResEntry.data.width,
-        highResHeight: highResEntry.data.height,
-        highResSecureUrl: highResEntry.data.secure_url,
-  });
-  }
-
-  else {
-      highResData.push({
+    // Push the final data, merging base and high-resolution details
+    highResData.push({
+      ...image.data, // Include existing image data
+      highResWidth: highResEntry.data.width,
+      highResHeight: highResEntry.data.height,
+      highResSecureUrl: highResEntry.data.secure_url,
+    });
+  } else {
+    highResData.push({
       ...image.data, // Include existing image data
       highResWidth: image.data.width,
       highResHeight: image.data.height,
       highResSecureUrl: image.data.secure_url,
     });
   }
-
 }
 
 /* console.log(projectImages.metadata?.description_title); */
 ---
-<div id={instanceId} data-slider-instance={instanceId} class:list={["image-slide keen-slider"]} >
-  {projectImages.map((image, index) =>  {
 
+<div
+  id={instanceId}
+  data-slider-instance={instanceId}
+  class:list={["image-slide keen-slider"]}
+>
+  {
+    projectImages.map((image, index) => {
       // Compute index: startIndex + 1 offset plus the current image index
       const computedIndex = Astro.props.startIndex + 1 + index;
 
-    return(
-      <div class:list={["keen-slider__slide ImageElement"]}  data-index={computedIndex}>
-         <a onclick={`pswpLightbox.loadAndOpen(${computedIndex}); return false;`}
-                class:list={["photo-link photoswipeData"]}
-                href={highResData[index].highResSecureUrl}  
-                data-pswp-width={highResData[index].highResWidth}
-                data-pswp-height={highResData[index].highResHeight}
-                target="_blank"
-                data-description_title={image.data.metadata?.description_title}
-                data-description_text={image.data.metadata?.description_text}
-                data-link={image.data.metadata?.link}
-                >
-          <CldImage
+      return (
+        <div
+          class:list={["keen-slider__slide ImageElement"]}
+          data-index={computedIndex}
+        >
+          <a
+            onclick={`pswpLightbox.loadAndOpen(${computedIndex}); return false;`}
+            class:list={["photo-link photoswipeData"]}
+            href={highResData[index].highResSecureUrl}
+            data-pswp-width={highResData[index].highResWidth}
+            data-pswp-height={highResData[index].highResHeight}
+            target="_blank"
+            data-description_title={image.data.metadata?.description_title}
+            data-description_text={image.data.metadata?.description_text}
+            data-link={image.data.metadata?.link}
+          >
+            <CldImage
               src={image.data.public_id}
-              data-src={image.data.secure_url}   
+              data-src={image.data.secure_url}
               width={image.data.width}
               height={image.data.height}
               sizes="(max-width: 650px) 90vw, (max-width: 1200px) 50vw, 33vw"
               alt={image.data.metadata?.description_title}
               format="avif"
-        />
-        </a>
-      </div>
-    )}
-  )}
-
+            />
+          </a>
+        </div>
+      );
+    })
+  }
 </div>
-
-    
-
-
-
-
 
 <style>
   .image-slide {

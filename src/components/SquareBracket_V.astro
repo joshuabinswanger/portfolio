@@ -3,77 +3,71 @@
 ---
 
 <div class="bracket">
-    <div class="top-border"></div>
-    <div class="bottom-border"></div>
-    <slot />
+  <div class="top-border"></div>
+  <div class="bottom-border"></div>
+  <slot />
 </div>
 
-
 <style>
-@import "../styles/global.css";
+  @import "../styles/global.css";
 
-:root {
+  :root {
     pointer-events: none;
-}
+  }
 
+  .bracket {
+    width: auto;
+    height: max-content;
+    margin: 0px;
+    margin-top: 0px;
+    position: relative;
+    padding: 0px;
+  }
 
-.bracket {
-  width: auto;
-  height: max-content;
-  margin: 0px;
-  margin-top:0px;
-  position: relative;
-  padding: 0px;
-}
-
-
-
-
-.top-border,
-.bottom-border {
-  position: absolute;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  height: 50%;
-  left: 0;
-}
-.top-border {
-}
-.bottom-border {
-  bottom: 0px;
-  align-items: end;
-}
-.top-border:after,
-.top-border:before,
-.bottom-border:after,
-.bottom-border:before {
-  content: '';
-  width: 100%;
-  height: 0.7rem;
-
-  @media (--bp-mobile) {
+  .top-border,
+  .bottom-border {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 50%;
+    left: 0;
+  }
+  .top-border {
+  }
+  .bottom-border {
+    bottom: 0px;
+    align-items: end;
+  }
+  .top-border:after,
+  .top-border:before,
+  .bottom-border:after,
+  .bottom-border:before {
+    content: "";
+    width: 100%;
     height: 0.7rem;
-  }
-  @media (--bp-tablet) {
-    height: 0.6rem;
-  }
-}
-.top-border:after,
-.top-border:before {
-  border-top: var(--border-size) solid black;
-}
-.bottom-border:after,
-.bottom-border:before {
-  border-bottom: var(--border-size) solid black;
-}
-.top-border:before,
-.bottom-border:before {
-  border-left: var(--border-size) solid black;
-}
-.top-border:after,
-.bottom-border:after {
-  border-right: var(--border-size) solid black;
-}
 
+    @media (--bp-mobile) {
+      height: 0.7rem;
+    }
+    @media (--bp-tablet) {
+      height: 0.6rem;
+    }
+  }
+  .top-border:after,
+  .top-border:before {
+    border-top: var(--border-size) solid black;
+  }
+  .bottom-border:after,
+  .bottom-border:before {
+    border-bottom: var(--border-size) solid black;
+  }
+  .top-border:before,
+  .bottom-border:before {
+    border-left: var(--border-size) solid black;
+  }
+  .top-border:after,
+  .bottom-border:after {
+    border-right: var(--border-size) solid black;
+  }
 </style>

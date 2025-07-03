@@ -4,22 +4,20 @@ import "../styles/global.css";
 import BracketOpenH from "./BracketOpenH.astro";
 import BracketCloseH from "./BracketCloseH.astro";
 import BracketMiddleH from "./BracketMiddleH.astro";
-
 ---
 
 <TopWrapper>
-    
-    <div id="email">
-        <BracketOpenH /><p><a href="mailto:info@rhizome.ch">info@rhizome.ch</a></p><BracketCloseH />
-    </div>
-
+  <div id="email">
+    <BracketOpenH /><p>
+      <a href="mailto:info@rhizome.ch">info@rhizome.ch</a>
+    </p><BracketCloseH />
+  </div>
 </TopWrapper>
 
-
 <style>
-@import "../styles/global.css";
+  @import "../styles/global.css";
 
-#email {
+  #email {
     display: grid;
     height: min-content;
     font-family: PowerGrotesk-Light;
@@ -35,31 +33,28 @@ import BracketMiddleH from "./BracketMiddleH.astro";
     gap: 1rem;
 
     a {
-        text-decoration: none;
-        color: black;
+      text-decoration: none;
+      color: black;
     }
 
     p {
-        margin: 0;
-        width: min-content;
-    
+      margin: 0;
+      width: min-content;
     }
-    
+
     @media (--bp-tablet) {
-        margin-top: calc(var(--padding-tablet) + 22vh);
-        
+      margin-top: calc(var(--padding-tablet) + 22vh);
     }
 
     @media (--bp-desktop-wide) {
-        margin-top: var(--padding-desktop-wide);
-    }   
-}
-
-@media (--bp-mobile) {
-    #email{
-        margin-top: 0;
-        margin: auto 0;
+      margin-top: var(--padding-desktop-wide);
     }
-}
+  }
 
+  @media (--bp-mobile) {
+    #email {
+      margin-top: 0;
+      margin: auto 0;
+    }
+  }
 </style>

@@ -1,29 +1,32 @@
 ---
-import type { ImageMetadata } from 'astro';
-import { Picture } from 'astro:assets';
-import Logo from './Logo.astro';
-import SquareBracketV from './SquareBracket_V.astro';
-import BracketOpenV from './BracketOpenV.astro';
-import BracketMiddleV from './BracketMiddleV.astro';
-import BracketCloseV from './BracketCloseV.astro';
+import type { ImageMetadata } from "astro";
+import { Picture } from "astro:assets";
+import Logo from "./Logo.astro";
+import SquareBracketV from "./SquareBracket_V.astro";
+import BracketOpenV from "./BracketOpenV.astro";
+import BracketMiddleV from "./BracketMiddleV.astro";
+import BracketCloseV from "./BracketCloseV.astro";
 import "../styles/global.css";
-import RhizomLogo from "../assets/Logo_BGColor.png"
+import RhizomLogo from "../assets/Logo_BGColor.png";
 
 const logoPath = "/assets/Rhizome_Test2.riv";
 
-import Index from './Index.astro';
+import Index from "./Index.astro";
 ---
 
 <nav id="NavBarDesktop" transition:persist>
-
-
   <Logo />
 
   <div id="MainWrapper">
-
     <BracketOpenV />
 
-    <a id="portfolio" href="/" class:list={["MenuItems button animation"]} data-href="/" data-animation="in">
+    <a
+      id="portfolio"
+      href="/"
+      class:list={["MenuItems button animation"]}
+      data-href="/"
+      data-animation="in"
+    >
       Portfolio
     </a>
 
@@ -31,17 +34,41 @@ import Index from './Index.astro';
 
     <!-- For items with submenus, wrap them in a container -->
     <div id="archive">
-      <a id="archive-main" href="/archive-gallery" class:list={["MenuItems button animation"]} data-href="/archive-gallery" data-animation="out">
+      <a
+        id="archive-main"
+        href="/archive-gallery"
+        class:list={["MenuItems button animation"]}
+        data-href="/archive-gallery"
+        data-animation="out"
+      >
         Archive
       </a>
       <div id="archive-select">
-        <a id="archive-gallery" class:list={["archive-subitems button animation"]} href="/archive-gallery" data-href="/archive-gallery" data-animation="out">
+        <a
+          id="archive-gallery"
+          class:list={["archive-subitems button animation"]}
+          href="/archive-gallery"
+          data-href="/archive-gallery"
+          data-animation="out"
+        >
           Gallery
         </a>
-        <a id="archive-project-list" class:list={["archive-subitems button animation"]} href="/archive-project-list" data-href="/archive-project-list" data-animation="out">
+        <a
+          id="archive-project-list"
+          class:list={["archive-subitems button animation"]}
+          href="/archive-project-list"
+          data-href="/archive-project-list"
+          data-animation="out"
+        >
           List
         </a>
-        <a id="archive-projects" class:list={["archive-subitems button animation"]} href="/archive-projects" data-href="/archive-projects" data-animation="out">
+        <a
+          id="archive-projects"
+          class:list={["archive-subitems button animation"]}
+          href="/archive-projects"
+          data-href="/archive-projects"
+          data-animation="out"
+        >
           Projects
         </a>
       </div>
@@ -49,7 +76,12 @@ import Index from './Index.astro';
 
     <BracketMiddleV />
 
-    <a href="/info" class:list={["MenuItems button animation"]} data-href="/info" data-animation="out">
+    <a
+      href="/info"
+      class:list={["MenuItems button animation"]}
+      data-href="/info"
+      data-animation="out"
+    >
       Information
     </a>
 
@@ -57,298 +89,283 @@ import Index from './Index.astro';
   </div>
 </nav>
 
-
 <script>
-  import { navigate } from 'astro:transitions/client';
-  
+  import { navigate } from "astro:transitions/client";
+
   // Update visual state (add/remove active class)
   function updateAnimationState(buttons) {
     setTimeout(() => {
-      buttons.forEach(btn => {
-        if (btn.getAttribute('data-animation') === "in") {
-          btn.classList.add('active');
+      buttons.forEach((btn) => {
+        if (btn.getAttribute("data-animation") === "in") {
+          btn.classList.add("active");
         } else {
-          btn.classList.remove('active');
+          btn.classList.remove("active");
         }
       });
     }, 300);
   }
-  
+
   // Handle button click for all buttons
   function handleButtonClick(clickedBtn, buttons) {
     // Special branch for Archive main button:
     if (clickedBtn.id === "archive-main") {
       // Activate the Archive main button
-      clickedBtn.setAttribute('data-animation', "in");
+      clickedBtn.setAttribute("data-animation", "in");
 
       // Optionally, set any other buttons in this group to "out"
-      buttons.forEach(btn => {
+      buttons.forEach((btn) => {
         if (btn.id !== "archive-main") {
-          btn.setAttribute('data-animation', "out");
+          btn.setAttribute("data-animation", "out");
         }
       });
-  
+
       // Find all archive subitems and force "Gallery" active, others inactive.
-      const archiveSubitems = document.querySelectorAll('.archive-subitems');
-      archiveSubitems.forEach(btn => {
+      const archiveSubitems = document.querySelectorAll(".archive-subitems");
+      archiveSubitems.forEach((btn) => {
         if (btn.id === "archive-gallery") {
-          btn.setAttribute('data-animation', "in");
+          btn.setAttribute("data-animation", "in");
         } else {
-          btn.setAttribute('data-animation', "out");
+          btn.setAttribute("data-animation", "out");
         }
       });
 
       return;
     }
-    
+
     // Special check: if clicked is Logo, force Portfolio active.
     if (clickedBtn.id === "Logo") {
-      const portfolioBtn = Array.from(buttons).find(btn => btn.id === "portfolio");
-      buttons.forEach(btn => {
+      const portfolioBtn = Array.from(buttons).find(
+        (btn) => btn.id === "portfolio",
+      );
+      buttons.forEach((btn) => {
         if (btn.id !== "portfolio" && btn.id !== clickedBtn.id) {
-          btn.setAttribute('data-animation', "out");
+          btn.setAttribute("data-animation", "out");
         }
       });
       if (portfolioBtn) {
-        portfolioBtn.setAttribute('data-animation', "in");
+        portfolioBtn.setAttribute("data-animation", "in");
       }
-      clickedBtn.setAttribute('data-animation', "in");
+      clickedBtn.setAttribute("data-animation", "in");
       return;
     }
-    
+
     // For Archive subitems (Gallery, List, Projects):
     if (
       clickedBtn.id === "archive-gallery" ||
       clickedBtn.id === "archive-project-list" ||
       clickedBtn.id === "archive-projects"
     ) {
-      const archiveSubitems = document.querySelectorAll('.archive-subitems');
-      archiveSubitems.forEach(btn => {
+      const archiveSubitems = document.querySelectorAll(".archive-subitems");
+      archiveSubitems.forEach((btn) => {
         if (btn === clickedBtn) {
-          btn.setAttribute('data-animation', "in");
+          btn.setAttribute("data-animation", "in");
         } else {
-          btn.setAttribute('data-animation', "out");
+          btn.setAttribute("data-animation", "out");
         }
       });
       return;
     }
-    
+
     // Default behavior: if button is currently "out", switch it "in" and set others "out"
-    if (clickedBtn.getAttribute('data-animation') === "out") {
-      buttons.forEach(btn => {
-        if (btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
-          btn.setAttribute('data-animation', "out");
+    if (clickedBtn.getAttribute("data-animation") === "out") {
+      buttons.forEach((btn) => {
+        if (btn !== clickedBtn && btn.getAttribute("data-animation") === "in") {
+          btn.setAttribute("data-animation", "out");
         }
       });
-      clickedBtn.setAttribute('data-animation', "in");
+      clickedBtn.setAttribute("data-animation", "in");
     }
   }
-  
+
   // Attach event listeners to buttons
   function createEventListeners(buttons) {
-    buttons.forEach(btn => {
-      btn.addEventListener('click', event => {
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", (event) => {
         handleButtonClick(event.currentTarget, buttons);
       });
     });
   }
-  
+
   // On page load, update visual state and attach click listeners.
   document.addEventListener("astro:page-load", () => {
     const navBar = document.getElementById("NavBarDesktop");
-    const mainButtons = navBar.querySelectorAll('.animation');
+    const mainButtons = navBar.querySelectorAll(".animation");
     updateAnimationState(mainButtons);
     createEventListeners(mainButtons);
   });
-  
+
   // Archive subitems onchange event (if needed)
   document.addEventListener("astro:page-load", () => {
     const navBar = document.getElementById("NavBarDesktop");
-    const archiveSubitem = navBar.querySelector('.archive-subitems');
+    const archiveSubitem = navBar.querySelector(".archive-subitems");
     if (archiveSubitem) {
-      archiveSubitem.onchange = event => {
+      archiveSubitem.onchange = (event) => {
         const href = event.target.value;
         navigate(href);
       };
     }
   });
-  </script>
-
-
+</script>
 
 <style>
-@import "../styles/global.css";
+  @import "../styles/global.css";
 
-#NavBarDesktop {
-  position: sticky;
-  height: min-content;
-  display: grid;
-  justify-items: center;
-  grid-template-rows: 40px 1fr;
-  top: var(--padding-top-desktop);
-  row-gap: 4px;
-
-  @media (--bp-mobile) {
-    display: none;
-  }
-  @media (--bp-tablet) {
-    top: var(--padding-top-tablet);
-    grid-template-rows: 36px 1fr;
-  }
-  @media (--bp-desktop-wide) {
-    top: var(--padding-top-desktop-wide);
+  #NavBarDesktop {
+    position: sticky;
+    height: min-content;
+    display: grid;
+    justify-items: center;
     grid-template-rows: 40px 1fr;
+    top: var(--padding-top-desktop);
+    row-gap: 4px;
+
+    @media (--bp-mobile) {
+      display: none;
+    }
+    @media (--bp-tablet) {
+      top: var(--padding-top-tablet);
+      grid-template-rows: 36px 1fr;
+    }
+    @media (--bp-desktop-wide) {
+      top: var(--padding-top-desktop-wide);
+      grid-template-rows: 40px 1fr;
+    }
   }
-}
 
-* {
-  letter-spacing: 0.8px;
-}
-
-
-#MainWrapper {
-  width: 100%;
-  display: grid;
-  grid-template-rows: 0 48px 0 48px 0 48px 0;
-  transition: grid-template-columns 0.6s ease;
-
-  @media (--bp-tablet) {
-    grid-template-rows: 0 40px 0 40px 0 40px 0;
-  } 
-    
-
-
-}
-
-#MainWrapper:has(#archive-main.active) {
-grid-template-rows: 0 3rem 0 9.5rem 0 3rem 0;
-}
-
-.MenuItems {
-  height: min-content;
-  font-family: PowerGrotesk-Light;
-  font-weight: 200;
-} 
-
-.button {
-  height: 100%;
-  color: black;
-  align-content: center;
-  align-items: center;
-  z-index: 1001;
-  transition: color 0.3s ease 0.15s;
-
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-  background: none;
-  border: none;
-  pointer-events: auto;
-  font-size: var(--font-size-dekstop-h1);
-  margin: 0;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
- 
-
-  @media (--bp-mobile) {
-    font-size: var(--font-size-mobile-h1);
+  * {
+    letter-spacing: 0.8px;
   }
-  @media (--bp-tablet) {
-    font-size: var(--font-size-tablet-h1);
+
+  #MainWrapper {
+    width: 100%;
+    display: grid;
+    grid-template-rows: 0 48px 0 48px 0 48px 0;
+    transition: grid-template-columns 0.6s ease;
+
+    @media (--bp-tablet) {
+      grid-template-rows: 0 40px 0 40px 0 40px 0;
+    }
   }
-  @media (--bp-desktop-wide) {
-    font-size: var(--font-size-desktop-wide-h1);
+
+  #MainWrapper:has(#archive-main.active) {
+    grid-template-rows: 0 3rem 0 9.5rem 0 3rem 0;
   }
-}
 
+  .MenuItems {
+    height: min-content;
+    font-family: PowerGrotesk-Light;
+    font-weight: 200;
+  }
 
+  .button {
+    height: 100%;
+    color: black;
+    align-content: center;
+    align-items: center;
+    z-index: 1001;
+    transition: color 0.3s ease 0.15s;
+  }
 
-/* The ::before pseudo-element creates a black bar that slides in from the bottom */
-.button::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  width: 0%;
-  height: 48px;
-  background-color: black;
-  transition: width 0.6s ease;
-  z-index: -1;
+  a {
+    text-decoration: none;
+    color: inherit;
+    background: none;
+    border: none;
+    pointer-events: auto;
+    font-size: var(--font-size-dekstop-h1);
+    margin: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-  @media (--bp-tablet) {
-    height: 40px;
-  } 
-}
+    @media (--bp-mobile) {
+      font-size: var(--font-size-mobile-h1);
+    }
+    @media (--bp-tablet) {
+      font-size: var(--font-size-tablet-h1);
+    }
+    @media (--bp-desktop-wide) {
+      font-size: var(--font-size-desktop-wide-h1);
+    }
+  }
 
-/* When active, change text color and expand the black bar */
-.button.active {
-  color: var(--bg-color);
-}
-.button.active::before {
-  width: 100%;
-}
+  /* The ::before pseudo-element creates a black bar that slides in from the bottom */
+  .button::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 0%;
+    height: 48px;
+    background-color: black;
+    transition: width 0.6s ease;
+    z-index: -1;
 
-#archive {
-  display: grid;
-  width: 100%;
-  height: 100%;
-  grid-template-rows: 3rem auto;
-  align-items: start;
-  overflow: hidden;
-}
+    @media (--bp-tablet) {
+      height: 40px;
+    }
+  }
 
-#archive-select {
-  display: grid;
-  height: 100%;
-  justify-content: center;
-  align-content: start;
-  grid-template-columns: 1fr;
-  grid-template-rows: 0rem 0rem 0rem;
-  width: 100%;
-  margin-top: 0rem;
-  margin-bottom: 0rem;
-  transition: grid-template-rows 0.4s ease;
-  overflow: hidden;
+  /* When active, change text color and expand the black bar */
+  .button.active {
+    color: var(--bg-color);
+  }
+  .button.active::before {
+    width: 100%;
+  }
 
-}
+  #archive {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    grid-template-rows: 3rem auto;
+    align-items: start;
+    overflow: hidden;
+  }
 
-#archive-select:has(a.active) {
-  grid-template-rows: 2rem 2rem 2rem;
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
+  #archive-select {
+    display: grid;
+    height: 100%;
+    justify-content: center;
+    align-content: start;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0rem 0rem 0rem;
+    width: 100%;
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+    transition: grid-template-rows 0.4s ease;
+    overflow: hidden;
+  }
 
-}
+  #archive-select:has(a.active) {
+    grid-template-rows: 2rem 2rem 2rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+  }
 
-.archive-subitems {
-  font-size: 13px;
-  font-family: PowerGrotesk-UltraLight;
-  cursor: pointer;
-  height: 100%;
-}
+  .archive-subitems {
+    font-size: 13px;
+    font-family: PowerGrotesk-UltraLight;
+    cursor: pointer;
+    height: 100%;
+  }
 
+  /* The ::before pseudo-element creates a black bar that slides in from the bottom */
+  .archive-subitems::before {
+    content: "";
+    position: absolute;
+    left: 2%;
+    align-self: flex-start;
+    width: 0%;
+    height: 2rem;
+    background-color: black;
+    transition: width 0.4s ease 0.2s;
+    z-index: -1;
+    opacity: 0;
+  }
 
-/* The ::before pseudo-element creates a black bar that slides in from the bottom */
-.archive-subitems::before {
-  content: "";
-  position: absolute;
-  left: 2%;
-  align-self: flex-start;
-  width: 0%;
-  height: 2rem;
-  background-color: black;
-  transition: width 0.4s ease 0.2s;
-  z-index: -1;
-  opacity: 0;
-
-}
-
-
-.archive-subitems.active::before {
-  width: 96%;
-  opacity: 1;
-}
-
+  .archive-subitems.active::before {
+    width: 96%;
+    opacity: 1;
+  }
 </style>

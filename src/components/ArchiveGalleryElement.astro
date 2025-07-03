@@ -6,11 +6,11 @@ import BracketOpenV from "./BracketOpenV.astro";
 import BracketCloseV from "./BracketCloseV.astro";
 import BracketMiddleV from "./BracketMiddleV.astro";
 import Icon from "./Icon.astro";
-import { getEntry } from 'astro:content';
-import { CldImage } from 'astro-cloudinary';
+import { getEntry } from "astro:content";
+import { CldImage } from "astro-cloudinary";
 
 import "photoswipe/style.css";
-import { marked } from 'marked';
+import { marked } from "marked";
 
 // Get asset with PUBLIC ID
 const { public_id } = Astro.props;
@@ -20,8 +20,10 @@ interface Props {
   index: number;
 }
 
-const archiveImage = await getEntry('galleryImages', `${Astro.props.public_id}`);
-
+const archiveImage = await getEntry(
+  "galleryImages",
+  `${Astro.props.public_id}`,
+);
 
 ///////////////////////////
 /////  CREATE TAGS ///////
@@ -31,35 +33,36 @@ const archiveImage = await getEntry('galleryImages', `${Astro.props.public_id}`)
 function ensureArray(value) {
   if (!value) return [];
   if (Array.isArray(value)) return value;
-  return value.split(',').map(item => item.trim()); // Split by comma and trim spaces
+  return value.split(",").map((item) => item.trim()); // Split by comma and trim spaces
 }
 
 //here we combine alll meta data with tags, so we can adjust them easily in cloudinary with deduplication
-const tags = Array.from(new Set([
-  ...ensureArray(archiveImage.data.metadata?.role),
-  ...ensureArray(archiveImage.data.metadata?.program),
-  ...ensureArray(archiveImage.data.metadata?.topic),
-  ...ensureArray(archiveImage.data.tags)
-]));
+const tags = Array.from(
+  new Set([
+    ...ensureArray(archiveImage.data.metadata?.role),
+    ...ensureArray(archiveImage.data.metadata?.program),
+    ...ensureArray(archiveImage.data.metadata?.topic),
+    ...ensureArray(archiveImage.data.tags),
+  ]),
+);
 
 // Convert numbers to string because CSS Classes cant start with numbers
 const tagConversion = {
   "2D": "twoD",
-  "3D": "threeD"
+  "3D": "threeD",
 };
 
 // Convert the tags in the allowed list using a mapping object
-const convertedTags = tags.map(tag => tagConversion[tag] || tag);
+const convertedTags = tags.map((tag) => tagConversion[tag] || tag);
 
 // Convert the tags in the allowed list using a mapping object
-const role =  [...ensureArray(archiveImage.data.metadata?.role)];
-const convertedRole = role.map(tag => tagConversion[tag] || tag);
+const role = [...ensureArray(archiveImage.data.metadata?.role)];
+const convertedRole = role.map((tag) => tagConversion[tag] || tag);
 
 // Join tags into a space-separated string
-const tagClassString = convertedTags.join(' ');
+const tagClassString = convertedTags.join(" ");
 
-
-console.log(tagClassString)
+console.log(tagClassString);
 
 ///////////////////////////
 //  HIGH RES IMAGE ADD ///
@@ -71,7 +74,10 @@ let highResImage = null;
 if (archiveImage?.data.metadata?.highres_public_id) {
   try {
     // Fetch high-resolution image data
-    highResImage = await getEntry('highResImages', archiveImage.data.metadata?.highres_public_id);
+    highResImage = await getEntry(
+      "highResImages",
+      archiveImage.data.metadata?.highres_public_id,
+    );
 
     if (highResImage?.data) {
       // Push the high-res image data
@@ -82,10 +88,15 @@ if (archiveImage?.data.metadata?.highres_public_id) {
         highResSecureUrl: highResImage.data.secure_url,
       });
     } else {
-      console.error(`High-res image data is invalid for public ID: ${archiveImage.data.metadata.highres_public_id}`);
+      console.error(
+        `High-res image data is invalid for public ID: ${archiveImage.data.metadata.highres_public_id}`,
+      );
     }
   } catch (error) {
-    console.error(`Failed to fetch highResImages for ${archiveImage.data.metadata.highres_public_id}:`, error);
+    console.error(
+      `Failed to fetch highResImages for ${archiveImage.data.metadata.highres_public_id}:`,
+      error,
+    );
   }
 } else {
   // Fallback to base archive image data if no high-res metadata exists
@@ -99,26 +110,31 @@ if (archiveImage?.data.metadata?.highres_public_id) {
 
 // Log to verify data
 /* console.log("HighResData:", highResData); */
+---
 
-
-
---- 
-
-<div class:list={[`archiveElement mix ${tagClassString}`]} id={`archiveElement-${Astro.props.index}`} data-role={convertedRole} data-program={archiveImage.data.metadata?.program} data-project={archiveImage.data.metadata?.project || "aaa_noproject"} data-date={archiveImage.data.metadata?.year || "2016-01"} >
-  
+<div
+  class:list={[`archiveElement mix ${tagClassString}`]}
+  id={`archiveElement-${Astro.props.index}`}
+  data-role={convertedRole}
+  data-program={archiveImage.data.metadata?.program}
+  data-project={archiveImage.data.metadata?.project || "aaa_noproject"}
+  data-date={archiveImage.data.metadata?.year || "2016-01"}
+>
   <div id="Image" class:list={["ImageElement"]}>
-    <a class:list={["photo-link"]} id={`index-${Astro.props.index}`}
-    href={highResData[0].highResSecureUrl}  
-    data-pswp-width={highResData[0].highResWidth}
-    data-pswp-height={highResData[0].highResHeight}
-    target="_blank"
-    data-description_title={archiveImage.data.metadata?.description_title}
-    data-description_text={archiveImage.data.metadata?.description_text}
-    data-link={archiveImage.data.metadata?.link}
+    <a
+      class:list={["photo-link"]}
+      id={`index-${Astro.props.index}`}
+      href={highResData[0].highResSecureUrl}
+      data-pswp-width={highResData[0].highResWidth}
+      data-pswp-height={highResData[0].highResHeight}
+      target="_blank"
+      data-description_title={archiveImage.data.metadata?.description_title}
+      data-description_text={archiveImage.data.metadata?.description_text}
+      data-link={archiveImage.data.metadata?.link}
     >
       <CldImage
         src={archiveImage.data.public_id}
-        data-src={archiveImage.data.secure_url}   
+        data-src={archiveImage.data.secure_url}
         width={archiveImage.data.width / 3}
         height={archiveImage.data.width / 3}
         sizes="(max-width: 650px) 45vw, (max-width: 1200px) 20vw, 25vw"
@@ -126,49 +142,41 @@ if (archiveImage?.data.metadata?.highres_public_id) {
         format="avif"
         crop={{
           type: "fill",
-
         }}
       />
-
     </a>
   </div>
 </div>
 
-
-
-
 <style>
-@import "../styles/global.css";
+  @import "../styles/global.css";
 
-.archiveElement{
-  padding: 28px;
+  .archiveElement {
+    padding: 28px;
 
-  @media (--bp-mobile) {
-    padding: 16px;
+    @media (--bp-mobile) {
+      padding: 16px;
+    }
   }
-}
 
-a {
-  height: 100%;
-  grid-column-start: 1;
-}
+  a {
+    height: 100%;
+    grid-column-start: 1;
+  }
 
-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
-#Image {
-  aspect-ratio: 1;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
+  #Image {
+    aspect-ratio: 1;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+  }
 
-}
-
-.mix {
-
-}
-
+  .mix {
+  }
 </style>

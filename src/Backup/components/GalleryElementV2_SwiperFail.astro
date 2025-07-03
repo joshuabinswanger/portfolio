@@ -6,11 +6,10 @@ import BracketOpenV from "./BracketOpenV.astro";
 import BracketCloseV from "./BracketCloseV.astro";
 import BracketMiddleV from "./BracketMiddleV.astro";
 import Icon from "./Icon.astro";
-import ImageElement from './ImageElement.astro';
-import { getEntry } from 'astro:content';
+import ImageElement from "./ImageElement.astro";
+import { getEntry } from "astro:content";
 import { imageConfig } from "astro:assets";
 import "photoswipe/style.css";
-
 
 // Get component props from Astro.props
 const { project } = Astro.props;
@@ -20,91 +19,101 @@ interface Props {
 }
 
 // Fetch the specific gallery project by the project name (slug)
-const galleryProject = await getEntry('gallery', Astro.props.project + "-gallery"); // Use the `project` prop
+const galleryProject = await getEntry(
+  "gallery",
+  Astro.props.project + "-gallery",
+); // Use the `project` prop
 
 if (!galleryProject) {
-  throw new Error(`Project with slug "${Astro.props.project + "-gallery"}" not found.`);
-  
+  throw new Error(
+    `Project with slug "${Astro.props.project + "-gallery"}" not found.`,
+  );
 }
 
 const bgcolor = galleryProject.data.bgcolor;
 
 const imagesAmount = galleryProject.data.images.length;
 
-const instanceId = Math.random().toString(36).slice(2, 11);  // Generate a unique ID for each instance
-
+const instanceId = Math.random().toString(36).slice(2, 11); // Generate a unique ID for each instance
 
 // format string credits
 function formatString(input) {
-
   let formattedString = input
-    .replace(/\*\*(.*?)\*\*/g, function(match, textBetweenStars) {
+    .replace(/\*\*(.*?)\*\*/g, function (match, textBetweenStars) {
       // Wrap text between ** in <strong> tags
-      return '<strong>' + textBetweenStars + '</strong>';
+      return "<strong>" + textBetweenStars + "</strong>";
     })
     // Replace *break* with <br>
-    .replace(/\*br\*/g, '<br>');
+    .replace(/\*br\*/g, "<br>");
 
   return formattedString;
-
 }
-
-
 ---
 
-<div id={`GalleryElement-${instanceId}`} class:list={["GalleryElement swiper"]} data-instanceid={instanceId} data-bgcolor={bgcolor} data-imagesAmount={imagesAmount} data-galleryProject={galleryProject} >
+<div
+  id={`GalleryElement-${instanceId}`}
+  class:list={["GalleryElement swiper"]}
+  data-instanceid={instanceId}
+  data-bgcolor={bgcolor}
+  data-imagesAmount={imagesAmount}
+  data-galleryProject={galleryProject}
+>
+  <div id="ImageWrapper" class:list={"swiper-wrapper"}>
+    {
+      galleryProject.data.images.map((image, index) => (
+        <div
+          id={`ImageContainer-${index + 1}`}
+          class:list={["ImageContainer", "swiper-slide"]}
+          style={index === 0 ? "display: block" : "display: none"}
+        >
+          <div class:list={"ImageInfo"}>
+            {
+              <div class:list={"ImageInfoWrapper"}>
+                <div id="spacer" />
+                <BracketOpenV strokewidth="0.5px" />
 
-<div id="ImageWrapper" class:list={"swiper-wrapper"}>
+                <div class:list={"ImageDescriptionWrapper"}>
+                  <Fragment set:html={formatString(image.description)} />
+                </div>
 
-  {galleryProject.data.images.map((image, index) => (
+                <BracketCloseV strokewidth="0.5px" />
+                <div id="spacer" />
+                <BracketOpenV strokewidth="0.5px" />
 
-    <div id={`ImageContainer-${index + 1}`} class:list={["ImageContainer", "swiper-slide" ]} style={index === 0 ? "display: block" : "display: none"}>
-    
-      <div class:list={ "ImageInfo"}>
+                <div class:list={"ProjectInfoWrapper"}>
+                  <Fragment
+                    set:html={formatString(
+                      galleryProject.data.projectDescription,
+                    )}
+                  />
+                </div>
 
-        {<div class:list={"ImageInfoWrapper"}>
-          <div id="spacer"></div>
-          <BracketOpenV strokewidth="0.5px"/>
+                <div class:list={"DetailsInfoWrapper"}>
+                  <Fragment
+                    set:html={formatString(galleryProject.data.credits)}
+                  />
+                </div>
 
-            <div class:list={"ImageDescriptionWrapper"}>
-              <Fragment set:html={formatString(image.description)} />
-            </div>
+                <BracketCloseV strokewidth="0.5px" />
+                <div id="spacer" />
+              </div>
+            }
+          </div>
 
-          <BracketCloseV strokewidth="0.5px" />
-          <div id="spacer"></div>
-          <BracketOpenV strokewidth="0.5px"/>
-
-            <div class:list={"ProjectInfoWrapper"}>
-              <Fragment set:html={formatString(galleryProject.data.projectDescription) } />
-            </div>
-
-            <div class:list={"DetailsInfoWrapper"}>
-              <Fragment set:html={formatString(galleryProject.data.credits)} />
-            </div>
-
-          <BracketCloseV strokewidth="0.5px" />
-          <div id="spacer"></div>
-        </div>}
-
-      </div>
-
-      <div class:list={"Filter"}></div>
-      <div id="Image">
-        <ImageElement
-          project={project}
-          imagePath={image.src}
-          altText={image.alt}
-          width="100%"
-          loading={index === 0 ? "eager" : "lazy"}
-        />
-      </div>
-    </div>
-  ))}
-
-</div>
-
-
-
+          <div class:list={"Filter"} />
+          <div id="Image">
+            <ImageElement
+              project={project}
+              imagePath={image.src}
+              altText={image.alt}
+              width="100%"
+              loading={index === 0 ? "eager" : "lazy"}
+            />
+          </div>
+        </div>
+      ))
+    }
+  </div>
 
   <div id="GalleryDescriptionWrapper">
     <BracketOpenH />
@@ -116,7 +125,7 @@ function formatString(input) {
       </div>
     </div>
 
-   <BracketMiddleH />
+    <BracketMiddleH />
 
     <div id="ArrowWrapper">
       <div id="ArrowContainer" class:list={["arrowPrev"]}>&larr;</div>
@@ -124,7 +133,7 @@ function formatString(input) {
       <div id="ArrowContainer" class:list={["arrowNext"]}>&rarr;</div>
     </div>
 
-   <BracketMiddleH /> 
+    <BracketMiddleH />
 
     <div id="Info">
       <Icon icon="Info" width="77%" />
@@ -132,23 +141,19 @@ function formatString(input) {
 
     <BracketCloseH />
   </div>
-
 </div>
 
 <script>
-// core version + navigation, pagination modules:
-import Swiper from 'swiper';
-import { Navigation, Pagination } from 'swiper/modules';
-// import Swiper and modules styles
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+  // core version + navigation, pagination modules:
+  import Swiper from "swiper";
+  import { Navigation, Pagination } from "swiper/modules";
+  // import Swiper and modules styles
+  import "swiper/css";
+  import "swiper/css/navigation";
+  import "swiper/css/pagination";
 
-
-
-
-document.addEventListener('astro:page-load', () => {
-  const galleryElements = document.querySelectorAll(".GalleryElement");
+  document.addEventListener("astro:page-load", () => {
+    const galleryElements = document.querySelectorAll(".GalleryElement");
 
     let swiperElement = document.querySelectorAll(`.swiper`);
     let nextButton = document.querySelectorAll(`.ArrowNext`);
@@ -156,9 +161,8 @@ document.addEventListener('astro:page-load', () => {
     let counter = document.querySelectorAll(`.Counter`);
 
     swiperElement.forEach((slider, index) => {
-
-      let sliderLength = slider.children[0].children.length
-      let result = (sliderLength > 1) ? true : false 
+      let sliderLength = slider.children[0].children.length;
+      let result = sliderLength > 1 ? true : false;
       const swiper = new Swiper(slider, {
         modules: [Navigation, Pagination],
         slidesPerView: 1,
@@ -170,37 +174,29 @@ document.addEventListener('astro:page-load', () => {
           prevEl: prevButton[index],
         },
       });
-
     });
-});
-
-
+  });
 </script>
-
-
-
-
-
-  
-
-	
 
 <style>
   @import "../styles/global.css";
 
-
   .swiper {
-		width: 100%;
-		height: 100%;
-	}
+    width: 100%;
+    height: 100%;
+  }
 
-  .swiper-wrapper {}
- 
-  .swiper-pagination {}
+  .swiper-wrapper {
+  }
 
-  .swiper-button-prev {}
+  .swiper-pagination {
+  }
 
-  .swiper-button-next {}
+  .swiper-button-prev {
+  }
+
+  .swiper-button-next {
+  }
 
   .GalleryElement {
     display: grid;
@@ -223,16 +219,12 @@ document.addEventListener('astro:page-load', () => {
     grid-row: 1;
   }
 
-
-
   .ImageContainer {
     position: relative;
     height: fit-content;
     box-shadow: 0px 0px 33px #988f821b;
     z-index: 1;
   }
-
-
 
   .Filter {
     position: absolute;
@@ -243,89 +235,86 @@ document.addEventListener('astro:page-load', () => {
     height: 100%;
     backdrop-filter: blur(0px);
     z-index: 11;
-    transition: backdrop-filter ease-in-out 0.2s, background-color ease-in-out 0.2s;
-  
+    transition:
+      backdrop-filter ease-in-out 0.2s,
+      background-color ease-in-out 0.2s;
   }
 
+  /*   Image Info */
 
+  .ImageInfo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10; /* Ensure it appears above the image */
+    display: grid;
+    justify-items: center;
+    align-items: center;
 
-
-/*   Image Info */
-
-.ImageInfo {
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 10; /* Ensure it appears above the image */
-  display: grid;
-  justify-items: center;
-  align-items: center;
-
-  background-color: var(--bg-color-trans); /* Example style */
+    background-color: var(--bg-color-trans); /* Example style */
     /* Start with no blur (initial state) */
-  backdrop-filter: blur(0px);
+    backdrop-filter: blur(0px);
 
-  /* Add transition for backdrop-filter */
-  transition: backdrop-filter ease-in-out 0.2s, opacity 0.2s ease-in-out;
+    /* Add transition for backdrop-filter */
+    transition:
+      backdrop-filter ease-in-out 0.2s,
+      opacity 0.2s ease-in-out;
 
-  font-size: 0.8rem;
+    font-size: 0.8rem;
 
-  overflow: hidden;
+    overflow: hidden;
 
-  @media (--bp-mobile) {
-    font-size: 0.6rem;
-  }
-
-  @media (--bp-desktop-wide) {
-    font-size: 1rem;
-    line-height: 1.33;
-  }
-}
-
-.ImageInfoWrapper {
-  display: grid;
-  width: min(88%, 66ch);
-  height: 90%;
-  grid-template-rows: 1fr min-content  min-content  min-content 0.5fr min-content min-content min-content min-content 1fr;
-  align-items: center;
-
-}
-
-.ImageDescriptionWrapper, .ProjectInfoWrapper, .DetailsInfoWrapper {
-
-  width: 80%;           /* Ensure it takes full width */
-  justify-self: center; /* Centers items horizontally */
- 
-
-  span {
-    font-family: PowerGrotesk-Medium;
-  }
-
-  @media (--bp-mobile) {
-    width: 85%;
+    @media (--bp-mobile) {
+      font-size: 0.6rem;
     }
 
-}
+    @media (--bp-desktop-wide) {
+      font-size: 1rem;
+      line-height: 1.33;
+    }
+  }
 
+  .ImageInfoWrapper {
+    display: grid;
+    width: min(88%, 66ch);
+    height: 90%;
+    grid-template-rows: 1fr min-content min-content min-content 0.5fr min-content min-content min-content min-content 1fr;
+    align-items: center;
+  }
 
+  .ImageDescriptionWrapper,
+  .ProjectInfoWrapper,
+  .DetailsInfoWrapper {
+    width: 80%; /* Ensure it takes full width */
+    justify-self: center; /* Centers items horizontally */
 
+    span {
+      font-family: PowerGrotesk-Medium;
+    }
 
+    @media (--bp-mobile) {
+      width: 85%;
+    }
+  }
 
   /* GalleryDescription */
 
   #GalleryDescriptionWrapper {
-  display: grid;
-  width: 100%;
-  opacity: 1;
-  height: fit-content;
-  grid-template-columns: 1.5ch minmax(min-content, 3fr) 3ch 2fr 3ch 3.5ch 1.5ch;
-  justify-content: center;
-  align-items: center;
-  transition: opacity 1.5s ease-in;
-}
+    display: grid;
+    width: 100%;
+    opacity: 1;
+    height: fit-content;
+    grid-template-columns: 1.5ch minmax(
+        min-content,
+        3fr
+      ) 3ch 2fr 3ch 3.5ch 1.5ch;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 1.5s ease-in;
+  }
 
   #ArrowWrapper {
     display: grid;
@@ -334,7 +323,7 @@ document.addEventListener('astro:page-load', () => {
     place-items: center;
   }
 
-/*   #ArrowContainer {
+  /*   #ArrowContainer {
     text-justify: center;
     text-align: center;
     width: 5ch;
@@ -374,7 +363,7 @@ document.addEventListener('astro:page-load', () => {
     text-overflow: ellipsis;
 
     @media (--bp-mobile) {
-    font-size: 0.6rem;
+      font-size: 0.6rem;
     }
   }
 
@@ -387,17 +376,15 @@ document.addEventListener('astro:page-load', () => {
     margin: 0px;
 
     @media (--bp-mobile) {
-    font-size: 0.6rem;
+      font-size: 0.6rem;
     }
-  
   }
 
   #Info {
     display: grid;
     place-items: center;
-	cursor: pointer; /* Ensure it looks clickable */
-	pointer-events: auto;
-	margin: 0 -5px;
+    cursor: pointer; /* Ensure it looks clickable */
+    pointer-events: auto;
+    margin: 0 -5px;
   }
-
 </style>

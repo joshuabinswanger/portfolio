@@ -1,47 +1,52 @@
 ---
 interface Props {
- strokewidth?: string;
- strokecolor?: string;
- height?: string;
- width?: string;
- overflow?: string;
+  strokewidth?: string;
+  strokecolor?: string;
+  height?: string;
+  width?: string;
+  overflow?: string;
 }
 
-const { strokewidth = "1px", strokecolor = "black", height = "100%", width = "100%", overflow = "visible" } = Astro.props;
+const {
+  strokewidth = "1px",
+  strokecolor = "black",
+  height = "100%",
+  width = "100%",
+  overflow = "visible",
+} = Astro.props;
 ---
 
-
 <div class:list={["svg-container bracket-open-v"]}>
-    <svg xmlns="http://www.w3.org/2000/svg"    viewBox="0 0 200 16" preserveAspectRatio="xMidYMid">
-        <path 
-        vector-effect="non-scaling-stroke"
-        d="M 1 15 V 2 H 199 V 15"/>
-    </svg>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 200 16"
+    preserveAspectRatio="xMidYMid"
+  >
+    <path vector-effect="non-scaling-stroke" d="M 1 15 V 2 H 199 V 15"></path>
+  </svg>
 </div>
 
-
-<style define:vars={{strokewidth, strokecolor, height, width, overflow}}>
-
-/* SVG container */
-.svg-container {
+<style define:vars={{ strokewidth, strokecolor, height, width, overflow }}>
+  /* SVG container */
+  .svg-container {
     overflow: var(--overflow);
-    height: var(--height);        /* Centers the SVG vertically */        
-    width: var(--width);  
+    height: var(--height); /* Centers the SVG vertically */
+    width: var(--width);
     align-self: start;
-    }
+  }
 
-/* SVG styling */
-svg {
+  /* SVG styling */
+  svg {
     overflow: var(--overflow);
     width: 100%;
     display: block; /* Removes inline spacing */
     align-self: start;
-}
+  }
 
-/* Keep stroke width constant */
-path {
+  /* Keep stroke width constant */
+  path {
     fill: none;
     stroke: var(--strokecolor);
     stroke-width: var(--strokewidth);
-}
+  }
 </style>

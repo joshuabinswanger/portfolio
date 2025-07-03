@@ -3,67 +3,58 @@
 ---
 
 <div id="TextRun" class:list={"hidden"}>
-
-    <slot />
-
-
+  <slot />
 </div>
 
 <style>
-@import "../styles/global.css";
+  @import "../styles/global.css";
 
-    #TextRun {
-        font-size: var(--font-size-dekstop);
-        @media (--bp-mobile){
-            font-size: var(--font-size-mobile)
-        }
-
-        @media (--bp-desktop-wide){
-            font-size: var(--font-size-desktop-wide);
-        }
+  #TextRun {
+    font-size: var(--font-size-dekstop);
+    @media (--bp-mobile) {
+      font-size: var(--font-size-mobile);
     }
 
-/*Fade */
+    @media (--bp-desktop-wide) {
+      font-size: var(--font-size-desktop-wide);
+    }
+  }
 
-.hidden{
-  opacity: 0.22;
-  filter: contrast(0.66) sepia(.8) blur(2px) grayscale(0.8);
-  transition: all 0.66s;
-  transform: translateY(10%);
-}
+  /*Fade */
 
-.show {
-  opacity: 1;
-  filter:  contrast(1) brightness(1) sepia(0) blur(0px) grayscale(0);
-  transform: translateY(0);
-}
+  .hidden {
+    opacity: 0.22;
+    filter: contrast(0.66) sepia(0.8) blur(2px) grayscale(0.8);
+    transition: all 0.66s;
+    transform: translateY(10%);
+  }
 
+  .show {
+    opacity: 1;
+    filter: contrast(1) brightness(1) sepia(0) blur(0px) grayscale(0);
+    transform: translateY(0);
+  }
 </style>
 
 <script>
-document.addEventListener('astro:page-load', () => {
+  document.addEventListener("astro:page-load", () => {
     let options = {
       rootMargin: "100px 0px -88px 0px",
     };
-    
-        // Define the behaviour for our new type of HTML element.
-        const observer = new IntersectionObserver((entries) => {  
-                entries.forEach((entry) => {
-                    console.log(entry)
-                    if (entry.isIntersecting){
-                        entry.target.classList.add("show");
-                    }
-                    else	{
-                        entry.target.classList.remove("show");
-                    }
-        
-            });
-         }, options);
-        
-        const fadeElements = document.querySelectorAll(".hidden");
-        fadeElements.forEach((el) => observer.observe(el));
 
-});
-    
-        
-    </script>
+    // Define the behaviour for our new type of HTML element.
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        console.log(entry);
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+        } else {
+          entry.target.classList.remove("show");
+        }
+      });
+    }, options);
+
+    const fadeElements = document.querySelectorAll(".hidden");
+    fadeElements.forEach((el) => observer.observe(el));
+  });
+</script>

@@ -3,8 +3,11 @@
 @font-face {
   font-family: PowerGrotesk-UltraLight;
   font-display: swap;
-  src: url(/fonts/PowerGrotesk/power-grotesk-ultra-light/webfonts/power-grotesk-ultra-light.woff2) format('woff2'),
-       url(/fonts/PowerGrotesk/power-grotesk-ultra-light/webfonts/power-grotesk-ultra-light.woff) format('woff');
+  src:
+    url(/fonts/PowerGrotesk/power-grotesk-ultra-light/webfonts/power-grotesk-ultra-light.woff2)
+      format("woff2"),
+    url(/fonts/PowerGrotesk/power-grotesk-ultra-light/webfonts/power-grotesk-ultra-light.woff)
+      format("woff");
   font-weight: 100;
   font-style: normal;
 }
@@ -12,8 +15,11 @@
 @font-face {
   font-family: PowerGrotesk-Light;
   font-display: swap;
-  src: url(/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-light.woff2) format('woff2'),
-       url(/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-light.woff) format('woff');
+  src:
+    url(/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-light.woff2)
+      format("woff2"),
+    url(/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-light.woff)
+      format("woff");
   font-weight: 200;
   font-style: normal;
 }
@@ -21,52 +27,58 @@
 @font-face {
   font-family: PowerGrotesk-Light;
   font-display: swap;
-  src: url(/fonts/PowerGrotesk/power-grotesk-light-italic/webfonts/power-grotesk-light-italic.woff2) format('woff2'),
-       url(/fonts/PowerGrotesk/power-grotesk-light-italic/webfonts/power-grotesk-light-italic.woff) format('woff');
+  src:
+    url(/fonts/PowerGrotesk/power-grotesk-light-italic/webfonts/power-grotesk-light-italic.woff2)
+      format("woff2"),
+    url(/fonts/PowerGrotesk/power-grotesk-light-italic/webfonts/power-grotesk-light-italic.woff)
+      format("woff");
   font-weight: 200;
   font-style: italic;
 }
 
-
 @font-face {
-  font-family: PowerGrotesk-Regular;	
+  font-family: PowerGrotesk-Regular;
   font-display: swap;
-	src: url(/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.woff2) format('woff2'),
-       url(/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.woff) format('woff');
-	font-weight: 400;
-	font-style: normal;
+  src:
+    url(/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.woff2)
+      format("woff2"),
+    url(/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.woff)
+      format("woff");
+  font-weight: 400;
+  font-style: normal;
 }
 
 @font-face {
-  font-family: PowerGrotesk-Medium;	
+  font-family: PowerGrotesk-Medium;
   font-display: swap;
-	src: url(/fonts/PowerGrotesk/power-grotesk-medium/webfonts/power-grotesk-medium.woff2) format('woff2'),
-       url(/fonts/PowerGrotesk/power-grotesk-medium/webfonts/power-grotesk-medium.woff) format('woff');
-	font-weight: 600;
-	font-style: normal;
+  src:
+    url(/fonts/PowerGrotesk/power-grotesk-medium/webfonts/power-grotesk-medium.woff2)
+      format("woff2"),
+    url(/fonts/PowerGrotesk/power-grotesk-medium/webfonts/power-grotesk-medium.woff)
+      format("woff");
+  font-weight: 600;
+  font-style: normal;
 }
 
 @font-face {
-  font-family: PowerGrotesk-Bold;	
+  font-family: PowerGrotesk-Bold;
   font-display: swap;
-	src: url(/fonts/PowerGrotesk/power-grotesk-bold/webfonts/power-grotesk-bold.woff2) format('woff2'),
-       url(/fonts/PowerGrotesk/power-grotesk-bold/webfonts/power-grotesk-bold.woff) format('woff');
-	font-weight: 600;
-	font-style: normal;
+  src:
+    url(/fonts/PowerGrotesk/power-grotesk-bold/webfonts/power-grotesk-bold.woff2)
+      format("woff2"),
+    url(/fonts/PowerGrotesk/power-grotesk-bold/webfonts/power-grotesk-bold.woff)
+      format("woff");
+  font-weight: 600;
+  font-style: normal;
 }
-
-
-
 
 /* Variables */
 :root {
-
   /* Colors */
   --bg-color: #fbf9f4;
   --bg-color-trans: #fbf9f4b1;
-  --bg-light: #FBF9F4;
+  --bg-light: #fbf9f4;
   --bg-color-accent: #e7dace;
-
 
   /* Top Padding */
   --padding-top-mobile-small: 80px;
@@ -85,7 +97,7 @@
   /* Margins */
   --margin-left-mobile: 2px;
   --margin-right-mobile: 2px;
-  
+
   --margin-left-tablet: 0px;
   --margin-right-tablet: 20px;
 
@@ -103,7 +115,6 @@
   --font-size-dekstop: 14px;
   --font-size-desktop-wide: 14px;
 
-
   --font-size-mobile-h1: 14px;
   --font-size-mobile-small-h1: 14px;
   --font-size-tablet-h1: 16px;
@@ -117,33 +128,36 @@
 
   /* Columns: Nav Main */
   --nav-main-layout-mobile-small: 1fr;
-  --nav-main-layout-mobile:       1fr;
-  --nav-main-layout-tablet:       144px 1fr;
-  --nav-main-layout-desktop:      160px 952px;
+  --nav-main-layout-mobile: 1fr;
+  --nav-main-layout-tablet: 144px 1fr;
+  --nav-main-layout-desktop: 160px 952px;
   --nav-main-layout-desktop-wide: 160px 1496px;
 
-  
-    /* Grid Layout*/
-    /* grid template columns: 17 Columns = 100vw - margin right - NavBar - margin left - column gap - scrollbar-wdith*(2) / 17*/
+  /* Grid Layout*/
+  /* grid template columns: 17 Columns = 100vw - margin right - NavBar - margin left - column gap - scrollbar-wdith*(2) / 17*/
 
-  --grid-layout-columns-mobile-small: repeat(7, calc((100vw - 2px - 2px - var(--scrollbar-width)) / 7));
-  --grid-layout-columns-mobile: repeat(7, calc((100vw - 2px - 2px - var(--scrollbar-width)) / 7));
-  --grid-layout-columns-tablet: repeat(11, calc((100vw - 124px - 20px - calc(var(--scrollbar-width) * 2)) / 11));
+  --grid-layout-columns-mobile-small: repeat(
+    7,
+    calc((100vw - 2px - 2px - var(--scrollbar-width)) / 7)
+  );
+  --grid-layout-columns-mobile: repeat(
+    7,
+    calc((100vw - 2px - 2px - var(--scrollbar-width)) / 7)
+  );
+  --grid-layout-columns-tablet: repeat(
+    11,
+    calc((100vw - 124px - 20px - calc(var(--scrollbar-width) * 2)) / 11)
+  );
   --grid-layout-columns-desktop: repeat(17, 56px);
   --grid-layout-columns-desktop-wide: repeat(17, 88px);
-
-
 }
 
-
-
-  /* Media Queries Breakpoints*/
-  @custom-media --bp-mobile-small (width <= 375px);
-  @custom-media --bp-mobile (width <= 767px);
-  @custom-media --bp-tablet (768px <= width <= 1119px);
-  @custom-media --bp-desktop (1120px <= width <= 1699px);
-  @custom-media --bp-desktop-wide (width >= 1700px);
-
+/* Media Queries Breakpoints*/
+@custom-media --bp-mobile-small (width <= 375px);
+@custom-media --bp-mobile (width <= 767px);
+@custom-media --bp-tablet (768px <= width <= 1119px);
+@custom-media --bp-desktop (1120px <= width <= 1699px);
+@custom-media --bp-desktop-wide (width >= 1700px);
 
 /* Photoswipe Styles */
 
@@ -153,9 +167,7 @@
 
 .pswp--custom-icon-colors {
   --pswp-icon-color: #000000 !important;
-
 }
-
 
 .pswp__counter {
   text-shadow: none !important;
@@ -172,7 +184,6 @@
 
 .pswp__button--close {
   margin-right: 30px !important;
-  
 }
 
 .pswp__button--arrow {
@@ -186,7 +197,6 @@
 
 .pswp__button--arrow--prev {
   left: 30px !important;
-
 }
 
 .pswp__button--arrow--next {
@@ -214,7 +224,7 @@
 }
 
 .pswp__img {
-/*   background: var(--bg-color); */
+  /*   background: var(--bg-color); */
 }
 
 .DetailsInfoWrapper th {
@@ -227,10 +237,8 @@
   padding-bottom: 10px;
 }
 
-
-
 /* Photoswipe ProjectSlide Wrapper */
-.pswp__project-title-slide{
+.pswp__project-title-slide {
   display: grid;
   align-items: center;
   height: 100%;
@@ -242,44 +250,38 @@
   letter-spacing: 0.7px;
 }
 
-
-
 /* Photoswipe ProjectSlide Wrapper */
 .pswp__project-info-slide-wrapper {
   height: 100%;
   display: grid;
   place-items: center;
-	
 }
-
 
 .pswp__project-info-slide {
-	display: grid;
-	font-size: var(--font-size-dekstop);
-	width: min(70%, 66ch);
-	grid-auto-rows: auto;
-	align-items: center;
-	overflow-x: hidden;
+  display: grid;
+  font-size: var(--font-size-dekstop);
+  width: min(70%, 66ch);
+  grid-auto-rows: auto;
+  align-items: center;
+  overflow-x: hidden;
 
+  @media (--bp-mobile) {
+    font-size: var(--font-size-mobile);
+  }
 
-	@media (--bp-mobile) {
-		font-size: var(--font-size-mobile);
-	}
+  @media (--bp-tablet) {
+    font-size: var(--font-size-tablet);
+  }
 
-	@media (--bp-tablet) {
-		font-size: var(--font-size-tablet);
-	}
-
-	@media (--bp-desktop-wide) {
-		font-size: var(--font-size-desktop-wide);
-	}
+  @media (--bp-desktop-wide) {
+    font-size: var(--font-size-desktop-wide);
+  }
 }
 
-
-.pswp__project-info, .pswp__project-details {
-	width: 80%;           /* Ensure it takes full width */
+.pswp__project-info,
+.pswp__project-details {
+  width: 80%; /* Ensure it takes full width */
   justify-self: center; /* Centers items horizontally */
-  
 
   span {
     font-family: PowerGrotesk-Medium;
@@ -287,19 +289,14 @@
 
   @media (--bp-mobile) {
     width: 85%;
-    }
-
-
+  }
 }
 
 .pswp__project-info {
-
   padding-top: 0.5rem;
 }
 
 .pswp__project-details {
   padding-top: 2rem;
-  padding-bottom:0.5rem;
+  padding-bottom: 0.5rem;
 }
-
-

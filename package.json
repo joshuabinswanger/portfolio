@@ -1,5 +1,6 @@
 {
   "name": "Portfolio_V1",
+  "type": "module",
   "browserslist": [
     "defaults"
   ],
@@ -42,6 +43,8 @@
     "@types/node": "^22.15.3",
     "astro-robots-txt": "^1.0.0",
     "postcss": "^8.4.45",
-    "postcss-nesting": "^13.0.0"
+    "postcss-nesting": "^13.0.0",
+    "prettier": "3.6.2",
+    "prettier-plugin-astro": "0.14.1"
   }
 }

@@ -1,66 +1,59 @@
 ---
-const { customClass = '', customStyle = '' } = Astro.props;
+const { customClass = "", customStyle = "" } = Astro.props;
 ---
 
 <div id="grid-container" class:list={["grid-container", customClass]}>
-    <slot />
-   
+  <slot />
 </div>
 
-
-
 <style>
-@import "../styles/global.css";
+  @import "../styles/global.css";
 
-/* grid template columns: 17 Columns = 100vw - margin right - NavBar - margin left - column gap - scrollbar-wdith*(2) / 17*/
-.grid-container {
-    display: grid; 			
-	height: max-content;
-	grid-template-columns: var(--grid-layout-columns-desktop);
-	grid-auto-rows: 56px;
-	margin-bottom: 0; 
+  /* grid template columns: 17 Columns = 100vw - margin right - NavBar - margin left - column gap - scrollbar-wdith*(2) / 17*/
+  .grid-container {
+    display: grid;
+    height: max-content;
+    grid-template-columns: var(--grid-layout-columns-desktop);
+    grid-auto-rows: 56px;
+    margin-bottom: 0;
 
-	@media (--bp-mobile) {
-		grid-template-columns: var(--grid-layout-columns-mobile);
-		grid-auto-rows: auto;
-		padding-bottom: 2lvh; 
-	}
+    @media (--bp-mobile) {
+      grid-template-columns: var(--grid-layout-columns-mobile);
+      grid-auto-rows: auto;
+      padding-bottom: 2lvh;
+    }
 
-	@media (--bp-tablet) {
-		grid-template-columns: var(--grid-layout-columns-tablet);
-		grid-auto-rows: auto;
-		padding-bottom: 0lvh;
-	}
+    @media (--bp-tablet) {
+      grid-template-columns: var(--grid-layout-columns-tablet);
+      grid-auto-rows: auto;
+      padding-bottom: 0lvh;
+    }
 
-	@media (--bp-desktop-wide) {
-		grid-template-columns: var(--grid-layout-columns-desktop-wide);
-		grid-auto-rows: 88px; 
-	}
-}
+    @media (--bp-desktop-wide) {
+      grid-template-columns: var(--grid-layout-columns-desktop-wide);
+      grid-auto-rows: 88px;
+    }
+  }
 
-.archive-grid {
-	grid-template-columns: 1fr 1fr 1fr 1fr;
-	column-gap: 28px;
-  	grid-auto-rows: auto;
-  
-	@media (--bp-mobile) {
-		grid-template-columns: 1fr 1fr;
-		column-gap: 16px;
-		row-gap: 16px;
-	}
+  .archive-grid {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    column-gap: 28px;
+    grid-auto-rows: auto;
 
+    @media (--bp-mobile) {
+      grid-template-columns: 1fr 1fr;
+      column-gap: 16px;
+      row-gap: 16px;
+    }
 
-	@media (--bp-tablet) {
-		grid-template-columns: 1fr 1fr 1fr;
-		column-gap: 56px;
-	}
+    @media (--bp-tablet) {
+      grid-template-columns: 1fr 1fr 1fr;
+      column-gap: 56px;
+    }
 
-	@media (--bp-desktop-wide) {
-		grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-		column-gap: 56px;
-	}
-}
-
-
-
+    @media (--bp-desktop-wide) {
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+      column-gap: 56px;
+    }
+  }
 </style>

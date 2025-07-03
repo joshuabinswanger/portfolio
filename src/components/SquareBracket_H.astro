@@ -1,101 +1,87 @@
 ---
-
-
-
 interface Props {
   padding?: string;
-    
-  };
+}
 
-  // Get component props from Astro.props
+// Get component props from Astro.props
 const { padding = "0.5rem 1rem" } = Astro.props;
-
 ---
+
 <div class="SquareH">
-    <div class="top-border"></div>
-    <div class="bottom-border"></div>
-    <div id="SlotWrapper">
-      <slot />
-    </div>
+  <div class="top-border"></div>
+  <div class="bottom-border"></div>
+  <div id="SlotWrapper">
+    <slot />
+  </div>
 </div>
 
-<style define:vars={{padding}} >
+<style define:vars={{ padding }}>
+  @import "../styles/global.css";
 
-@import "../styles/global.css";
-
-
-.SquareH {
-  width: 100%;
-  display: inline-grid;
-  height: auto;
-  margin: 0px;
-  position: relative;
-  align-content: center;
-  
-}
-
-#SlotWrapper{
-  padding: 2%;
-  display: grid;              /* Enables grid layout */
-  place-items: center;        /* Centers content both horizontally and vertically  justify-items: center; (horizontal centering) and align-items: center; */
-}
-
-
-
-.top-border,
-.bottom-border {
-  position: absolute;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  height: 50%;
-
-}
-.top-border {
-  top: 0;
-}
-.bottom-border {
-  bottom: 0;
-}
-.top-border:after,
-.top-border:before,
-.bottom-border:after,
-.bottom-border:before {
-  content: '';
-  width: 0.7rem;
-  height: 100%;
-
-  @media (--bp-mobile) {
-    width: 1.5vw;
+  .SquareH {
+    width: 100%;
+    display: inline-grid;
+    height: auto;
+    margin: 0px;
+    position: relative;
+    align-content: center;
   }
 
-  @media (--bp-tablet) {
-    width: 1.1vw;
+  #SlotWrapper {
+    padding: 2%;
+    display: grid; /* Enables grid layout */
+    place-items: center; /* Centers content both horizontally and vertically  justify-items: center; (horizontal centering) and align-items: center; */
   }
 
-  @media (--bp-desktop-wide) {
+  .top-border,
+  .bottom-border {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 50%;
+  }
+  .top-border {
+    top: 0;
+  }
+  .bottom-border {
+    bottom: 0;
+  }
+  .top-border:after,
+  .top-border:before,
+  .bottom-border:after,
+  .bottom-border:before {
+    content: "";
     width: 0.7rem;
+    height: 100%;
+
+    @media (--bp-mobile) {
+      width: 1.5vw;
+    }
+
+    @media (--bp-tablet) {
+      width: 1.1vw;
+    }
+
+    @media (--bp-desktop-wide) {
+      width: 0.7rem;
+    }
   }
 
-
-}
-
-
-.top-border:after,
-.top-border:before {
-  border-top: var(--border-size) solid black;
-}
-.bottom-border:after,
-.bottom-border:before {
-  border-bottom: var(--border-size) solid black;
-}
-.top-border:before,
-.bottom-border:before {
-  border-left: var(--border-size) solid black;
-}
-.top-border:after,
-.bottom-border:after {
-  border-right: var(--border-size) solid black;
-}
-
+  .top-border:after,
+  .top-border:before {
+    border-top: var(--border-size) solid black;
+  }
+  .bottom-border:after,
+  .bottom-border:before {
+    border-bottom: var(--border-size) solid black;
+  }
+  .top-border:before,
+  .bottom-border:before {
+    border-left: var(--border-size) solid black;
+  }
+  .top-border:after,
+  .bottom-border:after {
+    border-right: var(--border-size) solid black;
+  }
 </style>

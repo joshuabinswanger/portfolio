@@ -1,14 +1,14 @@
 ---
-import type { ImageMetadata } from 'astro';
-import { Picture } from 'astro:assets';
-import Logo from './Logo.astro';
-import SquareBracketV from './SquareBracket_V.astro';
-import BracketOpenV from './BracketOpenV.astro';
-import BracketMiddleV from './BracketMiddleV.astro';
-import BracketCloseV from './BracketCloseV.astro';
+import type { ImageMetadata } from "astro";
+import { Picture } from "astro:assets";
+import Logo from "./Logo.astro";
+import SquareBracketV from "./SquareBracket_V.astro";
+import BracketOpenV from "./BracketOpenV.astro";
+import BracketMiddleV from "./BracketMiddleV.astro";
+import BracketCloseV from "./BracketCloseV.astro";
 import "../styles/global.css";
-import { Image } from "astro:assets"
-import JoshLogo from "../assets/joshuabinswanger_tempLogo.png"
+import { Image } from "astro:assets";
+import JoshLogo from "../assets/joshuabinswanger_tempLogo.png";
 
 interface Props {
   personal?: boolean;
@@ -18,301 +18,316 @@ const { personal = false } = Astro.props;
 ---
 
 <nav id="NavBarDesktop" transition:persist>
-
-  <a 
-    id="Logo" 
+  <a
+    id="Logo"
     href="/personal"
     data-href="/personal"
-    class:list={["animation"]} 
-    data-animation="out">
-    
-    <Image src={JoshLogo} id="Image" alt= "Joshua Binswanger Logo" loading="eager">
+    class:list={["animation"]}
+    data-animation="out"
+  >
+    <Image
+      src={JoshLogo}
+      id="Image"
+      alt="Joshua Binswanger Logo"
+      loading="eager"
+    />
+
+    <div id="MainWrapper">
+      <BracketOpenV />
+
+      <a
+        id="portfolio"
+        class:list={["main-button", "button", "animation"]}
+        href="/personal"
+        data-href="/personal"
+        data-animation="out"
+      >
+        Gallery
+      </a>
+
+      <BracketMiddleV />
+
+      <a
+        id="info"
+        class:list={["main-button", "button", "animation"]}
+        href="/personal/info"
+        data-href="/personal/info"
+        data-animation="out"
+      >
+        Info
+      </a>
+
+      <BracketCloseV />
+    </div>
   </a>
 
-  <div id="MainWrapper">
+  <script>
+    import { navigate } from "astro:transitions/client";
 
-    <BracketOpenV />
-
-    <a
-    id="portfolio"
-    class:list={["main-button", "button", "animation"]}
-    href="/personal" 
-    data-href="/personal" 
-    data-animation="out">
-    Gallery
-  </a>
-
-    <BracketMiddleV />
-
-    <a
-      id="info"
-      class:list={["main-button", "button", "animation"]}
-      href="/personal/info"
-      data-href="/personal/info"
-      data-animation="out">
-      Info
-    </a>
-
-    <BracketCloseV />
-  </div>
-</nav>
-
-
-<script>
-  import { navigate } from 'astro:transitions/client';
-
-  // Update visual state (add/remove active class)
-  function updateAnimationState(buttons) {
-    setTimeout(() => {
-      buttons.forEach(btn => {
-        if (btn.getAttribute('data-animation') === "in") {
-          btn.classList.add('active');
-        } else {
-          btn.classList.remove('active');
-        }
-      });
-    }, 500);
-  }
-
-  // Handle button click for all buttons 
-  function handleButtonClick(clickedBtn, allButtonsNodeList) {
-    // Convert NodeList to Array for easier filtering if needed
-    const allButtons = Array.from(allButtonsNodeList); 
-    const mainButtons = allButtons.filter(btn => btn.id !== 'Logo'); // Exclude logo for some logic
-
-    // Special check: if clicked is Logo
-    if (clickedBtn.id === "Logo") {
-      const portfolioBtn = allButtons.find(btn => btn.id === 'portfolio'); // Find portfolio among all buttons
-
-      // Deactivate all MAIN buttons
-      mainButtons.forEach(btn => {
-        btn.setAttribute('data-animation', 'out');
-      });
-
-      // Activate portfolio button
-      if (portfolioBtn) {
-        portfolioBtn.setAttribute('data-animation', 'in');
-      }
-      
-      // Ensure logo itself remains visually 'out' (or handle its state if it needs one)
-      clickedBtn.setAttribute('data-animation', 'out'); 
-
-    } else { // Clicked a main button (gallery, info)
-      
-      // Only proceed if the clicked button is currently "out"
-      if (clickedBtn.getAttribute('data-animation') === "out") {
-        // Deactivate other MAIN buttons that are currently "in"
-        mainButtons.forEach(btn => {
-          if (btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
-            btn.setAttribute('data-animation', "out");
+    // Update visual state (add/remove active class)
+    function updateAnimationState(buttons) {
+      setTimeout(() => {
+        buttons.forEach((btn) => {
+          if (btn.getAttribute("data-animation") === "in") {
+            btn.classList.add("active");
+          } else {
+            btn.classList.remove("active");
           }
         });
-        // Activate the clicked button
-        clickedBtn.setAttribute('data-animation', "in");
+      }, 500);
+    }
+
+    // Handle button click for all buttons
+    function handleButtonClick(clickedBtn, allButtonsNodeList) {
+      // Convert NodeList to Array for easier filtering if needed
+      const allButtons = Array.from(allButtonsNodeList);
+      const mainButtons = allButtons.filter((btn) => btn.id !== "Logo"); // Exclude logo for some logic
+
+      // Special check: if clicked is Logo
+      if (clickedBtn.id === "Logo") {
+        const portfolioBtn = allButtons.find((btn) => btn.id === "portfolio"); // Find portfolio among all buttons
+
+        // Deactivate all MAIN buttons
+        mainButtons.forEach((btn) => {
+          btn.setAttribute("data-animation", "out");
+        });
+
+        // Activate portfolio button
+        if (portfolioBtn) {
+          portfolioBtn.setAttribute("data-animation", "in");
+        }
+
+        // Ensure logo itself remains visually 'out' (or handle its state if it needs one)
+        clickedBtn.setAttribute("data-animation", "out");
+      } else {
+        // Clicked a main button (gallery, info)
+
+        // Only proceed if the clicked button is currently "out"
+        if (clickedBtn.getAttribute("data-animation") === "out") {
+          // Deactivate other MAIN buttons that are currently "in"
+          mainButtons.forEach((btn) => {
+            if (
+              btn !== clickedBtn &&
+              btn.getAttribute("data-animation") === "in"
+            ) {
+              btn.setAttribute("data-animation", "out");
+            }
+          });
+          // Activate the clicked button
+          clickedBtn.setAttribute("data-animation", "in");
+        }
+      }
+
+      // --- IMPORTANT ---
+      // Update the visual state for ALL buttons AFTER any changes
+      updateAnimationState(allButtonsNodeList);
+      // --- IMPORTANT ---
+
+      // Navigation is handled by the browser for <a> tags with Astro View Transitions
+    }
+
+    // Attach event listeners to buttons
+    function createEventListeners(buttons) {
+      buttons.forEach((btn) => {
+        // Basic check to prevent adding multiple listeners if page-load fires rapidly
+        if (!btn.hasClickListener) {
+          btn.addEventListener("click", (event) => {
+            // Let Astro/browser handle navigation, just update state
+            // event.preventDefault(); // Usually NOT needed
+
+            // Pass event.currentTarget and the NodeList the listener was added to
+            handleButtonClick(event.currentTarget, buttons);
+          });
+          btn.hasClickListener = true; // Mark listener as added
+        }
+      });
+    }
+
+    // On page load, update visual state and attach click listeners
+    document.addEventListener("astro:page-load", () => {
+      const navBar = document.getElementById("NavBarDesktop");
+      if (!navBar) return;
+
+      // Select the Logo (#Logo) AND the direct children 'a.animation' of MainWrapper
+      const allNavButtons = navBar.querySelectorAll(
+        "#Logo, #MainWrapper > a.animation",
+      );
+
+      if (allNavButtons.length === 0) return;
+
+      // --- START: URL Matching Logic ---
+      let isActiveAlreadySet = false;
+
+      //check if already an active a element
+      allNavButtons.forEach((btn) => {
+        if (
+          btn.getAttribute("data-animation") === "in" ||
+          btn.classList.contains("active")
+        ) {
+          // Check class too
+          isActiveAlreadySet = true;
+        }
+      });
+
+      if (!isActiveAlreadySet) {
+        const currentPath = window.location.pathname;
+        let foundMatch = false;
+        let portfolioButton = null;
+
+        allNavButtons.forEach((btn) => {
+          const buttonHref = btn.getAttribute("data-href");
+
+          // Set portfolio button reference for personal site
+          if (buttonHref === "/personal") {
+            portfolioButton = btn;
+          }
+
+          //check if we pressed on the same button
+          if (buttonHref === currentPath) {
+            allNavButtons.forEach((otherBtn) =>
+              otherBtn.setAttribute("data-animation", "out"),
+            );
+            btn.setAttribute("data-animation", "in");
+            foundMatch = true;
+          }
+        });
+
+        //if pressed on a different route
+        if (!foundMatch && currentPath !== "/personal" && portfolioButton) {
+          allNavButtons.forEach((btn) =>
+            btn.setAttribute("data-animation", "out"),
+          );
+          portfolioButton.setAttribute("data-animation", "in");
+        }
+      }
+      // --- END: URL Matching Logic ---
+
+      // Initial visual state update based on URL matching or persisted state
+      updateAnimationState(allNavButtons);
+
+      // Attach listeners to ALL selected buttons (Logo + Main buttons)
+      createEventListeners(allNavButtons);
+    });
+  </script>
+
+  <style>
+    @import "../styles/global.css";
+
+    #NavBarDesktop {
+      position: sticky;
+      height: min-content;
+      display: grid;
+      justify-items: center;
+      grid-template-rows: 40px 1fr;
+      top: var(--padding-top-desktop);
+      row-gap: 4px;
+
+      @media (--bp-mobile) {
+        display: none;
+      }
+      @media (--bp-tablet) {
+        top: var(--padding-top-tablet);
+        grid-template-rows: 36px 1fr;
+      }
+      @media (--bp-desktop-wide) {
+        top: var(--padding-top-desktop-wide);
+        grid-template-rows: 40px 1fr;
       }
     }
 
-    // --- IMPORTANT ---
-    // Update the visual state for ALL buttons AFTER any changes
-    updateAnimationState(allButtonsNodeList); 
-    // --- IMPORTANT ---
+    * {
+      letter-spacing: 0.8px;
+    }
 
-    // Navigation is handled by the browser for <a> tags with Astro View Transitions
-  }
+    #Logo {
+      display: block;
+      height: 100%;
 
-  // Attach event listeners to buttons 
-  function createEventListeners(buttons) {
-    buttons.forEach(btn => {
-       // Basic check to prevent adding multiple listeners if page-load fires rapidly
-       if (!btn.hasClickListener) {
-            btn.addEventListener('click', event => {
-                // Let Astro/browser handle navigation, just update state
-                // event.preventDefault(); // Usually NOT needed
-                
-                // Pass event.currentTarget and the NodeList the listener was added to
-                handleButtonClick(event.currentTarget, buttons); 
-            });
-            btn.hasClickListener = true; // Mark listener as added
-        }
-    });
-  }
+      @media (--bp-mobile) {
+        margin-top: 32px;
+        display: block;
+        height: 36px;
+        width: 144px;
+        padding-left: 2px;
+      }
+    }
 
-  // On page load, update visual state and attach click listeners
-  document.addEventListener("astro:page-load", () => {
+    #Image {
+      height: min-content;
+      width: 100%;
+    }
 
-    const navBar = document.getElementById("NavBarDesktop");
-    if (!navBar) return;
+    #MainWrapper {
+      width: 100%;
+      display: grid;
+      /* Grid rows for 2 main items (Gallery and Info) */
+      grid-template-rows: 0 48px 0 48px 0;
+      transition: grid-template-rows 0.6s ease;
 
-    // Select the Logo (#Logo) AND the direct children 'a.animation' of MainWrapper
-    const allNavButtons = navBar.querySelectorAll('#Logo, #MainWrapper > a.animation'); 
+      @media (--bp-tablet) {
+        grid-template-rows: 0 40px 0 40px 0;
+      }
+    }
 
-    if (allNavButtons.length === 0) return;
+    .MenuItems {
+      height: min-content;
+      font-family: PowerGrotesk-Light;
+      font-weight: 200;
+    }
 
-     // --- START: URL Matching Logic ---
-     let isActiveAlreadySet = false;
+    .button {
+      height: 100%;
+      color: black;
+      align-content: center;
+      align-items: center;
+      z-index: 1001;
+      transition: color 0.3s ease 0.15s;
+      position: relative; /* Needed for ::before positioning */
+      display: flex; /* Ensure flex properties work */
+      justify-content: center; /* Center text horizontally */
+      align-items: center; /* Center text vertically */
+    }
 
-     //check if already an active a element
-     allNavButtons.forEach(btn => {
-       if (btn.getAttribute('data-animation') === 'in' || btn.classList.contains('active')) { // Check class too
-         isActiveAlreadySet = true;
-       }
-     });
+    a {
+      text-decoration: none;
+      color: inherit;
+      background: none;
+      border: none;
+      pointer-events: auto;
+      font-size: var(--font-size-dekstop-h1);
+      margin: 0;
+      height: 100%;
 
-     if (!isActiveAlreadySet) {
-       const currentPath = window.location.pathname;
-       let foundMatch = false;
-       let portfolioButton = null; 
+      @media (--bp-mobile) {
+        font-size: var(--font-size-mobile-h1);
+      }
+      @media (--bp-tablet) {
+        font-size: var(--font-size-tablet-h1);
+      }
+      @media (--bp-desktop-wide) {
+        font-size: var(--font-size-desktop-wide-h1);
+      }
+    }
 
-       allNavButtons.forEach(btn => {
-         const buttonHref = btn.getAttribute('data-href');
+    /* The ::before pseudo-element creates a black bar that slides in from the bottom */
+    .button::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0; /* Align to bottom */
+      width: 0%;
+      height: 100%; /* Cover full height */
+      background-color: black;
+      transition: width 0.6s ease;
+      z-index: -1;
+    }
 
-         // Set portfolio button reference for personal site
-         if (buttonHref === '/personal') {
-             portfolioButton = btn; 
-         }
-
-         //check if we pressed on the same button
-         if (buttonHref === currentPath) {
-           allNavButtons.forEach(otherBtn => otherBtn.setAttribute('data-animation', 'out')); 
-           btn.setAttribute('data-animation', 'in');
-           foundMatch = true;
-         } 
-       });
-
-       //if pressed on a different route
-       if (!foundMatch && currentPath !== '/personal' && portfolioButton) {
-          allNavButtons.forEach(btn => btn.setAttribute('data-animation', 'out')); 
-          portfolioButton.setAttribute('data-animation', 'in'); 
-       }
-     }
-    // --- END: URL Matching Logic ---
-
-    // Initial visual state update based on URL matching or persisted state
-    updateAnimationState(allNavButtons); 
-
-    // Attach listeners to ALL selected buttons (Logo + Main buttons)
-    createEventListeners(allNavButtons); 
-  });
-
-</script>
-
-<style>
-@import "../styles/global.css";
-
-#NavBarDesktop {
-  position: sticky;
-  height: min-content;
-  display: grid;
-  justify-items: center;
-  grid-template-rows: 40px 1fr;
-  top: var(--padding-top-desktop);
-  row-gap: 4px;
-
-  @media (--bp-mobile) {
-    display: none;
-  }
-  @media (--bp-tablet) {
-    top: var(--padding-top-tablet);
-    grid-template-rows: 36px 1fr;
-  }
-  @media (--bp-desktop-wide) {
-    top: var(--padding-top-desktop-wide);
-    grid-template-rows: 40px 1fr;
-  }
-}
-
-* {
-  letter-spacing: 0.8px;
-}
-
-#Logo {
-  display: block;
-  height: 100%;
-
-  @media (--bp-mobile){
-    margin-top: 32px;
-    display: block;
-    height: 36px;
-    width: 144px;
-    padding-left: 2px;
-  }
-}
-
-#Image {
-  height: min-content;
-  width: 100%;
-}
-
-#MainWrapper {
-  width: 100%;
-  display: grid;
-  /* Grid rows for 2 main items (Gallery and Info) */
-  grid-template-rows: 0 48px 0 48px 0;
-  transition: grid-template-rows 0.6s ease;
-
-  @media (--bp-tablet) {
-    grid-template-rows: 0 40px 0 40px 0;
-  }
-}
-
-.MenuItems {
-  height: min-content;
-  font-family: PowerGrotesk-Light;
-  font-weight: 200;
-}
-
-.button {
-  height: 100%;
-  color: black;
-  align-content: center;
-  align-items: center;
-  z-index: 1001;
-  transition: color 0.3s ease 0.15s;
-  position: relative; /* Needed for ::before positioning */
-  display: flex; /* Ensure flex properties work */
-  justify-content: center; /* Center text horizontally */
-  align-items: center; /* Center text vertically */
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-  background: none;
-  border: none;
-  pointer-events: auto;
-  font-size: var(--font-size-dekstop-h1);
-  margin: 0;
-  height: 100%;
-
-  @media (--bp-mobile) {
-    font-size: var(--font-size-mobile-h1);
-  }
-  @media (--bp-tablet) {
-    font-size: var(--font-size-tablet-h1);
-  }
-  @media (--bp-desktop-wide) {
-    font-size: var(--font-size-desktop-wide-h1);
-  }
-}
-
-/* The ::before pseudo-element creates a black bar that slides in from the bottom */
-.button::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0; /* Align to bottom */
-  width: 0%;
-  height: 100%; /* Cover full height */
-  background-color: black;
-  transition: width 0.6s ease;
-  z-index: -1;
-}
-
-/* When active, change text color and expand the black bar */
-.button.active {
-  color: var(--bg-color);
-}
-.button.active::before {
-  width: 100%;
-}
-</style>
+    /* When active, change text color and expand the black bar */
+    .button.active {
+      color: var(--bg-color);
+    }
+    .button.active::before {
+      width: 100%;
+    }
+  </style>
+</nav>

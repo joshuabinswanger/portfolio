@@ -1,52 +1,48 @@
 ---
-import Main from "../layouts/Main.astro"
+import Main from "../layouts/Main.astro";
 import Footer from "../components/Footer.astro";
 import Contact from "../components/Contact.astro";
 ---
-<Main title="Rhizome Visuals" description="Scientfic Illustration and Design by Joshua Binswanger" >
-	
-  <Contact />
 
+<Main
+  title="Rhizome Visuals"
+  description="Scientfic Illustration and Design by Joshua Binswanger"
+>
+  <Contact />
 </Main>
 
-
-
 <style>
-    @import "../styles/global.css";
-    
-    
-    
-    p {
-      font-size: var(--font-size-dekstop);
+  @import "../styles/global.css";
+
+  p {
+    font-size: var(--font-size-dekstop);
+    padding: 0.7rem 0.2rem;
+    text-align: center;
+    margin: 0px;
+
+    @media (--bp-mobile) {
+      font-size: var(--font-size-mobile);
       padding: 0.7rem 0.2rem;
-      text-align: center;
-      margin: 0px;
-      
-    
-      @media (--bp-mobile){
-          font-size: var(--font-size-mobile);
-          padding: 0.7rem 0.2rem
-        }
-    
-        @media (--bp-tablet){
-          font-size: var(--font-size-tablet);
-          padding: 0.7rem 0.2rem;
-        }
-    
-        @media (--bp-desktop-wide){
-          font-size: var(--font-size-desktop-wide);
-        }
     }
-    
-    li {
-      list-style: none;
-      margin: 0.5rem 0 0.5rem 0; 
+
+    @media (--bp-tablet) {
+      font-size: var(--font-size-tablet);
+      padding: 0.7rem 0.2rem;
     }
-    
-    a {
-      text-decoration: none;
-      color: inherit;
-      pointer-events: auto;
+
+    @media (--bp-desktop-wide) {
+      font-size: var(--font-size-desktop-wide);
     }
-    
-    </style>
+  }
+
+  li {
+    list-style: none;
+    margin: 0.5rem 0 0.5rem 0;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    pointer-events: auto;
+  }
+</style>

@@ -1,47 +1,54 @@
 ---
 interface Props {
- strokewidth?: string;
- strokecolor?: string;
- height?: string;
- width?: string;
- padding?: string;
+  strokewidth?: string;
+  strokecolor?: string;
+  height?: string;
+  width?: string;
+  padding?: string;
 }
 
-const { strokewidth = "1px", strokecolor = "black", height = "100%", width = "100%", padding = "1px"} = Astro.props;
+const {
+  strokewidth = "1px",
+  strokecolor = "black",
+  height = "100%",
+  width = "100%",
+  padding = "1px",
+} = Astro.props;
 ---
 
 <div class="svg-container bracket-open-h">
-    <svg xmlns="http://www.w3.org/2000/svg"    viewBox={`0 0 50 200`} preserveAspectRatio="xMidYMid">
-        <path 
-        vector-effect="non-scaling-stroke"
-        d={`M 50 0 H 0 V 200 H 50`}>
-    </svg>
-</div>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox={`0 0 50 200`}
+    preserveAspectRatio="xMidYMid"
+  >
+    <path vector-effect="non-scaling-stroke" d={`M 50 0 H 0 V 200 H 50`}>
+    </path>
+  </svg>
 
-
-<style define:vars={{strokewidth, strokecolor, height, width, padding}}>
-
-/* SVG container */
-.svg-container {
-    height: calc(var(--height) - 1px);
-    width: var(--wdith);       
-    justify-self: start;
+  <style define:vars={{ strokewidth, strokecolor, height, width, padding }}>
+    /* SVG container */
+    .svg-container {
+      height: calc(var(--height) - 1px);
+      width: var(--wdith);
+      justify-self: start;
     }
 
-/* SVG styling */
-svg {
-    overflow: visible;
-    height:  100%;
-    padding: calc(var(--padding) / 2);       /* Centers the SVG vertically */   
-    display: block; /* Removes inline spacing */
-    justify-self: start;
-    align-self: center;
-}
+    /* SVG styling */
+    svg {
+      overflow: visible;
+      height: 100%;
+      padding: calc(var(--padding) / 2); /* Centers the SVG vertically */
+      display: block; /* Removes inline spacing */
+      justify-self: start;
+      align-self: center;
+    }
 
-/* Keep stroke width constant */
-path {
-    fill: none;
-    stroke: var(--strokecolor);
-    stroke-width: var(--strokewidth);
-}
-</style>
+    /* Keep stroke width constant */
+    path {
+      fill: none;
+      stroke: var(--strokecolor);
+      stroke-width: var(--strokewidth);
+    }
+  </style>
+</div>

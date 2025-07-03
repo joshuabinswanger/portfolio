@@ -2,7 +2,7 @@
 import TopWrapper from "../layouts/TopWrapper.astro";
 import GridLayout from "../layouts/GridLayout.astro";
 import GalleryElement from "./GalleryElementV1.astro";
-import { getCollection } from 'astro:content';
+import { getCollection } from "astro:content";
 
 // Get props
 interface Props {
@@ -14,8 +14,7 @@ const { portfolio } = Astro.props;
 // Declare a single array or variable for your data
 let galleryProjects = [];
 
-const portfolioProjects = await getCollection('portfolio');
-
+const portfolioProjects = await getCollection("portfolio");
 
 // Sort
 portfolioProjects.sort((a, b) => {
@@ -24,147 +23,164 @@ portfolioProjects.sort((a, b) => {
   const priorityB = Number(b.data.priority);
 
   return priorityA - priorityB; // Ascending order
-  
+
   // For descending order, use: return priorityB - priorityA;
 });
 
 console.log("Logging portfolioElementProjects for each project:");
 portfolioProjects.forEach((entry, index) => {
   // Assuming each entry has data.portfolioElementProjects
-  console.log(`Project Entry ${index} (ID: ${entry.id}):`, entry.data.portfolioElementProjects);
+  console.log(
+    `Project Entry ${index} (ID: ${entry.id}):`,
+    entry.data.portfolioElementProjects,
+  );
 });
 
 // Make sure galleryProjects is defined and is an array before this
-console.log(`[DEBUG] Starting loop. Number of galleryProjects: ${portfolioProjects?.length ?? 'undefined'}`); // Log before loop
-
+console.log(
+  `[DEBUG] Starting loop. Number of galleryProjects: ${portfolioProjects?.length ?? "undefined"}`,
+); // Log before loop
 
 let enrichedProjects = []; // Ensure initialized
-let globalIndex = 0;      // Ensure initialized
+let globalIndex = 0; // Ensure initialized
 
 // Use async function if not already in Astro frontmatter
 // async function processProjects() { // Uncomment if needed
 
-  for (const entry of portfolioProjects) {
-    console.log(`[DEBUG] Loop iteration for entry ID: ${entry.id}`); // Log start of iteration
+for (const entry of portfolioProjects) {
+  console.log(`[DEBUG] Loop iteration for entry ID: ${entry.id}`); // Log start of iteration
 
-    const projectName = entry.data.portfolioElementName;
-    const startIndex = globalIndex;
-    const targetProjects = entry.data.portfolioElementProjects;
+  const projectName = entry.data.portfolioElementName;
+  const startIndex = globalIndex;
+  const targetProjects = entry.data.portfolioElementProjects;
 
-    console.log(`[DEBUG]   Project Name: ${projectName}`); // Log project name
-    console.log(`[DEBUG]   Target Projects:`, targetProjects); // Log target projects array
+  console.log(`[DEBUG]   Project Name: ${projectName}`); // Log project name
+  console.log(`[DEBUG]   Target Projects:`, targetProjects); // Log target projects array
 
-    if (!Array.isArray(targetProjects)) {
-      console.warn(`[DEBUG]   Skipping - 'portfolioElementProjects' is not an array.`);
-      continue;
-    }
-
-	// Fetch galleryImages that belong to targetProjects AND are marked for the portfolio gallery
-	console.log(`[DEBUG] Fetching galleryImages for projects in targetProjects list and marked for portfolio...`);
-
-	const galleryImages = await getCollection('galleryImages', ({ data }) => {
-	// Combine all checks using &&. Returns true only if all conditions are met.
-	return (
-		// Check 1: Metadata and project field must exist and be truthy
-		data.metadata?.project && // Use optional chaining for safety
-
-		// Check 2: The image's project must be in the targetProjects array
-		// (Make sure 'targetProjects' is defined and contains the project names you need)
-		targetProjects.includes(data.metadata.project) &&
-
-		// Check 3: The showInPortfolioGallery flag must be explicitly "yes"
-		// (We can access this directly because check 1 ensures data.metadata exists)
-		data.metadata.showInPortfolioGallery === "yes"
-	);
-	// If any condition fails (e.g., missing fields, project not included, flag not "yes"),
-	// the && chain will short-circuit and the function will return false for that image.
-	});
-
-	// Optional: Log the count of fetched images
-	console.log(`[DEBUG] Fetched ${galleryImages.length} galleryImages matching all criteria.`);
-
-
-
-
-
-
-
-
-    console.log(`[DEBUG]   Fetched ${galleryImages.length} galleryImages.`); // Log image count
-
-    const slidesCount = galleryImages.length;
-    const oldGlobalIndex = globalIndex; // Log index change
-    globalIndex += slidesCount + 2;
-    console.log(`[DEBUG]   Slides count: ${slidesCount}. Global index changed from ${oldGlobalIndex} to ${globalIndex}`);
-
-    const projectData = { // Log object being pushed
-      entry, // Maybe log just entry.id for brevity: entryId: entry.id
-      projectName,
-      startIndex,
-      galleryImages, // Maybe log just length: galleryImagesCount: galleryImages.length
-      slidesCount
-    };
-    console.log(`[DEBUG]   Pushing to enrichedProjects:`, { projectName: projectData.projectName, startIndex: projectData.startIndex, slidesCount: projectData.slidesCount });
-    enrichedProjects.push(projectData);
+  if (!Array.isArray(targetProjects)) {
+    console.warn(
+      `[DEBUG]   Skipping - 'portfolioElementProjects' is not an array.`,
+    );
+    continue;
   }
 
-  console.log(`[DEBUG] Loop finished. Final enrichedProjects count: ${enrichedProjects.length}`); // Log after loop
-  console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
-  enrichedProjects.forEach((projectItem, index) => {
+  // Fetch galleryImages that belong to targetProjects AND are marked for the portfolio gallery
+  console.log(
+    `[DEBUG] Fetching galleryImages for projects in targetProjects list and marked for portfolio...`,
+  );
+
+  const galleryImages = await getCollection("galleryImages", ({ data }) => {
+    // Combine all checks using &&. Returns true only if all conditions are met.
+    return (
+      // Check 1: Metadata and project field must exist and be truthy
+      data.metadata?.project && // Use optional chaining for safety
+      // Check 2: The image's project must be in the targetProjects array
+      // (Make sure 'targetProjects' is defined and contains the project names you need)
+      targetProjects.includes(data.metadata.project) &&
+      // Check 3: The showInPortfolioGallery flag must be explicitly "yes"
+      // (We can access this directly because check 1 ensures data.metadata exists)
+      data.metadata.showInPortfolioGallery === "yes"
+    );
+    // If any condition fails (e.g., missing fields, project not included, flag not "yes"),
+    // the && chain will short-circuit and the function will return false for that image.
+  });
+
+  // Optional: Log the count of fetched images
+  console.log(
+    `[DEBUG] Fetched ${galleryImages.length} galleryImages matching all criteria.`,
+  );
+
+  console.log(`[DEBUG]   Fetched ${galleryImages.length} galleryImages.`); // Log image count
+
+  const slidesCount = galleryImages.length;
+  const oldGlobalIndex = globalIndex; // Log index change
+  globalIndex += slidesCount + 2;
+  console.log(
+    `[DEBUG]   Slides count: ${slidesCount}. Global index changed from ${oldGlobalIndex} to ${globalIndex}`,
+  );
+
+  const projectData = {
+    // Log object being pushed
+    entry, // Maybe log just entry.id for brevity: entryId: entry.id
+    projectName,
+    startIndex,
+    galleryImages, // Maybe log just length: galleryImagesCount: galleryImages.length
+    slidesCount,
+  };
+  console.log(`[DEBUG]   Pushing to enrichedProjects:`, {
+    projectName: projectData.projectName,
+    startIndex: projectData.startIndex,
+    slidesCount: projectData.slidesCount,
+  });
+  enrichedProjects.push(projectData);
+}
+
+console.log(
+  `[DEBUG] Loop finished. Final enrichedProjects count: ${enrichedProjects.length}`,
+); // Log after loop
+console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
+enrichedProjects.forEach((projectItem, index) => {
   // Assuming each entry has data.portfolioElementProjects
   console.log(projectItem.entry.data.title);
 });
 
 // } // Uncomment if using async function wrapper
 // processProjects(); // Call the function if wrapped
-
 ---
 
 <TopWrapper>
   <GridLayout>
-	
-    {enrichedProjects.map(({entry, projectId, startIndex, slidesCount }, index) => {
-			
-		if (index > 2) {
-			
-		return(
-		<div class:list={["observer restrain"]}>
-			<div class:list={["GalleryElementWrapper"]} id={projectId} data-gallery-index={index} data-gallery-project={entry.data.title}>
-				<div class:list={["gallery-placeholder"]}>
-				</div>
-				<GalleryElement
-				project={entry.data.portfolioElementName}
-				startIndex={startIndex}
-				slidesCount={slidesCount}
-				/>
-			</div>
-		</div>
-		);
-	
-		}  else {
-		return(
-		<div class:list={["observer restrain"]}>
-			<div class:list={["GalleryElementWrapper"]} id={projectId} data-gallery-index={index} data-gallery-project={entry.data.title}>
-				<div class:list={["gallery-placeholder"]}>
-					{/* <img src="/src/assets/ImagePlaceholder.jpg" alt="Gallery Preview" loading="eager" /> */}				</div>
-				<GalleryElement
-				project={entry.data.portfolioElementName}
-				startIndex={startIndex}
-				slidesCount={slidesCount}
-				/>
-				
-			</div>
-		</div>
-		);
-	}
-	})}
+    {
+      enrichedProjects.map(
+        ({ entry, projectId, startIndex, slidesCount }, index) => {
+          if (index > 2) {
+            return (
+              <div class:list={["observer restrain"]}>
+                <div
+                  class:list={["GalleryElementWrapper"]}
+                  id={projectId}
+                  data-gallery-index={index}
+                  data-gallery-project={entry.data.title}
+                >
+                  <div class:list={["gallery-placeholder"]}></div>
+                  <GalleryElement
+                    project={entry.data.portfolioElementName}
+                    startIndex={startIndex}
+                    slidesCount={slidesCount}
+                  />
+                </div>
+              </div>
+            );
+          } else {
+            return (
+              <div class:list={["observer restrain"]}>
+                <div
+                  class:list={["GalleryElementWrapper"]}
+                  id={projectId}
+                  data-gallery-index={index}
+                  data-gallery-project={entry.data.title}
+                >
+                  <div class:list={["gallery-placeholder"]}>
+                    {/* <img src="/src/assets/ImagePlaceholder.jpg" alt="Gallery Preview" loading="eager" /> */}{" "}
+                  </div>
+                  <GalleryElement
+                    project={entry.data.portfolioElementName}
+                    startIndex={startIndex}
+                    slidesCount={slidesCount}
+                  />
+                </div>
+              </div>
+            );
+          }
+        },
+      )
+    }
   </GridLayout>
 </TopWrapper>
 
 <!-- Intersection Observer -->
 <script>
-
-/* document.addEventListener('astro:page-load', ev => {
+  /* document.addEventListener('astro:page-load', ev => {
 
 
 
@@ -240,325 +256,296 @@ let globalIndex = 0;      // Ensure initialized
 
 <!-- KeenSlider -->
 <script>
+  import KeenSlider from "keen-slider";
 
-	import KeenSlider from 'keen-slider'
-	
-	document.addEventListener('astro:page-load', () => {
-	
-	  const Sliders = document.querySelectorAll('.GalleryElement')
-	
-	  Sliders.forEach((item, index) => {
-		/* console.log(`This is the slider at index ${index} with ID: ${item.id}`); */
-	
-		// Select all Slides
-		const slides = item.querySelectorAll('.keen-slider__slide');
-		// Select the ProjectInfoSlideWrapper within this slider
-		const projectInfoSlideWrapper = item.querySelector('.ProjectInfoSlideWrapper');
-	
-		let loaded = []
-	
-		//Loading Function  
-		function loadImages(s) {
-		  const slideIdx = s.track.details.rel;
-		  const totalSlides = s.track.details.slides.length;
-	
-		  // Mark the current, previous, and next slide as loaded
-		  loaded[slideIdx] = true;
-		  loaded[(slideIdx + totalSlides) % totalSlides] = true; // Previous slide, wrapping around
-		  loaded[(slideIdx + 1) % totalSlides] = true; // Next slide, wrapping around
-	
-		  s.slides.forEach((element, idx) => {
-			  if (loaded[idx]) {
-				// Use querySelector to find the .ImageElement div
-				const imageElement = element.querySelector('.ImageElement');
-				/* console.log(`ImageElement found:`, imageElement); */
-	
-				if (imageElement) {
-				  imageElement.style.display = "block";
-				} else {
-				  console.warn(`.ImageElement not found in slide index ${idx}`);
-				}
-			  } 
-			})
-		}
-	
-		//Counter Function
-		function updateCounter(s) {
-		const counterContainer = item.querySelector('.CounterContainer');
-		  if (counterContainer) {
-			const currentSlide = s.track.details.rel + 1; // Add 1 because index is zero-based
-			const totalSlides = s.track.details.slides.length;
-			counterContainer.textContent = `${currentSlide} / ${totalSlides}`;
-		  }
-		}
-	
-		//MaxHeight Function
-		function setMaxHeight (s) {
-		  const activeSlide = s.track.details.rel;
-		  const height = s.size;
-		  /* console.log(`the slide has height: ${height}`) */
-		  const projectInfoSlide = s.slides[s.slides.length - 1];
-		 /*  console.log(`projectInfoSlide at index: ${projectInfoSlide.id}`) */
-		  const projectInfoSlideWrapper = projectInfoSlide.querySelector('.project-info-slide');
-	
-		  projectInfoSlideWrapper.style.maxHeight = `${height}px`;
-		}
-	
-		//Placeholder Image
-		function hideGalleryPlaceholder(sliderElement) {
+  document.addEventListener("astro:page-load", () => {
+    const Sliders = document.querySelectorAll(".GalleryElement");
 
-			const placeholder = sliderElement.previousElementSibling;
-			if (placeholder && placeholder.classList.contains('gallery-placeholder')) {
-				placeholder.classList.add('placeholder-hidden');
-			}
-		}
-		
-	
-	
-		var slider = new KeenSlider(item, {
-		  created: (s) => {
-			loadImages(s);
-			setMaxHeight(s);
-			hideGalleryPlaceholder(item);
-		  },
-		  slideChanged: loadImages,
-		  animationEnded: updateCounter,
-		  updated: setMaxHeight,
-		
-		  slides: {
-			spacing: 15,
-		  },
-		  loop: true,
-		  initial: 0,
-		  
-		});
-	
-	
-	
-	
-	
-	
-		/////////////////
-		////INFO DIV/////
-		////////////////
-	
-		// Function to toggle image info visibility
-		let imageInfoVisible = false; // Initial state
-	
-		const toggleImageInfoVisibility = () => {
-	
-		  // Get the current active slide
-		  const currentSlideIndex = slider.track.details.rel;
-		  const slides = item.querySelectorAll('.keen-slider__slide');
-		  const currentSlide = slides[currentSlideIndex];
-	
-		  if (currentSlide) {
-			const imageInfo = currentSlide.querySelector('.ImageInfo');
-			if (imageInfo) {
-			  if (imageInfoVisible) {
-				imageInfo.classList.remove('InfoVisible');
-			  } else {
-				imageInfo.classList.add('InfoVisible');
-			  }
-			  imageInfoVisible = !imageInfoVisible; // Toggle the state
-			}
-		  }
-		};
-	
-		// Function to hide image info (when slide changes)
-		const hideImageInfo = () => {
-		  if (imageInfoVisible) {
-			const slides = item.querySelectorAll('.keen-slider__slide');
-			  slides.forEach((slide) => {
-				const imageInfo = slide.querySelector('.ImageInfo');
-				if (imageInfo) {
-				  imageInfo.classList.remove('InfoVisible');
-				}
-			  });
-			  imageInfoVisible = false;
-			}
-		};
-	
-		// Add click event listener to the #Info div of this specific gallery
-		const infoDiv = item.querySelector('#Info');
-		if (infoDiv) {
-		  infoDiv.addEventListener('click', toggleImageInfoVisibility);
-		} else {
-		  console.error(`Info div not found for selector: ${item.id}`);
-		}
-	
-	
-	
-	
-		/////////////////
-		////Arrows/////
-		////////////////
-	
-		// Add click event listeners to the arrow buttons
-		const arrowLeft = item.querySelector('.ArrowLeft');
-		const arrowRight = item.querySelector('.ArrowRight');
-	
-		if (arrowLeft) {
-		  arrowLeft.addEventListener('click', () => {
-			slider.prev();
-			hideImageInfo();
-		  });
-		}
-	
-		if (arrowRight) {
-		  arrowRight.addEventListener('click', () => {
-			slider.next();
-			hideImageInfo();
-		  });
-		}
-	
-		/////////////////////
-		////Title Click/////
-		////////////////////
-	
-	
-		const titleElement = item.querySelector("#TextWrapper");
-		const maxIdx = slider.slides.length - 1;
-	
-		if (titleElement) {
-		  titleElement.addEventListener('click', () => {
-			slider.moveToIdx(maxIdx, false); 
-		  });
-		}
-	
-	
-	
-	
-	
-		/////////////////////
-		////Intersection/////
-		////////////////////
-	
-		// IntersectionObserver hidden options
-	  let optionsHidden = {
-			rootMargin: "400px",
-		};
-		
-	
-		// Define the IntersectionObserver
-		const observerSlider = new IntersectionObserver((entries) => {  
-		  entries.forEach((entry) => {
-		/* 	console.log(entry); */
-			if (entry.isIntersecting) {
-			  entry.target.classList.remove("restrain");
-			  slider.update();
-			} 
-		  });
-		}, optionsHidden);
-	
-		const hiddenElements = document.querySelectorAll(".observer");
-		hiddenElements.forEach((el) => observerSlider.observe(el));
-		  
-	  }); 
-	
-	  
-	
-	});
-	
+    Sliders.forEach((item, index) => {
+      /* console.log(`This is the slider at index ${index} with ID: ${item.id}`); */
+
+      // Select all Slides
+      const slides = item.querySelectorAll(".keen-slider__slide");
+      // Select the ProjectInfoSlideWrapper within this slider
+      const projectInfoSlideWrapper = item.querySelector(
+        ".ProjectInfoSlideWrapper",
+      );
+
+      let loaded = [];
+
+      //Loading Function
+      function loadImages(s) {
+        const slideIdx = s.track.details.rel;
+        const totalSlides = s.track.details.slides.length;
+
+        // Mark the current, previous, and next slide as loaded
+        loaded[slideIdx] = true;
+        loaded[(slideIdx + totalSlides) % totalSlides] = true; // Previous slide, wrapping around
+        loaded[(slideIdx + 1) % totalSlides] = true; // Next slide, wrapping around
+
+        s.slides.forEach((element, idx) => {
+          if (loaded[idx]) {
+            // Use querySelector to find the .ImageElement div
+            const imageElement = element.querySelector(".ImageElement");
+            /* console.log(`ImageElement found:`, imageElement); */
+
+            if (imageElement) {
+              imageElement.style.display = "block";
+            } else {
+              console.warn(`.ImageElement not found in slide index ${idx}`);
+            }
+          }
+        });
+      }
+
+      //Counter Function
+      function updateCounter(s) {
+        const counterContainer = item.querySelector(".CounterContainer");
+        if (counterContainer) {
+          const currentSlide = s.track.details.rel + 1; // Add 1 because index is zero-based
+          const totalSlides = s.track.details.slides.length;
+          counterContainer.textContent = `${currentSlide} / ${totalSlides}`;
+        }
+      }
+
+      //MaxHeight Function
+      function setMaxHeight(s) {
+        const activeSlide = s.track.details.rel;
+        const height = s.size;
+        /* console.log(`the slide has height: ${height}`) */
+        const projectInfoSlide = s.slides[s.slides.length - 1];
+        /*  console.log(`projectInfoSlide at index: ${projectInfoSlide.id}`) */
+        const projectInfoSlideWrapper = projectInfoSlide.querySelector(
+          ".project-info-slide",
+        );
+
+        projectInfoSlideWrapper.style.maxHeight = `${height}px`;
+      }
+
+      //Placeholder Image
+      function hideGalleryPlaceholder(sliderElement) {
+        const placeholder = sliderElement.previousElementSibling;
+        if (
+          placeholder &&
+          placeholder.classList.contains("gallery-placeholder")
+        ) {
+          placeholder.classList.add("placeholder-hidden");
+        }
+      }
+
+      var slider = new KeenSlider(item, {
+        created: (s) => {
+          loadImages(s);
+          setMaxHeight(s);
+          hideGalleryPlaceholder(item);
+        },
+        slideChanged: loadImages,
+        animationEnded: updateCounter,
+        updated: setMaxHeight,
+
+        slides: {
+          spacing: 15,
+        },
+        loop: true,
+        initial: 0,
+      });
+
+      /////////////////
+      ////INFO DIV/////
+      ////////////////
+
+      // Function to toggle image info visibility
+      let imageInfoVisible = false; // Initial state
+
+      const toggleImageInfoVisibility = () => {
+        // Get the current active slide
+        const currentSlideIndex = slider.track.details.rel;
+        const slides = item.querySelectorAll(".keen-slider__slide");
+        const currentSlide = slides[currentSlideIndex];
+
+        if (currentSlide) {
+          const imageInfo = currentSlide.querySelector(".ImageInfo");
+          if (imageInfo) {
+            if (imageInfoVisible) {
+              imageInfo.classList.remove("InfoVisible");
+            } else {
+              imageInfo.classList.add("InfoVisible");
+            }
+            imageInfoVisible = !imageInfoVisible; // Toggle the state
+          }
+        }
+      };
+
+      // Function to hide image info (when slide changes)
+      const hideImageInfo = () => {
+        if (imageInfoVisible) {
+          const slides = item.querySelectorAll(".keen-slider__slide");
+          slides.forEach((slide) => {
+            const imageInfo = slide.querySelector(".ImageInfo");
+            if (imageInfo) {
+              imageInfo.classList.remove("InfoVisible");
+            }
+          });
+          imageInfoVisible = false;
+        }
+      };
+
+      // Add click event listener to the #Info div of this specific gallery
+      const infoDiv = item.querySelector("#Info");
+      if (infoDiv) {
+        infoDiv.addEventListener("click", toggleImageInfoVisibility);
+      } else {
+        console.error(`Info div not found for selector: ${item.id}`);
+      }
+
+      /////////////////
+      ////Arrows/////
+      ////////////////
+
+      // Add click event listeners to the arrow buttons
+      const arrowLeft = item.querySelector(".ArrowLeft");
+      const arrowRight = item.querySelector(".ArrowRight");
+
+      if (arrowLeft) {
+        arrowLeft.addEventListener("click", () => {
+          slider.prev();
+          hideImageInfo();
+        });
+      }
+
+      if (arrowRight) {
+        arrowRight.addEventListener("click", () => {
+          slider.next();
+          hideImageInfo();
+        });
+      }
+
+      /////////////////////
+      ////Title Click/////
+      ////////////////////
+
+      const titleElement = item.querySelector("#TextWrapper");
+      const maxIdx = slider.slides.length - 1;
+
+      if (titleElement) {
+        titleElement.addEventListener("click", () => {
+          slider.moveToIdx(maxIdx, false);
+        });
+      }
+
+      /////////////////////
+      ////Intersection/////
+      ////////////////////
+
+      // IntersectionObserver hidden options
+      let optionsHidden = {
+        rootMargin: "400px",
+      };
+
+      // Define the IntersectionObserver
+      const observerSlider = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          /* 	console.log(entry); */
+          if (entry.isIntersecting) {
+            entry.target.classList.remove("restrain");
+            slider.update();
+          }
+        });
+      }, optionsHidden);
+
+      const hiddenElements = document.querySelectorAll(".observer");
+      hiddenElements.forEach((el) => observerSlider.observe(el));
+    });
+  });
 </script>
-	
+
 <!-- PhotoSwipe -->
 <script>
-		
-	import PhotoSwipeLightbox from 'photoswipe/lightbox';
+  import PhotoSwipeLightbox from "photoswipe/lightbox";
 
-	const leftArrowSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 155 139" "width="39" height="35"><path d="m0 69 69 69 14-12-45-46h116V58H38l44-44L69 0 0 69Z" style="fill-rule:nonzero"/></svg>';
-	const CloseSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 139 139" "width="139" height="139"><path d="m69 83-56 55-13-12 56-57L0 14 13 0l56 56 56-56 13 14-55 55 55 57-13 12-56-55Z"/></svg>';
+  const leftArrowSVGString =
+    '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 155 139" "width="39" height="35"><path d="m0 69 69 69 14-12-45-46h116V58H38l44-44L69 0 0 69Z" style="fill-rule:nonzero"/></svg>';
+  const CloseSVGString =
+    '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 139 139" "width="139" height="139"><path d="m69 83-56 55-13-12 56-57L0 14 13 0l56 56 56-56 13 14-55 55 55 57-13 12-56-55Z"/></svg>';
 
-	// Declare lightbox in the outer scope so both event handlers can access it
-    let lightbox = null;
+  // Declare lightbox in the outer scope so both event handlers can access it
+  let lightbox = null;
 
-	function isPhonePortrait() {
-			return window.matchMedia('(max-width: 650px) and (orientation: portrait)').matches;
-		}
+  function isPhonePortrait() {
+    return window.matchMedia("(max-width: 650px) and (orientation: portrait)")
+      .matches;
+  }
 
+  document.addEventListener("astro:page-load", () => {
+    // Select all gallery elements (each gallery container should have the class "GalleryElement")
+    const galleryElements = document.querySelectorAll(".GalleryElement");
 
+    // Only proceed if we found gallery elements
+    if (galleryElements.length === 0) {
+      return; // Exit early if no elements found
+    }
 
+    // Global array to hold the custom data for each gallery
+    let photoswipeCustomData = [];
 
-	document.addEventListener('astro:page-load', () => {
+    //////////////////////////////////////////////////////////
+    /////////////// Loop over each element ///////////////////
+    //////////////////////////////////////////////////////////
+    galleryElements.forEach((galleryEl) => {
+      // Create a new array for this gallery's data items
+      let galleryData = [];
 
-		// Select all gallery elements (each gallery container should have the class "GalleryElement")
-		const galleryElements = document.querySelectorAll(".GalleryElement");
+      // ----- 1. Add a custom element BEFORE the image gallery: Project Name ----- //
+      // Assume the gallery element stores the project title in a data attribute (for example, "data-project-title")
+      const projectTitle =
+        galleryEl.getAttribute("data-gallery-project") ||
+        "Default Project Title";
 
-		// Only proceed if we found gallery elements
-		if (galleryElements.length === 0) {
-			return; // Exit early if no elements found
-		}
+      //style with title slide
+      const portfolioElementNameElement = {
+        html: `<div class="pswp__project-title-slide photoswipeData"><p class="pswp__project-title ">${projectTitle}</p></div>`,
+      };
 
-		// Global array to hold the custom data for each gallery
-		let photoswipeCustomData = [];
+      galleryData.push(portfolioElementNameElement);
 
+      // ----- 2. Add all the image elements ----- //
+      // Here we assume each image link is contained in a child with class "ImageElement"
+      // We use galleryEl.querySelectorAll so we only search within the current gallery.
 
-		//////////////////////////////////////////////////////////
-		/////////////// Loop over each element ///////////////////
-		//////////////////////////////////////////////////////////
-		galleryElements.forEach(galleryEl => {
+      const imageLinks = galleryEl.querySelectorAll(".ImageElement a");
 
-			// Create a new array for this gallery's data items
-			let galleryData = [];
-		
-			// ----- 1. Add a custom element BEFORE the image gallery: Project Name ----- //
-			// Assume the gallery element stores the project title in a data attribute (for example, "data-project-title")
-			const projectTitle = galleryEl.getAttribute('data-gallery-project') || 'Default Project Title';
+      imageLinks.forEach((imgLink) => {
+        const photoswipeImageData = {
+          src: imgLink.getAttribute("href"),
+          width: imgLink.getAttribute("data-pswp-width"),
+          height: imgLink.getAttribute("data-pswp-height"),
+          alt: imgLink.getAttribute("data-description_text"),
+          description_title: imgLink.getAttribute("data-description_title"),
+          description_text: imgLink.getAttribute("data-description_text"),
+          link: imgLink.getAttribute("data-link"),
+        };
 
-			//style with title slide
-			const portfolioElementNameElement = {
-			html: `<div class="pswp__project-title-slide photoswipeData"><p class="pswp__project-title ">${projectTitle}</p></div>`,
-			};
+        galleryData.push(photoswipeImageData);
+      });
 
-			galleryData.push(portfolioElementNameElement);
+      // ----- 3. Add a custom element AFTER the images: ProjectInfoSlideWrapper ----- //
 
+      // get the description
+      const ProjectInfoWrapper = galleryEl.querySelector(".ProjectInfoWrapper");
+      const projectDescription = ProjectInfoWrapper.innerHTML;
 
-			
-			// ----- 2. Add all the image elements ----- //
-			// Here we assume each image link is contained in a child with class "ImageElement"
-			// We use galleryEl.querySelectorAll so we only search within the current gallery.
+      // get the Details
+      const DetailsInfoWrapper = galleryEl.querySelector(".DetailsInfoWrapper");
+      const projectDetails = DetailsInfoWrapper.innerHTML;
 
-			const imageLinks = galleryEl.querySelectorAll(".ImageElement a");
-			
-			imageLinks.forEach(imgLink => {
+      const bracketOpenVEl = galleryEl.querySelector(".bracket-open-v");
+      const bracketOpenV = bracketOpenVEl.innerHTML;
 
-				const photoswipeImageData = {
+      const bracketCloseVEl = galleryEl.querySelector(".bracket-close-v");
+      const bracketCloseV = bracketCloseVEl.innerHTML;
 
-					src:  imgLink.getAttribute('href'),
-					width: imgLink.getAttribute('data-pswp-width'),
-					height: imgLink.getAttribute('data-pswp-height'),
-					alt: imgLink.getAttribute('data-description_text'),
-					description_title: imgLink.getAttribute('data-description_title'),
-					description_text: imgLink.getAttribute('data-description_text'),
-					link: imgLink.getAttribute('data-link')
-					
-
-				}
-
-
-				galleryData.push(photoswipeImageData);
-			});
-		
-
-			// ----- 3. Add a custom element AFTER the images: ProjectInfoSlideWrapper ----- //
-
-			// get the description
-			const ProjectInfoWrapper = galleryEl.querySelector('.ProjectInfoWrapper');
-			const projectDescription = ProjectInfoWrapper.innerHTML;
-
-			// get the Details
-			const DetailsInfoWrapper = galleryEl.querySelector('.DetailsInfoWrapper');
-			const projectDetails = DetailsInfoWrapper.innerHTML;
-
-			const bracketOpenVEl = galleryEl.querySelector('.bracket-open-v');
-			const bracketOpenV = bracketOpenVEl.innerHTML;
-
-			const bracketCloseVEl = galleryEl.querySelector('.bracket-close-v');
-			const bracketCloseV = bracketCloseVEl.innerHTML;
-
-			const projectInfoEl = {
-				html: 	`<div
+      const projectInfoEl = {
+        html: `<div
 						class="pswp__project-info-slide-wrapper photoswipeData keen-slider__slide"
 						>
 
@@ -579,421 +566,368 @@ let globalIndex = 0;      // Ensure initialized
 							${bracketCloseV}
 
 						</div>
-						</div>`
-			};
+						</div>`,
+      };
 
-			if (projectInfoEl) {
-				galleryData.push(projectInfoEl);
-			}
-			
-			// Finally, add this gallery's data array to the global photoswipeCustomData array.
-			photoswipeCustomData.push(galleryData);
-		});
+      if (projectInfoEl) {
+        galleryData.push(projectInfoEl);
+      }
 
-		const flatData = photoswipeCustomData.flat();
-		/* console.log(flatData); */
+      // Finally, add this gallery's data array to the global photoswipeCustomData array.
+      photoswipeCustomData.push(galleryData);
+    });
 
-		const options = {
-			arrowPrevSVG: leftArrowSVGString,
-			arrowNextSVG: leftArrowSVGString,
-			closeSVG: CloseSVGString,
+    const flatData = photoswipeCustomData.flat();
+    /* console.log(flatData); */
 
-			dataSource: flatData,
+    const options = {
+      arrowPrevSVG: leftArrowSVGString,
+      arrowNextSVG: leftArrowSVGString,
+      closeSVG: CloseSVGString,
 
-			initialZoomLevel: `fit`,
-			bgOpacity: 0.95,
-			zoom: false,
-			
-			
-			// to apply styles just to this instance of PhotoSwipe
-			mainClass: 'pswp--custom-bg pswp--custom-icon-colors',
+      dataSource: flatData,
 
-			paddingFn: () => {
-			if (isPhonePortrait()) {
-				return { top: 0, bottom: 0, left: 10, right: 10  }  
-			}
-			else {
-				return { top: 20, bottom: 40, left: 100, right: 100 }
-			};
-			},
+      initialZoomLevel: `fit`,
+      bgOpacity: 0.95,
+      zoom: false,
 
-			showHideAnimationType: 'fade',
+      // to apply styles just to this instance of PhotoSwipe
+      mainClass: "pswp--custom-bg pswp--custom-icon-colors",
 
-			pswpModule: () => import('photoswipe'), // Import the PhotoSwipe module dynamically
-		};
-
-		// Destroy any existing lightbox before creating a new one
-        if (lightbox) {
-            lightbox.destroy();
-            lightbox = null;
+      paddingFn: () => {
+        if (isPhonePortrait()) {
+          return { top: 0, bottom: 0, left: 10, right: 10 };
+        } else {
+          return { top: 20, bottom: 40, left: 100, right: 100 };
         }
+      },
 
-		lightbox = new PhotoSwipeLightbox(options);
+      showHideAnimationType: "fade",
 
-		lightbox.on('uiRegister', function() {
-			lightbox.pswp.ui.registerElement({
-				name: 'custom-caption',
-				order: 9,
-				isButton: false,
-				appendTo: 'wrapper',
-				html: 'Caption text',
-				onInit: (el, pswp) => {
-					lightbox.pswp.on('change', () => {
-                        // Check if currSlide exists before accessing its properties
-                        if (!pswp.currSlide || !pswp.currSlide.data) {
-                            el.innerHTML = '';
-                            return;
-                        }
+      pswpModule: () => import("photoswipe"), // Import the PhotoSwipe module dynamically
+    };
 
-                        // Retrieve the DOM element attached to the current slide
-                        const currSlide = pswp.currSlide.data;
-                        let captionHTML = '';
+    // Destroy any existing lightbox before creating a new one
+    if (lightbox) {
+      lightbox.destroy();
+      lightbox = null;
+    }
 
-                        if (currSlide) {
-                            const description_title = currSlide.description_title;
-                            const description_text = currSlide.description_text;
-                            const link = currSlide.link;
+    lightbox = new PhotoSwipeLightbox(options);
 
-                            if (description_title && link) {
-                                captionHTML = `
+    lightbox.on("uiRegister", function () {
+      lightbox.pswp.ui.registerElement({
+        name: "custom-caption",
+        order: 9,
+        isButton: false,
+        appendTo: "wrapper",
+        html: "Caption text",
+        onInit: (el, pswp) => {
+          lightbox.pswp.on("change", () => {
+            // Check if currSlide exists before accessing its properties
+            if (!pswp.currSlide || !pswp.currSlide.data) {
+              el.innerHTML = "";
+              return;
+            }
+
+            // Retrieve the DOM element attached to the current slide
+            const currSlide = pswp.currSlide.data;
+            let captionHTML = "";
+
+            if (currSlide) {
+              const description_title = currSlide.description_title;
+              const description_text = currSlide.description_text;
+              const link = currSlide.link;
+
+              if (description_title && link) {
+                captionHTML = `
                                 <p><strong>${description_title}</strong></p>
                                 <p>${description_text}</p>
                                 <p><a href="${link}">External Link</a></p>
                                 `;
-                            } else if (description_title) {
-                                captionHTML = `
+              } else if (description_title) {
+                captionHTML = `
                                 <p><strong>${description_title}</strong></p>
                                 <p>${description_text}</p>
                                 `;
-                            }
-                        }
+              }
+            }
 
-                        el.innerHTML = captionHTML || '';
-                    });
-				}
-			});
-		});
+            el.innerHTML = captionHTML || "";
+          });
+        },
+      });
+    });
 
+    lightbox.init(); // Initialize the lightbox
 
-		lightbox.init(); // Initialize the lightbox
-
-		window.pswpLightbox = lightbox;
-
-
-
-	});
-
-		
+    window.pswpLightbox = lightbox;
+  });
 </script>
 
-
-
-
 <style>
-@import "../styles/global.css";
+  @import "../styles/global.css";
 
-.GalleryElementWrapper {
-	scroll-margin-top: var(--padding-desktop);
-	position: relative;
-	display: grid;
-	
-	@media (--bp-mobile) {
-		scroll-margin-top: var(--padding-mobile);
-	}
+  .GalleryElementWrapper {
+    scroll-margin-top: var(--padding-desktop);
+    position: relative;
+    display: grid;
 
-	@media (--bp-tablet) {
-		scroll-margin-top: var(--padding-tablet);
-	}
+    @media (--bp-mobile) {
+      scroll-margin-top: var(--padding-mobile);
+    }
 
-	@media (--bp-desktop-wide) {	
-		scroll-margin-top: var(--padding-desktop-wide);
-	}
-}
+    @media (--bp-tablet) {
+      scroll-margin-top: var(--padding-tablet);
+    }
 
-.gallery-placeholder {
-  position: absolute;
-  overflow: hidden;
-  top: 0;
-  left: 0;
-  width: 100%;   /* fill the width of the parent */
-  height: 100%; /* fill the height of the parent */
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 1;
-  background: var(--bg-color-accent); /* or another fallback background */
-  transition: opacity 0.5s ease;
-}
+    @media (--bp-desktop-wide) {
+      scroll-margin-top: var(--padding-desktop-wide);
+    }
+  }
 
-/* 
+  .gallery-placeholder {
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    width: 100%; /* fill the width of the parent */
+    height: 100%; /* fill the height of the parent */
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    background: var(--bg-color-accent); /* or another fallback background */
+    transition: opacity 0.5s ease;
+  }
+
+  /* 
 .gallery-placeholder img {
 	width: auto;
 	opacity: 0.03;
 } */
 
+  .gallery-placeholder.placeholder-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
 
-.gallery-placeholder.placeholder-hidden {
-	opacity: 0;
-  pointer-events: none;
-}
-
-
-/*Fade */
-.observer {
-	display: grid;
-	height: fit-content;
-}
-.restrain {
-	opacity: 0.1;
-	overflow: hidden;
-	height: 70vh;
-	width: 25vw;
-}
-.fade{
-  opacity: 0.22;
-  filter: contrast(0.66) sepia(.8) grayscale(0.8);
-  transition: all 1s ease;
-  transform: translateY(10%) translateZ(0);
-}
-
-.show {
-  opacity: 1;
-  filter:  contrast(1) brightness(1) sepia(0) grayscale(0);
-  transform: translateY(0);
-}
-
-.hidden {
-	display: none;
-}
-
-
-
-
-
-/* Gallery Styling */
-
-
-
-
-@media (--bp-mobile) {
-
-	.observer:nth-of-type(odd) {
-		grid-column-start: 1; 
-		grid-column-end: span 6; 
-	}
-
-	.observer:nth-of-type(even) {
-		grid-column-start: 2; 
-		grid-column-end: span 6; 
-	}
-
-	.observer {
-		margin-bottom: 5rem;
-	}
-
-}
-
-@media (--bp-tablet) {
+  /*Fade */
   .observer {
-    grid-column-end: span 7;
-    margin-bottom: 5rem;
+    display: grid;
+    height: fit-content;
+  }
+  .restrain {
+    opacity: 0.1;
+    overflow: hidden;
+    height: 70vh;
+    width: 25vw;
+  }
+  .fade {
+    opacity: 0.22;
+    filter: contrast(0.66) sepia(0.8) grayscale(0.8);
+    transition: all 1s ease;
+    transform: translateY(10%) translateZ(0);
   }
 
-  /* Use a repeating pattern instead of explicit positioning */
-  .observer:nth-of-type(3n+1) {
-    grid-column-start: 1;
+  .show {
+    opacity: 1;
+    filter: contrast(1) brightness(1) sepia(0) grayscale(0);
+    transform: translateY(0);
   }
-  
-  .observer:nth-of-type(3n+2) {
-    grid-column-start: 3;
+
+  .hidden {
+    display: none;
   }
-  
-  .observer:nth-of-type(3n) {
-    grid-column-start: 5;
+
+  /* Gallery Styling */
+
+  @media (--bp-mobile) {
+    .observer:nth-of-type(odd) {
+      grid-column-start: 1;
+      grid-column-end: span 6;
+    }
+
+    .observer:nth-of-type(even) {
+      grid-column-start: 2;
+      grid-column-end: span 6;
+    }
+
+    .observer {
+      margin-bottom: 5rem;
+    }
   }
-}
 
-/*Desktop*/
-@media (--bp-desktop) {
+  @media (--bp-tablet) {
+    .observer {
+      grid-column-end: span 7;
+      margin-bottom: 5rem;
+    }
 
-.observer:nth-of-type(1) {
-	grid-column-start: 1; 
-	grid-column-end: span 8; 
-	grid-row-start: 1;
-	
-}
+    /* Use a repeating pattern instead of explicit positioning */
+    .observer:nth-of-type(3n + 1) {
+      grid-column-start: 1;
+    }
 
-	
-.observer:nth-of-type(2) {
-	grid-column-start: 11; 
-	grid-column-end: span 6; 
-	grid-row-start: 8;
+    .observer:nth-of-type(3n + 2) {
+      grid-column-start: 3;
+    }
 
-}
+    .observer:nth-of-type(3n) {
+      grid-column-start: 5;
+    }
+  }
 
-.observer:nth-of-type(3) {
-	grid-column-start: 2;
-	grid-column-end: span 7; 
-	grid-row-start: 15;
-	
-}
-.observer:nth-of-type(4) {
-	grid-column-start: 11;
-	grid-column-end: span 7; 
-	grid-row-start: 22;
+  /*Desktop*/
+  @media (--bp-desktop) {
+    .observer:nth-of-type(1) {
+      grid-column-start: 1;
+      grid-column-end: span 8;
+      grid-row-start: 1;
+    }
 
-}
-.observer:nth-of-type(5) {
-	grid-column-start: 1;
-		grid-column-end: span 7; 
-		grid-row-start: 29;
+    .observer:nth-of-type(2) {
+      grid-column-start: 11;
+      grid-column-end: span 6;
+      grid-row-start: 8;
+    }
 
-}
-.observer:nth-of-type(6) {
-	grid-column-start: 10; 
-	grid-column-end: span 7; 
-	grid-row-start: 36;
+    .observer:nth-of-type(3) {
+      grid-column-start: 2;
+      grid-column-end: span 7;
+      grid-row-start: 15;
+    }
+    .observer:nth-of-type(4) {
+      grid-column-start: 11;
+      grid-column-end: span 7;
+      grid-row-start: 22;
+    }
+    .observer:nth-of-type(5) {
+      grid-column-start: 1;
+      grid-column-end: span 7;
+      grid-row-start: 29;
+    }
+    .observer:nth-of-type(6) {
+      grid-column-start: 10;
+      grid-column-end: span 7;
+      grid-row-start: 36;
+    }
+    .observer:nth-of-type(7) {
+      grid-column-start: 2;
+      grid-column-end: span 6;
+      grid-row-start: 43;
+    }
+    .observer:nth-of-type(8) {
+      grid-column-start: 11;
+      grid-column-end: span 7;
+      grid-row-start: 49;
+    }
+    .observer:nth-of-type(9) {
+      grid-column-start: 1;
+      grid-column-end: span 7;
+      grid-row-start: 56;
+    }
+    .observer:nth-of-type(10) {
+      grid-column-start: 12;
+      grid-column-end: span 6;
+      grid-row-start: 63;
+    }
+    .observer:nth-of-type(11) {
+      grid-column-start: 3;
+      grid-column-end: span 6;
+      grid-row-start: 70;
+    }
+    .observer:nth-of-type(12) {
+      grid-column-start: 12;
+      grid-column-end: span 6;
+      grid-row-start: 77;
+    }
+    .observer:nth-of-type(13) {
+      grid-column-start: 12;
+      grid-column-end: span 6;
+      grid-row-start: 84;
+    }
+    .observer:nth-of-type(14) {
+      grid-column-start: 12;
+      grid-column-end: span 6;
+      grid-row-start: 91;
+    }
+  }
 
-}
-.observer:nth-of-type(7) {
-	grid-column-start: 2; 
-	grid-column-end: span 6; 
-	grid-row-start: 43;
+  /* Desktop Wide */
+  @media (--bp-desktop-wide) {
+    .observer:nth-of-type(1) {
+      grid-column-start: 1;
+      grid-column-end: span 8;
+      grid-row-start: 1;
+    }
 
-}
-.observer:nth-of-type(8) {
-	grid-column-start: 11; 
-	grid-column-end: span 7; 
-	grid-row-start: 49;
+    .observer:nth-of-type(2) {
+      grid-column-start: 11;
+      grid-column-end: span 6;
+      grid-row-start: 9;
+    }
 
-	
-}
-.observer:nth-of-type(9) {
-	grid-column-start: 1; 
-	grid-column-end: span 7; 
-	grid-row-start: 56;
-
-}
-.observer:nth-of-type(10) {
-	grid-column-start: 12; 
-	grid-column-end: span 6; 
-	grid-row-start: 63;
-
-}
-.observer:nth-of-type(11) {
-	grid-column-start: 3; 
-	grid-column-end: span 6; 
-	grid-row-start: 70;
-}
-.observer:nth-of-type(12) {
-	grid-column-start: 12; 
-	grid-column-end: span 6; 
-	grid-row-start: 77;
-}
-.observer:nth-of-type(13) {
-	grid-column-start: 12; 
-	grid-column-end: span 6; 
-	grid-row-start: 84;
-
-}
-.observer:nth-of-type(14) {
-	grid-column-start: 12; 
-	grid-column-end: span 6; 
-	grid-row-start: 91;
-}
-}
-
-/* Desktop Wide */
-@media (--bp-desktop-wide) {
-
-.observer:nth-of-type(1) {
-	grid-column-start: 1; 
-	grid-column-end: span 8; 
-	grid-row-start: 1;
-	
-}
-
-	
-.observer:nth-of-type(2) {
-	grid-column-start: 11; 
-	grid-column-end: span 6; 
-	grid-row-start: 9;
-
-}
-
-.observer:nth-of-type(3) {
-	grid-column-start: 2;
-	grid-column-end: span 7; 
-	grid-row-start: 14;
-	
-}
-.observer:nth-of-type(4) {
-	grid-column-start: 11;
-	grid-column-end: span 7; 
-	grid-row-start: 21;
-
-}
-.observer:nth-of-type(5) {
-	grid-column-start: 1;
-		grid-column-end: span 7; 
-		grid-row-start: 27;
-
-}
-.observer:nth-of-type(6) {
-	grid-column-start: 10; 
-	grid-column-end: span 7; 
-	grid-row-start: 35;
-
-}
-.observer:nth-of-type(7) {
-	grid-column-start: 2; 
-	grid-column-end: span 6; 
-	grid-row-start: 42;
-
-}
-.observer:nth-of-type(8) {
-	grid-column-start: 11; 
-	grid-column-end: span 7; 
-	grid-row-start: 49;
-
-	
-}
-.observer:nth-of-type(9) {
-	grid-column-start: 1; 
-	grid-column-end: span 7; 
-	grid-row-start: 57;
-
-}
-.observer:nth-of-type(10) {
-	grid-column-start: 12; 
-	grid-column-end: span 6; 
-	grid-row-start: 62;
-
-}
-.observer:nth-of-type(11) {
-	grid-column-start: 3; 
-	grid-column-end: span 6; 
-	grid-row-start: 66;
-}
-.observer:nth-of-type(12) {
-	grid-column-start: 12; 
-	grid-column-end: span 6; 
-	grid-row-start: 71;
-}
-.observer:nth-of-type(13) {
-	grid-column-start: 12; 
-	grid-column-end: span 6; 
-	grid-row-start: 78;
-
-}
-.observer:nth-of-type(14) {
-	grid-column-start: 12; 
-	grid-column-end: span 6; 
-	grid-row-start: 86;
-}
-}
-
-
-
+    .observer:nth-of-type(3) {
+      grid-column-start: 2;
+      grid-column-end: span 7;
+      grid-row-start: 14;
+    }
+    .observer:nth-of-type(4) {
+      grid-column-start: 11;
+      grid-column-end: span 7;
+      grid-row-start: 21;
+    }
+    .observer:nth-of-type(5) {
+      grid-column-start: 1;
+      grid-column-end: span 7;
+      grid-row-start: 27;
+    }
+    .observer:nth-of-type(6) {
+      grid-column-start: 10;
+      grid-column-end: span 7;
+      grid-row-start: 35;
+    }
+    .observer:nth-of-type(7) {
+      grid-column-start: 2;
+      grid-column-end: span 6;
+      grid-row-start: 42;
+    }
+    .observer:nth-of-type(8) {
+      grid-column-start: 11;
+      grid-column-end: span 7;
+      grid-row-start: 49;
+    }
+    .observer:nth-of-type(9) {
+      grid-column-start: 1;
+      grid-column-end: span 7;
+      grid-row-start: 57;
+    }
+    .observer:nth-of-type(10) {
+      grid-column-start: 12;
+      grid-column-end: span 6;
+      grid-row-start: 62;
+    }
+    .observer:nth-of-type(11) {
+      grid-column-start: 3;
+      grid-column-end: span 6;
+      grid-row-start: 66;
+    }
+    .observer:nth-of-type(12) {
+      grid-column-start: 12;
+      grid-column-end: span 6;
+      grid-row-start: 71;
+    }
+    .observer:nth-of-type(13) {
+      grid-column-start: 12;
+      grid-column-end: span 6;
+      grid-row-start: 78;
+    }
+    .observer:nth-of-type(14) {
+      grid-column-start: 12;
+      grid-column-end: span 6;
+      grid-row-start: 86;
+    }
+  }
 </style>

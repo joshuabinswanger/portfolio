@@ -1,7 +1,7 @@
 ---
-import Footer from "../components/Footer.astro"
-import { ClientRouter  } from 'astro:transitions';
-import { fade } from 'astro:transitions';
+import Footer from "../components/Footer.astro";
+import { ClientRouter } from "astro:transitions";
+import { fade } from "astro:transitions";
 import Backdrop from "../components/Background.astro";
 import { AstroFont } from "astro-font";
 
@@ -10,73 +10,78 @@ import "../styles/global.css";
 const { title, description } = Astro.props;
 
 const isProd = import.meta.env.PROD;
-
-
 ---
-<html lang="en" style="height: 100%; margin: 0; padding: 0		-webkit-font-smoothing: auto;
--moz-osx-font-smoothing: auto;" transition:animate={fade({ duration: '0.5s' })}>
+
+<html
+  lang="en"
+  style="height: 100%; margin: 0; padding: 0		-webkit-font-smoothing: auto;
+-moz-osx-font-smoothing: auto;"
+  transition:animate={fade({ duration: "0.5s" })}
+>
   <head>
-    
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
- 
+
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
 
     <meta name="description" content={description} />
     <ClientRouter fallback="swap" />
- 
+
     <title>{title}</title>
 
-     <!-- Only include this script when in production -->
-     {isProd && <script defer src="https://cloud.umami.is/script.js" data-website-id="b091eee1-ced0-4ae9-bc1d-033243c323cc"></script>}
-    
+    <!-- Only include this script when in production -->
+    {
+      isProd && (
+        <script
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id="b091eee1-ced0-4ae9-bc1d-033243c323cc"
+        />
+      )
+    }
   </head>
   <body>
-    
     {/* We want the content of each page to go here */}
     <slot />
-
-   
-  </body>
-  <Backdrop transition:animate="none" transition:persist />
+  </body><Backdrop transition:animate="none" transition:persist />
 </html>
 
 <script>
-
   function _calculateScrollbarWidth() {
-    document.documentElement.style.setProperty('--scrollbar-width', (window.innerWidth - document.documentElement.clientWidth) + "px");
+    document.documentElement.style.setProperty(
+      "--scrollbar-width",
+      window.innerWidth - document.documentElement.clientWidth + "px",
+    );
   }
   // recalculate on resize
-  window.addEventListener('resize', _calculateScrollbarWidth, false);
+  window.addEventListener("resize", _calculateScrollbarWidth, false);
   // recalculate on dom load
-  document.addEventListener('DOMContentLoaded', _calculateScrollbarWidth, false); 
+  document.addEventListener(
+    "DOMContentLoaded",
+    _calculateScrollbarWidth,
+    false,
+  );
   // recalculate on load (assets loaded as well)
-  window.addEventListener('load', _calculateScrollbarWidth);
-  document.addEventListener('astro:page-load', _calculateScrollbarWidth)
+  window.addEventListener("load", _calculateScrollbarWidth);
+  document.addEventListener("astro:page-load", _calculateScrollbarWidth);
 </script>
 
-
 <style>
-@import "../styles/global.css";
+  @import "../styles/global.css";
 
+  body {
+    min-height: 100svh;
+    margin: 0;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    font-family: PowerGrotesk-Light;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    max-width: 100vw;
 
-body {
-  min-height: 100svh; 
-  margin: 0; 
-  display: grid; 
-  grid-template-rows: 1fr auto; 
-  font-family: PowerGrotesk-Light;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  max-width: 100vw;
-
-  @media (--bp-mobile){
-    grid-template-rows: 0px 1fr auto; 
+    @media (--bp-mobile) {
+      grid-template-rows: 0px 1fr auto;
+    }
   }
-
-
-}
-
-
 </style>

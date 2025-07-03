@@ -1,14 +1,11 @@
 ---
 import "../styles/global.css";
 
-
 interface Props {
-    
-    margin: string;
-    
-  };
+  margin: string;
+}
 
-  // Get component props from Astro.props
+// Get component props from Astro.props
 const { margin } = Astro.props;
 
 let wrapperClass;
@@ -18,40 +15,33 @@ if (margin === "yes") {
 } else {
   wrapperClass = "nomargin";
 }
-
-
 ---
 
 <div id="DoubleImageWrapper" class:list={wrapperClass}>
-
-    <slot />
-
+  <slot />
 </div>
 
 <style>
-@import "../styles/global.css";
+  @import "../styles/global.css";
 
-#DoubleImageWrapper {
+  #DoubleImageWrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-column-gap: 0.5rem;
-    
-    @media (--bp-mobile){
-        grid-template-columns: 1fr;
+
+    @media (--bp-mobile) {
+      grid-template-columns: 1fr;
     }
 
-    @media (--bp-desktop-wide){
-        grid-column-gap: 2rem;
+    @media (--bp-desktop-wide) {
+      grid-column-gap: 2rem;
     }
-}
+  }
 
-@media (--bp-mobile) {
-
+  @media (--bp-mobile) {
     .margin {
-    margin-left: 2rem;
-    margin-right: 2rem;
-
-}
-
-}
+      margin-left: 2rem;
+      margin-right: 2rem;
+    }
+  }
 </style>
