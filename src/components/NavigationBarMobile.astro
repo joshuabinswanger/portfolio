@@ -87,12 +87,201 @@ const { personal } = Astro.props;
       display: block;
       height: 100%;
 
-      @media (--bp-mobile) {
-        margin-top: 32px;
-        display: block;
-        height: 36px;
-        width: 144px;
-        padding-left: 2px;
+      <!-- Projects submenu -->
+      <a
+        id="index"
+        class:list={["main-button", "button", "animation"]}
+        href="/project-index/"
+        data-href="/project-index/"
+        data-animation="out">
+        Index
+      </a>
+
+      <BracketMiddleH />
+      
+      <!-- Menu item: Information -->
+      <a 
+        class:list={["main-button", "button", "animation"]} 
+        href="/info/"
+        data-href="/info/"
+        data-animation="out">
+        Info
+      </a>
+
+      <BracketCloseH />
+    </div>
+  </div>
+</nav>
+
+<style>
+@import "../styles/global.css";
+
+#NavBarMobile {
+  display: block;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  width: 100dvw;
+}
+
+#Logo {
+  display: block;
+  height: 100%;
+
+  @media (--bp-mobile){
+    margin-top: 32px;
+    display: block;
+    height: 36px;
+    width: 144px;
+    padding-left: 2px;
+  }
+}
+
+#Image {
+  height: min-content;
+  width: 100%;
+}
+
+#Menu {
+  position: fixed;
+  bottom: 0;
+  left: 2px;
+  right: 2px;
+  background-color: var(--bg-color);
+  z-index: 1001;
+  padding-bottom: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+#MainWrapper {
+  height: 52px;
+  display: grid;
+  grid-gap: 0;
+  grid-template-columns: 12px 1fr 24px 1fr 24px 1fr 12px;
+  justify-items: center;
+  z-index: 1002;
+  transition: grid-template-columns 0.6s ease;
+}
+
+/* Main button styling and active animation */
+.button {
+  position: relative;
+  overflow: visible;
+  width: 100%;
+  transition: color 0.3s ease 0.15s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button::after {
+  content: "";
+  position: absolute;
+  left: -12px;
+  bottom: 0;
+  width: calc(100% + 24px);
+  height: 0%;
+  background-color: black;
+  transition: height 0.6s ease;
+  z-index: -1;
+  transform-origin: bottom;
+  will-change: height;
+}
+
+.button.active {
+  color: var(--bg-color);
+}
+
+.button.active::after {
+  height: 100%;
+}
+
+/* General main-button styling */
+.main-button {
+  font-size: var(--font-size-dekstop-h1);
+  font-family: PowerGrotesk-Light;
+  font-weight: 200;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  cursor: pointer;
+
+  @media (--bp-mobile) {
+    font-size: var(--font-size-mobile-h1);
+  }
+  @media (--bp-tablet) {
+    font-size: var(--font-size-tablet-h1);
+  }
+  @media (--bp-desktop-wide) {
+    font-size: var(--font-size-desktop-wide-h1);
+  }
+}
+
+a {
+  text-decoration: none;
+  color: black;
+  width: 100%;
+  height: 100%;
+}
+</style>
+
+<script>
+  import { navigate } from 'astro:transitions/client';
+
+  // Update visual state (add/remove active class)
+  function updateAnimationState(buttons) {
+    setTimeout(() => {
+      buttons.forEach(btn => {
+        if (!btn) return;
+        if (btn.getAttribute('data-animation') === "in") {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }, 500);
+  }
+
+  // Handle button click for all buttons
+  function handleButtonClick(clickedBtn, allButtonsNodeList) {
+    if (!clickedBtn || !allButtonsNodeList) return;
+
+    const allButtons = Array.from(allButtonsNodeList);
+    const mainButtons = allButtons.filter(btn => btn && btn.id !== 'Logo'); 
+
+    // Special check: if clicked is Logo
+    if (clickedBtn.id === "Logo") {
+      const portfolioBtn = allButtons.find(btn => btn && btn.id === 'portfolio'); 
+
+      // Deactivate all MAIN buttons
+      mainButtons.forEach(btn => {
+        if (btn) btn.setAttribute('data-animation', 'out');
+      });
+
+      // Activate portfolio button
+      if (portfolioBtn) {
+        portfolioBtn.setAttribute('data-animation', 'in');
+      }
+      
+      // Ensure logo itself remains visually 'out'
+      clickedBtn.setAttribute('data-animation', 'out'); 
+
+    } else { // Clicked a main button (portfolio, projects, info)
+      
+      // Only proceed if the clicked button is currently "out"
+      if (clickedBtn.getAttribute('data-animation') === "out") {
+        // Deactivate other MAIN buttons that are currently "in"
+        mainButtons.forEach(btn => {
+          if (btn && btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
+            btn.setAttribute('data-animation', "out");
+          }
+        });
+        // Activate the clicked button
+        clickedBtn.setAttribute('data-animation', "in");
       }
     }
 

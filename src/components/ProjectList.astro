@@ -187,53 +187,71 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
         if (listEl.classList.contains("open")) {
           listEl.classList.remove("open");
 
-          setTimeout(() => {
-            sliderContainer.style.display = "";
-          }, 500);
-        } else {
-          sliderContainer.style.display = "block";
-
-          // Otherwise, open the element
-          listEl.classList.add("open");
-
-          if (
-            sliderContainer &&
-            !sliderContainer.dataset.keenSliderInitialized
-          ) {
-            var slider = new KeenSlider(sliderContainer, {
-              loop: true,
-              slides: { perView: 3, spacing: 50 },
-              breakpoints: {
-                "(max-width: 1119px)": {
-                  slides: { perView: 2, spacing: 40 },
-                },
-
-                "(min-width: 1201px)": {
-                  slides: { perView: 3, spacing: 80 },
-                },
-              },
-            });
-
-            // Add click event listeners to the arrow buttons
-            const arrowLeft = listEl.querySelector(".arrow-left");
-            const arrowRight = listEl.querySelector(".arrow-right");
-
-            if (arrowLeft) {
-              arrowLeft.addEventListener("click", () => {
-                slider.prev();
-              });
-            }
-
-            if (arrowRight) {
-              arrowRight.addEventListener("click", () => {
-                slider.next();
-              });
-            }
-
-            sliderContainer.dataset.keenSliderInitialized = "true";
-          }
+      // First, close all other open sliders
+/*       listElements.forEach(el => {
+        if (el !== listEl && el.classList.contains('open')) {
+          // Remove the open state (this triggers the CSS transition)
+          el.classList.remove('open');
         }
-      });
+      }); */
+
+      // Toggle the clicked slider:
+      if (listEl.classList.contains('open')) {
+
+      listEl.classList.remove('open');
+
+      setTimeout(() => {
+        sliderContainer.style.display = "";
+      }, 500);
+
+
+      } else {
+
+      sliderContainer.style.display = "block";
+
+      // Otherwise, open the element
+      listEl.classList.add('open');
+
+      if (sliderContainer && !sliderContainer.dataset.keenSliderInitialized) {
+      
+        var slider = new KeenSlider(sliderContainer, {
+          loop: true,
+          slides: { perView: 3, spacing: 50 },
+          breakpoints: {
+
+            '(max-width: 1119px)': {
+            slides: { perView: 2, spacing: 40 },
+            },
+
+            '(min-width: 1201px)': {
+            slides: { perView: 3, spacing: 80 },
+            },
+          }
+          },
+        );
+
+        
+        // Add click event listeners to the arrow buttons
+        const arrowLeft = listEl.querySelector('.arrow-left');
+        const arrowRight = listEl.querySelector('.arrow-right');
+      
+        if (arrowLeft) {
+          arrowLeft.addEventListener('click', () => {
+          slider.prev();
+          });
+        }
+      
+        if (arrowRight) {
+          arrowRight.addEventListener('click', () => {
+          slider.next();
+          });
+        }
+
+        sliderContainer.dataset.keenSliderInitialized = "true";
+      }
+
+
+      }
     });
   });
 

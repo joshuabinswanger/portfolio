@@ -73,14 +73,91 @@ const { personal = false } = Astro.props;
   <script>
     import { navigate } from "astro:transitions/client";
 
-    // Update visual state (add/remove active class)
-    function updateAnimationState(buttons) {
-      setTimeout(() => {
-        buttons.forEach((btn) => {
-          if (btn.getAttribute("data-animation") === "in") {
-            btn.classList.add("active");
-          } else {
-            btn.classList.remove("active");
+    <BracketOpenV />
+
+    <a
+    id="portfolio"
+    class:list={["main-button", "button", "animation"]}
+    href="/"
+    data-href="/"
+    data-animation="out">
+    Portfolio
+  </a>
+
+    <BracketMiddleV />
+
+    <a
+      id="index"
+      class:list={["main-button", "button", "animation"]}
+      href="/project-index/"
+      data-href="/project-index/"
+      data-animation="out">
+      Index
+    </a>
+
+    <BracketMiddleV />
+
+    <a
+      id="info"
+      class:list={["main-button", "button", "animation"]}
+      href="/info/"
+      data-href="/info/"
+      data-animation="out">
+      Info
+    </a>
+
+    <BracketCloseV />
+  </div>
+</nav>
+
+
+<script>
+  import { navigate } from 'astro:transitions/client';
+
+  // Update visual state (add/remove active class)
+  function updateAnimationState(buttons) {
+    setTimeout(() => {
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-animation') === "in") {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }, 500);
+  }
+
+  // Handle button click for all buttons 
+  function handleButtonClick(clickedBtn, allButtonsNodeList) {
+    // Convert NodeList to Array for easier filtering if needed
+    const allButtons = Array.from(allButtonsNodeList); 
+    const mainButtons = allButtons.filter(btn => btn.id !== 'Logo'); // Exclude logo for some logic
+
+    // Special check: if clicked is Logo
+    if (clickedBtn.id === "Logo") {
+      const portfolioBtn = allButtons.find(btn => btn.id === 'portfolio'); // Find portfolio among all buttons
+
+      // Deactivate all MAIN buttons
+      mainButtons.forEach(btn => {
+        btn.setAttribute('data-animation', 'out');
+      });
+
+      // Activate portfolio button
+      if (portfolioBtn) {
+        portfolioBtn.setAttribute('data-animation', 'in');
+      }
+      
+      // Ensure logo itself remains visually 'out' (or handle its state if it needs one)
+      clickedBtn.setAttribute('data-animation', 'out'); 
+
+    } else { // Clicked a main button (portfolio, projects, info)
+      
+      // Only proceed if the clicked button is currently "out"
+      if (clickedBtn.getAttribute('data-animation') === "out") {
+        // Deactivate other MAIN buttons that are currently "in"
+        mainButtons.forEach(btn => {
+          if (btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
+            btn.setAttribute('data-animation', "out");
           }
         });
       }, 500);
