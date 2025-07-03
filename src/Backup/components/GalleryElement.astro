@@ -704,10 +704,9 @@ const instanceId = Math.random().toString(36).slice(2, 11); // Generate a unique
     width: 100%;
     opacity: 0;
     height: fit-content;
-    grid-template-columns: 1.5ch minmax(
-        min-content,
-        3fr
-      ) 3ch 2fr 3ch 3.5ch 1.5ch;
+    grid-template-columns:
+      1.5ch minmax(min-content, 3fr)
+      3ch 2fr 3ch 3.5ch 1.5ch;
     justify-content: center;
     align-items: center;
     transition: opacity 1.5s ease-in;
