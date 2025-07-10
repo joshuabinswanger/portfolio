@@ -153,10 +153,12 @@ const imagesAmount = galleryImages.length;
             data-index={computedIndex}
           >
             <div class:list={"ImageInfo"}>
-              <div class:list={"ImageInfoWrapper"}>
-                <div id="spacer" />
+
+              <div class:list={"ImageDescriptionWrapper"}>
+
                 <BracketOpenV strokewidth="0.5px" />
-                <div class:list={"ImageDescriptionWrapper"}>
+
+                <div class:list={"image-description"}>
                   {image.data.metadata && (
                     <>
                       <p>
@@ -168,9 +170,29 @@ const imagesAmount = galleryImages.length;
                     </>
                   )}
                 </div>
+
                 <BracketCloseV strokewidth="0.5px" />
-                <div id="spacer" />
+
+                 <div class:list={["image-info-project"]}>
+                    <BracketOpenV strokewidth="0.5px" />
+
+                    <div class:list={"ProjectInfoWrapper"}>
+                      <Fragment
+                        set:html={marked.parse(galleryProject.data.projectDescription)}
+                      />
+                    </div>
+
+                    <div class:list={"DetailsInfoWrapper"}>
+                      <Fragment set:html={marked.parse(galleryProject.data.credits)} />
+                    </div>
+
+                    <BracketCloseV strokewidth="0.5px" />
+
+                  </div>
+
+
               </div>
+
             </div>
 
             <div class:list={"Filter"} />
@@ -336,14 +358,7 @@ const imagesAmount = galleryImages.length;
 
   /*   Image Info */
 
-  .ImageInfoWrapper {
-    display: grid;
-    width: min(88%, 66ch);
-    height: 90%;
-    grid-template-rows: 1fr min-content min-content min-content 1fr;
-    align-items: center;
-  }
-
+  
   .ImageInfo {
     position: absolute;
     top: 0;
@@ -355,35 +370,46 @@ const imagesAmount = galleryImages.length;
     display: grid;
     justify-items: center;
     align-items: center;
-
+    
     pointer-events: none; /* Prevent interaction with the description if needed */
     background-color: var(--bg-color-trans); /* Example style */
-
+    
     /* Start with no blur (initial state) */
     backdrop-filter: blur(0px);
-
+    
     /* Add transition for backdrop-filter */
     transition:
       backdrop-filter ease-in-out 0.3s,
       opacity 0.3s ease-in-out;
+      
+      font-size: var(--font-size-dekstop);
+      hyphens: auto;
+      
+      overflow: auto;
 
-    font-size: var(--font-size-dekstop);
-    hyphens: auto;
-
-    overflow: hidden;
-
-    @media (--bp-mobile) {
-      font-size: var(--font-size-mobile);
+      z-index: 1111;
+      
+      @media (--bp-mobile) {
+        font-size: var(--font-size-mobile);
+      }
+      
+      @media (--bp-tablet) {
+        font-size: var(--font-size-tablet);
+      }
+      
+      @media (--bp-desktop-wide) {
+        font-size: var(--font-size-desktop-wide);
+        line-height: 1.33;
     }
-
-    @media (--bp-tablet) {
-      font-size: var(--font-size-tablet);
-    }
-
-    @media (--bp-desktop-wide) {
-      font-size: var(--font-size-desktop-wide);
-      line-height: 1.33;
-    }
+  }
+  
+  .ImageDescriptionWrapper {
+    display: grid;
+    width: min(88%, 66ch);
+    height: 90%;
+    grid-template-rows: min-content min-content min-content;
+    align-items: center;
+    align-content: space-around;
   }
 
   .InfoVisible {
@@ -394,11 +420,13 @@ const imagesAmount = galleryImages.length;
       backdrop-filter 0.3s ease;
   }
 
-  .ImageDescriptionWrapper,
+  .image-description,
   .ProjectInfoWrapper,
   .DetailsInfoWrapper {
     width: 80%; /* Ensure it takes full width */
     justify-self: center; /* Centers items horizontally */
+    margin-top: -24px;
+    margin-bottom: -24px;
 
     span {
       font-family: PowerGrotesk-Medium;

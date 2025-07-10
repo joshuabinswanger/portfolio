@@ -24,7 +24,7 @@ const { personal } = Astro.props;
     data-animation="out"
   >
     <Image src={RhizomLogo} id="Image" alt="Rhizom Logo" loading="eager" />
-
+  </a>
     <div id="Menu">
       <div id="MainWrapper">
         <BracketOpenH />
@@ -68,7 +68,7 @@ const { personal } = Astro.props;
         <BracketCloseH />
       </div>
     </div>
-  </a>
+
 </nav>
 
 <style>
@@ -105,8 +105,8 @@ const { personal } = Astro.props;
 #Menu {
   position: fixed;
   bottom: 0;
-  left: 2px;
-  right: 2px;
+  left: 0px;
+  right: 0px;
   background-color: var(--bg-color);
   z-index: 1001;
   padding-bottom: 2px;
