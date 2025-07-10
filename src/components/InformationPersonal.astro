@@ -65,7 +65,7 @@ links.sort((a, b) => a.data.sortOrder - b.data.sortOrder);
     display: grid;
     align-items: center;
     grid-template-columns: 16px 1fr 1fr 1fr 16px;
-    grid-template-rows: 2fr;
+    grid-template-rows: min-content min-content;
     column-gap: 16px;
     margin-top: calc(var(--padding-desktop));
     max-height: calc(60vh - var(--padding-desktop));
@@ -96,6 +96,8 @@ links.sort((a, b) => a.data.sortOrder - b.data.sortOrder);
   #AboutText {
     grid-column-start: 2;
     grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 2;
     max-width: 111ch;
     max-height: min-content;
     justify-self: left;
@@ -120,4 +122,21 @@ links.sort((a, b) => a.data.sortOrder - b.data.sortOrder);
     color: black;
     text-decoration: underline;
   }
+
+  #portfolio-link {
+    grid-column-start: 2;
+    grid-column-end: 4;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    align-self: start;
+
+        @media (--bp-mobile) {
+      grid-column-start: 1;
+      grid-column-end: 3;
+      grid-row-start: 2;
+      grid-row-end: 3;
+    }
+  }
+
+  
 </style>
