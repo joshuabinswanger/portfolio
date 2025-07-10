@@ -86,34 +86,34 @@ const linkUrl = to ?? imagePath;
     aspect-ratio: ${aspectratio}
     `}
   />
+</a>
 
-  <style define:vars={{ margin_top }}>
-    @import "../styles/global.css";
+<style>
+  @import "../styles/global.css";
 
-    /*Fade */
+  /*Fade */
 
-    .hidden {
-      opacity: 0.22;
-      filter: contrast(0.66) sepia(0.8) blur(2px) grayscale(0.8);
-      transition: all 1s ease;
-      transform: translateY(10%);
-    }
+  .hidden {
+    opacity: 0.22;
+    filter: contrast(0.66) sepia(0.8) blur(2px) grayscale(0.8);
+    transition: all 1s ease;
+    transform: translateY(10%);
+  }
 
-    .show {
-      opacity: 1;
-      filter: contrast(1) brightness(1) sepia(0) blur(0px) grayscale(0);
-      transform: translateY(0);
-    }
+  .show {
+    opacity: 1;
+    filter: contrast(1) brightness(1) sepia(0) blur(0px) grayscale(0);
+    transform: translateY(0);
+  }
 
-    #Image {
-      pointer-events: auto;
-    }
+  #Image {
+    pointer-events: auto;
+  }
 
-    a {
-      height: 100%;
-    }
-    img {
-      vertical-align: top; /* or middle, top, depending on the desired effect */
-    }
-  </style></a
->
+  a {
+    height: 100%;
+  }
+  img {
+    vertical-align: top; /* or middle, top, depending on the desired effect */
+  }
+</style>
