@@ -28,70 +28,30 @@ const { personal = false } = Astro.props;
     data-animation="out"
   >
     <Image src={RhizomLogo} id="Image" alt="Rhizom Logo" loading="eager" />
-
-    <div id="MainWrapper">
-      <BracketOpenV />
-
-      <a
-        id="portfolio"
-        class:list={["main-button", "button", "animation"]}
-        href="/"
-        data-href="/"
-        data-animation="out"
-      >
-        Portfolio
-      </a>
-
-      <BracketMiddleV />
-
-      <a
-        id="projects"
-        class:list={["main-button", "button", "animation"]}
-        href="/projects/"
-        data-href="/projects/"
-        data-animation="out"
-      >
-        Projects
-      </a>
-
-      <BracketMiddleV />
-
-      <a
-        id="info"
-        class:list={["main-button", "button", "animation"]}
-        href="/info/"
-        data-href="/info/"
-        data-animation="out"
-      >
-        Info
-      </a>
-
-      <BracketCloseV />
-    </div>
   </a>
 
-  <script>
-    import { navigate } from "astro:transitions/client";
-
+  <div id="MainWrapper">
     <BracketOpenV />
 
     <a
-    id="portfolio"
-    class:list={["main-button", "button", "animation"]}
-    href="/"
-    data-href="/"
-    data-animation="out">
-    Portfolio
-  </a>
+      id="portfolio"
+      class:list={["main-button", "button", "animation"]}
+      href="/"
+      data-href="/"
+      data-animation="out"
+    >
+      Portfolio
+    </a>
 
     <BracketMiddleV />
 
     <a
-      id="index"
+      id="projects"
       class:list={["main-button", "button", "animation"]}
       href="/project-index/"
       data-href="/project-index/"
-      data-animation="out">
+      data-animation="out"
+    >
       Index
     </a>
 
@@ -102,14 +62,14 @@ const { personal = false } = Astro.props;
       class:list={["main-button", "button", "animation"]}
       href="/info/"
       data-href="/info/"
-      data-animation="out">
+      data-animation="out"
+    >
       Info
     </a>
 
     <BracketCloseV />
   </div>
 </nav>
-
 
 <script>
   import { navigate } from 'astro:transitions/client';
@@ -127,15 +87,14 @@ const { personal = false } = Astro.props;
     }, 500);
   }
 
-  // Handle button click for all buttons 
+  // Handle button click for all buttons
   function handleButtonClick(clickedBtn, allButtonsNodeList) {
-    // Convert NodeList to Array for easier filtering if needed
-    const allButtons = Array.from(allButtonsNodeList); 
-    const mainButtons = allButtons.filter(btn => btn.id !== 'Logo'); // Exclude logo for some logic
+    const allButtons = Array.from(allButtonsNodeList);
+    const mainButtons = allButtons.filter(btn => btn.id !== 'Logo');
 
     // Special check: if clicked is Logo
     if (clickedBtn.id === "Logo") {
-      const portfolioBtn = allButtons.find(btn => btn.id === 'portfolio'); // Find portfolio among all buttons
+      const portfolioBtn = allButtons.find(btn => btn.id === 'portfolio');
 
       // Deactivate all MAIN buttons
       mainButtons.forEach(btn => {
@@ -147,10 +106,10 @@ const { personal = false } = Astro.props;
         portfolioBtn.setAttribute('data-animation', 'in');
       }
       
-      // Ensure logo itself remains visually 'out' (or handle its state if it needs one)
-      clickedBtn.setAttribute('data-animation', 'out'); 
-
-    } else { // Clicked a main button (portfolio, projects, info)
+      // Ensure logo itself remains visually 'out'
+      clickedBtn.setAttribute('data-animation', 'out');
+    } else {
+      // Clicked a main button (portfolio, projects, info)
       
       // Only proceed if the clicked button is currently "out"
       if (clickedBtn.getAttribute('data-animation') === "out") {
@@ -160,260 +119,212 @@ const { personal = false } = Astro.props;
             btn.setAttribute('data-animation', "out");
           }
         });
-      }, 500);
-    }
-
-    // Handle button click for all buttons
-    function handleButtonClick(clickedBtn, allButtonsNodeList) {
-      // Convert NodeList to Array for easier filtering if needed
-      const allButtons = Array.from(allButtonsNodeList);
-      const mainButtons = allButtons.filter((btn) => btn.id !== "Logo"); // Exclude logo for some logic
-
-      // Special check: if clicked is Logo
-      if (clickedBtn.id === "Logo") {
-        const portfolioBtn = allButtons.find((btn) => btn.id === "portfolio"); // Find portfolio among all buttons
-
-        // Deactivate all MAIN buttons
-        mainButtons.forEach((btn) => {
-          btn.setAttribute("data-animation", "out");
-        });
-
-        // Activate portfolio button
-        if (portfolioBtn) {
-          portfolioBtn.setAttribute("data-animation", "in");
-        }
-
-        // Ensure logo itself remains visually 'out' (or handle its state if it needs one)
-        clickedBtn.setAttribute("data-animation", "out");
-      } else {
-        // Clicked a main button (portfolio, projects, info)
-
-        // Only proceed if the clicked button is currently "out"
-        if (clickedBtn.getAttribute("data-animation") === "out") {
-          // Deactivate other MAIN buttons that are currently "in"
-          mainButtons.forEach((btn) => {
-            if (
-              btn !== clickedBtn &&
-              btn.getAttribute("data-animation") === "in"
-            ) {
-              btn.setAttribute("data-animation", "out");
-            }
-          });
-          // Activate the clicked button
-          clickedBtn.setAttribute("data-animation", "in");
-        }
+        // Activate the clicked button
+        clickedBtn.setAttribute('data-animation', 'in');
       }
-
-      // --- IMPORTANT ---
-      // Update the visual state for ALL buttons AFTER any changes
-      updateAnimationState(allButtonsNodeList);
-      // --- IMPORTANT ---
-
-      // Navigation is handled by the browser for <a> tags with Astro View Transitions
     }
 
-    // Attach event listeners to buttons
-    function createEventListeners(buttons) {
-      buttons.forEach((btn) => {
-        // Basic check to prevent adding multiple listeners if page-load fires rapidly
-        if (!btn.hasClickListener) {
-          btn.addEventListener("click", (event) => {
-            // Let Astro/browser handle navigation, just update state
-            // event.preventDefault(); // Usually NOT needed
+    // Update the visual state for ALL buttons AFTER any changes
+    updateAnimationState(allButtonsNodeList);
+  }
 
-            // Pass event.currentTarget and the NodeList the listener was added to
-            handleButtonClick(event.currentTarget, buttons);
-          });
-          btn.hasClickListener = true; // Mark listener as added
-        }
-      });
-    }
-
-    // On page load, update visual state and attach click listeners
-    document.addEventListener("astro:page-load", () => {
-      const navBar = document.getElementById("NavBarDesktop");
-      if (!navBar) return;
-
-      // Select the Logo (#Logo) AND the direct children 'a.animation' of MainWrapper
-      const allNavButtons = navBar.querySelectorAll(
-        "#Logo, #MainWrapper > a.animation",
-      );
-
-      if (allNavButtons.length === 0) return;
-
-      // --- START: URL Matching Logic ---
-      let isActiveAlreadySet = false;
-
-      //check if already an active a element
-      allNavButtons.forEach((btn) => {
-        if (
-          btn.getAttribute("data-animation") === "in" ||
-          btn.classList.contains("active")
-        ) {
-          // Check class too
-          isActiveAlreadySet = true;
-        }
-      });
-
-      if (!isActiveAlreadySet) {
-        const currentPath = window.location.pathname;
-        let foundMatch = false;
-        let portfolioButton = null;
-
-        allNavButtons.forEach((btn) => {
-          const buttonHref = btn.getAttribute("data-href");
-
-          // Set portfolio button reference
-          if (buttonHref === "/") {
-            portfolioButton = btn;
-          }
-
-          //check if we pressed on the same button
-          if (buttonHref === currentPath) {
-            allNavButtons.forEach((otherBtn) =>
-              otherBtn.setAttribute("data-animation", "out"),
-            );
-            btn.setAttribute("data-animation", "in");
-            foundMatch = true;
-          }
+  // Attach event listeners to buttons
+  function createEventListeners(buttons) {
+    buttons.forEach((btn) => {
+      // Basic check to prevent adding multiple listeners if page-load fires rapidly
+      if (!btn.hasClickListener) {
+        btn.addEventListener("click", (event) => {
+          // Pass event.currentTarget and the NodeList the listener was added to
+          handleButtonClick(event.currentTarget, buttons);
         });
-
-        //if pressed on a different route
-        if (!foundMatch && currentPath !== "/" && portfolioButton) {
-          allNavButtons.forEach((btn) =>
-            btn.setAttribute("data-animation", "out"),
-          );
-          portfolioButton.setAttribute("data-animation", "in");
-        }
+        btn.hasClickListener = true; // Mark listener as added
       }
-      // --- END: URL Matching Logic ---
-
-      // Initial visual state update based on URL matching or persisted state
-      updateAnimationState(allNavButtons);
-
-      // Attach listeners to ALL selected buttons (Logo + Main buttons)
-      createEventListeners(allNavButtons);
     });
-  </script>
+  }
 
-  <style>
-    @import "../styles/global.css";
+  // On page load, update visual state and attach click listeners
+  document.addEventListener("astro:page-load", () => {
+    const navBar = document.getElementById("NavBarDesktop");
+    if (!navBar) return;
 
-    #NavBarDesktop {
-      position: sticky;
-      height: min-content;
-      display: grid;
-      justify-items: center;
+    // Select the Logo (#Logo) AND the direct children 'a.animation' of MainWrapper
+    const allNavButtons = navBar.querySelectorAll(
+      "#Logo, #MainWrapper > a.animation",
+    );
+
+    if (allNavButtons.length === 0) return;
+
+    // --- START: URL Matching Logic ---
+    let isActiveAlreadySet = false;
+
+    //check if already an active a element
+    allNavButtons.forEach((btn) => {
+      if (
+        btn.getAttribute("data-animation") === "in" ||
+        btn.classList.contains("active")
+      ) {
+        isActiveAlreadySet = true;
+      }
+    });
+
+    if (!isActiveAlreadySet) {
+      const currentPath = window.location.pathname;
+      let foundMatch = false;
+      let portfolioButton = null;
+
+      allNavButtons.forEach((btn) => {
+        const buttonHref = btn.getAttribute("data-href");
+
+        // Set portfolio button reference
+        if (buttonHref === "/") {
+          portfolioButton = btn;
+        }
+
+        //check if we pressed on the same button
+        if (buttonHref === currentPath) {
+          allNavButtons.forEach((otherBtn) =>
+            otherBtn.setAttribute("data-animation", "out"),
+          );
+          btn.setAttribute("data-animation", "in");
+          foundMatch = true;
+        }
+      });
+
+      //if pressed on a different route
+      if (!foundMatch && currentPath !== "/" && portfolioButton) {
+        allNavButtons.forEach((btn) =>
+          btn.setAttribute("data-animation", "out"),
+        );
+        portfolioButton.setAttribute("data-animation", "in");
+      }
+    }
+    // --- END: URL Matching Logic ---
+
+    // Initial visual state update based on URL matching or persisted state
+    updateAnimationState(allNavButtons);
+
+    // Attach listeners to ALL selected buttons (Logo + Main buttons)
+    createEventListeners(allNavButtons);
+  });
+</script>
+
+<style>
+  @import "../styles/global.css";
+
+  #NavBarDesktop {
+    position: sticky;
+    height: min-content;
+    display: grid;
+    justify-items: center;
+    grid-template-rows: 40px 1fr;
+    top: var(--padding-top-desktop);
+    row-gap: 4px;
+
+    @media (--bp-mobile) {
+      display: none;
+    }
+    @media (--bp-tablet) {
+      top: var(--padding-top-tablet);
+      grid-template-rows: 36px 1fr;
+    }
+    @media (--bp-desktop-wide) {
+      top: var(--padding-top-desktop-wide);
       grid-template-rows: 40px 1fr;
-      top: var(--padding-top-desktop);
-      row-gap: 4px;
-
-      @media (--bp-mobile) {
-        display: none;
-      }
-      @media (--bp-tablet) {
-        top: var(--padding-top-tablet);
-        grid-template-rows: 36px 1fr;
-      }
-      @media (--bp-desktop-wide) {
-        top: var(--padding-top-desktop-wide);
-        grid-template-rows: 40px 1fr;
-      }
     }
+  }
 
-    * {
-      letter-spacing: 0.8px;
-    }
+  * {
+    letter-spacing: 0.8px;
+  }
 
-    #Logo {
+  #Logo {
+    display: block;
+    height: 100%;
+
+    @media (--bp-mobile) {
+      margin-top: 32px;
       display: block;
-      height: 100%;
-
-      @media (--bp-mobile) {
-        margin-top: 32px;
-        display: block;
-        height: 36px;
-        width: 144px;
-        padding-left: 2px;
-      }
+      height: 36px;
+      width: 144px;
+      padding-left: 2px;
     }
+  }
 
-    #Image {
-      height: min-content;
-      width: 100%;
+  #Image {
+    height: min-content;
+    width: 100%;
+  }
+
+  #MainWrapper {
+    width: 100%;
+    display: grid;
+    /* Restored original grid rows for 3 main items */
+    grid-template-rows: 0 48px 0 48px 0 48px 0;
+    transition: grid-template-rows 0.6s ease; /* Changed from columns to rows */
+
+    @media (--bp-tablet) {
+      grid-template-rows: 0 40px 0 40px 0 40px 0;
     }
+  }
 
-    #MainWrapper {
-      width: 100%;
-      display: grid;
-      /* Restored original grid rows for 3 main items */
-      grid-template-rows: 0 48px 0 48px 0 48px 0;
-      transition: grid-template-rows 0.6s ease; /* Changed from columns to rows */
+  .MenuItems {
+    height: min-content;
+    font-family: PowerGrotesk-Light;
+    font-weight: 200;
+  }
 
-      @media (--bp-tablet) {
-        grid-template-rows: 0 40px 0 40px 0 40px 0;
-      }
+  .button {
+    height: 100%;
+    color: black;
+    align-content: center;
+    align-items: center;
+    z-index: 1001;
+    transition: color 0.3s ease 0.15s;
+    position: relative; /* Needed for ::before positioning */
+    display: flex; /* Ensure flex properties work */
+    justify-content: center; /* Center text horizontally */
+    align-items: center; /* Center text vertically */
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    background: none;
+    border: none;
+    pointer-events: auto;
+    font-size: var(--font-size-dekstop-h1);
+    margin: 0;
+    height: 100%;
+
+    @media (--bp-mobile) {
+      font-size: var(--font-size-mobile-h1);
     }
-
-    .MenuItems {
-      height: min-content;
-      font-family: PowerGrotesk-Light;
-      font-weight: 200;
+    @media (--bp-tablet) {
+      font-size: var(--font-size-tablet-h1);
     }
-
-    .button {
-      height: 100%;
-      color: black;
-      align-content: center;
-      align-items: center;
-      z-index: 1001;
-      transition: color 0.3s ease 0.15s;
-      position: relative; /* Needed for ::before positioning */
-      display: flex; /* Ensure flex properties work */
-      justify-content: center; /* Center text horizontally */
-      align-items: center; /* Center text vertically */
+    @media (--bp-desktop-wide) {
+      font-size: var(--font-size-desktop-wide-h1);
     }
+  }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-      background: none;
-      border: none;
-      pointer-events: auto;
-      font-size: var(--font-size-dekstop-h1);
-      margin: 0;
-      height: 100%;
+  /* The ::before pseudo-element creates a black bar that slides in from the bottom */
+  .button::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0; /* Align to bottom */
+    width: 0%;
+    height: 100%; /* Cover full height */
+    background-color: black;
+    transition: width 0.6s ease;
+    z-index: -1;
+  }
 
-      @media (--bp-mobile) {
-        font-size: var(--font-size-mobile-h1);
-      }
-      @media (--bp-tablet) {
-        font-size: var(--font-size-tablet-h1);
-      }
-      @media (--bp-desktop-wide) {
-        font-size: var(--font-size-desktop-wide-h1);
-      }
-    }
-
-    /* The ::before pseudo-element creates a black bar that slides in from the bottom */
-    .button::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: 0; /* Align to bottom */
-      width: 0%;
-      height: 100%; /* Cover full height */
-      background-color: black;
-      transition: width 0.6s ease;
-      z-index: -1;
-    }
-
-    /* When active, change text color and expand the black bar */
-    .button.active {
-      color: var(--bg-color);
-    }
-    .button.active::before {
-      width: 100%;
-    }
-  </style>
-</nav>
+  /* When active, change text color and expand the black bar */
+  .button.active {
+    color: var(--bg-color);
+  }
+  .button.active::before {
+    width: 100%;
+  }
+</style>

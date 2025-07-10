@@ -15,40 +15,34 @@ const projects = await getCollection("projects");
 projects.sort((a, b) => b.data.year.localeCompare(a.data.year));
 
 // make project keep track of its index, like this it can be used by photoswipe
-
-let enrichedProjects = []; // Ensure initialized
-let globalIndex = 0; // Ensure initialized
-
-// Use async function if not already in Astro frontmatter
-// async function processProjects() { // Uncomment if needed
+let enrichedProjects = [];
+let globalIndex = 0;
 
 for (const entry of projects) {
-  console.log(`[DEBUG] Loop iteration for entry ID: ${entry.id}`); // Log start of iteration
+  console.log(`[DEBUG] Loop iteration for entry ID: ${entry.id}`);
 
   const projectName = entry.data.projectName;
   const startIndex = globalIndex;
 
-  console.log(`[DEBUG]   Project Name: ${projectName}`); // Log project name
+  console.log(`[DEBUG]   Project Name: ${projectName}`);
 
   // Fetch galleryImages
   console.log(`[DEBUG]   Fetching galleryImages...`);
   const galleryImages = await getCollection("galleryImages", ({ data }) => {
     const imageProject = data.metadata?.project;
-    // Add log inside filter if needed: console.log(`[FILTER] Checking image ${data.public_id} with project ${imageProject}`);
     return imageProject && projectName.includes(imageProject);
   });
-  console.log(`[DEBUG]   Fetched ${galleryImages.length} galleryImages.`); // Log image count
+  console.log(`[DEBUG]   Fetched ${galleryImages.length} galleryImages.`);
 
   const slidesCount = galleryImages.length;
-  const oldGlobalIndex = globalIndex; // Log index change
+  const oldGlobalIndex = globalIndex;
   globalIndex += slidesCount + 2;
   console.log(
     `[DEBUG]   Slides count: ${slidesCount}. Global index changed from ${oldGlobalIndex} to ${globalIndex}`,
   );
 
   const projectData = {
-    // Log object being pushed
-    entry, // Maybe log just entry.id for brevity: entryId: entry.id
+    entry,
     projectName,
     startIndex,
     slidesCount,
@@ -64,7 +58,7 @@ for (const entry of projects) {
 
 console.log(
   `[DEBUG] Loop finished. Final enrichedProjects count: ${enrichedProjects.length}`,
-); // Log after loop
+);
 console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
 ---
 
@@ -74,7 +68,6 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
 
     {
       enrichedProjects.map(({ entry, startIndex, slidesCount }, index) => {
-        // Log it for debugging (optional)
         console.log(`Project: ${entry.data.projectName}`);
 
         const year = entry.data.year.slice(0, 4);
@@ -90,29 +83,24 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
               <div class:list={["list-element-bar"]}>
                 <div class:list={["column1"]}>
                   <div class:list={["year"]}>
-                    {" "}
                     <>
                       <p>{year}</p>
                       <p>
-                        {/* &mdash;&ensp; */}
                         {entry.data.client}
                       </p>
-                    </>{" "}
+                    </>
                   </div>
                 </div>
 
                 <div class:list={["column2"]}>
                   <div class:list={["project-title"]}>
-                    {" "}
-                    <p>{entry.data.title}</p>{" "}
+                    <p>{entry.data.title}</p>
                   </div>
                 </div>
 
                 <div class:list={["column3"]}>
                   <div class:list={["role"]}>
-                    {" "}
                     {entry.data.role}
-                    {/* &ensp;&mdash;&ensp;{entry.data.tools} */}
                   </div>
                 </div>
 
@@ -135,14 +123,11 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
                 </div>
 
                 <div class:list={["project-description"]}>
-                  {/*   <div class:list={["title"]}>{entry.data.title} | {entry.data.subtitle}</div> */}
                   <div class:list={["description"]}>
                     <Fragment
                       set:html={marked.parse(entry.data.projectDescription)}
                     />
                   </div>
-                  {/* <div class:list={["credits"]}><Fragment set:html={marked.parse(entry.data.credits)} /></div>
-                   */}
                 </div>
               </div>
             </div>
@@ -160,110 +145,81 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
   import KeenSlider from "keen-slider";
   import "keen-slider/keen-slider.min.css";
 
-  // --- 2. Store slider instances for later destruction ---
+  // Store slider instances for later destruction
   let keenSlidersStore = {};
 
   document.addEventListener("astro:page-load", () => {
     const listElements = document.querySelectorAll(".ListElement");
 
     listElements.forEach((listEl) => {
-      const flipOut = document.querySelectorAll(".flip-out");
-
       const sliderContainer = listEl.querySelector(".project-images");
-
       const listBar = listEl.querySelector(".list-element-bar");
 
-      // click on bar
+      // Click on bar
       listBar.addEventListener("click", () => {
-        // First, close all other open sliders
-        listElements.forEach((el) => {
-          if (el !== listEl && el.classList.contains("open")) {
-            // Remove the open state (this triggers the CSS transition)
-            el.classList.remove("open");
-          }
-        });
 
-        // Toggle the clicked slider:
+        // Toggle the clicked slider
         if (listEl.classList.contains("open")) {
           listEl.classList.remove("open");
 
-      // First, close all other open sliders
-/*       listElements.forEach(el => {
-        if (el !== listEl && el.classList.contains('open')) {
-          // Remove the open state (this triggers the CSS transition)
-          el.classList.remove('open');
-        }
-      }); */
+          setTimeout(() => {
+            sliderContainer.style.display = "";
+          }, 500);
+        } else {
+          sliderContainer.style.display = "block";
+          listEl.classList.add("open");
 
-      // Toggle the clicked slider:
-      if (listEl.classList.contains('open')) {
+          // Initialize Keen Slider if not already initialized
+          if (sliderContainer && !sliderContainer.dataset.keenSliderInitialized) {
+            const slider = new KeenSlider(sliderContainer, {
+              loop: true,
+              slides: { perView: 3, spacing: 50 },
+              breakpoints: {
+                "(max-width: 1119px)": {
+                  slides: { perView: 2, spacing: 40 },
+                },
+                "(min-width: 1201px)": {
+                  slides: { perView: 3, spacing: 80 },
+                },
+              },
+            });
 
-      listEl.classList.remove('open');
+            // Store slider instance for cleanup
+            keenSlidersStore[listEl.id] = slider;
 
-      setTimeout(() => {
-        sliderContainer.style.display = "";
-      }, 500);
+            // Add click event listeners to the arrow buttons
+            const arrowLeft = listEl.querySelector(".arrow-left");
+            const arrowRight = listEl.querySelector(".arrow-right");
 
+            if (arrowLeft) {
+              arrowLeft.addEventListener("click", (e) => {
+                e.stopPropagation(); // Prevent triggering the list bar click
+                slider.prev();
+              });
+            }
 
-      } else {
+            if (arrowRight) {
+              arrowRight.addEventListener("click", (e) => {
+                e.stopPropagation(); // Prevent triggering the list bar click
+                slider.next();
+              });
+            }
 
-      sliderContainer.style.display = "block";
-
-      // Otherwise, open the element
-      listEl.classList.add('open');
-
-      if (sliderContainer && !sliderContainer.dataset.keenSliderInitialized) {
-      
-        var slider = new KeenSlider(sliderContainer, {
-          loop: true,
-          slides: { perView: 3, spacing: 50 },
-          breakpoints: {
-
-            '(max-width: 1119px)': {
-            slides: { perView: 2, spacing: 40 },
-            },
-
-            '(min-width: 1201px)': {
-            slides: { perView: 3, spacing: 80 },
-            },
+            sliderContainer.dataset.keenSliderInitialized = "true";
           }
-          },
-        );
-
-        
-        // Add click event listeners to the arrow buttons
-        const arrowLeft = listEl.querySelector('.arrow-left');
-        const arrowRight = listEl.querySelector('.arrow-right');
-      
-        if (arrowLeft) {
-          arrowLeft.addEventListener('click', () => {
-          slider.prev();
-          });
         }
-      
-        if (arrowRight) {
-          arrowRight.addEventListener('click', () => {
-          slider.next();
-          });
-        }
-
-        sliderContainer.dataset.keenSliderInitialized = "true";
-      }
-
-
-      }
+      });
     });
   });
 
-  // --- 4. Clean up sliders before Astro navigates away ---
+  // Clean up sliders before Astro navigates away
   document.addEventListener("astro:before-swap", () => {
-    // console.log('astro:before-swap - Destroying sliders');
     Object.values(keenSlidersStore).forEach((slider) => {
       if (slider && typeof slider.destroy === "function") {
         slider.destroy();
       }
     });
-    keenSlidersStore = {}; // Clear the store
+    keenSlidersStore = {};
   });
 </script>
 
@@ -276,7 +232,6 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
   const CloseSVGString =
     '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 139 139" "width="139" height="139"><path d="m69 83-56 55-13-12 56-57L0 14 13 0l56 56 56-56 13 14-55 55 55 57-13 12-56-55Z"/></svg>';
 
-  // Declare lightbox in the outer scope so both event handlers can access it
   let lightbox = null;
 
   function isPhonePortrait() {
@@ -285,40 +240,28 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
   }
 
   document.addEventListener("astro:page-load", () => {
-    // Select all gallery elements (each gallery container should have the class "GalleryElement")
     const projectElements = document.querySelectorAll(".ListElement");
 
-    // Only proceed if we found gallery elements
     if (projectElements.length === 0) {
-      return; // Exit early if no elements found
+      return;
     }
 
-    // Global array to hold the custom data for each gallery
     let photoswipeCustomData = [];
 
-    //////////////////////////////////////////////////////////
-    /////////////// Loop over each element ///////////////////
-    //////////////////////////////////////////////////////////
     projectElements.forEach((projectEl) => {
-      // Create a new array for this gallery's data items
       let galleryData = [];
 
-      // ----- 1. Add a custom element BEFORE the image gallery: Project Name ----- //
-      // Assume the gallery element stores the project title in a data attribute (for example, "data-project-title")
+      // Add project title slide
       const projectTitle =
         projectEl.getAttribute("data-project-title") || "Default Project Title";
 
-      //style with title slide
       const portfolioElementNameElement = {
         html: `<div class="pswp__project-title-slide photoswipeData"><p class="pswp__project-title ">${projectTitle}</p></div>`,
       };
 
       galleryData.push(portfolioElementNameElement);
 
-      // ----- 2. Add all the image elements ----- //
-      // Here we assume each image link is contained in a child with class "ImageElement"
-      // We use projectEl.querySelectorAll so we only search within the current gallery.
-
+      // Add image elements
       const imageLinks = projectEl.querySelectorAll(".ImageElement a");
 
       imageLinks.forEach((imgLink) => {
@@ -335,46 +278,27 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
         galleryData.push(photoswipeImageData);
       });
 
-      // ----- 3. Add a custom element AFTER the images: ProjectInfoSlideWrapper ----- //
+      // Add project info slide
+      const ProjectInfoWrapper = projectEl.querySelector(".project-description");
+      const projectDescription = ProjectInfoWrapper ? ProjectInfoWrapper.innerHTML : "";
 
-      // get the description
-      const ProjectInfoWrapper = projectEl.querySelector(
-        ".project-description",
-      );
-      const projectDescription = ProjectInfoWrapper.innerHTML;
-
-      // get the Details
       const projectCredits =
         projectEl.getAttribute("data-project-credits") || "";
 
-      /* 		const bracketOpenV = bracketOpenVEl.innerHTML;
-			const bracketCloseV = bracketCloseVEl.innerHTML; */
-
       const projectInfoEl = {
-        html: `<div
-						class="pswp__project-info-slide-wrapper photoswipeData keen-slider__slide"
-						>
-
-						<div class="pswp__project-info-slide">
-
-							
-								
-							<div class="pswp__project-info">
-							${projectDescription}
-							</div>
-							
-							
-							<div class="pswp__project-details">
-						 ${projectCredits}
-
-          		
-						</div>
-						</div>`,
+        html: `<div class="pswp__project-info-slide-wrapper photoswipeData keen-slider__slide">
+          <div class="pswp__project-info-slide">
+            <div class="pswp__project-info">
+              ${projectDescription}
+            </div>
+            <div class="pswp__project-details">
+              ${projectCredits}
+            </div>
+          </div>
+        </div>`,
       };
 
       galleryData.push(projectInfoEl);
-
-      // Finally, add this gallery's data array to the global photoswipeCustomData array.
       photoswipeCustomData.push(galleryData);
     });
 
@@ -391,7 +315,6 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
       bgOpacity: 0.95,
       zoom: false,
 
-      // to apply styles just to this instance of PhotoSwipe
       mainClass: "pswp--custom-bg pswp--custom-icon-colors",
 
       paddingFn: () => {
@@ -403,8 +326,7 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
       },
 
       showHideAnimationType: "fade",
-
-      pswpModule: () => import("photoswipe"), // Import the PhotoSwipe module dynamically
+      pswpModule: () => import("photoswipe"),
     };
 
     // Destroy any existing lightbox before creating a new one
@@ -424,13 +346,11 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
         html: "Caption text",
         onInit: (el, pswp) => {
           lightbox.pswp.on("change", () => {
-            // Check if currSlide exists before accessing its properties
             if (!pswp.currSlide || !pswp.currSlide.data) {
               el.innerHTML = "";
               return;
             }
 
-            // Retrieve the DOM element attached to the current slide
             const currSlide = pswp.currSlide.data;
             let captionHTML = "";
 
@@ -441,15 +361,15 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
 
               if (description_title && link) {
                 captionHTML = `
-                                <p><strong>${description_title}</strong></p>
-                                <p>${description_text}</p>
-                                <p><a href="${link}">External Link</a></p>
-                                `;
+                  <p><strong>${description_title}</strong></p>
+                  <p>${description_text}</p>
+                  <p><a href="${link}">External Link</a></p>
+                `;
               } else if (description_title) {
                 captionHTML = `
-                                <p><strong>${description_title}</strong></p>
-                                <p>${description_text}</p>
-                                `;
+                  <p><strong>${description_title}</strong></p>
+                  <p>${description_text}</p>
+                `;
               }
             }
 
@@ -459,9 +379,16 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
       });
     });
 
-    lightbox.init(); // Initialize the lightbox
-
+    lightbox.init();
     window.pswpLightbox = lightbox;
+  });
+
+  // Clean up PhotoSwipe before navigation
+  document.addEventListener("astro:before-swap", () => {
+    if (lightbox) {
+      lightbox.destroy();
+      lightbox = null;
+    }
   });
 </script>
 
@@ -494,7 +421,7 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 52px auto;
-    transition: all 0.5s ease; /* Default transition for opening */
+    transition: all 0.5s ease;
     cursor: pointer;
     overflow: hidden;
   }
@@ -509,7 +436,6 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
     }
   }
 
-  /* The animated container */
   .flip-out {
     margin: 0px 0px 0px 0px;
     grid-column-start: 1;
@@ -573,23 +499,19 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
   }
 
   table tbody td {
-    /* Align the content vertically to the top */
     vertical-align: top;
-    /* Add some padding for better spacing */
     padding: 5px;
   }
 
-  /* Optional: Add padding to table header cells as well */
   table th {
     padding: 5px;
-    text-align: left; /* Align header text to the left */
-    vertical-align: top; /* Also align header text to the top */
+    text-align: left;
+    vertical-align: top;
   }
 
-  /* Optional: Style for the table itself */
   table {
-    border-collapse: collapse; /* Collapse borders if you have them */
-    width: 100%; /* Make table take full width */
+    border-collapse: collapse;
+    width: 100%;
   }
 
   .arrow-left,
@@ -618,7 +540,6 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
   }
 
   .project-images {
-    /* No display toggle—its parent (.flip-out) will handle the animation */
     display: none;
     grid-row-start: 1;
     grid-column-start: 2;
@@ -626,18 +547,15 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
     overflow-x: hidden;
   }
 
-  /* When open, expand the container */
   .ListElement.open .flip-out {
     display: grid;
     margin: 8px 0px 16px 0px;
-    max-height: 800px; /* Adjust as needed if your content height is known */
+    max-height: 800px;
     margin-top: 1rem;
     margin-bottom: 1rem;
     overflow: visible;
   }
-  /* 
 
-/* Other styles remain unchanged */
   hr {
     align-self: center;
     margin: 0;
