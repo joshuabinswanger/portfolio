@@ -1,11 +1,11 @@
 ---
-import BracketOpenH from "./BracketOpenH.astro";
-import BracketCloseH from "./BracketCloseH.astro";
-import BracketMiddleH from "./BracketMiddleH.astro";
-import BracketOpenV from "./BracketOpenV.astro";
-import BracketCloseV from "./BracketCloseV.astro";
-import BracketMiddleV from "./BracketMiddleV.astro";
-import Icon from "./Icon.astro";
+import BracketOpenH from "../brackets/BracketOpenH.astro";
+import BracketCloseH from "../brackets/BracketCloseH.astro";
+import BracketMiddleH from "../brackets/BracketMiddleH.astro";
+import BracketOpenV from "../brackets/BracketOpenV.astro";
+import BracketCloseV from "../brackets/BracketCloseV.astro";
+import BracketMiddleV from "../brackets/BracketMiddleV.astro";
+import Icon from "../Icon.astro";
 import { getEntry } from "astro:content";
 import { CldImage } from "astro-cloudinary";
 
@@ -149,7 +149,7 @@ if (archiveImage?.data.metadata?.highres_public_id) {
 </div>
 
 <style>
-  @import "../styles/global.css";
+  @import "../../styles/global.css";
 
   .archiveElement {
     padding: 28px;

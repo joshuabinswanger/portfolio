@@ -1,8 +1,8 @@
 ---
-import TopWrapper from "../layouts/TopWrapper.astro";
-import GridLayout from "../layouts/GridLayout.astro";
-import GalleryElement from "./GalleryElementV1.astro";
-import { getCollection } from "astro:content";
+import TopWrapper from "../../layouts/TopWrapper.astro";
+import GridLayout from "../../layouts/GridLayout.astro";
+import GalleryElement from "./GalleryElement.astro";
+import { getPortfolioGalleryData } from "./utils.ts";
 
 // Get props
 interface Props {
@@ -11,121 +11,8 @@ interface Props {
 
 const { portfolio } = Astro.props;
 
-// Declare a single array or variable for your data
-let galleryProjects = [];
-
-const portfolioProjects = await getCollection("portfolio");
-
-// Sort
-portfolioProjects.sort((a, b) => {
-  // Ensure priority exists and is a number
-  const priorityA = Number(a.data.priority);
-  const priorityB = Number(b.data.priority);
-
-  return priorityA - priorityB; // Ascending order
-
-  // For descending order, use: return priorityB - priorityA;
-});
-
-console.log("Logging portfolioElementProjects for each project:");
-portfolioProjects.forEach((entry, index) => {
-  // Assuming each entry has data.portfolioElementProjects
-  console.log(
-    `Project Entry ${index} (ID: ${entry.id}):`,
-    entry.data.portfolioElementProjects,
-  );
-});
-
-// Make sure galleryProjects is defined and is an array before this
-console.log(
-  `[DEBUG] Starting loop. Number of galleryProjects: ${portfolioProjects?.length ?? "undefined"}`,
-); // Log before loop
-
-let enrichedProjects = []; // Ensure initialized
-let globalIndex = 0; // Ensure initialized
-
-// Use async function if not already in Astro frontmatter
-// async function processProjects() { // Uncomment if needed
-
-for (const entry of portfolioProjects) {
-  console.log(`[DEBUG] Loop iteration for entry ID: ${entry.id}`); // Log start of iteration
-
-  const projectName = entry.data.portfolioElementName;
-  const startIndex = globalIndex;
-  const targetProjects = entry.data.portfolioElementProjects;
-
-  console.log(`[DEBUG]   Project Name: ${projectName}`); // Log project name
-  console.log(`[DEBUG]   Target Projects:`, targetProjects); // Log target projects array
-
-  if (!Array.isArray(targetProjects)) {
-    console.warn(
-      `[DEBUG]   Skipping - 'portfolioElementProjects' is not an array.`,
-    );
-    continue;
-  }
-
-  // Fetch galleryImages that belong to targetProjects AND are marked for the portfolio gallery
-  console.log(
-    `[DEBUG] Fetching galleryImages for projects in targetProjects list and marked for portfolio...`,
-  );
-
-  const galleryImages = await getCollection("galleryImages", ({ data }) => {
-    // Combine all checks using &&. Returns true only if all conditions are met.
-    return (
-      // Check 1: Metadata and project field must exist and be truthy
-      data.metadata?.project && // Use optional chaining for safety
-      // Check 2: The image's project must be in the targetProjects array
-      // (Make sure 'targetProjects' is defined and contains the project names you need)
-      targetProjects.includes(data.metadata.project) &&
-      // Check 3: The showInPortfolioGallery flag must be explicitly "yes"
-      // (We can access this directly because check 1 ensures data.metadata exists)
-      data.metadata.showInPortfolioGallery === "yes"
-    );
-    // If any condition fails (e.g., missing fields, project not included, flag not "yes"),
-    // the && chain will short-circuit and the function will return false for that image.
-  });
-
-  // Optional: Log the count of fetched images
-  console.log(
-    `[DEBUG] Fetched ${galleryImages.length} galleryImages matching all criteria.`,
-  );
-
-  console.log(`[DEBUG]   Fetched ${galleryImages.length} galleryImages.`); // Log image count
-
-  const slidesCount = galleryImages.length;
-  const oldGlobalIndex = globalIndex; // Log index change
-  globalIndex += slidesCount + 2;
-  console.log(
-    `[DEBUG]   Slides count: ${slidesCount}. Global index changed from ${oldGlobalIndex} to ${globalIndex}`,
-  );
-
-  const projectData = {
-    // Log object being pushed
-    entry, // Maybe log just entry.id for brevity: entryId: entry.id
-    projectName,
-    startIndex,
-    galleryImages, // Maybe log just length: galleryImagesCount: galleryImages.length
-    slidesCount,
-  };
-  console.log(`[DEBUG]   Pushing to enrichedProjects:`, {
-    projectName: projectData.projectName,
-    startIndex: projectData.startIndex,
-    slidesCount: projectData.slidesCount,
-  });
-  enrichedProjects.push(projectData);
-}
-
-console.log(
-  `[DEBUG] Loop finished. Final enrichedProjects count: ${enrichedProjects.length}`,
-); // Log after loop
-console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
-enrichedProjects.forEach((projectItem, index) => {
-  // Assuming each entry has data.portfolioElementProjects
-  console.log(projectItem.entry.data.title);
-});
-
-// } // Uncomment if using async function wrapper
-// processProjects(); // Call the function if wrapped
+// Get all portfolio data in one call
+const { enrichedProjects } = await getPortfolioGalleryData();
 ---
 
 <TopWrapper>
@@ -666,7 +553,7 @@ enrichedProjects.forEach((projectItem, index) => {
 </script>
 
 <style>
-  @import "../styles/global.css";
+  @import "../../styles/global.css";
 
   .GalleryElementWrapper {
     scroll-margin-top: var(--padding-desktop);

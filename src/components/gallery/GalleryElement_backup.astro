@@ -1,0 +1,579 @@
+---
+import BracketOpenH from "../brackets/BracketOpenH.astro";
+import BracketCloseH from "../brackets/BracketCloseH.astro";
+import BracketMiddleH from "../brackets/BracketMiddleH.astro";
+import BracketOpenV from "../brackets/BracketOpenV.astro";
+import BracketCloseV from "../brackets/BracketCloseV.astro";
+import BracketMiddleV from "../brackets/BracketMiddleV.astro";
+import Icon from "../Icon.astro";
+import { getEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import { CldImage } from "astro-cloudinary";
+
+import "keen-slider/keen-slider.min.css";
+import "photoswipe/style.css";
+import { marked } from "marked";
+import { intersection } from "astro:schema";
+
+// Get component props from Astro.props
+const { project } = Astro.props;
+
+interface Props {
+  project: string;
+  startIndex: number;
+  slidesCount: number;
+}
+
+// Generate a unique ID for each instance
+const instanceId = Math.random().toString(36).slice(2, 11);
+
+// Turn Prop into string
+const targetProject = Astro.props.project;
+console.log(`${targetProject}`);
+
+// Fetch the project entry from the 'portfolio' collection
+// Convert targetProject to lowercase to match the expected slug
+const galleryProject = await getEntry("portfolio", targetProject.toLowerCase());
+console.log(
+  `Gallery Project Fetched: ${galleryProject.data.portfolioElementName} `,
+);
+
+// Check if galleryProject exists before accessing its data
+let containedProjects: string[] = [];
+if (
+  galleryProject &&
+  galleryProject.data &&
+  galleryProject.data.portfolioElementProjects
+) {
+  // Create array of elements to check against in the galleryImages
+  containedProjects = galleryProject.data.portfolioElementProjects;
+} else {
+  console.warn(
+    `galleryProject or portfolioElementProjects not found for ${targetProject}. galleryImages filter will not be applied.`,
+  );
+}
+
+// Use getCollection with a filter function to only retrieve images with a matching project
+// AND where showInPortfolioGallery is set to "yes"
+const galleryImages = await getCollection("galleryImages", ({ data }) => {
+  // Combine all checks using && for conciseness and clarity.
+  // The filter will return true only if every condition evaluates to true.
+  return (
+    // Condition 1 & 2: Ensure metadata and metadata.project exist (using optional chaining)
+    data.metadata?.project &&
+    // Condition 3: Check if the image's project is included in the containedProjects array
+    containedProjects.includes(data.metadata.project) &&
+    // Condition 4: NEW - Check if showInPortfolioGallery is explicitly "yes"
+    // We can access showInPortfolioGallery directly now because if the first condition
+    // (data.metadata?.project) passed, we know data.metadata exists.
+    data.metadata.showInPortfolioGallery === "yes"
+  );
+  // If any condition fails (e.g., metadata missing, project missing, project not included,
+  // or showInPortfolioGallery is not "yes"), the && chain will short-circuit
+  // and the function will implicitly return false (or explicitly if any check results in false).
+});
+
+//sort by portfolioOrder
+galleryImages.sort((a, b) => {
+  // Use Infinity as default for missing values to place them last in ascending sort
+  const orderA = a.data.metadata?.portfolioOrder ?? Infinity;
+  const orderB = b.data.metadata?.portfolioOrder ?? Infinity;
+
+  // Simple subtraction works for numerical sorting
+  return orderA - orderB;
+});
+
+// Check if any image has metadata.highres_public_id
+const hasHighRes = galleryImages.some(
+  (image) => image.data?.metadata?.highres_public_id,
+);
+
+/* console.log(hasHighRes) */
+
+const highResData = [];
+
+for (const image of galleryImages) {
+  // Initialize a default high-resolution entry object
+  let highResEntry = null;
+
+  // Check if highres_public_id is present and fetch the entry if available
+  if (image.data.metadata?.highres_public_id) {
+    try {
+      highResEntry = await getEntry(
+        "highResImages",
+        image.data.metadata.highres_public_id,
+      );
+      /* console.log(highResEntry.data.secure_url); */
+    } catch (error) {
+      console.error(
+        `Failed to fetch highResImages for ${image.data.metadata.highres_public_id}:`,
+        error,
+      );
+    }
+    // Push the final data, merging base and high-resolution details
+    highResData.push({
+      ...image.data, // Include existing image data
+      highResWidth: highResEntry.data.width,
+      highResHeight: highResEntry.data.height,
+      highResSecureUrl: highResEntry.data.secure_url,
+    });
+  } else {
+    highResData.push({
+      ...image.data, // Include existing image data
+      highResWidth: image.data.width,
+      highResHeight: image.data.height,
+      highResSecureUrl: image.data.secure_url,
+    });
+  }
+}
+
+//Images Amount
+const imagesAmount = galleryImages.length;
+---
+
+<div
+  id={`slider-${instanceId}`}
+  class:list={"GalleryElement "}
+  data-instanceId={instanceId}
+  data-slidesCount={Astro.props.slidesCount}
+  data-gallery-project={galleryProject.data.title}
+>
+  <div class:list={"SlidesContainer keen-slider"}>
+    {
+      galleryImages.map((image, index) => {
+        /* console.log(highResData[index].highResSecureUrl) */
+
+        // Compute index: startIndex + 1 offset plus the current image index
+        const computedIndex = Astro.props.startIndex + 1 + index;
+
+        return (
+          <div
+            id={`ImageContainer-${index}`}
+            class:list={["keen-slider__slide Slide"]}
+            data-index={computedIndex}
+          >
+            <div class:list={"ImageInfo"}>
+
+              <div class:list={"ImageDescriptionWrapper"}>
+
+                <BracketOpenV strokewidth="0.5px" />
+
+                <div class:list={"image-description"}>
+                  {image.data.metadata && (
+                    <>
+                      <p>
+                        <strong>
+                          {image.data.metadata?.description_title}
+                        </strong>
+                      </p>
+                      <p>{image.data.metadata?.description_text}</p>
+                    </>
+                  )}
+                </div>
+
+                <BracketCloseV strokewidth="0.5px" />
+
+                 <div class:list={["image-info-project"]}>
+                    <BracketOpenV strokewidth="0.5px" />
+
+                    <div class:list={"ProjectInfoWrapper"}>
+
+                    <p><strong>About the Project:</strong></p>
+                      <Fragment
+                        set:html={marked.parse(galleryProject.data.projectDescription)}
+                      />
+                    </div>
+
+                    <BracketCloseV strokewidth="0.5px" />
+
+                  </div>
+
+
+              </div>
+
+            </div>
+
+            <div class:list={"Filter"} />
+
+            <div
+              id="Image"
+              class:list={["ImageElement"]}
+              style={index > 1 ? "display: none;" : ""}
+            >
+              <a
+                onclick={`pswpLightbox.loadAndOpen(${computedIndex}); return false;`}
+                class:list={["photo-link photoswipeData"]}
+                href={highResData[index].highResSecureUrl}
+                data-pswp-width={highResData[index].highResWidth}
+                data-pswp-height={highResData[index].highResHeight}
+                target="_blank"
+                data-description_title={image.data.metadata?.description_title}
+                data-description_text={image.data.metadata?.description_text}
+                data-link={image.data.metadata?.link}
+              >
+                <CldImage
+                  src={image.data.public_id}
+                  data-src={image.data.secure_url}
+                  width={image.data.width}
+                  height={image.data.height}
+                  sizes="(max-width: 767px) 85vw, (max-width: 1119px) 50vw, (max-width: 1699px) 33vw, 25vw"
+                  alt={image.data.metadata?.description_title}
+                  format="avif"
+                />
+              </a>
+            </div>
+          </div>
+        );
+      })
+    }
+
+    <div
+      class:list={[
+        "photoswipeData keen-slider__slide project-info-slide-wrapper",
+      ]}
+      data-index={Astro.props.startIndex + Astro.props.slidesCount + 1}
+    >
+      <div class:list={["project-info-slide"]}>
+        <BracketOpenV strokewidth="0.5px" />
+
+        <div class:list={"ProjectInfoWrapper"}>
+           <p><strong>About the Project:</strong></p>
+          <Fragment
+            set:html={marked.parse(galleryProject.data.projectDescription)}
+          />
+        </div>
+
+        <div class:list={"DetailsInfoWrapper"}>
+          <Fragment set:html={marked.parse(galleryProject.data.credits)} />
+        </div>
+
+        <BracketCloseV strokewidth="0.5px" />
+      </div>
+    </div>
+  </div>
+
+  <div id="GalleryDescriptionWrapper">
+    <BracketOpenH />
+
+    <div id="TextContainer">
+      <div id="TextWrapper">
+        <h1>{galleryProject.data.title}</h1>
+        <h2>{galleryProject.data.subtitle}</h2>
+      </div>
+    </div>
+
+    <BracketMiddleH />
+
+    <div id="ArrowWrapper">
+      <button class:list={["ArrowLeft"]}>&larr;</button>
+      <div class:list={"CounterContainer"}>
+        1 / {imagesAmount + 1}
+      </div>
+      <button class:list={["ArrowRight"]}>&rarr;</button>
+    </div>
+
+    <BracketMiddleH />
+
+    <div id="Info">
+      <Icon icon="Info" width="77%" />
+    </div>
+
+    <BracketCloseH />
+  </div>
+</div>
+
+<style>
+  @import "../../styles/global.css";
+
+  .GalleryElement {
+    grid-row-start: 1;
+    grid-column-start: 1;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    gap: 3px;
+    max-width: calc(100vw - 3px - 3px);
+    /* overflow: hidden; */
+  }
+
+  .SlidesContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0px 0px 22px #988f821b;
+  }
+
+  a {
+    height: 100%;
+  }
+  img {
+    vertical-align: top; /* or middle, top, depending on the desired effect */
+  }
+
+  .project-info-slide-wrapper {
+    height: 100%;
+    display: grid;
+    place-items: center;
+  }
+
+  .project-info-slide {
+    display: grid;
+    font-size: var(--font-size-dekstop);
+    width: min(70%, 66ch);
+    grid-auto-rows: auto;
+    align-items: center;
+    overflow-x: hidden;
+
+    @media (--bp-mobile) {
+      font-size: var(--font-size-mobile);
+    }
+
+    @media (--bp-tablet) {
+      font-size: var(--font-size-tablet);
+    }
+
+    @media (--bp-desktop-wide) {
+      font-size: var(--font-size-desktop-wide);
+    }
+  }
+
+  .Filter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #fbf9f400;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(0px);
+    z-index: 11;
+    transition:
+      backdrop-filter ease-in-out 0.2s,
+      background-color ease-in-out 0.2s;
+    pointer-events: none;
+  }
+
+  .hidden-image {
+    display: none;
+  }
+
+  /*   Image Info */
+
+  
+  .ImageInfo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    
+    pointer-events: none; /* Prevent interaction with the description if needed */
+    background-color: var(--bg-color-trans); /* Example style */
+    
+    /* Start with no blur (initial state) */
+    backdrop-filter: blur(0px);
+    
+    /* Add transition for backdrop-filter */
+    transition:
+      backdrop-filter ease-in-out 0.3s,
+      opacity 0.3s ease-in-out;
+      
+      font-size: var(--font-size-dekstop);
+      hyphens: auto;
+      
+      overflow: auto;
+
+      z-index: 1111;
+      
+      @media (--bp-mobile) {
+        font-size: var(--font-size-mobile);
+      }
+      
+      @media (--bp-tablet) {
+        font-size: var(--font-size-tablet);
+      }
+      
+      @media (--bp-desktop-wide) {
+        font-size: var(--font-size-desktop-wide);
+        line-height: 1.33;
+    }
+  }
+  
+  .ImageDescriptionWrapper {
+    display: grid;
+    width: min(88%, 66ch);
+    grid-template-rows: min-content min-content min-content;
+    align-items: center;
+    align-content: space-around;
+  }
+
+  .image-info-project {
+    margin-top: 24px;
+
+    @media (--bp-mobile) {
+        display: none;
+      }
+  }
+
+  .InfoVisible {
+    opacity: 1;
+    backdrop-filter: blur(22px);
+    transition:
+      opacity 0.3s,
+      backdrop-filter 0.3s ease;
+  }
+
+  .image-description,
+  .ProjectInfoWrapper,
+  .DetailsInfoWrapper {
+    width: 80%; /* Ensure it takes full width */
+    justify-self: center; /* Centers items horizontally */
+    margin-top: -18px;
+    margin-bottom: -24px;
+
+    span {
+      font-family: PowerGrotesk-Medium;
+    }
+
+    @media (--bp-mobile) {
+      width: 85%;
+    }
+  }
+
+  .ProjectInfoWrapper {
+  }
+
+  .DetailsInfoWrapper {
+    margin-top: 48px;
+    padding-bottom: 0.5rem;
+  }
+
+  /* Image Element */
+  /* .ImageElement {
+  min-width: 100%;
+}
+
+
+ */
+
+  /*  .Slide {
+min-width: 80vw !important;
+max-width: 80vw !important;
+} */
+  /* GalleryDescription */
+
+  #GalleryDescriptionWrapper {
+    display: grid;
+    width: 100%;
+    max-width: calc(100vw - 3px - 3px);
+    overflow: visible;
+    opacity: 1;
+    height: fit-content;
+    grid-template-columns:
+      1.5ch minmax(min-content, 2fr) 3ch minmax(7ch, 1.5fr)
+      3ch 3.5ch 1.5ch;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 1.5s ease-in;
+  }
+
+  #ArrowWrapper {
+    display: grid;
+    width: 100%;
+    grid-template-columns: auto min-content auto;
+    place-items: center;
+  }
+
+  button {
+    all: unset;
+    text-justify: center;
+    text-align: center;
+    width: stretch;
+    cursor: pointer;
+    padding: 0.5rem 0.5%;
+  }
+
+  .CounterContainer {
+    text-align: center;
+    width: 5ch;
+    font-size: var(--font-size-dekstop-h1);
+    font-family: PowerGrotesk-Regular;
+    font-weight: 400;
+    padding: 0.5rem 0.5%;
+
+    @media (--bp-mobile) {
+      font-size: var(--font-size-mobile-h1);
+    }
+
+    @media (--bp-tablet) {
+      font-size: var(--font-size-tablet-h1);
+    }
+
+    @media (--bp-desktop-wide) {
+      font-size: var(--font-size-desktop-wide-h1);
+    }
+  }
+
+  /* Text Elements */
+  #TextContainer {
+    cursor: pointer;
+    width: auto;
+    max-width: 40vw;
+    overflow-x: hidden;
+    display: grid;
+    place-items: center;
+  }
+
+  h1 {
+    font-family: PowerGrotesk-Regular;
+    font-weight: 400;
+    font-size: var(--font-size-dekstop-h1);
+    letter-spacing: 0.7px;
+    margin: 0px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @media (--bp-mobile) {
+      font-size: var(--font-size-mobile-h1);
+    }
+
+    @media (--bp-tablet) {
+      font-size: var(--font-size-tablet-h1);
+    }
+
+    @media (--bp-desktop-wide) {
+      font-size: var(--font-size-desktop-wide-h1);
+    }
+  }
+
+  h2 {
+    font-family: PowerGrotesk-Light;
+    font-weight: 200;
+    font-size: var(--font-size-dekstop);
+    letter-spacing: 0.5px;
+    margin: 0px;
+
+    @media (--bp-mobile) {
+      font-size: var(--font-size-mobile);
+    }
+
+    @media (--bp-tablet) {
+      font-size: var(--font-size-tablet);
+    }
+
+    @media (--bp-desktop-wide) {
+      font-size: var(--font-size-desktop-wide);
+    }
+  }
+
+  #Info {
+    display: grid;
+    place-items: center;
+    cursor: pointer; /* Ensure it looks clickable */
+    pointer-events: auto;
+    margin: 0 -5px;
+  }
+</style>

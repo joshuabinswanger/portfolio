@@ -1,19 +1,19 @@
 ---
-import BracketOpenH from "./BracketOpenH.astro";
-import BracketCloseH from "./BracketCloseH.astro";
-import BracketMiddleH from "./BracketMiddleH.astro";
-import BracketOpenV from "./BracketOpenV.astro";
-import BracketCloseV from "./BracketCloseV.astro";
-import BracketMiddleV from "./BracketMiddleV.astro";
-import Icon from "./Icon.astro";
-import { getEntry } from "astro:content";
-import { getCollection } from "astro:content";
+import BracketOpenH from "../brackets/BracketOpenH.astro";
+import BracketCloseH from "../brackets/BracketCloseH.astro";
+import BracketMiddleH from "../brackets/BracketMiddleH.astro";
+import BracketOpenV from "../brackets/BracketOpenV.astro";
+import BracketCloseV from "../brackets/BracketCloseV.astro";
+import BracketMiddleV from "../brackets/BracketMiddleV.astro";
+import Icon from "../Icon.astro";
 import { CldImage } from "astro-cloudinary";
 
 import "keen-slider/keen-slider.min.css";
 import "photoswipe/style.css";
 import { marked } from "marked";
-import { intersection } from "astro:schema";
+
+// Import the utility functions
+import { getGalleryData } from "./utils.ts";
 
 // Get component props from Astro.props
 const { project } = Astro.props;
@@ -31,104 +31,19 @@ const instanceId = Math.random().toString(36).slice(2, 11);
 const targetProject = Astro.props.project;
 console.log(`${targetProject}`);
 
-// Fetch the project entry from the 'portfolio' collection
-// Convert targetProject to lowercase to match the expected slug
-const galleryProject = await getEntry("portfolio", targetProject.toLowerCase());
-console.log(
-  `Gallery Project Fetched: ${galleryProject.data.portfolioElementName} `,
-);
+// Use the unified utility function to get all gallery data
+const { 
+  galleryProject, 
+  galleryImages, 
+  highResData, 
+  imagesAmount, 
+  hasHighRes 
+} = await getGalleryData(targetProject);
 
-// Check if galleryProject exists before accessing its data
-let containedProjects: string[] = [];
-if (
-  galleryProject &&
-  galleryProject.data &&
-  galleryProject.data.portfolioElementProjects
-) {
-  // Create array of elements to check against in the galleryImages
-  containedProjects = galleryProject.data.portfolioElementProjects;
-} else {
-  console.warn(
-    `galleryProject or portfolioElementProjects not found for ${targetProject}. galleryImages filter will not be applied.`,
-  );
+// Handle case where project is not found
+if (!galleryProject) {
+  throw new Error(`Gallery project "${targetProject}" not found`);
 }
-
-// Use getCollection with a filter function to only retrieve images with a matching project
-// AND where showInPortfolioGallery is set to "yes"
-const galleryImages = await getCollection("galleryImages", ({ data }) => {
-  // Combine all checks using && for conciseness and clarity.
-  // The filter will return true only if every condition evaluates to true.
-  return (
-    // Condition 1 & 2: Ensure metadata and metadata.project exist (using optional chaining)
-    data.metadata?.project &&
-    // Condition 3: Check if the image's project is included in the containedProjects array
-    containedProjects.includes(data.metadata.project) &&
-    // Condition 4: NEW - Check if showInPortfolioGallery is explicitly "yes"
-    // We can access showInPortfolioGallery directly now because if the first condition
-    // (data.metadata?.project) passed, we know data.metadata exists.
-    data.metadata.showInPortfolioGallery === "yes"
-  );
-  // If any condition fails (e.g., metadata missing, project missing, project not included,
-  // or showInPortfolioGallery is not "yes"), the && chain will short-circuit
-  // and the function will implicitly return false (or explicitly if any check results in false).
-});
-
-//sort by portfolioOrder
-galleryImages.sort((a, b) => {
-  // Use Infinity as default for missing values to place them last in ascending sort
-  const orderA = a.data.metadata?.portfolioOrder ?? Infinity;
-  const orderB = b.data.metadata?.portfolioOrder ?? Infinity;
-
-  // Simple subtraction works for numerical sorting
-  return orderA - orderB;
-});
-
-// Check if any image has metadata.highres_public_id
-const hasHighRes = galleryImages.some(
-  (image) => image.data?.metadata?.highres_public_id,
-);
-
-/* console.log(hasHighRes) */
-
-const highResData = [];
-
-for (const image of galleryImages) {
-  // Initialize a default high-resolution entry object
-  let highResEntry = null;
-
-  // Check if highres_public_id is present and fetch the entry if available
-  if (image.data.metadata?.highres_public_id) {
-    try {
-      highResEntry = await getEntry(
-        "highResImages",
-        image.data.metadata.highres_public_id,
-      );
-      /* console.log(highResEntry.data.secure_url); */
-    } catch (error) {
-      console.error(
-        `Failed to fetch highResImages for ${image.data.metadata.highres_public_id}:`,
-        error,
-      );
-    }
-    // Push the final data, merging base and high-resolution details
-    highResData.push({
-      ...image.data, // Include existing image data
-      highResWidth: highResEntry.data.width,
-      highResHeight: highResEntry.data.height,
-      highResSecureUrl: highResEntry.data.secure_url,
-    });
-  } else {
-    highResData.push({
-      ...image.data, // Include existing image data
-      highResWidth: image.data.width,
-      highResHeight: image.data.height,
-      highResSecureUrl: image.data.secure_url,
-    });
-  }
-}
-
-//Images Amount
-const imagesAmount = galleryImages.length;
 ---
 
 <div
@@ -283,7 +198,7 @@ const imagesAmount = galleryImages.length;
 </div>
 
 <style>
-  @import "../styles/global.css";
+  @import "../../styles/global.css";
 
   .GalleryElement {
     grid-row-start: 1;

@@ -1,10 +1,10 @@
 ---
-import BracketOpenH from "./BracketOpenH.astro";
-import BracketMiddleH from "./BracketMiddleH.astro";
-import BracketCloseH from "./BracketCloseH.astro";
-import "../styles/global.css";
+import BracketOpenH from "../brackets/BracketOpenH.astro";
+import BracketMiddleH from "../brackets/BracketMiddleH.astro";
+import BracketCloseH from "../brackets/BracketCloseH.astro";
+import "../../styles/global.css";
 import { Image } from "astro:assets";
-import JoshLogo from "../assets/joshuabinswanger_tempLogo.png";
+import JoshLogo from "../../assets/joshuabinswanger_tempLogo.png";
 
 interface Props {
   personal?: boolean;
@@ -63,7 +63,7 @@ const { personal } = Astro.props;
 
 
   <style>
-    @import "../styles/global.css";
+    @import "../../styles/global.css";
 
     #NavBarMobile {
       display: block;

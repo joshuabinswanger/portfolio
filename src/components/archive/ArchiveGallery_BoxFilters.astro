@@ -1,12 +1,12 @@
 ---
-import BracketOpenH from "./BracketOpenH.astro";
-import BracketMiddleH from "./BracketMiddleH.astro";
-import BracketCloseH from "./BracketCloseH.astro";
-import BracketOpenV from "./BracketOpenV.astro";
-import BracketMiddleV from "./BracketMiddleV.astro";
-import BracketCloseV from "./BracketCloseV.astro";
-import TopWrapper from "../layouts/TopWrapper.astro";
-import GridLayout from "../layouts/GridLayout.astro";
+import BracketOpenH from "../brackets/BracketOpenH.astro";
+import BracketMiddleH from "../brackets/BracketMiddleH.astro";
+import BracketCloseH from "../brackets/BracketCloseH.astro";
+import BracketOpenV from "../brackets/BracketOpenV.astro";
+import BracketMiddleV from "../brackets/BracketMiddleV.astro";
+import BracketCloseV from "../brackets/BracketCloseV.astro";
+import TopWrapper from "../../layouts/TopWrapper.astro";
+import GridLayout from "../../layouts/GridLayout.astro";
 import ArchiveElement from "./ArchiveGalleryElement.astro";
 import { getCollection } from "astro:content";
 
@@ -824,7 +824,7 @@ document.addEventListener("astro:page-load", () => {
 
 <style define:vars={{ roleFilters: roleListLength, programFilters: programListLength, topicFilters: topicListLength}}>
 
-@import "../styles/global.css";
+@import "../../styles/global.css";
 
 :root {
   --active-filters-list-length: 5;

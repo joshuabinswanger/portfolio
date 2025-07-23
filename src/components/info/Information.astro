@@ -1,16 +1,8 @@
 ---
-import ImageElement from "./ImageElement.astro";
-import ThumbnailElement from "./ThumbnailElement.astro";
-import TopWrapper from "../layouts/TopWrapper.astro";
-import GridLayout from "../layouts/GridLayout.astro";
-import BracketOpenH from "./BracketOpenH.astro";
-import BracketCloseH from "./BracketCloseH.astro";
-import BracketMiddleH from "./BracketMiddleH.astro";
-import { getCollection } from "astro:content";
 
-import SquareBracketH from "./SquareBracket_H.astro";
-import "../styles/global.css";
-import Footer from "./Footer.astro";
+import TopWrapper from "../../layouts/TopWrapper.astro"
+import { getCollection } from "astro:content";
+import "../../styles/global.css";
 
 // get all links
 const links = await getCollection("links");
@@ -116,7 +108,7 @@ links.sort((a, b) => a.data.sortOrder - b.data.sortOrder);
 </TopWrapper>
 
 <style>
-  @import "../styles/global.css";
+  @import "../../styles/global.css";
   p {
     font-size: var(--font-size-dekstop);
     letter-spacing: 2px;

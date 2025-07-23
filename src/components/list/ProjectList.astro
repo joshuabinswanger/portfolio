@@ -1,9 +1,9 @@
 ---
-import TopWrapper from "../layouts/TopWrapper.astro";
-import BracketOpenH from "./BracketOpenH.astro";
-import BracketCloseH from "./BracketCloseH.astro";
-import GridLayout from "../layouts/GridLayout.astro";
-import GalleryElement from "./GalleryElementV1.astro";
+import TopWrapper from "../../layouts/TopWrapper.astro";
+import BracketOpenH from "../brackets/BracketOpenH.astro";
+import BracketCloseH from "../brackets/BracketCloseH.astro";
+import GridLayout from "../../layouts/GridLayout.astro";
+import GalleryElement from "../gallery/GalleryElement.astro";
 import { getCollection } from "astro:content";
 import { marked } from "marked";
 import ImageSlide from "./ImageSlide.astro";
@@ -393,7 +393,7 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
 </script>
 
 <style>
-  @import "../styles/global.css";
+  @import "../../styles/global.css";
 
   #list-wrapper {
     display: grid;
