@@ -87,9 +87,7 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
                   <div class:list={["year"]}>
                     <>
                       <p>{year}</p>
-                      <p>
-                        {entry.data.client}
-                      </p>
+                      <p>{entry.data.client}</p>
                     </>
                   </div>
                 </div>
@@ -101,9 +99,7 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
                 </div>
 
                 <div class:list={["column3"]}>
-                  <div class:list={["role"]}>
-                    {entry.data.role}
-                  </div>
+                  <div class:list={["role"]}>{entry.data.role}</div>
                 </div>
 
                 <div class:list={["column4"]}>&darr;</div>
@@ -159,7 +155,6 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
 
       // Click on bar
       listBar.addEventListener("click", () => {
-
         // Toggle the clicked slider
         if (listEl.classList.contains("open")) {
           listEl.classList.remove("open");
@@ -172,7 +167,10 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
           listEl.classList.add("open");
 
           // Initialize Keen Slider if not already initialized
-          if (sliderContainer && !sliderContainer.dataset.keenSliderInitialized) {
+          if (
+            sliderContainer &&
+            !sliderContainer.dataset.keenSliderInitialized
+          ) {
             const slider = new KeenSlider(sliderContainer, {
               loop: true,
               slides: { perView: 3, spacing: 50 },
@@ -281,8 +279,12 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
       });
 
       // Add project info slide
-      const ProjectInfoWrapper = projectEl.querySelector(".project-description");
-      const projectDescription = ProjectInfoWrapper ? ProjectInfoWrapper.innerHTML : "";
+      const ProjectInfoWrapper = projectEl.querySelector(
+        ".project-description",
+      );
+      const projectDescription = ProjectInfoWrapper
+        ? ProjectInfoWrapper.innerHTML
+        : "";
 
       const projectCredits =
         projectEl.getAttribute("data-project-credits") || "";

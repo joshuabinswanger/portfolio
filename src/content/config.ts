@@ -55,7 +55,7 @@ export const collections = {
           z.object({
             loading: z.enum(["eager", "lazy"]).optional(), // Define 'loading' as a Zod enum
             to: z.string().optional(),
-          })
+          }),
         )
         .optional(),
     }),

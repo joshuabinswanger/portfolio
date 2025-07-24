@@ -7,7 +7,7 @@ import type { CollectionEntry } from "astro:content";
  * @returns New sorted array of projects
  */
 export function sortProjectsByYear<T extends CollectionEntry<"projects">>(
-  projects: T[]
+  projects: T[],
 ): T[] {
   return [...projects].sort((a, b) => b.data.year.localeCompare(a.data.year));
 }

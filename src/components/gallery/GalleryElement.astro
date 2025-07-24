@@ -32,13 +32,8 @@ const targetProject = Astro.props.project;
 console.log(`${targetProject}`);
 
 // Use the unified utility function to get all gallery data
-const { 
-  galleryProject, 
-  galleryImages, 
-  highResData, 
-  imagesAmount, 
-  hasHighRes 
-} = await getGalleryData(targetProject);
+const { galleryProject, galleryImages, highResData, imagesAmount, hasHighRes } =
+  await getGalleryData(targetProject);
 
 // Handle case where project is not found
 if (!galleryProject) {
@@ -68,9 +63,7 @@ if (!galleryProject) {
             data-index={computedIndex}
           >
             <div class:list={"ImageInfo"}>
-
               <div class:list={"ImageDescriptionWrapper"}>
-
                 <BracketOpenV strokewidth="0.5px" />
 
                 <div class:list={"image-description"}>
@@ -88,24 +81,23 @@ if (!galleryProject) {
 
                 <BracketCloseV strokewidth="0.5px" />
 
-                 <div class:list={["image-info-project"]}>
-                    <BracketOpenV strokewidth="0.5px" />
+                <div class:list={["image-info-project"]}>
+                  <BracketOpenV strokewidth="0.5px" />
 
-                    <div class:list={"ProjectInfoWrapper"}>
-
-                    <p><strong>About the Project:</strong></p>
-                      <Fragment
-                        set:html={marked.parse(galleryProject.data.projectDescription)}
-                      />
-                    </div>
-
-                    <BracketCloseV strokewidth="0.5px" />
-
+                  <div class:list={"ProjectInfoWrapper"}>
+                    <p>
+                      <strong>About the Project:</strong>
+                    </p>
+                    <Fragment
+                      set:html={marked.parse(
+                        galleryProject.data.projectDescription,
+                      )}
+                    />
                   </div>
 
-
+                  <BracketCloseV strokewidth="0.5px" />
+                </div>
               </div>
-
             </div>
 
             <div class:list={"Filter"} />
@@ -152,7 +144,7 @@ if (!galleryProject) {
         <BracketOpenV strokewidth="0.5px" />
 
         <div class:list={"ProjectInfoWrapper"}>
-           <p><strong>About the Project:</strong></p>
+          <p><strong>About the Project:</strong></p>
           <Fragment
             set:html={marked.parse(galleryProject.data.projectDescription)}
           />
@@ -272,7 +264,6 @@ if (!galleryProject) {
 
   /*   Image Info */
 
-  
   .ImageInfo {
     position: absolute;
     top: 0;
@@ -283,39 +274,39 @@ if (!galleryProject) {
     display: grid;
     justify-items: center;
     align-items: center;
-    
+
     pointer-events: none; /* Prevent interaction with the description if needed */
     background-color: var(--bg-color-trans); /* Example style */
-    
+
     /* Start with no blur (initial state) */
     backdrop-filter: blur(0px);
-    
+
     /* Add transition for backdrop-filter */
     transition:
       backdrop-filter ease-in-out 0.3s,
       opacity 0.3s ease-in-out;
-      
-      font-size: var(--font-size-dekstop);
-      hyphens: auto;
-      
-      overflow: auto;
 
-      z-index: 1111;
-      
-      @media (--bp-mobile) {
-        font-size: var(--font-size-mobile);
-      }
-      
-      @media (--bp-tablet) {
-        font-size: var(--font-size-tablet);
-      }
-      
-      @media (--bp-desktop-wide) {
-        font-size: var(--font-size-desktop-wide);
-        line-height: 1.33;
+    font-size: var(--font-size-dekstop);
+    hyphens: auto;
+
+    overflow: auto;
+
+    z-index: 1111;
+
+    @media (--bp-mobile) {
+      font-size: var(--font-size-mobile);
+    }
+
+    @media (--bp-tablet) {
+      font-size: var(--font-size-tablet);
+    }
+
+    @media (--bp-desktop-wide) {
+      font-size: var(--font-size-desktop-wide);
+      line-height: 1.33;
     }
   }
-  
+
   .ImageDescriptionWrapper {
     display: grid;
     width: min(88%, 66ch);
@@ -328,8 +319,8 @@ if (!galleryProject) {
     margin-top: 24px;
 
     @media (--bp-mobile) {
-        display: none;
-      }
+      display: none;
+    }
   }
 
   .InfoVisible {

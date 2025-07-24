@@ -71,16 +71,16 @@ const { personal = false } = Astro.props;
 </nav>
 
 <script>
-  import { navigate } from 'astro:transitions/client';
+  import { navigate } from "astro:transitions/client";
 
   // Update visual state (add/remove active class)
   function updateAnimationState(buttons) {
     setTimeout(() => {
-      buttons.forEach(btn => {
-        if (btn.getAttribute('data-animation') === "in") {
-          btn.classList.add('active');
+      buttons.forEach((btn) => {
+        if (btn.getAttribute("data-animation") === "in") {
+          btn.classList.add("active");
         } else {
-          btn.classList.remove('active');
+          btn.classList.remove("active");
         }
       });
     }, 500);
@@ -89,37 +89,40 @@ const { personal = false } = Astro.props;
   // Handle button click for all buttons
   function handleButtonClick(clickedBtn, allButtonsNodeList) {
     const allButtons = Array.from(allButtonsNodeList);
-    const mainButtons = allButtons.filter(btn => btn.id !== 'Logo');
+    const mainButtons = allButtons.filter((btn) => btn.id !== "Logo");
 
     // Special check: if clicked is Logo
     if (clickedBtn.id === "Logo") {
-      const portfolioBtn = allButtons.find(btn => btn.id === 'portfolio');
+      const portfolioBtn = allButtons.find((btn) => btn.id === "portfolio");
 
       // Deactivate all MAIN buttons
-      mainButtons.forEach(btn => {
-        btn.setAttribute('data-animation', 'out');
+      mainButtons.forEach((btn) => {
+        btn.setAttribute("data-animation", "out");
       });
 
       // Activate portfolio button
       if (portfolioBtn) {
-        portfolioBtn.setAttribute('data-animation', 'in');
+        portfolioBtn.setAttribute("data-animation", "in");
       }
-      
+
       // Ensure logo itself remains visually 'out'
-      clickedBtn.setAttribute('data-animation', 'out');
+      clickedBtn.setAttribute("data-animation", "out");
     } else {
       // Clicked a main button (portfolio, projects, info)
-      
+
       // Only proceed if the clicked button is currently "out"
-      if (clickedBtn.getAttribute('data-animation') === "out") {
+      if (clickedBtn.getAttribute("data-animation") === "out") {
         // Deactivate other MAIN buttons that are currently "in"
-        mainButtons.forEach(btn => {
-          if (btn !== clickedBtn && btn.getAttribute('data-animation') === "in") {
-            btn.setAttribute('data-animation', "out");
+        mainButtons.forEach((btn) => {
+          if (
+            btn !== clickedBtn &&
+            btn.getAttribute("data-animation") === "in"
+          ) {
+            btn.setAttribute("data-animation", "out");
           }
         });
         // Activate the clicked button
-        clickedBtn.setAttribute('data-animation', 'in');
+        clickedBtn.setAttribute("data-animation", "in");
       }
     }
 

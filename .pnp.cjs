@@ -7013,7 +7013,7 @@ function _interopNamespace(e) {
             : {
                 enumerable: true,
                 get: () => e[k],
-              }
+              },
         );
       }
     }
@@ -7331,7 +7331,7 @@ async function copyPromise(destinationFs, destination, sourceFs, source, opts) {
     : await sourceFs.lstatPromise(normalizedSource);
   await destinationFs.mkdirpPromise(
     destinationFs.pathUtils.dirname(destination),
-    { utimes: [atime, mtime] }
+    { utimes: [atime, mtime] },
   );
   await copyImpl(
     prelayout,
@@ -7340,13 +7340,13 @@ async function copyPromise(destinationFs, destination, sourceFs, source, opts) {
     normalizedDestination,
     sourceFs,
     normalizedSource,
-    { ...opts, didParentExist: true }
+    { ...opts, didParentExist: true },
   );
   for (const operation of prelayout) await operation();
   await Promise.all(
     postlayout.map((operation) => {
       return operation();
-    })
+    }),
   );
 }
 async function copyImpl(
@@ -7356,7 +7356,7 @@ async function copyImpl(
   destination,
   sourceFs,
   source,
-  opts
+  opts,
 ) {
   const destinationStat = opts.didParentExist
     ? await maybeLStat(destinationFs, destination)
@@ -7378,7 +7378,7 @@ async function copyImpl(
           sourceFs,
           source,
           sourceStat,
-          opts
+          opts,
         );
       }
       break;
@@ -7393,7 +7393,7 @@ async function copyImpl(
           sourceFs,
           source,
           sourceStat,
-          opts
+          opts,
         );
       }
       break;
@@ -7408,7 +7408,7 @@ async function copyImpl(
           sourceFs,
           source,
           sourceStat,
-          opts
+          opts,
         );
       }
       break;
@@ -7423,7 +7423,7 @@ async function copyImpl(
       destinationStat?.atime?.getTime() !== atime.getTime()
     ) {
       postlayout.push(() =>
-        destinationFs.lutimesPromise(destination, atime, mtime)
+        destinationFs.lutimesPromise(destination, atime, mtime),
       );
       updated = true;
     }
@@ -7432,7 +7432,7 @@ async function copyImpl(
       (destinationStat.mode & 511) !== (sourceStat.mode & 511)
     ) {
       postlayout.push(() =>
-        destinationFs.chmodPromise(destination, sourceStat.mode & 511)
+        destinationFs.chmodPromise(destination, sourceStat.mode & 511),
       );
       updated = true;
     }
@@ -7455,7 +7455,7 @@ async function copyFolder(
   sourceFs,
   source,
   sourceStat,
-  opts
+  opts,
 ) {
   if (destinationStat !== null && !destinationStat.isDirectory()) {
     if (opts.overwrite) {
@@ -7495,7 +7495,7 @@ async function copyFolder(
           destinationFs.pathUtils.join(destination, entry),
           sourceFs,
           sourceFs.pathUtils.join(source, entry),
-          nextOpts
+          nextOpts,
         )
       ) {
         updated = true;
@@ -7511,9 +7511,9 @@ async function copyFolder(
           destinationFs.pathUtils.join(destination, entry),
           sourceFs,
           sourceFs.pathUtils.join(source, entry),
-          nextOpts
+          nextOpts,
         );
-      })
+      }),
     );
     if (entriesUpdateStatus.some((status) => status)) {
       updated = true;
@@ -7531,7 +7531,7 @@ async function copyFileViaIndex(
   source,
   sourceStat,
   opts,
-  linkStrategy
+  linkStrategy,
 ) {
   const sourceHash = await sourceFs.checksumFilePromise(source, {
     algorithm: `sha1`,
@@ -7544,7 +7544,7 @@ async function copyFileViaIndex(
   const indexPath = destinationFs.pathUtils.join(
     linkStrategy.indexPath,
     sourceHash.slice(0, 2),
-    `${indexFileName}.dat`
+    `${indexFileName}.dat`,
   );
   let AtomicBehavior;
   ((AtomicBehavior2) => {
@@ -7630,7 +7630,7 @@ async function copyFileDirect(
   sourceFs,
   source,
   sourceStat,
-  opts
+  opts,
 ) {
   if (destinationStat !== null) {
     if (opts.overwrite) {
@@ -7655,7 +7655,7 @@ async function copyFile(
   sourceFs,
   source,
   sourceStat,
-  opts
+  opts,
 ) {
   if (opts.linkStrategy?.type === `HardlinkFromIndex`) {
     return copyFileViaIndex(
@@ -7668,7 +7668,7 @@ async function copyFile(
       source,
       sourceStat,
       opts,
-      opts.linkStrategy
+      opts.linkStrategy,
     );
   } else {
     return copyFileDirect(
@@ -7680,7 +7680,7 @@ async function copyFile(
       sourceFs,
       source,
       sourceStat,
-      opts
+      opts,
     );
   }
 }
@@ -7693,7 +7693,7 @@ async function copySymlink(
   sourceFs,
   source,
   sourceStat,
-  opts
+  opts,
 ) {
   if (destinationStat !== null) {
     if (opts.overwrite) {
@@ -7707,9 +7707,9 @@ async function copySymlink(
     await destinationFs.symlinkPromise(
       convertPath(
         destinationFs.pathUtils,
-        await sourceFs.readlinkPromise(source)
+        await sourceFs.readlinkPromise(source),
       ),
-      destination
+      destination,
     );
   });
   return true;
@@ -7773,7 +7773,7 @@ function opendir(fakeFs, path, entries, opts) {
 function assertStatus(current, expected) {
   if (current !== expected) {
     throw new Error(
-      `Invalid StatWatcher status: expected '${expected}', got '${current}'`
+      `Invalid StatWatcher status: expected '${expected}', got '${current}'`,
     );
   }
 }
@@ -7886,7 +7886,7 @@ function watchFile(fakeFs, path, a, b) {
   if (typeof statWatchers === `undefined`)
     statWatchersByFakeFS.set(
       fakeFs,
-      (statWatchers = /* @__PURE__ */ new Map())
+      (statWatchers = /* @__PURE__ */ new Map()),
     );
   let statWatcher = statWatchers.get(path);
   if (typeof statWatcher === `undefined`) {
@@ -7950,7 +7950,7 @@ class FakeFS {
         (bytesRead = await this.readPromise(fd, chunk, 0, CHUNK_SIZE)) !== 0
       )
         hash.update(
-          bytesRead === CHUNK_SIZE ? chunk : chunk.slice(0, bytesRead)
+          bytesRead === CHUNK_SIZE ? chunk : chunk.slice(0, bytesRead),
         );
       return hash.digest(`hex`);
     } finally {
@@ -7974,7 +7974,7 @@ class FakeFS {
         await Promise.all(
           entries.map((entry) => {
             return this.removePromise(this.pathUtils.resolve(p, entry));
-          })
+          }),
         );
       }
       for (let t = 0; t <= maxRetries; t++) {
@@ -8036,7 +8036,7 @@ class FakeFS {
           await this.utimesPromise(subPath, utimes[0], utimes[1]);
         } else {
           const parentStat = await this.statPromise(
-            this.pathUtils.dirname(subPath)
+            this.pathUtils.dirname(subPath),
           );
           await this.utimesPromise(subPath, parentStat.atime, parentStat.mtime);
         }
@@ -8082,7 +8082,7 @@ class FakeFS {
       stableSort = false,
       stableTime = false,
       linkStrategy = null,
-    } = {}
+    } = {},
   ) {
     return await copyPromise(this, destination, baseFs, source, {
       overwrite,
@@ -8101,7 +8101,7 @@ class FakeFS {
         this.copySync(
           this.pathUtils.join(destination, entry),
           baseFs.pathUtils.join(source, entry),
-          { baseFs, overwrite }
+          { baseFs, overwrite },
         );
       }
     } else if (stat.isFile()) {
@@ -8120,7 +8120,7 @@ class FakeFS {
       throw new Error(
         `Unsupported file type (file: ${source}, mode: 0o${stat.mode
           .toString(8)
-          .padStart(6, `0`)})`
+          .padStart(6, `0`)})`,
       );
     }
     const mode = stat.mode & 511;
@@ -8236,7 +8236,7 @@ class FakeFS {
             await new Promise((resolve) => setTimeout(resolve, interval));
           } else {
             throw new Error(
-              `Couldn't acquire a lock in a reasonable time (via ${lockPath})`
+              `Couldn't acquire a lock in a reasonable time (via ${lockPath})`,
             );
           }
         } else {
@@ -8277,7 +8277,7 @@ class FakeFS {
     return await this.writeFilePromise(
       p,
       `${JSON.stringify(data, null, space)}
-`
+`,
     );
   }
   writeJsonSync(p, data, { compact = false } = {}) {
@@ -8285,7 +8285,7 @@ class FakeFS {
     return this.writeFileSync(
       p,
       `${JSON.stringify(data, null, space)}
-`
+`,
     );
   }
   async preserveTimePromise(p, cb) {
@@ -8313,7 +8313,7 @@ function getEndOfLine(content) {
     (nl) =>
       nl ===
       `\r
-`
+`,
   ).length;
   const lf = matches.length - crlf;
   return crlf > lf
@@ -8345,7 +8345,7 @@ class ProxiedFS extends FakeFS {
   async opendirPromise(p, opts) {
     return Object.assign(
       await this.baseFs.opendirPromise(this.mapToBase(p), opts),
-      { path: p }
+      { path: p },
     );
   }
   opendirSync(p, opts) {
@@ -8368,7 +8368,7 @@ class ProxiedFS extends FakeFS {
         buffer,
         offset,
         length,
-        position
+        position,
       );
     }
   }
@@ -8388,18 +8388,18 @@ class ProxiedFS extends FakeFS {
   createReadStream(p, opts) {
     return this.baseFs.createReadStream(
       p !== null ? this.mapToBase(p) : p,
-      opts
+      opts,
     );
   }
   createWriteStream(p, opts) {
     return this.baseFs.createWriteStream(
       p !== null ? this.mapToBase(p) : p,
-      opts
+      opts,
     );
   }
   async realpathPromise(p) {
     return this.mapFromBase(
-      await this.baseFs.realpathPromise(this.mapToBase(p))
+      await this.baseFs.realpathPromise(this.mapToBase(p)),
     );
   }
   realpathSync(p) {
@@ -8462,7 +8462,7 @@ class ProxiedFS extends FakeFS {
   async renamePromise(oldP, newP) {
     return this.baseFs.renamePromise(
       this.mapToBase(oldP),
-      this.mapToBase(newP)
+      this.mapToBase(newP),
     );
   }
   renameSync(oldP, newP) {
@@ -8472,14 +8472,14 @@ class ProxiedFS extends FakeFS {
     return this.baseFs.copyFilePromise(
       this.mapToBase(sourceP),
       this.mapToBase(destP),
-      flags
+      flags,
     );
   }
   copyFileSync(sourceP, destP, flags = 0) {
     return this.baseFs.copyFileSync(
       this.mapToBase(sourceP),
       this.mapToBase(destP),
-      flags
+      flags,
     );
   }
   async appendFilePromise(p, content, opts) {
@@ -8533,13 +8533,13 @@ class ProxiedFS extends FakeFS {
   async linkPromise(existingP, newP) {
     return this.baseFs.linkPromise(
       this.mapToBase(existingP),
-      this.mapToBase(newP)
+      this.mapToBase(newP),
     );
   }
   linkSync(existingP, newP) {
     return this.baseFs.linkSync(
       this.mapToBase(existingP),
-      this.mapToBase(newP)
+      this.mapToBase(newP),
     );
   }
   async symlinkPromise(target, p, type) {
@@ -8547,11 +8547,11 @@ class ProxiedFS extends FakeFS {
     if (this.pathUtils.isAbsolute(target))
       return this.baseFs.symlinkPromise(this.mapToBase(target), mappedP, type);
     const mappedAbsoluteTarget = this.mapToBase(
-      this.pathUtils.join(this.pathUtils.dirname(p), target)
+      this.pathUtils.join(this.pathUtils.dirname(p), target),
     );
     const mappedTarget = this.baseFs.pathUtils.relative(
       this.baseFs.pathUtils.dirname(mappedP),
-      mappedAbsoluteTarget
+      mappedAbsoluteTarget,
     );
     return this.baseFs.symlinkPromise(mappedTarget, mappedP, type);
   }
@@ -8560,11 +8560,11 @@ class ProxiedFS extends FakeFS {
     if (this.pathUtils.isAbsolute(target))
       return this.baseFs.symlinkSync(this.mapToBase(target), mappedP, type);
     const mappedAbsoluteTarget = this.mapToBase(
-      this.pathUtils.join(this.pathUtils.dirname(p), target)
+      this.pathUtils.join(this.pathUtils.dirname(p), target),
     );
     const mappedTarget = this.baseFs.pathUtils.relative(
       this.baseFs.pathUtils.dirname(mappedP),
-      mappedAbsoluteTarget
+      mappedAbsoluteTarget,
     );
     return this.baseFs.symlinkSync(mappedTarget, mappedP, type);
   }
@@ -8582,7 +8582,7 @@ class ProxiedFS extends FakeFS {
   }
   async readlinkPromise(p) {
     return this.mapFromBase(
-      await this.baseFs.readlinkPromise(this.mapToBase(p))
+      await this.baseFs.readlinkPromise(this.mapToBase(p)),
     );
   }
   readlinkSync(p) {
@@ -8644,7 +8644,7 @@ class NodeFS extends BasePortableFakeFS {
         npath.fromPortablePath(p),
         flags,
         mode,
-        this.makeCallback(resolve, reject)
+        this.makeCallback(resolve, reject),
       );
     });
   }
@@ -8657,12 +8657,12 @@ class NodeFS extends BasePortableFakeFS {
         this.realFs.opendir(
           npath.fromPortablePath(p),
           opts,
-          this.makeCallback(resolve, reject)
+          this.makeCallback(resolve, reject),
         );
       } else {
         this.realFs.opendir(
           npath.fromPortablePath(p),
-          this.makeCallback(resolve, reject)
+          this.makeCallback(resolve, reject),
         );
       }
     }).then((dir) => {
@@ -8702,7 +8702,7 @@ class NodeFS extends BasePortableFakeFS {
           } else {
             resolve(bytesRead);
           }
-        }
+        },
       );
     });
   }
@@ -8716,7 +8716,7 @@ class NodeFS extends BasePortableFakeFS {
           fd,
           buffer,
           offset,
-          this.makeCallback(resolve, reject)
+          this.makeCallback(resolve, reject),
         );
       } else {
         return this.realFs.write(
@@ -8725,7 +8725,7 @@ class NodeFS extends BasePortableFakeFS {
           offset,
           length,
           position,
-          this.makeCallback(resolve, reject)
+          this.makeCallback(resolve, reject),
         );
       }
     });
@@ -8758,7 +8758,7 @@ class NodeFS extends BasePortableFakeFS {
       this.realFs.realpath(
         npath.fromPortablePath(p),
         {},
-        this.makeCallback(resolve, reject)
+        this.makeCallback(resolve, reject),
       );
     }).then((path) => {
       return npath.toPortablePath(path);
@@ -8766,7 +8766,7 @@ class NodeFS extends BasePortableFakeFS {
   }
   realpathSync(p) {
     return npath.toPortablePath(
-      this.realFs.realpathSync(npath.fromPortablePath(p), {})
+      this.realFs.realpathSync(npath.fromPortablePath(p), {}),
     );
   }
   async existsPromise(p) {
@@ -8782,7 +8782,7 @@ class NodeFS extends BasePortableFakeFS {
       this.realFs.access(
         npath.fromPortablePath(p),
         mode,
-        this.makeCallback(resolve, reject)
+        this.makeCallback(resolve, reject),
       );
     });
   }
@@ -8795,12 +8795,12 @@ class NodeFS extends BasePortableFakeFS {
         this.realFs.stat(
           npath.fromPortablePath(p),
           opts,
-          this.makeCallback(resolve, reject)
+          this.makeCallback(resolve, reject),
         );
       } else {
         this.realFs.stat(
           npath.fromPortablePath(p),
-          this.makeCallback(resolve, reject)
+          this.makeCallback(resolve, reject),
         );
       }
     });
@@ -8834,12 +8834,12 @@ class NodeFS extends BasePortableFakeFS {
         this.realFs.lstat(
           npath.fromPortablePath(p),
           opts,
-          this.makeCallback(resolve, reject)
+          this.makeCallback(resolve, reject),
         );
       } else {
         this.realFs.lstat(
           npath.fromPortablePath(p),
-          this.makeCallback(resolve, reject)
+          this.makeCallback(resolve, reject),
         );
       }
     });
@@ -8864,7 +8864,7 @@ class NodeFS extends BasePortableFakeFS {
       this.realFs.chmod(
         npath.fromPortablePath(p),
         mask,
-        this.makeCallback(resolve, reject)
+        this.makeCallback(resolve, reject),
       );
     });
   }
@@ -8885,7 +8885,7 @@ class NodeFS extends BasePortableFakeFS {
         npath.fromPortablePath(p),
         uid,
         gid,
-        this.makeCallback(resolve, reject)
+        this.makeCallback(resolve, reject),
       );
     });
   }
@@ -8897,14 +8897,14 @@ class NodeFS extends BasePortableFakeFS {
       this.realFs.rename(
         npath.fromPortablePath(oldP),
         npath.fromPortablePath(newP),
-        this.makeCallback(resolve, reject)
+        this.makeCallback(resolve, reject),
       );
     });
   }
   renameSync(oldP, newP) {
     return this.realFs.renameSync(
       npath.fromPortablePath(oldP),
-      npath.fromPortablePath(newP)
+      npath.fromPortablePath(newP),
     );
   }
   async copyFilePromise(sourceP, destP, flags = 0) {
@@ -8913,7 +8913,7 @@ class NodeFS extends BasePortableFakeFS {
         npath.fromPortablePath(sourceP),
         npath.fromPortablePath(destP),
         flags,
-        this.makeCallback(resolve, reject)
+        this.makeCallback(resolve, reject),
       );
     });
   }
@@ -8921,7 +8921,7 @@ class NodeFS extends BasePortableFakeFS {
     return this.realFs.copyFileSync(
       npath.fromPortablePath(sourceP),
       npath.fromPortablePath(destP),
-      flags
+      flags,
     );
   }
   async appendFilePromise(p, content, opts) {
@@ -8933,13 +8933,13 @@ class NodeFS extends BasePortableFakeFS {
           fsNativePath,
           content,
           opts,
-          this.makeCallback(resolve, reject)
+          this.makeCallback(resolve, reject),
         );
       } else {
         this.realFs.appendFile(
           fsNativePath,
           content,
-          this.makeCallback(resolve, reject)
+          this.makeCallback(resolve, reject),
         );
       }
     });
@@ -8961,13 +8961,13 @@ class NodeFS extends BasePortableFakeFS {
           fsNativePath,
           content,
           opts,
-          this.makeCallback(resolve, reject)
+          this.makeCallback(resolve, reject),
         );
       } else {
         this.realFs.writeFile(
           fsNativePath,
           content,
-          this.makeCallback(resolve, reject)
+          this.makeCallback(resolve, reject),
         );
       }
     });
@@ -8984,7 +8984,7 @@ class NodeFS extends BasePortableFakeFS {
     return await new Promise((resolve, reject) => {
       this.realFs.unlink(
         npath.fromPortablePath(p),
-        this.makeCallback(resolve, reject)
+        this.makeCallback(resolve, reject),
       );
     });
   }
@@ -8997,7 +8997,7 @@ class NodeFS extends BasePortableFakeFS {
         npath.fromPortablePath(p),
         atime,
         mtime,
-        this.makeCallback(resolve, reject)
+        this.makeCallback(resolve, reject),
       );
     });
   }
@@ -9010,7 +9010,7 @@ class NodeFS extends BasePortableFakeFS {
         npath.fromPortablePath(p),
         atime,
         mtime,
-        this.makeCallback(resolve, reject)
+        this.makeCallback(resolve, reject),
       );
     });
   }
@@ -9022,7 +9022,7 @@ class NodeFS extends BasePortableFakeFS {
       this.realFs.mkdir(
         npath.fromPortablePath(p),
         opts,
-        this.makeCallback(resolve, reject)
+        this.makeCallback(resolve, reject),
       );
     });
   }
@@ -9035,12 +9035,12 @@ class NodeFS extends BasePortableFakeFS {
         this.realFs.rmdir(
           npath.fromPortablePath(p),
           opts,
-          this.makeCallback(resolve, reject)
+          this.makeCallback(resolve, reject),
         );
       } else {
         this.realFs.rmdir(
           npath.fromPortablePath(p),
-          this.makeCallback(resolve, reject)
+          this.makeCallback(resolve, reject),
         );
       }
     });
@@ -9054,12 +9054,12 @@ class NodeFS extends BasePortableFakeFS {
         this.realFs.rm(
           npath.fromPortablePath(p),
           opts,
-          this.makeCallback(resolve, reject)
+          this.makeCallback(resolve, reject),
         );
       } else {
         this.realFs.rm(
           npath.fromPortablePath(p),
-          this.makeCallback(resolve, reject)
+          this.makeCallback(resolve, reject),
         );
       }
     });
@@ -9072,14 +9072,14 @@ class NodeFS extends BasePortableFakeFS {
       this.realFs.link(
         npath.fromPortablePath(existingP),
         npath.fromPortablePath(newP),
-        this.makeCallback(resolve, reject)
+        this.makeCallback(resolve, reject),
       );
     });
   }
   linkSync(existingP, newP) {
     return this.realFs.linkSync(
       npath.fromPortablePath(existingP),
-      npath.fromPortablePath(newP)
+      npath.fromPortablePath(newP),
     );
   }
   async symlinkPromise(target, p, type) {
@@ -9088,7 +9088,7 @@ class NodeFS extends BasePortableFakeFS {
         npath.fromPortablePath(target.replace(/\/+$/, ``)),
         npath.fromPortablePath(p),
         type,
-        this.makeCallback(resolve, reject)
+        this.makeCallback(resolve, reject),
       );
     });
   }
@@ -9096,7 +9096,7 @@ class NodeFS extends BasePortableFakeFS {
     return this.realFs.symlinkSync(
       npath.fromPortablePath(target.replace(/\/+$/, ``)),
       npath.fromPortablePath(p),
-      type
+      type,
     );
   }
   async readFilePromise(p, encoding) {
@@ -9106,7 +9106,7 @@ class NodeFS extends BasePortableFakeFS {
       this.realFs.readFile(
         fsNativePath,
         encoding,
-        this.makeCallback(resolve, reject)
+        this.makeCallback(resolve, reject),
       );
     });
   }
@@ -9124,8 +9124,8 @@ class NodeFS extends BasePortableFakeFS {
               opts,
               this.makeCallback(
                 (results) => resolve(results.map(direntToPortable)),
-                reject
-              )
+                reject,
+              ),
             );
           } else {
             this.realFs.readdir(
@@ -9133,21 +9133,21 @@ class NodeFS extends BasePortableFakeFS {
               opts,
               this.makeCallback(
                 (results) => resolve(results.map(npath.toPortablePath)),
-                reject
-              )
+                reject,
+              ),
             );
           }
         } else {
           this.realFs.readdir(
             npath.fromPortablePath(p),
             opts,
-            this.makeCallback(resolve, reject)
+            this.makeCallback(resolve, reject),
           );
         }
       } else {
         this.realFs.readdir(
           npath.fromPortablePath(p),
-          this.makeCallback(resolve, reject)
+          this.makeCallback(resolve, reject),
         );
       }
     });
@@ -9175,7 +9175,7 @@ class NodeFS extends BasePortableFakeFS {
     return await new Promise((resolve, reject) => {
       this.realFs.readlink(
         npath.fromPortablePath(p),
-        this.makeCallback(resolve, reject)
+        this.makeCallback(resolve, reject),
       );
     }).then((path) => {
       return npath.toPortablePath(path);
@@ -9183,7 +9183,7 @@ class NodeFS extends BasePortableFakeFS {
   }
   readlinkSync(p) {
     return npath.toPortablePath(
-      this.realFs.readlinkSync(npath.fromPortablePath(p))
+      this.realFs.readlinkSync(npath.fromPortablePath(p)),
     );
   }
   async truncatePromise(p, len) {
@@ -9191,7 +9191,7 @@ class NodeFS extends BasePortableFakeFS {
       this.realFs.truncate(
         npath.fromPortablePath(p),
         len,
-        this.makeCallback(resolve, reject)
+        this.makeCallback(resolve, reject),
       );
     });
   }
@@ -9245,7 +9245,7 @@ class MountFS extends BasePortableFakeFS {
       !(magicByte > 1 && magicByte <= 127)
     )
       throw new Error(
-        `The magic byte must be set to a round value between 1 and 127 included`
+        `The magic byte must be set to a round value between 1 and 127 included`,
       );
     super();
     this.fdMap = /* @__PURE__ */ new Map();
@@ -9306,9 +9306,9 @@ class MountFS extends BasePortableFakeFS {
       async (mountFs, { subPath }) => {
         return this.remapFd(
           mountFs,
-          await mountFs.openPromise(subPath, flags, mode)
+          await mountFs.openPromise(subPath, flags, mode),
         );
-      }
+      },
     );
   }
   openSync(p, flags, mode) {
@@ -9319,7 +9319,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return this.remapFd(mountFs, mountFs.openSync(subPath, flags, mode));
-      }
+      },
     );
   }
   async opendirPromise(p, opts) {
@@ -9333,7 +9333,7 @@ class MountFS extends BasePortableFakeFS {
       },
       {
         requireSubpath: false,
-      }
+      },
     );
   }
   opendirSync(p, opts) {
@@ -9347,7 +9347,7 @@ class MountFS extends BasePortableFakeFS {
       },
       {
         requireSubpath: false,
-      }
+      },
     );
   }
   async readPromise(fd, buffer, offset, length, position) {
@@ -9357,7 +9357,7 @@ class MountFS extends BasePortableFakeFS {
         buffer,
         offset,
         length,
-        position
+        position,
       );
     const entry = this.fdMap.get(fd);
     if (typeof entry === `undefined`) throw EBADF(`read`);
@@ -9382,7 +9382,7 @@ class MountFS extends BasePortableFakeFS {
           buffer,
           offset,
           length,
-          position
+          position,
         );
       }
     }
@@ -9397,7 +9397,7 @@ class MountFS extends BasePortableFakeFS {
         buffer,
         offset,
         length,
-        position
+        position,
       );
     }
   }
@@ -9445,10 +9445,10 @@ class MountFS extends BasePortableFakeFS {
       (mountFs, { archivePath, subPath }) => {
         const stream = mountFs.createReadStream(subPath, opts);
         stream.path = npath.fromPortablePath(
-          this.pathUtils.join(archivePath, subPath)
+          this.pathUtils.join(archivePath, subPath),
         );
         return stream;
-      }
+      },
     );
   }
   createWriteStream(p, opts) {
@@ -9460,7 +9460,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.createWriteStream(subPath, opts);
-      }
+      },
     );
   }
   async realpathPromise(p) {
@@ -9479,10 +9479,10 @@ class MountFS extends BasePortableFakeFS {
           realArchivePath,
           this.pathUtils.relative(
             PortablePath.root,
-            await mountFs.realpathPromise(subPath)
-          )
+            await mountFs.realpathPromise(subPath),
+          ),
         );
-      }
+      },
     );
   }
   realpathSync(p) {
@@ -9501,10 +9501,10 @@ class MountFS extends BasePortableFakeFS {
           realArchivePath,
           this.pathUtils.relative(
             PortablePath.root,
-            mountFs.realpathSync(subPath)
-          )
+            mountFs.realpathSync(subPath),
+          ),
         );
-      }
+      },
     );
   }
   async existsPromise(p) {
@@ -9515,7 +9515,7 @@ class MountFS extends BasePortableFakeFS {
       },
       async (mountFs, { subPath }) => {
         return await mountFs.existsPromise(subPath);
-      }
+      },
     );
   }
   existsSync(p) {
@@ -9526,7 +9526,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.existsSync(subPath);
-      }
+      },
     );
   }
   async accessPromise(p, mode) {
@@ -9537,7 +9537,7 @@ class MountFS extends BasePortableFakeFS {
       },
       async (mountFs, { subPath }) => {
         return await mountFs.accessPromise(subPath, mode);
-      }
+      },
     );
   }
   accessSync(p, mode) {
@@ -9548,7 +9548,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.accessSync(subPath, mode);
-      }
+      },
     );
   }
   async statPromise(p, opts) {
@@ -9559,7 +9559,7 @@ class MountFS extends BasePortableFakeFS {
       },
       async (mountFs, { subPath }) => {
         return await mountFs.statPromise(subPath, opts);
-      }
+      },
     );
   }
   statSync(p, opts) {
@@ -9570,7 +9570,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.statSync(subPath, opts);
-      }
+      },
     );
   }
   async fstatPromise(fd, opts) {
@@ -9597,7 +9597,7 @@ class MountFS extends BasePortableFakeFS {
       },
       async (mountFs, { subPath }) => {
         return await mountFs.lstatPromise(subPath, opts);
-      }
+      },
     );
   }
   lstatSync(p, opts) {
@@ -9608,7 +9608,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.lstatSync(subPath, opts);
-      }
+      },
     );
   }
   async fchmodPromise(fd, mask) {
@@ -9635,7 +9635,7 @@ class MountFS extends BasePortableFakeFS {
       },
       async (mountFs, { subPath }) => {
         return await mountFs.chmodPromise(subPath, mask);
-      }
+      },
     );
   }
   chmodSync(p, mask) {
@@ -9646,7 +9646,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.chmodSync(subPath, mask);
-      }
+      },
     );
   }
   async fchownPromise(fd, uid, gid) {
@@ -9673,7 +9673,7 @@ class MountFS extends BasePortableFakeFS {
       },
       async (mountFs, { subPath }) => {
         return await mountFs.chownPromise(subPath, uid, gid);
-      }
+      },
     );
   }
   chownSync(p, uid, gid) {
@@ -9684,7 +9684,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.chownSync(subPath, uid, gid);
-      }
+      },
     );
   }
   async renamePromise(oldP, newP) {
@@ -9699,9 +9699,9 @@ class MountFS extends BasePortableFakeFS {
           async () => {
             throw Object.assign(
               new Error(`EEXDEV: cross-device link not permitted`),
-              { code: `EEXDEV` }
+              { code: `EEXDEV` },
             );
-          }
+          },
         );
       },
       async (mountFsO, { subPath: subPathO }) => {
@@ -9710,21 +9710,21 @@ class MountFS extends BasePortableFakeFS {
           async () => {
             throw Object.assign(
               new Error(`EEXDEV: cross-device link not permitted`),
-              { code: `EEXDEV` }
+              { code: `EEXDEV` },
             );
           },
           async (mountFsN, { subPath: subPathN }) => {
             if (mountFsO !== mountFsN) {
               throw Object.assign(
                 new Error(`EEXDEV: cross-device link not permitted`),
-                { code: `EEXDEV` }
+                { code: `EEXDEV` },
               );
             } else {
               return await mountFsO.renamePromise(subPathO, subPathN);
             }
-          }
+          },
         );
-      }
+      },
     );
   }
   renameSync(oldP, newP) {
@@ -9739,9 +9739,9 @@ class MountFS extends BasePortableFakeFS {
           () => {
             throw Object.assign(
               new Error(`EEXDEV: cross-device link not permitted`),
-              { code: `EEXDEV` }
+              { code: `EEXDEV` },
             );
-          }
+          },
         );
       },
       (mountFsO, { subPath: subPathO }) => {
@@ -9750,21 +9750,21 @@ class MountFS extends BasePortableFakeFS {
           () => {
             throw Object.assign(
               new Error(`EEXDEV: cross-device link not permitted`),
-              { code: `EEXDEV` }
+              { code: `EEXDEV` },
             );
           },
           (mountFsN, { subPath: subPathN }) => {
             if (mountFsO !== mountFsN) {
               throw Object.assign(
                 new Error(`EEXDEV: cross-device link not permitted`),
-                { code: `EEXDEV` }
+                { code: `EEXDEV` },
               );
             } else {
               return mountFsO.renameSync(subPathO, subPathN);
             }
-          }
+          },
         );
-      }
+      },
     );
   }
   async copyFilePromise(sourceP, destP, flags = 0) {
@@ -9772,9 +9772,9 @@ class MountFS extends BasePortableFakeFS {
       if ((flags & fs.constants.COPYFILE_FICLONE_FORCE) !== 0)
         throw Object.assign(
           new Error(
-            `EXDEV: cross-device clone not permitted, copyfile '${sourceP2}' -> ${destP2}'`
+            `EXDEV: cross-device clone not permitted, copyfile '${sourceP2}' -> ${destP2}'`,
           ),
-          { code: `EXDEV` }
+          { code: `EXDEV` },
         );
       if (
         flags & fs.constants.COPYFILE_EXCL &&
@@ -9782,9 +9782,9 @@ class MountFS extends BasePortableFakeFS {
       )
         throw Object.assign(
           new Error(
-            `EEXIST: file already exists, copyfile '${sourceP2}' -> '${destP2}'`
+            `EEXIST: file already exists, copyfile '${sourceP2}' -> '${destP2}'`,
           ),
-          { code: `EEXIST` }
+          { code: `EEXIST` },
         );
       let content;
       try {
@@ -9792,9 +9792,9 @@ class MountFS extends BasePortableFakeFS {
       } catch (error) {
         throw Object.assign(
           new Error(
-            `EINVAL: invalid argument, copyfile '${sourceP2}' -> '${destP2}'`
+            `EINVAL: invalid argument, copyfile '${sourceP2}' -> '${destP2}'`,
           ),
-          { code: `EINVAL` }
+          { code: `EINVAL` },
         );
       }
       await destFs.writeFilePromise(destP2, content);
@@ -9809,7 +9809,7 @@ class MountFS extends BasePortableFakeFS {
           },
           async (mountFsD, { subPath: subPathD }) => {
             return await fallback(this.baseFs, sourceP, mountFsD, subPathD);
-          }
+          },
         );
       },
       async (mountFsS, { subPath: subPathS }) => {
@@ -9824,9 +9824,9 @@ class MountFS extends BasePortableFakeFS {
             } else {
               return await mountFsS.copyFilePromise(subPathS, subPathD, flags);
             }
-          }
+          },
         );
-      }
+      },
     );
   }
   copyFileSync(sourceP, destP, flags = 0) {
@@ -9834,16 +9834,16 @@ class MountFS extends BasePortableFakeFS {
       if ((flags & fs.constants.COPYFILE_FICLONE_FORCE) !== 0)
         throw Object.assign(
           new Error(
-            `EXDEV: cross-device clone not permitted, copyfile '${sourceP2}' -> ${destP2}'`
+            `EXDEV: cross-device clone not permitted, copyfile '${sourceP2}' -> ${destP2}'`,
           ),
-          { code: `EXDEV` }
+          { code: `EXDEV` },
         );
       if (flags & fs.constants.COPYFILE_EXCL && this.existsSync(sourceP2))
         throw Object.assign(
           new Error(
-            `EEXIST: file already exists, copyfile '${sourceP2}' -> '${destP2}'`
+            `EEXIST: file already exists, copyfile '${sourceP2}' -> '${destP2}'`,
           ),
-          { code: `EEXIST` }
+          { code: `EEXIST` },
         );
       let content;
       try {
@@ -9851,9 +9851,9 @@ class MountFS extends BasePortableFakeFS {
       } catch (error) {
         throw Object.assign(
           new Error(
-            `EINVAL: invalid argument, copyfile '${sourceP2}' -> '${destP2}'`
+            `EINVAL: invalid argument, copyfile '${sourceP2}' -> '${destP2}'`,
           ),
-          { code: `EINVAL` }
+          { code: `EINVAL` },
         );
       }
       destFs.writeFileSync(destP2, content);
@@ -9868,7 +9868,7 @@ class MountFS extends BasePortableFakeFS {
           },
           (mountFsD, { subPath: subPathD }) => {
             return fallback(this.baseFs, sourceP, mountFsD, subPathD);
-          }
+          },
         );
       },
       (mountFsS, { subPath: subPathS }) => {
@@ -9883,9 +9883,9 @@ class MountFS extends BasePortableFakeFS {
             } else {
               return mountFsS.copyFileSync(subPathS, subPathD, flags);
             }
-          }
+          },
         );
-      }
+      },
     );
   }
   async appendFilePromise(p, content, opts) {
@@ -9896,7 +9896,7 @@ class MountFS extends BasePortableFakeFS {
       },
       async (mountFs, { subPath }) => {
         return await mountFs.appendFilePromise(subPath, content, opts);
-      }
+      },
     );
   }
   appendFileSync(p, content, opts) {
@@ -9907,7 +9907,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.appendFileSync(subPath, content, opts);
-      }
+      },
     );
   }
   async writeFilePromise(p, content, opts) {
@@ -9918,7 +9918,7 @@ class MountFS extends BasePortableFakeFS {
       },
       async (mountFs, { subPath }) => {
         return await mountFs.writeFilePromise(subPath, content, opts);
-      }
+      },
     );
   }
   writeFileSync(p, content, opts) {
@@ -9929,7 +9929,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.writeFileSync(subPath, content, opts);
-      }
+      },
     );
   }
   async unlinkPromise(p) {
@@ -9940,7 +9940,7 @@ class MountFS extends BasePortableFakeFS {
       },
       async (mountFs, { subPath }) => {
         return await mountFs.unlinkPromise(subPath);
-      }
+      },
     );
   }
   unlinkSync(p) {
@@ -9951,7 +9951,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.unlinkSync(subPath);
-      }
+      },
     );
   }
   async utimesPromise(p, atime, mtime) {
@@ -9962,7 +9962,7 @@ class MountFS extends BasePortableFakeFS {
       },
       async (mountFs, { subPath }) => {
         return await mountFs.utimesPromise(subPath, atime, mtime);
-      }
+      },
     );
   }
   utimesSync(p, atime, mtime) {
@@ -9973,7 +9973,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.utimesSync(subPath, atime, mtime);
-      }
+      },
     );
   }
   async lutimesPromise(p, atime, mtime) {
@@ -9984,7 +9984,7 @@ class MountFS extends BasePortableFakeFS {
       },
       async (mountFs, { subPath }) => {
         return await mountFs.lutimesPromise(subPath, atime, mtime);
-      }
+      },
     );
   }
   lutimesSync(p, atime, mtime) {
@@ -9995,7 +9995,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.lutimesSync(subPath, atime, mtime);
-      }
+      },
     );
   }
   async mkdirPromise(p, opts) {
@@ -10006,7 +10006,7 @@ class MountFS extends BasePortableFakeFS {
       },
       async (mountFs, { subPath }) => {
         return await mountFs.mkdirPromise(subPath, opts);
-      }
+      },
     );
   }
   mkdirSync(p, opts) {
@@ -10017,7 +10017,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.mkdirSync(subPath, opts);
-      }
+      },
     );
   }
   async rmdirPromise(p, opts) {
@@ -10028,7 +10028,7 @@ class MountFS extends BasePortableFakeFS {
       },
       async (mountFs, { subPath }) => {
         return await mountFs.rmdirPromise(subPath, opts);
-      }
+      },
     );
   }
   rmdirSync(p, opts) {
@@ -10039,7 +10039,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.rmdirSync(subPath, opts);
-      }
+      },
     );
   }
   async rmPromise(p, opts) {
@@ -10050,7 +10050,7 @@ class MountFS extends BasePortableFakeFS {
       },
       async (mountFs, { subPath }) => {
         return await mountFs.rmPromise(subPath, opts);
-      }
+      },
     );
   }
   rmSync(p, opts) {
@@ -10061,7 +10061,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.rmSync(subPath, opts);
-      }
+      },
     );
   }
   async linkPromise(existingP, newP) {
@@ -10072,7 +10072,7 @@ class MountFS extends BasePortableFakeFS {
       },
       async (mountFs, { subPath }) => {
         return await mountFs.linkPromise(existingP, subPath);
-      }
+      },
     );
   }
   linkSync(existingP, newP) {
@@ -10083,7 +10083,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.linkSync(existingP, subPath);
-      }
+      },
     );
   }
   async symlinkPromise(target, p, type) {
@@ -10094,7 +10094,7 @@ class MountFS extends BasePortableFakeFS {
       },
       async (mountFs, { subPath }) => {
         return await mountFs.symlinkPromise(target, subPath);
-      }
+      },
     );
   }
   symlinkSync(target, p, type) {
@@ -10105,7 +10105,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.symlinkSync(target, subPath);
-      }
+      },
     );
   }
   async readFilePromise(p, encoding) {
@@ -10116,7 +10116,7 @@ class MountFS extends BasePortableFakeFS {
       },
       async (mountFs, { subPath }) => {
         return await mountFs.readFilePromise(subPath, encoding);
-      }
+      },
     );
   }
   readFileSync(p, encoding) {
@@ -10127,7 +10127,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.readFileSync(subPath, encoding);
-      }
+      },
     );
   }
   async readdirPromise(p, opts) {
@@ -10141,7 +10141,7 @@ class MountFS extends BasePortableFakeFS {
       },
       {
         requireSubpath: false,
-      }
+      },
     );
   }
   readdirSync(p, opts) {
@@ -10155,7 +10155,7 @@ class MountFS extends BasePortableFakeFS {
       },
       {
         requireSubpath: false,
-      }
+      },
     );
   }
   async readlinkPromise(p) {
@@ -10166,7 +10166,7 @@ class MountFS extends BasePortableFakeFS {
       },
       async (mountFs, { subPath }) => {
         return await mountFs.readlinkPromise(subPath);
-      }
+      },
     );
   }
   readlinkSync(p) {
@@ -10177,7 +10177,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.readlinkSync(subPath);
-      }
+      },
     );
   }
   async truncatePromise(p, len) {
@@ -10188,7 +10188,7 @@ class MountFS extends BasePortableFakeFS {
       },
       async (mountFs, { subPath }) => {
         return await mountFs.truncatePromise(subPath, len);
-      }
+      },
     );
   }
   truncateSync(p, len) {
@@ -10199,7 +10199,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.truncateSync(subPath, len);
-      }
+      },
     );
   }
   async ftruncatePromise(fd, len) {
@@ -10226,7 +10226,7 @@ class MountFS extends BasePortableFakeFS {
       },
       (mountFs, { subPath }) => {
         return mountFs.watch(subPath, a, b);
-      }
+      },
     );
   }
   watchFile(p, a, b) {
@@ -10237,7 +10237,7 @@ class MountFS extends BasePortableFakeFS {
       },
       () => {
         return watchFile(this, p, a, b);
-      }
+      },
     );
   }
   unwatchFile(p, cb) {
@@ -10248,7 +10248,7 @@ class MountFS extends BasePortableFakeFS {
       },
       () => {
         return unwatchFile(this, p, cb);
-      }
+      },
     );
   }
   async makeCallPromise(p, discard, accept, { requireSubpath = true } = {}) {
@@ -10259,7 +10259,7 @@ class MountFS extends BasePortableFakeFS {
     if (requireSubpath && mountInfo.subPath === `/`) return await discard();
     return await this.getMountPromise(
       mountInfo.archivePath,
-      async (mountFs) => await accept(mountFs, mountInfo)
+      async (mountFs) => await accept(mountFs, mountInfo),
     );
   }
   makeCallSync(p, discard, accept, { requireSubpath = true } = {}) {
@@ -10269,7 +10269,7 @@ class MountFS extends BasePortableFakeFS {
     if (!mountInfo) return discard();
     if (requireSubpath && mountInfo.subPath === `/`) return discard();
     return this.getMountSync(mountInfo.archivePath, (mountFs) =>
-      accept(mountFs, mountInfo)
+      accept(mountFs, mountInfo),
     );
   }
   findMount(p) {
@@ -10300,7 +10300,7 @@ class MountFS extends BasePortableFakeFS {
         archivePath: filePath,
         subPath: this.pathUtils.join(
           PortablePath.root,
-          p.substring(filePath.length)
+          p.substring(filePath.length),
         ),
       };
     }
@@ -10424,11 +10424,11 @@ class VirtualFS extends ProxiedFS {
   static makeVirtualPath(base, component, to) {
     if (ppath.basename(base) !== `__virtual__`)
       throw new Error(
-        `Assertion failed: Virtual folders must be named "__virtual__"`
+        `Assertion failed: Virtual folders must be named "__virtual__"`,
       );
     if (!ppath.basename(component).match(VALID_COMPONENT))
       throw new Error(
-        `Assertion failed: Virtual components must be ended by an hexadecimal hash`
+        `Assertion failed: Virtual components must be ended by an hexadecimal hash`,
       );
     const target = ppath.relative(ppath.dirname(base), to);
     const segments = target.split(`/`);
@@ -10439,7 +10439,7 @@ class VirtualFS extends ProxiedFS {
       base,
       component,
       String(depth),
-      ...finalSegments
+      ...finalSegments,
     );
     return fullVirtualPath;
   }
@@ -10479,7 +10479,7 @@ class VirtualFS extends ProxiedFS {
     if (p === ``) return p;
     if (this.pathUtils.isAbsolute(p)) return VirtualFS.resolveVirtual(p);
     const resolvedRoot = VirtualFS.resolveVirtual(
-      this.baseFs.resolve(PortablePath.dot)
+      this.baseFs.resolve(PortablePath.dot),
     );
     const resolvedP = VirtualFS.resolveVirtual(this.baseFs.resolve(p));
     return ppath.relative(resolvedRoot, resolvedP) || PortablePath.dot;
@@ -10509,7 +10509,7 @@ class NodePathFS extends ProxiedFS {
       const str = path.toString();
       if (!isUtf8(path, str))
         throw new Error(
-          `Non-utf8 buffers are not supported at the moment. Please upvote the following issue if you encounter this error: https://github.com/yarnpkg/berry/issues/4942`
+          `Non-utf8 buffers are not supported at the moment. Please upvote the following issue if you encounter this error: https://github.com/yarnpkg/berry/issues/4942`,
         );
       return str;
     }
@@ -10551,7 +10551,7 @@ class FileHandle {
       return await this[kBaseFs].appendFilePromise(
         this.fd,
         data,
-        encoding ? { encoding } : void 0
+        encoding ? { encoding } : void 0,
       );
     } finally {
       this[kUnref]();
@@ -10611,7 +10611,7 @@ class FileHandle {
         buffer,
         offset,
         length,
-        position
+        position,
       );
       return {
         bytesRead,
@@ -10676,7 +10676,7 @@ class FileHandle {
           buffer,
           offset ?? void 0,
           length ?? void 0,
-          position ?? void 0
+          position ?? void 0,
         );
         return { bytesWritten, buffer };
       } else {
@@ -10685,7 +10685,7 @@ class FileHandle {
           this.fd,
           data,
           position,
-          encoding
+          encoding,
         );
         return { bytesWritten, buffer: data };
       }
@@ -10703,7 +10703,7 @@ class FileHandle {
             buffer,
             void 0,
             void 0,
-            position
+            position,
           );
           bytesWritten += writeResult.bytesWritten;
           position += writeResult.bytesWritten;
@@ -10864,7 +10864,7 @@ function patchFs(patchedFs, fakeFs) {
           },
           () => {
             callback(false);
-          }
+          },
         );
       });
     });
@@ -10901,7 +10901,7 @@ function patchFs(patchedFs, fakeFs) {
           },
           (error) => {
             callback(error, 0, buffer);
-          }
+          },
         );
       });
     });
@@ -10920,7 +10920,7 @@ function patchFs(patchedFs, fakeFs) {
             },
             (error) => {
               callback(error);
-            }
+            },
           );
         });
       };
@@ -11001,7 +11001,7 @@ function patchFs(patchedFs, fakeFs) {
 let cachedInstance;
 let registeredFactory = () => {
   throw new Error(
-    `Assertion failed: No libzip instance is available, and no factory was configured`
+    `Assertion failed: No libzip instance is available, and no factory was configured`,
   );
 };
 function setFactory(factory) {
@@ -11127,7 +11127,9 @@ var libzipSync = { exports: {} };
         var func = Module["_" + ident];
         assert(
           func,
-          "Cannot call unknown function " + ident + ", make sure it is exported"
+          "Cannot call unknown function " +
+            ident +
+            ", make sure it is exported",
         );
         return func;
       }
@@ -11385,7 +11387,7 @@ var libzipSync = { exports: {} };
             str.includes("memory import")
           ) {
             err(
-              "Memory size incompatibility issues may be due to changing INITIAL_MEMORY at runtime to something too large. Use ALLOW_MEMORY_GROWTH to allow any size memory (and also make sure not to set INITIAL_MEMORY at runtime to something smaller than it was at compile time)."
+              "Memory size incompatibility issues may be due to changing INITIAL_MEMORY at runtime to something too large. Use ALLOW_MEMORY_GROWTH to allow any size memory (and also make sure not to set INITIAL_MEMORY at runtime to something smaller than it was at compile time).",
             );
           }
           throw e;
@@ -11460,7 +11462,7 @@ var libzipSync = { exports: {} };
         LE_HEAP_STORE_I32(((tmPtr + 16) >> 2) * 4, date.getUTCMonth());
         LE_HEAP_STORE_I32(
           ((tmPtr + 20) >> 2) * 4,
-          date.getUTCFullYear() - 1900
+          date.getUTCFullYear() - 1900,
         );
         LE_HEAP_STORE_I32(((tmPtr + 24) >> 2) * 4, date.getUTCDay());
         LE_HEAP_STORE_I32(((tmPtr + 36) >> 2) * 4, 0);
@@ -11496,11 +11498,11 @@ var libzipSync = { exports: {} };
           var overGrownHeapSize = oldSize * (1 + 0.2 / cutDown);
           overGrownHeapSize = Math.min(
             overGrownHeapSize,
-            requestedSize + 100663296
+            requestedSize + 100663296,
           );
           var newSize = Math.min(
             maxHeapSize,
-            alignUp(Math.max(requestedSize, overGrownHeapSize), 65536)
+            alignUp(Math.max(requestedSize, overGrownHeapSize), 65536),
           );
           var replacement = emscripten_realloc_buffer(newSize);
           if (replacement) {
@@ -11529,7 +11531,7 @@ var libzipSync = { exports: {} };
         LE_HEAP_STORE_I32((__get_timezone() >> 2) * 4, stdTimezoneOffset * 60);
         LE_HEAP_STORE_I32(
           (__get_daylight() >> 2) * 4,
-          Number(winterOffset != summerOffset)
+          Number(winterOffset != summerOffset),
         );
         function extractZone(date) {
           var match = date.toTimeString().match(/\(([A-Za-z ]+)\)$/);
@@ -11556,7 +11558,7 @@ var libzipSync = { exports: {} };
           LE_HEAP_LOAD_I32(((tmPtr + 8) >> 2) * 4),
           LE_HEAP_LOAD_I32(((tmPtr + 4) >> 2) * 4),
           LE_HEAP_LOAD_I32((tmPtr >> 2) * 4),
-          0
+          0,
         );
         var date = new Date(time);
         LE_HEAP_STORE_I32(((tmPtr + 24) >> 2) * 4, date.getUTCDay());
@@ -11576,7 +11578,7 @@ var libzipSync = { exports: {} };
           return new Uint8Array(
             buf["buffer"],
             buf["byteOffset"],
-            buf["byteLength"]
+            buf["byteLength"],
           );
         }
       }
@@ -11825,12 +11827,12 @@ const makeInterface = (emZip) => ({
     getExternalAttributes: emZip.cwrap(
       `zip_file_get_external_attributes`,
       `number`,
-      [`number`, ...number64, `number`, `number`, `number`]
+      [`number`, ...number64, `number`, `number`, `number`],
     ),
     setExternalAttributes: emZip.cwrap(
       `zip_file_set_external_attributes`,
       `number`,
-      [`number`, ...number64, `number`, `number`, `number`]
+      [`number`, ...number64, `number`, `number`, `number`],
     ),
     setMtime: emZip.cwrap(`zip_file_set_mtime`, `number`, [
       `number`,
@@ -12059,7 +12061,7 @@ class ZipFS extends BasePortableFakeFS {
         const error = this.libzip.struct.errorS();
         this.libzip.error.initWithCode(
           error,
-          this.libzip.getValue(errPtr, `i32`)
+          this.libzip.getValue(errPtr, `i32`),
         );
         throw this.makeLibzipError(error);
       }
@@ -12087,11 +12089,11 @@ class ZipFS extends BasePortableFakeFS {
     const strerror = this.libzip.error.strerror(error);
     const libzipError = new LibzipError(
       strerror,
-      this.libzip.errors[errorCode]
+      this.libzip.errors[errorCode],
     );
     if (errorCode === this.libzip.errors.ZIP_ER_CHANGED)
       throw new Error(
-        `Assertion failed: Unexpected libzip error: ${libzipError.message}`
+        `Assertion failed: Unexpected libzip error: ${libzipError.message}`,
       );
     return libzipError;
   }
@@ -12150,7 +12152,7 @@ class ZipFS extends BasePortableFakeFS {
         else if (rc < size) throw new Error(`Incomplete read`);
         else if (rc > size) throw new Error(`Overread`);
         let result = Buffer.from(
-          this.libzip.HEAPU8.subarray(buffer, buffer + size)
+          this.libzip.HEAPU8.subarray(buffer, buffer + size),
         );
         if (process.env.YARN_IS_TEST_ENV && process.env.YARN_ZIP_DATA_EPILOGUE)
           result = Buffer.concat([
@@ -12175,7 +12177,7 @@ class ZipFS extends BasePortableFakeFS {
   saveAndClose() {
     if (!this.path || !this.baseFs)
       throw new Error(
-        `ZipFS cannot be saved and must be discarded when loaded from a buffer`
+        `ZipFS cannot be saved and must be discarded when loaded from a buffer`,
       );
     if (this.readOnly) {
       this.discardAndClose();
@@ -12232,7 +12234,7 @@ class ZipFS extends BasePortableFakeFS {
     source.copy(buffer, offset, realPosition, realPosition + length);
     const bytesRead = Math.max(
       0,
-      Math.min(source.length - realPosition, length)
+      Math.min(source.length - realPosition, length),
     );
     if (position === -1 || position === null) entry.cursor += bytesRead;
     return bytesRead;
@@ -12277,7 +12279,7 @@ class ZipFS extends BasePortableFakeFS {
         bytesRead: 0,
         path: p,
         pending: false,
-      }
+      },
     );
     const immediate = setImmediate(async () => {
       try {
@@ -12321,7 +12323,7 @@ class ZipFS extends BasePortableFakeFS {
         bytesWritten: 0,
         path: p,
         pending: false,
-      }
+      },
     );
     stream$1.on(`data`, (chunk) => {
       const chunkBuffer = Buffer.from(chunk);
@@ -12377,7 +12379,7 @@ class ZipFS extends BasePortableFakeFS {
       `stat '${p}'`,
       p,
       void 0,
-      opts.throwIfNoEntry
+      opts.throwIfNoEntry,
     );
     if (resolvedP === void 0) return void 0;
     if (!this.entries.has(resolvedP) && !this.listings.has(resolvedP)) {
@@ -12411,7 +12413,7 @@ class ZipFS extends BasePortableFakeFS {
       `lstat '${p}'`,
       p,
       false,
-      opts.throwIfNoEntry
+      opts.throwIfNoEntry,
     );
     if (resolvedP === void 0) return void 0;
     if (!this.entries.has(resolvedP) && !this.listings.has(resolvedP)) {
@@ -12444,8 +12446,8 @@ class ZipFS extends BasePortableFakeFS {
       const type = this.listings.has(p)
         ? fs.constants.S_IFDIR
         : this.isSymbolicLink(entry)
-        ? fs.constants.S_IFLNK
-        : fs.constants.S_IFREG;
+          ? fs.constants.S_IFLNK
+          : fs.constants.S_IFREG;
       const defaultMode = type === fs.constants.S_IFDIR ? 493 : 420;
       const mode = type | (this.getUnixMode(entry, defaultMode) & 511);
       const crc = this.libzip.struct.statCrc(stat);
@@ -12516,7 +12518,7 @@ class ZipFS extends BasePortableFakeFS {
       0,
       0,
       this.libzip.uint08S,
-      this.libzip.uint32S
+      this.libzip.uint32S,
     );
     if (rc === -1) throw this.makeLibzipError(this.libzip.getError(this.zip));
     const opsys = this.libzip.getValue(this.libzip.uint08S, `i8`) >>> 0;
@@ -12563,7 +12565,7 @@ class ZipFS extends BasePortableFakeFS {
     reason,
     p,
     resolveLastComponent = true,
-    throwIfNoEntry = true
+    throwIfNoEntry = true,
   ) {
     if (!this.ready) throw EBUSY(`archive closed, ${reason}`);
     let resolvedP = ppath.resolve(PortablePath.root, p);
@@ -12576,7 +12578,7 @@ class ZipFS extends BasePortableFakeFS {
           reason,
           ppath.resolve(ppath.dirname(resolvedP), target),
           true,
-          throwIfNoEntry
+          throwIfNoEntry,
         );
       } else {
         return resolvedP;
@@ -12587,7 +12589,7 @@ class ZipFS extends BasePortableFakeFS {
         reason,
         ppath.dirname(resolvedP),
         true,
-        throwIfNoEntry
+        throwIfNoEntry,
       );
       if (parentP === void 0) return parentP;
       const isDir = this.listings.has(parentP);
@@ -12617,7 +12619,7 @@ class ZipFS extends BasePortableFakeFS {
     const heap = new Uint8Array(
       this.libzip.HEAPU8.buffer,
       buffer,
-      content.byteLength
+      content.byteLength,
     );
     heap.set(content);
     return { buffer, byteLength: content.byteLength };
@@ -12630,7 +12632,7 @@ class ZipFS extends BasePortableFakeFS {
       byteLength,
       0,
       1,
-      error
+      error,
     );
     if (source === 0) {
       this.libzip.free(error);
@@ -12645,7 +12647,7 @@ class ZipFS extends BasePortableFakeFS {
       buffer,
       byteLength,
       0,
-      1
+      1,
     );
     if (source === 0) {
       this.libzip.free(buffer);
@@ -12662,7 +12664,7 @@ class ZipFS extends BasePortableFakeFS {
         this.zip,
         target,
         lzSource,
-        this.libzip.ZIP_FL_OVERWRITE
+        this.libzip.ZIP_FL_OVERWRITE,
       );
       if (newIndex === -1)
         throw this.makeLibzipError(this.libzip.getError(this.zip));
@@ -12676,7 +12678,7 @@ class ZipFS extends BasePortableFakeFS {
           newIndex,
           0,
           method,
-          this.level
+          this.level,
         );
         if (rc === -1) {
           throw this.makeLibzipError(this.libzip.getError(this.zip));
@@ -12697,7 +12699,7 @@ class ZipFS extends BasePortableFakeFS {
       0,
       0,
       this.libzip.uint08S,
-      this.libzip.uint32S
+      this.libzip.uint32S,
     );
     if (attrs === -1)
       throw this.makeLibzipError(this.libzip.getError(this.zip));
@@ -12720,7 +12722,7 @@ class ZipFS extends BasePortableFakeFS {
         this.zip,
         index,
         0,
-        this.libzip.ZIP_FL_COMPRESSED
+        this.libzip.ZIP_FL_COMPRESSED,
       );
       if (file === 0)
         throw this.makeLibzipError(this.libzip.getError(this.zip));
@@ -12774,7 +12776,7 @@ class ZipFS extends BasePortableFakeFS {
     const entry = this.entries.get(resolvedP);
     if (typeof entry === `undefined`)
       throw new Error(
-        `Assertion failed: The entry should have been registered (${resolvedP})`
+        `Assertion failed: The entry should have been registered (${resolvedP})`,
       );
     const oldMod = this.getUnixMode(entry, fs.constants.S_IFREG | 0);
     const newMod = (oldMod & ~511) | mask;
@@ -12784,7 +12786,7 @@ class ZipFS extends BasePortableFakeFS {
       0,
       0,
       this.libzip.ZIP_OPSYS_UNIX,
-      newMod << 16
+      newMod << 16,
     );
     if (rc === -1) {
       throw this.makeLibzipError(this.libzip.getError(this.zip));
@@ -12812,7 +12814,7 @@ class ZipFS extends BasePortableFakeFS {
     const { indexSource, indexDest, resolvedDestP } = this.prepareCopyFile(
       sourceP,
       destP,
-      flags
+      flags,
     );
     const source = await this.getFileSource(indexSource, {
       asyncDecompress: true,
@@ -12826,7 +12828,7 @@ class ZipFS extends BasePortableFakeFS {
     const { indexSource, indexDest, resolvedDestP } = this.prepareCopyFile(
       sourceP,
       destP,
-      flags
+      flags,
     );
     const source = this.getFileSource(indexSource);
     const newIndex = this.setFileSource(resolvedDestP, source);
@@ -12839,18 +12841,18 @@ class ZipFS extends BasePortableFakeFS {
     if ((flags & fs.constants.COPYFILE_FICLONE_FORCE) !== 0)
       throw ENOSYS(
         `unsupported clone operation`,
-        `copyfile '${sourceP}' -> ${destP}'`
+        `copyfile '${sourceP}' -> ${destP}'`,
       );
     const resolvedSourceP = this.resolveFilename(
       `copyfile '${sourceP} -> ${destP}'`,
-      sourceP
+      sourceP,
     );
     const indexSource = this.entries.get(resolvedSourceP);
     if (typeof indexSource === `undefined`)
       throw EINVAL(`copyfile '${sourceP}' -> '${destP}'`);
     const resolvedDestP = this.resolveFilename(
       `copyfile '${sourceP}' -> ${destP}'`,
-      destP
+      destP,
     );
     const indexDest = this.entries.get(resolvedDestP);
     if (
@@ -12981,7 +12983,7 @@ class ZipFS extends BasePortableFakeFS {
       entry,
       0,
       toUnixTimestamp(mtime),
-      0
+      0,
     );
     if (rc === -1) {
       throw this.makeLibzipError(this.libzip.getError(this.zip));
@@ -13037,7 +13039,7 @@ class ZipFS extends BasePortableFakeFS {
   hydrateDirectory(resolvedP) {
     const index = this.libzip.dir.add(
       this.zip,
-      ppath.relative(PortablePath.root, resolvedP)
+      ppath.relative(PortablePath.root, resolvedP),
     );
     if (index === -1)
       throw this.makeLibzipError(this.libzip.getError(this.zip));
@@ -13069,7 +13071,7 @@ class ZipFS extends BasePortableFakeFS {
       0,
       0,
       this.libzip.ZIP_OPSYS_UNIX,
-      (fs.constants.S_IFLNK | 511) << 16
+      (fs.constants.S_IFLNK | 511) << 16,
     );
     if (rc === -1) throw this.makeLibzipError(this.libzip.getError(this.zip));
     this.symlinkCount += 1;
@@ -13126,8 +13128,8 @@ class ZipFS extends BasePortableFakeFS {
                 {
                   name: child,
                   path: subPath,
-                }
-              )
+                },
+              ),
             );
           }
         }
@@ -13242,15 +13244,13 @@ setFactory(() => {
 
 var ErrorCode = /* @__PURE__ */ ((ErrorCode2) => {
   ErrorCode2["API_ERROR"] = `API_ERROR`;
-  ErrorCode2[
-    "BUILTIN_NODE_RESOLUTION_FAILED"
-  ] = `BUILTIN_NODE_RESOLUTION_FAILED`;
+  ErrorCode2["BUILTIN_NODE_RESOLUTION_FAILED"] =
+    `BUILTIN_NODE_RESOLUTION_FAILED`;
   ErrorCode2["EXPORTS_RESOLUTION_FAILED"] = `EXPORTS_RESOLUTION_FAILED`;
   ErrorCode2["MISSING_DEPENDENCY"] = `MISSING_DEPENDENCY`;
   ErrorCode2["MISSING_PEER_DEPENDENCY"] = `MISSING_PEER_DEPENDENCY`;
-  ErrorCode2[
-    "QUALIFIED_PATH_RESOLUTION_FAILED"
-  ] = `QUALIFIED_PATH_RESOLUTION_FAILED`;
+  ErrorCode2["QUALIFIED_PATH_RESOLUTION_FAILED"] =
+    `QUALIFIED_PATH_RESOLUTION_FAILED`;
   ErrorCode2["INTERNAL"] = `INTERNAL`;
   ErrorCode2["UNDECLARED_DEPENDENCY"] = `UNDECLARED_DEPENDENCY`;
   ErrorCode2["UNSUPPORTED"] = `UNSUPPORTED`;
@@ -13345,8 +13345,8 @@ function reportRequiredFilesToWatchMode(files) {
   if (process.env.WATCH_REPORT_DEPENDENCIES && process.send) {
     files = files.map((filename) =>
       npath.fromPortablePath(
-        VirtualFS.resolveVirtual(npath.toPortablePath(filename))
-      )
+        VirtualFS.resolveVirtual(npath.toPortablePath(filename)),
+      ),
     );
     if (WATCH_MODE_MESSAGE_USES_ARRAYS) {
       process.send({ "watch:require": files });
@@ -13440,7 +13440,7 @@ function applyPatch(pnpapi, opts) {
     request,
     parent,
     isMain,
-    options
+    options,
   ) {
     if (require$$0.isBuiltin(request)) return request;
     if (!enableNativeHooks)
@@ -13449,7 +13449,7 @@ function applyPatch(pnpapi, opts) {
         request,
         parent,
         isMain,
-        options
+        options,
       );
     if (options && options.plugnplay === false) {
       const { plugnplay, ...forwardedOptions } = options;
@@ -13460,7 +13460,7 @@ function applyPatch(pnpapi, opts) {
           request,
           parent,
           isMain,
-          forwardedOptions
+          forwardedOptions,
         );
       } finally {
         enableNativeHooks = true;
@@ -13474,8 +13474,8 @@ function applyPatch(pnpapi, opts) {
         throw makeError(
           ErrorCode.UNSUPPORTED,
           `Some options passed to require() aren't supported by PnP yet (${Array.from(
-            optionNames
-          ).join(`, `)})`
+            optionNames,
+          ).join(`, `)})`,
         );
       }
     }
@@ -13489,8 +13489,8 @@ function applyPatch(pnpapi, opts) {
       const absoluteRequest = npath.isAbsolute(request)
         ? request
         : parentDirectory !== null
-        ? npath.resolve(parentDirectory, request)
-        : null;
+          ? npath.resolve(parentDirectory, request)
+          : null;
       if (absoluteRequest !== null) {
         const apiPath =
           parent && parentDirectory === npath.dirname(absoluteRequest)
@@ -13516,7 +13516,7 @@ function applyPatch(pnpapi, opts) {
         if (issuerApi !== null) {
           resolution = issuerApi.resolveRequest(
             request,
-            path !== null ? `${path}/` : null
+            path !== null ? `${path}/` : null,
           );
         } else {
           if (path === null)
@@ -13525,7 +13525,7 @@ function applyPatch(pnpapi, opts) {
             require$$0.Module,
             request,
             module || makeFakeParent(path),
-            isMain
+            isMain,
           );
         }
       } catch (error) {
@@ -13564,7 +13564,7 @@ Require stack:
       let resolution;
       try {
         const pnpApiPath = opts.manager.findApiPathFor(
-          isAbsolute ? request : path
+          isAbsolute ? request : path,
         );
         if (pnpApiPath !== null) {
           const api = opts.manager.getApiEntry(pnpApiPath, true).instance;
@@ -13574,7 +13574,7 @@ Require stack:
             require$$0.Module,
             request,
             [path],
-            isMain
+            isMain,
           );
         }
       } catch (error) {
@@ -13605,9 +13605,9 @@ Require stack:
       this,
       module,
       npath.fromPortablePath(
-        VirtualFS.resolveVirtual(npath.toPortablePath(filename))
+        VirtualFS.resolveVirtual(npath.toPortablePath(filename)),
       ),
-      ...rest
+      ...rest,
     );
   };
   const originalEmit = process.emit;
@@ -13639,7 +13639,7 @@ function hydrateRuntimeState(data, { basePath }) {
           packageStoreData.map(([packageReference, packageInformationData]) => {
             if ((packageName === null) !== (packageReference === null))
               throw new Error(
-                `Assertion failed: The name and reference should be null, or neither should`
+                `Assertion failed: The name and reference should be null, or neither should`,
               );
             const discardFromLookup =
               packageInformationData.discardFromLookup ?? false;
@@ -13648,12 +13648,12 @@ function hydrateRuntimeState(data, { basePath }) {
               reference: packageReference,
             };
             const entry = packageLocatorsByLocations.get(
-              packageInformationData.packageLocation
+              packageInformationData.packageLocation,
             );
             if (!entry) {
               packageLocatorsByLocations.set(
                 packageInformationData.packageLocation,
-                { locator: packageLocator, discardFromLookup }
+                { locator: packageLocator, discardFromLookup },
               );
             } else {
               entry.discardFromLookup =
@@ -13667,7 +13667,7 @@ function hydrateRuntimeState(data, { basePath }) {
               packageReference,
               {
                 packageDependencies: new Map(
-                  packageInformationData.packageDependencies
+                  packageInformationData.packageDependencies,
                 ),
                 packagePeers: new Set(packageInformationData.packagePeers),
                 linkType: packageInformationData.linkType,
@@ -13677,21 +13677,21 @@ function hydrateRuntimeState(data, { basePath }) {
                     resolvedPackageLocation ||
                     (resolvedPackageLocation = ppath.join(
                       absolutePortablePath,
-                      packageInformationData.packageLocation
+                      packageInformationData.packageLocation,
                     ))
                   );
                 },
               },
             ];
-          })
+          }),
         ),
       ];
-    })
+    }),
   );
   const fallbackExclusionList = new Map(
     data.fallbackExclusionList.map(([packageName, packageReferences]) => {
       return [packageName, new Set(packageReferences)];
-    })
+    }),
   );
   const fallbackPool = new Map(data.fallbackPool);
   const dependencyTreeRoots = data.dependencyTreeRoots;
@@ -13750,7 +13750,7 @@ const ERR_PACKAGE_IMPORT_NOT_DEFINED = createErrorType(
       packagePath ? ` in package ${packagePath}package.json` : ``
     } imported from ${base}`;
   },
-  TypeError
+  TypeError,
 );
 const ERR_INVALID_MODULE_SPECIFIER = createErrorType(
   `ERR_INVALID_MODULE_SPECIFIER`,
@@ -13759,7 +13759,7 @@ const ERR_INVALID_MODULE_SPECIFIER = createErrorType(
       base ? ` imported from ${base}` : ``
     }`;
   },
-  TypeError
+  TypeError,
 );
 const ERR_INVALID_PACKAGE_TARGET = createErrorType(
   `ERR_INVALID_PACKAGE_TARGET`,
@@ -13772,7 +13772,7 @@ const ERR_INVALID_PACKAGE_TARGET = createErrorType(
     if (key === `.`) {
       assert__default.default(isImport === false);
       return `Invalid "exports" main target ${JSONStringify(
-        target
+        target,
       )} defined in the package config ${pkgPath}package.json${
         base ? ` imported from ${base}` : ``
       }${relError ? `; targets must start with "./"` : ``}`;
@@ -13780,12 +13780,12 @@ const ERR_INVALID_PACKAGE_TARGET = createErrorType(
     return `Invalid "${
       isImport ? `imports` : `exports`
     }" target ${JSONStringify(
-      target
+      target,
     )} defined for '${key}' in the package config ${pkgPath}package.json${
       base ? ` imported from ${base}` : ``
     }${relError ? `; targets must start with "./"` : ``}`;
   },
-  Error
+  Error,
 );
 const ERR_INVALID_PACKAGE_CONFIG = createErrorType(
   `ERR_INVALID_PACKAGE_CONFIG`,
@@ -13794,7 +13794,7 @@ const ERR_INVALID_PACKAGE_CONFIG = createErrorType(
       base ? ` while importing ${base}` : ``
     }${message ? `. ${message}` : ``}`;
   },
-  Error
+  Error,
 );
 const ERR_PACKAGE_PATH_NOT_EXPORTED = createErrorType(
   "ERR_PACKAGE_PATH_NOT_EXPORTED",
@@ -13807,7 +13807,7 @@ const ERR_PACKAGE_PATH_NOT_EXPORTED = createErrorType(
       base ? ` imported from ${base}` : ""
     }`;
   },
-  Error
+  Error,
 );
 
 function filterOwnProperties(source, keys) {
@@ -13849,7 +13849,7 @@ function getPackageConfig(path, specifier, base, readFileSyncFn) {
       path,
       (base ? `"${specifier}" from ` : "") +
         url.fileURLToPath(base || specifier),
-      error.message
+      error.message,
     );
   }
   let { imports, main, name, type } = filterOwnProperties(packageJSON, [
@@ -13898,7 +13898,7 @@ function getPackageScopeConfig(resolved, readFileSyncFn) {
       url.fileURLToPath(packageJSONUrl),
       resolved,
       void 0,
-      readFileSyncFn
+      readFileSyncFn,
     );
     if (packageConfig2.exists) {
       return packageConfig2;
@@ -13927,7 +13927,7 @@ function throwImportNotDefined(specifier, packageJSONUrl, base) {
   throw new ERR_PACKAGE_IMPORT_NOT_DEFINED(
     specifier,
     packageJSONUrl && url.fileURLToPath(new URL(".", packageJSONUrl)),
-    url.fileURLToPath(base)
+    url.fileURLToPath(base),
   );
 }
 function throwInvalidSubpath(subpath, packageJSONUrl, internal, base) {
@@ -13937,7 +13937,7 @@ function throwInvalidSubpath(subpath, packageJSONUrl, internal, base) {
   throw new ERR_INVALID_MODULE_SPECIFIER(
     subpath,
     reason,
-    base && url.fileURLToPath(base)
+    base && url.fileURLToPath(base),
   );
 }
 function throwInvalidPackageTarget(
@@ -13945,7 +13945,7 @@ function throwInvalidPackageTarget(
   target,
   packageJSONUrl,
   internal,
-  base
+  base,
 ) {
   if (typeof target === "object" && target !== null) {
     target = JSONStringify(target, null, "");
@@ -13957,7 +13957,7 @@ function throwInvalidPackageTarget(
     subpath,
     target,
     internal,
-    base && url.fileURLToPath(base)
+    base && url.fileURLToPath(base),
   );
 }
 const invalidSegmentRegEx =
@@ -13971,7 +13971,7 @@ function resolvePackageTargetString(
   base,
   pattern,
   internal,
-  conditions
+  conditions,
 ) {
   if (subpath !== "" && !pattern && target[target.length - 1] !== "/")
     throwInvalidPackageTarget(match, target, packageJSONUrl, internal, base);
@@ -13998,7 +13998,7 @@ function resolvePackageTargetString(
   if (
     RegExpPrototypeExec(
       invalidSegmentRegEx,
-      StringPrototypeSlice(target, 2)
+      StringPrototypeSlice(target, 2),
     ) !== null
   )
     throwInvalidPackageTarget(match, target, packageJSONUrl, internal, base);
@@ -14016,7 +14016,7 @@ function resolvePackageTargetString(
   }
   if (pattern) {
     return new URL(
-      RegExpPrototypeSymbolReplace(patternRegEx, resolved.href, () => subpath)
+      RegExpPrototypeSymbolReplace(patternRegEx, resolved.href, () => subpath),
     );
   }
   return new URL(subpath, resolved);
@@ -14034,7 +14034,7 @@ function resolvePackageTarget(
   base,
   pattern,
   internal,
-  conditions
+  conditions,
 ) {
   if (typeof target === "string") {
     return resolvePackageTargetString(
@@ -14044,7 +14044,7 @@ function resolvePackageTarget(
       packageJSONUrl,
       base,
       pattern,
-      internal
+      internal,
     );
   } else if (ArrayIsArray(target)) {
     if (target.length === 0) {
@@ -14063,7 +14063,7 @@ function resolvePackageTarget(
           base,
           pattern,
           internal,
-          conditions
+          conditions,
         );
       } catch (e) {
         lastException = e;
@@ -14092,7 +14092,7 @@ function resolvePackageTarget(
         throw new ERR_INVALID_PACKAGE_CONFIG(
           url.fileURLToPath(packageJSONUrl),
           base,
-          '"exports" cannot contain numeric property keys.'
+          '"exports" cannot contain numeric property keys.',
         );
       }
     }
@@ -14108,7 +14108,7 @@ function resolvePackageTarget(
           base,
           pattern,
           internal,
-          conditions
+          conditions,
         );
         if (resolveResult === void 0) continue;
         return resolveResult;
@@ -14123,7 +14123,7 @@ function resolvePackageTarget(
     target,
     packageJSONUrl,
     internal,
-    base
+    base,
   );
 }
 function patternKeyCompare(a, b) {
@@ -14154,7 +14154,7 @@ function isConditionalExportsMainSugar(exports, packageJSONUrl, base) {
       throw new ERR_INVALID_PACKAGE_CONFIG(
         url.fileURLToPath(packageJSONUrl),
         base,
-        `"exports" cannot contain some keys starting with '.' and some not. The exports object must either be an object of package subpath keys or an object of main entry condition name keys only.`
+        `"exports" cannot contain some keys starting with '.' and some not. The exports object must either be an object of package subpath keys or an object of main entry condition name keys only.`,
       );
     }
   }
@@ -14164,7 +14164,7 @@ function throwExportsNotFound(subpath, packageJSONUrl, base) {
   throw new ERR_PACKAGE_PATH_NOT_EXPORTED(
     url.fileURLToPath(new URL(".", packageJSONUrl)),
     subpath,
-    base && url.fileURLToPath(base)
+    base && url.fileURLToPath(base),
   );
 }
 const emittedPackageWarnings = /* @__PURE__ */ new Set();
@@ -14177,7 +14177,7 @@ function emitTrailingSlashPatternDeprecation(match, pjsonUrl, base) {
       base ? ` imported from ${url.fileURLToPath(base)}` : ""
     }. Mapping specifiers ending in "/" is no longer supported.`,
     "DeprecationWarning",
-    "DEP0155"
+    "DEP0155",
   );
 }
 function packageExportsResolve({
@@ -14203,7 +14203,7 @@ function packageExportsResolve({
       base,
       false,
       false,
-      conditions
+      conditions,
     );
     if (resolveResult == null) {
       throwExportsNotFound(packageSubpath, packageJSONUrl, base);
@@ -14220,14 +14220,14 @@ function packageExportsResolve({
       patternIndex !== -1 &&
       StringPrototypeStartsWith(
         packageSubpath,
-        StringPrototypeSlice(key, 0, patternIndex)
+        StringPrototypeSlice(key, 0, patternIndex),
       )
     ) {
       if (StringPrototypeEndsWith(packageSubpath, "/"))
         emitTrailingSlashPatternDeprecation(
           packageSubpath,
           packageJSONUrl,
-          base
+          base,
         );
       const patternTrailer = StringPrototypeSlice(key, patternIndex + 1);
       if (
@@ -14240,7 +14240,7 @@ function packageExportsResolve({
         bestMatchSubpath = StringPrototypeSlice(
           packageSubpath,
           patternIndex,
-          packageSubpath.length - patternTrailer.length
+          packageSubpath.length - patternTrailer.length,
         );
       }
     }
@@ -14255,7 +14255,7 @@ function packageExportsResolve({
       base,
       true,
       false,
-      conditions
+      conditions,
     );
     if (resolveResult == null) {
       throwExportsNotFound(packageSubpath, packageJSONUrl, base);
@@ -14274,7 +14274,7 @@ function packageImportsResolve({ name, base, conditions, readFileSyncFn }) {
     throw new ERR_INVALID_MODULE_SPECIFIER(
       name,
       reason,
-      url.fileURLToPath(base)
+      url.fileURLToPath(base),
     );
   }
   let packageJSONUrl;
@@ -14295,7 +14295,7 @@ function packageImportsResolve({ name, base, conditions, readFileSyncFn }) {
           base,
           false,
           true,
-          conditions
+          conditions,
         );
         if (resolveResult != null) {
           return resolveResult;
@@ -14311,7 +14311,7 @@ function packageImportsResolve({ name, base, conditions, readFileSyncFn }) {
             patternIndex !== -1 &&
             StringPrototypeStartsWith(
               name,
-              StringPrototypeSlice(key, 0, patternIndex)
+              StringPrototypeSlice(key, 0, patternIndex),
             )
           ) {
             const patternTrailer = StringPrototypeSlice(key, patternIndex + 1);
@@ -14325,7 +14325,7 @@ function packageImportsResolve({ name, base, conditions, readFileSyncFn }) {
               bestMatchSubpath = StringPrototypeSlice(
                 name,
                 patternIndex,
-                name.length - patternTrailer.length
+                name.length - patternTrailer.length,
               );
             }
           }
@@ -14340,7 +14340,7 @@ function packageImportsResolve({ name, base, conditions, readFileSyncFn }) {
             base,
             true,
             true,
-            conditions
+            conditions,
           );
           if (resolveResult != null) {
             return resolveResult;
@@ -14370,12 +14370,12 @@ function arg(
     argv = process.argv.slice(2),
     permissive = false,
     stopAtPositional = false,
-  } = {}
+  } = {},
 ) {
   if (!opts) {
     throw new ArgError(
       "argument specification object is required",
-      "ARG_CONFIG_NO_SPEC"
+      "ARG_CONFIG_NO_SPEC",
     );
   }
 
@@ -14388,21 +14388,21 @@ function arg(
     if (!key) {
       throw new ArgError(
         "argument key cannot be an empty string",
-        "ARG_CONFIG_EMPTY_KEY"
+        "ARG_CONFIG_EMPTY_KEY",
       );
     }
 
     if (key[0] !== "-") {
       throw new ArgError(
         `argument key must start with '-' but found: '${key}'`,
-        "ARG_CONFIG_NONOPT_KEY"
+        "ARG_CONFIG_NONOPT_KEY",
       );
     }
 
     if (key.length === 1) {
       throw new ArgError(
         `argument key must have a name; singular '-' keys are not allowed: ${key}`,
-        "ARG_CONFIG_NONAME_KEY"
+        "ARG_CONFIG_NONAME_KEY",
       );
     }
 
@@ -14430,14 +14430,14 @@ function arg(
     } else {
       throw new ArgError(
         `type missing or not a function or valid array type: ${key}`,
-        "ARG_CONFIG_VAD_TYPE"
+        "ARG_CONFIG_VAD_TYPE",
       );
     }
 
     if (key[1] !== "-" && key.length > 2) {
       throw new ArgError(
         `short argument keys (with a single hyphen) must have only one character: ${key}`,
-        "ARG_CONFIG_SHORTOPT_TOOLONG"
+        "ARG_CONFIG_SHORTOPT_TOOLONG",
       );
     }
 
@@ -14483,7 +14483,7 @@ function arg(
           } else {
             throw new ArgError(
               `unknown or unexpected option: ${originalArgName}`,
-              "ARG_UNKNOWN_OPTION"
+              "ARG_UNKNOWN_OPTION",
             );
           }
         }
@@ -14493,7 +14493,7 @@ function arg(
         if (!isFlag && j + 1 < separatedArguments.length) {
           throw new ArgError(
             `option requires argument (but was followed by another short argument): ${originalArgName}`,
-            "ARG_MISSING_REQUIRED_SHORTARG"
+            "ARG_MISSING_REQUIRED_SHORTARG",
           );
         }
 
@@ -14514,7 +14514,7 @@ function arg(
               originalArgName === argName ? "" : ` (alias for ${argName})`;
             throw new ArgError(
               `option requires argument: ${originalArgName}${extended}`,
-              "ARG_MISSING_REQUIRED_LONGARG"
+              "ARG_MISSING_REQUIRED_LONGARG",
             );
           }
 
@@ -14592,14 +14592,14 @@ function parseArgv(argv) {
     {
       argv,
       permissive: true,
-    }
+    },
   );
 }
 function getNodeOptionsEnvArgv() {
   const errors = [];
   const envArgv = ParseNodeOptionsEnvVar(
     process.env.NODE_OPTIONS || "",
-    errors
+    errors,
   );
   if (errors.length !== 0);
   return envArgv;
@@ -14658,7 +14658,7 @@ function makeApi(runtimeState, opts) {
         for (const reference of packageStore.keys()) {
           if (reference === null) {
             throw new Error(
-              `Assertion failed: This reference shouldn't be null`
+              `Assertion failed: This reference shouldn't be null`,
             );
           } else {
             fallbackLocators.push({ name, reference });
@@ -14683,7 +14683,7 @@ function makeApi(runtimeState, opts) {
     const error = entry.error;
     if (error)
       console.error(
-        c(`31;1`, `\u2716 ${entry.error?.message.replace(/\n.*/s, ``)}`)
+        c(`31;1`, `\u2716 ${entry.error?.message.replace(/\n.*/s, ``)}`),
       );
     else console.error(c(`33;1`, `\u203C Resolution`));
     if (entry.args.length > 0) console.error();
@@ -14692,7 +14692,7 @@ function makeApi(runtimeState, opts) {
         `  ${c(`37;1`, `In \u2190`)} ${nodeUtils.inspect(arg, {
           colors,
           compact: true,
-        })}`
+        })}`,
       );
     if (entry.result) {
       console.error();
@@ -14700,7 +14700,7 @@ function makeApi(runtimeState, opts) {
         `  ${c(`37;1`, `Out \u2192`)} ${nodeUtils.inspect(entry.result, {
           colors,
           compact: true,
-        })}`
+        })}`,
       );
     }
     const stack = new Error().stack.match(/(?<=^ +)at.*/gm)?.slice(2) ?? [];
@@ -14746,7 +14746,7 @@ function makeApi(runtimeState, opts) {
     if (!packageInformation) {
       throw makeError(
         ErrorCode.INTERNAL,
-        `Couldn't find a matching entry in the dependency tree for the specified parent (this is probably an internal error)`
+        `Couldn't find a matching entry in the dependency tree for the specified parent (this is probably an internal error)`,
       );
     }
     return packageInformation;
@@ -14769,19 +14769,19 @@ function makeApi(runtimeState, opts) {
   function applyNodeExportsResolution(
     unqualifiedPath,
     conditions = defaultExportsConditions,
-    issuer
+    issuer,
   ) {
     const locator = findPackageLocator(
       ppath.join(unqualifiedPath, `internal.js`),
       {
         resolveIgnored: true,
         includeDiscardFromLookup: true,
-      }
+      },
     );
     if (locator === null) {
       throw makeError(
         ErrorCode.INTERNAL,
-        `The locator that owns the "${unqualifiedPath}" path can't be found inside the dependency tree (this is probably an internal error)`
+        `The locator that owns the "${unqualifiedPath}" path can't be found inside the dependency tree (this is probably an internal error)`,
       );
     }
     const { packageLocation } = getPackageInformationSafe(locator);
@@ -14793,7 +14793,7 @@ function makeApi(runtimeState, opts) {
     if (subpath === null) {
       throw makeError(
         ErrorCode.INTERNAL,
-        `unqualifiedPath doesn't contain the packageLocation (this is probably an internal error)`
+        `unqualifiedPath doesn't contain the packageLocation (this is probably an internal error)`,
       );
     }
     if (subpath !== `.` && !isRelativeRegexp.test(subpath))
@@ -14818,14 +14818,14 @@ function makeApi(runtimeState, opts) {
           subpath: getPathForDisplay(subpath),
           conditions,
         },
-        error.code
+        error.code,
       );
     }
   }
   function applyNodeExtensionResolution(
     unqualifiedPath,
     candidates,
-    { extensions }
+    { extensions },
   ) {
     let stat;
     try {
@@ -14840,8 +14840,8 @@ function makeApi(runtimeState, opts) {
         pkgJson = JSON.parse(
           opts.fakeFs.readFileSync(
             ppath.join(unqualifiedPath, Filename.manifest),
-            `utf8`
-          )
+            `utf8`,
+          ),
         );
       } catch (error) {}
       let nextUnqualifiedPath;
@@ -14851,7 +14851,7 @@ function makeApi(runtimeState, opts) {
         const resolution = applyNodeExtensionResolution(
           nextUnqualifiedPath,
           candidates,
-          { extensions }
+          { extensions },
         );
         if (resolution !== null) {
           return resolution;
@@ -14892,7 +14892,7 @@ function makeApi(runtimeState, opts) {
       npath.fromPortablePath(request),
       makeFakeModule(npath.fromPortablePath(issuer)),
       false,
-      { plugnplay: false }
+      { plugnplay: false },
     );
   }
   function isPathIgnored(path) {
@@ -14953,7 +14953,7 @@ function makeApi(runtimeState, opts) {
           if (typeof brokenSet === `undefined`)
             brokenPackages.set(
               dependent.name,
-              (brokenSet = /* @__PURE__ */ new Set())
+              (brokenSet = /* @__PURE__ */ new Set()),
             );
           brokenSet.add(dependent.reference);
         }
@@ -14968,7 +14968,7 @@ function makeApi(runtimeState, opts) {
   }
   function findPackageLocator(
     location,
-    { resolveIgnored = false, includeDiscardFromLookup = false } = {}
+    { resolveIgnored = false, includeDiscardFromLookup = false } = {},
   ) {
     if (isPathIgnored(location) && !resolveIgnored) return null;
     let relativeLocation = ppath.relative(runtimeState.basePath, location);
@@ -14984,7 +14984,7 @@ function makeApi(runtimeState, opts) {
       ) {
         relativeLocation = relativeLocation.substring(
           0,
-          relativeLocation.lastIndexOf(`/`, relativeLocation.length - 2) + 1
+          relativeLocation.lastIndexOf(`/`, relativeLocation.length - 2) + 1,
         );
         continue;
       }
@@ -15003,11 +15003,11 @@ function makeApi(runtimeState, opts) {
   function resolveToUnqualified(
     request,
     issuer,
-    { considerBuiltins = true } = {}
+    { considerBuiltins = true } = {},
   ) {
     if (request.startsWith(`#`))
       throw new Error(
-        `resolveToUnqualified can not handle private import mappings`
+        `resolveToUnqualified can not handle private import mappings`,
       );
     if (request === `pnpapi`)
       return npath.toPortablePath(opts.pnpapiResolution);
@@ -15025,7 +15025,7 @@ function makeApi(runtimeState, opts) {
 Require request: "${requestForDisplay}"
 Required by: ${issuerForDisplay}
 `,
-            { request: requestForDisplay, issuer: issuerForDisplay }
+            { request: requestForDisplay, issuer: issuerForDisplay },
           );
         }
         return npath.toPortablePath(result);
@@ -15041,17 +15041,17 @@ Required by: ${issuerForDisplay}
           throw makeError(
             ErrorCode.API_ERROR,
             `The resolveToUnqualified function must be called with a valid issuer when the path isn't a builtin nor absolute`,
-            { request: requestForDisplay, issuer: issuerForDisplay }
+            { request: requestForDisplay, issuer: issuerForDisplay },
           );
         }
         const absoluteIssuer = ppath.resolve(issuer);
         if (issuer.match(isDirRegExp)) {
           unqualifiedPath = ppath.normalize(
-            ppath.join(absoluteIssuer, request)
+            ppath.join(absoluteIssuer, request),
           );
         } else {
           unqualifiedPath = ppath.normalize(
-            ppath.join(ppath.dirname(absoluteIssuer), request)
+            ppath.join(ppath.dirname(absoluteIssuer), request),
           );
         }
       }
@@ -15060,7 +15060,7 @@ Required by: ${issuerForDisplay}
         throw makeError(
           ErrorCode.API_ERROR,
           `The resolveToUnqualified function must be called with a valid issuer when the path isn't a builtin nor absolute`,
-          { request: requestForDisplay, issuer: issuerForDisplay }
+          { request: requestForDisplay, issuer: issuerForDisplay },
         );
       }
       const [, dependencyName, subPath] = dependencyNameMatch;
@@ -15075,7 +15075,7 @@ Required by: ${issuerForDisplay}
 Require path: "${requestForDisplay}"
 Required by: ${issuerForDisplay}
 `,
-            { request: requestForDisplay, issuer: issuerForDisplay }
+            { request: requestForDisplay, issuer: issuerForDisplay },
           );
         }
         return npath.toPortablePath(result);
@@ -15087,14 +15087,14 @@ Required by: ${issuerForDisplay}
       if (dependencyReference == null) {
         if (issuerLocator.name !== null) {
           const exclusionEntry = runtimeState.fallbackExclusionList.get(
-            issuerLocator.name
+            issuerLocator.name,
           );
           const canUseFallbacks =
             !exclusionEntry || !exclusionEntry.has(issuerLocator.reference);
           if (canUseFallbacks) {
             for (let t = 0, T = fallbackLocators.length; t < T; ++t) {
               const fallbackInformation = getPackageInformationSafe(
-                fallbackLocators[t]
+                fallbackLocators[t],
               );
               const reference =
                 fallbackInformation.packageDependencies.get(dependencyName);
@@ -15132,12 +15132,12 @@ Required by: ${issuerForDisplay}
               request: requestForDisplay,
               issuer: issuerForDisplay,
               dependencyName,
-            }
+            },
           );
         } else {
           const brokenAncestors = findBrokenPeerDependencies(
             dependencyName,
-            issuerLocator
+            issuerLocator,
           );
           if (
             brokenAncestors.every((ancestor) => isDependencyTreeRoot(ancestor))
@@ -15159,9 +15159,9 @@ Required by: ${issuerLocator.name}@${
 ${brokenAncestors
   .map(
     (
-      ancestorLocator
+      ancestorLocator,
     ) => `Ancestor breaking the chain: ${ancestorLocator.name}@${ancestorLocator.reference}
-`
+`,
   )
   .join(``)}
 `,
@@ -15171,7 +15171,7 @@ ${brokenAncestors
                 issuerLocator: Object.assign({}, issuerLocator),
                 dependencyName,
                 brokenAncestors,
-              }
+              },
             );
           } else {
             error = makeError(
@@ -15192,9 +15192,9 @@ Required by: ${issuerLocator.name}@${
 ${brokenAncestors
   .map(
     (
-      ancestorLocator
+      ancestorLocator,
     ) => `Ancestor breaking the chain: ${ancestorLocator.name}@${ancestorLocator.reference}
-`
+`,
   )
   .join(``)}
 `,
@@ -15204,7 +15204,7 @@ ${brokenAncestors
                 issuerLocator: Object.assign({}, issuerLocator),
                 dependencyName,
                 brokenAncestors,
-              }
+              },
             );
           }
         }
@@ -15226,7 +15226,7 @@ Required by: ${issuerForDisplay}
                 request: requestForDisplay,
                 issuer: issuerForDisplay,
                 dependencyName,
-              }
+              },
             );
           } else {
             error = makeError(
@@ -15249,7 +15249,7 @@ Required by: ${issuerForDisplay}
                 issuer: issuerForDisplay,
                 issuerLocator: Object.assign({}, issuerLocator),
                 dependencyName,
-              }
+              },
             );
           }
         } else {
@@ -15269,7 +15269,7 @@ Required by: ${issuerForDisplay}
                 request: requestForDisplay,
                 issuer: issuerForDisplay,
                 dependencyName,
-              }
+              },
             );
           } else {
             error = makeError(
@@ -15292,7 +15292,7 @@ Required by: ${issuerLocator.name}@${
                 issuer: issuerForDisplay,
                 issuerLocator: Object.assign({}, issuerLocator),
                 dependencyName,
-              }
+              },
             );
           }
         }
@@ -15334,7 +15334,7 @@ Required by: ${issuerLocator.name}@${
             request: requestForDisplay,
             issuer: issuerForDisplay,
             dependencyLocator: Object.assign({}, dependencyLocator),
-          }
+          },
         );
       }
       const dependencyLocation = dependencyInformation.packageLocation;
@@ -15350,13 +15350,13 @@ Required by: ${issuerLocator.name}@${
     request,
     unqualifiedPath,
     conditions = defaultExportsConditions,
-    issuer
+    issuer,
   ) {
     if (isStrictRegExp.test(request)) return unqualifiedPath;
     const unqualifiedExportPath = applyNodeExportsResolution(
       unqualifiedPath,
       conditions,
-      issuer
+      issuer,
     );
     if (unqualifiedExportPath) {
       return ppath.normalize(unqualifiedExportPath);
@@ -15366,19 +15366,19 @@ Required by: ${issuerLocator.name}@${
   }
   function resolveUnqualified(
     unqualifiedPath,
-    { extensions = Object.keys(require$$0.Module._extensions) } = {}
+    { extensions = Object.keys(require$$0.Module._extensions) } = {},
   ) {
     const candidates = [];
     const qualifiedPath = applyNodeExtensionResolution(
       unqualifiedPath,
       candidates,
-      { extensions }
+      { extensions },
     );
     if (qualifiedPath) {
       return ppath.normalize(qualifiedPath);
     } else {
       reportRequiredFilesToWatchMode(
-        candidates.map((candidate) => npath.fromPortablePath(candidate))
+        candidates.map((candidate) => npath.fromPortablePath(candidate)),
       );
       const unqualifiedPathForDisplay = getPathForDisplay(unqualifiedPath);
       const containingPackage = findPackageLocator(unqualifiedPath);
@@ -15404,7 +15404,7 @@ Required by: ${issuerLocator.name}@${
 Missing package: ${containingPackage.name}@${containingPackage.reference}
 Expected package location: ${getPathForDisplay(packageLocation)}
 `,
-              { unqualifiedPath: unqualifiedPathForDisplay, extensions }
+              { unqualifiedPath: unqualifiedPathForDisplay, extensions },
             );
           }
         }
@@ -15419,7 +15419,7 @@ Expected package location: ${getPathForDisplay(packageLocation)}
 Missing package: ${containingPackage.name}@${containingPackage.reference}
 Expected package location: ${getPathForDisplay(packageLocation)}
 `,
-            { unqualifiedPath: unqualifiedPathForDisplay, extensions }
+            { unqualifiedPath: unqualifiedPathForDisplay, extensions },
           );
         }
       }
@@ -15431,17 +15431,17 @@ Source path: ${unqualifiedPathForDisplay}
 ${candidates
   .map(
     (candidate) => `Not found: ${getPathForDisplay(candidate)}
-`
+`,
   )
   .join(``)}`,
-        { unqualifiedPath: unqualifiedPathForDisplay, extensions }
+        { unqualifiedPath: unqualifiedPathForDisplay, extensions },
       );
     }
   }
   function resolvePrivateRequest(request, issuer, opts2) {
     if (!issuer)
       throw new Error(
-        `Assertion failed: An issuer is required to resolve private import mappings`
+        `Assertion failed: An issuer is required to resolve private import mappings`,
       );
     const resolved = packageImportsResolve({
       name: request,
@@ -15452,12 +15452,12 @@ ${candidates
     if (resolved instanceof URL) {
       return resolveUnqualified(
         npath.toPortablePath(url.fileURLToPath(resolved)),
-        { extensions: opts2.extensions }
+        { extensions: opts2.extensions },
       );
     } else {
       if (resolved.startsWith(`#`))
         throw new Error(
-          `Mapping from one private import to another isn't allowed`
+          `Mapping from one private import to another isn't allowed`,
         );
       return resolveRequest(resolved, issuer, opts2);
     }
@@ -15481,7 +15481,7 @@ ${candidates
               request,
               unqualifiedPath,
               conditions,
-              issuer
+              issuer,
             )
           : unqualifiedPath;
       return resolveUnqualified(remappedPath, { extensions });
@@ -15538,19 +15538,19 @@ ${candidates
         const resolution = resolveToUnqualified(
           npath.toPortablePath(request),
           portableIssuer,
-          opts2
+          opts2,
         );
         if (resolution === null) return null;
         return npath.fromPortablePath(resolution);
-      }
+      },
     ),
     resolveUnqualified: maybeLog(
       `resolveUnqualified`,
       (unqualifiedPath, opts2) => {
         return npath.fromPortablePath(
-          resolveUnqualified(npath.toPortablePath(unqualifiedPath), opts2)
+          resolveUnqualified(npath.toPortablePath(unqualifiedPath), opts2),
         );
-      }
+      },
     ),
     resolveRequest: maybeLog(`resolveRequest`, (request, issuer, opts2) => {
       const portableIssuer =
@@ -15558,7 +15558,7 @@ ${candidates
       const resolution = resolveRequest(
         npath.toPortablePath(request),
         portableIssuer,
-        opts2
+        opts2,
       );
       if (resolution === null) return null;
       return npath.fromPortablePath(resolution);
@@ -15576,10 +15576,10 @@ ${candidates
 
 function makeManager(pnpapi, opts) {
   const initialApiPath = npath.toPortablePath(
-    pnpapi.resolveToUnqualified(`pnpapi`, null)
+    pnpapi.resolveToUnqualified(`pnpapi`, null),
   );
   const initialApiStats = opts.fakeFs.statSync(
-    npath.toPortablePath(initialApiPath)
+    npath.toPortablePath(initialApiPath),
   );
   const apiMetadata = /* @__PURE__ */ new Map([
     [
@@ -15605,8 +15605,8 @@ function makeManager(pnpapi, opts) {
     if (stats.mtime > apiEntry.stats.mtime) {
       process.emitWarning(
         `[Warning] The runtime detected new information in a PnP file; reloading the API instance (${npath.fromPortablePath(
-          pnpApiPath
-        )})`
+          pnpApiPath,
+        )})`,
       );
       apiEntry.stats = stats;
       apiEntry.instance = loadApiInstance(pnpApiPath);
@@ -15625,7 +15625,7 @@ function makeManager(pnpapi, opts) {
           instance: loadApiInstance(pnpApiPath),
           stats: opts.fakeFs.statSync(pnpApiPath),
           lastRefreshCheck: Date.now(),
-        })
+        }),
       );
     }
     return apiEntry;
@@ -15655,7 +15655,7 @@ function makeManager(pnpapi, opts) {
         apiEntry.instance.getPackageInformation(locator);
       if (!packageInformation)
         throw new Error(
-          `Assertion failed: Couldn't get package information for '${modulePath}'`
+          `Assertion failed: Couldn't get package information for '${modulePath}'`,
         );
       if (!bestCandidate)
         bestCandidate = {
@@ -15679,7 +15679,7 @@ function makeManager(pnpapi, opts) {
     if (bestCandidate) {
       if (bestCandidate.apiPaths.length === 1) return bestCandidate.apiPaths[0];
       const controlSegment = bestCandidate.apiPaths.map(
-        (apiPath) => `  ${npath.fromPortablePath(apiPath)}`
+        (apiPath) => `  ${npath.fromPortablePath(apiPath)}`,
       ).join(`
 `);
       throw new Error(`Unable to locate pnpapi, the module '${modulePath}' is controlled by multiple pnpapi instances.
@@ -15782,7 +15782,7 @@ const defaultApi = Object.assign(
       });
       dynamicFsLayer.baseFs = new NodeFS(fs__default.default);
     },
-  }
+  },
 );
 manager = makeManager(defaultApi, {
   fakeFs: dynamicFsLayer,

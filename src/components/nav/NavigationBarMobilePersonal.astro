@@ -21,7 +21,6 @@ const { personal } = Astro.props;
     data-href="/personal"
     data-animation="out"
   >
-  
     <Image
       src={JoshLogo}
       id="Image"
@@ -29,38 +28,37 @@ const { personal } = Astro.props;
       loading="eager"
     />
   </a>
-    <div id="Menu">
-      <div id="MainWrapper">
-        <BracketOpenH />
+  <div id="Menu">
+    <div id="MainWrapper">
+      <BracketOpenH />
 
-        <!-- Menu item: Gallery -->
-        <a
-          id="portfolio"
-          class:list={["main-button", "button", "animation"]}
-          href="/personal"
-          data-href="/personal"
-          data-animation="out"
-        >
-          Gallery
-        </a>
+      <!-- Menu item: Gallery -->
+      <a
+        id="portfolio"
+        class:list={["main-button", "button", "animation"]}
+        href="/personal"
+        data-href="/personal"
+        data-animation="out"
+      >
+        Gallery
+      </a>
 
-        <BracketMiddleH />
+      <BracketMiddleH />
 
-        <!-- Menu item: Information -->
-        <a
-          id="info"
-          class:list={["main-button", "button", "animation"]}
-          href="/personal/info"
-          data-href="/personal/info"
-          data-animation="out"
-        >
-          Info
-        </a>
+      <!-- Menu item: Information -->
+      <a
+        id="info"
+        class:list={["main-button", "button", "animation"]}
+        href="/personal/info"
+        data-href="/personal/info"
+        data-animation="out"
+      >
+        Info
+      </a>
 
-        <BracketCloseH />
-      </div>
+      <BracketCloseH />
     </div>
-
+  </div>
 
   <style>
     @import "../../styles/global.css";

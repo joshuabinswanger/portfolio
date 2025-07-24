@@ -3,7 +3,8 @@
 @font-face {
   font-family: PowerGrotesk-UltraLight;
   font-display: swap;
-  src: url(/fonts/PowerGrotesk/power-grotesk-ultra-light/webfonts/power-grotesk-ultra-light.woff2)
+  src:
+    url(/fonts/PowerGrotesk/power-grotesk-ultra-light/webfonts/power-grotesk-ultra-light.woff2)
       format("woff2"),
     url(/fonts/PowerGrotesk/power-grotesk-ultra-light/webfonts/power-grotesk-ultra-light.woff)
       format("woff");
@@ -14,7 +15,8 @@
 @font-face {
   font-family: PowerGrotesk-Light;
   font-display: swap;
-  src: url(/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-light.woff2)
+  src:
+    url(/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-light.woff2)
       format("woff2"),
     url(/fonts/PowerGrotesk/power-grotesk-light/webfonts/power-grotesk-light.woff)
       format("woff");
@@ -25,7 +27,8 @@
 @font-face {
   font-family: PowerGrotesk-Light;
   font-display: swap;
-  src: url(/fonts/PowerGrotesk/power-grotesk-light-italic/webfonts/power-grotesk-light-italic.woff2)
+  src:
+    url(/fonts/PowerGrotesk/power-grotesk-light-italic/webfonts/power-grotesk-light-italic.woff2)
       format("woff2"),
     url(/fonts/PowerGrotesk/power-grotesk-light-italic/webfonts/power-grotesk-light-italic.woff)
       format("woff");
@@ -36,7 +39,8 @@
 @font-face {
   font-family: PowerGrotesk-Regular;
   font-display: swap;
-  src: url(/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.woff2)
+  src:
+    url(/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.woff2)
       format("woff2"),
     url(/fonts/PowerGrotesk/power-grotesk-regular/webfonts/power-grotesk-regular.woff)
       format("woff");
@@ -47,7 +51,8 @@
 @font-face {
   font-family: PowerGrotesk-Medium;
   font-display: swap;
-  src: url(/fonts/PowerGrotesk/power-grotesk-medium/webfonts/power-grotesk-medium.woff2)
+  src:
+    url(/fonts/PowerGrotesk/power-grotesk-medium/webfonts/power-grotesk-medium.woff2)
       format("woff2"),
     url(/fonts/PowerGrotesk/power-grotesk-medium/webfonts/power-grotesk-medium.woff)
       format("woff");
@@ -58,7 +63,8 @@
 @font-face {
   font-family: PowerGrotesk-Bold;
   font-display: swap;
-  src: url(/fonts/PowerGrotesk/power-grotesk-bold/webfonts/power-grotesk-bold.woff2)
+  src:
+    url(/fonts/PowerGrotesk/power-grotesk-bold/webfonts/power-grotesk-bold.woff2)
       format("woff2"),
     url(/fonts/PowerGrotesk/power-grotesk-bold/webfonts/power-grotesk-bold.woff)
       format("woff");

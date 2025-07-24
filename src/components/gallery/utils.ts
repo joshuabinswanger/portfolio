@@ -18,7 +18,7 @@ export interface EnrichedProject {
  * @returns New sorted array of portfolioProjects
  */
 export function sortPortfolioProjects<T extends CollectionEntry<"portfolio">>(
-  portfolioProjects: T[]
+  portfolioProjects: T[],
 ): T[] {
   return [...portfolioProjects].sort((a, b) => {
     const priorityA = Number(a.data.priority);
@@ -33,7 +33,7 @@ export function sortPortfolioProjects<T extends CollectionEntry<"portfolio">>(
  * @returns Filtered gallery images that belong to the projects and are marked for portfolio
  */
 export async function fetchGalleryImagesForProjects(
-  targetProjects: string[]
+  targetProjects: string[],
 ): Promise<CollectionEntry<"galleryImages">[]> {
   const galleryImages = await getCollection("galleryImages", ({ data }) => {
     return (
@@ -52,7 +52,7 @@ export async function fetchGalleryImagesForProjects(
  * @returns Array of enriched projects with gallery data and global index
  */
 export async function enrichPortfolioProjects(
-  portfolioProjects: CollectionEntry<"portfolio">[]
+  portfolioProjects: CollectionEntry<"portfolio">[],
 ): Promise<{ enrichedProjects: EnrichedProject[]; totalGlobalIndex: number }> {
   const enrichedProjects: EnrichedProject[] = [];
   let globalIndex = 0;
@@ -123,7 +123,7 @@ export async function getGalleryProject(projectSlug: string) {
     }
 
     console.log(
-      `Gallery Project Fetched: ${project.data.portfolioElementName}`
+      `Gallery Project Fetched: ${project.data.portfolioElementName}`,
     );
     return project;
   } catch (error) {
@@ -140,7 +140,7 @@ export async function getGalleryProject(projectSlug: string) {
  */
 
 export function extractContainedProjects(
-  galleryProject: CollectionEntry<"portfolio"> | null
+  galleryProject: CollectionEntry<"portfolio"> | null,
 ): string[] {
   if (galleryProject?.data?.portfolioElementProjects) {
     return galleryProject.data.portfolioElementProjects;
@@ -173,7 +173,7 @@ export async function getFilteredGalleryImages(containedProjects: string[]) {
  * @returns Sorted array of images
  */
 export function sortImagesByPortfolioOrder<
-  T extends CollectionEntry<"galleryImages">
+  T extends CollectionEntry<"galleryImages">,
 >(images: T[]): T[] {
   return [...images].sort((a, b) => {
     const orderA = a.data.metadata?.portfolioOrder ?? Infinity;
@@ -188,7 +188,7 @@ export function sortImagesByPortfolioOrder<
  * @returns Array of image data with high resolution information
  */
 export async function buildHighResData(
-  galleryImages: CollectionEntry<"galleryImages">[]
+  galleryImages: CollectionEntry<"galleryImages">[],
 ) {
   const highResData = [];
 
@@ -199,12 +199,12 @@ export async function buildHighResData(
       try {
         highResEntry = await getEntry(
           "highResImages",
-          image.data.metadata.highres_public_id
+          image.data.metadata.highres_public_id,
         );
       } catch (error) {
         console.error(
           `Failed to fetch highResImages for ${image.data.metadata.highres_public_id}:`,
-          error
+          error,
         );
       }
     }
@@ -226,7 +226,7 @@ export async function buildHighResData(
  * @returns true if at least one image has highres_public_id
  */
 export function hasHighResImages(
-  images: CollectionEntry<"galleryImages">[]
+  images: CollectionEntry<"galleryImages">[],
 ): boolean {
   return images.some((image) => image.data?.metadata?.highres_public_id);
 }

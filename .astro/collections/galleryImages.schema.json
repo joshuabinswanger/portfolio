@@ -8,10 +8,7 @@
           "anyOf": [
             {
               "type": "string",
-              "enum": [
-                "public",
-                "authenticated"
-              ]
+              "enum": ["public", "authenticated"]
             },
             {
               "allOf": [
@@ -73,9 +70,7 @@
               ]
             }
           },
-          "required": [
-            "custom"
-          ],
+          "required": ["custom"],
           "additionalProperties": false
         },
         "colors": {
@@ -193,12 +188,7 @@
           "anyOf": [
             {
               "type": "string",
-              "enum": [
-                "image",
-                "video",
-                "raw",
-                "auto"
-              ]
+              "enum": ["image", "video", "raw", "auto"]
             },
             {
               "allOf": [

@@ -5,11 +5,10 @@ import { fade } from "astro:transitions";
 import Backdrop from "../components/Background.astro";
 import { AstroFont } from "astro-font";
 
-
 import "../styles/global.css";
 
 import { getImage } from "astro:assets";
-import ogImage from "../assets/Rhizome_OpenGraphImage_Main_ScientficIllustration.jpg"
+import ogImage from "../assets/Rhizome_OpenGraphImage_Main_ScientficIllustration.jpg";
 
 // This forces Astro to process and include the image
 const optimizedOgImage = await getImage({ src: ogImage });
@@ -29,24 +28,38 @@ const isProd = import.meta.env.PROD;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <meta name="keywords" content="scientific illustration, 3D visualisation, data visualisation, knowledge visualisation, information design, sidefx houdini, blender, science illustration, character design" />
+    <meta
+      name="keywords"
+      content="scientific illustration, 3D visualisation, data visualisation, knowledge visualisation, information design, sidefx houdini, blender, science illustration, character design"
+    />
     <meta name="author" content="Joshua Binswanger" />
     <meta name="generator" content={Astro.generator} />
-    
+
     <title>{title}</title>
     <link rel="canonical" href="https://rhizome.ch" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    
     <!-- OG Tags -->
-    <meta property="og:title" content="Rhizome Visuals - Scientific Illustration" />
-    <meta property="og:description" content="Scientific Illustration and 3D Design by Joshua Binswanger" />
-    <meta property="og:image" content={new URL(optimizedOgImage.src, Astro.site)} />
+    <meta
+      property="og:title"
+      content="Rhizome Visuals - Scientific Illustration"
+    />
+    <meta
+      property="og:description"
+      content="Scientific Illustration and 3D Design by Joshua Binswanger"
+    />
+    <meta
+      property="og:image"
+      content={new URL(optimizedOgImage.src, Astro.site)}
+    />
     <meta property="og:url" content="https://rhizome.ch" />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Rhizome Visuals - Scientific Illustration" />
+    <meta
+      property="og:site_name"
+      content="Rhizome Visuals - Scientific Illustration"
+    />
 
-     <!-- Client Router -->
+    <!-- Client Router -->
     <ClientRouter fallback="swap" />
 
     <!-- Umami Analytics Script -->
