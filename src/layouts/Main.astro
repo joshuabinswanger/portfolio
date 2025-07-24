@@ -5,7 +5,11 @@ import { fade } from "astro:transitions";
 import Backdrop from "../components/Background.astro";
 import { AstroFont } from "astro-font";
 
+
 import "../styles/global.css";
+
+import { Image } from 'astro:assets';
+import ogImage from "../assets/Rhizome_OpenGraphImage_Main_ScientficIllustration.jpg";
 
 const { title, description } = Astro.props;
 
@@ -34,7 +38,7 @@ const isProd = import.meta.env.PROD;
     <!-- OG Tags -->
     <meta property="og:title" content="Rhizome Visuals - Scientific Illustration" />
     <meta property="og:description" content="Scientific Illustration and 3D Design by Joshua Binswanger" />
-    <meta property="og:image" content="https://rhizome.ch/og_images/Rhizome_OpenGraphImage_Main_ScientficIllustration.jpg" />
+    <meta property="og:image" content="https://rhizome.ch/Rhizome_OpenGraphImage_Main_ScientficIllustration.jpg" />
     <meta property="og:url" content="https://rhizome.ch" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Rhizome Visuals - Scientific Illustration" />
