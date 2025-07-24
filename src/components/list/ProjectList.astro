@@ -9,16 +9,18 @@ import { marked } from "marked";
 import ImageSlide from "./ImageSlide.astro";
 import "keen-slider/keen-slider.min.css";
 
+import { sortProjectsByYear } from "./utils.ts";
+
 const projects = await getCollection("projects");
 
 // Sort
-projects.sort((a, b) => b.data.year.localeCompare(a.data.year));
+const sortedProjects = sortProjectsByYear(projects);
 
 // make project keep track of its index, like this it can be used by photoswipe
 let enrichedProjects = [];
 let globalIndex = 0;
 
-for (const entry of projects) {
+for (const entry of sortedProjects) {
   console.log(`[DEBUG] Loop iteration for entry ID: ${entry.id}`);
 
   const projectName = entry.data.projectName;
