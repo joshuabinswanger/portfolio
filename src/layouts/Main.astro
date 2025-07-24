@@ -19,18 +19,30 @@ const isProd = import.meta.env.PROD;
   transition:animate={fade({ duration: "0.5s" })}
 >
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="keywords" content="scientific illustration, 3D visualisation, data visualisation, knowledge visualisation, information design, sidefx houdini, blender, science illustration, character design" />
+    <meta name="author" content="Joshua Binswanger" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <title>{title}</title>
+    <link rel="canonical" href="https://rhizome.ch" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
+    
+    <!-- OG Tags -->
+    <meta property="og:title" content="Rhizome Visuals - Scientific Illustration" />
+    <meta property="og:description" content="Scientific Illustration and 3D Design by Joshua Binswanger" />
+    <meta property="og:image" content="https://rhizome.ch/og_images/Rhizome_OpenGraphImage_Main_ScientficIllustration.jpg" />
+    <meta property="og:url" content="https://rhizome.ch" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Rhizome Visuals - Scientific Illustration" />
 
-    <meta name="description" content={description} />
+     <!-- Client Router -->
     <ClientRouter fallback="swap" />
 
-    <title>{title}</title>
-
-    <!-- Only include this script when in production -->
+    <!-- Umami Analytics Script -->
     {
       isProd && (
         <script
