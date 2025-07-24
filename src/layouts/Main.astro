@@ -11,7 +11,8 @@ import "../styles/global.css";
 import { getImage } from "astro:assets";
 import ogImage from "../assets/Rhizome_OpenGraphImage_Main_ScientficIllustration.jpg"
 
-
+// This forces Astro to process and include the image
+const optimizedOgImage = await getImage({ src: ogImage });
 
 const { title, description } = Astro.props;
 
@@ -40,7 +41,7 @@ const isProd = import.meta.env.PROD;
     <!-- OG Tags -->
     <meta property="og:title" content="Rhizome Visuals - Scientific Illustration" />
     <meta property="og:description" content="Scientific Illustration and 3D Design by Joshua Binswanger" />
-    <meta property="og:image" content={new URL(ogImage.src, Astro.site)} />
+    <meta property="og:image" content={new URL(optimizedOgImage.src, Astro.site)} />
     <meta property="og:url" content="https://rhizome.ch" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Rhizome Visuals - Scientific Illustration" />
