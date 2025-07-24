@@ -28,7 +28,7 @@ export const collections = {
 
   portfolio: defineCollection({
     loader: glob({
-      pattern: "**\/[^_]*.yaml",
+      pattern: "**/[^_]*.yaml",
       base: "./src/content/portfolio",
     }),
     schema: z.object({
@@ -55,7 +55,7 @@ export const collections = {
           z.object({
             loading: z.enum(["eager", "lazy"]).optional(), // Define 'loading' as a Zod enum
             to: z.string().optional(),
-          }),
+          })
         )
         .optional(),
     }),

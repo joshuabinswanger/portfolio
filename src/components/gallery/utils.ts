@@ -1,7 +1,6 @@
 import { getEntry, getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 
-
 /**
  * Interface for enriched project data
  */
@@ -70,7 +69,7 @@ export async function enrichPortfolioProjects(
 
     // Fetch gallery images for this project
     const galleryImages = await fetchGalleryImagesForProjects(targetProjects);
-    
+
     const slidesCount = galleryImages.length;
     globalIndex += slidesCount + 2;
 
@@ -101,10 +100,10 @@ export async function getPortfolioGalleryData(): Promise<{
 }> {
   // Fetch all portfolio projects
   const portfolioProjects = await getCollection("portfolio");
-  
+
   // Sort projects by priority
   const sortedProjects = sortPortfolioProjects(portfolioProjects);
-  
+
   // Enrich projects with gallery data
   return enrichPortfolioProjects(sortedProjects);
 }
@@ -117,13 +116,15 @@ export async function getPortfolioGalleryData(): Promise<{
 export async function getGalleryProject(projectSlug: string) {
   try {
     const project = await getEntry("portfolio", projectSlug.toLowerCase());
-    
+
     if (!project || !project.data) {
       console.warn(`Gallery project not found for ${projectSlug}`);
       return null;
     }
-    
-    console.log(`Gallery Project Fetched: ${project.data.portfolioElementName}`);
+
+    console.log(
+      `Gallery Project Fetched: ${project.data.portfolioElementName}`
+    );
     return project;
   } catch (error) {
     console.error(`Error fetching gallery project ${projectSlug}:`, error);
@@ -133,7 +134,7 @@ export async function getGalleryProject(projectSlug: string) {
 
 /**
  * Extracts project names from a gallery project
- * one gallery project (element) can show multiple projects (i.e. mutiple Material Science Projects) 
+ * one gallery project (element) can show multiple projects (i.e. mutiple Material Science Projects)
  * @param galleryProject - The gallery project entry
  * @returns Array of project names or empty array if none found
  */
@@ -141,12 +142,10 @@ export async function getGalleryProject(projectSlug: string) {
 export function extractContainedProjects(
   galleryProject: CollectionEntry<"portfolio"> | null
 ): string[] {
-  if (
-    galleryProject?.data?.portfolioElementProjects 
-  ) {
+  if (galleryProject?.data?.portfolioElementProjects) {
     return galleryProject.data.portfolioElementProjects;
   }
-  
+
   console.warn("portfolioElementProjects not found or invalid");
   return [];
 }
@@ -164,7 +163,7 @@ export async function getFilteredGalleryImages(containedProjects: string[]) {
       data.metadata.showInPortfolioGallery === "yes"
     );
   });
-  
+
   return sortImagesByPortfolioOrder(galleryImages);
 }
 
@@ -173,9 +172,9 @@ export async function getFilteredGalleryImages(containedProjects: string[]) {
  * @param images - Array of gallery images to sort
  * @returns Sorted array of images
  */
-export function sortImagesByPortfolioOrder<T extends CollectionEntry<"galleryImages">>(
-  images: T[]
-): T[] {
+export function sortImagesByPortfolioOrder<
+  T extends CollectionEntry<"galleryImages">
+>(images: T[]): T[] {
   return [...images].sort((a, b) => {
     const orderA = a.data.metadata?.portfolioOrder ?? Infinity;
     const orderB = b.data.metadata?.portfolioOrder ?? Infinity;
@@ -192,10 +191,10 @@ export async function buildHighResData(
   galleryImages: CollectionEntry<"galleryImages">[]
 ) {
   const highResData = [];
-  
+
   for (const image of galleryImages) {
     let highResEntry = null;
-    
+
     if (image.data.metadata?.highres_public_id) {
       try {
         highResEntry = await getEntry(
@@ -209,7 +208,7 @@ export async function buildHighResData(
         );
       }
     }
-    
+
     highResData.push({
       ...image.data,
       highResWidth: highResEntry?.data.width ?? image.data.width,
@@ -217,7 +216,7 @@ export async function buildHighResData(
       highResSecureUrl: highResEntry?.data.secure_url ?? image.data.secure_url,
     });
   }
-  
+
   return highResData;
 }
 
@@ -226,7 +225,9 @@ export async function buildHighResData(
  * @param images - Collection of gallery images
  * @returns true if at least one image has highres_public_id
  */
-export function hasHighResImages(images: CollectionEntry<"galleryImages">[]): boolean {
+export function hasHighResImages(
+  images: CollectionEntry<"galleryImages">[]
+): boolean {
   return images.some((image) => image.data?.metadata?.highres_public_id);
 }
 
@@ -238,7 +239,7 @@ export function hasHighResImages(images: CollectionEntry<"galleryImages">[]): bo
 export async function getGalleryData(projectSlug: string) {
   // Fetch the gallery project
   const galleryProject = await getGalleryProject(projectSlug);
-  
+
   if (!galleryProject) {
     return {
       galleryProject: null,
@@ -248,19 +249,19 @@ export async function getGalleryData(projectSlug: string) {
       hasHighRes: false,
     };
   }
-  
+
   // Extract contained projects
   const containedProjects = extractContainedProjects(galleryProject);
-  
+
   // Get filtered and sorted gallery images
   const galleryImages = await getFilteredGalleryImages(containedProjects);
-  
+
   // Build high resolution data
   const highResData = await buildHighResData(galleryImages);
-  
+
   // Check if any images have high resolution versions
   const hasHighRes = hasHighResImages(galleryImages);
-  
+
   return {
     galleryProject,
     galleryImages,
