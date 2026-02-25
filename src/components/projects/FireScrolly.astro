@@ -1,9 +1,21 @@
 ---
 import { Image } from "astro:assets";
 import RhizomLogo from "../assets/Rhizome_Logo_208h.jpg";
+
+// 1. Grab all AVIF files in the sequence folder.
+// 'eager: true' forces Vite to load them immediately so we can access their default.src
+const imageFiles = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/projects/fire/sequence/*.avif",
+  { eager: true },
+);
+
+// 2. Extract the URLs and sort them to guarantee correct frame order
+const imageUrls = Object.values(imageFiles)
+  .map((file) => file.default.src)
+  .sort(); // FireTest_1001, 1002, etc. sort perfectly alphabetically
 ---
 
-<div id="scrolly-container">
+<div id="scrolly-container" data-images={JSON.stringify(imageUrls)}>
   <canvas id="hero-canvas"></canvas>
 
   <div class="step" id="step1">
@@ -44,22 +56,17 @@ import RhizomLogo from "../assets/Rhizome_Logo_208h.jpg";
   const context = canvas.getContext("2d")!;
 
   const frameCount = 200;
-  const currentFrame = (index: number) => {
-    // We add the current index to the starting frame number
-    const frameNumber = 1001 + index;
-
-    // Return the full path string
-    return `/sequence/FireTest_${frameNumber}.avif`;
-  };
+  const container = document.getElementById("scrolly-container")!;
+  const parsedUrls: string[] = JSON.parse(container.dataset.images || "[]");
 
   // create image array
   const images: HTMLImageElement[] = [];
-  for (let i = 0; i < frameCount; i++) {
+  parsedUrls.forEach((url) => {
     //avoid conflict with Astro Image Component by calling window.
     const img = new window.Image();
-    img.src = currentFrame(i);
+    img.src = url;
     images.push(img);
-  }
+  });
 
   // Set internal canvas resolution
   canvas.width = 600;
