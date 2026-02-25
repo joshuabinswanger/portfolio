@@ -1,0 +1,190 @@
+---
+import { Image } from "astro:assets";
+import RhizomLogo from "../assets/Rhizome_Logo_208h.jpg";
+---
+
+<div id="scrolly-container">
+  <canvas id="hero-canvas"></canvas>
+
+  <div class="step" id="step1">
+    <h2>Revolutionary Design.</h2>
+  </div>
+
+  <div class="step" id="step2">
+    <h2>Head 2</h2>
+  </div>
+</div>
+
+<script>
+  import Lenis from "lenis";
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // 1. Initialize Lenis
+  const lenis = new Lenis({
+    lerp: 0.1, // Smoothness intensity (0.1 is standard)
+    wheelMultiplier: 1,
+    smoothWheel: true,
+  });
+
+  // 2. Critical: Tell ScrollTrigger to watch Lenis
+  // This ensures that GSAP knows exactly where the "smooth" scroll is at all times
+  lenis.on("scroll", ScrollTrigger.update);
+
+  // 3. Connect Lenis to the GSAP Ticker
+  // This makes sure both libraries run on the same high-performance animation loop
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000);
+  });
+
+  // initialize canvas
+  const canvas = document.getElementById("hero-canvas") as HTMLCanvasElement;
+  const context = canvas.getContext("2d")!;
+
+  const frameCount = 200;
+  const currentFrame = (index: number) => {
+    // We add the current index to the starting frame number
+    const frameNumber = 1001 + index;
+
+    // Return the full path string
+    return `/sequence/fire/FireTest_${frameNumber}.avif`;
+  };
+
+  // create image array
+  const images: HTMLImageElement[] = [];
+  for (let i = 0; i < frameCount; i++) {
+    //avoid conflict with Astro Image Component by calling window.
+    const img = new window.Image();
+    img.src = currentFrame(i);
+    images.push(img);
+  }
+
+  // Set internal canvas resolution
+  canvas.width = 600;
+  canvas.height = 400; // Adjust height based on your image aspect ratio
+
+  const render = () => {
+    // Clear the old frame
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw the new frame from our array
+    // 'playhead.frame' will be a number we animate with GSAP
+    context.drawImage(
+      images[playhead.frame],
+      0,
+      0,
+      canvas.width,
+      canvas.height,
+    );
+  };
+
+  const playhead = { frame: 0 };
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: "#scrolly-container",
+      start: "top top", // When the top of the container hits the top of the viewport
+      end: `+=500%`, // How long the scroll lasts
+      scrub: 1, // Smoothly "catches up" to the scrollbar
+      pin: true, // Locks the element in place
+      markers: false,
+    },
+  });
+
+  ScrollTrigger.normalizeScroll(true);
+
+  // 1. Animate the frames, but finish early
+  tl.to(
+    playhead,
+    {
+      frame: images.length - 1,
+      snap: "frame",
+      ease: "none",
+      onUpdate: render,
+      duration: 0.7, // This finishes the fire at 50% of the scroll
+    },
+    0,
+  );
+
+  // 2. Fade out the canvas
+  tl.to(
+    "#hero-canvas",
+    {
+      autoAlpha: 0, // Fades opacity to 0 and sets visibility: hidden
+      duration: 0.1, // Takes up 20% of the scroll distance
+    },
+    0.8,
+  ); // Starts at 60% of the scroll
+
+  // Step 1: Revolutionary Design
+  tl.fromTo(
+    "#step1",
+    { autoAlpha: 0, y: 50 }, // Start state: invisible and lower down
+    {
+      autoAlpha: 1,
+      y: 0,
+      duration: 0.1, // This defines how 'long' the fade-in takes
+    },
+    0.2, // This is the start position (20% into the scroll)
+  ).to(
+    "#step1",
+    {
+      autoAlpha: 0,
+      y: -50,
+      duration: 0.1,
+    },
+    0.4, // This is the exit position (40% into the scroll)
+  );
+
+  // Step 1: Revolutionary Design
+  tl.fromTo(
+    "#step2",
+    { autoAlpha: 0, y: 50 }, // Start state: invisible and lower down
+    {
+      autoAlpha: 1,
+      y: 0,
+      duration: 0.1, // This defines how 'long' the fade-in takes
+    },
+    0.6, // This is the start position (20% into the scroll)
+  ).to(
+    "#step2",
+    {
+      autoAlpha: 0,
+      y: -50,
+      duration: 0.1,
+    },
+    0.8, // This is the exit position (40% into the scroll)
+  );
+</script>
+
+<style>
+  #scrolly-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+  }
+
+  canvas {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 1;
+  }
+
+  .step {
+    height: min-content;
+    display: flex;
+    padding-top: 5rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 2; /* Sits on top of canvas */
+    color: rgb(0, 0, 0);
+    opacity: 0; /* Hidden by default */
+    pointer-events: none; /* Let the scroll pass through to the container */
+  }
+</style>
