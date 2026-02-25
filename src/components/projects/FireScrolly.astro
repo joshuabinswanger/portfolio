@@ -25,6 +25,7 @@ const imageUrls = Object.values(imageFiles)
   <div class="step" id="step2">
     <h2>Head 2</h2>
   </div>
+  <div class="bottom-gradient"></div>
 </div>
 
 <script>
@@ -120,9 +121,9 @@ const imageUrls = Object.values(imageFiles)
     "#hero-canvas",
     {
       autoAlpha: 0, // Fades opacity to 0 and sets visibility: hidden
-      duration: 0.1, // Takes up 20% of the scroll distance
+      duration: 0.1,
     },
-    0.8,
+    0.7,
   ); // Starts at 60% of the scroll
 
   // Step 1: Revolutionary Design
@@ -167,10 +168,12 @@ const imageUrls = Object.values(imageFiles)
 </script>
 
 <style>
+  @import "../../styles/global.css";
   #scrolly-container {
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: 100svh;
+    padding-bottom: 20px;
   }
 
   canvas {
@@ -193,5 +196,23 @@ const imageUrls = Object.values(imageFiles)
     color: rgb(0, 0, 0);
     opacity: 0; /* Hidden by default */
     pointer-events: none; /* Let the scroll pass through to the container */
+  }
+
+  .bottom-gradient {
+    position: fixed; /* Fixed so it stays at the bottom of the viewport while pinned */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 10%; /* As requested, 10% of the viewport height */
+    z-index: 10; /* Higher than the canvas (1) and steps (2) */
+    pointer-events: none; /* Let clicks/scrolls pass through */
+
+    /* Adjust the colors to match your design. 
+       This goes from transparent to solid black. */
+    background: linear-gradient(
+      to bottom,
+      rgb(from var(--bg-color) r g b / 0) 0%,
+      var(--bg-color) 100%
+    );
   }
 </style>
