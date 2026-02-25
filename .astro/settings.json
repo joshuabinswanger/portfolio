@@ -1,6 +1,10 @@
 {
 	"_variables": {
+<<<<<<< HEAD
 		"lastUpdateCheck": 1771951617965
+=======
+		"lastUpdateCheck": 1771320786440
+>>>>>>> 5238a859fa57391d1bc26fd7700085e6078f0982
 	},
 	"devToolbar": {
 		"enabled": false

@@ -12,14 +12,10 @@ export interface EnrichedProject {
   slidesCount: number;
 }
 
-/**
- * Sort Portfolio Projects by priority (ascending)
- * @param portfolioProjects - Array of portfolio collection entries to sort
- * @returns New sorted array of portfolioProjects
- */
-export function sortPortfolioProjects<T extends CollectionEntry<"portfolio">>(
-  portfolioProjects: T[],
-): T[] {
+
+export function sortPortfolioProjects(
+  portfolioProjects: CollectionEntry<"portfolio">,
+) {
   return [...portfolioProjects].sort((a, b) => {
     const priorityA = Number(a.data.priority);
     const priorityB = Number(b.data.priority);
@@ -27,11 +23,8 @@ export function sortPortfolioProjects<T extends CollectionEntry<"portfolio">>(
   });
 }
 
-/**
- * Fetch gallery images for specific target projects
- * @param targetProjects - Array of project names to filter by
- * @returns Filtered gallery images that belong to the projects and are marked for portfolio
- */
+
+
 export async function fetchGalleryImagesForProjects(
   targetProjects: string[],
 ): Promise<CollectionEntry<"galleryImages">[]> {
@@ -46,11 +39,8 @@ export async function fetchGalleryImagesForProjects(
   return galleryImages;
 }
 
-/**
- * Process portfolio projects and create enriched data with gallery images
- * @param portfolioProjects - Array of portfolio projects to process
- * @returns Array of enriched projects with gallery data and global index
- */
+
+
 export async function enrichPortfolioProjects(
   portfolioProjects: CollectionEntry<"portfolio">[],
 ): Promise<{ enrichedProjects: EnrichedProject[]; totalGlobalIndex: number }> {
@@ -90,10 +80,7 @@ export async function enrichPortfolioProjects(
   };
 }
 
-/**
- * Complete pipeline: Fetch, sort, and enrich portfolio projects
- * @returns Sorted and enriched portfolio projects with gallery data
- */
+
 export async function getPortfolioGalleryData(): Promise<{
   enrichedProjects: EnrichedProject[];
   totalGlobalIndex: number;
@@ -108,11 +95,7 @@ export async function getPortfolioGalleryData(): Promise<{
   return enrichPortfolioProjects(sortedProjects);
 }
 
-/**
- * Fetches a gallery project by its slug
- * @param projectSlug - The project identifier (will be converted to lowercase)
- * @returns The gallery project entry or null if not found
- */
+
 export async function getGalleryProject(projectSlug: string) {
   try {
     const project = await getEntry("portfolio", projectSlug.toLowerCase());
@@ -132,12 +115,7 @@ export async function getGalleryProject(projectSlug: string) {
   }
 }
 
-/**
- * Extracts project names from a gallery project
- * one gallery project (element) can show multiple projects (i.e. mutiple Material Science Projects)
- * @param galleryProject - The gallery project entry
- * @returns Array of project names or empty array if none found
- */
+
 
 export function extractContainedProjects(
   galleryProject: CollectionEntry<"portfolio"> | null,
@@ -150,11 +128,8 @@ export function extractContainedProjects(
   return [];
 }
 
-/**
- * Fetches and filters gallery images based on project inclusion
- * @param containedProjects - Array of project names to filter by
- * @returns Filtered and sorted collection of gallery images
- */
+
+
 export async function getFilteredGalleryImages(containedProjects: string[]) {
   const galleryImages = await getCollection("galleryImages", ({ data }) => {
     return (
@@ -167,14 +142,8 @@ export async function getFilteredGalleryImages(containedProjects: string[]) {
   return sortImagesByPortfolioOrder(galleryImages);
 }
 
-/**
- * Sorts images by portfolio order (ascending)
- * @param images - Array of gallery images to sort
- * @returns Sorted array of images
- */
-export function sortImagesByPortfolioOrder<
-  T extends CollectionEntry<"galleryImages">,
->(images: T[]): T[] {
+
+export function sortImagesByPortfolioOrder(images: CollectionEntry<"galleryImages">) {
   return [...images].sort((a, b) => {
     const orderA = a.data.metadata?.portfolioOrder ?? Infinity;
     const orderB = b.data.metadata?.portfolioOrder ?? Infinity;
@@ -231,11 +200,7 @@ export function hasHighResImages(
   return images.some((image) => image.data?.metadata?.highres_public_id);
 }
 
-/**
- * Complete gallery data fetching pipeline
- * @param projectSlug - The project identifier
- * @returns Object containing all processed gallery data
- */
+
 export async function getGalleryData(projectSlug: string) {
   // Fetch the gallery project
   const galleryProject = await getGalleryProject(projectSlug);

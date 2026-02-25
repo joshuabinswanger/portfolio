@@ -425,11 +425,16 @@ const { enrichedProjects } = await getPortfolioGalleryData();
       const DetailsInfoWrapper = galleryEl.querySelector(".DetailsInfoWrapper");
       const projectDetails = DetailsInfoWrapper.innerHTML;
 
-      const bracketOpenVEl = galleryEl.querySelector(".bracket-open-v");
+/*       const bracketOpenVEl = galleryEl.querySelector(".bracket-open-v");
       const bracketOpenV = bracketOpenVEl.innerHTML;
 
       const bracketCloseVEl = galleryEl.querySelector(".bracket-close-v");
-      const bracketCloseV = bracketCloseVEl.innerHTML;
+      const bracketCloseV = bracketCloseVEl.innerHTML; 
+      
+      those would be the elements
+      ${bracketOpenV}
+      	${bracketCloseV}
+      */
 
       const projectInfoEl = {
         html: `<div
@@ -439,7 +444,7 @@ const { enrichedProjects } = await getPortfolioGalleryData();
 						<div class="pswp__project-info-slide">
 
 							
-							${bracketOpenV}
+							
 							
 							<div class="pswp__project-info">
 								${projectDescription}
@@ -450,7 +455,7 @@ const { enrichedProjects } = await getPortfolioGalleryData();
 								${projectDetails}
 							</div>
 
-							${bracketCloseV}
+						
 
 						</div>
 						</div>`,
@@ -475,7 +480,7 @@ const { enrichedProjects } = await getPortfolioGalleryData();
       dataSource: flatData,
 
       initialZoomLevel: `fit`,
-      bgOpacity: 0.95,
+      bgOpacity: 0.98,
       zoom: false,
 
       // to apply styles just to this instance of PhotoSwipe
