@@ -1,0 +1,143 @@
+---
+import { CldImage } from "astro-cloudinary";
+import { getCollection } from "astro:content";
+const galleryImages = await getCollection("galleryImages");
+---
+
+<div id="scrolly-container">
+  <div id="intro-section" class="scrolly-panel">
+    <h1 id="intro-head">Liebes NZZ Visuals Team,</h1>
+    <h1 id="intro-name">ich heisse Joshua Binswanger</h1>
+    <h1 id="intro-title">Scientific Illustrator & Visual Storyteller.</h1>
+    <p id="intro-intersection">
+      Ich bewege mich an der Schnittstelle von visuellem Design und Technologie.
+    </p>
+  </div>
+
+  <div id="work-section" class="scrolly-panel">
+    <p id="work-head">
+      Seit meinem Abschluss in Knowledge Visualization an der ZHdK, arbeite ich
+      als freischaffender wissenschaftlicher Illustrator.
+    </p>
+    <p id="work-phenological">
+      Dabei vermittle ich wissenschaftliche Forschung
+    </p>
+    <div id="work-image-container" class="image">
+      <CldImage
+        src="Phenological_Shift_GalleryImage_2_rvbeeb"
+        width="100%"
+        alt="Phenological Shift"
+      />
+    </div>
+  </div>
+</div>
+
+<script>
+  import Lenis from "lenis";
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // 1. Initialize Lenis
+  const lenis = new Lenis({
+    lerp: 0.1,
+    wheelMultiplier: 1,
+    smoothWheel: true,
+  });
+
+  // 2. Critical: Tell ScrollTrigger to watch Lenis
+  lenis.on("scroll", ScrollTrigger.update);
+
+  // 3. Connect Lenis to the GSAP Ticker
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000);
+  });
+
+  // 4. Create the Master Timeline hooked to ScrollTrigger
+  const masterTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: "#scrolly-container",
+      start: "top top",
+      end: "+=500%", // Extended the distance to accommodate the sequential fades
+      scrub: 1,
+      pin: true,
+      markers: false, // Turned off markers
+    },
+  });
+
+  // 5. Create Child Timeline for the Intro
+  const introTl = gsap.timeline();
+  introTl
+    .to("#intro-head", { opacity: 1, y: -10, duration: 0.5 }, "-=0.5")
+    .to("#intro-name", { opacity: 1, y: -10, duration: 1 })
+    .to("#intro-title", { opacity: 1, y: -10, duration: 1 }, "+=1")
+    .to("#intro-intersection", { opacity: 1, y: -10, duration: 1 }, "-=0.5")
+    // Add a slight pause, then fade out the whole intro
+    .to("#intro-section", { opacity: 0, y: -50, duration: 2 }, "+=1");
+
+  // 6. Create Child Timeline for the Work Section
+  const workTl = gsap.timeline();
+  workTl
+    .set("#work-section", { opacity: 1 }) // Ensure the parent container is visible first
+    .to("#work-head", { opacity: 1, y: -10, duration: 1 })
+    .to("#work-phenological", { opacity: 1, y: -10, duration: 1 })
+    // The "<" parameter means "start at the exact same time as the previous animation"
+    .to("#work-image-container", { opacity: 1, y: -10, duration: 1 }, "<");
+
+  // 7. Nest them into the Master Timeline
+  masterTl.add(introTl).add(workTl);
+</script>
+
+<style>
+  @import "../../styles/global.css";
+
+  #scrolly-container {
+    position: relative;
+    width: 100%;
+    height: 100svh;
+    overflow: hidden; /* Keeps things neat while pinning */
+  }
+
+  /* padding for all scrolly elements */
+  #scrolly-container p,
+  #scrolly-container h1 {
+    padding: 0 2rem 0 2rem;
+  }
+
+  h1 {
+    font-size: 20px;
+    padding-bottom: 2rem;
+  }
+
+  /* Stack the sections on top of each other so they can transition smoothly */
+  .scrolly-panel {
+    position: absolute;
+    top: 10%;
+    width: 100%;
+  }
+
+  /* image styling */
+  .image {
+    justify-items: center;
+    padding: 0;
+  }
+
+  /* INITIAL HIDDEN STATES */
+  /* Hide the second section container initially */
+  #work-section {
+    opacity: 0;
+  }
+
+  /* Hide individual elements and push them down slightly for a nice slide-up effect */
+  #intro-head,
+  #intro-name,
+  #intro-title,
+  #intro-intersection,
+  #work-head,
+  #work-phenological,
+  #work-image-container {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+</style>
