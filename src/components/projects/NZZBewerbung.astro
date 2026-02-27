@@ -92,14 +92,15 @@ const galleryImages = await getCollection("galleryImages");
   <div id="panel-3" class="scrolly-panel split-panel">
     <div class="text-col">
       <p class="text-block t-3-1">
-        Mein wichtigstes Werkzeug dafür ist 3D – ob als hochauflösendes Still,
+        Mein wichtigstes Werkzeug dafür ist 3D <br />
+        – ob als hochauflösendes Still,
       </p>
-      <p class="text-block t-3-2">
-        als Animation oder für interaktive Web-Formate.
-      </p>
+      <p class="text-block t-3-2">als Animation</p>
+      <p class="text-block t-3-2-1">oder für interaktive Web-Formate.</p>
       <p class="text-block t-3-3">
-        Das Fundament meiner Arbeit bleibt jedoch das Handwerk: Zeichnen und
-        Illustration bilden die Basis für gutes Design.
+        <br />
+        Das Fundament meiner Arbeit bleibt jedoch das Handwerk: Zeichnen und Illustration
+        bilden die Basis für gutes Design.
       </p>
     </div>
     <div class="img-col">
@@ -341,7 +342,7 @@ const galleryImages = await getCollection("galleryImages");
 
     imageTl
       .to(selector, {
-        y: "-15%",
+        y: "0%",
         duration: 1,
       })
       .to(
@@ -377,7 +378,13 @@ const galleryImages = await getCollection("galleryImages");
   showText(".t-1-1");
   showText(".t-1-2");
   pause(1);
-  masterTl.to("#panel-1", { opacity: 0, duration: 1 });
+  masterTl.to("#panel-1 .text-block", {
+    y: "-100vh",
+    opacity: 0,
+    duration: 1.5,
+    stagger: 0.1,
+  });
+  masterTl.to("#panel-1", { opacity: 0, duration: 0.5 }, "<1"); // Fade panel out at the end
 
   // --- PANEL 2: Mission ---
   masterTl.to("#panel-2", { opacity: 1, duration: 1 });
@@ -386,21 +393,19 @@ const galleryImages = await getCollection("galleryImages");
   showImg(".i-2-1", true);
   pause();
   hideImg(".i-2-1");
+  showText(".t-2-2", true);
   showImg(".i-2-2");
   pause();
   hideImg(".i-2-2");
   showImg(".i-2-3");
   pause();
-  hideText(".t-2-1");
   hideImg(".i-2-3");
 
-  showText(".t-2-2", true);
   showImg(".i-2-4", true);
   pause();
   hideImg(".i-2-4");
   showImg(".i-2-5");
   pause();
-  hideText(".t-2-2");
   hideImg(".i-2-5");
 
   showText(".t-2-3", true);
@@ -411,7 +416,13 @@ const galleryImages = await getCollection("galleryImages");
   pause(1);
 
   hideImg(".i-2-7");
-  masterTl.to("#panel-2", { opacity: 0, duration: 1 }, "<");
+  // Move all texts in this panel up and out of the viewport smoothly
+  masterTl.to(
+    "#panel-2 .text-block",
+    { y: "-100vh", opacity: 0, duration: 1.5, stagger: 0.1 },
+    "<",
+  );
+  masterTl.to("#panel-2", { opacity: 0, duration: 0.5 }, "<1");
 
   // --- PANEL 3: Werkzeuge ---
   masterTl.to("#panel-3", { opacity: 1, duration: 1 });
@@ -428,19 +439,18 @@ const galleryImages = await getCollection("galleryImages");
   hideImg(".i-3-3");
   showImg(".i-3-4");
   pause();
-  hideText(".t-3-1");
   hideImg(".i-3-4");
 
   showText(".t-3-2", true);
   showImg(".i-3-5", true);
   pause();
   hideImg(".i-3-5");
+  showText(".t-3-2-1", true);
   showImg(".i-3-6");
   pause();
   hideImg(".i-3-6");
   showImg(".i-3-7");
   pause();
-  hideText(".t-3-2");
   hideImg(".i-3-7");
 
   showText(".t-3-3", true);
@@ -457,15 +467,26 @@ const galleryImages = await getCollection("galleryImages");
   pause(1);
 
   hideImg(".i-3-11");
-  masterTl.to("#panel-3", { opacity: 0, duration: 1 }, "<");
+  masterTl.to(
+    "#panel-3 .text-block",
+    { y: "-100vh", opacity: 0, duration: 1.5, stagger: 0.1 },
+    "<",
+  );
+  masterTl.to("#panel-3", { opacity: 0, duration: 0.5 }, "<1");
 
   // --- PANEL 4: Tech ---
   masterTl.to("#panel-4", { opacity: 1, duration: 1 });
   showText(".t-4-1");
   showText(".t-4-2");
   showText(".t-4-3");
-  pause(1);
-  masterTl.to("#panel-4", { opacity: 0, duration: 1 });
+  pause(1.5);
+  masterTl.to("#panel-4 .text-block", {
+    y: "-100vh",
+    opacity: 0,
+    duration: 1.5,
+    stagger: 0.1,
+  });
+  masterTl.to("#panel-4", { opacity: 0, duration: 0.5 }, "<1");
 
   // --- PANEL 5: Web ---
   masterTl.to("#panel-5", { opacity: 1, duration: 1 });
@@ -473,7 +494,6 @@ const galleryImages = await getCollection("galleryImages");
   showText(".t-5-1");
   showImg(".i-5-1", true);
   pause();
-  hideText(".t-5-1");
   hideImg(".i-5-1");
 
   showText(".t-5-2", true);
@@ -481,7 +501,12 @@ const galleryImages = await getCollection("galleryImages");
   pause(1);
 
   hideImg(".i-5-2");
-  masterTl.to("#panel-5", { opacity: 0, duration: 1 }, "<");
+  masterTl.to(
+    "#panel-5 .text-block",
+    { y: "-100vh", opacity: 0, duration: 1.5, stagger: 0.1 },
+    "<",
+  );
+  masterTl.to("#panel-5", { opacity: 0, duration: 0.5 }, "<1");
 
   // --- PANEL 6: Pitch ---
   masterTl.to("#panel-6", { opacity: 1, duration: 1 });
@@ -489,7 +514,13 @@ const galleryImages = await getCollection("galleryImages");
   showText(".t-6-2");
   showText(".t-6-3");
   pause(1.5);
-  masterTl.to("#panel-6", { opacity: 0, duration: 1 });
+  masterTl.to("#panel-6 .text-block", {
+    y: "-100vh",
+    opacity: 0,
+    duration: 1.5,
+    stagger: 0.1,
+  });
+  masterTl.to("#panel-6", { opacity: 0, duration: 0.5 }, "<1");
 
   // --- PANEL 7: Outro ---
   masterTl.to("#panel-7", { opacity: 1, duration: 1 });
@@ -531,6 +562,8 @@ const galleryImages = await getCollection("galleryImages");
 
   .text-col {
     position: absolute;
+    display: grid;
+    grid-auto-rows: min-content;
     width: 100%;
     height: 100svh; /* Top 1/4 of the viewport */
     background-color: transparent;
@@ -539,9 +572,32 @@ const galleryImages = await getCollection("galleryImages");
   .img-col {
     position: absolute;
     width: 100%;
+    align-items: end;
     height: 100svh; /* Lower 2/4 (Half the screen) */
     overflow: hidden;
     margin: 0 auto;
+  }
+
+  /* --- Image Stacking --- */
+
+  .img-stack {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    padding: 0 5% 40vh 5%;
+    transform: translateY(100%);
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    pointer-events: none; /* Allows clicking through hidden images */
+  }
+
+  .img-stack img {
+    width: 100%; /* Take up full container width */
+    height: auto; /* Maintain aspect ratio */
+    max-width: 800px; /* Optional: cap the size so it doesn't get too huge */
+    max-height: 60vh; /* Keep it within the viewport height */
+    object-fit: scale-down !important;
   }
 
   /* --- Typography --- */
@@ -558,19 +614,22 @@ const galleryImages = await getCollection("galleryImages");
     line-height: 1.5;
   }
 
-  .center-panel .text-block {
-    margin-bottom: 2rem;
+  .center-panel .text-container {
+    margin-bottom: 20vh;
   }
 
   .text-col .text-block {
-    position: absolute;
     justify-self: center;
     width: 90%;
-    padding: 70vh 5% 0 5%;
+    padding: 0 5% 0 5%;
     top: 0;
     left: 0;
-    font-size: var(--font-size-mobile);
+    font-size: var(--font-size-desktop);
     margin: 0;
+  }
+
+  .text-col .text-block:first-child {
+    padding-top: 65svh;
   }
 
   h1.text-block {
@@ -586,29 +645,7 @@ const galleryImages = await getCollection("galleryImages");
   }
 
   p.text-block {
-    font-size: var(--font-size-mobile);
-  }
-
-  /* --- Image Stacking --- */
-
-  .img-stack {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    padding: 0 5%;
-    transform: translateY(100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none; /* Allows clicking through hidden images */
-  }
-
-  .img-stack img {
-    width: 100%; /* Take up full container width */
-    height: auto; /* Maintain aspect ratio */
-    max-width: 800px; /* Optional: cap the size so it doesn't get too huge */
-    max-height: 60vh; /* Keep it within the viewport height */
-    object-fit: scale-down !important;
+    font-size: var(--font-size-desktop);
   }
 
   /* --- Links and Buttons --- */
