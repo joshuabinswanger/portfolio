@@ -5,7 +5,8 @@ const galleryImages = await getCollection("galleryImages");
 ---
 
 <div id="scrolly-container">
-  <div id="intro-section" class="scrolly-panel">
+  <!-- Intro Panel -->
+  <div id="intro-panel" class="scrolly-panel">
     <h1 id="intro-head">Liebes NZZ Visuals Team,</h1>
     <h1 id="intro-name">ich heisse Joshua Binswanger</h1>
     <h1 id="intro-title">Scientific Illustrator & Visual Storyteller.</h1>
@@ -14,20 +15,56 @@ const galleryImages = await getCollection("galleryImages");
     </p>
   </div>
 
-  <div id="work-section" class="scrolly-panel">
+  <!-- Work Panel -->
+  <div id="work-panel" class="scrolly-panel">
     <p id="work-head">
       Seit meinem Abschluss in Knowledge Visualization an der ZHdK, arbeite ich
       als freischaffender wissenschaftlicher Illustrator.
     </p>
-    <p id="work-phenological">
-      Dabei vermittle ich wissenschaftliche Forschung
-    </p>
-    <div id="work-image-container" class="image">
-      <CldImage
-        src="Phenological_Shift_GalleryImage_2_rvbeeb"
-        width="100%"
-        alt="Phenological Shift"
-      />
+
+    <div class="work-content">
+      <p id="work-scientific-illustration">
+        Dabei vermittle ich wissenschaftliche Forschung
+      </p>
+
+      <!-- Stacking Image Container -->
+      <div id="image-stack-container">
+        <div id="img-phenological-shift-1" class="stacked-image">
+          <CldImage
+            src="Phenological_Shift_GalleryImage_2_rvbeeb"
+            width="800"
+            height="600"
+            alt="Phenological Shift"
+          />
+        </div>
+
+        <div id="img-living-bricks-1" class="stacked-image">
+          <CldImage
+            src="ETHVisualisations_Gallery_2_lqhc5s"
+            width="800"
+            height="600"
+            alt="ETH Visualisations"
+          />
+        </div>
+
+        <div id="img-bacteria" class="stacked-image">
+          <CldImage
+            src="ETH_CelluloseLivingMaterial_2_ttlmvt"
+            width="800"
+            height="600"
+            alt="ETH Visualisations"
+          />
+        </div>
+
+        <div id="img-fungi" class="stacked-image">
+          <CldImage
+            src="ETHVisualisations_Gallery_4_mcdinf"
+            width="800"
+            height="600"
+            alt="ETH Visualisations"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -46,46 +83,51 @@ const galleryImages = await getCollection("galleryImages");
     smoothWheel: true,
   });
 
-  // 2. Critical: Tell ScrollTrigger to watch Lenis
   lenis.on("scroll", ScrollTrigger.update);
 
-  // 3. Connect Lenis to the GSAP Ticker
   gsap.ticker.add((time) => {
     lenis.raf(time * 1000);
   });
 
-  // 4. Create the Master Timeline hooked to ScrollTrigger
+  // 2. Master Timeline
   const masterTl = gsap.timeline({
     scrollTrigger: {
       trigger: "#scrolly-container",
       start: "top top",
-      end: "+=500%", // Extended the distance to accommodate the sequential fades
+      end: "+=700%", // Increased distance for more steps
       scrub: 1,
       pin: true,
-      markers: false, // Turned off markers
+      markers: false,
     },
   });
 
-  // 5. Create Child Timeline for the Intro
+  // 3. Intro Timeline
   const introTl = gsap.timeline();
   introTl
-    .to("#intro-head", { opacity: 1, y: -10, duration: 0.5 }, "-=0.5")
+    .to("#intro-head", { opacity: 1, y: -10, duration: 1 })
     .to("#intro-name", { opacity: 1, y: -10, duration: 1 })
-    .to("#intro-title", { opacity: 1, y: -10, duration: 1 }, "+=1")
+    .to("#intro-title", { opacity: 1, y: -10, duration: 1 }, "+=0.5")
     .to("#intro-intersection", { opacity: 1, y: -10, duration: 1 }, "-=0.5")
-    // Add a slight pause, then fade out the whole intro
-    .to("#intro-section", { opacity: 0, y: -50, duration: 2 }, "+=1");
+    .to("#intro-panel", { opacity: 0, y: -50, duration: 2 }, "+=1");
 
-  // 6. Create Child Timeline for the Work Section
+  // 4. Work Timeline (with Sliding Images)
   const workTl = gsap.timeline();
   workTl
-    .set("#work-section", { opacity: 1 }) // Ensure the parent container is visible first
+    .set("#work-panel", { opacity: 1 })
     .to("#work-head", { opacity: 1, y: -10, duration: 1 })
-    .to("#work-phenological", { opacity: 1, y: -10, duration: 1 })
-    // The "<" parameter means "start at the exact same time as the previous animation"
-    .to("#work-image-container", { opacity: 1, y: -10, duration: 1 }, "<");
+    .to("#work-scientific-illustration", { opacity: 1, y: -10, duration: 1 })
+    // Image 1 fades and slides in
+    .to(
+      "#img-phenological-shift-1",
+      { opacity: 1, y: 0, duration: 1.5 },
+      "-=0.5",
+    )
+    // Image 2 slides OVER Image 1 (starts from y: 100% in CSS)
+    .to("#img-living-bricks-1", { y: "0%", duration: 2 }, "+=0.5")
+    .to("#img-bacteria", { y: "0%", duration: 2 }, "+=0.5")
+    .to("#img-fungi", { y: "0%", duration: 2 }, "+=0.5")
+    .to("#work-panel", { duration: 1, opacity: 0 });
 
-  // 7. Nest them into the Master Timeline
   masterTl.add(introTl).add(workTl);
 </script>
 
@@ -96,13 +138,12 @@ const galleryImages = await getCollection("galleryImages");
     position: relative;
     width: 100%;
     height: 100svh;
-    overflow: hidden; /* Keeps things neat while pinning */
+    overflow: hidden;
   }
 
-  /* padding for all scrolly elements */
   #scrolly-container p,
   #scrolly-container h1 {
-    padding: 0 2rem 0 2rem;
+    padding: 0 2rem;
   }
 
   h1 {
@@ -110,34 +151,73 @@ const galleryImages = await getCollection("galleryImages");
     padding-bottom: 2rem;
   }
 
-  /* Stack the sections on top of each other so they can transition smoothly */
   .scrolly-panel {
     position: absolute;
     top: 10%;
     width: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
-  /* image styling */
-  .image {
-    justify-items: center;
-    padding: 0;
+  /* Image Stacking Logic */
+  #image-stack-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    aspect-ratio: 4/3;
+    margin: 2rem auto;
+    overflow: hidden; /* Important so image 2 stays hidden below */
+    border-radius: 8px;
   }
 
-  /* INITIAL HIDDEN STATES */
-  /* Hide the second section container initially */
-  #work-section {
+  .stacked-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0 !important; /* Remove typography padding from images */
+  }
+
+  .stacked-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* INITIAL STATES */
+  #work-panel {
     opacity: 0;
   }
 
-  /* Hide individual elements and push them down slightly for a nice slide-up effect */
   #intro-head,
   #intro-name,
   #intro-title,
   #intro-intersection,
   #work-head,
-  #work-phenological,
-  #work-image-container {
+  #work-scientific-illustration {
     opacity: 0;
     transform: translateY(10px);
+  }
+
+  #img-phenological-shift-1 {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  #img-living-bricks-1 {
+    /* Positioned fully below the container, ready to slide up */
+    transform: translateY(100%);
+    z-index: 2;
+  }
+
+  #img-bacteria {
+    transform: translateY(100%);
+    z-index: 3;
+  }
+
+  #img-fungi {
+    transform: translateY(100%);
+    z-index: 4;
   }
 </style>
