@@ -1,0 +1,851 @@
+---
+import { CldImage } from "astro-cloudinary";
+import { getCollection } from "astro:content";
+const galleryImages = await getCollection("galleryImages");
+
+// Load N64 Sequence Images
+// Ensure this path matches your actual folder structure for the sequence
+const n64Files = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/projects/gamedesign101/N64_avif_sequence/*.avif",
+  { eager: true },
+);
+
+const n64Urls = Object.values(n64Files)
+  .map((file) => file.default.src)
+  .sort();
+---
+
+<!-- Intro -->
+<div id="scrolly-container" data-n64-images={JSON.stringify(n64Urls)}>
+  <div id="panel-1" class="scrolly-panel center-panel">
+    <div class="text-container">
+      <h1 class="text-block text-intro-name">
+        Hi, <br />mein Name ist Joshua Binswanger.
+      </h1>
+      <h2 class="text-block text-intro-passion">
+        Meine Leidenschaft ist es komplexe Sachverhalte in visuell ansprechende
+        Bilder zu übersetzten.
+      </h2>
+    </div>
+  </div>
+
+  <!-- Panel 2 Sci Vis -->
+  <div id="panel-2" class="scrolly-panel split-panel">
+    <div class="text-col">
+      <p class="padding-top text-block text-mission-background">
+        Seit meinem Abschluss in Knowledge Visualization an der ZHdK arbeite ich
+        als freischaffended wissenschaftlicher Illustrator.
+      </p>
+      <p class="text-block text-mission-claim">
+        Mein Anspruch dabei ist wissenschaftliche Tiefe getreu aber mit
+        ästethsichem Feingefühl zu visualiseren.
+      </p>
+      <p class="text-block text-mission-narrative">
+        Mein besonderes Augenmerk liegt darauf, die komplexe Inhalte eines
+        Themas in ein visuelles Narrativ zu übersetzen.
+      </p>
+      <p class="text-block text-mission-audience">
+        Für ein wissenschaftliches Publikum, oder für eine Laiengruppe.
+      </p>
+    </div>
+    <div class="img-col">
+      <div class="img-stack img-mission-pheno">
+        <CldImage
+          src="Phenological_Shift_GalleryImage1_cjmvqe"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Phenological Shift"
+        />
+      </div>
+      <div class="img-stack img-mission-eth1">
+        <CldImage
+          src="ETHVisualisations_GalleryPic1_hnzfw1"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="ETH Visualisations"
+        />
+      </div>
+      <div class="img-stack img-mission-eth2">
+        <CldImage
+          src="ETHVisualisations_GalleryPic2_mdr3sb"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="ETH Visualisations"
+        />
+      </div>
+      <div class="img-stack img-mission-microbiome-olma">
+        <CldImage
+          src="Microbiome_OLMA_ttmkmz"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Microbiome"
+        />
+      </div>
+      <div class="img-stack img-mission-microbiome-gallery">
+        <CldImage
+          src="Microbiome_GalleryImages1_bue7bs"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Microbiome"
+        />
+      </div>
+      <div class="img-stack img-mission-freedom-gallery">
+        <CldImage
+          src="Freedom_GalleryImages_5_pbxr8g"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Freedom Gallery"
+        />
+      </div>
+      <div class="img-stack img-mission-freedom-info">
+        <CldImage
+          src="Freedom_Infografik_z43mem"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Freedom Infographic"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel 3 3D Tools -->
+  <div id="panel-3" class="scrolly-panel split-panel">
+    <div class="text-col">
+      <p class="text-block text-tools-3d padding-top">
+        Bervorzugt arbeite ich mit 3D Visualiserung. <br />
+      </p>
+      <p class="text-block text-tools-still">Ob als hochauflösendes Still,</p>
+
+      <p class="text-block text-tools-anim">Animation</p>
+      <p class="text-block text-tools-interactive">
+        oder für interaktive Web-Formate.
+      </p>
+      <p class="text-block text-tools-illustration">
+        <br />
+        Das Fundament meiner Arbeit bleibt jedoch die Illustration.
+      </p>
+    </div>
+    <div class="img-col">
+      <div class="img-stack img-tools-wood5">
+        <CldImage
+          src="StructureofWood_Gallery_5_g1x7ry"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Structure of Wood"
+        />
+      </div>
+      <div class="img-stack img-tools-wood4">
+        <CldImage
+          src="StructureofWood_Gallery_4_llpwgf"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Structure of Wood"
+        />
+      </div>
+      <div class="img-stack img-tools-eth3">
+        <CldImage
+          src="ETHVisualisations_Gallery_3_myrndw"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="ETH Visualisations"
+        />
+      </div>
+      <div class="img-stack img-tools-eth1">
+        <CldImage
+          src="ETHVisualisations_Gallery_1_skyq6j"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="ETH Visualisations"
+        />
+      </div>
+      <div class="img-stack img-tools-n64">
+        <canvas id="n64-canvas"></canvas>
+      </div>
+      <div class="img-stack img-tools-xylopedia-ipad">
+        <CldImage
+          src="XylopediaInsta4_hjbuf8"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Xylopedia iPad"
+        />
+      </div>
+      <div class="img-stack img-tools-xylopedia-gallery">
+        <CldImage
+          src="Xylopedia_Gallery_1_afnq0i"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Xylopedia"
+        />
+      </div>
+      <div class="img-stack img-tools-illu1">
+        <CldImage
+          src="Illustration_GalleryImages_1_sihglc"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Illustration"
+        />
+      </div>
+      <div class="img-stack img-tools-illu6">
+        <CldImage
+          src="Illustration_GalleryImages_6_wgojna"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Illustration"
+        />
+      </div>
+      <div class="img-stack img-tools-borken">
+        <CldImage
+          src="Borkenkaefer_Gallery_1_daro6y"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Borkenkäfer"
+        />
+      </div>
+      <div class="img-stack img-tools-figure">
+        <CldImage
+          src="FigureDrawing_Gallery_23_dnrpi3"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Figure Drawing"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel 4 Tech and Tools -->
+  <div id="panel-4" class="scrolly-panel center-panel">
+    <div class="text-container">
+      <p class="text-block text-tech-intro padding-top">
+        Um meine Arbeitsprozesse effizienter zu gestalten, erweitere ich mein
+        technisches Know-how stetig.
+      </p>
+      <p class="text-block text-tech-augmedi">
+        Bei der Augmedi AG entwickle ich aktuell 3D-Scans (Photogrammetry &
+        Gaussian Splats) für ein Next-Gen-Anatomietool. Dabei nutze ich <em
+          >Houdini</em
+        > und <em>Python</em>, um Pipelines prozedural aufzubauen und zu
+        automatisieren.<br /><br /><a href="#" class="inline-link"
+          >Link zu Augmedi</a
+        >
+      </p>
+      <p class="text-block text-tech-ai">
+        Auch bemühe ich mich die neusten KI-Tools wie Weavy in meinen Workflow
+        einzubauen, um den kreativen Prozesse zu beschleunigen.
+      </p>
+    </div>
+  </div>
+
+  <!--  Panel 5 Web and Portfolio -->
+  <div id="panel-5" class="scrolly-panel split-panel">
+    <div class="text-col">
+      <p class="text-block text-web-intro padding-top">
+        Visual Storytelling und Lerntools entfalten ihre grösste Kraft im
+        digitalen Raum. Viele meiner Projekte bewegen sich an der Schittstelle
+        zum Web,
+      </p>
+      <p class="text-block text-web-portfolio">
+        deshalb habe ich mir die Grundlagen des Web Designs angeeignet. Mein
+        grösstes Projekt war mein persönliches Portfolio.<br /><br />
+        Für einen tieferen Einblick in meine Arbeit besuchen sie <a
+          href="https://rhizome.ch"
+          target="_blank"
+          class="inline-link"
+        >
+          rhizome.ch
+        </a>
+      </p>
+    </div>
+    <div class="img-col">
+      <div class="img-stack img-web-ub">
+        <CldImage
+          src="UBJahresbericht"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="UB Jahresbericht"
+        />
+      </div>
+      <div class="img-stack img-web-portfolio">
+        <CldImage
+          src="Portfolio"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Portfolio"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- NZZ Pitch -->
+  <div id="panel-6" class="scrolly-panel center-panel">
+    <div class="text-container">
+      <h2 class="text-block text-pitch-nzz padding-top">
+        Seit langem verfolge ich die Arbeit des NZZ Visuals Teams – eure
+        analytische Tiefe und optische Eleganz beeindrucken mich sehr.
+      </h2>
+      <p class="text-block text-pitch-skills">
+        Ich bin es gewohnt, komplexe Inhalte analytisch zu durchdringen.
+        Kombiniert mit meinem breiten Skillset in Design, 3D und Code bringe ich
+        das perfekte Rüstzeug mit.
+      </p>
+      <h2 class="text-block text-pitch-motivation">
+        Ich bewerbe mich für das Volontariat, weil ich mir keinen besseren Ort
+        vorstellen kann, um meine Fähigkeiten auf weiterzuentwickeln und
+        gemeinsam mit Ihnen neue visuelle Formate zu prägen.
+      </h2>
+    </div>
+  </div>
+
+  <!-- Thanks  -->
+  <div id="panel-7" class="scrolly-panel center-panel">
+    <div class="text-container">
+      <h1 class="text-block text-outro-thanks">Vielen Dank für Ihre Zeit.</h1>
+      <h2 class="text-block text-outro-contact">
+        Ich freue mich auf ein persönliches Gespräch.
+      </h2>
+      <div class="text-block text-outro-links action-links">
+        <a href="mailto:hallo@rhizome.ch" class="btn">E-Mail schreiben</a>
+        <a href="/cv.pdf" target="_blank" class="btn">CV herunterladen</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import Lenis from "lenis";
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import { CustomEase } from "gsap/CustomEase";
+  import { SplitText } from "gsap/SplitText";
+
+  gsap.registerPlugin(ScrollTrigger, CustomEase, SplitText);
+
+  // 1. Initialize Lenis
+  const lenis = new Lenis({
+    lerp: 0.1,
+    wheelMultiplier: 1,
+    smoothWheel: true,
+  });
+
+  lenis.on("scroll", ScrollTrigger.update);
+
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000);
+  });
+
+  // 2. Master Timeline - increased duration significantly for the volume of content
+  const masterTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: "#scrolly-container",
+      start: "top top",
+      end: "+=15000%", // Provides enough scrolling length for smooth reading
+      scrub: 1,
+      pin: true,
+      markers: false,
+    },
+  });
+
+  // 3. Prepare SplitText
+  const splitTexts = new SplitText(".text-block", {
+    type: "words",
+    wordsClass: "word",
+  });
+
+  // --- N64 Canvas Setup ---
+  const n64Canvas = document.getElementById("n64-canvas") as HTMLCanvasElement;
+  const n64Ctx = n64Canvas.getContext("2d");
+  const container = document.getElementById("scrolly-container");
+  const n64Urls = JSON.parse(container.dataset.n64Images || "[]");
+  const n64Images = [];
+  const n64Playhead = { frame: 0 };
+
+  // Preload images
+  n64Urls.forEach((url) => {
+    const img = new window.Image();
+    img.src = url;
+    n64Images.push(img);
+  });
+
+  // Set canvas resolution (adjust to your image aspect ratio, e.g., 800x600)
+  n64Canvas.width = 600;
+  n64Canvas.height = 600;
+
+  const renderN64 = () => {
+    if (n64Images.length === 0) return;
+    n64Ctx.clearRect(0, 0, n64Canvas.width, n64Canvas.height);
+    // Clamp frame to valid range
+    const frame = Math.min(
+      Math.max(Math.round(n64Playhead.frame), 0),
+      n64Images.length - 1,
+    );
+    n64Ctx.drawImage(n64Images[frame], 0, 0, n64Canvas.width, n64Canvas.height);
+  };
+
+  // Override initial CSS to make parents visible, but hide the individual words
+  gsap.set(".text-block", { opacity: 1, y: 0 });
+  gsap.set(splitTexts.words, { opacity: 0, y: 20 });
+
+  // Helper Functions to keep the timeline clean
+  const showText = (selector, sync = false) => {
+    return masterTl.to(
+      `${selector} .word`, // Target the individual words inside the selector
+      { opacity: 1, y: 0, duration: 0.8, stagger: 0.04, ease: "power2.out" },
+      sync ? "<" : "+=0.2",
+    );
+  };
+  const hideText = (selector, sync = false) => {
+    return masterTl.to(
+      selector,
+      { opacity: 0, y: -20, duration: 1 },
+      sync ? "<" : "+=0.2",
+    );
+  };
+
+  const fadeCollapseText = (selector, sync = false) => {
+    return masterTl.to(
+      selector,
+      {
+        opacity: 0,
+        y: -20,
+        height: 0,
+        duration: 1,
+        ease: "power2.inOut",
+      },
+      sync ? "<" : "+=0.2",
+    );
+  };
+
+  const showImg = (selector, sync = false) => {
+    // Create a localized mini-timeline for this specific image
+    const imageTl = gsap.timeline();
+
+    imageTl
+      .to(selector, {
+        y: "0%",
+        duration: 1,
+      })
+      .to(
+        selector,
+        {
+          opacity: 1,
+          duration: 0.8,
+        },
+        ">-0.8",
+      ); // Starts 0.2s before the 1s movement ends
+
+    // Add the mini-timeline to your masterTl
+    return masterTl.add(imageTl, sync ? "<" : "-=0.2");
+  };
+
+  const zoomFadeOutImg = (selector, sync = false) => {
+    return masterTl.fromTo(
+      selector,
+      {
+        y: "0%", // Overrides the initial translateY(100%) from your CSS
+        scale: 1, // Starts scaled down at 60% size. (Use 1.2 to start zoomed IN)
+      },
+      {
+        scale: 0.6, // Animates to its natural size
+        opacity: 0,
+        duration: 1.2,
+        ease: "back.out(1.2)", // Gives a very subtle, satisfying "pop" into place
+      },
+      sync ? "<" : "+=0.2",
+    );
+  };
+
+  const zoomFadeInImg = (selector, sync = false) => {
+    return masterTl.fromTo(
+      selector,
+      {
+        y: "0%", // Overrides the initial translateY(100%) from your CSS
+        opacity: 0,
+        scale: 1.4,
+      },
+      {
+        opacity: 1,
+        duration: 1.2,
+        scale: 1,
+        ease: "power2.out",
+      },
+      sync ? "<" : "-=0.5",
+    );
+  };
+
+  const hideImg = (selector, sync = false) => {
+    return masterTl.to(
+      selector,
+      {
+        y: "-100%",
+        opacity: 0,
+        duration: 1,
+      },
+      sync ? "<" : "+=0.2",
+    );
+  };
+  const pause = (duration = 0.2) => {
+    return masterTl.to({}, { duration: duration });
+  };
+
+  // --- PANEL 1: Intro ---
+  // Introduction with Name and Passion
+  masterTl.set("#panel-1", { opacity: 1 });
+  showText(".text-intro-name");
+  showText(".text-intro-passion");
+  masterTl.to("#panel-1 .text-block", {
+    y: "-50vh",
+    opacity: 0,
+    duration: 1.5,
+    stagger: 0.1,
+  });
+  masterTl.to("#panel-1", { opacity: 0, duration: 0.5 }, "<1"); // Fade panel out at the end
+
+  // --- PANEL 2: Mission ---
+  // Background, Claim, and Narrative with supporting images
+  masterTl.to("#panel-2", { opacity: 1, duration: 1 });
+
+  showImg(".img-mission-pheno", true);
+  showText(".text-mission-background");
+  pause();
+  showText(".text-mission-claim", true);
+  hideImg(".img-mission-pheno");
+  showImg(".img-mission-eth1");
+  zoomFadeOutImg(".img-mission-eth1");
+  zoomFadeInImg(".img-mission-eth2");
+  pause();
+  zoomFadeOutImg(".img-mission-eth2");
+  fadeCollapseText(".text-mission-background", true);
+  fadeCollapseText(".text-mission-claim", true);
+
+  showImg(".img-mission-microbiome-olma", true);
+  showText(".text-mission-narrative", true);
+  showImg(".img-mission-microbiome-olma", true);
+  pause();
+  zoomFadeOutImg(".img-mission-microbiome-olma");
+  zoomFadeInImg(".img-mission-microbiome-gallery");
+  pause();
+  hideImg(".img-mission-microbiome-gallery");
+
+  showText(".text-mission-audience", true);
+  pause();
+  showImg(".img-mission-freedom-gallery", true);
+  hideImg(".img-mission-freedom-gallery");
+  showImg(".img-mission-freedom-info");
+  pause(1);
+
+  hideImg(".img-mission-freedom-info");
+  // Move all texts in this panel up and out of the viewport smoothly
+  masterTl.to(
+    "#panel-2 .text-block",
+    { y: "-100vh", opacity: 0, duration: 1.5, stagger: 0.1 },
+    "<",
+  );
+  masterTl.to("#panel-2", { opacity: 0, duration: 0.5 }, "<1");
+
+  // --- PANEL 3: Werkzeuge ---
+  // Tools: 3D, Stills, Animation, Interactive, Illustration
+  masterTl.to("#panel-3", { opacity: 1, duration: 1 });
+
+  showText(".text-tools-3d");
+  showImg(".img-tools-wood5", true);
+  pause();
+  showText(".text-tools-still", true);
+  zoomFadeOutImg(".img-tools-wood5");
+  zoomFadeInImg(".img-tools-wood4");
+  pause();
+  zoomFadeOutImg(".img-tools-wood4");
+  zoomFadeInImg(".img-tools-eth3");
+  pause();
+  zoomFadeOutImg(".img-tools-eth3");
+  zoomFadeInImg(".img-tools-eth1");
+  pause();
+  hideImg(".img-tools-eth1");
+
+  showText(".text-tools-anim", true);
+  showImg(".img-tools-n64", true);
+
+  // Animate N64 Sequence (Scrubbing)
+  masterTl.to(n64Playhead, {
+    frame: (n64Images.length || 1) - 1,
+    snap: "frame",
+    ease: "none",
+    onUpdate: renderN64,
+    duration: 3, // Adjust duration to control how long the scroll sequence lasts
+  });
+
+  hideImg(".img-tools-n64");
+  showText(".text-tools-interactive", true);
+  showImg(".img-tools-xylopedia-ipad");
+  pause();
+  hideImg(".img-tools-xylopedia-ipad");
+  showImg(".img-tools-xylopedia-gallery");
+  pause();
+  hideImg(".img-tools-xylopedia-gallery");
+
+  showText(".text-tools-illustration", true);
+  showImg(".img-tools-illu1", true);
+  pause();
+  hideImg(".img-tools-illu1");
+  showImg(".img-tools-illu6");
+  pause();
+  hideImg(".img-tools-illu6");
+  showImg(".img-tools-borken");
+  pause();
+  hideImg(".img-tools-borken");
+  showImg(".img-tools-figure");
+  pause(1);
+
+  hideImg(".img-tools-figure");
+  masterTl.to(
+    "#panel-3 .text-block",
+    { y: "-100vh", opacity: 0, duration: 1.5, stagger: 0.1 },
+    "<",
+  );
+  masterTl.to("#panel-3", { opacity: 0, duration: 0.5 }, "<1");
+
+  // --- PANEL 4: Tech ---
+  // Technical Skills: Augmedi, Houdini, Python, AI
+  masterTl.to("#panel-4", { opacity: 1, duration: 1 });
+  showText(".text-tech-intro");
+  showText(".text-tech-augmedi");
+  showText(".text-tech-ai");
+  pause(1.5);
+  masterTl.to("#panel-4 .text-block", {
+    y: "-100vh",
+    opacity: 0,
+    duration: 1.5,
+    stagger: 0.1,
+  });
+  masterTl.to("#panel-4", { opacity: 0, duration: 0.5 }, "<1");
+
+  // --- PANEL 5: Web ---
+  // Web Skills: Portfolio, UB Jahresbericht
+  masterTl.to("#panel-5", { opacity: 1, duration: 1 });
+
+  showText(".text-web-intro");
+  showImg(".img-web-ub", true);
+  pause();
+  hideImg(".img-web-ub");
+
+  showText(".text-web-portfolio", true);
+  showImg(".img-web-portfolio", true);
+  pause(1);
+
+  hideImg(".img-web-portfolio");
+  masterTl.to(
+    "#panel-5 .text-block",
+    { y: "-100vh", opacity: 0, duration: 1.5, stagger: 0.1 },
+    "<",
+  );
+  masterTl.to("#panel-5", { opacity: 0, duration: 0.5 }, "<1");
+
+  // --- PANEL 6: Pitch ---
+  // Motivation for NZZ
+  masterTl.to("#panel-6", { opacity: 1, duration: 1 });
+  showText(".text-pitch-nzz");
+  showText(".text-pitch-skills");
+  showText(".text-pitch-motivation");
+  pause(1.5);
+  masterTl.to("#panel-6 .text-block", {
+    y: "-100vh",
+    opacity: 0,
+    duration: 1.5,
+    stagger: 0.1,
+  });
+  masterTl.to("#panel-6", { opacity: 0, duration: 0.5 }, "<1");
+
+  // --- PANEL 7: Outro ---
+  // Contact and Thanks
+  masterTl.to("#panel-7", { opacity: 1, duration: 1 });
+  showText(".text-outro-thanks");
+  showText(".text-outro-contact");
+  showText(".text-outro-links");
+  // Holds on the final frame due to end of timeline
+</script>
+
+<style>
+  @import "../../styles/global.css";
+
+  #scrolly-container {
+    position: relative;
+    width: 100%;
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  .scrolly-panel {
+    position: absolute;
+    display: grid;
+    opacity: 0; /* Hidden by default */
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+  }
+
+  .text-col {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    display: grid;
+    grid-auto-rows: min-content;
+    height: 100svh;
+    background-color: transparent;
+  }
+
+  .img-col {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    align-items: end;
+    height: 100svh;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+
+  /* --- Image Stacking --- */
+
+  .img-stack {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    padding: 0 8px 15vh 8px;
+    transform: translateY(100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none; /* Allows clicking through hidden images */
+  }
+
+  .img-stack img {
+    width: 100%; /* Take up full container width */
+    height: auto; /* Maintain aspect ratio */
+    max-width: 800px; /* Optional: cap the size so it doesn't get too huge */
+    max-height: 85vh; /* Keep it within the viewport height */
+    object-fit: scale-down !important;
+  }
+
+  #n64-canvas {
+    width: 100%;
+    height: auto;
+    max-width: 800px;
+    max-height: 60vh;
+    object-fit: contain;
+  }
+  /* --- Typography --- */
+
+  .text-container {
+    max-width: 800px;
+    text-align: left;
+  }
+
+  .text-block {
+    opacity: 0;
+    z-index: 2;
+    transform: translateY(20px); /* Pre-set for animation */
+    line-height: 1.5;
+  }
+
+  .center-panel .text-container {
+    margin-bottom: 20vh;
+  }
+
+  .text-col .text-block {
+    justify-self: center;
+    width: 90%;
+    padding: 0 5% 0 5%;
+    top: 0;
+    left: 0;
+    font-size: var(--font-size-desktop);
+    margin: 0;
+  }
+
+  .text-col .padding-top {
+    padding-top: 65svh;
+  }
+
+  h1.text-block {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+  }
+
+  h2.text-block {
+    font-size: var(--font-size-mobile-h1);
+    font-weight: 400;
+  }
+
+  p.text-block {
+    font-size: var(--font-size-desktop);
+  }
+
+  /* --- Links and Buttons --- */
+
+  .inline-link {
+    color: #1a1a1a;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    transition: opacity 0.3s;
+  }
+
+  .inline-link:hover {
+    opacity: 0.7;
+  }
+
+  .action-links {
+    margin-top: 3rem;
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    border: 1px solid #1a1a1a;
+    border-radius: 4px;
+    color: #1a1a1a;
+    text-decoration: none;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+  }
+
+  /* Desktop Responsiveness */
+  @media (min-width: 768px) {
+    .split-panel {
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      padding: 0 5%;
+      gap: 4rem;
+    }
+
+    .text-col {
+      height: 50vh;
+      width: 50%;
+    }
+
+    .text-col .text-block {
+      top: 20%; /* Vertically balance text block on desktop */
+    }
+
+    .img-col {
+      height: 100vh;
+      width: 50%;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    h1.text-block {
+      font-size: 3rem;
+    }
+    h2.text-block {
+      font-size: 2rem;
+    }
+    p.text-block {
+      font-size: 1.25rem;
+    }
+  }
+</style>

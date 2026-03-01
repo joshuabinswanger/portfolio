@@ -3,101 +3,151 @@ import { CldImage } from "astro-cloudinary";
 import { getCollection } from "astro:content";
 const galleryImages = await getCollection("galleryImages");
 
-// Load N64 Sequence Images
-// Ensure this path matches your actual folder structure for the sequence
-const n64Files = import.meta.glob<{ default: ImageMetadata }>(
+// 1. FRONTMATTER: Fetch files and force Vite to return production-ready URLs
+const n64Files = import.meta.glob(
   "/src/assets/projects/gamedesign101/N64_avif_sequence/*.avif",
-  { eager: true },
+  { eager: true, query: "?url" },
+);
+const flowerFiles = import.meta.glob(
+  "/src/assets/projects/flower_splat/flower_splat_avif_sequence/*.avif",
+  { eager: true, query: "?url" },
 );
 
 const n64Urls = Object.values(n64Files)
-  .map((file) => file.default.src)
+  .map((mod: any) => mod.default)
   .sort();
+const flowerUrls = Object.values(flowerFiles)
+  .map((mod: any) => mod.default)
+  .sort()
+  .reverse(); // Flips the array backwards
 ---
 
-<!-- Intro -->
-<div id="scrolly-container" data-n64-images={JSON.stringify(n64Urls)}>
-  <div id="panel-1" class="scrolly-panel center-panel">
-    <div class="text-container">
-      <h1 class="text-block text-intro-name">
-        Hi, <br />mein Name ist Joshua Binswanger.
-      </h1>
-      <h2 class="text-block text-intro-passion">
-        Meine Leidenschaft ist es komplexe Sachverhalte in visuell ansprechende
-        Bilder zu übersetzten.
-      </h2>
+<div id="scrolly-container">
+  <div id="panel-1" class="scrolly-panel split-panel">
+    <div class="text-col">
+      <h1 class="text-block text-p1" style="font-size: 36px;">Hi,</h1>
+      <h1 class="text-block text-p1-1">mein Name ist Joshua Binswanger.</h1>
+    </div>
+    <div class="img-col">
+      <div class="img-stack img-quercus">
+        <CldImage
+          src="QuercusRobur_VolumeRendering_epzxld"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Quercus Robur Volume Rendering"
+        />
+      </div>
+      <div class="img-stack img-gjermundbu">
+        <CldImage
+          src="Gjermundbu_GalleryImages_1_sco2yz"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Gjermundbu Helmet"
+        />
+      </div>
+      <div class="img-stack img-buchdrucker-1">
+        <CldImage
+          src="Buchdrucker_djaxkc"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Buchdrucker Käfer"
+        />
+      </div>
+      <div class="img-stack img-eth-vis-3">
+        <CldImage
+          src="ETHVisualisations_Gallery_3_myrndw"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="ETH Visualisation 3"
+        />
+      </div>
     </div>
   </div>
 
-  <!-- Panel 2 Sci Vis -->
   <div id="panel-2" class="scrolly-panel split-panel">
     <div class="text-col">
-      <p class="padding-top text-block text-mission-background">
-        Seit meinem Abschluss in Knowledge Visualization an der ZHdK arbeite ich
-        als freischaffended wissenschaftlicher Illustrator.
-      </p>
-      <p class="text-block text-mission-claim">
-        Mein Anspruch dabei ist wissenschaftliche Tiefe getreu aber mit
-        ästethsichem Feingefühl zu visualiseren.
-      </p>
-      <p class="text-block text-mission-narrative">
-        Mein besonderes Augenmerk liegt darauf, die komplexe Inhalte eines
-        Themas in ein visuelles Narrativ zu übersetzen.
-      </p>
-      <p class="text-block text-mission-audience">
-        Für ein wissenschaftliches Publikum, oder für eine Laiengruppe.
+      <p class="text-block text-p2">
+        Ich verleihe komplexen Zusammenhängen eine visuelle Form.
       </p>
     </div>
     <div class="img-col">
-      <div class="img-stack img-mission-pheno">
+      <div class="img-stack img-eth-vis-1">
+        <CldImage
+          src="ETHVisualisations_GalleryPic1_hnzfw1"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="ETH Visualisation 1"
+        />
+      </div>
+      <div class="img-stack img-pheno-zoom">
         <CldImage
           src="Phenological_Shift_GalleryImage1_cjmvqe"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Phenological Shift Zoom"
+        />
+      </div>
+      <div class="img-stack img-pheno-base">
+        <CldImage
+          src="Phenological_Shift_GalleryImage_1_fkhkff"
           width="1200"
           sizes="(max-width: 768px) 100vw, 50vw"
           alt="Phenological Shift"
         />
       </div>
-      <div class="img-stack img-mission-eth1">
+    </div>
+  </div>
+
+  <div id="panel-3" class="scrolly-panel split-panel">
+    <div class="text-col">
+      <p class="text-block text-p3">
+        Dafür verbinde ich inhaltliche Tiefe mit ästhetischem Anspruch.
+      </p>
+    </div>
+    <div class="img-col">
+      <div class="img-stack img-wood-zoom">
         <CldImage
-          src="ETHVisualisations_GalleryPic1_hnzfw1"
+          src="StructureofWood_Gallery_5_g1x7ry"
           width="1200"
           sizes="(max-width: 768px) 100vw, 50vw"
-          alt="ETH Visualisations"
+          alt="Structure of Wood Zoom"
         />
       </div>
-      <div class="img-stack img-mission-eth2">
+      <div class="img-stack img-wood-base">
         <CldImage
-          src="ETHVisualisations_GalleryPic2_mdr3sb"
+          src="StructureofWood_Gallery_12_rbvqux"
           width="1200"
           sizes="(max-width: 768px) 100vw, 50vw"
-          alt="ETH Visualisations"
+          alt="Structure of Wood"
         />
       </div>
-      <div class="img-stack img-mission-microbiome-olma">
+    </div>
+  </div>
+
+  <div id="panel-4" class="scrolly-panel split-panel">
+    <div class="text-col">
+      <p class="text-block text-p4">
+        Und breche komplexe Sachverhalte zielgruppengerecht herunter.
+      </p>
+    </div>
+    <div class="img-col">
+      <div class="img-stack img-microbiome">
         <CldImage
           src="Microbiome_OLMA_ttmkmz"
           width="1200"
           sizes="(max-width: 768px) 100vw, 50vw"
-          alt="Microbiome"
+          alt="Microbiome OLMA"
         />
       </div>
-      <div class="img-stack img-mission-microbiome-gallery">
-        <CldImage
-          src="Microbiome_GalleryImages1_bue7bs"
-          width="1200"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          alt="Microbiome"
-        />
-      </div>
-      <div class="img-stack img-mission-freedom-gallery">
+      <div class="img-stack img-freedom-zoom">
         <CldImage
           src="Freedom_GalleryImages_5_pbxr8g"
           width="1200"
           sizes="(max-width: 768px) 100vw, 50vw"
-          alt="Freedom Gallery"
+          alt="Freedom Gallery Zoom"
         />
       </div>
-      <div class="img-stack img-mission-freedom-info">
+      <div class="img-stack img-freedom-base">
         <CldImage
           src="Freedom_Infografik_z43mem"
           width="1200"
@@ -108,100 +158,23 @@ const n64Urls = Object.values(n64Files)
     </div>
   </div>
 
-  <!-- Panel 3 3D Tools -->
-  <div id="panel-3" class="scrolly-panel split-panel">
+  <div id="panel-5" class="scrolly-panel split-panel">
     <div class="text-col">
-      <p class="text-block text-tools-3d padding-top">
-        Bervorzugt arbeite ich mit 3D Visualiserung. <br />
-      </p>
-      <p class="text-block text-tools-still">Ob als hochauflösendes Still,</p>
-
-      <p class="text-block text-tools-anim">Animation</p>
-      <p class="text-block text-tools-interactive">
-        oder für interaktive Web-Formate.
-      </p>
-      <p class="text-block text-tools-illustration">
-        <br />
-        Das Fundament meiner Arbeit bleibt jedoch die Illustration.
+      <p class="text-block text-p5">
+        Meine gestalterischen Grundlagen habe ich im BA Knowledge Visualization
+        (ZHdK) erworben.
       </p>
     </div>
     <div class="img-col">
-      <div class="img-stack img-tools-wood5">
+      <div class="img-stack img-yearring">
         <CldImage
-          src="StructureofWood_Gallery_5_g1x7ry"
+          src="StructureofWood_YearRing_1_tvgnzr"
           width="1200"
           sizes="(max-width: 768px) 100vw, 50vw"
-          alt="Structure of Wood"
+          alt="Year Ring"
         />
       </div>
-      <div class="img-stack img-tools-wood4">
-        <CldImage
-          src="StructureofWood_Gallery_4_llpwgf"
-          width="1200"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          alt="Structure of Wood"
-        />
-      </div>
-      <div class="img-stack img-tools-eth3">
-        <CldImage
-          src="ETHVisualisations_Gallery_3_myrndw"
-          width="1200"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          alt="ETH Visualisations"
-        />
-      </div>
-      <div class="img-stack img-tools-eth1">
-        <CldImage
-          src="ETHVisualisations_Gallery_1_skyq6j"
-          width="1200"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          alt="ETH Visualisations"
-        />
-      </div>
-      <div class="img-stack img-tools-n64">
-        <canvas id="n64-canvas"></canvas>
-      </div>
-      <div class="img-stack img-tools-xylopedia-ipad">
-        <CldImage
-          src="XylopediaInsta4_hjbuf8"
-          width="1200"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          alt="Xylopedia iPad"
-        />
-      </div>
-      <div class="img-stack img-tools-xylopedia-gallery">
-        <CldImage
-          src="Xylopedia_Gallery_1_afnq0i"
-          width="1200"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          alt="Xylopedia"
-        />
-      </div>
-      <div class="img-stack img-tools-illu1">
-        <CldImage
-          src="Illustration_GalleryImages_1_sihglc"
-          width="1200"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          alt="Illustration"
-        />
-      </div>
-      <div class="img-stack img-tools-illu6">
-        <CldImage
-          src="Illustration_GalleryImages_6_wgojna"
-          width="1200"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          alt="Illustration"
-        />
-      </div>
-      <div class="img-stack img-tools-borken">
-        <CldImage
-          src="Borkenkaefer_Gallery_1_daro6y"
-          width="1200"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          alt="Borkenkäfer"
-        />
-      </div>
-      <div class="img-stack img-tools-figure">
+      <div class="img-stack img-figure">
         <CldImage
           src="FigureDrawing_Gallery_23_dnrpi3"
           width="1200"
@@ -209,105 +182,200 @@ const n64Urls = Object.values(n64Files)
           alt="Figure Drawing"
         />
       </div>
+      <div class="img-stack img-misc-3d">
+        <CldImage
+          src="Misc_3D_GalleryImages_1_haojjs"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Misc 3D"
+        />
+      </div>
+      <div class="img-stack img-illustration">
+        <CldImage
+          src="Illustration_GalleryImages_1_sihglc"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Illustration"
+        />
+      </div>
     </div>
   </div>
 
-  <!-- Panel 4 Tech and Tools -->
-  <div id="panel-4" class="scrolly-panel center-panel">
-    <div class="text-container">
-      <p class="text-block text-tech-intro padding-top">
-        Um meine Arbeitsprozesse effizienter zu gestalten, erweitere ich mein
-        technisches Know-how stetig.
-      </p>
-      <p class="text-block text-tech-augmedi">
-        Bei der Augmedi AG entwickle ich aktuell 3D-Scans (Photogrammetry &
-        Gaussian Splats) für ein Next-Gen-Anatomietool. Dabei nutze ich <em
-          >Houdini</em
-        > und <em>Python</em>, um Pipelines prozedural aufzubauen und zu
-        automatisieren.<br /><br /><a href="#" class="inline-link"
-          >Link zu Augmedi</a
-        >
-      </p>
-      <p class="text-block text-tech-ai">
-        Auch bemühe ich mich die neusten KI-Tools wie Weavy in meinen Workflow
-        einzubauen, um den kreativen Prozesse zu beschleunigen.
-      </p>
-    </div>
-  </div>
-
-  <!--  Panel 5 Web and Portfolio -->
-  <div id="panel-5" class="scrolly-panel split-panel">
+  <div id="panel-6" class="scrolly-panel split-panel">
     <div class="text-col">
-      <p class="text-block text-web-intro padding-top">
-        Visual Storytelling und Lerntools entfalten ihre grösste Kraft im
-        digitalen Raum. Viele meiner Projekte bewegen sich an der Schittstelle
-        zum Web,
-      </p>
-      <p class="text-block text-web-portfolio">
-        deshalb habe ich mir die Grundlagen des Web Designs angeeignet. Mein
-        grösstes Projekt war mein persönliches Portfolio.<br /><br />
-        Für einen tieferen Einblick in meine Arbeit besuchen sie <a
-          href="https://rhizome.ch"
-          target="_blank"
-          class="inline-link"
-        >
-          rhizome.ch
-        </a>
+      <p class="text-block text-p6">
+        Nach dem Abschluss suchte ich als wissenschaftlicher Illustrator die
+        Herausforderung, anspruchsvolle Inhalte schnell zu durchdringen und ihre
+        essenziellen Aussagen zu destillieren.
       </p>
     </div>
     <div class="img-col">
-      <div class="img-stack img-web-ub">
+      <div class="img-stack img-buchdrucker-poster">
         <CldImage
-          src="UBJahresbericht"
+          src="Buchdrucker_Poster"
           width="1200"
           sizes="(max-width: 768px) 100vw, 50vw"
-          alt="UB Jahresbericht"
+          alt="Buchdrucker Poster"
         />
       </div>
-      <div class="img-stack img-web-portfolio">
+      <div class="img-stack img-eth-vis-2">
         <CldImage
-          src="Portfolio"
+          src="ETHVisualisations_GalleryPic2_mdr3sb"
           width="1200"
           sizes="(max-width: 768px) 100vw, 50vw"
-          alt="Portfolio"
+          alt="ETH Visualisation 2"
         />
       </div>
     </div>
   </div>
 
-  <!-- NZZ Pitch -->
-  <div id="panel-6" class="scrolly-panel center-panel">
-    <div class="text-container">
-      <h2 class="text-block text-pitch-nzz padding-top">
-        Seit langem verfolge ich die Arbeit des NZZ Visuals Teams – eure
-        analytische Tiefe und optische Eleganz beeindrucken mich sehr.
-      </h2>
-      <p class="text-block text-pitch-skills">
-        Ich bin es gewohnt, komplexe Inhalte analytisch zu durchdringen.
-        Kombiniert mit meinem breiten Skillset in Design, 3D und Code bringe ich
-        das perfekte Rüstzeug mit.
+  <div id="panel-7" class="scrolly-panel split-panel">
+    <div class="text-col">
+      <p class="text-block text-p7">
+        Meine Neugier leitet mich dazu an, mein technisches Repertoire stetig zu
+        erweitern. Die Grundlage meiner Praxis bildet mein 3D-Wissen, das ich
+        mir an der Vertex School angeeignet habe. Heute gebe ich dieses Wissen
+        in Blender-Workshops weiter.
       </p>
-      <h2 class="text-block text-pitch-motivation">
-        Ich bewerbe mich für das Volontariat, weil ich mir keinen besseren Ort
-        vorstellen kann, um meine Fähigkeiten auf weiterzuentwickeln und
-        gemeinsam mit Ihnen neue visuelle Formate zu prägen.
-      </h2>
     </div>
-  </div>
-
-  <!-- Thanks  -->
-  <div id="panel-7" class="scrolly-panel center-panel">
-    <div class="text-container">
-      <h1 class="text-block text-outro-thanks">Vielen Dank für Ihre Zeit.</h1>
-      <h2 class="text-block text-outro-contact">
-        Ich freue mich auf ein persönliches Gespräch.
-      </h2>
-      <div class="text-block text-outro-links action-links">
-        <a href="mailto:hallo@rhizome.ch" class="btn">E-Mail schreiben</a>
-        <a href="/cv.pdf" target="_blank" class="btn">CV herunterladen</a>
+    <div class="img-col">
+      <div class="img-stack img-blender-course">
+        <CldImage
+          src="UZHBlenderCourse_1_r6kaar"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Blender Course UZH"
+        />
       </div>
     </div>
   </div>
+
+  <div id="panel-8" class="scrolly-panel split-panel">
+    <div class="text-col">
+      <p class="text-block text-p8">
+        Bei der Lernapp «Xylopedia» (basierend auf Mikro-CT-Daten) habe ich
+        zudem gelernt, wie wichtig klare Strukturierung, UX-Design und
+        Storytelling in der Wissensvermittlung sind.
+      </p>
+    </div>
+    <div class="img-col">
+      <div class="img-stack img-xylo-ipad">
+        <CldImage
+          src="Xylopedia_Ipad_topget"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Xylopedia iPad"
+        />
+      </div>
+      <div class="img-stack img-eiche-vdb">
+        <CldImage
+          src="Eiche_HoudiniVDB_049_mpdcoj"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Eiche Houdini VDB"
+        />
+      </div>
+      <div class="img-stack img-xylo-gallery">
+        <CldImage
+          src="Xylopedia_Gallery_4_t8h8zq"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Xylopedia Gallery"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-9" class="scrolly-panel split-panel">
+    <div class="text-col">
+      <p class="text-block text-p9">
+        Da heute visuelles Storytelling im Browser stattfindet, habe ich mich
+        auch vertieft mit Web-Technologien auseinandergesetzt.
+      </p>
+    </div>
+    <div class="img-col">
+      <div class="img-stack img-portfolio-video">
+        <CldImage
+          src="Portfolio_lc2mft"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Portfolio Web Tech Video/GIF"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-10" class="scrolly-panel split-panel">
+    <div class="text-col">
+      <p class="text-block text-p10">
+        Dabei sind animierte Elemente besonders wichtig.
+      </p>
+    </div>
+    <div class="img-col">
+      <div class="img-stack img-n64-canvas">
+        <canvas id="n64-canvas"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-11" class="scrolly-panel split-panel">
+    <div class="text-col">
+      <p class="text-block text-p11">
+        Seit einem Jahr verantworte ich beim Medizin-Start-up Augmedi komplexe
+        3D-Scans und Web-Modelle. Dabei integriere ich neue Workflows
+        (Scripting, ComfyUI) und erschliesse neue Formate wie Gaussian Splats.
+      </p>
+    </div>
+    <div class="img-col">
+      <div class="img-stack img-houdini-scripts">
+        <CldImage
+          src="Houdini_Scripts_hd7d5e"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Houdini Scripts"
+        />
+      </div>
+      <div class="img-stack img-augmedi-approach">
+        <CldImage
+          src="Augmedi_Appraoch_tuka73"
+          width="1200"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Augmedi Approach"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-12" class="scrolly-panel split-panel">
+    <div class="text-col">
+      <p class="text-block text-p12-1">
+        Ich möchte nun mein technisches Skillset aus der Wissenschaft nutzen, um
+        gesellschaftsrelevante Inhalte für ein breites Publikum visuell greifbar
+        zu machen.
+      </p>
+      <p class="text-block text-p12-2">
+        Die analytische Klarheit und visuelle Eleganz der NZZ Visuals
+        beeindrucken mich schon lange.
+      </p>
+      <p class="text-block text-p12-3">
+        Deswegen bewerbe ich mich für das Volontariat bei NZZ Visuals: Um von
+        eurem Team zu lernen und gemeinsam neue digitale Formate zu prägen.
+      </p>
+    </div>
+    <div class="img-col">
+      <div class="img-stack img-flower-canvas">
+        <canvas id="flower-canvas"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  id="image-sequences"
+  style="display: none;"
+  data-n64={JSON.stringify(n64Urls)}
+  data-flower={JSON.stringify(flowerUrls)}
+>
 </div>
 
 <script>
@@ -319,60 +387,56 @@ const n64Urls = Object.values(n64Files)
 
   gsap.registerPlugin(ScrollTrigger, CustomEase, SplitText);
 
-  // 1. Initialize Lenis
-  const lenis = new Lenis({
-    lerp: 0.1,
-    wheelMultiplier: 1,
-    smoothWheel: true,
-  });
-
+  const lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 1, smoothWheel: true });
   lenis.on("scroll", ScrollTrigger.update);
-
   gsap.ticker.add((time) => {
     lenis.raf(time * 1000);
   });
 
-  // 2. Master Timeline - increased duration significantly for the volume of content
   const masterTl = gsap.timeline({
     scrollTrigger: {
       trigger: "#scrolly-container",
       start: "top top",
-      end: "+=15000%", // Provides enough scrolling length for smooth reading
+      end: "+=20000%",
       scrub: 1,
       pin: true,
       markers: false,
     },
   });
 
-  // 3. Prepare SplitText
   const splitTexts = new SplitText(".text-block", {
     type: "words",
     wordsClass: "word",
   });
 
-  // --- N64 Canvas Setup ---
+  // --- Extract Data from Island ---
+  const dataIsland = document.getElementById("image-sequences");
+  const n64Urls = JSON.parse(dataIsland.dataset.n64 || "[]");
+  const flowerUrls = JSON.parse(dataIsland.dataset.flower || "[]");
+
+  // --- N64 Canvas Setup (Panel 10) ---
   const n64Canvas = document.getElementById("n64-canvas") as HTMLCanvasElement;
   const n64Ctx = n64Canvas.getContext("2d");
-  const container = document.getElementById("scrolly-container");
-  const n64Urls = JSON.parse(container.dataset.n64Images || "[]");
   const n64Images = [];
   const n64Playhead = { frame: 0 };
 
-  // Preload images
   n64Urls.forEach((url) => {
     const img = new window.Image();
     img.src = url;
     n64Images.push(img);
   });
 
-  // Set canvas resolution (adjust to your image aspect ratio, e.g., 800x600)
-  n64Canvas.width = 600;
-  n64Canvas.height = 600;
+  if (n64Images.length > 0) {
+    n64Images[0].onload = () => {
+      n64Canvas.width = n64Images[0].naturalWidth;
+      n64Canvas.height = n64Images[0].naturalHeight;
+      renderN64();
+    };
+  }
 
   const renderN64 = () => {
     if (n64Images.length === 0) return;
     n64Ctx.clearRect(0, 0, n64Canvas.width, n64Canvas.height);
-    // Clamp frame to valid range
     const frame = Math.min(
       Math.max(Math.round(n64Playhead.frame), 0),
       n64Images.length - 1,
@@ -380,14 +444,51 @@ const n64Urls = Object.values(n64Files)
     n64Ctx.drawImage(n64Images[frame], 0, 0, n64Canvas.width, n64Canvas.height);
   };
 
-  // Override initial CSS to make parents visible, but hide the individual words
+  // --- Flower Splat Canvas Setup (Panel 12) ---
+  const flowerCanvas = document.getElementById(
+    "flower-canvas",
+  ) as HTMLCanvasElement;
+  const flowerCtx = flowerCanvas.getContext("2d");
+  const flowerImages = [];
+  const flowerPlayhead = { frame: 0 };
+
+  flowerUrls.forEach((url) => {
+    const img = new window.Image();
+    img.src = url;
+    flowerImages.push(img);
+  });
+
+  if (flowerImages.length > 0) {
+    flowerImages[0].onload = () => {
+      flowerCanvas.width = flowerImages[0].naturalWidth;
+      flowerCanvas.height = flowerImages[0].naturalHeight;
+      renderFlower();
+    };
+  }
+
+  const renderFlower = () => {
+    if (flowerImages.length === 0) return;
+    flowerCtx.clearRect(0, 0, flowerCanvas.width, flowerCanvas.height);
+    const frame = Math.min(
+      Math.max(Math.round(flowerPlayhead.frame), 0),
+      flowerImages.length - 1,
+    );
+    flowerCtx.drawImage(
+      flowerImages[frame],
+      0,
+      0,
+      flowerCanvas.width,
+      flowerCanvas.height,
+    );
+  };
+
   gsap.set(".text-block", { opacity: 1, y: 0 });
   gsap.set(splitTexts.words, { opacity: 0, y: 20 });
 
-  // Helper Functions to keep the timeline clean
+  // Helper functions
   const showText = (selector, sync = false) => {
     return masterTl.to(
-      `${selector} .word`, // Target the individual words inside the selector
+      `${selector} .word`,
       { opacity: 1, y: 0, duration: 0.8, stagger: 0.04, ease: "power2.out" },
       sync ? "<" : "+=0.2",
     );
@@ -400,24 +501,8 @@ const n64Urls = Object.values(n64Files)
     );
   };
 
-  const fadeCollapseText = (selector, sync = false) => {
-    return masterTl.to(
-      selector,
-      {
-        opacity: 0,
-        y: -20,
-        height: 0,
-        duration: 1,
-        ease: "power2.inOut",
-      },
-      sync ? "<" : "+=0.2",
-    );
-  };
-
   const showImg = (selector, sync = false) => {
-    // Create a localized mini-timeline for this specific image
     const imageTl = gsap.timeline();
-
     imageTl
       .to(selector, {
         y: "0%",
@@ -430,34 +515,15 @@ const n64Urls = Object.values(n64Files)
           duration: 0.8,
         },
         ">-0.8",
-      ); // Starts 0.2s before the 1s movement ends
-
-    // Add the mini-timeline to your masterTl
+      );
     return masterTl.add(imageTl, sync ? "<" : "-=0.2");
-  };
-
-  const zoomFadeOutImg = (selector, sync = false) => {
-    return masterTl.fromTo(
-      selector,
-      {
-        y: "0%", // Overrides the initial translateY(100%) from your CSS
-        scale: 1, // Starts scaled down at 60% size. (Use 1.2 to start zoomed IN)
-      },
-      {
-        scale: 0.6, // Animates to its natural size
-        opacity: 0,
-        duration: 1.2,
-        ease: "back.out(1.2)", // Gives a very subtle, satisfying "pop" into place
-      },
-      sync ? "<" : "+=0.2",
-    );
   };
 
   const zoomFadeInImg = (selector, sync = false) => {
     return masterTl.fromTo(
       selector,
       {
-        y: "0%", // Overrides the initial translateY(100%) from your CSS
+        y: "0%",
         opacity: 0,
         scale: 1.4,
       },
@@ -482,184 +548,226 @@ const n64Urls = Object.values(n64Files)
       sync ? "<" : "+=0.2",
     );
   };
+
   const pause = (duration = 0.2) => {
     return masterTl.to({}, { duration: duration });
   };
 
-  // --- PANEL 1: Intro ---
-  // Introduction with Name and Passion
+  // ------------------------------------------
+  // GSAP Timeline Sequencing
+  // ------------------------------------------
+
+  // Panel 1: Intro
   masterTl.set("#panel-1", { opacity: 1 });
-  showText(".text-intro-name");
-  showText(".text-intro-passion");
-  masterTl.to("#panel-1 .text-block", {
-    y: "-50vh",
-    opacity: 0,
-    duration: 1.5,
-    stagger: 0.1,
-  });
-  masterTl.to("#panel-1", { opacity: 0, duration: 0.5 }, "<1"); // Fade panel out at the end
+  showText(".text-p1");
+  showText(".text-p1-1", true); // Sync text
+  pause(); // Added a pause here so the user can read the intro!
 
-  // --- PANEL 2: Mission ---
-  // Background, Claim, and Narrative with supporting images
+  hideText(".text-p1"); // Text leaves before new image comes
+  hideText(".text-p1-1", true);
+  showImg(".img-quercus", true);
+  pause();
+
+  hideImg(".img-quercus", true); // Hide old image (synced)
+  showImg(".img-gjermundbu", true); // Show new image (synced)
+  pause();
+
+  hideImg(".img-gjermundbu", true);
+  showImg(".img-buchdrucker-1", true);
+  pause();
+
+  hideImg(".img-buchdrucker-1", true);
+  showImg(".img-eth-vis-3", true);
+  pause();
+  masterTl.to("#panel-1", { opacity: 0, duration: 0.5 });
+
+  // Panel 2: Mission Statement
   masterTl.to("#panel-2", { opacity: 1, duration: 1 });
-
-  showImg(".img-mission-pheno", true);
-  showText(".text-mission-background");
+  showText(".text-p2", true);
   pause();
-  showText(".text-mission-claim", true);
-  hideImg(".img-mission-pheno");
-  showImg(".img-mission-eth1");
-  zoomFadeOutImg(".img-mission-eth1");
-  zoomFadeInImg(".img-mission-eth2");
-  pause();
-  zoomFadeOutImg(".img-mission-eth2");
-  fadeCollapseText(".text-mission-background", true);
-  fadeCollapseText(".text-mission-claim", true);
 
-  showImg(".img-mission-microbiome-olma", true);
-  showText(".text-mission-narrative", true);
-  showImg(".img-mission-microbiome-olma", true);
+  hideText(".text-p2");
+  showImg(".img-eth-vis-1", true);
   pause();
-  zoomFadeOutImg(".img-mission-microbiome-olma");
-  zoomFadeInImg(".img-mission-microbiome-gallery");
+
+  hideImg(".img-eth-vis-1", true);
+  zoomFadeInImg(".img-pheno-zoom", true);
   pause();
-  hideImg(".img-mission-microbiome-gallery");
 
-  showText(".text-mission-audience", true);
+  hideImg(".img-pheno-zoom", true);
+  showImg(".img-pheno-base", true);
   pause();
-  showImg(".img-mission-freedom-gallery", true);
-  hideImg(".img-mission-freedom-gallery");
-  showImg(".img-mission-freedom-info");
-  pause(1);
+  masterTl.to("#panel-2", { opacity: 0, duration: 0.5 });
 
-  hideImg(".img-mission-freedom-info");
-  // Move all texts in this panel up and out of the viewport smoothly
-  masterTl.to(
-    "#panel-2 .text-block",
-    { y: "-100vh", opacity: 0, duration: 1.5, stagger: 0.1 },
-    "<",
-  );
-  masterTl.to("#panel-2", { opacity: 0, duration: 0.5 }, "<1");
-
-  // --- PANEL 3: Werkzeuge ---
-  // Tools: 3D, Stills, Animation, Interactive, Illustration
+  // Panel 3: Ästhetik & Tiefe
   masterTl.to("#panel-3", { opacity: 1, duration: 1 });
+  showText(".text-p3", true);
+  pause();
 
-  showText(".text-tools-3d");
-  showImg(".img-tools-wood5", true);
+  hideText(".text-p3");
+  zoomFadeInImg(".img-wood-zoom", true);
   pause();
-  showText(".text-tools-still", true);
-  zoomFadeOutImg(".img-tools-wood5");
-  zoomFadeInImg(".img-tools-wood4");
-  pause();
-  zoomFadeOutImg(".img-tools-wood4");
-  zoomFadeInImg(".img-tools-eth3");
-  pause();
-  zoomFadeOutImg(".img-tools-eth3");
-  zoomFadeInImg(".img-tools-eth1");
-  pause();
-  hideImg(".img-tools-eth1");
 
-  showText(".text-tools-anim", true);
-  showImg(".img-tools-n64", true);
+  hideImg(".img-wood-zoom", true);
+  showImg(".img-wood-base", true);
+  pause();
+  masterTl.to("#panel-3", { opacity: 0, duration: 0.5 });
 
-  // Animate N64 Sequence (Scrubbing)
+  // Panel 4: Zielgruppe
+  masterTl.to("#panel-4", { opacity: 1, duration: 1 });
+  showText(".text-p4", true);
+  pause();
+
+  hideText(".text-p4");
+  showImg(".img-microbiome", true);
+  pause();
+
+  hideImg(".img-microbiome", true);
+  zoomFadeInImg(".img-freedom-zoom", true);
+  pause();
+
+  hideImg(".img-freedom-zoom", true);
+  showImg(".img-freedom-base", true);
+  pause();
+  masterTl.to("#panel-4", { opacity: 0, duration: 0.5 });
+
+  // Panel 5: Die Basis
+  masterTl.to("#panel-5", { opacity: 1, duration: 1 });
+  showText(".text-p5", true);
+  pause();
+
+  hideText(".text-p5");
+  showImg(".img-yearring", true);
+  pause();
+
+  hideImg(".img-yearring", true);
+  showImg(".img-figure", true);
+  pause();
+
+  hideImg(".img-figure", true);
+  showImg(".img-misc-3d", true);
+  pause();
+
+  hideImg(".img-misc-3d", true);
+  showImg(".img-illustration", true);
+  pause();
+  masterTl.to("#panel-5", { opacity: 0, duration: 0.5 });
+
+  // Panel 6: Der Start als Illustrator
+  masterTl.to("#panel-6", { opacity: 1, duration: 1 });
+  showText(".text-p6", true);
+  pause();
+
+  hideText(".text-p6");
+  showImg(".img-buchdrucker-poster", true);
+  pause();
+
+  hideImg(".img-buchdrucker-poster", true);
+  showImg(".img-eth-vis-2", true);
+  pause();
+  masterTl.to("#panel-6", { opacity: 0, duration: 0.5 });
+
+  // Panel 7: 3D & Wissensvermittlung
+  masterTl.to("#panel-7", { opacity: 1, duration: 1 });
+  showText(".text-p7", true);
+  pause();
+
+  hideText(".text-p7");
+  showImg(".img-blender-course", true);
+  pause();
+  masterTl.to("#panel-7", { opacity: 0, duration: 0.5 });
+
+  // Panel 8: UX & Storytelling
+  masterTl.to("#panel-8", { opacity: 1, duration: 1 });
+  showText(".text-p8", true);
+  pause();
+
+  hideText(".text-p8");
+  showImg(".img-xylo-ipad", true);
+  pause();
+
+  hideImg(".img-xylo-ipad", true);
+  showImg(".img-eiche-vdb", true);
+  pause();
+
+  hideImg(".img-eiche-vdb", true);
+  showImg(".img-xylo-gallery", true);
+  pause();
+  masterTl.to("#panel-8", { opacity: 0, duration: 0.5 });
+
+  // Panel 9: Web Tech
+  masterTl.to("#panel-9", { opacity: 1, duration: 1 });
+  showText(".text-p9", true);
+  pause();
+
+  hideText(".text-p9");
+  showImg(".img-portfolio-video", true);
+  pause();
+  masterTl.to("#panel-9", { opacity: 0, duration: 0.5 });
+
+  // Panel 10: Animation & Interaktivität (N64 Canvas)
+  masterTl.to("#panel-10", { opacity: 1, duration: 1 });
+  showText(".text-p10", true);
+  pause();
+
+  hideText(".text-p10");
+  showImg(".img-n64-canvas", true);
   masterTl.to(n64Playhead, {
     frame: (n64Images.length || 1) - 1,
     snap: "frame",
     ease: "none",
     onUpdate: renderN64,
-    duration: 3, // Adjust duration to control how long the scroll sequence lasts
+    duration: 3,
+  });
+  pause();
+  masterTl.to("#panel-10", { opacity: 0, duration: 0.5 });
+
+  // Panel 11: Innovation & Current Role
+  masterTl.to("#panel-11", { opacity: 1, duration: 1 });
+  showText(".text-p11", true);
+  pause();
+
+  hideText(".text-p11");
+  showImg(".img-houdini-scripts", true);
+  pause();
+
+  hideImg(".img-houdini-scripts", true);
+  showImg(".img-augmedi-approach", true);
+  pause();
+  masterTl.to("#panel-11", { opacity: 0, duration: 0.5 });
+
+  // Panel 12: Der Pitch (Flower Splat Canvas & Black bg transition)
+
+  // 1. Transition background to black and text to white
+  masterTl.to("#scrolly-container", {
+    backgroundColor: "#000000",
+    color: "#ffffff",
+    duration: 1,
+  });
+  masterTl.to(".text-block", { color: "#ffffff", duration: 1 }, "<");
+
+  masterTl.to(flowerPlayhead, {
+    frame: (flowerImages.length || 1) - 1,
+    snap: "frame",
+    ease: "none",
+    onUpdate: renderFlower,
+    duration: 3,
   });
 
-  hideImg(".img-tools-n64");
-  showText(".text-tools-interactive", true);
-  showImg(".img-tools-xylopedia-ipad");
-  pause();
-  hideImg(".img-tools-xylopedia-ipad");
-  showImg(".img-tools-xylopedia-gallery");
-  pause();
-  hideImg(".img-tools-xylopedia-gallery");
+  masterTl.to("#panel-12", { opacity: 1, duration: 1 }, "<");
+  showImg(".img-flower-canvas", true);
 
-  showText(".text-tools-illustration", true);
-  showImg(".img-tools-illu1", true);
-  pause();
-  hideImg(".img-tools-illu1");
-  showImg(".img-tools-illu6");
-  pause();
-  hideImg(".img-tools-illu6");
-  showImg(".img-tools-borken");
-  pause();
-  hideImg(".img-tools-borken");
-  showImg(".img-tools-figure");
-  pause(1);
+  showText(".text-p12-1", true);
+  showText(".text-p12-2", true);
+  showText(".text-p12-3", true);
 
-  hideImg(".img-tools-figure");
-  masterTl.to(
-    "#panel-3 .text-block",
-    { y: "-100vh", opacity: 0, duration: 1.5, stagger: 0.1 },
-    "<",
-  );
-  masterTl.to("#panel-3", { opacity: 0, duration: 0.5 }, "<1");
-
-  // --- PANEL 4: Tech ---
-  // Technical Skills: Augmedi, Houdini, Python, AI
-  masterTl.to("#panel-4", { opacity: 1, duration: 1 });
-  showText(".text-tech-intro");
-  showText(".text-tech-augmedi");
-  showText(".text-tech-ai");
-  pause(1.5);
-  masterTl.to("#panel-4 .text-block", {
-    y: "-100vh",
-    opacity: 0,
-    duration: 1.5,
-    stagger: 0.1,
+  masterTl.to(flowerPlayhead, {
+    frame: (flowerImages.length || 1) - 1,
+    snap: "frame",
+    ease: "none",
+    onUpdate: renderFlower,
+    duration: 3,
   });
-  masterTl.to("#panel-4", { opacity: 0, duration: 0.5 }, "<1");
-
-  // --- PANEL 5: Web ---
-  // Web Skills: Portfolio, UB Jahresbericht
-  masterTl.to("#panel-5", { opacity: 1, duration: 1 });
-
-  showText(".text-web-intro");
-  showImg(".img-web-ub", true);
-  pause();
-  hideImg(".img-web-ub");
-
-  showText(".text-web-portfolio", true);
-  showImg(".img-web-portfolio", true);
-  pause(1);
-
-  hideImg(".img-web-portfolio");
-  masterTl.to(
-    "#panel-5 .text-block",
-    { y: "-100vh", opacity: 0, duration: 1.5, stagger: 0.1 },
-    "<",
-  );
-  masterTl.to("#panel-5", { opacity: 0, duration: 0.5 }, "<1");
-
-  // --- PANEL 6: Pitch ---
-  // Motivation for NZZ
-  masterTl.to("#panel-6", { opacity: 1, duration: 1 });
-  showText(".text-pitch-nzz");
-  showText(".text-pitch-skills");
-  showText(".text-pitch-motivation");
-  pause(1.5);
-  masterTl.to("#panel-6 .text-block", {
-    y: "-100vh",
-    opacity: 0,
-    duration: 1.5,
-    stagger: 0.1,
-  });
-  masterTl.to("#panel-6", { opacity: 0, duration: 0.5 }, "<1");
-
-  // --- PANEL 7: Outro ---
-  // Contact and Thanks
-  masterTl.to("#panel-7", { opacity: 1, duration: 1 });
-  showText(".text-outro-thanks");
-  showText(".text-outro-contact");
-  showText(".text-outro-links");
-  // Holds on the final frame due to end of timeline
 </script>
 
 <style>
@@ -670,42 +778,39 @@ const n64Urls = Object.values(n64Files)
     width: 100%;
     height: 100svh;
     overflow: hidden;
+    color: black;
+    background-color: transparent; /* Changed to allow smooth GSAP animation */
+    transition: background-color 0.5s ease;
   }
 
   .scrolly-panel {
     position: absolute;
-    inset: 0;
-    opacity: 0; /* Hidden by default */
-  }
-
-  /* --- Panel Types (Mobile First) --- */
-
-  .center-panel {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 5%;
-  }
-
-  .split-panel {
+    display: grid;
+    width: 100%;
     height: 100svh;
-    box-sizing: border-box;
+    opacity: 0; /* Hidden by default */
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
   }
 
   .text-col {
-    position: absolute;
     display: grid;
-    grid-auto-rows: min-content;
+    grid-column: 1;
+    grid-row: 1;
     width: 100%;
-    height: 100svh; /* Top 1/4 of the viewport */
+    height: 100svh;
+    grid-auto-rows: min-content;
+    align-content: center;
+    padding-top: 30vh;
     background-color: transparent;
   }
 
   .img-col {
-    position: absolute;
+    grid-column: 1;
+    grid-row: 1;
     width: 100%;
     align-items: end;
-    height: 100svh; /* Lower 2/4 (Half the screen) */
+    height: 100svh;
     overflow: hidden;
     margin: 0 auto;
   }
@@ -716,12 +821,20 @@ const n64Urls = Object.values(n64Files)
     position: absolute;
     inset: 0;
     opacity: 0;
-    padding: 0 5% 40vh 5%;
+    padding: 0 0 15vh 0;
     transform: translateY(100%);
     display: flex;
-    align-items: end;
+    align-items: center;
     justify-content: center;
     pointer-events: none; /* Allows clicking through hidden images */
+  }
+
+  .img-stack img {
+    width: 100%; /* Take up full container width */
+    height: auto; /* Maintain aspect ratio */
+    max-width: 800px; /* Optional: cap the size so it doesn't get too huge */
+    max-height: 85vh; /* Keep it within the viewport height */
+    object-fit: scale-down !important;
   }
 
   #n64-canvas {
@@ -731,15 +844,6 @@ const n64Urls = Object.values(n64Files)
     max-height: 60vh;
     object-fit: contain;
   }
-
-  .img-stack img {
-    width: 100%; /* Take up full container width */
-    height: auto; /* Maintain aspect ratio */
-    max-width: 800px; /* Optional: cap the size so it doesn't get too huge */
-    max-height: 60vh; /* Keep it within the viewport height */
-    object-fit: scale-down !important;
-  }
-
   /* --- Typography --- */
 
   .text-container {
@@ -752,6 +856,7 @@ const n64Urls = Object.values(n64Files)
     z-index: 2;
     transform: translateY(20px); /* Pre-set for animation */
     line-height: 1.5;
+    color: black;
   }
 
   .center-panel .text-container {
@@ -761,10 +866,9 @@ const n64Urls = Object.values(n64Files)
   .text-col .text-block {
     justify-self: center;
     width: 90%;
-    padding: 0 5% 0 5%;
+    padding: 5%;
     top: 0;
     left: 0;
-    font-size: var(--font-size-desktop);
     margin: 0;
   }
 
@@ -773,7 +877,7 @@ const n64Urls = Object.values(n64Files)
   }
 
   h1.text-block {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     line-height: 1.5;
     margin-bottom: 1.5rem;
@@ -786,6 +890,23 @@ const n64Urls = Object.values(n64Files)
 
   p.text-block {
     font-size: var(--font-size-desktop);
+  }
+
+  /* --- custom layout --- */
+
+  #panel-1 .text-col {
+    align-content: start;
+    padding-top: 15vh;
+  }
+
+  #panel-12 .text-col {
+    align-content: start;
+    padding-top: 15vh;
+  }
+
+  #panel-12 .text-col .text-block {
+    background-color: transparent;
+    color: var(--bg-color);
   }
 
   /* --- Links and Buttons --- */
