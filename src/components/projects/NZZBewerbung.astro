@@ -1,5 +1,5 @@
 ---
-import { CldImage } from "astro-cloudinary";
+import { CldImage, CldVideoPlayer } from "astro-cloudinary";
 import { getCollection } from "astro:content";
 const galleryImages = await getCollection("galleryImages");
 
@@ -295,11 +295,15 @@ const flowerUrls = Object.values(flowerFiles)
     </div>
     <div class="img-col">
       <div class="img-stack img-portfolio-video">
-        <CldImage
+        <CldVideoPlayer
           src="Portfolio_lc2mft"
-          width="1200"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          alt="Portfolio Web Tech Video/GIF"
+          width="648"
+          height="1350"
+          autoplay={true}
+          muted={true}
+          loop={true}
+          controls={false}
+          aria-label="Portfolio Web Tech Video"
         />
       </div>
     </div>
@@ -361,6 +365,8 @@ const flowerUrls = Object.values(flowerFiles)
         Deswegen bewerbe ich mich für das Volontariat bei NZZ Visuals: Um von
         eurem Team zu lernen und gemeinsam neue digitale Formate zu prägen.
       </p>
+
+      <h1 class="text-block text-p12-4">Vielen Dank für ihre Zeit.</h1>
     </div>
     <div class="img-col">
       <div class="img-stack img-flower-canvas">
@@ -482,8 +488,12 @@ const flowerUrls = Object.values(flowerFiles)
     );
   };
 
+  //GSAP Set
   gsap.set(".text-block", { opacity: 1, y: 0 });
   gsap.set(splitTexts.words, { opacity: 0, y: 20 });
+
+  // ADD THIS LINE: Instantly show Panel 1's text on page load
+  gsap.set("#panel-1 .text-col .text-p1 .word", { opacity: 1, y: 0 });
 
   // Helper functions
   const showText = (selector, sync = false) => {
@@ -559,26 +569,24 @@ const flowerUrls = Object.values(flowerFiles)
 
   // Panel 1: Intro
   masterTl.set("#panel-1", { opacity: 1 });
-  showText(".text-p1");
-  showText(".text-p1-1", true); // Sync text
+  showText(".text-p1-1", true);
+  hideText(".text-p1");
+  hideText(".text-p1-1", true);
+
   pause(); // Added a pause here so the user can read the intro!
 
-  hideText(".text-p1"); // Text leaves before new image comes
-  hideText(".text-p1-1", true);
   showImg(".img-quercus", true);
-  pause();
+  hideImg(".img-quercus");
 
-  hideImg(".img-quercus", true); // Hide old image (synced)
-  showImg(".img-gjermundbu", true); // Show new image (synced)
-  pause();
+  // Hide old image (synced)
+  showImg(".img-gjermundbu", true);
+  hideImg(".img-gjermundbu");
 
-  hideImg(".img-gjermundbu", true);
   showImg(".img-buchdrucker-1", true);
-  pause();
+  hideImg(".img-buchdrucker-1");
 
-  hideImg(".img-buchdrucker-1", true);
   showImg(".img-eth-vis-3", true);
-  pause();
+
   masterTl.to("#panel-1", { opacity: 0, duration: 0.5 });
 
   // Panel 2: Mission Statement
@@ -702,7 +710,7 @@ const flowerUrls = Object.values(flowerFiles)
 
   hideText(".text-p9");
   showImg(".img-portfolio-video", true);
-  pause();
+  pause(3);
   masterTl.to("#panel-9", { opacity: 0, duration: 0.5 });
 
   // Panel 10: Animation & Interaktivität (N64 Canvas)
@@ -737,14 +745,23 @@ const flowerUrls = Object.values(flowerFiles)
   masterTl.to("#panel-11", { opacity: 0, duration: 0.5 });
 
   // Panel 12: Der Pitch (Flower Splat Canvas & Black bg transition)
+  masterTl.to("#panel-12", { opacity: 1, duration: 1 }, "<");
+
+  showText(".text-p12-1");
+  showText(".text-p12-2");
+  showText(".text-p12-3");
+  hideText(".text-p12-1");
+  hideText(".text-p12-2", true);
+  hideText(".text-p12-3", true);
 
   // 1. Transition background to black and text to white
+
+  masterTl.to(".text-p12-4", { color: "#ffffff", duration: 1 }, "<");
   masterTl.to("#scrolly-container", {
     backgroundColor: "#000000",
     color: "#ffffff",
     duration: 1,
   });
-  masterTl.to(".text-block", { color: "#ffffff", duration: 1 }, "<");
 
   masterTl.to(flowerPlayhead, {
     frame: (flowerImages.length || 1) - 1,
@@ -754,20 +771,9 @@ const flowerUrls = Object.values(flowerFiles)
     duration: 3,
   });
 
-  masterTl.to("#panel-12", { opacity: 1, duration: 1 }, "<");
   showImg(".img-flower-canvas", true);
 
-  showText(".text-p12-1", true);
-  showText(".text-p12-2", true);
-  showText(".text-p12-3", true);
-
-  masterTl.to(flowerPlayhead, {
-    frame: (flowerImages.length || 1) - 1,
-    snap: "frame",
-    ease: "none",
-    onUpdate: renderFlower,
-    duration: 3,
-  });
+  showText(".text-p12-4", true);
 </script>
 
 <style>
@@ -801,7 +807,7 @@ const flowerUrls = Object.values(flowerFiles)
     height: 100svh;
     grid-auto-rows: min-content;
     align-content: center;
-    padding-top: 30vh;
+    /*     padding-top: 30vh; */
     background-color: transparent;
   }
 
@@ -821,7 +827,7 @@ const flowerUrls = Object.values(flowerFiles)
     position: absolute;
     inset: 0;
     opacity: 0;
-    padding: 0 0 15vh 0;
+    padding: 0;
     transform: translateY(100%);
     display: flex;
     align-items: center;
@@ -889,7 +895,7 @@ const flowerUrls = Object.values(flowerFiles)
   }
 
   p.text-block {
-    font-size: var(--font-size-desktop);
+    font-size: 16px;
   }
 
   /* --- custom layout --- */
@@ -897,14 +903,26 @@ const flowerUrls = Object.values(flowerFiles)
   #panel-1 .text-col {
     align-content: start;
     padding-top: 15vh;
+    opacity: 1;
   }
 
+  #panel-1 .text-col div {
+    opacity: 1;
+  }
+
+  .img-portfolio-video {
+    padding: 0 5%;
+  }
+
+  #panel-12 {
+    height: 100lvh;
+  }
   #panel-12 .text-col {
     align-content: start;
     padding-top: 15vh;
   }
 
-  #panel-12 .text-col .text-block {
+  #panel-12 .text-col .text-p12-4 {
     background-color: transparent;
     color: var(--bg-color);
   }
