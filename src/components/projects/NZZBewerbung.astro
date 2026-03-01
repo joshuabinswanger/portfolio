@@ -756,11 +756,11 @@ const flowerUrls = Object.values(flowerFiles)
 
   // 1. Transition background to black and text to white
 
-  masterTl.to(".text-p12-4", { color: "#FBFBF3", duration: 1 }, "<");
+  /*   masterTl.to(".text-p12-4", { color: "#FBFBF3", duration: 1 }, "<");
   masterTl.to("#scrolly-container", {
     backgroundColor: "#000000",
     duration: 1,
-  });
+  }); */
 
   masterTl.to(flowerPlayhead, {
     frame: (flowerImages.length || 1) - 1,
@@ -771,9 +771,11 @@ const flowerUrls = Object.values(flowerFiles)
   });
 
   showImg(".img-flower-canvas", true);
-  pause(2);
-
-  showText(".text-p12-4", true);
+  masterTl.to(
+    "#panel-12 .text-p12-4 .word",
+    { opacity: 1, y: 0, duration: 0.8, stagger: 0.04, ease: "power2.out" },
+    "-=1",
+  );
 </script>
 
 <style>
@@ -927,7 +929,7 @@ const flowerUrls = Object.values(flowerFiles)
     position: absolute;
     text-align: center;
     padding-top: 10vh;
-    color: var(--bg-color);
+    /* color: var(--bg-color); */
     height: 100lvh;
   }
 
