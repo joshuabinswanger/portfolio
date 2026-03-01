@@ -756,10 +756,9 @@ const flowerUrls = Object.values(flowerFiles)
 
   // 1. Transition background to black and text to white
 
-  masterTl.to(".text-p12-4", { color: "#ffffff", duration: 1 }, "<");
+  masterTl.to(".text-p12-4", { color: "#FBFBF3", duration: 1 }, "<");
   masterTl.to("#scrolly-container", {
     backgroundColor: "#000000",
-    color: "#ffffff",
     duration: 1,
   });
 
@@ -772,6 +771,7 @@ const flowerUrls = Object.values(flowerFiles)
   });
 
   showImg(".img-flower-canvas", true);
+  pause(2);
 
   showText(".text-p12-4", true);
 </script>
@@ -883,7 +883,7 @@ const flowerUrls = Object.values(flowerFiles)
   }
 
   h1.text-block {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 700;
     line-height: 1.5;
     margin-bottom: 1.5rem;
@@ -895,7 +895,7 @@ const flowerUrls = Object.values(flowerFiles)
   }
 
   p.text-block {
-    font-size: 16px;
+    font-size: 20px;
   }
 
   /* --- custom layout --- */
@@ -924,7 +924,11 @@ const flowerUrls = Object.values(flowerFiles)
 
   #panel-12 .text-col .text-p12-4 {
     background-color: transparent;
+    position: absolute;
+    text-align: center;
+    padding-top: 10vh;
     color: var(--bg-color);
+    height: 100lvh;
   }
 
   /* --- Links and Buttons --- */
