@@ -535,7 +535,7 @@ const flowerUrls = Object.values(flowerFiles)
     n64Ctx.clearRect(0, 0, n64Canvas.width, n64Canvas.height);
     const frame = Math.min(
       Math.max(Math.round(n64Playhead.frame), 0),
-      n64Images.length - 1,
+      n64Images.length - 8,
     );
     n64Ctx.drawImage(n64Images[frame], 0, 0, n64Canvas.width, n64Canvas.height);
   };
@@ -974,6 +974,19 @@ const flowerUrls = Object.values(flowerFiles)
     place-items: center;
     align-items: start;
     opacity: 0;
+
+    @media (min-width: 768px) {
+      width: auto;
+      height: 50vh;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 3rem;
+      right: auto;
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(9, 1fr);
+      place-items: center start;
+      padding: 0;
+    }
   }
 
   .progress-word {
@@ -1053,7 +1066,13 @@ const flowerUrls = Object.values(flowerFiles)
   }
 
   .img-portfolio-video {
-    padding: 0 5%;
+    padding: 0 10%;
+
+    @media (min-width: 768px) {
+      width: 20%;
+      padding: 0 40%;
+      align-items: center;
+    }
   }
 
   #panel-12 {
@@ -1071,6 +1090,11 @@ const flowerUrls = Object.values(flowerFiles)
     padding-top: 10vh;
     /* color: var(--bg-color); */
     height: 100lvh;
+
+    @media (min-width: 768px) {
+      padding-top: calc(50vh - 48px);
+      left: 15%;
+    }
   }
 
   /* --- Links and Buttons --- */
@@ -1142,7 +1166,7 @@ const flowerUrls = Object.values(flowerFiles)
     }
 
     h1.text-block {
-      font-size: 3.5rem;
+      font-size: 48px;
     }
     h2.text-block {
       font-size: 2.5rem;
