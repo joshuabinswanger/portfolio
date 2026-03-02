@@ -458,10 +458,8 @@ const flowerUrls = Object.values(flowerFiles)
   import Lenis from "lenis";
   import { gsap } from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
-  import { CustomEase } from "gsap/CustomEase";
-  import { SplitText } from "gsap/SplitText";
 
-  gsap.registerPlugin(ScrollTrigger, CustomEase, SplitText);
+  gsap.registerPlugin(ScrollTrigger);
 
   const lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 1, smoothWheel: true });
   lenis.on("scroll", ScrollTrigger.update);
@@ -492,11 +490,6 @@ const flowerUrls = Object.values(flowerFiles)
           self.progress * 100 + "%";
       },
     },
-  });
-
-  const splitTexts = new SplitText(".text-block", {
-    type: "words",
-    wordsClass: "word",
   });
 
   // --- Extract Data from Island ---
@@ -573,19 +566,16 @@ const flowerUrls = Object.values(flowerFiles)
   };
 
   //GSAP Set
-  gsap.set(".text-block", { opacity: 1, y: 0 });
-  gsap.set(splitTexts.words, { opacity: 0, y: 20 });
-
-  // ADD THIS LINE: Instantly show Panel 1's text on page load
-  gsap.set("#panel-1 .text-col .text-p1 .word", { opacity: 1, y: 0 });
+  // Set initial state for the first text element which is not animated in
+  gsap.set(".text-p1", { opacity: 1, y: 0 });
 
   // Helper functions
   let snapLabelCount = 0;
 
   const showText = (selector, sync = false) => {
     const result = masterTl.to(
-      `${selector} .word`,
-      { opacity: 1, y: 0, duration: 0.2, stagger: 0.01, ease: "power2.out" },
+      selector,
+      { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
       sync ? "<" : "+=0.2",
     );
     masterTl.addLabel(`text-snap-${snapLabelCount++}`);
@@ -844,8 +834,8 @@ const flowerUrls = Object.values(flowerFiles)
 
   showImg(".img-flower-canvas", true);
   masterTl.to(
-    "#panel-12 .text-p12-4 .word",
-    { opacity: 1, y: 0, duration: 0.8, stagger: 0.04, ease: "power2.out" },
+    "#panel-12 .text-p12-4",
+    { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
     "-=1",
   );
   masterTl.addLabel(`text-snap-${snapLabelCount++}`);
@@ -986,7 +976,7 @@ const flowerUrls = Object.values(flowerFiles)
   .text-block {
     opacity: 0;
     z-index: 2;
-    transform: translateY(20px); /* Pre-set for animation */
+    transform: translateY(40px); /* Pre-set for animation */
     line-height: 1.5;
     color: black;
   }
