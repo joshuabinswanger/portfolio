@@ -231,11 +231,13 @@ const flowerUrls = Object.values(flowerFiles)
 
   <div id="panel-7" class="scrolly-panel split-panel">
     <div class="text-col">
-      <p class="text-block text-p7">
+      <p class="text-block text-p7-1">
         Meine Neugier leitet mich dazu an, mein technisches Repertoire stetig zu
         erweitern. Die Grundlage meiner Praxis bildet mein 3D-Wissen, das ich
-        mir an der Vertex School angeeignet habe. Heute gebe ich dieses Wissen
-        in Blender-Workshops weiter.
+        mir an der Vertex School angeeignet habe.
+      </p>
+      <p class="text-block text-p7-2">
+        Heute gebe ich dieses Wissen in Blender-Workshops weiter.
       </p>
     </div>
     <div class="img-col">
@@ -407,6 +409,12 @@ const flowerUrls = Object.values(flowerFiles)
       scrub: 1,
       pin: true,
       markers: false,
+      snap: {
+        snapTo: "labels",
+        directional: true,
+        duration: { min: 0.2, max: 0.5 },
+        ease: "power1.inOut",
+      },
     },
   });
 
@@ -496,17 +504,20 @@ const flowerUrls = Object.values(flowerFiles)
   gsap.set("#panel-1 .text-col .text-p1 .word", { opacity: 1, y: 0 });
 
   // Helper functions
+  let snapLabelCount = 0;
   const showText = (selector, sync = false) => {
-    return masterTl.to(
+    const result = masterTl.to(
       `${selector} .word`,
-      { opacity: 1, y: 0, duration: 0.8, stagger: 0.04, ease: "power2.out" },
+      { opacity: 1, y: 0, duration: 0.4, stagger: 0.02, ease: "power2.out" },
       sync ? "<" : "+=0.2",
     );
+    masterTl.addLabel(`text-snap-${snapLabelCount++}`);
+    return result;
   };
   const hideText = (selector, sync = false) => {
     return masterTl.to(
       selector,
-      { opacity: 0, y: -20, duration: 1 },
+      { y: "-50vh", opacity: 0, duration: 1 },
       sync ? "<" : "+=0.2",
     );
   };
@@ -526,11 +537,13 @@ const flowerUrls = Object.values(flowerFiles)
         },
         ">-0.8",
       );
-    return masterTl.add(imageTl, sync ? "<" : "-=0.2");
+    const result = masterTl.add(imageTl, sync ? "<" : "-=0.2");
+    masterTl.addLabel(`img-snap-${snapLabelCount++}`);
+    return result;
   };
 
   const zoomFadeInImg = (selector, sync = false) => {
-    return masterTl.fromTo(
+    const result = masterTl.fromTo(
       selector,
       {
         y: "0%",
@@ -545,6 +558,8 @@ const flowerUrls = Object.values(flowerFiles)
       },
       sync ? "<" : "-=0.5",
     );
+    masterTl.addLabel(`img-snap-${snapLabelCount++}`);
+    return result;
   };
 
   const hideImg = (selector, sync = false) => {
@@ -577,15 +592,12 @@ const flowerUrls = Object.values(flowerFiles)
 
   showImg(".img-quercus", true);
   hideImg(".img-quercus");
-
-  // Hide old image (synced)
-  showImg(".img-gjermundbu", true);
+  zoomFadeInImg(".img-gjermundbu", true);
   hideImg(".img-gjermundbu");
-
-  showImg(".img-buchdrucker-1", true);
+  zoomFadeInImg(".img-buchdrucker-1", true);
   hideImg(".img-buchdrucker-1");
-
-  showImg(".img-eth-vis-3", true);
+  zoomFadeInImg(".img-eth-vis-3", true);
+  hideImg(".img-eth-vis-3");
 
   masterTl.to("#panel-1", { opacity: 0, duration: 0.5 });
 
@@ -603,8 +615,9 @@ const flowerUrls = Object.values(flowerFiles)
   pause();
 
   hideImg(".img-pheno-zoom", true);
-  showImg(".img-pheno-base", true);
+  zoomFadeInImg(".img-pheno-base", true);
   pause();
+  hideImg(".img-pheno-base");
   masterTl.to("#panel-2", { opacity: 0, duration: 0.5 });
 
   // Panel 3: Ästhetik & Tiefe
@@ -613,12 +626,13 @@ const flowerUrls = Object.values(flowerFiles)
   pause();
 
   hideText(".text-p3");
-  zoomFadeInImg(".img-wood-zoom", true);
+  showImg(".img-wood-zoom", true);
   pause();
 
   hideImg(".img-wood-zoom", true);
-  showImg(".img-wood-base", true);
+  zoomFadeInImg(".img-wood-base", true);
   pause();
+  hideImg(".img-wood-base");
   masterTl.to("#panel-3", { opacity: 0, duration: 0.5 });
 
   // Panel 4: Zielgruppe
@@ -635,8 +649,9 @@ const flowerUrls = Object.values(flowerFiles)
   pause();
 
   hideImg(".img-freedom-zoom", true);
-  showImg(".img-freedom-base", true);
+  zoomFadeInImg(".img-freedom-base", true);
   pause();
+  hideImg(".img-freedom-base");
   masterTl.to("#panel-4", { opacity: 0, duration: 0.5 });
 
   // Panel 5: Die Basis
@@ -649,16 +664,17 @@ const flowerUrls = Object.values(flowerFiles)
   pause();
 
   hideImg(".img-yearring", true);
-  showImg(".img-figure", true);
+  zoomFadeInImg(".img-figure", true);
   pause();
 
   hideImg(".img-figure", true);
-  showImg(".img-misc-3d", true);
+  zoomFadeInImg(".img-misc-3d", true);
   pause();
 
   hideImg(".img-misc-3d", true);
-  showImg(".img-illustration", true);
+  zoomFadeInImg(".img-illustration", true);
   pause();
+  hideImg(".img-illustration");
   masterTl.to("#panel-5", { opacity: 0, duration: 0.5 });
 
   // Panel 6: Der Start als Illustrator
@@ -671,18 +687,24 @@ const flowerUrls = Object.values(flowerFiles)
   pause();
 
   hideImg(".img-buchdrucker-poster", true);
-  showImg(".img-eth-vis-2", true);
+  zoomFadeInImg(".img-eth-vis-2", true);
   pause();
+  hideImg(".img-eth-vis-2");
   masterTl.to("#panel-6", { opacity: 0, duration: 0.5 });
 
   // Panel 7: 3D & Wissensvermittlung
   masterTl.to("#panel-7", { opacity: 1, duration: 1 });
-  showText(".text-p7", true);
+  showText(".text-p7-1", true);
   pause();
 
-  hideText(".text-p7");
+  showText(".text-p7-2");
+  pause();
+
+  hideText(".text-p7-1");
+  hideText(".text-p7-2", true);
   showImg(".img-blender-course", true);
   pause();
+  hideImg(".img-blender-course");
   masterTl.to("#panel-7", { opacity: 0, duration: 0.5 });
 
   // Panel 8: UX & Storytelling
@@ -695,12 +717,13 @@ const flowerUrls = Object.values(flowerFiles)
   pause();
 
   hideImg(".img-xylo-ipad", true);
-  showImg(".img-eiche-vdb", true);
+  zoomFadeInImg(".img-eiche-vdb", true);
   pause();
 
   hideImg(".img-eiche-vdb", true);
-  showImg(".img-xylo-gallery", true);
+  zoomFadeInImg(".img-xylo-gallery", true);
   pause();
+  hideImg(".img-xylo-gallery");
   masterTl.to("#panel-8", { opacity: 0, duration: 0.5 });
 
   // Panel 9: Web Tech
@@ -711,6 +734,7 @@ const flowerUrls = Object.values(flowerFiles)
   hideText(".text-p9");
   showImg(".img-portfolio-video", true);
   pause(3);
+  hideImg(".img-portfolio-video");
   masterTl.to("#panel-9", { opacity: 0, duration: 0.5 });
 
   // Panel 10: Animation & Interaktivität (N64 Canvas)
@@ -728,6 +752,7 @@ const flowerUrls = Object.values(flowerFiles)
     duration: 3,
   });
   pause();
+  hideImg(".img-n64-canvas");
   masterTl.to("#panel-10", { opacity: 0, duration: 0.5 });
 
   // Panel 11: Innovation & Current Role
@@ -740,14 +765,15 @@ const flowerUrls = Object.values(flowerFiles)
   pause();
 
   hideImg(".img-houdini-scripts", true);
-  showImg(".img-augmedi-approach", true);
+  zoomFadeInImg(".img-augmedi-approach", true);
   pause();
+  hideImg(".img-augmedi-approach");
   masterTl.to("#panel-11", { opacity: 0, duration: 0.5 });
 
   // Panel 12: Der Pitch (Flower Splat Canvas & Black bg transition)
   masterTl.to("#panel-12", { opacity: 1, duration: 1 }, "<");
 
-  showText(".text-p12-1");
+  showText(".text-p12-1", true);
   showText(".text-p12-2");
   showText(".text-p12-3");
   hideText(".text-p12-1");
@@ -767,7 +793,7 @@ const flowerUrls = Object.values(flowerFiles)
     snap: "frame",
     ease: "none",
     onUpdate: renderFlower,
-    duration: 3,
+    duration: 2,
   });
 
   showImg(".img-flower-canvas", true);
@@ -776,6 +802,7 @@ const flowerUrls = Object.values(flowerFiles)
     { opacity: 1, y: 0, duration: 0.8, stagger: 0.04, ease: "power2.out" },
     "-=1",
   );
+  masterTl.addLabel(`text-snap-${snapLabelCount++}`);
 </script>
 
 <style>
