@@ -442,7 +442,15 @@ const flowerUrls = Object.values(flowerFiles)
     </div>
   </div>
   <div id="scrolly-progress">
-    <div id="scrolly-progress-fill"></div>
+    <span class="progress-word active" data-section="intro">Intro</span>
+    <span></span>
+    <span class="progress-word" data-section="illustration">Illustration</span>
+    <span></span>
+    <span class="progress-word" data-section="3d">3D</span>
+    <span></span>
+    <span class="progress-word" data-section="web">Web & Tech</span>
+    <span></span>
+    <span class="progress-word" data-section="outro">Outro</span>
   </div>
 </div>
 
@@ -476,18 +484,23 @@ const flowerUrls = Object.values(flowerFiles)
       pin: true,
       markers: false,
       snap: {
-        snapTo: (value) => {
-          const labels = Object.values(masterTl.labels)
-            .map((t) => t / masterTl.totalDuration())
-            .sort((a, b) => a - b);
-          return labels.find((l) => l >= value) ?? labels[labels.length - 1];
-        },
-        duration: { min: 0.1, max: 0.2 },
-        ease: "power1.inOut",
+        snapTo: "labels", // snap to the closest label in the timeline
+        duration: { min: 0.2, max: 3 }, // the snap animation should be at least 0.2 seconds, but no more than 3 seconds (determined by velocity)
+        delay: 0.2, // wait 0.2 seconds from the last scroll event before doing the snapping
+        ease: "power1.inOut", // the ease of the snap animation ("power3" by default)
       },
       onUpdate: (self) => {
-        document.getElementById("scrolly-progress-fill").style.width =
-          self.progress * 100 + "%";
+        const tl = self.animation;
+        const time = tl.time();
+        const labels = tl.labels;
+        let active = "intro";
+        if (time >= labels["chapter-12"]) active = "outro";
+        else if (time >= labels["chapter-9"]) active = "web";
+        else if (time >= labels["chapter-7"]) active = "3d";
+        else if (time >= labels["chapter-2"]) active = "illustration";
+        document.querySelectorAll(".progress-word").forEach((el) => {
+          el.classList.toggle("active", el.dataset.section === active);
+        });
       },
     },
   });
@@ -578,7 +591,7 @@ const flowerUrls = Object.values(flowerFiles)
       { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
       sync ? "<" : "+=0.2",
     );
-    masterTl.addLabel(`text-snap-${snapLabelCount++}`);
+    masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
     return result;
   };
 
@@ -606,7 +619,7 @@ const flowerUrls = Object.values(flowerFiles)
         ">-0.4",
       );
     const result = masterTl.add(imageTl, sync ? "<" : "-=0.2");
-    masterTl.addLabel(`img-snap-${snapLabelCount++}`);
+    masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
     return result;
   };
 
@@ -626,7 +639,7 @@ const flowerUrls = Object.values(flowerFiles)
       },
       sync ? "<" : "-=0.5",
     );
-    masterTl.addLabel(`img-snap-${snapLabelCount++}`);
+    masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
     return result;
   };
 
@@ -649,6 +662,7 @@ const flowerUrls = Object.values(flowerFiles)
   // Panel 1: Intro
   masterTl.addLabel("chapter-1");
   masterTl.set("#panel-1", { opacity: 1 });
+  masterTl.to("#scrolly-progress", { opacity: 1, duration: 1 });
   showText(".text-p1-1", true);
   showText(".text-p1-3");
   hideText(".text-p1");
@@ -840,18 +854,23 @@ const flowerUrls = Object.values(flowerFiles)
   );
   masterTl.addLabel(`text-snap-${snapLabelCount++}`);
 
-  // Build chapter marks from panel labels
-  /* const progressEl = document.getElementById("scrolly-progress");
-  const totalDur = masterTl.totalDuration();
-  Object.entries(masterTl.labels)
-    .filter(([name]) => name.startsWith("chapter-"))
-    .sort(([a], [b]) => masterTl.labels[a] - masterTl.labels[b])
-    .forEach(([, time]) => {
-      const mark = document.createElement("div");
-      mark.className = "chapter-mark";
-      mark.style.left = (time / totalDur) * 100 + "%";
-      progressEl.appendChild(mark);
-    }); */
+  // Clickable Progress Words
+  document.querySelectorAll(".progress-word").forEach((word) => {
+    word.addEventListener("click", (e) => {
+      const target = e.currentTarget as HTMLElement;
+      const section = target.dataset.section;
+      let label = "chapter-1";
+      if (section === "illustration") label = "chapter-2";
+      else if (section === "3d") label = "chapter-7";
+      else if (section === "web") label = "chapter-9";
+      else if (section === "outro") label = "chapter-12";
+
+      if (masterTl.scrollTrigger) {
+        const scrollPos = masterTl.scrollTrigger.labelToScroll(label) + 700;
+        lenis.scrollTo(scrollPos, { duration: 4 });
+      }
+    });
+  });
 </script>
 
 <style>
@@ -943,27 +962,34 @@ const flowerUrls = Object.values(flowerFiles)
 
   #scrolly-progress {
     position: absolute;
-    bottom: env(safe-area-inset-bottom, 0px);
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: rgba(0, 0, 0, 0.12);
+    top: 1rem;
+    width: 90%;
+    padding: 0 5%;
     z-index: 10;
+    pointer-events: none;
+    mix-blend-mode: difference;
+    color: rgb(0, 0, 0);
+    display: grid;
+    grid-template-columns: max-content repeat(4, auto max-content);
+    place-items: center;
+    align-items: start;
+    opacity: 0;
   }
 
-  #scrolly-progress-fill {
-    height: 100%;
-    width: 0%;
-    background: black;
+  .progress-word {
+    font-size: 10px;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    pointer-events: auto;
+    cursor: pointer;
   }
 
-  :global(.chapter-mark) {
-    position: absolute;
-    top: -3px;
-    width: 1px;
-    height: 7px;
-    background: rgba(0, 0, 0, 0.25);
-    transform: translateX(-50%);
+  .progress-word.active {
+    font-size: 14px;
+    opacity: 1;
+    font-weight: 700;
   }
 
   /* --- Typography --- */
