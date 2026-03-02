@@ -484,7 +484,7 @@ const flowerUrls = Object.values(flowerFiles)
             .sort((a, b) => a - b);
           return labels.find((l) => l >= value) ?? labels[labels.length - 1];
         },
-        duration: { min: 0.2, max: 0.6 },
+        duration: { min: 0.1, max: 0.2 },
         ease: "power1.inOut",
       },
       onUpdate: (self) => {
@@ -581,19 +581,21 @@ const flowerUrls = Object.values(flowerFiles)
 
   // Helper functions
   let snapLabelCount = 0;
+
   const showText = (selector, sync = false) => {
     const result = masterTl.to(
       `${selector} .word`,
-      { opacity: 1, y: 0, duration: 0.2, stagger: 0.02, ease: "power2.out" },
+      { opacity: 1, y: 0, duration: 0.2, stagger: 0.01, ease: "power2.out" },
       sync ? "<" : "+=0.2",
     );
     masterTl.addLabel(`text-snap-${snapLabelCount++}`);
     return result;
   };
+
   const hideText = (selector, sync = false) => {
     return masterTl.to(
       selector,
-      { y: "-50vh", opacity: 0, duration: 1 },
+      { y: "-70vh", opacity: 0, duration: 0.5 },
       sync ? "<" : "+=0.2",
     );
   };
@@ -644,7 +646,7 @@ const flowerUrls = Object.values(flowerFiles)
       {
         y: "-100%",
         opacity: 0,
-        duration: 1,
+        duration: 0.5,
       },
       sync ? "<" : "+=0.2",
     );
@@ -672,12 +674,14 @@ const flowerUrls = Object.values(flowerFiles)
   zoomFadeInImg(".img-eth-vis-3", true);
   hideImg(".img-eth-vis-3");
 
-  masterTl.to("#panel-1", { opacity: 0, duration: 0.2 });
+  masterTl.to("#panel-1", { opacity: 0, duration: 0.05 });
 
   // Panel 2: Mission Statement
   masterTl.addLabel("chapter-2");
-  masterTl.to("#panel-2", { opacity: 1, duration: 0.3 });
+  masterTl.to("#panel-2", { opacity: 1, duration: 0.05 });
 
+  showText(".text-p2", true);
+  hideText(".text-p2");
   showImg(".img-eth-vis-1", true);
 
   hideImg(".img-eth-vis-1");
@@ -686,11 +690,11 @@ const flowerUrls = Object.values(flowerFiles)
   hideImg(".img-pheno-zoom");
   zoomFadeInImg(".img-pheno-base", true);
   hideImg(".img-pheno-base");
-  masterTl.to("#panel-2", { opacity: 0, duration: 0.2 });
+  masterTl.to("#panel-2", { opacity: 0, duration: 0.05 });
 
   // Panel 3: Ästhetik & Tiefe
   masterTl.addLabel("chapter-3");
-  masterTl.to("#panel-3", { opacity: 1, duration: 0.3 });
+  masterTl.to("#panel-3", { opacity: 1, duration: 0.05 });
   showText(".text-p3", true);
 
   hideText(".text-p3");
@@ -699,11 +703,11 @@ const flowerUrls = Object.values(flowerFiles)
   hideImg(".img-wood-zoom");
   zoomFadeInImg(".img-wood-base", true);
   hideImg(".img-wood-base");
-  masterTl.to("#panel-3", { opacity: 0, duration: 0.2 });
+  masterTl.to("#panel-3", { opacity: 0, duration: 0.05 });
 
   // Panel 4: Zielgruppe
   masterTl.addLabel("chapter-4");
-  masterTl.to("#panel-4", { opacity: 1, duration: 0.3 });
+  masterTl.to("#panel-4", { opacity: 1, duration: 0.05 });
   showText(".text-p4", true);
 
   hideText(".text-p4");
@@ -715,43 +719,43 @@ const flowerUrls = Object.values(flowerFiles)
   hideImg(".img-freedom-zoom", true);
   zoomFadeInImg(".img-freedom-base", true);
   hideImg(".img-freedom-base");
-  masterTl.to("#panel-4", { opacity: 0, duration: 0.2 });
+  masterTl.to("#panel-4", { opacity: 0, duration: 0.05 });
 
   // Panel 5: Die Basis
   masterTl.addLabel("chapter-5");
-  masterTl.to("#panel-5", { opacity: 1, duration: 0.3 });
+  masterTl.to("#panel-5", { opacity: 1, duration: 0.05 });
   showText(".text-p5", true);
 
   hideText(".text-p5");
   showImg(".img-yearring", true);
 
-  hideImg(".img-yearring", true);
+  hideImg(".img-yearring");
   zoomFadeInImg(".img-figure", true);
 
-  hideImg(".img-figure", true);
+  hideImg(".img-figure");
   zoomFadeInImg(".img-misc-3d", true);
 
-  hideImg(".img-misc-3d", true);
+  hideImg(".img-misc-3d");
   zoomFadeInImg(".img-illustration", true);
   hideImg(".img-illustration");
-  masterTl.to("#panel-5", { opacity: 0, duration: 0.2 });
+  masterTl.to("#panel-5", { opacity: 0, duration: 0.05 });
 
   // Panel 6: Der Start als Illustrator
   masterTl.addLabel("chapter-6");
-  masterTl.to("#panel-6", { opacity: 1, duration: 0.3 });
+  masterTl.to("#panel-6", { opacity: 1, duration: 0.05 });
   showText(".text-p6", true);
 
   hideText(".text-p6");
   showImg(".img-buchdrucker-poster", true);
 
-  hideImg(".img-buchdrucker-poster", true);
+  hideImg(".img-buchdrucker-poster");
   zoomFadeInImg(".img-eth-vis-2", true);
   hideImg(".img-eth-vis-2");
-  masterTl.to("#panel-6", { opacity: 0, duration: 0.1 });
+  masterTl.to("#panel-6", { opacity: 0, duration: 0.05 });
 
   // Panel 7: 3D & Wissensvermittlung
   masterTl.addLabel("chapter-7");
-  masterTl.to("#panel-7", { opacity: 1, duration: 0.3 });
+  masterTl.to("#panel-7", { opacity: 1, duration: 0.05 });
   showText(".text-p7-1", true);
 
   showText(".text-p7-2");
@@ -760,37 +764,37 @@ const flowerUrls = Object.values(flowerFiles)
   hideText(".text-p7-2", true);
   showImg(".img-blender-course", true);
   hideImg(".img-blender-course");
-  masterTl.to("#panel-7", { opacity: 0, duration: 0.2 });
+  masterTl.to("#panel-7", { opacity: 0, duration: 0.05 });
 
   // Panel 8: UX & Storytelling
   masterTl.addLabel("chapter-8");
-  masterTl.to("#panel-8", { opacity: 1, duration: 0.3 });
+  masterTl.to("#panel-8", { opacity: 1, duration: 0.05 });
   showText(".text-p8", true);
 
   hideText(".text-p8");
   showImg(".img-xylo-ipad", true);
 
-  hideImg(".img-xylo-ipad", true);
+  hideImg(".img-xylo-ipad");
   zoomFadeInImg(".img-eiche-vdb", true);
 
-  hideImg(".img-eiche-vdb", true);
+  hideImg(".img-eiche-vdb");
   zoomFadeInImg(".img-xylo-gallery", true);
   hideImg(".img-xylo-gallery");
-  masterTl.to("#panel-8", { opacity: 0, duration: 0.2 });
+  masterTl.to("#panel-8", { opacity: 0, duration: 0.05 });
 
   // Panel 9: Web Tech
   masterTl.addLabel("chapter-9");
-  masterTl.to("#panel-9", { opacity: 1, duration: 0.3 });
+  masterTl.to("#panel-9", { opacity: 1, duration: 0.05 });
   showText(".text-p9", true);
 
   hideText(".text-p9");
-  showImg(".img-portfolio-video", true);
+  showImg(".img-portfolio-video");
   hideImg(".img-portfolio-video");
-  masterTl.to("#panel-9", { opacity: 0, duration: 0.2 });
+  masterTl.to("#panel-9", { opacity: 0, duration: 0.05 });
 
   // Panel 10: Animation & Interaktivität (N64 Canvas)
   masterTl.addLabel("chapter-10");
-  masterTl.to("#panel-10", { opacity: 1, duration: 0.3 });
+  masterTl.to("#panel-10", { opacity: 1, duration: 0.05 });
   showText(".text-p10", true);
 
   hideText(".text-p10");
@@ -800,28 +804,28 @@ const flowerUrls = Object.values(flowerFiles)
     snap: "frame",
     ease: "none",
     onUpdate: renderN64,
-    duration: 3,
+    duration: 1.5,
   });
   masterTl.addLabel(`img-snap-${snapLabelCount++}`);
   hideImg(".img-n64-canvas");
-  masterTl.to("#panel-10", { opacity: 0, duration: 0.2 });
+  masterTl.to("#panel-10", { opacity: 0, duration: 0.05 });
 
   // Panel 11: Innovation & Current Role
   masterTl.addLabel("chapter-11");
-  masterTl.to("#panel-11", { opacity: 1, duration: 0.3 });
+  masterTl.to("#panel-11", { opacity: 1, duration: 0.05 });
   showText(".text-p11", true);
 
   hideText(".text-p11");
   showImg(".img-houdini-scripts", true);
 
-  hideImg(".img-houdini-scripts", true);
+  hideImg(".img-houdini-scripts");
   zoomFadeInImg(".img-augmedi-approach", true);
   hideImg(".img-augmedi-approach");
-  masterTl.to("#panel-11", { opacity: 0, duration: 0.2 });
+  masterTl.to("#panel-11", { opacity: 0, duration: 0.05 });
 
   // Panel 12: Der Pitch (Flower Splat Canvas & Black bg transition)
   masterTl.addLabel("chapter-12");
-  masterTl.to("#panel-12", { opacity: 1, duration: 0.3 }, "<");
+  masterTl.to("#panel-12", { opacity: 1, duration: 0.05 }, "<");
 
   showText(".text-p12-1", true);
   showText(".text-p12-2");
@@ -829,14 +833,6 @@ const flowerUrls = Object.values(flowerFiles)
   hideText(".text-p12-1");
   hideText(".text-p12-2", true);
   hideText(".text-p12-3", true);
-
-  // 1. Transition background to black and text to white
-
-  /*   masterTl.to(".text-p12-4", { color: "#FBFBF3", duration: 1 }, "<");
-  masterTl.to("#scrolly-container", {
-    backgroundColor: "#000000",
-    duration: 1,
-  }); */
 
   masterTl.to(flowerPlayhead, {
     frame: (flowerImages.length || 1) - 1,
