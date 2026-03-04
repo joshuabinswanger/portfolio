@@ -1,5 +1,5 @@
 ---
-import { CldImage, CldVideoPlayer } from "astro-cloudinary";
+import { CldImage } from "astro-cloudinary";
 
 const flowerFiles = import.meta.glob(
   "/src/assets/projects/flower_splat/flower_splat_avif_sequence/*.avif",
@@ -269,16 +269,22 @@ const flowerUrls = Object.values(flowerFiles)
       </p>
     </div>
     <div class="img-stack img-gamedesign">
-      <CldVideoPlayer
-        src="GameDesign101_1080p_eoaems"
-        width={1080}
-        height={1080}
-        autoplay={true}
-        muted={true}
-        loop={true}
-        controls={false}
+      <video
+        autoplay
+        muted
+        loop
+        playsinline
         aria-label="Game Design 101 – prozedurale Animation"
-      />
+      >
+        <source
+          src="https://res.cloudinary.com/rhizomech/video/upload/f_webm,vc_vp9/GameDesign101_1080p_eoaems.webm"
+          type="video/webm"
+        />
+        <source
+          src="https://res.cloudinary.com/rhizomech/video/upload/f_mp4,vc_h264/GameDesign101_1080p_eoaems.mp4"
+          type="video/mp4"
+        />
+      </video>
       <p class="img-caption">und prozedurale Animation.</p>
     </div>
     <div class="img-stack img-eiche-vdb">
@@ -325,32 +331,38 @@ const flowerUrls = Object.values(flowerFiles)
       <p class="img-caption">Von der Echtzeit-3D-App «Xylopedia» fürs iPad</p>
     </div>
     <div class="img-stack img-ub-video">
-      <CldVideoPlayer
-        src="UB_Zuerich_Jahresbericht25_grgopa"
-        width={1390}
-        height={1912}
-        autoplay={true}
-        muted={true}
-        loop={true}
-        controls={false}
+      <video
+        autoplay
+        muted
+        loop
+        playsinline
         aria-label="UB Zürich Jahresbericht 2025"
-      />
+      >
+        <source
+          src="https://res.cloudinary.com/rhizomech/video/upload/f_webm,vc_vp9/UB_Zuerich_Jahresbericht25_grgopa.webm"
+          type="video/webm"
+        />
+        <source
+          src="https://res.cloudinary.com/rhizomech/video/upload/f_mp4,vc_h264/UB_Zuerich_Jahresbericht25_grgopa.mp4"
+          type="video/mp4"
+        />
+      </video>
       <p class="img-caption">
         Animierte Website für den Jahresbericht der Universitätsbibliothek
         Zürich
       </p>
     </div>
     <div class="img-stack img-portfolio-video">
-      <CldVideoPlayer
-        src="Portfolio_lc2mft"
-        width={824}
-        height={1636}
-        autoplay={true}
-        muted={true}
-        loop={true}
-        controls={false}
-        aria-label="Portfolio"
-      />
+      <video autoplay muted loop playsinline aria-label="Portfolio">
+        <source
+          src="https://res.cloudinary.com/rhizomech/video/upload/f_webm,vc_vp9/Portfolio_lc2mft.webm"
+          type="video/webm"
+        />
+        <source
+          src="https://res.cloudinary.com/rhizomech/video/upload/f_mp4,vc_h264/Portfolio_lc2mft.mp4"
+          type="video/mp4"
+        />
+      </video>
       <p class="img-caption">
         Deswegen habe ich mein Portfolio von Grundauf selbst programmiert.
       </p>
@@ -847,7 +859,7 @@ const flowerUrls = Object.values(flowerFiles)
 
     @media (min-width: 1024px) {
       grid-column: 1;
-      height: 85vh;
+      height: 65vh;
     }
   }
 
