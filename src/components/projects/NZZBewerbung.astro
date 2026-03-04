@@ -352,7 +352,7 @@ const flowerUrls = Object.values(flowerFiles)
         programmiert.
       </p>
     </div>
-    <div class="text-wrapper portfolio-link">
+    <div class="text-wrapper text-block portfolio-link">
       <span>Dort finden Sie auch mehr von meiner Arbeit:</span>
       <div class="logo-link"></div><a
         href="/"
@@ -883,13 +883,14 @@ const flowerUrls = Object.values(flowerFiles)
     gap: 0.5rem;
     z-index: 1000;
     pointer-events: all;
+
     @media (min-width: 1024px) {
       flex-direction: row;
+      font-size: 26px;
     }
   }
 
   .portfolio-link a {
-    font-size: 16px;
     color: black;
     letter-spacing: 0.01em;
     text-decoration: underline;
@@ -937,7 +938,7 @@ const flowerUrls = Object.values(flowerFiles)
 
   .img-gamedesign {
     align-content: center;
-    padding: 0 10%;
+    padding: 0;
 
     @media (min-width: 1024px) {
       padding: 0 10% 0 20%;
@@ -946,7 +947,7 @@ const flowerUrls = Object.values(flowerFiles)
   }
 
   .img-gamedesign.img-caption {
-    padding: 0;
+    padding: 0 5%;
   }
 
   .img-quercus {
@@ -960,7 +961,7 @@ const flowerUrls = Object.values(flowerFiles)
   }
 
   .img-quercus .img-caption {
-    padding: 0;
+    padding: 0 5%;
   }
 
   .img-portfolio-video {
