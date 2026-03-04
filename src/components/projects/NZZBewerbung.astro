@@ -818,8 +818,7 @@ const flowerUrls = Object.values(flowerFiles)
     }
   }
   /* Image and video share identical sizing rules */
-  .img-stack img,
-  .img-stack canvas {
+  .img-stack img {
     object-fit: contain;
     max-height: 85vh;
     align-self: start;
@@ -909,12 +908,18 @@ const flowerUrls = Object.values(flowerFiles)
   }
 
   .img-flower-canvas {
+    padding: 0;
+    max-height: 100vh;
+
     @media (min-width: 768px) {
       position: absolute;
-      right: 0;
+      right: 5%;
       left: auto;
       padding: 0;
       gap: 0;
+      max-height: 100vh;
+      object-fit: contain;
+      align-self: start;
     }
   }
 
@@ -931,9 +936,11 @@ const flowerUrls = Object.values(flowerFiles)
   }
 
   #flower-canvas {
+    max-height: 100vh;
     @media (min-width: 768px) {
       height: 100vh;
       max-height: 100vh;
+      object-fit: contain;
     }
   }
   /* #endregion */
