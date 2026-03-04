@@ -25,9 +25,8 @@ const flowerUrls = Object.values(flowerFiles)
         von visuellem Design und Technologie.
       </p>
       <p class="text-block intro-reveal-2">
-        Ob hochkomplexe Forschungsdaten oder öffentliche Scans: Mein Ziel ist
-        es, rohe Informationen in ästhetische Geschichten zu übersetzen und
-        visuell greifbar zu machen.
+        Mein Ziel ist es, rohe Informationen in ästhetische Geschichten zu
+        übersetzen und visuell greifbar zu machen.
       </p>
     </div>
 
@@ -43,10 +42,13 @@ const flowerUrls = Object.values(flowerFiles)
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Quercus Robur Volume Rendering"
       />
-      <p class="img-caption">
-        Wie bei diesem Mikro-CT-Scan (DESY), den ich als visuelle Basis für eine
-        interaktive Lern-App aufbereitet habe.
-      </p>
+      <div class="img-caption">
+        <h2>Ob hochkomplexe Forschungsdaten... <br /></h2>
+        <p>
+          Die Struktur von Eichenholz, visualisiert basierend auf einem
+          Mikro-CT-Scan des Deutschen Elektronen-Synchrotrons (DESY).
+        </p>
+      </div>
     </div>
 
     <!-- Intro Gjermundbu -->
@@ -57,10 +59,13 @@ const flowerUrls = Object.values(flowerFiles)
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Gjermundbu Helmet"
       />
-      <p class="img-caption">
-        Oder bei diesem 3D-Modell des Gjermundbu-Helms, das aus frei verfügbaren
-        Scandaten entstand.
-      </p>
+      <div class="img-caption">
+        <h2>oder öffentliche Scans: <br /></h2>
+        <p>
+          Eine 3D-Rekonstruktion des berühmten Gjermundbu-Helms — entstanden aus
+          frei verfügbaren Scandaten.
+        </p>
+      </div>
     </div>
 
     <!-- chapter Buchdrucker -->
@@ -113,7 +118,7 @@ const flowerUrls = Object.values(flowerFiles)
     <div class="text-wrapper text-p3">
       <p class="text-block">
         Mein Fokus liegt momentan auf der wissenschaftlichen Illustration. Es
-        reizt mich, abstrakte Sachverhalte in zugängliche Bildwelten zu
+        fasziniert mich, abstrakte Sachverhalte in zugängliche Bildwelten zu
         übersetzen.
       </p>
     </div>
@@ -223,7 +228,8 @@ const flowerUrls = Object.values(flowerFiles)
     <!-- chapter 6 -->
     <div class="text-wrapper text-p6">
       <p class="text-block">
-        Heute liegt mein technisches Hauptaugenmerk auf der 3D-Visualisierung.
+        Heute liegt mein technisches Hauptaugenmerk jedoch auf der
+        3D-Visualisierung.
       </p>
     </div>
     <div class="img-stack img-bacteria">
@@ -556,7 +562,7 @@ const flowerUrls = Object.values(flowerFiles)
 
   const hideScrollIndicator = () => {
     scrollIndicatorTween.kill();
-    gsap.to(".scroll-indicator", { opacity: 0, duration: 0.3 });
+    gsap.to(".scroll-indicator", { opacity: 0, duration: 0.6 });
     lenis.off("scroll", hideScrollIndicator);
   };
   lenis.on("scroll", hideScrollIndicator);
@@ -847,24 +853,29 @@ const flowerUrls = Object.values(flowerFiles)
     color: black;
     line-height: 1.4;
     letter-spacing: 0.01em;
-    text-align: center;
+    text-align: left;
     align-self: start;
+    padding: 0 5%;
 
     @media (min-width: 1024px) {
       grid-column: 2;
       text-align: left;
       align-self: center;
       max-width: 66ch;
+      padding: 0;
     }
   }
 
   .portfolio-link {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     gap: 0.5rem;
     z-index: 1000;
     pointer-events: all;
+    @media (min-width: 1024px) {
+      flex-direction: row;
+    }
   }
 
   .portfolio-link a {
@@ -885,8 +896,19 @@ const flowerUrls = Object.values(flowerFiles)
     height: 100lvh;
   }
 
-  .intro-reveal {
-    padding-top: 1rem;
+  .intro-static:nth-child(2) {
+    padding-bottom: 2rem;
+  }
+
+  .img-caption h2 {
+    font-size: 20px;
+    font-family: PowerGrotesk-Medium;
+    line-height: 1.4;
+    margin: 0;
+
+    @media (min-width: 1024px) {
+      font-size: 26px;
+    }
   }
 
   .img-ub-video,
@@ -908,15 +930,20 @@ const flowerUrls = Object.values(flowerFiles)
     transform: translateY(100%);
   }
 
-  /*   .text-p8-4 {
-    top: -50%;
+  .text-p8-4 {
+    padding-bottom: 100%;
     @media (min-width: 1024px) {
-      top: -25%;
+      padding-bottom: 0;
     }
-  } */
+  }
+
+  .text-p8-1 .text-block {
+    padding-bottom: 1rem;
+  }
 
   .img-flower-canvas {
     padding: 0;
+    align-self: end;
 
     @media (min-width: 1024px) {
       position: absolute;
