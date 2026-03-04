@@ -670,7 +670,6 @@ const flowerUrls = Object.values(flowerFiles)
   hideText(".text-p8-1");
   hideText(".text-p8-2", true);
   hideText(".text-p8-3", true);
-
   masterTl.to(
     flowerPlayhead,
     {
@@ -723,18 +722,6 @@ const flowerUrls = Object.values(flowerFiles)
     width: 100%;
     height: 100svh;
     overflow: hidden;
-  }
-
-  #scrolly-container::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 20%;
-    background: linear-gradient(to top, var(--bg-color), transparent);
-    pointer-events: none;
-    z-index: 5;
   }
 
   .scrolly-panel {
@@ -929,6 +916,18 @@ const flowerUrls = Object.values(flowerFiles)
       padding: 0;
       gap: 0;
     }
+  }
+
+  .img-flower-canvas::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20%;
+    background: linear-gradient(to top, var(--bg-color), transparent);
+    pointer-events: none;
+    z-index: 5;
   }
 
   #flower-canvas {
