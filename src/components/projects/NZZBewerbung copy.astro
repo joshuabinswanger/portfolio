@@ -381,7 +381,7 @@ const n64Urls = Object.values(n64Files)
   };
 
   // Override initial CSS to make parents visible, but hide the individual words
-  gsap.set(".text-block", { opacity: 1, y: 0 });
+
   gsap.set(splitTexts.words, { opacity: 0, y: 20 });
 
   // Helper Functions to keep the timeline clean
