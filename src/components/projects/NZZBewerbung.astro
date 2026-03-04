@@ -671,19 +671,23 @@ const flowerUrls = Object.values(flowerFiles)
   hideText(".text-p8-2", true);
   hideText(".text-p8-3", true);
 
-  masterTl.to(flowerPlayhead, {
-    frame: (flowerImages.length || 1) - 1,
-    snap: "frame",
-    ease: "none",
-    onUpdate: renderFlower,
-    duration: 2,
-  });
+  masterTl.to(
+    flowerPlayhead,
+    {
+      frame: (flowerImages.length || 1) - 1,
+      snap: "frame",
+      ease: "none",
+      onUpdate: renderFlower,
+      duration: 2,
+    },
+    "-=1",
+  );
 
   showImg(".img-flower-canvas", true);
   masterTl.to(
     "#panel-zukunft .text-p8-4",
     { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
-    "-=1",
+    "-=1.25",
   );
   masterTl.addLabel(`text-snap-${snapLabelCount++}`);
   // #endregion
