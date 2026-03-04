@@ -760,11 +760,11 @@ const flowerUrls = Object.values(flowerFiles)
     z-index: 3;
     padding: 0 5% 0 5%;
 
-    @media (min-width: 768px) and (max-width: 1023px) {
+    @media (min-width: 768px) and (max-width: 1032px) {
       padding: 0 12% 0 12%;
     }
 
-    @media (min-width: 1024px) {
+    @media (min-width: 1033px) {
       padding: 0 10% 0 20%;
       width: auto;
       max-width: 800px;
@@ -788,7 +788,7 @@ const flowerUrls = Object.values(flowerFiles)
     font-size: 24px;
     font-weight: 700;
 
-    @media (min-width: 1024px) {
+    @media (min-width: 1033px) {
       font-size: 48px;
     }
   }
@@ -796,7 +796,7 @@ const flowerUrls = Object.values(flowerFiles)
   p.text-block {
     font-size: 20px;
 
-    @media (min-width: 1024px) {
+    @media (min-width: 1033px) {
       font-size: 26px;
     }
   }
@@ -825,11 +825,11 @@ const flowerUrls = Object.values(flowerFiles)
     z-index: 1;
     gap: 1rem;
 
-    @media (min-width: 768px) and (max-width: 1023px) {
-      padding: 15vh 10% 0 10%;
+    @media (min-width: 768px) and (max-width: 1032px) {
+      padding: 15vh 15% 0 15%;
     }
 
-    @media (min-width: 1024px) {
+    @media (min-width: 1033px) {
       grid-template-columns: max-content 1fr;
       grid-template-rows: 1fr;
       align-content: start;
@@ -839,11 +839,13 @@ const flowerUrls = Object.values(flowerFiles)
   }
   /* Image and video share identical sizing rules */
   .img-stack img {
-    object-fit: contain;
     max-height: 85vh;
+    max-width: 100%;
+    width: auto;
+    height: auto;
     align-self: start;
 
-    @media (min-width: 1024px) {
+    @media (min-width: 1033px) {
       grid-column: 1;
       max-height: 85vh;
       max-width: 60vw;
@@ -857,7 +859,7 @@ const flowerUrls = Object.values(flowerFiles)
     max-height: 85vh;
     object-fit: contain;
 
-    @media (min-width: 1024px) {
+    @media (min-width: 1033px) {
       grid-column: 1;
       height: 65vh;
     }
@@ -871,7 +873,7 @@ const flowerUrls = Object.values(flowerFiles)
     text-align: center;
     align-self: start;
 
-    @media (min-width: 1024px) {
+    @media (min-width: 1033px) {
       grid-column: 2;
       text-align: left;
       align-self: center;
@@ -895,7 +897,7 @@ const flowerUrls = Object.values(flowerFiles)
     align-self: start;
     padding: 30% 10% 0 10%;
 
-    @media (min-width: 1024px) {
+    @media (min-width: 1033px) {
       align-self: center;
       padding: 0 10% 0 20%;
       height: 65vh;
@@ -906,7 +908,7 @@ const flowerUrls = Object.values(flowerFiles)
     align-self: start;
     padding: 20% 10% 0 10%;
 
-    @media (min-width: 1024px) {
+    @media (min-width: 1033px) {
       align-self: center;
       padding: 0 10% 0 20%;
       height: 65vh;
@@ -922,7 +924,7 @@ const flowerUrls = Object.values(flowerFiles)
 
   .text-p8-4 {
     top: -50%;
-    @media (min-width: 1024px) {
+    @media (min-width: 1033px) {
       top: -25%;
     }
   }
@@ -931,7 +933,7 @@ const flowerUrls = Object.values(flowerFiles)
     padding: 0;
     max-height: 100vh;
 
-    @media (min-width: 1024px) {
+    @media (min-width: 1033px) {
       position: absolute;
       right: 5%;
       left: auto;
@@ -957,7 +959,7 @@ const flowerUrls = Object.values(flowerFiles)
 
   #flower-canvas {
     max-height: 100vh;
-    @media (min-width: 1024px) {
+    @media (min-width: 1033px) {
       height: 100vh;
       max-height: 100vh;
       object-fit: contain;
@@ -982,7 +984,7 @@ const flowerUrls = Object.values(flowerFiles)
     align-items: start;
     opacity: 0;
 
-    @media (min-width: 1024px) {
+    @media (min-width: 1033px) {
       width: auto;
       height: 50vh;
       top: 50%;
