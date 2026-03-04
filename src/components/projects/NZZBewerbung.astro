@@ -36,12 +36,22 @@ const flowerUrls = Object.values(flowerFiles)
     </div>
 
     <div class="img-stack img-quercus">
-      <CldImage
-        src="QuercusRobur_VolumeRendering_epzxld"
-        width={1200}
-        sizes="(max-width: 768px) 100vw, 50vw"
-        alt="Quercus Robur Volume Rendering"
-      />
+      <video
+        autoplay
+        muted
+        loop
+        playsinline
+        aria-label="Eiche VDB Volume Rendering"
+      >
+        <source
+          src="https://res.cloudinary.com/rhizomech/video/upload/f_webm,vc_vp9/v1772652991/Eiche_VDB_0001_h265_l14cyb.webm"
+          type="video/webm"
+        />
+        <source
+          src="https://res.cloudinary.com/rhizomech/video/upload/v1772652991/Eiche_VDB_0001_h265_l14cyb.mp4"
+          type="video/mp4"
+        />
+      </video>
       <div class="img-caption">
         <h2>Ob hochkomplexe Forschungsdaten... <br /></h2>
         <p>
@@ -911,6 +921,7 @@ const flowerUrls = Object.values(flowerFiles)
     }
   }
 
+  .img-quercus,
   .img-ub-video,
   .img-gamedesign,
   .img-portfolio-video {
@@ -931,7 +942,7 @@ const flowerUrls = Object.values(flowerFiles)
   }
 
   .text-p8-4 {
-    padding-bottom: 100%;
+    padding-bottom: 120%;
     @media (min-width: 1024px) {
       padding-bottom: 0;
     }
