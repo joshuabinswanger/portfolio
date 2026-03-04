@@ -10,5 +10,11 @@ export default defineConfig({
     build: {
       assetsInlineLimit: 0,
     },
+    resolve: {
+      alias: {
+        "@components": "/src/components",
+        "@assets": "/src/assets",
+      },
+    },
   },
 });

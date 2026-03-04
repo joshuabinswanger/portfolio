@@ -1,6 +1,5 @@
 ---
 import { CldImage } from "astro-cloudinary";
-import rhizomeLogo from "@assets/Rhizome_Logo_208h.jpg";
 
 const flowerFiles = import.meta.glob(
   "/src/assets/projects/flower_splat/flower_splat_avif_sequence/*.avif",
@@ -20,14 +19,9 @@ const flowerUrls = Object.values(flowerFiles)
     <div class="text-wrapper text-p1">
       <h1 class="text-block left-align intro-static">Hi,</h1>
       <h1 class="text-block intro-static">mein Name ist Joshua Binswanger.</h1>
-      <p class="text-block intro-reveal-1">
+      <p class="text-block intro-reveal">
         Als wissenschaftlicher Illustrator bewege ich mich an der Schnittstelle
         von visuellem Design und Technologie.
-      </p>
-      <p class="text-block intro-reveal-2">
-        Ob hochkomplexe Forschungsdaten oder öffentliche Scans: Mein Ziel ist
-        es, rohe Informationen in ästhetische Geschichten zu übersetzen und
-        visuell greifbar zu machen.
       </p>
     </div>
 
@@ -44,8 +38,9 @@ const flowerUrls = Object.values(flowerFiles)
         alt="Quercus Robur Volume Rendering"
       />
       <p class="img-caption">
-        Wie bei diesem Mikro-CT-Scan (DESY), den ich als visuelle Basis für eine
-        interaktive Lern-App aufbereitet habe.
+        Visualisierung eines Mikro-CT-Scans von Eichenholz: Die am Deutschen
+        Elektronen-Synchrotron (DESY) gewonnenen Daten bilden die Grundlage
+        einer interaktiven Lern-App für Studierende der Holzwissenschaften.
       </p>
     </div>
 
@@ -58,27 +53,28 @@ const flowerUrls = Object.values(flowerFiles)
         alt="Gjermundbu Helmet"
       />
       <p class="img-caption">
-        Oder bei diesem 3D-Modell des Gjermundbu-Helms, das aus frei verfügbaren
-        Scandaten entstand.
+        Diese 3D-Rekonstruktion des Gjermundbu-Helms zeigt diesen Ansatz: Aus
+        rohen, öffentlichen Scandaten entstand durch mein technisches Know-how
+        ein interaktives Echtzeit-3D-Modell.
       </p>
     </div>
 
     <!-- chapter Buchdrucker -->
     <div class="text-wrapper text-p2">
       <p class="text-block">
-        Den grössten Mehrwert schafft mein Design, wenn es dichte Informationen
-        entschlüsselt und für alle intuitiv zugänglich macht.
+        Am wertvollsten ist meine Arbeit jedoch, wenn sie Wissen für ein breites
+        Publikum zugänglich macht.
       </p>
     </div>
 
-    <!--     <div class="img-stack img-buchdrucker-1">
+    <div class="img-stack img-buchdrucker-1">
       <CldImage
         src="Buchdrucker_djaxkc"
         width={1200}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Buchdrucker"
       />
-    </div> -->
+    </div>
     <div class="img-stack img-borkenkaefer">
       <CldImage
         src="Borkenkaefer_Gallery_2_zdvtwp"
@@ -87,8 +83,7 @@ const flowerUrls = Object.values(flowerFiles)
         alt="Borkenkäfer Infoposter"
       />
       <p class="img-caption">
-        Wie etwa bei diesem Infoposter über den Borkenkäfer (<em
-          >Ips typographus</em
+        Wie bei diesem Infoposter über den Borkenkäfer (<em>Ips typographus</em
         >)...
       </p>
     </div>
@@ -99,10 +94,7 @@ const flowerUrls = Object.values(flowerFiles)
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Microbiome OLMA"
       />
-      <p class="img-caption">
-        ...oder bei dieser Mikrobiom-Illustration für Wissenstransfer-Events wie
-        die OLMA.
-      </p>
+      <p class="img-caption">oder dem Mikrobiom-Poster für die OLMA.</p>
     </div>
   </div>
   <!-- #endregion -->
@@ -112,11 +104,19 @@ const flowerUrls = Object.values(flowerFiles)
     <!-- chapter 3 -->
     <div class="text-wrapper text-p3">
       <p class="text-block">
-        Mein Fokus liegt momentan auf der wissenschaftlichen Illustration. Es
-        reizt mich, abstrakte Sachverhalte in zugängliche Bildwelten zu
-        übersetzen.
+        Mein Fokus liegt auf der wissenschaftlichen Illustration. Es reizt mich,
+        abstrakte Sachverhalte in neuartige Bildwelten zu übersetzen.
       </p>
     </div>
+    <!-- chapter 4 -->
+    <div class="text-wrapper text-p4-1">
+      <p class="text-block">
+        Meine Stärke dabei: Ich arbeite mich selbstständig und tief in
+        hochkomplexe Themen ein und übersetze diese passgenau für die jeweilige
+        Zielgruppe.
+      </p>
+    </div>
+
     <!-- chapter 3 images -->
     <div class="img-stack img-eth-vis-3">
       <CldImage
@@ -126,8 +126,8 @@ const flowerUrls = Object.values(flowerFiles)
         alt="ETH Visualisation 3"
       />
       <p class="img-caption">
-        Mein Ansatz: Ein starker visueller Anker, der das Publikum sofort ins
-        Thema zieht.
+        Dabei pobiere ich immer ein starkes Visual zu erkennen und als zentraler
+        Punkt im Bild einzubinden.
       </p>
     </div>
     <div class="img-stack img-eth-vis-1">
@@ -139,9 +139,15 @@ const flowerUrls = Object.values(flowerFiles)
       />
       <p class="img-caption">
         Bei Projekten wie den Paper-Figures für die ETH-Materialforschung
-        balanciere ich höchste Informationsdichte auf kleinstem Raum. Meine
-        Stärke dabei: Ich arbeite mich selbstständig und tief in hochkomplexe
-        Themen ein und übersetze diese passgenau für die jeweilige Zielgruppe.
+        balanciere ich höchste Informationsdichte auf kleinstem Raum.
+      </p>
+    </div>
+
+    <!-- chapter 4 images -->
+    <div class="text-wrapper text-p4-2">
+      <p class="text-block">
+        Dabei verbinde ich zunehmend klassische Datenvisualisierung mit
+        illustrativen Elementen.
       </p>
     </div>
 
@@ -155,7 +161,7 @@ const flowerUrls = Object.values(flowerFiles)
       <p class="img-caption">
         Ein Beispiel dafür ist dieser Visual Abstract, der den «Phenological
         Shift» – die klimawandelbedingte Verschiebung des Pflanzenwachstums in
-        den Alpen – visuell zusammenfasst.
+        den Alpen – visuell auf den Punkt bringt.
       </p>
     </div>
   </div>
@@ -166,21 +172,15 @@ const flowerUrls = Object.values(flowerFiles)
     <!-- chapter 5 -->
     <div class="text-wrapper text-p5-1">
       <p class="text-block">
-        Ein kurzer Blick auf meinen Werdegang: <br />
-        Es sind vor allem Neugier und die Faszination für neue Technologien, die
-        mein Schaffen antreiben.
+        Ein kurzer Blick auf meinen Werdegang: Neugier und neue Technologien
+        treiben mich an.
       </p>
     </div>
-    <div class="img-stack img-illustration-1">
-      <CldImage
-        src="FigureDrawing_Gallery_23_dnrpi3"
-        width={1200}
-        sizes="(max-width: 768px) 100vw, 50vw"
-        alt="Figure Drawing"
-      />
-      <p class="img-caption">
-        In meinem Bachelor an der ZHdK habe ich mir meine analytischen und
-        handwerklichen Grundlagen erarbeitet.
+    <div class="text-wrapper text-p5-2">
+      <p class="text-block">
+        In meinem Bachelor an der ZHdK habe ich mir jene analytischen und
+        handwerklichen Grundlagen erarbeitet, auf denen mein heutiges Schaffen
+        aufbaut.
       </p>
     </div>
     <div class="img-stack img-wood-12">
@@ -190,10 +190,7 @@ const flowerUrls = Object.values(flowerFiles)
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Structure of Wood"
       />
-      <p class="img-caption">
-        Dort fing ich an, mich intensiv und auf ästhetische Weise mit komplexen
-        Sachverhalten auseinanderzusetzen.
-      </p>
+      <p class="img-caption">Von der Mikrostruktur des Holzes...</p>
     </div>
     <div class="img-stack img-wood-5">
       <CldImage
@@ -202,10 +199,15 @@ const flowerUrls = Object.values(flowerFiles)
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Structure of Wood 5"
       />
-      <p class="img-caption">
-        Beispielsweise bei der Entschlüsselung der mikroskopischen Struktur von
-        Cellulose und Lignin.
-      </p>
+    </div>
+    <div class="img-stack img-illustration-1">
+      <CldImage
+        src="FigureDrawing_Gallery_23_dnrpi3"
+        width={1200}
+        sizes="(max-width: 768px) 100vw, 50vw"
+        alt="Figure Drawing"
+      />
+      <p class="img-caption">bis zur anatomischen Darstellung des Menschen:</p>
     </div>
     <div class="img-stack img-figure">
       <CldImage
@@ -214,16 +216,12 @@ const flowerUrls = Object.values(flowerFiles)
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Illustration 1"
       />
-      <p class="img-caption">
-        Vor allem die zeichnerische Praxis aus dieser Zeit bildet bis heute das
-        Fundament meiner Arbeit.
-      </p>
     </div>
 
     <!-- chapter 6 -->
     <div class="text-wrapper text-p6">
       <p class="text-block">
-        Heute liegt mein technisches Hauptaugenmerk auf der 3D-Visualisierung.
+        Mein wichtigstes Werkzeug ist heute das 3D-Design.
       </p>
     </div>
     <div class="img-stack img-bacteria">
@@ -234,7 +232,7 @@ const flowerUrls = Object.values(flowerFiles)
         alt="Blender Bacteria"
       />
       <p class="img-caption">
-        Hier reicht mein Repertoire von der 3D-Modellierung (in Blender)...
+        Hier fasziniert mich nicht nur die präzise 3D-Modellierung...
       </p>
     </div>
     <div class="img-stack img-gamedesign">
@@ -254,28 +252,40 @@ const flowerUrls = Object.values(flowerFiles)
           type="video/mp4"
         />
       </video>
-      <p class="img-caption">
-        ...über die prozedurale Animation (in Houdini)...
-      </p>
+      <p class="img-caption">und prozedurale Animation.</p>
     </div>
-    <div class="img-stack img-uzh-blender">
+    <div class="img-stack img-houdini-scripts">
       <CldImage
-        src="UZHBlenderCourse_1_r6kaar"
+        src="Houdini_Scripts_hd7d5e"
         width={1200}
         sizes="(max-width: 768px) 100vw, 50vw"
-        alt="UZH Blender Kurs"
+        alt="Houdini Scripts"
       />
       <p class="img-caption">
-        ...bis hin zur Lehre. Meine Faszination für 3D-Workflows gebe ich
-        mittlerweile auch als Dozent in meinem Blender-Kurs an der UZH weiter.
+        Momentan bin ich für die 3D-Scanning Pipline beim Medizin-Start-Up
+        Augmedi verantwortlich. Dabei habe ich mich vertieft mit Scripting und
+        KI-Tools auseinandergesetzt.
+      </p>
+    </div>
+    <div class="img-stack img-augmedi-approach">
+      <CldImage
+        src="Augmedi_Appraoch_tuka73"
+        width={1200}
+        sizes="(max-width: 768px) 100vw, 50vw"
+        alt="Augmedi Approach"
+      />
+      <p class="img-caption">
+        Das Resultat ist ein Workflow, der es mir erlaubt hunderte von Scans
+        alleine zu verarbeiten und trorzdem dem hohen Qualitätsanspruch der
+        Ärzte gerecht wird.
       </p>
     </div>
 
     <!-- chapter 7 -->
     <div class="text-wrapper text-p7-1">
       <p class="text-block">
-        Wissen wird heute digital vermittelt. Deshalb gestalte ich Formate, die
-        zur Interaktion einladen.
+        Da Wissen heute primär digital konsumiert wird, entwickle ich
+        interaktive Formate.
       </p>
     </div>
     <div class="img-stack img-xylo">
@@ -285,16 +295,10 @@ const flowerUrls = Object.values(flowerFiles)
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Xylopedia iPad App"
       />
-      <p class="img-caption">
-        Angefangen bei mobilen Anwendungen wie der Echtzeit-3D-App «Xylopedia»
-        fürs iPad.
-      </p>
+      <p class="img-caption">Von der Echtzeit-3D-App «Xylopedia» fürs iPad</p>
     </div>
     <div class="text-wrapper text-p7-2">
-      <p class="text-block">
-        Nun verlagert sich mein Fokus jedoch zunehmend auf das Web, da es das
-        Publikum am direktesten erreicht.
-      </p>
+      <p class="text-block">bis hin zu modernen Web-Technologien:</p>
     </div>
     <div class="img-stack img-ub-video">
       <video
@@ -314,9 +318,14 @@ const flowerUrls = Object.values(flowerFiles)
         />
       </video>
       <p class="img-caption">
-        Ein Beispiel dafür ist der interaktive Jahresbericht der
-        Universitätsbibliothek Zürich, den ich designt und mit Rive fürs Web
-        animiert habe.
+        Animierte Website für den Jahresbericht der Universitätsbibliothek
+        Zürich
+      </p>
+    </div>
+    <div class="text-wrapper text-p7-3">
+      <p class="text-block">
+        Mein Fokus verlagert sich zunehmend auf interaktives Web-Design, da es
+        dem Publikum den direktesten Zugang bietet.
       </p>
     </div>
     <div class="img-stack img-portfolio-video">
@@ -331,28 +340,9 @@ const flowerUrls = Object.values(flowerFiles)
         />
       </video>
       <p class="img-caption">
-        Weil mir diese nahtlose Verbindung von Design und Code wichtig ist, habe
-        ich konsequenterweise auch mein eigenes Portfolio von Grund auf selbst
-        programmiert.
+        Deswegen habe ich mein Portfolio von Grundauf selbst programmiert.
       </p>
     </div>
-    <div class="text-wrapper portfolio-link">
-      <span>Dort finden Sie auch mehr von meiner Arbeit:</span>
-      <div class="logo-link"></div><a
-        href="/"
-        class="portfolio-logo-btn"
-        aria-label="rhizome.ch"
-      >
-        rhizome.ch
-      </a>
-    </div>
-    <!-- <div class="text-wrapper text-p7-3">
-      <p class="text-block">
-        Das schönste Resultat ist für mich, wenn schliesslich verschiedene
-        Disziplinen – 3D-Daten, Design und Web-Technologie – zu einem stimmigen
-        Gesamterlebnis zusammenfinden.
-      </p>
-    </div> -->
   </div>
   <!-- #endregion -->
 
@@ -360,23 +350,24 @@ const flowerUrls = Object.values(flowerFiles)
   <div id="panel-zukunft" class="scrolly-panel split-panel">
     <div class="text-wrapper text-p8-1">
       <p class="text-block">
-        Nun möchte ich meine Erfahrungen und mein technisches Repertoire nutzen,
-        um gesellschaftsrelevante Themen visuell erfahrbar zu machen.
+        Nun möchte ich mein breites Skillset nutzen, um gesellschaftsrelevante
+        Themen im journalistischen Kontext visuell erfahrbar zu machen.
       </p>
       <p class="text-block text-p8-2">
-        Die NZZ steht für analytische Klarheit und visuelle Eleganz. Genau an
-        diesem Massstab möchte ich meine Arbeit im redaktionellen Alltag messen.
+        Die analytische Klarheit und visuelle Eleganz von NZZ Visuals sind für
+        mich der Benchmark im Informationsdesign.
       </p>
 
       <p class="text-block text-p8-3">
-        Ein Volontariat bei NZZ Visuals ist mein logischer nächster Schritt:
-        Meine technische Expertise trifft auf euren redaktionellen Takt – um
-        gemeinsam neue Formate zu entwickeln.
+        Deshalb bewerbe ich mich für das Volontariat: Um von eurem Team zu
+        lernen, meine technischen Workflows effizient in den rasanten
+        redaktionellen Alltag zu übersetzen und gemeinsam neue digitale Formate
+        zu prägen.
       </p>
     </div>
 
     <div class="text-wrapper text-p8-4">
-      <h1 class="text-block">Vielen Dank für eure Zeit.</h1>
+      <h1 class="text-block">Vielen Dank für ihre Zeit.</h1>
     </div>
 
     <div class="img-stack img-flower-canvas">
@@ -422,7 +413,7 @@ const flowerUrls = Object.values(flowerFiles)
     scrollTrigger: {
       trigger: "#scrolly-container",
       start: "top top",
-      end: "+=6000%",
+      end: "+=7000%",
       scrub: 0.15,
       pin: true,
       markers: false,
@@ -497,7 +488,7 @@ const flowerUrls = Object.values(flowerFiles)
   const showText = (selector, sync = false) => {
     const result = masterTl.to(
       selector,
-      { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" },
+      { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
       sync ? "<" : "+=0.2",
     );
     masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
@@ -566,18 +557,17 @@ const flowerUrls = Object.values(flowerFiles)
   // GSAP Timeline Sequencing
   // ------------------------------------------
 
-  gsap.set(".intro-static", { opacity: 1, y: 0 });
-  gsap.set(".intro-reveal-1", { opacity: 0, y: 0 });
-  gsap.set(".intro-reveal-2", { opacity: 0, y: 0 });
+  gsap.set(".text-p1", { opacity: 1, y: 0 });
+  gsap.set(".intro-reveal", { opacity: 0, y: 0 });
 
   // #region Section: Intro (chapters 1–2)
   masterTl.addLabel("chapter-1");
   masterTl.set("#panel-intro", { opacity: 1 });
   masterTl.to("#scrolly-progress", { opacity: 1, duration: 0.2 });
-  showText(".intro-reveal-1");
-  showText(".intro-reveal-2");
+  showText(".intro-reveal");
   hideText(".text-p1");
-  masterTl.to(".scroll-indicator", { opacity: 0, duration: 0.4 }, "<");
+  hideText(".text-p1-1", true);
+  masterTl.to(".scroll-indicator", { opacity: 0, duration: 0.2 }, "<");
 
   showImg(".img-quercus", true);
   hideImg(".img-quercus");
@@ -587,8 +577,8 @@ const flowerUrls = Object.values(flowerFiles)
   masterTl.addLabel("chapter-2");
   showText(".text-p2", true);
   hideText(".text-p2");
-  /*   showImg(".img-buchdrucker-1", true);
-  hideImg(".img-buchdrucker-1"); */
+  showImg(".img-buchdrucker-1", true);
+  hideImg(".img-buchdrucker-1");
   zoomFadeInImg(".img-borkenkaefer", true);
   hideImg(".img-borkenkaefer");
   zoomFadeInImg(".img-microbiome", true);
@@ -602,10 +592,19 @@ const flowerUrls = Object.values(flowerFiles)
   showText(".text-p3", true);
   hideText(".text-p3");
 
+  masterTl.addLabel("chapter-4");
+  showText(".text-p4-1", true);
+  hideText(".text-p4-1");
+
   showImg(".img-eth-vis-3", true);
   hideImg(".img-eth-vis-3");
   zoomFadeInImg(".img-eth-vis-1", true);
   hideImg(".img-eth-vis-1");
+
+  showImg(".img-eth-vis-2", true);
+  hideImg(".img-eth-vis-2");
+  showText(".text-p4-2", true);
+  hideText(".text-p4-2");
   zoomFadeInImg(".img-pheno", true);
   hideImg(".img-pheno");
   // #endregion
@@ -616,12 +615,14 @@ const flowerUrls = Object.values(flowerFiles)
   masterTl.to("#panel-work", { opacity: 0, duration: 0.05 }, "<");
   showText(".text-p5-1", true);
   hideText(".text-p5-1");
-  showImg(".img-illustration-1", true);
-  hideImg(".img-illustration-1");
-  zoomFadeInImg(".img-wood-12", true);
+  showText(".text-p5-2", true);
+  hideText(".text-p5-2");
+  showImg(".img-wood-12", true);
   hideImg(".img-wood-12");
   zoomFadeInImg(".img-wood-5", true);
   hideImg(".img-wood-5");
+  zoomFadeInImg(".img-illustration-1", true);
+  hideImg(".img-illustration-1");
   zoomFadeInImg(".img-figure", true);
   hideImg(".img-figure");
   // #endregion
@@ -634,8 +635,10 @@ const flowerUrls = Object.values(flowerFiles)
   hideImg(".img-bacteria");
   zoomFadeInImg(".img-gamedesign", true);
   hideImg(".img-gamedesign");
-  zoomFadeInImg(".img-uzh-blender", true);
-  hideImg(".img-uzh-blender");
+  zoomFadeInImg(".img-houdini-scripts", true);
+  hideImg(".img-houdini-scripts");
+  zoomFadeInImg(".img-augmedi-approach", true);
+  hideImg(".img-augmedi-approach");
   // #endregion
 
   // #region Section: Chapter 7
@@ -648,12 +651,10 @@ const flowerUrls = Object.values(flowerFiles)
   hideText(".text-p7-2");
   zoomFadeInImg(".img-ub-video", true);
   hideImg(".img-ub-video");
+  showText(".text-p7-3", true);
+  hideText(".text-p7-3");
   showImg(".img-portfolio-video", true);
   hideImg(".img-portfolio-video");
-  showText(".portfolio-link", true);
-  hideText(".portfolio-link");
-  /*   showText(".text-p7-3", true);
-  hideText(".text-p7-3"); */
   // #endregion
 
   // #region Section: Zukunft (chapter 8)
@@ -769,7 +770,7 @@ const flowerUrls = Object.values(flowerFiles)
     font-size: 24px;
 
     @media (min-width: 1024px) {
-      font-size: 44px;
+      font-size: 48px;
     }
   }
 
@@ -858,29 +859,10 @@ const flowerUrls = Object.values(flowerFiles)
     }
   }
 
-  .portfolio-link {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-    z-index: 1000;
-    pointer-events: all;
-  }
-
-  .portfolio-link a {
-    font-size: 16px;
-    color: black;
-    letter-spacing: 0.01em;
-    text-decoration: underline;
-  }
-
   /* #endregion */
 
   /* #region Custom Layout */
 
-  .text-p1 {
-    opacity: 1;
-  }
   #panel-zukunft {
     height: 100lvh;
   }
@@ -908,12 +890,12 @@ const flowerUrls = Object.values(flowerFiles)
     transform: translateY(100%);
   }
 
-  /*   .text-p8-4 {
+  .text-p8-4 {
     top: -50%;
     @media (min-width: 1024px) {
       top: -25%;
     }
-  } */
+  }
 
   .img-flower-canvas {
     padding: 0;
