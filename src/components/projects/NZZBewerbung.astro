@@ -425,8 +425,8 @@ const flowerUrls = Object.values(flowerFiles)
     scrollTrigger: {
       trigger: "#scrolly-container",
       start: "top top",
-      end: "+=10000%",
-      scrub: 0.25,
+      end: "+=8000%",
+      scrub: 0.15,
       pin: true,
       markers: false,
       snap: {
@@ -564,11 +564,11 @@ const flowerUrls = Object.values(flowerFiles)
   // #region Section: Intro (chapters 1–2)
   masterTl.addLabel("chapter-1");
   masterTl.set("#panel-intro", { opacity: 1 });
-  masterTl.to("#scrolly-progress", { opacity: 1, duration: 1 });
+  masterTl.to("#scrolly-progress", { opacity: 1, duration: 0.2 });
   showText(".intro-reveal");
   hideText(".text-p1");
   hideText(".text-p1-1", true);
-  masterTl.to(".scroll-indicator", { opacity: 0, duration: 0.5 }, "<");
+  masterTl.to(".scroll-indicator", { opacity: 0, duration: 0.2 }, "<");
 
   showImg(".img-quercus", true);
   hideImg(".img-quercus");
