@@ -566,8 +566,12 @@ const flowerUrls = Object.values(flowerFiles)
   // Scroll Indicator Animation
   gsap.to(".scroll-indicator", {
     opacity: 1,
-    duration: 1,
+    y: 50,
+    duration: 1.2,
     delay: 0.5,
+    repeat: -1,
+    yoyo: true,
+    ease: "power1.out",
   });
 
   // #region GSAP Timeline Sequencing
