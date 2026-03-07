@@ -599,7 +599,7 @@ const flowerUrls = Object.values(flowerFiles)
 
     showImg(".img-quercus", true);
     hideImg(".img-quercus");
-    zoomFadeInImg(".img-buchdrucker", true);
+    showImg(".img-buchdrucker", true);
     hideImg(".img-buchdrucker");
     showImg(".img-ub-intro", true);
     hideImg(".img-ub-intro");
@@ -777,25 +777,27 @@ const flowerUrls = Object.values(flowerFiles)
     }
 
     p.text-block {
-      font-size: 14px;
+      font-size: 16px;
 
       @media (min-width: 1024px) {
         font-size: 22px;
       }
     }
     .img-caption h2 {
-      font-size: 18px;
-      font-family: PowerGrotesk-Medium;
+      font-size: 16px;
       line-height: 1.4;
-      margin: 0;
+      font-family: PowerGrotesk-Regular;
+      font-weight: normal;
 
       @media (min-width: 1024px) {
         font-size: 22px;
+        font-family: PowerGrotesk-Medium;
+        font-weight: bold;
       }
     }
 
     .img-caption p {
-      font-size: 14px;
+      font-size: 12px;
 
       @media (min-width: 1024px) {
         font-size: 22px;
@@ -834,7 +836,7 @@ const flowerUrls = Object.values(flowerFiles)
     }
     /* Image and video share identical sizing rules */
     .img-stack img {
-      max-height: 85vh;
+      max-height: 65vh;
       max-width: 100%;
       width: auto;
       height: auto;
