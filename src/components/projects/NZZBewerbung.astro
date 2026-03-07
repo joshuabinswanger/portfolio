@@ -1,6 +1,5 @@
 ---
 import { CldImage } from "astro-cloudinary";
-import rhizomeLogo from "@assets/Rhizome_Logo_208h.jpg";
 
 const flowerFiles = import.meta.glob(
   "/src/assets/projects/flower_splat/flower_splat_avif_sequence/*.avif",
@@ -197,6 +196,9 @@ const flowerUrls = Object.values(flowerFiles)
 
   <!-- #region Section: Werdegang (chapters 5–7) -->
   <div id="panel-werdegang" class="scrolly-panel split-panel">
+    <div class="text-wrapper text-titel-werdegang">
+      <h1>Werdegang</h1>
+    </div>
     <!-- chapter 5 -->
     <div class="text-wrapper text-p5-1">
       <p class="text-block">
@@ -311,7 +313,7 @@ const flowerUrls = Object.values(flowerFiles)
     <div class="text-wrapper text-p7-1">
       <p class="text-block">
         Da Information heute primär digital konsumiert wird, ist es mir wichtig,
-        mich vertieft mit modernen interaktiven Formaten auseinanderzusetzen.
+        mich vertieft mit modernen Web-Formaten auseinanderzusetzen.
       </p>
     </div>
 
@@ -330,12 +332,6 @@ const flowerUrls = Object.values(flowerFiles)
         </p>
       </div>
     </div>
-    <div class="text-wrapper text-p7-2">
-      <p class="text-block">
-        Nun verlagert sich mein Fokus jedoch zunehmend auf das Web, da es das
-        Publikum am direktesten erreicht.
-      </p>
-    </div>
 
     <div class="img-stack img-portfolio-video">
       <video autoplay muted loop playsinline aria-label="Portfolio">
@@ -350,25 +346,17 @@ const flowerUrls = Object.values(flowerFiles)
       </video>
       <div class="img-caption">
         <h2>bis hin zu Coding & Design für das Web.<br /></h2>
-        <p>Mein Portfolio rhizome.ch von Grund auf designt und programmiert.</p>
+        <p>
+          Beim Programmieren meines Portfolios habe ich ein Verständis für die
+          Feinheiten von Webseiten entwickelt.
+        </p>
       </div>
     </div>
     <div class="text-wrapper text-block portfolio-link">
-      <div class="logo-link"></div><a
-        href="/"
-        class="portfolio-logo-btn"
-        aria-label="rhizome.ch"
-      >
+      <a href="/" class="portfolio-logo-btn" aria-label="rhizome.ch">
         &rarr; rhizome.ch
       </a>
     </div>
-    <!-- <div class="text-wrapper text-p7-3">
-      <p class="text-block">
-        Das schönste Resultat ist für mich, wenn schliesslich verschiedene
-        Disziplinen – 3D-Daten, Design und Web-Technologie – zu einem stimmigen
-        Gesamterlebnis zusammenfinden.
-      </p>
-    </div> -->
   </div>
   <!-- #endregion -->
 
@@ -426,8 +414,8 @@ const flowerUrls = Object.values(flowerFiles)
 
     // #region Lenis Smooth Scroll
     const lenis = new Lenis({
-      lerp: 0.1,
-      wheelMultiplier: 1,
+      lerp: 0.07,
+      wheelMultiplier: 0.8,
       smoothWheel: true,
     });
     lenis.on("scroll", ScrollTrigger.update);
@@ -442,14 +430,13 @@ const flowerUrls = Object.values(flowerFiles)
         trigger: "#scrolly-container",
         start: "top top",
         end: "+=3000%",
-        scrub: 0.15,
+        scrub: 0.8,
         pin: true,
-        markers: false,
         snap: {
           snapTo: "labels",
-          duration: { min: 0.2, max: 3 },
-          delay: 0.2,
-          ease: "power1.inOut",
+          duration: { min: 0.4, max: 3 },
+          delay: 0.3,
+          ease: "power2.inOut",
         },
         onUpdate: (self) => {
           const tl = self.animation;
@@ -513,14 +500,14 @@ const flowerUrls = Object.values(flowerFiles)
     // Helper functions
     let snapLabelCount = 0;
 
-    const showText = (selector, sync = false) => {
+    const showText = (selector, sync = false, snap = true) => {
       const result = masterTl.fromTo(
         selector,
         { opacity: 0, y: 40 },
         { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" },
         sync ? "<" : "+=0.2",
       );
-      masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
+      if (snap) masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
       return result;
     };
 
@@ -532,25 +519,25 @@ const flowerUrls = Object.values(flowerFiles)
       );
     };
 
-    const showImg = (selector, sync = false) => {
+    const showImg = (selector, sync = false, snap = true) => {
       const result = masterTl.fromTo(
         selector,
         { scale: 0.85, opacity: 0 },
         { scale: 1, opacity: 1, duration: 0.6, ease: "power2.out" },
         sync ? "<" : "-=0.2",
       );
-      masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
+      if (snap) masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
       return result;
     };
 
-    const zoomFadeInImg = (selector, sync = false) => {
+    const zoomFadeInImg = (selector, sync = false, snap = true) => {
       const result = masterTl.fromTo(
         selector,
         { scale: 0.8, opacity: 0 },
         { opacity: 1, duration: 0.8, scale: 1, ease: "power2.out" },
         sync ? "<" : "-=0.5",
       );
-      masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
+      if (snap) masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
       return result;
     };
 
@@ -591,7 +578,6 @@ const flowerUrls = Object.values(flowerFiles)
     // #region Chapter 1: Intro — text then 3 images
     masterTl.addLabel("chapter-1");
     masterTl.set("#panel-intro", { opacity: 1 });
-    masterTl.to("#scrolly-progress", { opacity: 1, duration: 0.2 });
     showText(".intro-reveal-1");
     showText(".intro-reveal-2");
     hideText(".text-p1");
@@ -612,9 +598,9 @@ const flowerUrls = Object.values(flowerFiles)
     hideText(".text-titel-work");
     showText(".text-p3-intro", true);
     hideText(".text-p3-intro");
-    zoomFadeInImg(".img-pheno", true);
+    zoomFadeInImg(".img-pheno", true, false);
     hideImg(".img-pheno");
-    zoomFadeInImg(".img-eth-vis-1", true);
+    zoomFadeInImg(".img-eth-vis-1", true, false);
     hideImg(".img-eth-vis-1");
     zoomFadeInImg(".img-microbiome", true);
     hideImg(".img-microbiome");
@@ -626,6 +612,8 @@ const flowerUrls = Object.values(flowerFiles)
     masterTl.addLabel("chapter-5");
     masterTl.to("#panel-werdegang", { opacity: 1, duration: 0.05 });
     masterTl.to("#panel-intro", { opacity: 0, duration: 0.05 }, "<");
+    showText(".text-titel-werdegang", true);
+    hideText(".text-titel-werdegang");
     showText(".text-p5-1", true);
     hideText(".text-p5-1");
     showImg(".img-illustration-1", true);
@@ -654,8 +642,6 @@ const flowerUrls = Object.values(flowerFiles)
     hideText(".text-p7-1");
     zoomFadeInImg(".img-xylo", true);
     hideImg(".img-xylo");
-    showText(".text-p7-2", true);
-    hideText(".text-p7-2");
     showImg(".img-portfolio-video", true);
     hideImg(".img-portfolio-video");
     showText(".portfolio-link", true);
@@ -704,7 +690,11 @@ const flowerUrls = Object.values(flowerFiles)
 
         if (masterTl.scrollTrigger) {
           const scrollPos = masterTl.scrollTrigger.labelToScroll(label) + 700;
-          lenis.scrollTo(scrollPos, { duration: 4 });
+          lenis.scrollTo(scrollPos, {
+            duration: 3,
+            easing: (t) =>
+              t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
+          });
         }
       });
     });
@@ -731,7 +721,6 @@ const flowerUrls = Object.values(flowerFiles)
       opacity: 0;
       grid-template-columns: 1fr;
       grid-template-rows: 1fr;
-      place-: center;
     }
 
     .text-wrapper {
@@ -748,9 +737,8 @@ const flowerUrls = Object.values(flowerFiles)
       padding: 0 5% 0 5%;
 
       @media (min-width: 1024px) {
-        padding: 0 10% 0 20%;
+        padding: 0 30% 0 30%;
         width: auto;
-        max-width: 800px;
         justify-content: start;
       }
     }
@@ -800,13 +788,10 @@ const flowerUrls = Object.values(flowerFiles)
       font-size: 12px;
 
       @media (min-width: 1024px) {
-        font-size: 22px;
+        font-size: 16px;
       }
     }
 
-    .left-align {
-      align-self: left;
-    }
     /* #endregion */
 
     /* #endregion */
@@ -915,7 +900,6 @@ const flowerUrls = Object.values(flowerFiles)
       padding-bottom: 2rem;
     }
 
-    .img-ub-video,
     .img-ub-intro {
       align-content: center;
       padding: 0 10%;
@@ -926,7 +910,6 @@ const flowerUrls = Object.values(flowerFiles)
       }
     }
 
-    .img-ub-video .img-caption,
     .img-ub-intro .img-caption {
       padding: 0;
     }
@@ -941,7 +924,7 @@ const flowerUrls = Object.values(flowerFiles)
       }
     }
 
-    .img-gamedesign.img-caption {
+    .img-gamedesign .img-caption {
       padding: 0 5%;
     }
 
@@ -979,7 +962,6 @@ const flowerUrls = Object.values(flowerFiles)
       padding: 0;
     }
 
-    .img-ub-video,
     .img-ub-intro,
     .text-p8-2,
     .text-p8-3,
@@ -1000,7 +982,7 @@ const flowerUrls = Object.values(flowerFiles)
 
     .img-flower-canvas {
       padding: 0;
-      align-self: end;
+      align-content: end;
 
       @media (min-width: 1024px) {
         position: absolute;
@@ -1008,9 +990,10 @@ const flowerUrls = Object.values(flowerFiles)
         left: auto;
         padding: 0;
         gap: 0;
-        max-height: 100vh;
+        max-height: 100svh;
         object-fit: contain;
         align-self: start;
+        align-content: start;
       }
     }
 
@@ -1027,13 +1010,12 @@ const flowerUrls = Object.values(flowerFiles)
     }
 
     #flower-canvas {
-      max-height: 100vh;
+      max-height: 100svh;
       width: 100vw;
-      object-fit: contain;
 
       @media (min-width: 1024px) {
-        height: 100vh;
-        max-height: 100vh;
+        height: 100svh;
+        max-height: 100svh;
         width: auto;
       }
     }
@@ -1046,7 +1028,7 @@ const flowerUrls = Object.values(flowerFiles)
       top: 1rem;
       width: 90%;
       padding: 0 5%;
-      z-index: 10;
+      z-index: 1000;
       pointer-events: none;
       mix-blend-mode: difference;
       color: rgb(0, 0, 0);
@@ -1054,7 +1036,6 @@ const flowerUrls = Object.values(flowerFiles)
       grid-template-columns: max-content repeat(3, auto max-content);
       place-items: center;
       align-items: start;
-      opacity: 0;
 
       @media (min-width: 1024px) {
         width: auto;
