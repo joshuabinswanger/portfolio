@@ -533,11 +533,12 @@ const flowerUrls = Object.values(flowerFiles)
     };
 
     const showImg = (selector, sync = false) => {
-      const imageTl = gsap.timeline();
-      imageTl
-        .to(selector, { y: "0%", duration: 0.5 })
-        .to(selector, { opacity: 1, duration: 0.4 }, ">-0.4");
-      const result = masterTl.add(imageTl, sync ? "<" : "-=0.2");
+      const result = masterTl.fromTo(
+        selector,
+        { scale: 0.85, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.6, ease: "power2.out" },
+        sync ? "<" : "-=0.2",
+      );
       masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
       return result;
     };
@@ -545,7 +546,7 @@ const flowerUrls = Object.values(flowerFiles)
     const zoomFadeInImg = (selector, sync = false) => {
       const result = masterTl.fromTo(
         selector,
-        { y: "0%", opacity: 0, scale: 1.4 },
+        { scale: 0.8, opacity: 0 },
         { opacity: 1, duration: 0.8, scale: 1, ease: "power2.out" },
         sync ? "<" : "-=0.5",
       );
@@ -556,7 +557,7 @@ const flowerUrls = Object.values(flowerFiles)
     const hideImg = (selector, sync = false) => {
       return masterTl.to(
         selector,
-        { y: "-100%", opacity: 0, duration: 0.5 },
+        { scale: 0.95, opacity: 0, duration: 0.4 },
         sync ? "<" : "+=0.2",
       );
     };
@@ -814,21 +815,19 @@ const flowerUrls = Object.values(flowerFiles)
       position: absolute;
       inset: 0;
       opacity: 0;
-      transform: translateY(100%);
       pointer-events: none;
       display: grid;
       grid-template-columns: 1fr;
       grid-template-rows: min-content min-content;
-      padding-top: 15vh;
       justify-content: center;
-      align-content: start;
+      align-content: center;
       z-index: 1;
       gap: 1rem;
 
       @media (min-width: 1024px) {
         grid-template-columns: fit-content(50%) 1fr;
         grid-template-rows: 1fr;
-        align-content: start;
+        align-content: center;
         gap: 2rem;
         padding: 0 10% 0 20%;
       }
