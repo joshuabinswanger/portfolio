@@ -21,20 +21,22 @@ const flowerUrls = Object.values(flowerFiles)
       <h1 class="text-block left-align intro-static">Hi,</h1>
       <h1 class="text-block intro-static">mein Name ist Joshua Binswanger.</h1>
       <p class="text-block intro-reveal-1">
-        Als wissenschaftlicher Illustrator bewege ich mich an der Schnittstelle
-        von visuellem Design und Technologie.
+        Ich übersetze Wissen in ästhetische Bilder. Dazu bewege ich mich mit
+        Leidenschaft zwischen Design und Technologie und mache komplexe Inhalte
+        intuitiv erlebbar.
       </p>
       <p class="text-block intro-reveal-2">
-        Mein Ziel ist es, Wissen in ästhetische Geschichten zu übersetzen und
-        visuell greifbar zu machen.
+        Nun will ich meine diversen Fähigkeiten für die Vermittlung
+        gesellschaftsrelevanter Themen einsetzen.
       </p>
+
+      <div class="scroll-indicator">
+        <span>Scroll</span>
+        <span class="arrow">&darr;</span>
+      </div>
     </div>
 
-    <div class="scroll-indicator">
-      <span>Scroll</span>
-      <span class="arrow">&darr;</span>
-    </div>
-
+    <!-- Images are siblings of text-p1 so they animate independently -->
     <div class="img-stack img-quercus">
       <video
         autoplay
@@ -53,7 +55,7 @@ const flowerUrls = Object.values(flowerFiles)
         />
       </video>
       <div class="img-caption">
-        <h2>Ob Visualisierungen von komplexen Strukturen... <br /></h2>
+        <h2>Ob Visualisierung komplexer Strukturen...<br /></h2>
         <p>
           Rendering von Eichenholz auf mikroskopischer Ebene. Basierend auf
           einem Mikro-CT-Scan des Deutschen Elektronen-Synchrotrons (DESY).
@@ -61,52 +63,108 @@ const flowerUrls = Object.values(flowerFiles)
       </div>
     </div>
 
-    <!-- Intro Gjermundbu -->
-    <div class="img-stack img-gjermundbu">
-      <CldImage
-        src="Gjermundbu_GalleryImages_1_sco2yz"
-        width={1200}
-        sizes="(max-width: 768px) 100vw, 50vw"
-        alt="Gjermundbu Helmet"
-      />
-      <div class="img-caption">
-        <h2>oder öffentlichen Datensätzen.<br /></h2>
-        <p>
-          3D-Rekonstruktion des berühmten Gjermundbu-Helms — entstanden aus frei
-          verfügbaren Scandaten.
-        </p>
-      </div>
-    </div>
-
-    <!-- chapter Buchdrucker -->
-    <div class="text-wrapper text-p2">
-      <p class="text-block">
-        Den grössten Mehrwert schafft mein Design, wenn es dichte Informationen
-        entschlüsselt und für alle intuitiv zugänglich macht.
-      </p>
-    </div>
-
-    <!--     <div class="img-stack img-buchdrucker-1">
-      <CldImage
-        src="Buchdrucker_djaxkc"
-        width={1200}
-        sizes="(max-width: 768px) 100vw, 50vw"
-        alt="Buchdrucker"
-      />
-    </div> -->
-    <div class="img-stack img-borkenkaefer">
+    <!-- Intro Buchdrucker -->
+    <div class="img-stack img-buchdrucker">
       <CldImage
         src="Borkenkaefer_Gallery_2_zdvtwp"
         width={1200}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Borkenkäfer Infoposter"
       />
-      <p class="img-caption">
-        Wie etwa bei diesem Infoposter über den Borkenkäfer (<em
-          >Ips typographus</em
-        >)...
-      </p>
+      <div class="img-caption">
+        <h2>Illustrationen für Wissenstransfer...<br /></h2>
+        <p>
+          Poster über den Buchdrucker zur Informationsvermittlung an Förster.
+        </p>
+      </div>
     </div>
+
+    <div class="img-stack img-ub-intro">
+      <video
+        autoplay
+        muted
+        loop
+        playsinline
+        aria-label="UB Zürich Jahresbericht 2025"
+      >
+        <source
+          src="https://res.cloudinary.com/rhizomech/video/upload/f_webm,vc_vp9/UB_Zuerich_Jahresbericht25_grgopa.webm"
+          type="video/webm"
+        />
+        <source
+          src="https://res.cloudinary.com/rhizomech/video/upload/f_mp4,vc_h264/UB_Zuerich_Jahresbericht25_grgopa.mp4"
+          type="video/mp4"
+        />
+      </video>
+      <div class="img-caption">
+        <h2>oder animierten Webseiten.<br /></h2>
+        <p>
+          Design und Animation (mit Rive) für die Universitätsbibliothek Zürich.
+        </p>
+      </div>
+    </div>
+
+    <!-- #endregion -->
+
+    <!-- #region Section: Work (chapters 3–4) -->
+    <div class="text-wrapper text-titel-work">
+      <h1>Work</h1>
+    </div>
+
+    <div id="panel-work" class="scrolly-panel split-panel">
+      <!-- chapter 3 -->
+      <div class="text-wrapper text-p3-intro">
+        <p class="text-block">
+          Als wissenschaftlicher Illustrator übersetze ich komplexe Sachverhalte
+          in visuell ansprechende Bilder.
+        </p>
+        <p class="text-block">
+          Meine Stärke liegt darin, die inhaltliche und visuelle Essenz zu
+          destillieren.
+        </p>
+      </div>
+      <!-- chapter 3 images -->
+
+      <div class="img-stack img-pheno">
+        <CldImage
+          src="Phenological_Shift_GalleryImage1_cjmvqe"
+          width={1200}
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Phenological Shift"
+        />
+        <div class="img-caption">
+          <h2>
+            In Visual Abstracts kombiniere ich inhaltliche Tiefe mit visuellem
+            Interesse...<br />
+          </h2>
+          <p>
+            So wie in der Zusammenfassung der klimawandelbedingten Verschiebung
+            des Pflanzenwachstums in den Alpen.
+          </p>
+        </div>
+      </div>
+
+      <div class="img-stack img-eth-vis-1">
+        <CldImage
+          src="ETHVisualisations_GalleryPic1_hnzfw1"
+          width={1200}
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="ETH Visualisation 1"
+        />
+
+        <div class="img-caption">
+          <h2>
+            und bei der wissenschaftlichen Paper-Illustration balanciere ich
+            höchste Informationsdichte auf kleinstem Raum.<br />
+          </h2>
+          <p>
+            Für die ETH Complex Materials Group visualisiere ich die neusten
+            Funde in der Materialforschung.
+          </p>
+        </div>
+      </div>
+    </div>
+
     <div class="img-stack img-microbiome">
       <CldImage
         src="Microbiome_OLMA_ttmkmz"
@@ -114,68 +172,24 @@ const flowerUrls = Object.values(flowerFiles)
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Microbiome OLMA"
       />
-      <p class="img-caption">
-        ...oder bei dieser Mikrobiom-Illustration für Wissenstransfer-Events wie
-        die OLMA.
-      </p>
-    </div>
-  </div>
-  <!-- #endregion -->
-
-  <!-- #region Section: Work (chapters 3–4) -->
-  <div id="panel-work" class="scrolly-panel split-panel">
-    <!-- chapter 3 -->
-    <div class="text-wrapper text-p3">
-      <p class="text-block">
-        Mein Fokus liegt momentan auf der wissenschaftlichen Illustration. Es
-        fasziniert mich, abstrakte Sachverhalte in zugängliche Bildwelten zu
-        übersetzen.
-      </p>
-    </div>
-    <!-- chapter 3 images -->
-    <div class="img-stack img-eth-vis-3">
-      <CldImage
-        src="ETHVisualisations_Gallery_3_myrndw"
-        width={1200}
-        sizes="(max-width: 768px) 100vw, 50vw"
-        alt="ETH Visualisation 3"
-      />
-      <p class="img-caption">
-        Mein Ansatz: Ein starker visueller Anker, der das Publikum sofort ins
-        Thema zieht.
-      </p>
-    </div>
-    <div class="img-stack img-eth-vis-1">
-      <CldImage
-        src="ETHVisualisations_GalleryPic1_hnzfw1"
-        width={1200}
-        sizes="(max-width: 768px) 100vw, 50vw"
-        alt="ETH Visualisation 1"
-      />
-      <p class="img-caption">
-        Bei Projekten wie den Paper-Figures für die ETH-Materialforschung
-        balanciere ich höchste Informationsdichte auf kleinstem Raum.
-      </p>
-    </div>
-    <div class="text-wrapper text-p3-1">
-      <p class="text-block">
-        Meine Stärke dabei: Ich arbeite mich selbstständig und tief in
-        hochkomplexe Themen ein und übersetze diese passgenau für die jeweilige
-        Zielgruppe.
-      </p>
+      <div class="img-caption">
+        <h2>
+          Oder ich fokussiere mich auf die ästhetische Darstellung für
+          Wissenstransfer an ein breiteres Publikum.<br />
+        </h2>
+        <p>
+          Illustration für den Wissentransfer über das Mikrobiom an der OLMA.
+        </p>
+      </div>
     </div>
 
-    <div class="img-stack img-pheno">
-      <CldImage
-        src="Phenological_Shift_GalleryImage1_cjmvqe"
-        width={1200}
-        sizes="(max-width: 768px) 100vw, 50vw"
-        alt="Phenological Shift"
-      />
-      <p class="img-caption">
-        Ein Beispiel dafür ist dieser Visual Abstract, der den «Phenological
-        Shift» – die klimawandelbedingte Verschiebung des Pflanzenwachstums in
-        den Alpen – visuell zusammenfasst.
+    <div class="text-wrapper text-p3-conclusion">
+      <p class="text-block">
+        Dabei schätze ich besonders die enge Kooperation mit Wissenschaftlern.
+      </p>
+      <p class="text-block">
+        Ich bin überzeugt, dass die stärksten Arbeiten im Austausch entstehen –
+        mit Menschen, die genauso für ein Thema brennen wie ich.
       </p>
     </div>
   </div>
@@ -186,22 +200,25 @@ const flowerUrls = Object.values(flowerFiles)
     <!-- chapter 5 -->
     <div class="text-wrapper text-p5-1">
       <p class="text-block">
-        Ein kurzer Blick auf meinen Werdegang: <br />
-        Es sind vor allem Neugier und die Faszination für neue Technologien, die
-        mein Schaffen antreiben.
+        Ein kurzer Blick auf meinen Werdegang. Meine Neugier und Faszination für
+        neue Technologien ist eine treibende Kraft in meiner gestalterischen
+        Entwicklung.
       </p>
     </div>
     <div class="img-stack img-illustration-1">
       <CldImage
-        src="FigureDrawing_Gallery_23_dnrpi3"
+        src="Illustration_GalleryImages_1_sihglc"
         width={1200}
         sizes="(max-width: 768px) 100vw, 50vw"
-        alt="Figure Drawing"
+        alt="Illustration 1"
       />
-      <p class="img-caption">
-        In meinem Bachelor an der ZHdK habe ich mir meine analytischen und
-        handwerklichen Grundlagen erarbeitet.
-      </p>
+      <div class="img-caption">
+        <h2>
+          In meinem Bachelor in Knowledge Visualisation an der ZHdK habe ich
+          mein handwerkliches Fundament erworben...<br />
+        </h2>
+        <p>Besonders die Illustration von Menschen fasziniert mich.</p>
+      </div>
     </div>
     <div class="img-stack img-wood-12">
       <CldImage
@@ -210,41 +227,21 @@ const flowerUrls = Object.values(flowerFiles)
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Structure of Wood"
       />
-      <p class="img-caption">
-        Dort fing ich an, mich intensiv und auf ästhetische Weise mit komplexen
-        Sachverhalten auseinanderzusetzen.
-      </p>
-    </div>
-    <div class="img-stack img-wood-5">
-      <CldImage
-        src="StructureofWood_Gallery_5_g1x7ry"
-        width={1200}
-        sizes="(max-width: 768px) 100vw, 50vw"
-        alt="Structure of Wood 5"
-      />
-      <p class="img-caption">
-        Beispielsweise bei der Entschlüsselung der mikroskopischen Struktur von
-        Cellulose und Lignin.
-      </p>
-    </div>
-    <div class="img-stack img-figure">
-      <CldImage
-        src="Illustration_GalleryImages_1_sihglc"
-        width={1200}
-        sizes="(max-width: 768px) 100vw, 50vw"
-        alt="Illustration 1"
-      />
-      <p class="img-caption">
-        Vor allem die zeichnerische Praxis aus dieser Zeit bildet bis heute das
-        Fundament meiner Arbeit.
-      </p>
+      <div class="img-caption">
+        <h2>
+          und mich begonnen intensiver mit der Darstellung von Inhalten zu
+          beschäftigen.<br />
+        </h2>
+        <p>Darstellung der Mikrostruktur von Holz.</p>
+      </div>
     </div>
 
     <!-- chapter 6 -->
     <div class="text-wrapper text-p6">
       <p class="text-block">
-        Heute liegt mein technisches Hauptaugenmerk jedoch auf der
-        3D-Visualisierung.
+        Danach habe ich mein technisches Hauptaugenmerk auf die
+        3D-Visualisierung fokussiert. Ich baue mein Repertoire stetig aus.
+        Mittlerweile umfasst es:
       </p>
     </div>
     <div class="img-stack img-bacteria">
@@ -254,9 +251,10 @@ const flowerUrls = Object.values(flowerFiles)
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Blender Bacteria"
       />
-      <p class="img-caption">
-        Hier reicht mein Repertoire von der 3D-Modellierung (in Blender)...
-      </p>
+      <div class="img-caption">
+        <h2>3D-Modellierung...<br /></h2>
+        <p>Modellierung und Rendering in Blender.</p>
+      </div>
     </div>
     <div class="img-stack img-gamedesign">
       <video
@@ -275,10 +273,27 @@ const flowerUrls = Object.values(flowerFiles)
           type="video/mp4"
         />
       </video>
-      <p class="img-caption">
-        ...über die prozedurale Animation (in Houdini)...
-      </p>
+      <div class="img-caption">
+        <h2>Prozedurale Animation in Houdini...<br /></h2>
+      </div>
     </div>
+
+    <div class="img-stack img-gjermundbu">
+      <CldImage
+        src="Gjermundbu_GalleryImages_1_sco2yz"
+        width={1200}
+        sizes="(max-width: 768px) 100vw, 50vw"
+        alt="UZH Blender Kurs"
+      />
+      <div class="img-caption">
+        <h2>Handling von 3D-Scans und Daten...<br /></h2>
+        <p>
+          3D-Modell des Gjermundbu-Helms, aus frei verfügbaren Scandaten
+          entstanden.
+        </p>
+      </div>
+    </div>
+
     <div class="img-stack img-uzh-blender">
       <CldImage
         src="UZHBlenderCourse_1_r6kaar"
@@ -286,19 +301,20 @@ const flowerUrls = Object.values(flowerFiles)
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="UZH Blender Kurs"
       />
-      <p class="img-caption">
-        ...bis hin zur Lehre. Meine Faszination für 3D-Workflows gebe ich
-        mittlerweile auch als Dozent in meinem Blender-Kurs an der UZH weiter.
-      </p>
+      <div class="img-caption">
+        <h2>bis hin zur Lehre.<br /></h2>
+        <p>Dozent für Blender-Kurse an der Universität Zürich (UZH).</p>
+      </div>
     </div>
 
     <!-- chapter 7 -->
     <div class="text-wrapper text-p7-1">
       <p class="text-block">
-        Wissen wird heute digital vermittelt. Deshalb gestalte ich Formate, die
-        zur Interaktion einladen.
+        Da Information heute primär digital konsumiert wird, ist es mir wichtig,
+        mich vertieft mit modernen interaktiven Formaten auseinanderzusetzen.
       </p>
     </div>
+
     <div class="img-stack img-xylo">
       <CldImage
         src="XylopediaInsta4_hjbuf8"
@@ -306,10 +322,13 @@ const flowerUrls = Object.values(flowerFiles)
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Xylopedia iPad App"
       />
-      <p class="img-caption">
-        Angefangen bei mobilen Anwendungen wie der Echtzeit-3D-App «Xylopedia»
-        fürs iPad.
-      </p>
+      <div class="img-caption">
+        <h2>Angefangen bei interaktiven 3D-Applikationen...<br /></h2>
+        <p>
+          App für die Vermittlung der Holzstrukturen an der Hochschule für
+          Nachhaltige Entwicklung Eberswalde.
+        </p>
+      </div>
     </div>
     <div class="text-wrapper text-p7-2">
       <p class="text-block">
@@ -317,29 +336,7 @@ const flowerUrls = Object.values(flowerFiles)
         Publikum am direktesten erreicht.
       </p>
     </div>
-    <div class="img-stack img-ub-video">
-      <video
-        autoplay
-        muted
-        loop
-        playsinline
-        aria-label="UB Zürich Jahresbericht 2025"
-      >
-        <source
-          src="https://res.cloudinary.com/rhizomech/video/upload/f_webm,vc_vp9/UB_Zuerich_Jahresbericht25_grgopa.webm"
-          type="video/webm"
-        />
-        <source
-          src="https://res.cloudinary.com/rhizomech/video/upload/f_mp4,vc_h264/UB_Zuerich_Jahresbericht25_grgopa.mp4"
-          type="video/mp4"
-        />
-      </video>
-      <p class="img-caption">
-        Ein Beispiel dafür ist der interaktive Jahresbericht der
-        Universitätsbibliothek Zürich, den ich designt und mit Rive fürs Web
-        animiert habe.
-      </p>
-    </div>
+
     <div class="img-stack img-portfolio-video">
       <video autoplay muted loop playsinline aria-label="Portfolio">
         <source
@@ -351,20 +348,18 @@ const flowerUrls = Object.values(flowerFiles)
           type="video/mp4"
         />
       </video>
-      <p class="img-caption">
-        Weil mir diese nahtlose Verbindung von Design und Code wichtig ist, habe
-        ich konsequenterweise auch mein eigenes Portfolio von Grund auf selbst
-        programmiert.
-      </p>
+      <div class="img-caption">
+        <h2>bis hin zu Coding & Design für das Web.<br /></h2>
+        <p>Mein Portfolio rhizome.ch von Grund auf designt und programmiert.</p>
+      </div>
     </div>
     <div class="text-wrapper text-block portfolio-link">
-      <span>Dort finden Sie auch mehr von meiner Arbeit:</span>
       <div class="logo-link"></div><a
         href="/"
         class="portfolio-logo-btn"
         aria-label="rhizome.ch"
       >
-        rhizome.ch
+        &rarr; rhizome.ch
       </a>
     </div>
     <!-- <div class="text-wrapper text-p7-3">
@@ -380,33 +375,36 @@ const flowerUrls = Object.values(flowerFiles)
   <!-- #region Section: Zukunft (chapter 8) -->
   <div id="panel-zukunft" class="scrolly-panel split-panel">
     <div class="text-wrapper text-p8-1">
-      <p class="text-block">
-        Nun möchte ich meine Erfahrungen und mein technisches Repertoire nutzen,
-        um gesellschaftsrelevante Themen visuell erfahrbar zu machen.
-      </p>
       <p class="text-block text-p8-2">
-        Die NZZ steht für analytische Klarheit und visuelle Eleganz. Genau an
-        diesem Massstab möchte ich meine Arbeit im redaktionellen Alltag messen.
+        Die NZZ steht für analytische Klarheit und besticht mit ihrem Visual
+        Storytelling.
       </p>
-
       <p class="text-block text-p8-3">
-        Ein Volontariat bei NZZ Visuals ist mein logischer nächster Schritt:
-        Meine technische Expertise trifft auf euren redaktionellen Takt – um
-        gemeinsam neue Formate zu entwickeln.
+        In Ihrem Umfeld, in dem Tempo und Kompetenz zusammenkommen, möchte ich
+        meine Erfahrungen und mein technisches Repertoire einbringen. Ob
+        schnelle, prägnante Arbeiten oder tiefgründige Auseinandersetzungen mit
+        einem Thema – beides reizt mich gleichermassen.
       </p>
-    </div>
+      <p class="text-block text-p8-4">
+        Deswegen bewerbe ich mich als Volontär bei NZZ Visuals, um von Ihrem
+        Team zu lernen und gemeinsam die Zukunft des visuellen Journalismus zu
+        prägen.
+      </p>
 
-    <div class="text-wrapper text-p8-4">
-      <h1 class="text-block">Vielen Dank für eure Zeit.</h1>
-    </div>
+      <div class="text-wrapper text-p8-5">
+        <h1 class="text-block">Vielen Dank für Ihre Zeit.</h1>
+      </div>
 
-    <div class="img-stack img-flower-canvas">
-      <canvas id="flower-canvas"></canvas>
+      <div class="img-stack img-flower-canvas">
+        <canvas id="flower-canvas"></canvas>
+      </div>
     </div>
+    <!-- #endregion -->
+
+    <div id="image-sequences" data-flower={JSON.stringify(flowerUrls)}></div>
   </div>
-  <!-- #endregion -->
 
-  <!-- #region Scrolly Progress & Data -->
+  <!-- Progress bar is a sibling of all panels so panel opacity doesn't affect it -->
   <div id="scrolly-progress">
     <span class="progress-word active" data-section="intro">Intro</span>
     <span></span>
@@ -417,702 +415,700 @@ const flowerUrls = Object.values(flowerFiles)
     <span class="progress-word" data-section="zukunft">Zukunft</span>
   </div>
 
-  <div id="image-sequences" data-flower={JSON.stringify(flowerUrls)}></div>
-  <!-- #endregion -->
-</div>
+  <script>
+    // #region Imports & Setup
+    import Lenis from "lenis";
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-<script>
-  // #region Imports & Setup
-  import Lenis from "lenis";
-  import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
+    gsap.registerPlugin(ScrollTrigger);
+    // #endregion
 
-  gsap.registerPlugin(ScrollTrigger);
-  // #endregion
-
-  // #region Lenis Smooth Scroll
-  const lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 1, smoothWheel: true });
-  lenis.on("scroll", ScrollTrigger.update);
-  gsap.ticker.add((time) => {
-    lenis.raf(time * 1000);
-  });
-  // #endregion
-
-  // #region Master Timeline & Progress Update
-  const masterTl = gsap.timeline({
-    scrollTrigger: {
-      trigger: "#scrolly-container",
-      start: "top top",
-      end: "+=4000%",
-      scrub: 0.15,
-      pin: true,
-      markers: false,
-      snap: {
-        snapTo: "labels",
-        duration: { min: 0.2, max: 3 },
-        delay: 0.2,
-        ease: "power1.inOut",
-      },
-      onUpdate: (self) => {
-        const tl = self.animation;
-        const time = tl.time();
-        const labels = tl.labels;
-        let active = "intro";
-        if (time >= labels["chapter-8"]) active = "zukunft";
-        else if (time >= labels["chapter-5"]) active = "werdegang";
-        else if (time >= labels["chapter-3"]) active = "work";
-        document.querySelectorAll(".progress-word").forEach((el) => {
-          el.classList.toggle("active", el.dataset.section === active);
-        });
-      },
-    },
-  });
-  // #endregion
-
-  // #region Flower Splat Canvas
-  const dataIsland = document.getElementById("image-sequences");
-  const flowerUrls = JSON.parse(dataIsland.dataset.flower || "[]");
-
-  const flowerCanvas = document.getElementById(
-    "flower-canvas",
-  ) as HTMLCanvasElement;
-  const flowerCtx = flowerCanvas.getContext("2d");
-  const flowerImages = [];
-  const flowerPlayhead = { frame: 0 };
-
-  flowerUrls.forEach((url) => {
-    const img = new window.Image();
-    img.src = url;
-    flowerImages.push(img);
-  });
-
-  if (flowerImages.length > 0) {
-    flowerImages[0].onload = () => {
-      flowerCanvas.width = flowerImages[0].naturalWidth;
-      flowerCanvas.height = flowerImages[0].naturalHeight;
-      renderFlower();
-    };
-  }
-
-  const renderFlower = () => {
-    if (flowerImages.length === 0) return;
-    flowerCtx.clearRect(0, 0, flowerCanvas.width, flowerCanvas.height);
-    const frame = Math.min(
-      Math.max(Math.round(flowerPlayhead.frame), 0),
-      flowerImages.length - 1,
-    );
-    flowerCtx.drawImage(
-      flowerImages[frame],
-      0,
-      0,
-      flowerCanvas.width,
-      flowerCanvas.height,
-    );
-  };
-  // #endregion
-
-  // #region GSAP Helper Functions
-  // Helper functions
-  let snapLabelCount = 0;
-
-  const showText = (selector, sync = false) => {
-    const result = masterTl.to(
-      selector,
-      { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" },
-      sync ? "<" : "+=0.2",
-    );
-    masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
-    return result;
-  };
-
-  const hideText = (selector, sync = false) => {
-    return masterTl.to(
-      selector,
-      { y: "-70vh", opacity: 0, duration: 0.5 },
-      sync ? "<" : "+=0.2",
-    );
-  };
-
-  const showImg = (selector, sync = false) => {
-    const imageTl = gsap.timeline();
-    imageTl
-      .to(selector, { y: "0%", duration: 0.5 })
-      .to(selector, { opacity: 1, duration: 0.4 }, ">-0.4");
-    const result = masterTl.add(imageTl, sync ? "<" : "-=0.2");
-    masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
-    return result;
-  };
-
-  const zoomFadeInImg = (selector, sync = false) => {
-    const result = masterTl.fromTo(
-      selector,
-      { y: "0%", opacity: 0, scale: 1.4 },
-      { opacity: 1, duration: 0.8, scale: 1, ease: "power2.out" },
-      sync ? "<" : "-=0.5",
-    );
-    masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
-    return result;
-  };
-
-  const hideImg = (selector, sync = false) => {
-    return masterTl.to(
-      selector,
-      { y: "-100%", opacity: 0, duration: 0.5 },
-      sync ? "<" : "+=0.2",
-    );
-  };
-  // #endregion
-
-  // #region Initial States & Animations
-  // Scroll Indicator Animation
-  const scrollIndicatorTween = gsap.to(".scroll-indicator", {
-    opacity: 1,
-    y: 50,
-    duration: 1.2,
-    delay: 0.5,
-    repeat: -1,
-    yoyo: true,
-    ease: "power1.out",
-  });
-
-  const hideScrollIndicator = () => {
-    scrollIndicatorTween.kill();
-    gsap.to(".scroll-indicator", { opacity: 0, duration: 0.6 });
-    lenis.off("scroll", hideScrollIndicator);
-  };
-  lenis.on("scroll", hideScrollIndicator);
-
-  // #region GSAP Timeline Sequencing
-  // ------------------------------------------
-  // GSAP Timeline Sequencing
-  // ------------------------------------------
-
-  gsap.set(".intro-static", { opacity: 1, y: 0 });
-  gsap.set(".intro-reveal-1", { opacity: 0, y: 0 });
-  gsap.set(".intro-reveal-2", { opacity: 0, y: 0 });
-
-  // #region Section: Intro (chapters 1–2)
-  masterTl.addLabel("chapter-1");
-  masterTl.set("#panel-intro", { opacity: 1 });
-  masterTl.to("#scrolly-progress", { opacity: 1, duration: 0.2 });
-  showText(".intro-reveal-1");
-  showText(".intro-reveal-2");
-  hideText(".text-p1");
-  masterTl.to(".scroll-indicator", { opacity: 0, duration: 0.1 }, "<");
-
-  showImg(".img-quercus", true);
-  hideImg(".img-quercus");
-  zoomFadeInImg(".img-gjermundbu", true);
-  hideImg(".img-gjermundbu");
-
-  masterTl.addLabel("chapter-2");
-  showText(".text-p2", true);
-  hideText(".text-p2");
-  /*   showImg(".img-buchdrucker-1", true);
-  hideImg(".img-buchdrucker-1"); */
-  zoomFadeInImg(".img-borkenkaefer", true);
-  hideImg(".img-borkenkaefer");
-  zoomFadeInImg(".img-microbiome", true);
-  hideImg(".img-microbiome");
-  // #endregion
-
-  // #region Section: Work (chapters 3–4)
-  masterTl.addLabel("chapter-3");
-  masterTl.to("#panel-work", { opacity: 1, duration: 0.05 });
-  masterTl.to("#panel-intro", { opacity: 0, duration: 0.05 }, "<");
-  showText(".text-p3", true);
-  hideText(".text-p3");
-
-  showImg(".img-eth-vis-3", true);
-  hideImg(".img-eth-vis-3");
-  zoomFadeInImg(".img-eth-vis-1", true);
-  hideImg(".img-eth-vis-1");
-  showText(".text-p3-1", true);
-  hideText(".text-p3-1");
-
-  showImg(".img-pheno", true);
-  hideImg(".img-pheno");
-  // #endregion
-
-  // #region Section: Werdegang (chapters 5–7)
-  masterTl.addLabel("chapter-5");
-  masterTl.to("#panel-werdegang", { opacity: 1, duration: 0.05 });
-  masterTl.to("#panel-work", { opacity: 0, duration: 0.05 }, "<");
-  showText(".text-p5-1", true);
-  hideText(".text-p5-1");
-  showImg(".img-illustration-1", true);
-  hideImg(".img-illustration-1");
-  zoomFadeInImg(".img-wood-12", true);
-  hideImg(".img-wood-12");
-  zoomFadeInImg(".img-wood-5", true);
-  hideImg(".img-wood-5");
-  zoomFadeInImg(".img-figure", true);
-  hideImg(".img-figure");
-  // #endregion
-
-  // #region Section: Chapter 6
-  masterTl.addLabel("chapter-6");
-  showText(".text-p6", true);
-  hideText(".text-p6");
-  showImg(".img-bacteria", true);
-  hideImg(".img-bacteria");
-  zoomFadeInImg(".img-gamedesign", true);
-  hideImg(".img-gamedesign");
-  zoomFadeInImg(".img-uzh-blender", true);
-  hideImg(".img-uzh-blender");
-  // #endregion
-
-  // #region Section: Chapter 7
-  masterTl.addLabel("chapter-7");
-  showText(".text-p7-1", true);
-  hideText(".text-p7-1");
-  showImg(".img-xylo", true);
-  hideImg(".img-xylo");
-  showText(".text-p7-2", true);
-  hideText(".text-p7-2");
-  zoomFadeInImg(".img-ub-video", true);
-  hideImg(".img-ub-video");
-  showImg(".img-portfolio-video", true);
-  hideImg(".img-portfolio-video");
-  showText(".portfolio-link", true);
-  hideText(".portfolio-link");
-  /*   showText(".text-p7-3", true);
-  hideText(".text-p7-3"); */
-  // #endregion
-
-  // #region Section: Zukunft (chapter 8)
-  masterTl.addLabel("chapter-8");
-  masterTl.to("#panel-zukunft", { opacity: 1, duration: 0.05 });
-  masterTl.to("#panel-werdegang", { opacity: 0, duration: 0.05 }, "<");
-  showText(".text-p8-1", true);
-  showText(".text-p8-2");
-  showText(".text-p8-3");
-  hideText(".text-p8-1");
-  hideText(".text-p8-2", true);
-  hideText(".text-p8-3", true);
-  masterTl.to(
-    flowerPlayhead,
-    {
-      frame: (flowerImages.length || 1) - 1,
-      snap: "frame",
-      ease: "none",
-      onUpdate: renderFlower,
-      duration: 1.5,
-    },
-    "-=1",
-  );
-
-  showImg(".img-flower-canvas", true);
-  masterTl.to(
-    "#panel-zukunft .text-p8-4",
-    { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
-    "-=0.5",
-  );
-  masterTl.addLabel(`text-snap-${snapLabelCount++}`);
-  // #endregion
-  // #endregion
-
-  // #region Event Listeners
-  // Clickable Progress Words
-  document.querySelectorAll(".progress-word").forEach((word) => {
-    word.addEventListener("click", (e) => {
-      const target = e.currentTarget as HTMLElement;
-      const section = target.dataset.section;
-      let label = "chapter-1";
-      if (section === "work") label = "chapter-3";
-      else if (section === "werdegang") label = "chapter-5";
-      else if (section === "zukunft") label = "chapter-8";
-
-      if (masterTl.scrollTrigger) {
-        const scrollPos = masterTl.scrollTrigger.labelToScroll(label) + 700;
-        lenis.scrollTo(scrollPos, { duration: 4 });
-      }
+    // #region Lenis Smooth Scroll
+    const lenis = new Lenis({
+      lerp: 0.1,
+      wheelMultiplier: 1,
+      smoothWheel: true,
     });
-  });
-  // #endregion
-</script>
+    lenis.on("scroll", ScrollTrigger.update);
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+    // #endregion
 
-<style>
-  @import "../../styles/global.css";
+    // #region Master Timeline & Progress Update
+    const masterTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#scrolly-container",
+        start: "top top",
+        end: "+=3000%",
+        scrub: 0.15,
+        pin: true,
+        markers: false,
+        snap: {
+          snapTo: "labels",
+          duration: { min: 0.2, max: 3 },
+          delay: 0.2,
+          ease: "power1.inOut",
+        },
+        onUpdate: (self) => {
+          const tl = self.animation;
+          const time = tl.time();
+          const labels = tl.labels;
+          let active = "intro";
+          if (time >= labels["chapter-8"]) active = "zukunft";
+          else if (time >= labels["chapter-5"]) active = "werdegang";
+          else if (time >= labels["chapter-3"]) active = "work";
+          document.querySelectorAll(".progress-word").forEach((el) => {
+            el.classList.toggle("active", el.dataset.section === active);
+          });
+        },
+      },
+    });
+    // #endregion
 
-  /* #region Layout */
+    // #region Flower Splat Canvas
+    const dataIsland = document.getElementById("image-sequences");
+    const flowerUrls = JSON.parse(dataIsland.dataset.flower || "[]");
 
-  #scrolly-container {
-    position: relative;
-    width: 100%;
-    height: 100svh;
-    overflow: hidden;
-  }
+    const flowerCanvas = document.getElementById(
+      "flower-canvas",
+    ) as HTMLCanvasElement;
+    const flowerCtx = flowerCanvas.getContext("2d");
+    const flowerImages = [];
+    const flowerPlayhead = { frame: 0 };
 
-  .scrolly-panel {
-    position: absolute;
-    display: grid;
-    width: 100%;
-    height: 100svh;
-    opacity: 0;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
-    place-: center;
-  }
+    flowerUrls.forEach((url) => {
+      const img = new window.Image();
+      img.src = url;
+      flowerImages.push(img);
+    });
 
-  .text-wrapper {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    justify-content: center;
-    align-content: center;
-    grid-auto-rows: min-content;
-    pointer-events: none;
-    row-gap: 12px;
-    opacity: 0;
-    z-index: 3;
-    padding: 0 5% 0 5%;
-
-    @media (min-width: 1024px) {
-      padding: 0 10% 0 20%;
-      width: auto;
-      max-width: 800px;
-      justify-content: start;
+    if (flowerImages.length > 0) {
+      flowerImages[0].onload = () => {
+        flowerCanvas.width = flowerImages[0].naturalWidth;
+        flowerCanvas.height = flowerImages[0].naturalHeight;
+        renderFlower();
+      };
     }
-  }
 
-  /* Ensure text blocks are centered and contained */
-  .text-wrapper .text-block {
-    margin: 0;
-  }
+    const renderFlower = () => {
+      if (flowerImages.length === 0) return;
+      flowerCtx.clearRect(0, 0, flowerCanvas.width, flowerCanvas.height);
+      const frame = Math.min(
+        Math.max(Math.round(flowerPlayhead.frame), 0),
+        flowerImages.length - 1,
+      );
+      flowerCtx.drawImage(
+        flowerImages[frame],
+        0,
+        0,
+        flowerCanvas.width,
+        flowerCanvas.height,
+      );
+    };
+    // #endregion
 
-  /* #region Typography */
-  .text-block {
-    z-index: 2;
-    line-height: 1.5;
-    color: black;
-  }
+    // #region GSAP Helper Functions
+    // Helper functions
+    let snapLabelCount = 0;
 
-  h1.text-block {
-    font-family: PowerGrotesk-Medium;
-    font-size: 24px;
+    const showText = (selector, sync = false) => {
+      const result = masterTl.fromTo(
+        selector,
+        { opacity: 0, y: 40 },
+        { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" },
+        sync ? "<" : "+=0.2",
+      );
+      masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
+      return result;
+    };
 
-    @media (min-width: 1024px) {
-      font-size: 44px;
+    const hideText = (selector, sync = false) => {
+      return masterTl.to(
+        selector,
+        { y: "-70vh", opacity: 0, duration: 0.5 },
+        sync ? "<" : "+=0.2",
+      );
+    };
+
+    const showImg = (selector, sync = false) => {
+      const imageTl = gsap.timeline();
+      imageTl
+        .to(selector, { y: "0%", duration: 0.5 })
+        .to(selector, { opacity: 1, duration: 0.4 }, ">-0.4");
+      const result = masterTl.add(imageTl, sync ? "<" : "-=0.2");
+      masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
+      return result;
+    };
+
+    const zoomFadeInImg = (selector, sync = false) => {
+      const result = masterTl.fromTo(
+        selector,
+        { y: "0%", opacity: 0, scale: 1.4 },
+        { opacity: 1, duration: 0.8, scale: 1, ease: "power2.out" },
+        sync ? "<" : "-=0.5",
+      );
+      masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
+      return result;
+    };
+
+    const hideImg = (selector, sync = false) => {
+      return masterTl.to(
+        selector,
+        { y: "-100%", opacity: 0, duration: 0.5 },
+        sync ? "<" : "+=0.2",
+      );
+    };
+    // #endregion
+
+    // #region Initial States & Animations
+    // Scroll Indicator Animation
+    const scrollIndicatorTween = gsap.to(".scroll-indicator", {
+      opacity: 1,
+      y: 50,
+      duration: 1.2,
+      delay: 0.5,
+      repeat: -1,
+      yoyo: true,
+      ease: "power1.out",
+    });
+
+    const hideScrollIndicator = () => {
+      scrollIndicatorTween.kill();
+      gsap.to(".scroll-indicator", { opacity: 0, duration: 0.6 });
+      lenis.off("scroll", hideScrollIndicator);
+    };
+    lenis.on("scroll", hideScrollIndicator);
+
+    // #region GSAP Timeline Sequencing
+
+    gsap.set(".intro-static", { opacity: 1, y: 0 });
+    gsap.set(".intro-reveal-1", { opacity: 0, y: 0 });
+    gsap.set(".intro-reveal-2", { opacity: 0, y: 0 });
+
+    // #region Chapter 1: Intro — text then 3 images
+    masterTl.addLabel("chapter-1");
+    masterTl.set("#panel-intro", { opacity: 1 });
+    masterTl.to("#scrolly-progress", { opacity: 1, duration: 0.2 });
+    showText(".intro-reveal-1");
+    showText(".intro-reveal-2");
+    hideText(".text-p1");
+    masterTl.to(".scroll-indicator", { opacity: 0, duration: 0.1 }, "<");
+
+    showImg(".img-quercus", true);
+    hideImg(".img-quercus");
+    zoomFadeInImg(".img-buchdrucker", true);
+    hideImg(".img-buchdrucker");
+    showImg(".img-ub-intro", true);
+    hideImg(".img-ub-intro");
+    // #endregion
+
+    // #region Chapter 3: Work — panel-intro stays visible; panel-work overlays it
+    masterTl.addLabel("chapter-3");
+    masterTl.to("#panel-work", { opacity: 1, duration: 0.05 });
+    showText(".text-titel-work", true);
+    hideText(".text-titel-work");
+    showText(".text-p3-intro", true);
+    hideText(".text-p3-intro");
+    zoomFadeInImg(".img-pheno", true);
+    hideImg(".img-pheno");
+    zoomFadeInImg(".img-eth-vis-1", true);
+    hideImg(".img-eth-vis-1");
+    zoomFadeInImg(".img-microbiome", true);
+    hideImg(".img-microbiome");
+    showText(".text-p3-conclusion", true);
+    hideText(".text-p3-conclusion");
+    // #endregion
+
+    // #region Chapter 5: Werdegang — fade out panel-intro (takes panel-work with it)
+    masterTl.addLabel("chapter-5");
+    masterTl.to("#panel-werdegang", { opacity: 1, duration: 0.05 });
+    masterTl.to("#panel-intro", { opacity: 0, duration: 0.05 }, "<");
+    showText(".text-p5-1", true);
+    hideText(".text-p5-1");
+    showImg(".img-illustration-1", true);
+    hideImg(".img-illustration-1");
+    zoomFadeInImg(".img-wood-12", true);
+    hideImg(".img-wood-12");
+    // #endregion
+
+    // #region Chapter 6: Technologie & 3D
+    masterTl.addLabel("chapter-6");
+    showText(".text-p6", true);
+    hideText(".text-p6");
+    showImg(".img-bacteria", true);
+    hideImg(".img-bacteria");
+    zoomFadeInImg(".img-gamedesign", true);
+    hideImg(".img-gamedesign");
+    zoomFadeInImg(".img-gjermundbu", true);
+    hideImg(".img-gjermundbu");
+    zoomFadeInImg(".img-uzh-blender", true);
+    hideImg(".img-uzh-blender");
+    // #endregion
+
+    // #region Chapter 7: Digitale Formate & Web
+    masterTl.addLabel("chapter-7");
+    showText(".text-p7-1", true);
+    hideText(".text-p7-1");
+    zoomFadeInImg(".img-xylo", true);
+    hideImg(".img-xylo");
+    showText(".text-p7-2", true);
+    hideText(".text-p7-2");
+    showImg(".img-portfolio-video", true);
+    hideImg(".img-portfolio-video");
+    showText(".portfolio-link", true);
+    hideText(".portfolio-link");
+    // #endregion
+
+    // #region Chapter 8: Zukunft — 3 sequential text reveals, then flower + finale
+    masterTl.addLabel("chapter-8");
+    masterTl.to("#panel-zukunft", { opacity: 1, duration: 0.05 });
+    masterTl.to("#panel-werdegang", { opacity: 0, duration: 0.05 }, "<");
+    masterTl.to(".text-p8-1", { opacity: 1, duration: 0.05 }, "<");
+    showText(".text-p8-2", true);
+    showText(".text-p8-3");
+    showText(".text-p8-4");
+    hideText(".text-p8-2");
+    hideText(".text-p8-3", true);
+    hideText(".text-p8-4", true);
+    masterTl.to(
+      flowerPlayhead,
+      {
+        frame: (flowerImages.length || 1) - 1,
+        snap: "frame",
+        ease: "none",
+        onUpdate: renderFlower,
+        duration: 1.5,
+      },
+      "-=1",
+    );
+    showImg(".img-flower-canvas", true);
+    showText(".text-p8-5");
+    masterTl.addLabel(`text-snap-${snapLabelCount++}`);
+    // #endregion
+
+    // #endregion
+
+    // #region Event Listeners
+    // Clickable Progress Words
+    document.querySelectorAll(".progress-word").forEach((word) => {
+      word.addEventListener("click", (e) => {
+        const target = e.currentTarget as HTMLElement;
+        const section = target.dataset.section;
+        let label = "chapter-1";
+        if (section === "work") label = "chapter-3";
+        else if (section === "werdegang") label = "chapter-5";
+        else if (section === "zukunft") label = "chapter-8";
+
+        if (masterTl.scrollTrigger) {
+          const scrollPos = masterTl.scrollTrigger.labelToScroll(label) + 700;
+          lenis.scrollTo(scrollPos, { duration: 4 });
+        }
+      });
+    });
+    // #endregion
+  </script>
+
+  <style>
+    @import "../../styles/global.css";
+
+    /* #region Layout */
+
+    #scrolly-container {
+      position: relative;
+      width: 100%;
+      height: 100svh;
+      overflow: hidden;
     }
-  }
 
-  p.text-block {
-    font-size: 20px;
-
-    @media (min-width: 1024px) {
-      font-size: 26px;
-    }
-  }
-
-  .left-align {
-    align-self: left;
-  }
-  /* #endregion */
-
-  /* #endregion */
-
-  /* #region Image Stacking */
-
-  .img-stack {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transform: translateY(100%);
-    pointer-events: none;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: min-content min-content;
-    padding-top: 15vh;
-    justify-content: center;
-    align-content: start;
-    z-index: 1;
-    gap: 1rem;
-
-    @media (min-width: 1024px) {
-      grid-template-columns: fit-content(50%) 1fr;
-      grid-template-rows: 1fr;
-      align-content: start;
-      gap: 2rem;
-      padding: 0 10% 0 20%;
-    }
-  }
-  /* Image and video share identical sizing rules */
-  .img-stack img {
-    max-height: 85vh;
-    max-width: 100%;
-    width: auto;
-    height: auto;
-    align-self: start;
-
-    @media (min-width: 1024px) {
-      grid-column: 1;
-      max-height: 85vh;
-      max-width: 60vw;
-      align-self: center;
-    }
-  }
-
-  .img-stack :global(.cld-video-player),
-  .img-stack video {
-    width: 100%;
-    max-height: 85vh;
-    object-fit: contain;
-    align-self: center;
-
-    @media (min-width: 1024px) {
-      grid-column: 1;
-      height: 65vh;
-    }
-  }
-
-  .img-caption {
-    font-size: 16px;
-    color: black;
-    line-height: 1.4;
-    letter-spacing: 0.01em;
-    text-align: left;
-    align-self: start;
-    padding: 0 5%;
-
-    @media (min-width: 1024px) {
-      grid-column: 2;
-      text-align: left;
-      align-self: center;
-      max-width: 66ch;
-      padding: 0;
-    }
-  }
-
-  .portfolio-link {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    z-index: 1000;
-    pointer-events: all;
-
-    @media (min-width: 1024px) {
-      flex-direction: row;
-      font-size: 26px;
-    }
-  }
-
-  .portfolio-link a {
-    color: black;
-    letter-spacing: 0.01em;
-    text-decoration: underline;
-  }
-
-  /* #endregion */
-
-  /* #region Custom Layout */
-
-  .text-p1 {
-    opacity: 1;
-  }
-  #panel-zukunft {
-    height: 100lvh;
-  }
-
-  .intro-static:nth-child(2) {
-    padding-bottom: 2rem;
-  }
-
-  .img-caption h2 {
-    font-size: 20px;
-    font-family: PowerGrotesk-Medium;
-    line-height: 1.4;
-    margin: 0;
-
-    @media (min-width: 1024px) {
-      font-size: 26px;
-    }
-  }
-
-  .img-ub-video {
-    align-content: center;
-    padding: 0 10%;
-
-    @media (min-width: 1024px) {
-      padding: 0 10% 0 20%;
-      grid-template-columns: min(max-content, 40vw) 1fr;
-    }
-  }
-
-  .img-ub-video .img-caption {
-    padding: 0;
-  }
-
-  .img-gamedesign {
-    align-content: center;
-    padding: 0;
-
-    @media (min-width: 1024px) {
-      padding: 0 10% 0 20%;
-      grid-template-columns: min(max-content, 40vw) 1fr;
-    }
-  }
-
-  .img-gamedesign.img-caption {
-    padding: 0 5%;
-  }
-
-  .img-quercus {
-    padding: 0;
-    align-content: center;
-
-    @media (min-width: 1024px) {
-      padding: 0 10% 0 20%;
-      grid-template-columns: min(max-content, 40vw) 1fr;
-    }
-  }
-
-  .img-quercus .img-caption {
-    padding: 0 5%;
-  }
-
-  .img-portfolio-video {
-    align-content: center;
-    padding: 0 15%;
-    @media (min-width: 1024px) {
-      padding: 0 10% 0 20%;
-      grid-template-columns: min(max-content, 40vw) 1fr;
-    }
-  }
-  .img-portfolio-video .img-caption {
-    padding: 0;
-  }
-
-  .img-ub-video,
-  .text-p8-2,
-  .text-p8-3 {
-    opacity: 0;
-    transform: translateY(100%);
-  }
-
-  .text-p8-4 {
-    padding-bottom: 120%;
-    @media (min-width: 1024px) {
-      padding-bottom: 0;
-    }
-  }
-
-  .text-p8-1 .text-block {
-    padding-bottom: 1rem;
-  }
-
-  .img-flower-canvas {
-    padding: 0;
-    align-self: end;
-
-    @media (min-width: 1024px) {
+    .scrolly-panel {
       position: absolute;
-      right: 5%;
-      left: auto;
-      padding: 0;
-      gap: 0;
-      max-height: 100vh;
-      object-fit: contain;
-      align-self: start;
-    }
-  }
-
-  .img-flower-canvas::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 20%;
-    background: linear-gradient(to top, var(--bg-color), transparent);
-    pointer-events: none;
-    z-index: 5;
-  }
-
-  #flower-canvas {
-    max-height: 100vh;
-    width: 100vw;
-    object-fit: contain;
-
-    @media (min-width: 1024px) {
-      height: 100vh;
-      max-height: 100vh;
-      width: auto;
-    }
-  }
-  /* #endregion */
-
-  /* #region Scrolly */
-
-  #scrolly-progress {
-    position: absolute;
-    top: 1rem;
-    width: 90%;
-    padding: 0 5%;
-    z-index: 10;
-    pointer-events: none;
-    mix-blend-mode: difference;
-    color: rgb(0, 0, 0);
-    display: grid;
-    grid-template-columns: max-content repeat(3, auto max-content);
-    place-items: center;
-    align-items: start;
-    opacity: 0;
-
-    @media (min-width: 1024px) {
-      width: auto;
-      height: 50vh;
-      top: 50%;
-      transform: translateY(-50%);
-      left: 3rem;
-      right: auto;
+      display: grid;
+      width: 100%;
+      height: 100svh;
+      opacity: 0;
       grid-template-columns: 1fr;
-      grid-template-rows: repeat(7, 1fr);
-      place-items: center start;
+      grid-template-rows: 1fr;
+      place-: center;
+    }
+
+    .text-wrapper {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      justify-content: center;
+      align-content: center;
+      grid-auto-rows: min-content;
+      pointer-events: none;
+      row-gap: 12px;
+      opacity: 0;
+      z-index: 3;
+      padding: 0 5% 0 5%;
+
+      @media (min-width: 1024px) {
+        padding: 0 10% 0 20%;
+        width: auto;
+        max-width: 800px;
+        justify-content: start;
+      }
+    }
+
+    /* Ensure text blocks are centered and contained */
+    .text-wrapper .text-block {
+      margin: 0;
+    }
+
+    /* #region Typography */
+    .text-block {
+      z-index: 2;
+      line-height: 1.5;
+      color: black;
+    }
+
+    h1.text-block {
+      font-family: PowerGrotesk-Medium;
+      font-size: 24px;
+
+      @media (min-width: 1024px) {
+        font-size: 40px;
+      }
+    }
+
+    p.text-block {
+      font-size: 14px;
+
+      @media (min-width: 1024px) {
+        font-size: 22px;
+      }
+    }
+    .img-caption h2 {
+      font-size: 18px;
+      font-family: PowerGrotesk-Medium;
+      line-height: 1.4;
+      margin: 0;
+
+      @media (min-width: 1024px) {
+        font-size: 22px;
+      }
+    }
+
+    .img-caption p {
+      font-size: 14px;
+
+      @media (min-width: 1024px) {
+        font-size: 22px;
+      }
+    }
+
+    .left-align {
+      align-self: left;
+    }
+    /* #endregion */
+
+    /* #endregion */
+
+    /* #region Image Stacking */
+
+    .img-stack {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: translateY(100%);
+      pointer-events: none;
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: min-content min-content;
+      padding-top: 15vh;
+      justify-content: center;
+      align-content: start;
+      z-index: 1;
+      gap: 1rem;
+
+      @media (min-width: 1024px) {
+        grid-template-columns: fit-content(50%) 1fr;
+        grid-template-rows: 1fr;
+        align-content: start;
+        gap: 2rem;
+        padding: 0 10% 0 20%;
+      }
+    }
+    /* Image and video share identical sizing rules */
+    .img-stack img {
+      max-height: 85vh;
+      max-width: 100%;
+      width: auto;
+      height: auto;
+      align-self: start;
+
+      @media (min-width: 1024px) {
+        grid-column: 1;
+        max-height: 85vh;
+        max-width: 60vw;
+        align-self: center;
+      }
+    }
+
+    .img-stack :global(.cld-video-player),
+    .img-stack video {
+      width: 100%;
+      max-height: 85vh;
+      object-fit: contain;
+      align-self: center;
+
+      @media (min-width: 1024px) {
+        grid-column: 1;
+        height: 65vh;
+      }
+    }
+
+    .img-caption {
+      color: black;
+      line-height: 1.4;
+      letter-spacing: 0.01em;
+      text-align: left;
+      align-self: start;
+      padding: 0 5%;
+
+      @media (min-width: 1024px) {
+        grid-column: 2;
+        text-align: left;
+        align-self: center;
+        max-width: 66ch;
+        padding: 0;
+      }
+    }
+
+    .portfolio-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 1000;
+      pointer-events: all;
+
+      @media (min-width: 1024px) {
+        flex-direction: row;
+        font-size: 26px;
+      }
+    }
+
+    .portfolio-link a {
+      color: black;
+      letter-spacing: 0.01em;
+      text-decoration: underline;
+    }
+
+    /* #endregion */
+
+    /* #region Custom Layout */
+
+    .text-p1 {
+      opacity: 1;
+    }
+    #panel-zukunft {
+      height: 100lvh;
+    }
+
+    .intro-static:nth-child(2) {
+      padding-bottom: 2rem;
+    }
+
+    .img-ub-video,
+    .img-ub-intro {
+      align-content: center;
+      padding: 0 10%;
+
+      @media (min-width: 1024px) {
+        padding: 0 10% 0 20%;
+        grid-template-columns: min(max-content, 40vw) 1fr;
+      }
+    }
+
+    .img-ub-video .img-caption,
+    .img-ub-intro .img-caption {
       padding: 0;
     }
-  }
 
-  .progress-word {
-    font-size: 10px;
-    opacity: 0.5;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    pointer-events: auto;
-    cursor: pointer;
-  }
+    .img-gamedesign {
+      align-content: center;
+      padding: 0;
 
-  .progress-word.active {
-    font-size: 14px;
-    opacity: 1;
-    font-weight: 700;
-  }
+      @media (min-width: 1024px) {
+        padding: 0 10% 0 20%;
+        grid-template-columns: min(max-content, 40vw) 1fr;
+      }
+    }
 
-  .scroll-indicator {
-    position: absolute;
-    bottom: 20%;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    opacity: 0;
-    z-index: 10;
-    pointer-events: none;
-    color: black;
-  }
+    .img-gamedesign.img-caption {
+      padding: 0 5%;
+    }
 
-  .scroll-indicator span {
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
+    .img-quercus,
+    .img-buchdrucker,
+    .img-microbiome {
+      padding: 0;
+      align-content: center;
 
-  .scroll-indicator .arrow {
-    font-size: 24px;
-  }
-  /* #endregion */
-</style>
+      @media (min-width: 1024px) {
+        padding: 0 10% 0 20%;
+        grid-template-columns: min(max-content, 40vw) 1fr;
+      }
+    }
+
+    .img-quercus .img-caption,
+    .img-buchdrucker .img-caption,
+    .img-microbiome .img-caption {
+      padding: 0 5%;
+
+      @media (min-width: 1024px) {
+        padding: 0;
+      }
+    }
+
+    .img-portfolio-video {
+      align-content: center;
+      padding: 0 15%;
+      @media (min-width: 1024px) {
+        padding: 0 10% 0 20%;
+        grid-template-columns: min(max-content, 40vw) 1fr;
+      }
+    }
+    .img-portfolio-video .img-caption {
+      padding: 0;
+    }
+
+    .img-ub-video,
+    .img-ub-intro,
+    .text-p8-2,
+    .text-p8-3,
+    .text-p8-4 {
+      opacity: 0;
+    }
+
+    .text-p8-5 {
+      padding-bottom: 120%;
+      @media (min-width: 1024px) {
+        padding-bottom: 0;
+      }
+    }
+
+    .text-p8-1 .text-block {
+      padding-bottom: 1rem;
+    }
+
+    .img-flower-canvas {
+      padding: 0;
+      align-self: end;
+
+      @media (min-width: 1024px) {
+        position: absolute;
+        right: 5%;
+        left: auto;
+        padding: 0;
+        gap: 0;
+        max-height: 100vh;
+        object-fit: contain;
+        align-self: start;
+      }
+    }
+
+    .img-flower-canvas::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 20%;
+      background: linear-gradient(to top, var(--bg-color), transparent);
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    #flower-canvas {
+      max-height: 100vh;
+      width: 100vw;
+      object-fit: contain;
+
+      @media (min-width: 1024px) {
+        height: 100vh;
+        max-height: 100vh;
+        width: auto;
+      }
+    }
+    /* #endregion */
+
+    /* #region Scrolly */
+
+    #scrolly-progress {
+      position: absolute;
+      top: 1rem;
+      width: 90%;
+      padding: 0 5%;
+      z-index: 10;
+      pointer-events: none;
+      mix-blend-mode: difference;
+      color: rgb(0, 0, 0);
+      display: grid;
+      grid-template-columns: max-content repeat(3, auto max-content);
+      place-items: center;
+      align-items: start;
+      opacity: 0;
+
+      @media (min-width: 1024px) {
+        width: auto;
+        height: 50vh;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 3rem;
+        right: auto;
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(7, 1fr);
+        place-items: center start;
+        padding: 0;
+      }
+    }
+
+    .progress-word {
+      font-size: 10px;
+      opacity: 0.5;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    .progress-word.active {
+      font-size: 14px;
+      opacity: 1;
+      font-weight: 700;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      z-index: 10;
+      pointer-events: none;
+      color: black;
+    }
+
+    .scroll-indicator span {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .scroll-indicator .arrow {
+      font-size: 24px;
+    }
+    /* #endregion */
+  </style>
+</div>
