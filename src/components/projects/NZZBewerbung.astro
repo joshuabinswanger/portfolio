@@ -30,10 +30,11 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       <h1 class="text-block left-align intro-static">Hi,</h1>
       <h1 class="text-block intro-static">mein Name ist Joshua Binswanger.</h1>
       <p class="text-block intro-reveal-1">
-        Ich übersetze Wissen in ästhetische Bilder. <br />
-        <br />
-        Dazu bewege ich mich leidenschaftlich an der Schnittstelle von Design und
-        Technologie und mache komplexe Inhalte intuitiv greifbar.
+        Ich übersetze Wissen in ästhetische Bilder.
+      </p>
+      <p class="text-block intro-reveal-1">
+        Dafür verbinde ich gestalterischen Anspruch mit technischem Know-how, um
+        komplexe Themen intuitiv fassbar zu machen.
       </p>
 
       <div class="scroll-indicator">
@@ -379,9 +380,9 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       </p>
       <p class="text-block text-p8-3">
         In diesem Umfeld, in dem Tempo und Kompetenz zusammenkommen, möchte ich
-        meine Erfahrungen und mein technisches Repertoire einbringen. Sowohl
-        schnelle, prägnante Illustrationen als auch die tiefgründige
-        Auseinandersetzung mit komplexen Themen begeistern mich.
+        meine Erfahrungen und mein technisches Repertoire einbringen – sei es
+        für schnelle, tagesaktuelle Grafiken oder für tiefgründige visuelle
+        Inhalte.
       </p>
       <p class="text-block text-p8-4">
         Deswegen bewerbe ich mich als Volontär bei NZZ Visuals, um von Ihrem
@@ -449,7 +450,8 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
         pin: true,
         snap: {
           snapTo: "labels",
-          duration: { min: 0.4, max: 2 },
+          directional: true,
+          duration: { min: 0.4, max: 1 },
           delay: 0.2,
           ease: "power2.inOut",
         },
@@ -534,7 +536,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     const hideText = (selector, sync = false) => {
       return masterTl.to(
         selector,
-        { y: "-70vh", opacity: 0, duration: 0.4 },
+        { y: "-70vh", opacity: 0, duration: 0.6 },
         sync ? "<" : "+=0.2",
       );
     };
@@ -644,10 +646,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     hideText(".text-p6");
     showImg(".img-bacteria", true);
     hideImg(".img-bacteria");
-    zoomFadeInImg(".img-gamedesign", true);
-    hideImg(".img-gamedesign");
     zoomFadeInImg(".img-gjermundbu", true);
     hideImg(".img-gjermundbu");
+    zoomFadeInImg(".img-gamedesign", true);
+    hideImg(".img-gamedesign");
     zoomFadeInImg(".img-uzh-blender", true);
     hideImg(".img-uzh-blender");
     // #endregion
@@ -882,6 +884,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       text-align: left;
       align-self: start;
       padding: 0 5%;
+      padding-top: 0.5rem;
 
       @media (min-width: 1024px) {
         grid-column: 2;
@@ -943,7 +946,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
 
     .img-gamedesign {
       align-content: center;
-      padding: 0;
+      padding: 0 5%;
 
       @media (min-width: 1024px) {
         padding: 0 10% 0 20%;
@@ -951,14 +954,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       }
     }
 
-    .img-gamedesign .img-caption {
-      padding: 0 5%;
-    }
-
-    .img-quercus,
-    .img-buchdrucker,
-    .img-microbiome {
-      padding: 0;
+    .img-quercus {
       align-content: center;
 
       @media (min-width: 1024px) {
@@ -969,7 +965,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
 
     .img-quercus .img-caption,
     .img-buchdrucker .img-caption,
-    .img-microbiome .img-caption {
+    .img-illustration-1 .img-caption {
       padding: 0 5%;
 
       @media (min-width: 1024px) {
@@ -1005,6 +1001,14 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
 
     .text-p8-1 .text-block {
       padding-bottom: 1rem;
+    }
+
+    .portfolio-link {
+      font-size: 24px;
+
+      @media (min-width: 1024px) {
+        font-size: 40px;
+      }
     }
 
     .img-flower-canvas {
