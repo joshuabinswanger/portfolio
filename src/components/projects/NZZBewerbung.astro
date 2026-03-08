@@ -1,12 +1,22 @@
 ---
 import { CldImage } from "astro-cloudinary";
 
-const flowerFiles = import.meta.glob(
-  "/src/assets/projects/flower_splat/flower_splat_avif_sequence/*.avif",
+const mobileFlowerFiles = import.meta.glob(
+  "/src/assets/projects/flower_splat/mobile_flower_splat_avif_sequence/*.avif",
   { eager: true, query: "?url" },
 );
 
-const flowerUrls = Object.values(flowerFiles)
+const desktopFlowerFiles = import.meta.glob(
+  "/src/assets/projects/flower_splat/desktop_flower_splat_avif_sequence/*.avif",
+  { eager: true, query: "?url" },
+);
+
+const mobileFlowerUrls = Object.values(mobileFlowerFiles)
+  .map((mod: any) => mod.default)
+  .sort()
+  .reverse();
+
+const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   .map((mod: any) => mod.default)
   .sort()
   .reverse();
@@ -20,9 +30,10 @@ const flowerUrls = Object.values(flowerFiles)
       <h1 class="text-block left-align intro-static">Hi,</h1>
       <h1 class="text-block intro-static">mein Name ist Joshua Binswanger.</h1>
       <p class="text-block intro-reveal-1">
-        Ich übersetze Wissen in ästhetische Bilder. Ich bewege mich mit
-        Leidenschaft an der Schnittstelle von Design und Technologie und mache
-        komplexe Inhalte intuitiv greifbar.
+        Ich übersetze Wissen in ästhetische Bilder. <br />
+        <br />
+        Dazu bewege ich mich leidenschaftlich an der Schnittstelle von Design und
+        Technologie und mache komplexe Inhalte intuitiv greifbar.
       </p>
 
       <div class="scroll-indicator">
@@ -98,21 +109,22 @@ const flowerUrls = Object.values(flowerFiles)
     <div class="text-wrapper text-intro-after">
       <p class="text-block">
         Mein breites Spektrum an Fähigkeiten will ich nun für
-        gesellschaftsrelevante Themen nutzen. Das NZZ Visuals Team setzt genau
-        dabei visuelle wie inhaltliche Massstäbe – und genau dort will ich hin.
+        gesellschaftsrelevante Themen nutzen.
+      </p>
+      <p class="text-block">
+        Das NZZ Visuals Team setzt genau dabei visuelle wie inhaltliche
+        Massstäbe – und genau dort will ich mitwirken.
       </p>
     </div>
 
     <!-- #endregion -->
 
     <!-- #region Section: Work (chapters 3–4) -->
-    <div class="text-wrapper text-titel-work">
-      <h1>Work</h1>
-    </div>
 
     <div id="panel-work" class="scrolly-panel split-panel">
       <!-- chapter 3 -->
       <div class="text-wrapper text-p3-intro">
+        <h1 class="text-block work-title">Work</h1>
         <p class="text-block">
           In der wissenschaftlichen Illustration ist es meine Aufgabe komplexe
           Sachverhalte zu verstehen und deren Essenz visuell zu destillieren.
@@ -190,12 +202,9 @@ const flowerUrls = Object.values(flowerFiles)
 
   <!-- #region Section: Werdegang (chapters 5–7) -->
   <div id="panel-werdegang" class="scrolly-panel split-panel">
-    <div class="text-wrapper text-titel-werdegang">
-      <h1>Werdegang</h1>
-    </div>
     <!-- chapter 5 -->
     <div class="text-wrapper text-p5-1">
-      <p class="text-block">Ein kurzer Blick auf meinen Werdegang.</p>
+      <h2 class="text-block werdegang-titel">Werdegang</h2>
       <p class="text-block">
         Meine Neugier und Faszination für neue Technologien war schon immer
         treibende Kraft in meiner gestalterischen Entwicklung.
@@ -234,8 +243,11 @@ const flowerUrls = Object.values(flowerFiles)
     <!-- chapter 6 -->
     <div class="text-wrapper text-p6">
       <p class="text-block">
-        Seither baue ich mein technisches Profil im Bereich der
-        3D-Visualisierung aus.
+        Die 3D-Visualisierung ist seither zu meiner grossen Leidenschaft
+        geworden.
+      </p><p class="text-block">
+        Mich reizt die Herausforderung, modernste Technologien zu meistern und
+        sie für zeitgemässe Visuals einzusetzen.
       </p>
     </div>
     <div class="img-stack img-bacteria">
@@ -246,8 +258,8 @@ const flowerUrls = Object.values(flowerFiles)
         alt="Blender Bacteria"
       />
       <div class="img-caption">
-        <h2>Von 3D-Modellierung...<br /></h2>
-        <p>Blender.</p>
+        <h2>Von 3D-Modelling, -Texturing und -Rendering...<br /></h2>
+        <p>In Blender erstelltes Bakteriemodell mit Lipiddoppelschicht.</p>
       </div>
     </div>
     <div class="img-stack img-gamedesign">
@@ -269,10 +281,7 @@ const flowerUrls = Object.values(flowerFiles)
       </video>
       <div class="img-caption">
         <h2>über prozeduraler Animation in Houdini...<br /></h2>
-        <p>
-          Dank seiner Flexibilität ist Houdini mittlerweile zu meinem zentralen
-          Werkzeug geworden.
-        </p>
+        <p>Key Visual für die Workshop-Reihe Game Design 101 an der UZH.</p>
       </div>
     </div>
 
@@ -311,8 +320,8 @@ const flowerUrls = Object.values(flowerFiles)
     <!-- chapter 7 -->
     <div class="text-wrapper text-p7-1">
       <p class="text-block">
-        Da Information heute primär digital konsumiert wird, habe ich mich
-        vertieft mit modernen Web-Formaten auseinandergesetzt.
+        Da Information heute primär digital konsumiert wird, setzte ich mich
+        vertieft mit modernen Web-Formaten auseinander.
       </p>
     </div>
 
@@ -325,10 +334,7 @@ const flowerUrls = Object.values(flowerFiles)
       />
       <div class="img-caption">
         <h2>Angefangen beim Design interaktiver 3D-Applikationen...<br /></h2>
-        <p>
-          App über Holzstrukturen für die Hochschule für Nachhaltige Entwicklung
-          Eberswalde.
-        </p>
+        <p>App zur Vermittlung der Holzstrukturen an der HNE Eberswalde.</p>
       </div>
     </div>
 
@@ -345,11 +351,19 @@ const flowerUrls = Object.values(flowerFiles)
       </video>
       <div class="img-caption">
         <h2>bis hin zum Entwickeln von eigenen Webseiten.<br /></h2>
-        <p>Mein persönliches Portfolio.</p>
+        <p>
+          Mein persönliches Portfolio, habe ich von Grund auf selbst
+          programmiert.
+        </p>
       </div>
     </div>
     <div class="text-wrapper text-block portfolio-link">
-      <a href="/" class="portfolio-logo-btn" aria-label="rhizome.ch">
+      <a
+        href="/"
+        class="portfolio-logo-btn"
+        aria-label="rhizome.ch"
+        target="_blank"
+      >
         &rarr; rhizome.ch
       </a>
     </div>
@@ -360,8 +374,8 @@ const flowerUrls = Object.values(flowerFiles)
   <div id="panel-zukunft" class="scrolly-panel split-panel">
     <div class="text-wrapper text-p8-1">
       <p class="text-block text-p8-2">
-        Die NZZ prägt die heutige Medienlandschaft massgebend mit ihrem
-        visuellen Journalismus.
+        Die NZZ prägt mit ihrem Visual Storytelling die heutige Medienlandschaft
+        massgebend.
       </p>
       <p class="text-block text-p8-3">
         In diesem Umfeld, in dem Tempo und Kompetenz zusammenkommen, möchte ich
@@ -385,7 +399,12 @@ const flowerUrls = Object.values(flowerFiles)
     </div>
     <!-- #endregion -->
 
-    <div id="image-sequences" data-flower={JSON.stringify(flowerUrls)}></div>
+    <div
+      id="image-sequences"
+      data-flower-mobile={JSON.stringify(mobileFlowerUrls)}
+      data-flower-desktop={JSON.stringify(desktopFlowerUrls)}
+    >
+    </div>
   </div>
 
   <!-- Progress bar is a sibling of all panels so panel opacity doesn't affect it -->
@@ -452,7 +471,12 @@ const flowerUrls = Object.values(flowerFiles)
 
     // #region Flower Splat Canvas
     const dataIsland = document.getElementById("image-sequences");
-    const flowerUrls = JSON.parse(dataIsland.dataset.flower || "[]");
+    const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+    const flowerUrls = JSON.parse(
+      isDesktop
+        ? dataIsland.dataset.flowerDesktop || "[]"
+        : dataIsland.dataset.flowerMobile || "[]",
+    );
 
     const flowerCanvas = document.getElementById(
       "flower-canvas",
@@ -500,7 +524,7 @@ const flowerUrls = Object.values(flowerFiles)
       const result = masterTl.fromTo(
         selector,
         { opacity: 0, y: 40 },
-        { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" },
+        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
         sync ? "<" : "+=0.2",
       );
       if (snap) masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
@@ -510,7 +534,7 @@ const flowerUrls = Object.values(flowerFiles)
     const hideText = (selector, sync = false) => {
       return masterTl.to(
         selector,
-        { y: "-70vh", opacity: 0, duration: 0.5 },
+        { y: "-70vh", opacity: 0, duration: 0.4 },
         sync ? "<" : "+=0.2",
       );
     };
@@ -519,7 +543,7 @@ const flowerUrls = Object.values(flowerFiles)
       const result = masterTl.fromTo(
         selector,
         { scale: 0.85, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.6, ease: "power2.out" },
+        { scale: 1, opacity: 1, duration: 0.4, ease: "power2.out" },
         sync ? "<" : "-=0.2",
       );
       if (snap) masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
@@ -530,8 +554,8 @@ const flowerUrls = Object.values(flowerFiles)
       const result = masterTl.fromTo(
         selector,
         { scale: 0.8, opacity: 0 },
-        { opacity: 1, duration: 0.8, scale: 1, ease: "power2.out" },
-        sync ? "<" : "-=0.5",
+        { opacity: 1, duration: 0.4, scale: 1, ease: "power2.out" },
+        sync ? "<" : "-=0.2",
       );
       if (snap) masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
       return result;
@@ -590,8 +614,6 @@ const flowerUrls = Object.values(flowerFiles)
     // #region Chapter 3: Work — panel-intro stays visible; panel-work overlays it
     masterTl.addLabel("chapter-3");
     masterTl.to("#panel-work", { opacity: 1, duration: 0.05 });
-    showText(".text-titel-work", true);
-    hideText(".text-titel-work");
     showText(".text-p3-intro", true);
     hideText(".text-p3-intro");
     zoomFadeInImg(".img-pheno", true);
@@ -608,8 +630,6 @@ const flowerUrls = Object.values(flowerFiles)
     masterTl.addLabel("chapter-5");
     masterTl.to("#panel-werdegang", { opacity: 1, duration: 0.05 });
     masterTl.to("#panel-intro", { opacity: 0, duration: 0.05 }, "<");
-    showText(".text-titel-werdegang", true);
-    hideText(".text-titel-werdegang");
     showText(".text-p5-1", true);
     hideText(".text-p5-1");
     showImg(".img-illustration-1", true);
@@ -664,7 +684,7 @@ const flowerUrls = Object.values(flowerFiles)
         onUpdate: renderFlower,
         duration: 1.5,
       },
-      "-=1",
+      "-=0.5",
     );
     showImg(".img-flower-canvas", true);
     showText(".text-p8-5");
@@ -760,6 +780,15 @@ const flowerUrls = Object.values(flowerFiles)
       }
     }
 
+    h2.text-block {
+      font-family: PowerGrotesk-Medium;
+      font-size: 28px;
+
+      @media (min-width: 1024px) {
+        font-size: 28px;
+      }
+    }
+
     p.text-block {
       font-size: 16px;
 
@@ -786,6 +815,7 @@ const flowerUrls = Object.values(flowerFiles)
 
       @media (min-width: 1024px) {
         font-size: 16px;
+        max-width: 33ch;
       }
     }
 
@@ -1013,6 +1043,7 @@ const flowerUrls = Object.values(flowerFiles)
       @media (min-width: 1024px) {
         height: 100svh;
         max-height: 100svh;
+        padding-left: 15%;
         width: auto;
       }
     }
