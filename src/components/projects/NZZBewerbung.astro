@@ -24,11 +24,6 @@ const flowerUrls = Object.values(flowerFiles)
         Leidenschaft an der Schnittstelle von Design und Technologie und mache
         komplexe Inhalte intuitiv greifbar.
       </p>
-      <p class="text-block intro-reveal-2">
-        Mein breites Spektrum an Fähigkeiten will ich nun für
-        gesellschaftsrelevante Themen nutzen. Das NZZ Visuals Team setzt genau
-        dabei visuelle wie inhaltliche Massstäbe – und genau dort will ich hin.
-      </p>
 
       <div class="scroll-indicator">
         <span>Scroll</span>
@@ -98,6 +93,14 @@ const flowerUrls = Object.values(flowerFiles)
         <h2>oder Animationen für das Web.<br /></h2>
         <p>Interaktiver Jahresbericht für die Universitätsbibliothek Zürich.</p>
       </div>
+    </div>
+
+    <div class="text-wrapper text-intro-after">
+      <p class="text-block">
+        Mein breites Spektrum an Fähigkeiten will ich nun für
+        gesellschaftsrelevante Themen nutzen. Das NZZ Visuals Team setzt genau
+        dabei visuelle wie inhaltliche Massstäbe – und genau dort will ich hin.
+      </p>
     </div>
 
     <!-- #endregion -->
@@ -401,7 +404,6 @@ const flowerUrls = Object.values(flowerFiles)
     import Lenis from "lenis";
     import { gsap } from "gsap";
     import { ScrollTrigger } from "gsap/ScrollTrigger";
-    import { toPaths } from "astro:i18n";
 
     gsap.registerPlugin(ScrollTrigger);
     // #endregion
@@ -567,13 +569,11 @@ const flowerUrls = Object.values(flowerFiles)
 
     gsap.set(".intro-static", { opacity: 1, y: 0 });
     gsap.set(".intro-reveal-1", { opacity: 0, y: 0 });
-    gsap.set(".intro-reveal-2", { opacity: 0, y: 0 });
 
-    // #region Chapter 1: Intro — text then 3 images
+    // #region Chapter 1: Intro — text then 3 images then closing text
     masterTl.addLabel("chapter-1");
     masterTl.set("#panel-intro", { opacity: 1 });
     showText(".intro-reveal-1");
-    showText(".intro-reveal-2");
     hideText(".text-p1");
     masterTl.to(".scroll-indicator", { opacity: 0, duration: 0.1 }, "<");
 
@@ -583,6 +583,8 @@ const flowerUrls = Object.values(flowerFiles)
     hideImg(".img-buchdrucker");
     showImg(".img-ub-intro", true);
     hideImg(".img-ub-intro");
+    showText(".text-intro-after", true);
+    hideText(".text-intro-after");
     // #endregion
 
     // #region Chapter 3: Work — panel-intro stays visible; panel-work overlays it
@@ -592,11 +594,11 @@ const flowerUrls = Object.values(flowerFiles)
     hideText(".text-titel-work");
     showText(".text-p3-intro", true);
     hideText(".text-p3-intro");
-    zoomFadeInImg(".img-pheno", true, true);
+    zoomFadeInImg(".img-pheno", true);
     hideImg(".img-pheno");
-    zoomFadeInImg(".img-eth-vis-1", true, true);
+    zoomFadeInImg(".img-eth-vis-1", true);
     hideImg(".img-eth-vis-1");
-    zoomFadeInImg(".img-microbiome", true, true);
+    zoomFadeInImg(".img-microbiome", true);
     hideImg(".img-microbiome");
     showText(".text-p3-conclusion", true);
     hideText(".text-p3-conclusion");
