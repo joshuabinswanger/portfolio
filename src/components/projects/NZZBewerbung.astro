@@ -555,18 +555,28 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   // Helper functions
   let snapLabelCount = 0;
 
-  const showText = (selector, sync = false, snap = true) => {
+  const slideIn = (selector, sync = false, snap = true) => {
     const result = masterTl.fromTo(
       selector,
-      { opacity: 0, y: 40 },
-      { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" },
-      sync ? "<" : "+=0.2",
+      { y: "70vh", opacity: 0 },
+      { y: 0, opacity: 1, duration: 1, ease: "power2.out" },
+      sync ? "<" : "-=0.2",
+    );
+    if (snap) masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
+    return result;
+  };
+  const fadeIn = (selector, sync = false, snap = true) => {
+    const result = masterTl.fromTo(
+      selector,
+      { scale: 0.8, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 1, ease: "power2.out" },
+      sync ? "<" : "-=0.2",
     );
     if (snap) masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
     return result;
   };
 
-  const hideText = (selector, sync = false) => {
+  const slideOut = (selector, sync = false) => {
     return masterTl.to(
       selector,
       { y: "-70vh", opacity: 0, duration: 0.7 },
@@ -574,32 +584,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     );
   };
 
-  const showImg = (selector, sync = false, snap = true) => {
-    const result = masterTl.fromTo(
-      selector,
-      { scale: 0.85, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 0.7, ease: "power2.out" },
-      sync ? "<" : "-=0.2",
-    );
-    if (snap) masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
-    return result;
-  };
-
-  const zoomFadeInImg = (selector, sync = false, snap = true) => {
-    const result = masterTl.fromTo(
-      selector,
-      { scale: 0.8, opacity: 0 },
-      { opacity: 1, duration: 1, scale: 1, ease: "power2.out" },
-      sync ? "<" : "-=0.2",
-    );
-    if (snap) masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
-    return result;
-  };
-
-  const hideImg = (selector, sync = false) => {
+  const fadeOut = (selector, sync = false) => {
     return masterTl.to(
       selector,
-      { scale: 0.95, opacity: 0, duration: 0.7 },
+      { scale: 0.8, opacity: 0, duration: 0.5 },
       sync ? "<" : "+=0.2",
     );
   };
@@ -622,79 +610,77 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   gsap.set(".intro-static", { opacity: 1, y: 0 });
   gsap.set(".intro-reveal-1", { opacity: 0, y: 0 });
   gsap.set("#scrolly-progress", { opacity: 0 });
+  gsap.set("#panel-intro", { opacity: 1 });
 
   // #region Chapter 1: Intro — text then 3 images then closing text
   masterTl.addLabel("chapter-1");
-  masterTl.set("#panel-intro", { opacity: 1 });
-  showText(".intro-reveal-1");
-  hideText(".text-p1");
-  masterTl.to(".scroll-indicator", { opacity: 0, duration: 0.1 }, "<");
+  slideIn(".intro-reveal-1");
+  slideOut(".text-p1");
   masterTl.to("#scrolly-progress", { opacity: 1, duration: 0.6 }, "<");
 
-  showImg(".img-quercus", true);
-  hideImg(".img-quercus");
-  showImg(".img-buchdrucker", true);
-  hideImg(".img-buchdrucker");
-  showImg(".img-ub-intro", true);
-  hideImg(".img-ub-intro");
-  showText(".text-intro-after", true);
-  hideText(".text-intro-after");
+  slideIn(".img-quercus", true);
+  fadeOut(".img-quercus");
+  fadeIn(".img-buchdrucker", true);
+  fadeOut(".img-buchdrucker");
+  fadeIn(".img-ub-intro", true);
+  fadeOut(".img-ub-intro");
+  fadeIn(".text-intro-after", true);
+  slideOut(".text-intro-after");
   // #endregion
 
   // #region Chapter 3: Work — panel-intro stays visible; panel-work overlays it
   masterTl.addLabel("chapter-3");
   masterTl.to("#panel-work", { opacity: 1, duration: 0.05 });
-  showText(".text-p3-intro", true);
-  hideText(".text-p3-intro");
-  zoomFadeInImg(".img-pheno", true);
-  hideImg(".img-pheno");
-  zoomFadeInImg(".img-eth-vis-1", true);
-  hideImg(".img-eth-vis-1");
-  zoomFadeInImg(".img-microbiome", true);
-  hideImg(".img-microbiome");
-  showText(".text-p3-conclusion", true);
-  hideText(".text-p3-conclusion");
+  slideIn(".text-p3-intro", true);
+  slideOut(".text-p3-intro");
+  slideIn(".img-pheno", true);
+  fadeOut(".img-pheno");
+  fadeIn(".img-eth-vis-1", true);
+  fadeOut(".img-eth-vis-1");
+  fadeIn(".img-microbiome", true);
+  slideOut(".img-microbiome");
+  slideIn(".text-p3-conclusion", true);
+  slideOut(".text-p3-conclusion");
   // #endregion
 
   // #region Chapter 5: Werdegang — fade out panel-intro (takes panel-work with it)
   masterTl.addLabel("chapter-5");
-  masterTl.to("#panel-werdegang", { opacity: 1, duration: 0.05 });
+  masterTl.to("#panel-werdegang", { opacity: 1, duration: 0.05 }, "<");
   masterTl.to("#panel-intro", { opacity: 0, duration: 0.05 }, "<");
-  showText(".text-p5-1", true);
-  hideText(".text-p5-1");
-  showImg(".img-illustration-1", true);
-  hideImg(".img-illustration-1");
-  zoomFadeInImg(".img-wood-12", true);
-  hideImg(".img-wood-12");
+  slideIn(".text-p5-1", true);
+  slideOut(".text-p5-1");
+  slideIn(".img-illustration-1", true);
+  fadeOut(".img-illustration-1");
+  fadeIn(".img-wood-12", true);
+  slideOut(".img-wood-12");
   // #endregion
 
   // #region Chapter 6: Technologie & 3D
   masterTl.addLabel("chapter-6");
-  showText(".text-p6", true);
-  hideText(".text-p6");
+  slideIn(".text-p6", true);
+  slideOut(".text-p6");
   masterTl.to({}, { duration: 0.25 });
-  showImg(".img-bacteria", true);
-  hideImg(".img-bacteria");
-  zoomFadeInImg(".img-gjermundbu", true);
-  hideImg(".img-gjermundbu");
-  zoomFadeInImg(".img-gamedesign", true);
-  hideImg(".img-gamedesign");
-  zoomFadeInImg(".img-uzh-blender", true);
-  hideImg(".img-uzh-blender");
+  slideIn(".img-bacteria", true);
+  fadeOut(".img-bacteria");
+  fadeIn(".img-gjermundbu", true);
+  fadeOut(".img-gjermundbu");
+  fadeIn(".img-gamedesign", true);
+  fadeOut(".img-gamedesign");
+  fadeIn(".img-uzh-blender", true);
+  slideOut(".img-uzh-blender");
   // #endregion
 
   // #region Chapter 7: Digitale Formate & Web
   masterTl.addLabel("chapter-7");
-  showText(".text-p7-1", true);
-  hideText(".text-p7-1");
-  zoomFadeInImg(".img-xylo", true);
-  hideImg(".img-xylo");
-  zoomFadeInImg(".img-augmedi", true);
-  hideImg(".img-augmedi");
-  showImg(".img-portfolio-video", true);
-  hideImg(".img-portfolio-video");
-  showText(".portfolio-link", true);
-  masterTl.to({}, { duration: 0.5 });
+  slideIn(".text-p7-1", true);
+  slideOut(".text-p7-1");
+  slideIn(".img-xylo", true);
+  fadeOut(".img-xylo");
+  fadeIn(".img-augmedi", true);
+  fadeOut(".img-augmedi");
+  fadeIn(".img-portfolio-video", true);
+  fadeOut(".img-portfolio-video");
+  slideOut(".portfolio-link", true);
   // #endregion
 
   // #region Chapter 8: Zukunft — 3 sequential text reveals, then flower + finale
@@ -702,12 +688,12 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   masterTl.to("#panel-zukunft", { opacity: 1, duration: 0.05 });
   masterTl.to("#panel-werdegang", { opacity: 0, duration: 0.05 }, "<");
   masterTl.to(".text-p8-1", { opacity: 1, duration: 0.05 }, "<");
-  showText(".text-p8-2", true);
-  showText(".text-p8-3");
-  showText(".text-p8-4");
-  hideText(".text-p8-2");
-  hideText(".text-p8-3", true);
-  hideText(".text-p8-4", true);
+  slideIn(".text-p8-2", true);
+  slideIn(".text-p8-3");
+  slideIn(".text-p8-4");
+  fadeOut(".text-p8-2");
+  fadeOut(".text-p8-3", true);
+  slideOut(".text-p8-4", true);
   masterTl.to(
     flowerPlayhead,
     {
@@ -719,8 +705,8 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     },
     "-=0.5",
   );
-  showImg(".img-flower-canvas", true);
-  showText(".text-p8-5");
+  fadeIn(".img-flower-canvas", true);
+  slideIn(".text-p8-5");
   masterTl.addLabel(`text-snap-${snapLabelCount++}`);
   masterTl.addLabel("end");
   // #endregion
@@ -728,6 +714,18 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   // #endregion
 
   // #region Event Listeners
+  // Hide scroll indicator on first scroll
+  const hideScrollIndicator = () => {
+    scrollIndicatorTween.kill();
+    gsap.to(".scroll-indicator", {
+      opacity: 0,
+      duration: 0.3,
+      ease: "power1.out",
+    });
+    lenis.off("scroll", hideScrollIndicator);
+  };
+  lenis.on("scroll", hideScrollIndicator);
+
   // Clickable Progress Words
   document.querySelectorAll(".progress-word").forEach((word) => {
     word.addEventListener("click", (e) => {
@@ -973,8 +971,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     padding: 0 10%;
 
     @media (min-width: 1024px) {
-      padding: 0 10% 0 20%;
-      grid-template-columns: min(max-content, 40vw) 1fr;
+      padding: 0 20% 0 30%;
     }
   }
 
@@ -988,7 +985,6 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
 
     @media (min-width: 1024px) {
       padding: 0 10% 0 20%;
-      grid-template-columns: min(max-content, 40vw) 1fr;
     }
   }
 
@@ -997,7 +993,6 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
 
     @media (min-width: 1024px) {
       padding: 0 10% 0 20%;
-      grid-template-columns: min(max-content, 40vw) 1fr;
     }
   }
 
@@ -1021,8 +1016,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     align-content: center;
     padding: 0 15%;
     @media (min-width: 1024px) {
-      padding: 0 10% 0 20%;
-      grid-template-columns: min(max-content, 40vw) 1fr;
+      padding: 0 20% 0 30%;
     }
   }
   .img-portfolio-video .img-caption {
