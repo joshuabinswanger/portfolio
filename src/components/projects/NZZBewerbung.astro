@@ -62,7 +62,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
         />
       </video>
       <div class="img-caption">
-        <h2>Ob Visualisierung mikroskopischer Strukturen...<br /></h2>
+        <h2>Ob Darstellungen mikroskopischer Strukturen...<br /></h2>
         <p>
           Ein nur 0.3mm langer Ausschnitt von Eichenholz, mit klar ersichtlichen
           Gefässen und Zellen. Basierend auf einem Mikro-CT-Scan des Deutschen
@@ -84,6 +84,29 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
         <p>
           Informationsposter über den Buchdrucker und wie man eine der grössten
           Gefahren für unsere Wälder erkennt.
+        </p>
+      </div>
+    </div>
+
+    <!-- Intro Fire -->
+    <div class="img-stack img-fire">
+      <CldImage
+        src="Fire_2020_mvjojb"
+        width={1200}
+        sizes="(max-width: 768px) 100vw, 50vw"
+        alt="Boreale Feuer 2020"
+      />
+      <div class="img-caption">
+        <h2>Visualisierung von Daten...<br /></h2>
+        <p>
+          Visualisierung der verbrannten Fläche des borealen Waldes im Jahr
+          2020. Aufgrund des Klimawandels finden Waldbrände immer weiter
+          nördlich statt und setzen enorme Mengen an CO2 frei. Datensatz
+          basierend auf dieser <a
+            href="https://essd.copernicus.org/articles/17/3599/2025/"
+            target="_blank"
+            class="inline-link">Publikation</a
+          >.
         </p>
       </div>
     </div>
@@ -373,8 +396,8 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
             href="https://www.augmedi.com/"
             target="_blank"
             class="inline-link">Augmedi AG</a
-          > verantworte ich die 3D-Scans von menschlichen Körpern und deren
-          Aufbereitung für unsere Lernapp.
+          > verantworte ich die 3D-Scans von menschlichen Körpern und deren Aufbereitung
+          für unsere Lernapp.
         </p>
       </div>
     </div>
@@ -638,6 +661,8 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   fadeOut(".img-quercus");
   fadeIn(".img-buchdrucker", true);
   fadeOut(".img-buchdrucker");
+  fadeIn(".img-fire", true);
+  fadeOut(".img-fire");
   fadeIn(".img-ub-intro", true);
   fadeOut(".img-ub-intro");
   fadeIn(".text-intro-after", true);
