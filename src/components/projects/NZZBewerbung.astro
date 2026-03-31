@@ -482,6 +482,12 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   </div>
 </div>
 <script>
+  // #region Scroll Reset on Reload
+  history.scrollRestoration = "manual";
+  window.scrollTo(0, 0);
+  window.addEventListener("beforeunload", () => window.scrollTo(0, 0));
+  // #endregion
+
   // #region Imports & Setup
   import Lenis from "lenis";
   import { gsap } from "gsap";
@@ -554,19 +560,6 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     flowerImages.push(img);
   });
 
-  if (flowerImages.length > 0) {
-    const setFlowerCanvasSize = () => {
-      flowerCanvas.width = flowerImages[0].naturalWidth;
-      flowerCanvas.height = flowerImages[0].naturalHeight;
-      renderFlower();
-    };
-    if (flowerImages[0].complete) {
-      setFlowerCanvasSize();
-    } else {
-      flowerImages[0].onload = setFlowerCanvasSize;
-    }
-  }
-
   const renderFlower = () => {
     if (flowerImages.length === 0) return;
     flowerCtx.clearRect(0, 0, flowerCanvas.width, flowerCanvas.height);
@@ -588,6 +581,19 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       flowerCtx.globalAlpha = 1;
     }
   };
+
+  if (flowerImages.length > 0) {
+    const setFlowerCanvasSize = () => {
+      flowerCanvas.width = flowerImages[0].naturalWidth;
+      flowerCanvas.height = flowerImages[0].naturalHeight;
+      renderFlower();
+    };
+    if (flowerImages[0].complete) {
+      setFlowerCanvasSize();
+    } else {
+      flowerImages[0].onload = setFlowerCanvasSize;
+    }
+  }
   // #endregion
 
   // #region GSAP Helper Functions
@@ -754,6 +760,8 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   // #endregion
 
   // #endregion
+
+  ScrollTrigger.refresh();
 
   // #region Event Listeners
   // Hide scroll indicator on first scroll
