@@ -1,7 +1,7 @@
 projectName: "UZHBlender"
 
 title: "UZH Blender Course"
-subtitle: "Basics of 3D Visualtions"
+subtitle: "Basics of 3D Visualizations"
 year: "202304"
 client: "University of Zurich"
 collaborators: ""
@@ -14,10 +14,10 @@ tags:
 bgcolor: "#111111cc"
 
 projectDescription: |
-  At the University of Zurich I am teaching a recurring course that lets participants familiarize with the basics of 3D Visualisation. We focus mainly on getting hands-on with Modeling, Texturing and Rendering with Blender. The course takes place in a hybrid setting where watching video tutorials are combined with in-person sessions. With time for experimentation it is ossible to accomodate for the specific interest of the participants, veen beyond the scope of Blender. 
+  At the University of Zurich I am teaching a recurring course that lets participants familiarize with the basics of 3D Visualisation. We focus mainly on getting hands-on with Modeling, Texturing and Rendering with Blender. The course takes place in a hybrid setting where watching video tutorials are combined with in-person sessions. With time for experimentation it is possible to accommodate for the specific interest of the participants, even beyond the scope of Blender. 
   <br>
   <br>**<a href="https://zi-training.zi.uzh.ch/angebot/details/9666" target="_blank" style="pointer-events: auto; color: black;">Course &mdash; Blender: 3D Modeling, Texturing und Rendering</a>**
-  <br>**<a href="https://www.youtube.com/@dlsubzh/videos" target="_blank" style="pointer-events: auto; color: black;">Video Tutrial Series</a>**
+  <br>**<a href="https://www.youtube.com/@dlsubzh/videos" target="_blank" style="pointer-events: auto; color: black;">Video Tutorial Series</a>**
 
 credits: |
   <table>
