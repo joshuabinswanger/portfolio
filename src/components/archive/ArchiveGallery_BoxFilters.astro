@@ -6,25 +6,16 @@ import TopWrapper from "../../layouts/TopWrapper.astro";
 import GridLayout from "../../layouts/GridLayout.astro";
 import ArchiveElement from "./ArchiveGalleryElement.astro";
 import { getCollection } from "astro:content";
+import { convertTagForCss, ensureArray } from "./utils";
 
 // Filter the collection to include only items with metadata.archive === "include"
-const archiveImages = await getCollection('galleryImages', ({ data }) => {
+const archiveImages = await getCollection('images', ({ data }) => {
   return data.metadata?.showInIndex === "yes";
 });
 
 //////////////////
 ///// TAGS ///////
 //////////////////
-
-
-// Helper function to ensure we get an array from any input
-function ensureArray(value: string | string[] | null | undefined) {
-  if (!value) return [];
-  if (Array.isArray(value)) return value;
-  return value.split(',').map(item => item.trim()); // Split by comma and trim spaces
-}
-
-
 
 //// Role /////
 
@@ -39,18 +30,12 @@ const roleListLength = roleAllowedList.length;
 
 const roleAllowed = role.filter(tag => roleAllowedList.includes(tag));
 
-//covnert to CSS conform tags
-const roleConversionCSS = {
-  "2D": "twoD",
-  "3D": "threeD"
-};
-
 const roleConversionName = {
   "Dev": "Tech",
 };
 
 
-const roleConvertedCSS = roleAllowed.map(tag => roleConversionCSS[tag] || tag);
+const roleConvertedCSS = roleAllowed.map(convertTagForCss);
 const roleConvertedName = roleAllowed.map(tag => roleConversionName[tag] || tag);
 
 
@@ -68,16 +53,12 @@ const programListLength = programAllowedList.length;
 
 const programAllowed = program.filter(tag => programAllowedList.includes(tag));
 
-//covnert to CSS conform tags
-const programConversionCSS = {
-};
-
 const programConversionName = {
   "SubstancePainter" : "Substance Painter"
 };
 
 
-const programConvertedCSS = programAllowed.map(tag => programConversionCSS[tag] || tag);
+const programConvertedCSS = programAllowed.map(convertTagForCss);
 const programConvertedName= programAllowed.map(tag => programConversionName[tag] || tag);
 
 
@@ -111,12 +92,7 @@ const topicConversionName = {
 const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || tag);
 
 
-
-//covnert to CSS conform tags 
-const topicConversionCSS = {
-};
-
-const topicConvertedCSS = topicAllowed.map(tag => topicConversionCSS[tag] || tag);
+const topicConvertedCSS = topicAllowed.map(convertTagForCss);
 
 ---
 
@@ -332,7 +308,7 @@ const topicConvertedCSS = topicAllowed.map(tag => topicConversionCSS[tag] || tag
         {archiveImages.map((image, index) => (
             
                 <ArchiveElement
-                    public_id={image.data.public_id}
+                    image={image}
                     index={index}
                 />
 

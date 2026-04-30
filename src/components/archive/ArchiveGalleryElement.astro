@@ -1,102 +1,27 @@
 ---
-import { getEntry } from "astro:content";
-import { CldImage } from "astro-cloudinary";
+import { Picture } from "astro:assets";
 
 import "photoswipe/style.css";
 
+import { resolveImageUrl, resolveLocalImage } from "../images/localImages";
+import {
+  buildArchiveHighResData,
+  getArchiveRoleTags,
+  getArchiveTagClassString,
+  type ArchiveImage,
+} from "./utils";
+
 interface Props {
-  public_id: string;
+  image: ArchiveImage;
   index: number;
 }
 
-const archiveImage = await getEntry(
-  "galleryImages",
-  `${Astro.props.public_id}`,
-);
-
-///////////////////////////
-/////  CREATE TAGS ///////
-//////////////////////////
-
-// Helper function to ensure we get an array from any input
-function ensureArray(value: string | string[] | null | undefined) {
-  if (!value) return [];
-  if (Array.isArray(value)) return value;
-  return value.split(",").map((item) => item.trim()); // Split by comma and trim spaces
-}
-
-//here we combine alll meta data with tags, so we can adjust them easily in cloudinary with deduplication
-const tags = Array.from(
-  new Set([
-    ...ensureArray(archiveImage.data.metadata?.role),
-    ...ensureArray(archiveImage.data.metadata?.program),
-    ...ensureArray(archiveImage.data.metadata?.topic),
-    ...ensureArray(archiveImage.data.tags),
-  ]),
-);
-
-// Convert numbers to string because CSS Classes cant start with numbers
-const tagConversion = {
-  "2D": "twoD",
-  "3D": "threeD",
-};
-
-// Convert the tags in the allowed list using a mapping object
-const convertedTags = tags.map((tag) => tagConversion[tag] || tag);
-
-// Convert role tags for data attributes.
-const role = [...ensureArray(archiveImage.data.metadata?.role)];
-const convertedRole = role.map((tag) => tagConversion[tag] || tag);
-
-// Join tags into a space-separated string
-const tagClassString = convertedTags.join(" ");
-
-///////////////////////////
-//  HIGH RES IMAGE ADD ///
-//////////////////////////
-// Check if any image has metadata.highres_public_id
-const highResData = [];
-let highResImage = null;
-
-if (archiveImage?.data.metadata?.highres_public_id) {
-  try {
-    // Fetch high-resolution image data
-    highResImage = await getEntry(
-      "highResImages",
-      archiveImage.data.metadata?.highres_public_id,
-    );
-
-    if (highResImage?.data) {
-      // Push the high-res image data
-      highResData.push({
-        ...archiveImage.data, // Base data
-        highResWidth: highResImage.data.width,
-        highResHeight: highResImage.data.height,
-        highResSecureUrl: highResImage.data.secure_url,
-      });
-    } else {
-      console.error(
-        `High-res image data is invalid for public ID: ${archiveImage.data.metadata.highres_public_id}`,
-      );
-    }
-  } catch (error) {
-    console.error(
-      `Failed to fetch highResImages for ${archiveImage.data.metadata.highres_public_id}:`,
-      error,
-    );
-  }
-} else {
-  // Fallback to base archive image data if no high-res metadata exists
-  highResData.push({
-    ...archiveImage.data,
-    highResWidth: archiveImage.data.width,
-    highResHeight: archiveImage.data.height,
-    highResSecureUrl: archiveImage.data.secure_url,
-  });
-}
-
-// Log to verify data
-/* console.log("HighResData:", highResData); */
+const archiveImage = Astro.props.image;
+const imageSrc = resolveLocalImage(archiveImage.data.src);
+const imageUrl = resolveImageUrl(archiveImage.data.src);
+const highResData = await buildArchiveHighResData(archiveImage);
+const tagClassString = getArchiveTagClassString(archiveImage);
+const convertedRole = getArchiveRoleTags(archiveImage);
 ---
 
 <div
@@ -111,25 +36,23 @@ if (archiveImage?.data.metadata?.highres_public_id) {
     <a
       class:list={["photo-link"]}
       id={`index-${Astro.props.index}`}
-      href={highResData[0].highResSecureUrl}
-      data-pswp-width={highResData[0].highResWidth}
-      data-pswp-height={highResData[0].highResHeight}
+      href={highResData.url}
+      data-pswp-width={highResData.width}
+      data-pswp-height={highResData.height}
       target="_blank"
       data-description_title={archiveImage.data.metadata?.description_title}
       data-description_text={archiveImage.data.metadata?.description_text}
       data-link={archiveImage.data.metadata?.link}
     >
-      <CldImage
-        src={archiveImage.data.public_id}
-        data-src={archiveImage.data.secure_url}
-        width={archiveImage.data.width / 3}
-        height={archiveImage.data.width / 3}
+      <Picture
+        src={imageSrc}
+        data-src={imageUrl}
+        width={archiveImage.data.width}
+        height={archiveImage.data.height}
         sizes="(max-width: 650px) 45vw, (max-width: 1200px) 20vw, 25vw"
-        alt={archiveImage.data.metadata?.description_title}
-        format="avif"
-        crop={{
-          type: "fill",
-        }}
+        alt={archiveImage.data.metadata?.description_title ?? ""}
+        formats={["avif", "webp"]}
+        loading="lazy"
       />
     </a>
   </div>

@@ -18,7 +18,8 @@ export function resolveLocalImage(src: string): ImageMetadata {
   }
 
   const image =
-    localImages[src]?.default ?? localImagesByLowercasePath.get(src.toLowerCase());
+    localImages[src]?.default ??
+    localImagesByLowercasePath.get(src.toLowerCase());
 
   if (!image) {
     throw new Error(`Local image asset not found for "${src}"`);
@@ -28,7 +29,5 @@ export function resolveLocalImage(src: string): ImageMetadata {
 }
 
 export function resolveImageUrl(src: string): string {
-  const resolvedImage = resolveLocalImage(src);
-
-  return resolvedImage.src;
+  return resolveLocalImage(src).src;
 }
