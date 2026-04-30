@@ -1,0 +1,25 @@
+src: /src/assets/projects/StructureOfWood/StructureofWood_Gallery_5_g1x7ry.webp
+width: 1200
+height: 1320
+tags:
+  - 3D
+  - Science
+  - Wood
+  - ZBrush
+metadata:
+  project: StructureOfWood
+  description_title: Cellulose Microfibril Close Up
+  description_text: The lignin fibrils wrap around the cellulose fibrils, analogous to ferroconcrete
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 9
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2019'
+  client: null
+  collaborators: null
+  role: 3D
+  program: null
+  topic: Wood, Science
+  link: null
+  highres_public_id: null

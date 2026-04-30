@@ -1,0 +1,25 @@
+src: /src/assets/projects/LivingBricks/ETHVisualisations_Gallery_2_lqhc5s.webp
+width: 1200
+height: 1380
+tags:
+  - 3D
+  - Houdini
+  - Science
+  - Proceduralism
+metadata:
+  project: LivingBricks
+  description_title: Living porous ceramics for bacteria-regulated gas sensing and carbon capture
+  description_text: arXiv:2409.00789 [cond-mat.mtrl-sci]
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 2
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2023'
+  client: ETH
+  collaborators: null
+  role: 3D
+  program: Houdini
+  topic: Science
+  link: null
+  highres_public_id: null

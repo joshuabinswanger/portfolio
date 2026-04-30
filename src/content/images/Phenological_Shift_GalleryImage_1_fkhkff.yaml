@@ -1,0 +1,23 @@
+src: /src/assets/projects/PhenologicalShift/Phenological_Shift_GalleryImage_1_fkhkff.webp
+width: 2000
+height: 2250
+tags:
+  - Houdini
+  - Science
+metadata:
+  project: PhenologicalShift
+  description_title: Snow Height SensorReveal Phenological Advance in Alpine Grasslands
+  description_text: Examplary plant growth at higher altitudes in the swiss alps.
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 0
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2024'
+  client: SLF
+  collaborators: null
+  role: null
+  program: Houdini
+  topic: Science
+  link: https://doi.org/10.1111/gcb.70195
+  highres_public_id: null

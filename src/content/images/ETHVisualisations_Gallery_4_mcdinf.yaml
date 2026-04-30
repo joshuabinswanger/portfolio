@@ -1,0 +1,23 @@
+src: /src/assets/projects/FungusPrinting/ETHVisualisations_Gallery_4_mcdinf.webp
+width: 1200
+height: 1380
+tags:
+  - 3D
+  - Science
+metadata:
+  project: FungusPrinting
+  description_title: Three-dimensional printing of mycelium hydrogels into living complex materials
+  description_text: 'DOI: 10.1038/s41563-022-01429-5'
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 3
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2021'
+  client: ETH
+  collaborators: null
+  role: 3D
+  program: ZBrush, Keyshot
+  topic: Science
+  link: null
+  highres_public_id: null

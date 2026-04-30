@@ -1,0 +1,26 @@
+src: /src/assets/projects/GameDesign101/GameDesign101_GalleryImages_2_k20ac0.webp
+width: 1500
+height: 1500
+tags:
+  - 3D
+  - Houdini
+  - Illustration
+  - Motion
+  - Proceduralism
+metadata:
+  project: GameDesign101
+  description_title: N64 Controller Close Up
+  description_text: Proceduraly generated Key Visual in Houdini, Octane & Blender
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 1
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2024'
+  client: UZH
+  collaborators: null
+  role: 3D Dev
+  program: Houdini, Octane
+  topic: Motion
+  link: null
+  highres_public_id: null

@@ -1,0 +1,25 @@
+src: /src/assets/projects/GamesDesign101forKids/GameDesign101_GalleryImages_6_f0ezlz.webp
+width: 1500
+height: 1500
+tags:
+  - 3D
+  - Houdini
+  - Illustration
+  - Proceduralism
+metadata:
+  project: GamesDesign101forKids
+  description_title: Game Design 101 for Kids!
+  description_text: Variant of the Visual, for Kids...
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 9
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2024'
+  client: null
+  collaborators: null
+  role: 3D
+  program: Houdini
+  topic: 3D
+  link: null
+  highres_public_id: GameDesign101_forKids_1_x1cudy

@@ -1,0 +1,24 @@
+src: /src/assets/projects/Buchdrucker/Borkenkaefer_Gallery_4_utyhxe.webp
+width: 1500
+height: 1800
+tags:
+  - 2D
+  - Science
+  - Wood
+metadata:
+  project: Buchdrucker
+  description_title: Fir Tree (Picea abies)
+  description_text: The Picea abies is the tree suffering most, especially in the huge forest in eastern germany. Therefore a competent managment of the bark beetles is essentia.
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 9
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: 1
+  showInIndex: 'yes'
+  year: '2019'
+  client: null
+  collaborators: null
+  role: Illustration, 2D
+  program: null
+  topic: Science, Wood
+  link: null
+  highres_public_id: null

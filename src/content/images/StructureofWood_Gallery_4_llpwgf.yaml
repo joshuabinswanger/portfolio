@@ -1,0 +1,25 @@
+src: /src/assets/projects/StructureOfWood/StructureofWood_Gallery_4_llpwgf.webp
+width: 2000
+height: 2200
+tags:
+  - 3D
+  - Science
+  - Wood
+  - ZBrush
+metadata:
+  project: StructureOfWood
+  description_title: 'Cellulose Microfibril: 15 nanometer'
+  description_text: Abstract illustration showing a possbile arrangement of cellulose (blue) and lignin (pink) molecules
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 9
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2019'
+  client: null
+  collaborators: null
+  role: 3D
+  program: null
+  topic: null
+  link: null
+  highres_public_id: null

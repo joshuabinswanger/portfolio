@@ -2,11 +2,8 @@
 import BracketOpenH from "../brackets/BracketOpenH.astro";
 import BracketCloseH from "../brackets/BracketCloseH.astro";
 import BracketMiddleH from "../brackets/BracketMiddleH.astro";
-import BracketOpenV from "../brackets/BracketOpenV.astro";
-import BracketCloseV from "../brackets/BracketCloseV.astro";
-import BracketMiddleV from "../brackets/BracketMiddleV.astro";
 import Icon from "../Icon.astro";
-import { CldImage } from "astro-cloudinary";
+import { Picture } from "astro:assets";
 
 import "keen-slider/keen-slider.min.css";
 import "photoswipe/style.css";
@@ -14,9 +11,6 @@ import { marked } from "marked";
 
 // Import the utility functions
 import { getGalleryData } from "./utils.ts";
-
-// Get component props from Astro.props
-const { project } = Astro.props;
 
 interface Props {
   project: string;
@@ -29,17 +23,18 @@ const instanceId = Math.random().toString(36).slice(2, 11);
 
 // Turn Prop into string
 const targetProject = Astro.props.project;
-console.log(`${targetProject}`);
 
 // Use the unified utility function to get all gallery data
-const { galleryProject, galleryImages, highResData, imagesAmount, hasHighRes } =
-  await getGalleryData(targetProject);
+const {
+  galleryProject,
+  galleryImages,
+  /* highResData, hasHighRes, */ imagesAmount,
+} = await getGalleryData(targetProject);
 
 // Handle case where project is not found
 if (!galleryProject) {
   throw new Error(`Gallery project "${targetProject}" not found`);
 }
-
 ---
 
 <div
@@ -65,7 +60,6 @@ if (!galleryProject) {
           >
             <div class:list={"ImageInfo"}>
               <div class:list={"ImageDescriptionWrapper"}>
-
                 <div class:list={"image-description"}>
                   {image.data.metadata && (
                     <>
@@ -82,7 +76,6 @@ if (!galleryProject) {
                 <hr />
 
                 <div class:list={["image-info-project"]}>
-
                   <div class:list={"ProjectInfoWrapper"}>
                     <p>
                       <strong>About the Project:</strong>
@@ -93,7 +86,6 @@ if (!galleryProject) {
                       )}
                     />
                   </div>
-
                 </div>
               </div>
             </div>
@@ -105,25 +97,31 @@ if (!galleryProject) {
               class:list={["ImageElement"]}
               style={index > 1 ? "display: none;" : ""}
             >
+              {/*        TODO: restore highRes lightbox data
+                href={highResData[index].highResSecureUrl}
+                data-pswp-width={highResData[index].highResWidth}
+                data-pswp-height={highResData[index].highResHeight} 
+                */}
+
               <a
                 onclick={`pswpLightbox.loadAndOpen(${computedIndex}); return false;`}
                 class:list={["photo-link photoswipeData"]}
-                href={highResData[index].highResSecureUrl}
-                data-pswp-width={highResData[index].highResWidth}
-                data-pswp-height={highResData[index].highResHeight}
+                href={image.data.src}
+                data-pswp-width={image.data.width}
+                data-pswp-height={image.data.height}
                 target="_blank"
                 data-description_title={image.data.metadata?.description_title}
                 data-description_text={image.data.metadata?.description_text}
                 data-link={image.data.metadata?.link}
               >
-                <CldImage
-                  src={image.data.public_id}
-                  data-src={image.data.secure_url}
+                <Picture
+                  src={image.data.src}
                   width={image.data.width}
                   height={image.data.height}
                   sizes="(max-width: 767px) 85vw, (max-width: 1119px) 50vw, (max-width: 1699px) 33vw, 25vw"
-                  alt={image.data.metadata?.description_title}
-                  format="avif"
+                  alt={image.data.metadata?.description_title ?? ""}
+                  formats={["avif", "webp"]}
+                  loading={index === 0 ? "eager" : "lazy"}
                 />
               </a>
             </div>
@@ -139,7 +137,6 @@ if (!galleryProject) {
       data-index={Astro.props.startIndex + Astro.props.slidesCount + 1}
     >
       <div class:list={["project-info-slide"]}>
-
         <div class:list={"ProjectInfoWrapper"}>
           <p><strong>About the Project:</strong></p>
           <Fragment
@@ -150,7 +147,6 @@ if (!galleryProject) {
         <div class:list={"DetailsInfoWrapper"}>
           <Fragment set:html={marked.parse(galleryProject.data.credits)} />
         </div>
-
       </div>
     </div>
   </div>
@@ -206,10 +202,22 @@ if (!galleryProject) {
   }
 
   a {
+    display: block;
+    width: 100%;
     height: 100%;
   }
+
+  picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
   img {
-    vertical-align: top; /* or middle, top, depending on the desired effect */
+    display: block;
+    vertical-align: top;
+    width: 100%;
+    height: auto;
   }
 
   .project-info-slide-wrapper {
@@ -312,13 +320,13 @@ if (!galleryProject) {
   }
 
   hr {
-    width: 80%; 
+    width: 80%;
     align-self: center;
-    border-style: unset; 
-    border-top: 1px solid; 
-    border-color: black; 
-    margin-block: unset; 
-    margin-inline: unset; 
+    border-style: unset;
+    border-top: 1px solid;
+    border-color: black;
+    margin-block: unset;
+    margin-inline: unset;
     margin: 24px auto;
 
     @media (--bp-mobile) {

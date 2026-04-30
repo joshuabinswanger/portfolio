@@ -1,0 +1,25 @@
+src: /src/assets/projects/GameDesign101/GameDesign101_GalleryImages_4_gmbguk.webp
+width: 1500
+height: 1500
+tags:
+  - 3D
+  - Houdini
+  - Motion
+  - Proceduralism
+metadata:
+  project: GameDesign101
+  description_title: Joystick
+  description_text: Proceduraly generated Key Visual in Houdini, Octane & Blender
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 9
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2024'
+  client: null
+  collaborators: null
+  role: 3D
+  program: Houdini
+  topic: null
+  link: null
+  highres_public_id: null

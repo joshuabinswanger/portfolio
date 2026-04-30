@@ -1,0 +1,24 @@
+src: /src/assets/projects/Xylopedia/Xylopedia_Gallery_3_fn59fh.webp
+width: 2000
+height: 2250
+tags:
+  - Interactive
+  - Web
+  - Wood
+metadata:
+  project: Xylopedia
+  description_title: Xylopedia App on Ipad & Web
+  description_text: The Xylopedia App is available as a download on the AppStore or you can use the web version on xylopedia.de
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 2
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2024'
+  client: null
+  collaborators: null
+  role: 3D Dev
+  program: null
+  topic: Science, Wood
+  link: null
+  highres_public_id: null

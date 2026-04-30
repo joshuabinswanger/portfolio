@@ -1,0 +1,25 @@
+src: /src/assets/projects/LivingBricks/ETHVisualisations_Gallery_1_skyq6j.webp
+width: 1200
+height: 1380
+tags:
+  - 3D
+  - Houdini
+  - Science
+  - Proceduralism
+metadata:
+  project: LivingBricks
+  description_title: Ceramic Material Close Up with Bacteria
+  description_text: arXiv:2409.00789 [cond-mat.mtrl-sci]
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 1
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2023'
+  client: ETH
+  collaborators: null
+  role: 3D
+  program: Houdini
+  topic: Science
+  link: null
+  highres_public_id: null

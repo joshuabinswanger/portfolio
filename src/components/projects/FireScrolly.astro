@@ -1,7 +1,4 @@
 ---
-import { Image } from "astro:assets";
-import RhizomLogo from "../assets/Rhizome_Logo_208h.jpg";
-
 // 1. Grab all AVIF files in the sequence folder.
 // 'eager: true' forces Vite to load them immediately so we can access their default.src
 const imageFiles = import.meta.glob<{ default: ImageMetadata }>(
@@ -56,7 +53,6 @@ const imageUrls = Object.values(imageFiles)
   const canvas = document.getElementById("hero-canvas") as HTMLCanvasElement;
   const context = canvas.getContext("2d")!;
 
-  const frameCount = 200;
   const container = document.getElementById("scrolly-container")!;
   const parsedUrls: string[] = JSON.parse(container.dataset.images || "[]");
 

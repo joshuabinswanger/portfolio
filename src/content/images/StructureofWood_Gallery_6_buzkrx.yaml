@@ -1,0 +1,23 @@
+src: /src/assets/projects/StructureOfWood/StructureofWood_Gallery_6_buzkrx.webp
+width: 2000
+height: 2200
+tags:
+  - Science
+  - Wood
+metadata:
+  project: StructureOfWood
+  description_title: Wood Cell Structures
+  description_text: Different Structures and their real sizes; from year ring to cellulose molecule
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 5
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2019'
+  client: null
+  collaborators: null
+  role: null
+  program: null
+  topic: Science, Wood
+  link: null
+  highres_public_id: StructureofWood_Models_xghmft

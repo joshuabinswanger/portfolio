@@ -1,0 +1,25 @@
+src: /src/assets/projects/misc3d/Misc_3D_GalleryImages_4_n6lcwb.webp
+width: 2000
+height: 2000
+tags:
+  - 3D
+  - Houdini
+  - Illustration
+  - Motion
+metadata:
+  project: misc3d
+  description_title: UB Zürich Christmas Card
+  description_text: null
+  showInPortfolioGallery: 'no'
+  portfolioOrder: 9
+  showInProjectGallery: 'no'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2023'
+  client: UZH
+  collaborators: null
+  role: 3D
+  program: Houdini, Octane
+  topic: MoGraph
+  link: null
+  highres_public_id: null

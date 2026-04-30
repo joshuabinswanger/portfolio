@@ -1,0 +1,25 @@
+src: /src/assets/projects/StructureOfWood/StructureofWood_Gallery_1_ytvxjm.webp
+width: 2000
+height: 2200
+tags:
+  - 3D
+  - Science
+  - Wood
+  - ZBrush
+metadata:
+  project: StructureOfWood
+  description_title: 'Soft Wood Cell Structure: 300 microns'
+  description_text: Fibre Cells showing the year ring, bordered pits and parenchyma cells
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 0
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: 0
+  showInIndex: 'yes'
+  year: '2019'
+  client: null
+  collaborators: null
+  role: 3D
+  program: null
+  topic: Wood, Material Science
+  link: null
+  highres_public_id: null

@@ -1,0 +1,25 @@
+src: /src/assets/projects/StructureOfWood/StructureofWood_Gallery_2_rgmaqy.webp
+width: 1200
+height: 1320
+tags:
+  - 3D
+  - Science
+  - Wood
+  - ZBrush
+metadata:
+  project: StructureOfWood
+  description_title: Soft Wood Cell Structure Close Up
+  description_text: The bordered pits also show the margo
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 9
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2019'
+  client: null
+  collaborators: null
+  role: 3D
+  program: null
+  topic: Wood, Science
+  link: null
+  highres_public_id: null

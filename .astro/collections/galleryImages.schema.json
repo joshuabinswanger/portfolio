@@ -1,299 +1,266 @@
 {
-  "$ref": "#/definitions/galleryImages",
-  "definitions": {
-    "galleryImages": {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "asset_id": {
+      "type": "string"
+    },
+    "bytes": {
+      "type": "number"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "folder": {
+      "type": "string"
+    },
+    "format": {
+      "type": "string"
+    },
+    "height": {
+      "type": "number"
+    },
+    "metadata": {
       "type": "object",
       "properties": {
-        "access_mode": {
+        "project": {
           "anyOf": [
             {
-              "type": "string",
-              "enum": [
-                "public",
-                "authenticated"
-              ]
+              "type": "string"
             },
             {
-              "allOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "object",
-                  "properties": {}
-                }
-              ]
+              "type": "null"
             }
           ]
         },
-        "access_control": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "asset_id": {
-          "type": "string"
-        },
-        "backup": {
-          "type": "boolean"
-        },
-        "bytes": {
-          "type": "number"
-        },
-        "context": {
-          "type": "object",
-          "properties": {
-            "custom": {
-              "allOf": [
-                {
-                  "type": "object",
-                  "properties": {
-                    "alt": {
-                      "type": "string"
-                    },
-                    "caption": {
-                      "type": "string"
-                    }
-                  }
-                },
-                {
-                  "type": "object",
-                  "additionalProperties": {
-                    "anyOf": [
-                      {
-                        "not": {}
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  }
-                }
-              ]
+        "description_title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
             }
-          },
-          "required": [
-            "custom"
-          ],
-          "additionalProperties": false
+          ]
         },
-        "colors": {
-          "type": "array",
-          "items": {
-            "type": "array",
-            "minItems": 2,
-            "maxItems": 2,
-            "items": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "number"
-              }
-            ]
-          }
+        "description_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
-        "coordinates": {
-          "type": "object",
-          "properties": {},
-          "additionalProperties": true
+        "showInPortfolioGallery": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
-        "created_at": {
-          "type": "string"
-        },
-        "derived": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "display_name": {
-          "type": "string"
-        },
-        "exif": {
-          "type": "object",
-          "properties": {},
-          "additionalProperties": true
-        },
-        "faces": {
-          "type": "array",
-          "items": {
-            "type": "array",
-            "items": {
+        "portfolioOrder": {
+          "anyOf": [
+            {
               "type": "number"
-            }
-          }
-        },
-        "folder": {
-          "type": "string"
-        },
-        "format": {
-          "type": "string"
-        },
-        "height": {
-          "type": "number"
-        },
-        "image_metadata": {
-          "type": "object",
-          "properties": {},
-          "additionalProperties": true
-        },
-        "info": {
-          "type": "object",
-          "properties": {},
-          "additionalProperties": true
-        },
-        "media_metadata": {
-          "type": "object",
-          "properties": {},
-          "additionalProperties": true
-        },
-        "metadata": {
-          "type": "object",
-          "properties": {},
-          "additionalProperties": true
-        },
-        "moderation": {
-          "anyOf": [
-            {
-              "type": "object",
-              "properties": {},
-              "additionalProperties": true
             },
             {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "type": "null"
             }
           ]
         },
-        "pages": {
-          "type": "number"
-        },
-        "phash": {
-          "type": "string"
-        },
-        "placeholder": {
-          "type": "boolean"
-        },
-        "predominant": {
-          "type": "object",
-          "properties": {},
-          "additionalProperties": true
-        },
-        "public_id": {
-          "type": "string"
-        },
-        "quality_analysis": {
-          "type": "number"
-        },
-        "resource_type": {
+        "showInProjectGallery": {
           "anyOf": [
             {
-              "type": "string",
-              "enum": [
-                "image",
-                "video",
-                "raw",
-                "auto"
-              ]
+              "type": "string"
             },
             {
-              "allOf": [
+              "type": "null"
+            }
+          ]
+        },
+        "projectGalleryOrder": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "showInIndex": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "year": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "client": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "collaborators": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "role": {
+          "anyOf": [
+            {
+              "anyOf": [
                 {
                   "type": "string"
                 },
                 {
-                  "type": "object",
-                  "properties": {}
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 }
-              ]
-            }
-          ]
-        },
-        "secure_url": {
-          "type": "string"
-        },
-        "signature": {
-          "type": "string"
-        },
-        "tags": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "type": {
-          "anyOf": [
-            {
-              "type": "string",
-              "enum": [
-                "animoto",
-                "asset",
-                "authenticated",
-                "dailymotion",
-                "facebook",
-                "fetch",
-                "gravatar",
-                "hulu",
-                "instagram",
-                "list",
-                "multi",
-                "private",
-                "text",
-                "twitter",
-                "twitter_name",
-                "upload",
-                "vimeo",
-                "worldstarhiphop",
-                "youtube"
               ]
             },
             {
-              "allOf": [
+              "type": "null"
+            }
+          ]
+        },
+        "program": {
+          "anyOf": [
+            {
+              "anyOf": [
                 {
                   "type": "string"
                 },
                 {
-                  "type": "object",
-                  "properties": {}
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 }
               ]
+            },
+            {
+              "type": "null"
             }
           ]
         },
-        "url": {
-          "type": "string"
+        "topic": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
-        "version": {
-          "type": "number"
+        "link": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
-        "width": {
-          "type": "number"
-        },
-        "$schema": {
-          "type": "string"
+        "highres_public_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
-      "required": [
-        "asset_id",
-        "bytes",
-        "created_at",
-        "folder",
-        "format",
-        "height",
-        "public_id",
-        "resource_type",
-        "secure_url",
-        "type",
-        "url",
-        "version",
-        "width"
-      ],
-      "additionalProperties": true
+      "additionalProperties": {}
+    },
+    "public_id": {
+      "type": "string"
+    },
+    "resource_type": {
+      "type": "string"
+    },
+    "secure_url": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "type": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "version": {
+      "type": "number"
+    },
+    "width": {
+      "type": "number"
+    },
+    "$schema": {
+      "type": "string"
     }
   },
-  "$schema": "http://json-schema.org/draft-07/schema#"
+  "required": [
+    "asset_id",
+    "bytes",
+    "created_at",
+    "folder",
+    "format",
+    "height",
+    "public_id",
+    "resource_type",
+    "secure_url",
+    "type",
+    "url",
+    "version",
+    "width"
+  ],
+  "additionalProperties": {}
 }

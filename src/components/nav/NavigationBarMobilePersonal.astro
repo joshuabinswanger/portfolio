@@ -9,8 +9,6 @@ import JoshLogo from "../../assets/joshuabinswanger_tempLogo.png";
 interface Props {
   personal?: boolean;
 }
-
-const { personal } = Astro.props;
 ---
 
 <nav id="NavBarMobile" transition:persist>
@@ -177,10 +175,8 @@ const { personal } = Astro.props;
   </style>
 
   <script>
-    import { navigate } from "astro:transitions/client";
-
     // Update visual state (add/remove active class)
-    function updateAnimationState(buttons) {
+    function updateAnimationState(buttons: NodeListOf<HTMLElement>) {
       setTimeout(() => {
         buttons.forEach((btn) => {
           if (!btn) return;
@@ -194,7 +190,7 @@ const { personal } = Astro.props;
     }
 
     // Handle button click for all buttons
-    function handleButtonClick(clickedBtn, allButtonsNodeList) {
+    function handleButtonClick(clickedBtn: HTMLElement, allButtonsNodeList: NodeListOf<HTMLElement>) {
       if (!clickedBtn || !allButtonsNodeList) return;
 
       const allButtons = Array.from(allButtonsNodeList);
@@ -243,13 +239,13 @@ const { personal } = Astro.props;
     }
 
     // Attach event listeners to buttons
-    function createEventListeners(buttons) {
+    function createEventListeners(buttons: NodeListOf<HTMLElement>) {
       buttons.forEach((btn) => {
         if (!btn) return;
         // Basic check to prevent adding multiple listeners
         if (!btn.hasClickListener) {
           btn.addEventListener("click", (event) => {
-            handleButtonClick(event.currentTarget, buttons);
+            handleButtonClick(event.currentTarget as HTMLElement, buttons);
           });
           btn.hasClickListener = true;
         }
@@ -262,7 +258,7 @@ const { personal } = Astro.props;
       if (!navBar) return;
 
       // Select the Logo (#Logo) AND the direct children 'a.animation' of MainWrapper inside Menu
-      const allNavButtons = navBar.querySelectorAll(
+      const allNavButtons = navBar.querySelectorAll<HTMLElement>(
         "#Logo, #Menu #MainWrapper > a.animation",
       );
 
@@ -330,7 +326,7 @@ const { personal } = Astro.props;
       const navBar = document.getElementById("NavBarMobile");
       if (!navBar) return;
       // Re-select buttons to potentially remove listeners
-      const allNavButtons = navBar.querySelectorAll(
+      const allNavButtons = navBar.querySelectorAll<HTMLElement>(
         "#Logo, #Menu #MainWrapper > a.animation",
       );
       allNavButtons.forEach((btn) => {

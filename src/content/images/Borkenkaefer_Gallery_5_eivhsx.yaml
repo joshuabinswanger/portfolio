@@ -1,0 +1,25 @@
+src: /src/assets/projects/Kupferstecher/Borkenkaefer_Gallery_5_eivhsx.webp
+width: 1500
+height: 1800
+tags:
+  - 2D
+  - Illustration
+  - Science
+  - Wood
+metadata:
+  project: Kupferstecher
+  description_title: Engraver Beelte ( Pityogenes chalcographus)
+  description_text: Poster showing the most important signs for spotting the engraver beetle.
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 9
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2020'
+  client: null
+  collaborators: null
+  role: Illustration, 2D
+  program: null
+  topic: Sciene, Wood
+  link: null
+  highres_public_id: null

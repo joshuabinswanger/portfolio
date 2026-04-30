@@ -1,0 +1,24 @@
+src: /src/assets/projects/Microbiome/Microbiome_GalleryImages_2_nsyczi.webp
+width: 2250
+height: 2500
+tags:
+  - 2D
+  - Illustration
+  - Science
+metadata:
+  project: Microbiome
+  description_title: 'Microbiome: Engines of the Earth'
+  description_text: 'icrobial key functions in the plant-soil system. Soil microorganisms play essential roles in climate regulation, nutrient cycling, plant growth promotion and abiotic stress tolerance, pest and disease control, and pollutant degradation. Visit: www.microbiome.ch'
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 9
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '202008'
+  client: null
+  collaborators: null
+  role: Illustration, 2D
+  program: null
+  topic: microbiome
+  link: https://www.microbiome.ch/
+  highres_public_id: Microbiome_OLMA_ttmkmz

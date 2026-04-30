@@ -1,0 +1,23 @@
+src: /src/assets/projects/UBJahresbericht24/UBJahresbericht_2024_4_t4e7bl.webp
+width: 1500
+height: 2000
+tags:
+  - Motion
+  - Web
+metadata:
+  project: UBJahresbericht24
+  description_title: UB Jahresbericht 2024
+  description_text: Joshua Binswanger - Rhizome Visuals - Scientific Illustration
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 8
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'no'
+  year: '202505'
+  client: University Library Zurich
+  collaborators: null
+  role: 2D Dev
+  program: Rive
+  topic: Web Design
+  link: https://dlsubzh.github.io/ubjahresbericht24/
+  highres_public_id: null

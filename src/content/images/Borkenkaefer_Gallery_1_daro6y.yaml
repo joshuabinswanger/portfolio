@@ -1,0 +1,25 @@
+src: /src/assets/projects/Buchdrucker/Borkenkaefer_Gallery_1_daro6y.webp
+width: 1500
+height: 1800
+tags:
+  - 2D
+  - Illustration
+  - Science
+  - Wood
+metadata:
+  project: Buchdrucker
+  description_title: 'Bark Beetles in Forestry: Ips typographus & Pityogenes chalcographus'
+  description_text: The European Spruce Bark Beetle and Engraver Beetle are major pests in modern forestry, causing severe damage to spruce forests, especially with warming climates. Their impact underscores the need for effective forest management strategies.
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 0
+  showInProjectGallery: 'no'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2019'
+  client: null
+  collaborators: null
+  role: Illustration, 2D
+  program: null
+  topic: Bark Beetles
+  link: null
+  highres_public_id: null

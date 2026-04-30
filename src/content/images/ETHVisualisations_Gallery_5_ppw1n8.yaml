@@ -1,0 +1,23 @@
+src: /src/assets/projects/FungusPrinting/ETHVisualisations_Gallery_5_ppw1n8.webp
+width: 1200
+height: 1380
+tags:
+  - 3D
+  - Science
+metadata:
+  project: FungusPrinting
+  description_title: 3D Printed Objects with regenerative capabilities
+  description_text: The fungus materials enables parts to grow back together.
+  showInPortfolioGallery: 'no'
+  portfolioOrder: 9
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2021'
+  client: ETH
+  collaborators: null
+  role: 3D
+  program: ZBrush, Keyshot
+  topic: Science
+  link: null
+  highres_public_id: null

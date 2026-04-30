@@ -1,7 +1,4 @@
 ---
-import type { ImageMetadata } from "astro";
-import { Picture } from "astro:assets";
-import Logo from "../Logo.astro";
 import BracketOpenV from "../brackets/BracketOpenV.astro";
 import BracketMiddleV from "../brackets/BracketMiddleV.astro";
 import BracketCloseV from "../brackets/BracketCloseV.astro";
@@ -9,13 +6,9 @@ import "../../styles/global.css";
 import { Image } from "astro:assets";
 import RhizomLogo from "../../assets/Rhizome_Logo_208h.jpg";
 
-const logoPath = "/assets/Rhizome_Test2.riv";
-
 interface Props {
   personal?: boolean;
 }
-
-const { personal = false } = Astro.props;
 ---
 
 <nav id="NavBarDesktop" transition:persist>
@@ -71,10 +64,8 @@ const { personal = false } = Astro.props;
 </nav>
 
 <script>
-  import { navigate } from "astro:transitions/client";
-
   // Update visual state (add/remove active class)
-  function updateAnimationState(buttons) {
+  function updateAnimationState(buttons: NodeListOf<HTMLElement>) {
     setTimeout(() => {
       buttons.forEach((btn) => {
         if (btn.getAttribute("data-animation") === "in") {
@@ -87,7 +78,7 @@ const { personal = false } = Astro.props;
   }
 
   // Handle button click for all buttons
-  function handleButtonClick(clickedBtn, allButtonsNodeList) {
+  function handleButtonClick(clickedBtn: HTMLElement, allButtonsNodeList: NodeListOf<HTMLElement>) {
     const allButtons = Array.from(allButtonsNodeList);
     const mainButtons = allButtons.filter((btn) => btn.id !== "Logo");
 
@@ -131,13 +122,13 @@ const { personal = false } = Astro.props;
   }
 
   // Attach event listeners to buttons
-  function createEventListeners(buttons) {
+  function createEventListeners(buttons: NodeListOf<HTMLElement>) {
     buttons.forEach((btn) => {
       // Basic check to prevent adding multiple listeners if page-load fires rapidly
       if (!btn.hasClickListener) {
         btn.addEventListener("click", (event) => {
           // Pass event.currentTarget and the NodeList the listener was added to
-          handleButtonClick(event.currentTarget, buttons);
+          handleButtonClick(event.currentTarget as HTMLElement, buttons);
         });
         btn.hasClickListener = true; // Mark listener as added
       }
@@ -150,7 +141,7 @@ const { personal = false } = Astro.props;
     if (!navBar) return;
 
     // Select the Logo (#Logo) AND the direct children 'a.animation' of MainWrapper
-    const allNavButtons = navBar.querySelectorAll(
+    const allNavButtons = navBar.querySelectorAll<HTMLElement>(
       "#Logo, #MainWrapper > a.animation",
     );
 

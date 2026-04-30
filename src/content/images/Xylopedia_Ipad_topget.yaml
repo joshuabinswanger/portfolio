@@ -1,0 +1,22 @@
+src: /src/assets/projects/Xylopedia/Xylopedia_Ipad_topget.webp
+width: 2000
+height: 2250
+tags:
+  - Interactive
+metadata:
+  project: Xylopedia
+  description_title: Ipad and WebApp for Wood/Material Science Students
+  description_text: Joshua Binswanger - Rhizome Visuals - Scientific Illustration
+  showInPortfolioGallery: 'no'
+  portfolioOrder: 2
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: 2
+  showInIndex: 'yes'
+  year: '202508'
+  client: HNE Eberswalde
+  collaborators: null
+  role: 3D Dev
+  program: Houdini, Blender
+  topic: Design
+  link: null
+  highres_public_id: null

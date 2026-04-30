@@ -1,0 +1,23 @@
+src: /src/assets/projects/misc3d/Misc_3D_GalleryImages_7_eotlvo.webp
+width: 2000
+height: 2000
+tags:
+  - 3D
+  - Science
+metadata:
+  project: misc3d
+  description_title: null
+  description_text: null
+  showInPortfolioGallery: 'no'
+  portfolioOrder: 9
+  showInProjectGallery: 'no'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '20250'
+  client: null
+  collaborators: null
+  role: 3D
+  program: ZBrush, SubstancePainter
+  topic: SciCom
+  link: null
+  highres_public_id: null

@@ -1,0 +1,22 @@
+src: /src/assets/projects/FungusPrinting/ETHVisualisations_Gallery_6_lq8c59.webp
+width: 1200
+height: 1380
+tags:
+  - Science
+metadata:
+  project: FungusPrinting
+  description_title: Fungi Hyphen
+  description_text: Showing the basic functions of the hyphens
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 4
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2021'
+  client: null
+  collaborators: null
+  role: null
+  program: null
+  topic: Science, Material Science
+  link: null
+  highres_public_id: null

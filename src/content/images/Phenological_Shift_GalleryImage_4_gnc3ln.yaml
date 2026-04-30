@@ -1,0 +1,24 @@
+src: /src/assets/projects/PhenologicalShift/Phenological_Shift_GalleryImage_4_gnc3ln.webp
+width: 1400
+height: 1575
+tags:
+  - 3D
+  - Houdini
+  - Science
+metadata:
+  project: PhenologicalShift
+  description_title: Ultrasonic Plant Height Masurement
+  description_text: Ultrasonic plant height measurements from 32 automatic weather stations from 1500 to 2700 m.
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 3
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2024'
+  client: SLF
+  collaborators: null
+  role: 3D
+  program: Houdini
+  topic: Science
+  link: null
+  highres_public_id: null

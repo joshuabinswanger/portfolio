@@ -1,103 +1,96 @@
 {
-  "$ref": "#/definitions/portfolio",
-  "definitions": {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "portfolioElementProjects": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "portfolioElementName": {
+      "type": "string"
+    },
+    "priority": {
+      "type": "number"
+    },
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "shortDescription": {
+      "type": "string"
+    },
+    "year": {
+      "type": "string"
+    },
+    "client": {
+      "type": "string"
+    },
+    "collaborators": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string"
+    },
+    "tools": {
+      "type": "string"
+    },
     "portfolio": {
-      "type": "object",
-      "properties": {
-        "portfolioElementProjects": {
-          "type": "array",
-          "items": {
+      "type": "boolean"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "bgcolor": {
+      "type": "string"
+    },
+    "projectDescription": {
+      "type": "string"
+    },
+    "credits": {
+      "type": "string"
+    },
+    "containedProjects": {
+      "type": "string"
+    },
+    "images": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "loading": {
+            "type": "string",
+            "enum": [
+              "eager",
+              "lazy"
+            ]
+          },
+          "to": {
             "type": "string"
           }
-        },
-        "portfolioElementName": {
-          "type": "string"
-        },
-        "priority": {
-          "type": "number"
-        },
-        "title": {
-          "type": "string"
-        },
-        "subtitle": {
-          "type": "string"
-        },
-        "shortDescription": {
-          "type": "string"
-        },
-        "year": {
-          "type": "string"
-        },
-        "client": {
-          "type": "string"
-        },
-        "collaborators": {
-          "type": "string"
-        },
-        "role": {
-          "type": "string"
-        },
-        "tools": {
-          "type": "string"
-        },
-        "portfolio": {
-          "type": "boolean"
-        },
-        "tags": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "bgcolor": {
-          "type": "string"
-        },
-        "projectDescription": {
-          "type": "string"
-        },
-        "credits": {
-          "type": "string"
-        },
-        "containedProjects": {
-          "type": "string"
-        },
-        "images": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "loading": {
-                "type": "string",
-                "enum": [
-                  "eager",
-                  "lazy"
-                ]
-              },
-              "to": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false
-          }
-        },
-        "$schema": {
-          "type": "string"
         }
-      },
-      "required": [
-        "portfolioElementProjects",
-        "portfolioElementName",
-        "priority",
-        "title",
-        "subtitle",
-        "year",
-        "portfolio",
-        "tags",
-        "projectDescription",
-        "credits"
-      ],
-      "additionalProperties": false
+      }
+    },
+    "$schema": {
+      "type": "string"
     }
   },
-  "$schema": "http://json-schema.org/draft-07/schema#"
+  "required": [
+    "portfolioElementProjects",
+    "portfolioElementName",
+    "priority",
+    "title",
+    "subtitle",
+    "year",
+    "portfolio",
+    "tags",
+    "projectDescription",
+    "credits"
+  ]
 }

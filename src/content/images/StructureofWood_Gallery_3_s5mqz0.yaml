@@ -1,0 +1,25 @@
+src: /src/assets/projects/StructureOfWood/StructureofWood_Gallery_3_s5mqz0.webp
+width: 2000
+height: 2200
+tags:
+  - 3D
+  - Science
+  - Wood
+  - ZBrush
+metadata:
+  project: StructureOfWood
+  description_title: 'Simplified Cell Wall Structure: 30 microns'
+  description_text: Soft Wood Fibre Cell Wall Structure showing the different angles the Fibres are aligned in multiple Layers
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 9
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2019'
+  client: null
+  collaborators: null
+  role: 3D
+  program: null
+  topic: null
+  link: null
+  highres_public_id: null

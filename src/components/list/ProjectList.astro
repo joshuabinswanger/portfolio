@@ -1,9 +1,5 @@
 ---
 import TopWrapper from "../../layouts/TopWrapper.astro";
-import BracketOpenH from "../brackets/BracketOpenH.astro";
-import BracketCloseH from "../brackets/BracketCloseH.astro";
-import GridLayout from "../../layouts/GridLayout.astro";
-import GalleryElement from "../gallery/GalleryElement.astro";
 import { getCollection } from "astro:content";
 import { marked } from "marked";
 import ImageSlide from "./ImageSlide.astro";
@@ -21,27 +17,17 @@ let enrichedProjects = [];
 let globalIndex = 0;
 
 for (const entry of sortedProjects) {
-  console.log(`[DEBUG] Loop iteration for entry ID: ${entry.id}`);
-
   const projectName = entry.data.projectName;
   const startIndex = globalIndex;
 
-  console.log(`[DEBUG]   Project Name: ${projectName}`);
-
   // Fetch galleryImages
-  console.log(`[DEBUG]   Fetching galleryImages...`);
   const galleryImages = await getCollection("galleryImages", ({ data }) => {
     const imageProject = data.metadata?.project;
     return imageProject && projectName.includes(imageProject);
   });
-  console.log(`[DEBUG]   Fetched ${galleryImages.length} galleryImages.`);
 
   const slidesCount = galleryImages.length;
-  const oldGlobalIndex = globalIndex;
   globalIndex += slidesCount + 2;
-  console.log(
-    `[DEBUG]   Slides count: ${slidesCount}. Global index changed from ${oldGlobalIndex} to ${globalIndex}`,
-  );
 
   const projectData = {
     entry,
@@ -49,19 +35,8 @@ for (const entry of sortedProjects) {
     startIndex,
     slidesCount,
   };
-  console.log(`[DEBUG]   Pushing to enrichedProjects:`, {
-    projectName: projectData.projectName,
-    startIndex: projectData.startIndex,
-    slidesCount: projectData.slidesCount,
-  });
   enrichedProjects.push(projectData);
-  console.log(enrichedProjects);
 }
-
-console.log(
-  `[DEBUG] Loop finished. Final enrichedProjects count: ${enrichedProjects.length}`,
-);
-console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
 ---
 
 <TopWrapper>
@@ -69,9 +44,7 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
     <hr />
 
     {
-      enrichedProjects.map(({ entry, startIndex, slidesCount }, index) => {
-        console.log(`Project: ${entry.data.projectName}`);
-
+      enrichedProjects.map(({ entry, startIndex, slidesCount }) => {
         const year = entry.data.year.slice(0, 4);
 
         return (
@@ -143,15 +116,23 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
   import KeenSlider from "keen-slider";
   import "keen-slider/keen-slider.min.css";
 
+  type DestroyableSlider = {
+    destroy: () => void;
+  };
+
   // Store slider instances for later destruction
-  let keenSlidersStore = {};
+  let keenSlidersStore: Record<string, DestroyableSlider> = {};
 
   document.addEventListener("astro:page-load", () => {
-    const listElements = document.querySelectorAll(".ListElement");
+    const listElements = document.querySelectorAll<HTMLElement>(".ListElement");
 
     listElements.forEach((listEl) => {
-      const sliderContainer = listEl.querySelector(".project-images");
-      const listBar = listEl.querySelector(".list-element-bar");
+      const sliderContainer = listEl.querySelector<HTMLElement>(".project-images");
+      const listBar = listEl.querySelector<HTMLElement>(".list-element-bar");
+
+      if (!sliderContainer || !listBar) {
+        return;
+      }
 
       // Click on bar
       listBar.addEventListener("click", () => {
@@ -188,8 +169,8 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
             keenSlidersStore[listEl.id] = slider;
 
             // Add click event listeners to the arrow buttons
-            const arrowLeft = listEl.querySelector(".arrow-left");
-            const arrowRight = listEl.querySelector(".arrow-right");
+            const arrowLeft = listEl.querySelector<HTMLElement>(".arrow-left");
+            const arrowRight = listEl.querySelector<HTMLElement>(".arrow-right");
 
             if (arrowLeft) {
               arrowLeft.addEventListener("click", (e) => {
@@ -226,6 +207,7 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
 <!-- PhotoSwipe -->
 <script>
   import PhotoSwipeLightbox from "photoswipe/lightbox";
+  import { registerPhotoSwipeCaption } from "../gallery/photoswipeCaption";
 
   const leftArrowSVGString =
     '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 155 139" "width="39" height="35"><path d="m0 69 69 69 14-12-45-46h116V58H38l44-44L69 0 0 69Z" style="fill-rule:nonzero"/></svg>';
@@ -240,7 +222,7 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
   }
 
   document.addEventListener("astro:page-load", () => {
-    const projectElements = document.querySelectorAll(".ListElement");
+    const projectElements = document.querySelectorAll<HTMLElement>(".ListElement");
 
     if (projectElements.length === 0) {
       return;
@@ -262,7 +244,7 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
       galleryData.push(portfolioElementNameElement);
 
       // Add image elements
-      const imageLinks = projectEl.querySelectorAll(".ImageElement a");
+      const imageLinks = projectEl.querySelectorAll<HTMLAnchorElement>(".ImageElement a");
 
       imageLinks.forEach((imgLink) => {
         const photoswipeImageData = {
@@ -279,7 +261,7 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
       });
 
       // Add project info slide
-      const ProjectInfoWrapper = projectEl.querySelector(
+      const ProjectInfoWrapper = projectEl.querySelector<HTMLElement>(
         ".project-description",
       );
       const projectDescription = ProjectInfoWrapper
@@ -315,7 +297,7 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
 
       dataSource: flatData,
 
-      initialZoomLevel: `fit`,
+      initialZoomLevel: "fit" as const,
       bgOpacity: 0.95,
       zoom: false,
 
@@ -329,7 +311,7 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
         }
       },
 
-      showHideAnimationType: "fade",
+      showHideAnimationType: "fade" as const,
       pswpModule: () => import("photoswipe"),
     };
 
@@ -341,47 +323,7 @@ console.log(`[DEBUG] Final globalIndex: ${globalIndex}`);
 
     lightbox = new PhotoSwipeLightbox(options);
 
-    lightbox.on("uiRegister", function () {
-      lightbox.pswp.ui.registerElement({
-        name: "custom-caption",
-        order: 9,
-        isButton: false,
-        appendTo: "wrapper",
-        html: "Caption text",
-        onInit: (el, pswp) => {
-          lightbox.pswp.on("change", () => {
-            if (!pswp.currSlide || !pswp.currSlide.data) {
-              el.innerHTML = "";
-              return;
-            }
-
-            const currSlide = pswp.currSlide.data;
-            let captionHTML = "";
-
-            if (currSlide) {
-              const description_title = currSlide.description_title;
-              const description_text = currSlide.description_text;
-              const link = currSlide.link;
-
-              if (description_title && link) {
-                captionHTML = `
-                  <p><strong>${description_title}</strong></p>
-                  <p>${description_text}</p>
-                  <p><a href="${link}">External Link</a></p>
-                `;
-              } else if (description_title) {
-                captionHTML = `
-                  <p><strong>${description_title}</strong></p>
-                  <p>${description_text}</p>
-                `;
-              }
-            }
-
-            el.innerHTML = captionHTML || "";
-          });
-        },
-      });
-    });
+    registerPhotoSwipeCaption(lightbox);
 
     lightbox.init();
     window.pswpLightbox = lightbox;

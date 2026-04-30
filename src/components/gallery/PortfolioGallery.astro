@@ -4,12 +4,9 @@ import GridLayout from "../../layouts/GridLayout.astro";
 import GalleryElement from "./GalleryElement.astro";
 import { getPortfolioGalleryData } from "./utils.ts";
 
-// Get props
 interface Props {
   portfolio?: boolean;
 }
-
-const { portfolio } = Astro.props;
 
 // Get all portfolio data in one call
 const { enrichedProjects } = await getPortfolioGalleryData();
@@ -65,103 +62,18 @@ const { enrichedProjects } = await getPortfolioGalleryData();
   </GridLayout>
 </TopWrapper>
 
-<!-- Intersection Observer -->
-<script>
-  /* document.addEventListener('astro:page-load', ev => {
-
-
-
-	// Select all ImageElement components
-	const imageElements = document.querySelectorAll('.GalleryElementWrapper');
-
-	// Loop through the ImageElement NodeList and start adding the fade class from the 3rd element onwards
-	imageElements.forEach((image, index) => {
-		if (index >= 2) { // index starts from 0, so 2 is the 3rd element
-			image.classList.add('fade');
-		}
-		}
-	); 
-
-
-
-/////// Fade Intersection Observer
-
- 	// IntersectionObserver options
-	let optionsFade = {
-			rootMargin: "150px 0px -200px 0px",
-	};
-
-	// Define the IntersectionObserver
-	const observerFade = new IntersectionObserver((entries) => {  
-		entries.forEach((entry) => {
-
-			if (entry.isIntersecting) {
-				entry.target.firstElementChild.classList.add("show");
-				entry.target.classList.remove("restrain");
-			} else {
-				entry.target.firstElementChild.classList.remove("show");
-			}
-		});
-	}, optionsFade);
-
-
-
-	
-///// Hidden Intersection Observer
-
-	 // IntersectionObserver hidden options
-	 let optionsHidden = {
-			rootMargin: "700px",
-		};
-	
-	// Define the IntersectionObserver
-	const observerHidden = new IntersectionObserver((entries) => {  
-		entries.forEach((entry) => {
-		
-			if (entry.isIntersecting) {
-				entry.target.firstElementChild.classList.remove("hidden");
-			} 
-		});
-	}, optionsHidden); 
-
-
-
-
-
-
-     // Select elements to observe and start observing them
-     const fadeElements = document.querySelectorAll(".observer");
-     fadeElements.forEach((el) => observerFade.observe(el));
-
-	 const hiddenElements = document.querySelectorAll(".observer");
-	 hiddenElements.forEach((el) => observerHidden.observe(el));
-
-
-
-  }); */
-</script>
-
 <!-- KeenSlider -->
 <script>
-  import KeenSlider from "keen-slider";
+  import KeenSlider, { type KeenSliderInstance } from "keen-slider";
 
   document.addEventListener("astro:page-load", () => {
-    const Sliders = document.querySelectorAll(".GalleryElement");
+    const Sliders = document.querySelectorAll<HTMLElement>(".GalleryElement");
 
-    Sliders.forEach((item, index) => {
-      /* console.log(`This is the slider at index ${index} with ID: ${item.id}`); */
-
-      // Select all Slides
-      const slides = item.querySelectorAll(".keen-slider__slide");
-      // Select the ProjectInfoSlideWrapper within this slider
-      const projectInfoSlideWrapper = item.querySelector(
-        ".ProjectInfoSlideWrapper",
-      );
-
-      let loaded = [];
+    Sliders.forEach((item) => {
+      let loaded: boolean[] = [];
 
       //Loading Function
-      function loadImages(s) {
+      function loadImages(s: KeenSliderInstance) {
         const slideIdx = s.track.details.rel;
         const totalSlides = s.track.details.slides.length;
 
@@ -173,7 +85,7 @@ const { enrichedProjects } = await getPortfolioGalleryData();
         s.slides.forEach((element, idx) => {
           if (loaded[idx]) {
             // Use querySelector to find the .ImageElement div
-            const imageElement = element.querySelector(".ImageElement");
+            const imageElement = (element as HTMLElement).querySelector<HTMLElement>(".ImageElement");
             /* console.log(`ImageElement found:`, imageElement); */
 
             if (imageElement) {
@@ -186,7 +98,7 @@ const { enrichedProjects } = await getPortfolioGalleryData();
       }
 
       //Counter Function
-      function updateCounter(s) {
+      function updateCounter(s: KeenSliderInstance) {
         const counterContainer = item.querySelector(".CounterContainer");
         if (counterContainer) {
           const currentSlide = s.track.details.rel + 1; // Add 1 because index is zero-based
@@ -196,21 +108,22 @@ const { enrichedProjects } = await getPortfolioGalleryData();
       }
 
       //MaxHeight Function
-      function setMaxHeight(s) {
-        const activeSlide = s.track.details.rel;
+      function setMaxHeight(s: KeenSliderInstance) {
         const height = s.size;
         /* console.log(`the slide has height: ${height}`) */
         const projectInfoSlide = s.slides[s.slides.length - 1];
         /*  console.log(`projectInfoSlide at index: ${projectInfoSlide.id}`) */
-        const projectInfoSlideWrapper = projectInfoSlide.querySelector(
+        const projectInfoSlideWrapper = (projectInfoSlide as HTMLElement).querySelector<HTMLElement>(
           ".project-info-slide",
         );
 
-        projectInfoSlideWrapper.style.maxHeight = `${height}px`;
+        if (projectInfoSlideWrapper) {
+          projectInfoSlideWrapper.style.maxHeight = `${height}px`;
+        }
       }
 
       //Placeholder Image
-      function hideGalleryPlaceholder(sliderElement) {
+      function hideGalleryPlaceholder(sliderElement: HTMLElement) {
         const placeholder = sliderElement.previousElementSibling;
         if (
           placeholder &&
@@ -349,6 +262,7 @@ const { enrichedProjects } = await getPortfolioGalleryData();
 <!-- PhotoSwipe -->
 <script>
   import PhotoSwipeLightbox from "photoswipe/lightbox";
+  import { registerPhotoSwipeCaption } from "./photoswipeCaption";
 
   const leftArrowSVGString =
     '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 155 139" "width="39" height="35"><path d="m0 69 69 69 14-12-45-46h116V58H38l44-44L69 0 0 69Z" style="fill-rule:nonzero"/></svg>';
@@ -365,7 +279,7 @@ const { enrichedProjects } = await getPortfolioGalleryData();
 
   document.addEventListener("astro:page-load", () => {
     // Select all gallery elements (each gallery container should have the class "GalleryElement")
-    const galleryElements = document.querySelectorAll(".GalleryElement");
+    const galleryElements = document.querySelectorAll<HTMLElement>(".GalleryElement");
 
     // Only proceed if we found gallery elements
     if (galleryElements.length === 0) {
@@ -399,7 +313,7 @@ const { enrichedProjects } = await getPortfolioGalleryData();
       // Here we assume each image link is contained in a child with class "ImageElement"
       // We use galleryEl.querySelectorAll so we only search within the current gallery.
 
-      const imageLinks = galleryEl.querySelectorAll(".ImageElement a");
+      const imageLinks = galleryEl.querySelectorAll<HTMLAnchorElement>(".ImageElement a");
 
       imageLinks.forEach((imgLink) => {
         const photoswipeImageData = {
@@ -418,23 +332,13 @@ const { enrichedProjects } = await getPortfolioGalleryData();
       // ----- 3. Add a custom element AFTER the images: ProjectInfoSlideWrapper ----- //
 
       // get the description
-      const ProjectInfoWrapper = galleryEl.querySelector(".ProjectInfoWrapper");
-      const projectDescription = ProjectInfoWrapper.innerHTML;
+      const ProjectInfoWrapper = galleryEl.querySelector<HTMLElement>(".ProjectInfoWrapper");
+      const projectDescription = ProjectInfoWrapper?.innerHTML ?? "";
 
       // get the Details
-      const DetailsInfoWrapper = galleryEl.querySelector(".DetailsInfoWrapper");
-      const projectDetails = DetailsInfoWrapper.innerHTML;
+      const DetailsInfoWrapper = galleryEl.querySelector<HTMLElement>(".DetailsInfoWrapper");
+      const projectDetails = DetailsInfoWrapper?.innerHTML ?? "";
 
-/*       const bracketOpenVEl = galleryEl.querySelector(".bracket-open-v");
-      const bracketOpenV = bracketOpenVEl.innerHTML;
-
-      const bracketCloseVEl = galleryEl.querySelector(".bracket-close-v");
-      const bracketCloseV = bracketCloseVEl.innerHTML; 
-      
-      those would be the elements
-      ${bracketOpenV}
-      	${bracketCloseV}
-      */
 
       const projectInfoEl = {
         html: `<div
@@ -479,7 +383,7 @@ const { enrichedProjects } = await getPortfolioGalleryData();
 
       dataSource: flatData,
 
-      initialZoomLevel: `fit`,
+      initialZoomLevel: "fit" as const,
       bgOpacity: 0.98,
       zoom: false,
 
@@ -494,7 +398,7 @@ const { enrichedProjects } = await getPortfolioGalleryData();
         }
       },
 
-      showHideAnimationType: "fade",
+      showHideAnimationType: "fade" as const,
 
       pswpModule: () => import("photoswipe"), // Import the PhotoSwipe module dynamically
     };
@@ -507,49 +411,7 @@ const { enrichedProjects } = await getPortfolioGalleryData();
 
     lightbox = new PhotoSwipeLightbox(options);
 
-    lightbox.on("uiRegister", function () {
-      lightbox.pswp.ui.registerElement({
-        name: "custom-caption",
-        order: 9,
-        isButton: false,
-        appendTo: "wrapper",
-        html: "Caption text",
-        onInit: (el, pswp) => {
-          lightbox.pswp.on("change", () => {
-            // Check if currSlide exists before accessing its properties
-            if (!pswp.currSlide || !pswp.currSlide.data) {
-              el.innerHTML = "";
-              return;
-            }
-
-            // Retrieve the DOM element attached to the current slide
-            const currSlide = pswp.currSlide.data;
-            let captionHTML = "";
-
-            if (currSlide) {
-              const description_title = currSlide.description_title;
-              const description_text = currSlide.description_text;
-              const link = currSlide.link;
-
-              if (description_title && link) {
-                captionHTML = `
-                                <p><strong>${description_title}</strong></p>
-                                <p>${description_text}</p>
-                                <p><a href="${link}">External Link</a></p>
-                                `;
-              } else if (description_title) {
-                captionHTML = `
-                                <p><strong>${description_title}</strong></p>
-                                <p>${description_text}</p>
-                                `;
-              }
-            }
-
-            el.innerHTML = captionHTML || "";
-          });
-        },
-      });
-    });
+    registerPhotoSwipeCaption(lightbox);
 
     lightbox.init(); // Initialize the lightbox
 

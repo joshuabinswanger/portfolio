@@ -1,0 +1,25 @@
+src: /src/assets/projects/GameDesign101/GameDesign101_GalleryImages_3_ff20tq.webp
+width: 2000
+height: 2000
+tags:
+  - 3D
+  - Houdini
+  - Illustration
+  - Proceduralism
+metadata:
+  project: GameDesign101
+  description_title: Game Design 101 Poster
+  description_text: Proceduraly generated Key Visual for an Event Series at the MEEETLab @UZH
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 2
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2024'
+  client: null
+  collaborators: null
+  role: 3D
+  program: Houdini
+  topic: MotionGraphics
+  link: null
+  highres_public_id: null

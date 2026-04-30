@@ -1,0 +1,24 @@
+src: /src/assets/projects/characters/Characters_GalleryImages_14_vfiama.webp
+width: 1400
+height: 2000
+tags:
+  - 2D
+  - 3D
+  - Character
+metadata:
+  project: characters
+  description_title: 3D Character
+  description_text: Inspired by Volta Character Designs (by Rael Lyra)
+  showInPortfolioGallery: 'no'
+  portfolioOrder: 9
+  showInProjectGallery: 'no'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2022'
+  client: Personal
+  collaborators: null
+  role: 3D
+  program: ZBrush, Blender
+  topic: Character
+  link: null
+  highres_public_id: null

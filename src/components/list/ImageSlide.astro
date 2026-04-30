@@ -4,9 +4,6 @@ import { getEntry } from "astro:content";
 import { getCollection } from "astro:content";
 import "keen-slider/keen-slider.min.css";
 
-// Get component props from Astro.props
-const { projectName } = Astro.props;
-
 interface Props {
   projectName: string;
   startIndex: number;
@@ -16,33 +13,10 @@ interface Props {
 // Generate a unique ID for each instance
 const instanceId = Math.random().toString(36).slice(2, 11);
 
-console.log(Astro.props.projectName);
-
 const project = Astro.props.projectName;
-const projectTitle = Astro.props.projectName;
 
 const projectImages = await getCollection("galleryImages", ({ data }) => {
   return data.metadata?.project === project;
-});
-
-// Use getCollection with a filter function to only retrieve images with a matching project
-// AND where showInPortfolioGallery is set to "yes"
-const galleryImages = await getCollection("galleryImages", ({ data }) => {
-  // Combine all checks using && for conciseness and clarity.
-  // The filter will return true only if every condition evaluates to true.
-  return (
-    // Condition 1 & 2: Ensure metadata and metadata.project exist (using optional chaining)
-    data.metadata?.project &&
-    // Condition 3: Check if the image's project is included in the containedProjects array
-    data.metadata?.project === project &&
-    // Condition 4: NEW - Check if showInPortfolioGallery is explicitly "yes"
-    // We can access showInPortfolioGallery directly now because if the first condition
-    // (data.metadata?.project) passed, we know data.metadata exists.
-    data.metadata.showInProjectGallery === "yes"
-  );
-  // If any condition fails (e.g., metadata missing, project missing, project not included,
-  // or showInPortfolioGallery is not "yes"), the && chain will short-circuit
-  // and the function will implicitly return false (or explicitly if any check results in false).
 });
 
 //order projectImages
@@ -54,13 +28,6 @@ projectImages.sort((a, b) => {
   // Simple subtraction works for numerical sorting
   return orderA - orderB;
 });
-
-// Check if any image has metadata.highres_public_id
-const hasHighRes = projectImages.some(
-  (image) => image.data?.metadata?.highres_public_id,
-);
-
-/* console.log(hasHighRes) */
 
 const highResData = [];
 

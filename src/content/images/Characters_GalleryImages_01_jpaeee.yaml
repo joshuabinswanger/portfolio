@@ -1,0 +1,23 @@
+src: /src/assets/projects/BardsOfDawn/Characters_GalleryImages_01_jpaeee.webp
+width: 1400
+height: 2000
+tags:
+  - 2D
+  - Character
+metadata:
+  project: BardsOfDawn
+  description_title: The Bards of Dawn
+  description_text: The bards met on the sacred island, where they learnt their Bardcraft. Now they serve the mother's will in the armies of the King. they let their music strike the enemiy's mind with dread of the higher power of the allmother.Acting as a vanguard shrouded by mist called down by Gwenyth they let their music resonate through the damp air. The sound seemingly coming from another world, strikes the enemy's minds with dread of the unseen power of the allmother. The high and shattering sound of the karnyx is complemented by the deep strumming of the war harp. The daughter of the mist then sings of the great mother invoking her power.
+  showInPortfolioGallery: 'no'
+  portfolioOrder: 9
+  showInProjectGallery: 'no'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2019'
+  client: null
+  collaborators: null
+  role: Illustration, 2D
+  program: Photoshop
+  topic: Character
+  link: null
+  highres_public_id: null

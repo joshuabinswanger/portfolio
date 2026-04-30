@@ -1,0 +1,24 @@
+src: /src/assets/projects/Freiheit/Freedom_GalleryImages_2_z6m81z.webp
+width: 1500
+height: 1500
+tags:
+  - Motion
+  - Science
+  - Web
+metadata:
+  project: Freiheit
+  description_title: Freedom Infographic
+  description_text: Animated and Interactive Infographic
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 9
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2024'
+  client: null
+  collaborators: null
+  role: 2D
+  program: Rive
+  topic: AI
+  link: null
+  highres_public_id: Freedom_Infografik_z43mem

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -l \"width\\\\|height\" d:/SynoDrive/PORTFOLIO/Portfolio/Desktop/portfolio/src/content/images/*.yaml)",
+      "Bash(node -e \"const sharp = require\\(''sharp''\\); console.log\\(''sharp available''\\)\")"
+    ]
+  }
+}

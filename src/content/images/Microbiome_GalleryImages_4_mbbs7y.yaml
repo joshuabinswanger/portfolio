@@ -1,0 +1,24 @@
+src: /src/assets/projects/Microbiome/Microbiome_GalleryImages_4_mbbs7y.webp
+width: 2250
+height: 2500
+tags:
+  - 2D
+  - Science
+  - Illustration
+metadata:
+  project: Microbiome
+  description_title: Azospirillum, Arthrobacter & Rhizophagus
+  description_text: Soil microorganisms promote plant growth by producing growth-promoting hormones or by increasing the plant's tolerance to environmental stressors such as drought.
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 9
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2020'
+  client: null
+  collaborators: null
+  role: Illustration, 2D
+  program: null
+  topic: null
+  link: https://www.microbiome.ch/
+  highres_public_id: null

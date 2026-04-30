@@ -1,0 +1,23 @@
+src: /src/assets/projects/Gjermundbu/Gjermundbu_GalleryImages_3_gz1mnx.webp
+width: 1000
+height: 1250
+tags:
+  - 3D
+  - Houdini
+metadata:
+  project: Gjermundbu
+  description_title: Gjermundbu Helmet Close Up
+  description_text: Gjermundbu Helmet from c. 900s, with some extra frost details made in Houdini
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 9
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2024'
+  client: UZH
+  collaborators: null
+  role: 3D
+  program: Houdini, Metashape, SubstancePainter
+  topic: 3DScan
+  link: null
+  highres_public_id: null

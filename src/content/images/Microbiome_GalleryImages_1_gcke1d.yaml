@@ -1,0 +1,24 @@
+src: /src/assets/projects/Microbiome/Microbiome_GalleryImages_1_gcke1d.webp
+width: 2250
+height: 2500
+tags:
+  - 2D
+  - Science
+  - Illustration
+metadata:
+  project: Microbiome
+  description_title: Microbiome Close Up
+  description_text: Microbiome Close Up
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 0
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2020'
+  client: null
+  collaborators: null
+  role: Illustration, 2D
+  program: null
+  topic: science, soil
+  link: https://www.microbiome.ch/
+  highres_public_id: null

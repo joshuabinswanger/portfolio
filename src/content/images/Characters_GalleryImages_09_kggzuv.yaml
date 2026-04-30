@@ -1,0 +1,23 @@
+src: /src/assets/projects/hold/Characters_GalleryImages_09_kggzuv.webp
+width: 1400
+height: 2000
+tags:
+  - 2D
+  - Character
+metadata:
+  project: hold
+  description_title: Glirna
+  description_text: Huntress
+  showInPortfolioGallery: 'no'
+  portfolioOrder: 9
+  showInProjectGallery: 'no'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '20250'
+  client: null
+  collaborators: null
+  role: Illustration, 2D
+  program: null
+  topic: Character
+  link: null
+  highres_public_id: null

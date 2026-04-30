@@ -6,15 +6,15 @@ import type { CollectionEntry } from "astro:content";
  */
 export interface EnrichedProject {
   entry: CollectionEntry<"portfolio">;
+  projectId: string;
   projectName: string;
   startIndex: number;
-  galleryImages: CollectionEntry<"galleryImages">[];
+  galleryImages: CollectionEntry<"images">[];
   slidesCount: number;
 }
 
-
 export function sortPortfolioProjects(
-  portfolioProjects: CollectionEntry<"portfolio">,
+  portfolioProjects: CollectionEntry<"portfolio">[],
 ) {
   return [...portfolioProjects].sort((a, b) => {
     const priorityA = Number(a.data.priority);
@@ -23,12 +23,10 @@ export function sortPortfolioProjects(
   });
 }
 
-
-
 export async function fetchGalleryImagesForProjects(
   targetProjects: string[],
-): Promise<CollectionEntry<"galleryImages">[]> {
-  const galleryImages = await getCollection("galleryImages", ({ data }) => {
+): Promise<CollectionEntry<"images">[]> {
+  const galleryImages = await getCollection("images", ({ data }) => {
     return (
       data.metadata?.project &&
       targetProjects.includes(data.metadata.project) &&
@@ -38,8 +36,6 @@ export async function fetchGalleryImagesForProjects(
 
   return galleryImages;
 }
-
-
 
 export async function enrichPortfolioProjects(
   portfolioProjects: CollectionEntry<"portfolio">[],
@@ -65,6 +61,7 @@ export async function enrichPortfolioProjects(
 
     const projectData: EnrichedProject = {
       entry,
+      projectId: entry.id,
       projectName,
       startIndex,
       galleryImages,
@@ -80,7 +77,6 @@ export async function enrichPortfolioProjects(
   };
 }
 
-
 export async function getPortfolioGalleryData(): Promise<{
   enrichedProjects: EnrichedProject[];
   totalGlobalIndex: number;
@@ -95,7 +91,6 @@ export async function getPortfolioGalleryData(): Promise<{
   return enrichPortfolioProjects(sortedProjects);
 }
 
-
 export async function getGalleryProject(projectSlug: string) {
   try {
     const project = await getEntry("portfolio", projectSlug.toLowerCase());
@@ -105,17 +100,12 @@ export async function getGalleryProject(projectSlug: string) {
       return null;
     }
 
-    console.log(
-      `Gallery Project Fetched: ${project.data.portfolioElementName}`,
-    );
     return project;
   } catch (error) {
     console.error(`Error fetching gallery project ${projectSlug}:`, error);
     return null;
   }
 }
-
-
 
 export function extractContainedProjects(
   galleryProject: CollectionEntry<"portfolio"> | null,
@@ -128,10 +118,8 @@ export function extractContainedProjects(
   return [];
 }
 
-
-
 export async function getFilteredGalleryImages(containedProjects: string[]) {
-  const galleryImages = await getCollection("galleryImages", ({ data }) => {
+  const galleryImages = await getCollection("images", ({ data }) => {
     return (
       data.metadata?.project &&
       containedProjects.includes(data.metadata.project) &&
@@ -142,8 +130,9 @@ export async function getFilteredGalleryImages(containedProjects: string[]) {
   return sortImagesByPortfolioOrder(galleryImages);
 }
 
-
-export function sortImagesByPortfolioOrder(images: CollectionEntry<"galleryImages">) {
+export function sortImagesByPortfolioOrder(
+  images: CollectionEntry<"images">[],
+) {
   return [...images].sort((a, b) => {
     const orderA = a.data.metadata?.portfolioOrder ?? Infinity;
     const orderB = b.data.metadata?.portfolioOrder ?? Infinity;
@@ -157,7 +146,7 @@ export function sortImagesByPortfolioOrder(images: CollectionEntry<"galleryImage
  * @returns Array of image data with high resolution information
  */
 export async function buildHighResData(
-  galleryImages: CollectionEntry<"galleryImages">[],
+  galleryImages: CollectionEntry<"images">[],
 ) {
   const highResData = [];
 
@@ -182,7 +171,7 @@ export async function buildHighResData(
       ...image.data,
       highResWidth: highResEntry?.data.width ?? image.data.width,
       highResHeight: highResEntry?.data.height ?? image.data.height,
-      highResSecureUrl: highResEntry?.data.secure_url ?? image.data.secure_url,
+      highResSecureUrl: highResEntry?.data.secure_url ?? image.data.src,
     });
   }
 
@@ -194,12 +183,9 @@ export async function buildHighResData(
  * @param images - Collection of gallery images
  * @returns true if at least one image has highres_public_id
  */
-export function hasHighResImages(
-  images: CollectionEntry<"galleryImages">[],
-): boolean {
+export function hasHighResImages(images: CollectionEntry<"images">[]): boolean {
   return images.some((image) => image.data?.metadata?.highres_public_id);
 }
-
 
 export async function getGalleryData(projectSlug: string) {
   // Fetch the gallery project

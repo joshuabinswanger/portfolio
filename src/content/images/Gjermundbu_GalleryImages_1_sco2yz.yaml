@@ -1,0 +1,24 @@
+src: /src/assets/projects/Gjermundbu/Gjermundbu_GalleryImages_1_sco2yz.webp
+width: 1000
+height: 1250
+tags:
+  - 3D
+  - Houdini
+  - Illustration
+metadata:
+  project: Gjermundbu
+  description_title: Gjermundbu Helmet
+  description_text: Gjermundbu Helmet from c. 900s
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 0
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2024'
+  client: UZH
+  collaborators: null
+  role: 3D
+  program: Houdini, Metashape, SubstancePainter
+  topic: 3DScan
+  link: null
+  highres_public_id: null

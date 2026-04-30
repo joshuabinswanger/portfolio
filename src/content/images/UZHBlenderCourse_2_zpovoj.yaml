@@ -1,0 +1,22 @@
+src: /src/assets/projects/UZHBlender/UZHBlenderCourse_2_zpovoj.webp
+width: 2000
+height: 2000
+tags:
+  - Tutorial
+metadata:
+  project: UZHBlender
+  description_title: null
+  description_text: Joshua Binswanger - Rhizome Visuals - Scientific Illustration
+  showInPortfolioGallery: 'no'
+  portfolioOrder: 9
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2023'
+  client: University of Zurich
+  collaborators: null
+  role: 3D
+  program: null
+  topic: Teaching
+  link: null
+  highres_public_id: null

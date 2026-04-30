@@ -1,0 +1,24 @@
+src: /src/assets/projects/Microbiome/Microbiome_GalleryImages_3_tej0fp.webp
+width: 2250
+height: 2500
+tags:
+  - 2D
+  - Science
+  - Illustration
+metadata:
+  project: Microbiome
+  description_title: Entomopathogenic fungi & Bacillus thuringiensis
+  description_text: Soil microorganisms help the plant defending against pests by eliminating pests directly or by enhancing systemic plant defense mechanisms.
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 9
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2020'
+  client: null
+  collaborators: null
+  role: Illustration, 2D
+  program: null
+  topic: null
+  link: https://www.microbiome.ch/
+  highres_public_id: null

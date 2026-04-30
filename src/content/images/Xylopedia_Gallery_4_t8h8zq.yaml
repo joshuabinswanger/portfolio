@@ -1,0 +1,27 @@
+src: /src/assets/projects/Xylopedia/Xylopedia_Gallery_4_t8h8zq.webp
+width: 2000
+height: 2250
+tags:
+  - 3D
+  - Blender
+  - Interactive
+  - Science
+  - Web
+  - Wood
+metadata:
+  project: Xylopedia
+  description_title: Parenchyma Cells of Oak Wood visualized
+  description_text: Based on CT-Scans from Hereon @DESY, we created an idealized representation of all the Parenchyma cells in a block of aprox. 2mm x 3mm x 3mm
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 3
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '2024'
+  client: null
+  collaborators: null
+  role: 3D Dev
+  program: Blender, Slicer3D
+  topic: Wood, Real-time
+  link: null
+  highres_public_id: null

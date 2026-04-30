@@ -5,16 +5,9 @@ interface Props {
   margin: string;
 }
 
-// Get component props from Astro.props
 const { margin } = Astro.props;
 
-let wrapperClass;
-
-if (margin === "yes") {
-  wrapperClass = "margin";
-} else {
-  wrapperClass = "nomargin";
-}
+const wrapperClass = margin === "yes" ? "margin" : "nomargin";
 ---
 
 <div id="DoubleImageWrapper" class:list={wrapperClass}>

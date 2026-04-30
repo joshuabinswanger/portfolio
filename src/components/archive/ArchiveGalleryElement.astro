@@ -1,19 +1,8 @@
 ---
-import BracketOpenH from "../brackets/BracketOpenH.astro";
-import BracketCloseH from "../brackets/BracketCloseH.astro";
-import BracketMiddleH from "../brackets/BracketMiddleH.astro";
-import BracketOpenV from "../brackets/BracketOpenV.astro";
-import BracketCloseV from "../brackets/BracketCloseV.astro";
-import BracketMiddleV from "../brackets/BracketMiddleV.astro";
-import Icon from "../Icon.astro";
 import { getEntry } from "astro:content";
 import { CldImage } from "astro-cloudinary";
 
 import "photoswipe/style.css";
-import { marked } from "marked";
-
-// Get asset with PUBLIC ID
-const { public_id } = Astro.props;
 
 interface Props {
   public_id: string;
@@ -30,7 +19,7 @@ const archiveImage = await getEntry(
 //////////////////////////
 
 // Helper function to ensure we get an array from any input
-function ensureArray(value) {
+function ensureArray(value: string | string[] | null | undefined) {
   if (!value) return [];
   if (Array.isArray(value)) return value;
   return value.split(",").map((item) => item.trim()); // Split by comma and trim spaces
@@ -55,14 +44,12 @@ const tagConversion = {
 // Convert the tags in the allowed list using a mapping object
 const convertedTags = tags.map((tag) => tagConversion[tag] || tag);
 
-// Convert the tags in the allowed list using a mapping object
+// Convert role tags for data attributes.
 const role = [...ensureArray(archiveImage.data.metadata?.role)];
 const convertedRole = role.map((tag) => tagConversion[tag] || tag);
 
 // Join tags into a space-separated string
 const tagClassString = convertedTags.join(" ");
-
-console.log(tagClassString);
 
 ///////////////////////////
 //  HIGH RES IMAGE ADD ///

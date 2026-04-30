@@ -1,0 +1,22 @@
+src: /src/assets/projects/misc3d/Misc_3D_GalleryImages_5_qyfysj.webp
+width: 2000
+height: 2000
+tags:
+  - 3D
+metadata:
+  project: misc3d
+  description_title: Rubber Hammer
+  description_text: Real-time 3D practice
+  showInPortfolioGallery: 'no'
+  portfolioOrder: 9
+  showInProjectGallery: 'no'
+  projectGalleryOrder: null
+  showInIndex: 'yes'
+  year: '202205'
+  client: null
+  collaborators: null
+  role: 3D
+  program: ZBrush, Blender, SubstancePainter, Marmoset
+  topic: Interactive
+  link: null
+  highres_public_id: null

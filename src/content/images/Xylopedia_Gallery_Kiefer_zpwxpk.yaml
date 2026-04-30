@@ -1,0 +1,22 @@
+src: /src/assets/projects/Xylopedia/Xylopedia_Gallery_Kiefer_zpwxpk.webp
+width: 2000
+height: 2250
+tags:
+  - Proceduralism
+metadata:
+  project: Xylopedia
+  description_title: CT scan rendering of spruce wood (pinus sylvestris) ~300 microns (0.3mm)
+  description_text: CT scan rendering of spruce wood (pinus sylvestris) ~300 microns (0.3mm)
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 4
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: 4
+  showInIndex: 'yes'
+  year: '2024'
+  client: HNE Eberswalde
+  collaborators: null
+  role: 3D Dev
+  program: Houdini
+  topic: Design
+  link: https://ms.hereon.de/xylopedia/
+  highres_public_id: Xylopedia_Kiefer_uamtrb

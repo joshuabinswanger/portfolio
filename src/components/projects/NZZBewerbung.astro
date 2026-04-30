@@ -524,14 +524,17 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
         ease: "power2.inOut",
       },
       onUpdate: (self) => {
-        const tl = self.animation;
+        const tl = self.animation as unknown as {
+          time: () => number;
+          labels: Record<string, number>;
+        };
         const time = tl.time();
         const labels = tl.labels;
         let active = "intro";
         if (time >= labels["chapter-8"]) active = "zukunft";
         else if (time >= labels["chapter-5"]) active = "werdegang";
         else if (time >= labels["chapter-3"]) active = "work";
-        document.querySelectorAll(".progress-word").forEach((el) => {
+        document.querySelectorAll<HTMLElement>(".progress-word").forEach((el) => {
           el.classList.toggle("active", el.dataset.section === active);
         });
       },
@@ -552,10 +555,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     "flower-canvas",
   ) as HTMLCanvasElement;
   const flowerCtx = flowerCanvas.getContext("2d");
-  const flowerImages = [];
+  const flowerImages: HTMLImageElement[] = [];
   const flowerPlayhead = { frame: 0 };
 
-  flowerUrls.forEach((url) => {
+  flowerUrls.forEach((url: string) => {
     const img = new window.Image();
     img.src = url;
     flowerImages.push(img);
@@ -601,7 +604,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   // Helper functions
   let snapLabelCount = 0;
 
-  const slideIn = (selector, sync = false, snap = true) => {
+  const slideIn = (selector: string, sync = false, snap = true) => {
     const result = masterTl.fromTo(
       selector,
       { y: "70vh", opacity: 0 },
@@ -611,7 +614,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     if (snap) masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
     return result;
   };
-  const fadeIn = (selector, sync = false, snap = true) => {
+  const fadeIn = (selector: string, sync = false, snap = true) => {
     const result = masterTl.fromTo(
       selector,
       { scale: 0.8, opacity: 0 },
@@ -622,7 +625,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     return result;
   };
 
-  const slideOut = (selector, sync = false) => {
+  const slideOut = (selector: string, sync = false) => {
     return masterTl.to(
       selector,
       { y: "-70vh", opacity: 0, duration: 0.7 },
@@ -630,7 +633,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     );
   };
 
-  const fadeOut = (selector, sync = false) => {
+  const fadeOut = (selector: string, sync = false) => {
     return masterTl.to(
       selector,
       { scale: 0.8, opacity: 0, duration: 0.5 },

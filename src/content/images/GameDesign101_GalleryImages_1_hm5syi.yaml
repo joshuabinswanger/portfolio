@@ -1,0 +1,26 @@
+src: /src/assets/projects/GameDesign101/GameDesign101_GalleryImages_1_hm5syi.webp
+width: 1500
+height: 1500
+tags:
+  - 3D
+  - Houdini
+  - Illustration
+  - Motion
+  - Proceduralism
+metadata:
+  project: GameDesign101
+  description_title: N64 Controller
+  description_text: Proceduraly generated Key Visual in Houdini, Octane & Blender
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 0
+  showInProjectGallery: 'yes'
+  projectGalleryOrder: 0
+  showInIndex: 'yes'
+  year: '2024'
+  client: null
+  collaborators: null
+  role: 3D, Dev
+  program: Houdini, Blender
+  topic: Proceduralism, Mo Graph
+  link: https://www.instagram.com/p/C537QZXLEvf/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==
+  highres_public_id: GameDesign101_N64_1_nsrrn8
