@@ -11,6 +11,7 @@ import { marked } from "marked";
 
 // Import the utility functions
 import { getGalleryData } from "./utils.ts";
+import { resolveImageUrl, resolveLocalImage } from "./localImages.ts";
 
 interface Props {
   project: string;
@@ -51,6 +52,8 @@ if (!galleryProject) {
 
         // Compute index: startIndex + 1 offset plus the current image index
         const computedIndex = Astro.props.startIndex + 1 + index;
+        const imageSrc = resolveLocalImage(image.data.src);
+        const imageUrl = resolveImageUrl(image.data.src);
 
         return (
           <div
@@ -106,7 +109,7 @@ if (!galleryProject) {
               <a
                 onclick={`pswpLightbox.loadAndOpen(${computedIndex}); return false;`}
                 class:list={["photo-link photoswipeData"]}
-                href={image.data.src}
+                href={imageUrl}
                 data-pswp-width={image.data.width}
                 data-pswp-height={image.data.height}
                 target="_blank"
@@ -115,7 +118,7 @@ if (!galleryProject) {
                 data-link={image.data.metadata?.link}
               >
                 <Picture
-                  src={image.data.src}
+                  src={imageSrc}
                   width={image.data.width}
                   height={image.data.height}
                   sizes="(max-width: 767px) 85vw, (max-width: 1119px) 50vw, (max-width: 1699px) 33vw, 25vw"
