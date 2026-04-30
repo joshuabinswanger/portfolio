@@ -6,12 +6,12 @@ metadata:
   project: structureofwood
   description_title: null
   description_text: Joshua Binswanger - Rhizome Visuals - Scientific Illustration
-  showInPortfolioGallery: 'no'
+  showInPortfolioGallery: "no"
   portfolioOrder: 9
-  showInProjectGallery: 'yes'
+  showInProjectGallery: "yes"
   projectGalleryOrder: null
-  showInIndex: 'yes'
-  year: '2019'
+  showInIndex: "yes"
+  year: "2019"
   client: null
   collaborators: null
   role: 3D
