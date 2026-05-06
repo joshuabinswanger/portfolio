@@ -2,6 +2,11 @@
 /// <reference types="astro/client" />
 
 declare global {
+  interface ImportMetaEnv {
+    readonly PUBLIC_MUX_ENV_ID?: string;
+    readonly PUBLIC_MUX_ENV_KEY?: string;
+  }
+
   interface HTMLElement {
     hasClickListener?: boolean;
   }

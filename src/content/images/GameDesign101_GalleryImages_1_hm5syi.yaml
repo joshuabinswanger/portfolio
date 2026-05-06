@@ -11,7 +11,7 @@ metadata:
   project: GameDesign101
   description_title: N64 Controller
   description_text: Proceduraly generated Key Visual in Houdini, Octane & Blender
-  showInPortfolioGallery: 'yes'
+  showInPortfolioGallery: 'no'
   portfolioOrder: 0
   showInProjectGallery: 'yes'
   projectGalleryOrder: 0

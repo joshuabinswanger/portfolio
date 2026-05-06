@@ -71,9 +71,17 @@ const { enrichedProjects } = await getPortfolioGalleryData();
 
     Sliders.forEach((item) => {
       let loaded: boolean[] = [];
+      let sliderInView = false;
+
+      function canPlayInlineVideos() {
+        return (
+          document.visibilityState === "visible" &&
+          document.documentElement.dataset.photoswipeOpen !== "true"
+        );
+      }
 
       //Loading Function
-      function loadImages(s: KeenSliderInstance) {
+      function loadMedia(s: KeenSliderInstance) {
         const slideIdx = s.track.details.rel;
         const totalSlides = s.track.details.slides.length;
 
@@ -83,18 +91,64 @@ const { enrichedProjects } = await getPortfolioGalleryData();
         loaded[(slideIdx + 1) % totalSlides] = true; // Next slide, wrapping around
 
         s.slides.forEach((element, idx) => {
-          if (loaded[idx]) {
-            // Use querySelector to find the .ImageElement div
-            const imageElement = (element as HTMLElement).querySelector<HTMLElement>(".ImageElement");
-            /* console.log(`ImageElement found:`, imageElement); */
+          if (!loaded[idx]) {
+            return;
+          }
 
-            if (imageElement) {
-              imageElement.style.display = "block";
-            } else {
-              console.warn(`.ImageElement not found in slide index ${idx}`);
-            }
+          const slide = element as HTMLElement;
+          const imageElement =
+            slide.querySelector<HTMLElement>(".ImageElement");
+
+          if (imageElement) {
+            imageElement.style.display = "block";
           }
         });
+      }
+
+      function pauseInactiveVideos(s: KeenSliderInstance) {
+        const currentSlideIndex = s.track.details.rel;
+
+        s.slides.forEach((slide, idx) => {
+          if (idx === currentSlideIndex) {
+            return;
+          }
+
+          slide.querySelectorAll("video, mux-video").forEach((video) => {
+            if ("pause" in video && typeof video.pause === "function") {
+              video.pause();
+            }
+          });
+        });
+      }
+
+      function playAutoplayVideos(root: ParentNode) {
+        root.querySelectorAll("video, mux-video, mux-player").forEach((video) => {
+          const mediaLink = video.closest("a[data-media-type='video']");
+          const shouldAutoplay =
+            mediaLink?.getAttribute("data-mux-autoplay") === "true" ||
+            video.hasAttribute("autoplay");
+
+          if (
+            shouldAutoplay &&
+            "play" in video &&
+            typeof video.play === "function"
+          ) {
+            video.play().catch(() => {});
+          }
+        });
+      }
+
+      function playCurrentVideo(s: KeenSliderInstance) {
+        const currentSlide = s.slides[s.track.details.rel];
+
+        if (currentSlide && sliderInView && canPlayInlineVideos()) {
+          window.requestAnimationFrame(() => playAutoplayVideos(currentSlide));
+        }
+      }
+
+      function syncInlineVideos(s: KeenSliderInstance) {
+        pauseInactiveVideos(s);
+        playCurrentVideo(s);
       }
 
       //Counter Function
@@ -133,14 +187,21 @@ const { enrichedProjects } = await getPortfolioGalleryData();
         }
       }
 
-      var slider = new KeenSlider(item, {
+      const slider = new KeenSlider(item, {
         created: (s) => {
-          loadImages(s);
+          loadMedia(s);
           setMaxHeight(s);
           hideGalleryPlaceholder(item);
+          syncInlineVideos(s);
         },
-        slideChanged: loadImages,
-        animationEnded: updateCounter,
+        slideChanged: (s) => {
+          loadMedia(s);
+          syncInlineVideos(s);
+        },
+        animationEnded: (s) => {
+          updateCounter(s);
+          syncInlineVideos(s);
+        },
         updated: setMaxHeight,
 
         slides: {
@@ -148,6 +209,44 @@ const { enrichedProjects } = await getPortfolioGalleryData();
         },
         loop: true,
         initial: 0,
+      });
+
+      const inlineVisibilityObserver = new IntersectionObserver(
+        ([entry]) => {
+          sliderInView = Boolean(entry?.isIntersecting);
+
+          if (sliderInView) {
+            syncInlineVideos(slider);
+          } else {
+            pauseInactiveVideos(slider);
+            item.querySelectorAll("video, mux-video").forEach((video) => {
+              if ("pause" in video && typeof video.pause === "function") {
+                video.pause();
+              }
+            });
+          }
+        },
+        { threshold: 0.25 },
+      );
+
+      inlineVisibilityObserver.observe(item);
+
+      document.addEventListener("portfolio:photoswipe-closed", () => {
+        if (sliderInView) {
+          syncInlineVideos(slider);
+        }
+      });
+
+      document.addEventListener("visibilitychange", () => {
+        if (canPlayInlineVideos()) {
+          syncInlineVideos(slider);
+        } else {
+          item.querySelectorAll("video, mux-video").forEach((video) => {
+            if ("pause" in video && typeof video.pause === "function") {
+              video.pause();
+            }
+          });
+        }
       });
 
       /////////////////
@@ -261,6 +360,8 @@ const { enrichedProjects } = await getPortfolioGalleryData();
 
 <!-- PhotoSwipe -->
 <script>
+  import "@mux/mux-player";
+  import "@mux/mux-video";
   import PhotoSwipeLightbox from "photoswipe/lightbox";
   import { registerPhotoSwipeCaption } from "./photoswipeCaption";
 
@@ -275,6 +376,98 @@ const { enrichedProjects } = await getPortfolioGalleryData();
   function isPhonePortrait() {
     return window.matchMedia("(max-width: 650px) and (orientation: portrait)")
       .matches;
+  }
+
+  const MUX_ENV_KEY = import.meta.env.PUBLIC_MUX_ENV_KEY ?? "";
+
+  function escapeHtml(value: string | null) {
+    return (value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function buildMuxPlayerSlide(videoLink: HTMLAnchorElement) {
+    const playbackId = videoLink.getAttribute("data-mux-playback-id");
+    const poster = videoLink.getAttribute("data-mux-poster");
+    const maxResolution = videoLink.getAttribute("data-mux-max-resolution");
+    const width = videoLink.getAttribute("data-pswp-width") ?? "16";
+    const height = videoLink.getAttribute("data-pswp-height") ?? "9";
+    const showControls = videoLink.getAttribute("data-mux-controls") !== "false";
+    const autoplay = videoLink.getAttribute("data-mux-autoplay") === "true";
+    const loop = videoLink.getAttribute("data-mux-loop") === "true";
+    const muted = videoLink.getAttribute("data-mux-muted") === "true";
+    const title = escapeHtml(videoLink.getAttribute("data-description_title"));
+    const posterAttr = poster ? ` poster="${escapeHtml(poster)}"` : "";
+    const maxResolutionAttr = maxResolution
+      ? ` max-resolution="${escapeHtml(maxResolution)}"`
+      : "";
+    const controlsAttr = showControls ? " controls" : "";
+    const autoplayAttr = autoplay ? " autoplay" : "";
+    const loopAttr = loop ? " loop" : "";
+    const mutedAttr = muted ? " muted" : "";
+    const envKeyAttr = MUX_ENV_KEY
+      ? ` env-key="${escapeHtml(MUX_ENV_KEY)}"`
+      : "";
+    const muxElement = showControls ? "mux-player" : "mux-video";
+
+    return {
+      html: `<div class="pswp__video-slide photoswipeData" style="--video-aspect-ratio: ${escapeHtml(width)} / ${escapeHtml(height)};">
+        <${muxElement}
+          playback-id="${escapeHtml(playbackId)}"
+          stream-type="on-demand"
+          metadata-video-id="${escapeHtml(playbackId)}"
+          metadata-video-title="${title}"
+          ${controlsAttr}
+          ${autoplayAttr}
+          ${loopAttr}
+          ${mutedAttr}
+          playsinline
+          ${posterAttr}
+          ${maxResolutionAttr}
+          ${envKeyAttr}
+        ></${muxElement}>
+      </div>`,
+      width: videoLink.getAttribute("data-pswp-width"),
+      height: videoLink.getAttribute("data-pswp-height"),
+      description_title: videoLink.getAttribute("data-description_title"),
+      description_text: videoLink.getAttribute("data-description_text"),
+      link: videoLink.getAttribute("data-link"),
+    };
+  }
+
+  function pauseAllVideos(root: ParentNode = document) {
+    root.querySelectorAll("video, mux-video, mux-player").forEach((video) => {
+      if ("pause" in video && typeof video.pause === "function") {
+        video.pause();
+      }
+    });
+  }
+
+  function playAutoplayVideos(root: ParentNode) {
+    root.querySelectorAll("video, mux-video, mux-player").forEach((video) => {
+      if (
+        video.hasAttribute("autoplay") &&
+        "play" in video &&
+        typeof video.play === "function"
+      ) {
+        video.play().catch(() => {});
+      }
+    });
+  }
+
+  function playActivePhotoSwipeVideo() {
+    window.requestAnimationFrame(() => {
+      const activeSlide =
+        document.querySelector<HTMLElement>(".pswp__item--active") ??
+        document.querySelector<HTMLElement>(".pswp__item[aria-hidden='false']") ??
+        document.querySelector<HTMLElement>(".pswp__video-slide");
+
+      if (activeSlide) {
+        playAutoplayVideos(activeSlide);
+      }
+    });
   }
 
   document.addEventListener("astro:page-load", () => {
@@ -316,6 +509,11 @@ const { enrichedProjects } = await getPortfolioGalleryData();
       const imageLinks = galleryEl.querySelectorAll<HTMLAnchorElement>(".ImageElement a");
 
       imageLinks.forEach((imgLink) => {
+        if (imgLink.getAttribute("data-media-type") === "video") {
+          galleryData.push(buildMuxPlayerSlide(imgLink));
+          return;
+        }
+
         const photoswipeImageData = {
           src: imgLink.getAttribute("href"),
           width: imgLink.getAttribute("data-pswp-width"),
@@ -412,10 +610,38 @@ const { enrichedProjects } = await getPortfolioGalleryData();
     lightbox = new PhotoSwipeLightbox(options);
 
     registerPhotoSwipeCaption(lightbox);
+    lightbox.on("beforeOpen", () => {
+      document.documentElement.dataset.photoswipeOpen = "true";
+      pauseAllVideos();
+    });
+    lightbox.on("change", () => {
+      pauseAllVideos();
+      playActivePhotoSwipeVideo();
+    });
+    lightbox.on("close", () => {
+      pauseAllVideos();
+      document.documentElement.dataset.photoswipeOpen = "false";
+      document.dispatchEvent(new CustomEvent("portfolio:photoswipe-closed"));
+    });
+    lightbox.on("destroy", () => {
+      pauseAllVideos();
+      document.documentElement.dataset.photoswipeOpen = "false";
+      document.dispatchEvent(new CustomEvent("portfolio:photoswipe-closed"));
+    });
 
     lightbox.init(); // Initialize the lightbox
 
     window.pswpLightbox = lightbox;
+  });
+
+  document.addEventListener("astro:before-swap", () => {
+    pauseAllVideos();
+    document.documentElement.dataset.photoswipeOpen = "false";
+
+    if (lightbox) {
+      lightbox.destroy();
+      lightbox = null;
+    }
   });
 </script>
 
@@ -493,6 +719,23 @@ const { enrichedProjects } = await getPortfolioGalleryData();
 
   .hidden {
     display: none;
+  }
+
+  :global(.pswp__video-slide) {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    place-items: center;
+  }
+
+  :global(.pswp__video-slide mux-player),
+  :global(.pswp__video-slide mux-video) {
+    width: 100%;
+    max-width: min(100%, 1600px);
+    max-height: 100%;
+    aspect-ratio: var(--video-aspect-ratio, 16 / 9);
+    object-fit: contain;
+    --media-object-fit: contain;
   }
 
   /* Gallery Styling */

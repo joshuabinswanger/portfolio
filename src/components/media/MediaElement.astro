@@ -1,0 +1,124 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { Picture } from "astro:assets";
+
+import { resolveImageUrl, resolveLocalImage } from "../images/localImages.ts";
+import { getMuxHlsUrl, isMuxVideoData } from "./mux.ts";
+
+interface Props {
+  computedIndex: number;
+  media: CollectionEntry<"images">;
+  loading?: "eager" | "lazy";
+  sizes: string;
+}
+
+const { computedIndex, media, loading = "lazy", sizes } = Astro.props;
+const { data } = media;
+const metadata = data.metadata;
+const descriptionTitle = metadata?.description_title ?? "";
+const descriptionText = metadata?.description_text ?? "";
+const link = metadata?.link ?? "";
+const isVideo = isMuxVideoData(data);
+const posterUrl = isVideo ? resolveImageUrl(data.posterSrc) : "";
+const imageSrc = !isVideo ? resolveLocalImage(data.src) : null;
+const imageUrl = !isVideo ? resolveImageUrl(data.src) : "";
+const href = isVideo ? getMuxHlsUrl(data.video.playbackId) : imageUrl;
+const autoplay = isVideo ? (data.video.autoplay ?? true) : false;
+const loop = isVideo ? (data.video.loop ?? true) : false;
+const muted = isVideo ? (data.video.muted ?? true) : false;
+const maxResolution = isVideo ? data.video.maxResolution : undefined;
+const muxEnvKey = import.meta.env.PUBLIC_MUX_ENV_KEY;
+---
+
+<a
+  onclick={`pswpLightbox.loadAndOpen(${computedIndex}); return false;`}
+  class:list={["MediaLink photo-link photoswipeData"]}
+  href={href}
+  data-media-type={isVideo ? "video" : "image"}
+  data-pswp-width={data.width}
+  data-pswp-height={data.height}
+  data-description_title={descriptionTitle}
+  data-description_text={descriptionText}
+  data-link={link}
+  data-mux-playback-id={isVideo ? data.video.playbackId : undefined}
+  data-mux-poster={isVideo ? posterUrl : undefined}
+  data-mux-max-resolution={maxResolution}
+  data-mux-controls={isVideo ? String(data.video.controls ?? true) : undefined}
+  data-mux-autoplay={isVideo ? String(data.video.autoplay ?? false) : undefined}
+  data-mux-loop={isVideo ? String(data.video.loop ?? false) : undefined}
+  data-mux-muted={isVideo ? String(data.video.muted ?? false) : undefined}
+  target="_blank"
+>
+  {
+    isVideo ? (
+      <mux-video
+        playback-id={data.video.playbackId}
+        stream-type="on-demand"
+        poster={posterUrl}
+        preload="metadata"
+        playsinline
+        autoplay={autoplay}
+        loop={loop}
+        muted={muted}
+        max-resolution={maxResolution}
+        env-key={muxEnvKey}
+        metadata-video-id={isVideo ? data.video.playbackId : undefined}
+        metadata-video-title={descriptionTitle}
+        aria-label={descriptionTitle || descriptionText || "Portfolio video"}
+      />
+    ) : (
+      imageSrc && (
+        <Picture
+          src={imageSrc}
+          width={data.width}
+          height={data.height}
+          sizes={sizes}
+          alt={descriptionTitle}
+          formats={["avif", "webp"]}
+          loading={loading}
+        />
+      )
+    )
+  }
+</a>
+
+<script>
+  import "@mux/mux-video";
+</script>
+
+<style>
+  .MediaLink {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .MediaLink :global(picture) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .MediaLink :global(img) {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    vertical-align: top;
+  }
+
+  mux-video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  mux-video {
+    --media-object-fit: contain;
+    pointer-events: none;
+  }
+</style>

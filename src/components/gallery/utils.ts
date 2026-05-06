@@ -1,5 +1,6 @@
 import { getEntry, getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
+import { getMuxHlsUrl, isMuxVideoEntry } from "../media/mux";
 
 /**
  * Interface for enriched project data
@@ -153,6 +154,16 @@ export async function buildHighResData(
   for (const image of galleryImages) {
     let highResEntry = null;
 
+    if (isMuxVideoEntry(image)) {
+      highResData.push({
+        ...image.data,
+        highResWidth: image.data.width,
+        highResHeight: image.data.height,
+        highResSecureUrl: getMuxHlsUrl(image.data.video.playbackId),
+      });
+      continue;
+    }
+
     if (image.data.metadata?.highres_public_id) {
       try {
         highResEntry = await getEntry(
@@ -167,11 +178,13 @@ export async function buildHighResData(
       }
     }
 
+    const imageUrl = "src" in image.data ? image.data.src : "";
+
     highResData.push({
       ...image.data,
       highResWidth: highResEntry?.data.width ?? image.data.width,
       highResHeight: highResEntry?.data.height ?? image.data.height,
-      highResSecureUrl: highResEntry?.data.secure_url ?? image.data.src,
+      highResSecureUrl: highResEntry?.data.secure_url ?? imageUrl,
     });
   }
 

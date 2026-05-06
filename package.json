@@ -13,6 +13,8 @@
   "dependencies": {
     "@astrojs/check": "^0.9.9",
     "@glidejs/glide": "^3.6.2",
+    "@mux/mux-player": "^3.13.0",
+    "@mux/mux-video": "^0.31.0",
     "@rive-app/canvas": "^2.19.6",
     "@unpic/astro": "^0.0.47",
     "astro": "^6.2.0",

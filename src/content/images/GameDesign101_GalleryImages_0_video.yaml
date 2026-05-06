@@ -1,0 +1,35 @@
+mediaType: video
+posterSrc: /src/assets/projects/GameDesign101/GameDesign101_GalleryImages_1_hm5syi.webp
+width: 1500
+height: 1500
+tags:
+  - 3D
+  - Houdini
+  - Illustration
+  - Motion
+  - Proceduralism
+video:
+  provider: mux
+  playbackId: GKrw600zDTXw3ZyYno01L1HbGBaTrTnhyuP3l01wF5UYnQ
+  autoplay: true
+  loop: true
+  muted: true
+  controls: false
+  maxResolution: 1080p
+metadata:
+  project: GameDesign101
+  description_title: Game Design 101 Motion
+  description_text: Proceduraly generated motion key visual in Houdini, Octane & Blender
+  showInPortfolioGallery: 'yes'
+  portfolioOrder: 0
+  showInProjectGallery: 'no'
+  projectGalleryOrder: null
+  showInIndex: 'no'
+  year: '2024'
+  client: null
+  collaborators: null
+  role: 3D, Dev
+  program: Houdini, Blender
+  topic: Proceduralism, Mo Graph
+  link: https://www.instagram.com/p/C537QZXLEvf/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==
+  highres_public_id: null

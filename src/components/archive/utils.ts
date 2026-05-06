@@ -8,7 +8,17 @@ const tagConversion: Record<string, string> = {
   "3D": "threeD",
 };
 
-export type ArchiveImage = CollectionEntry<"images">;
+type LocalImageData = Extract<CollectionEntry<"images">["data"], { src: string }>;
+
+export type ArchiveImage = CollectionEntry<"images"> & {
+  data: LocalImageData;
+};
+
+export function isArchiveImage(
+  image: CollectionEntry<"images">,
+): image is ArchiveImage {
+  return image.data.mediaType !== "video";
+}
 
 export interface ArchiveHighResData {
   width: number;

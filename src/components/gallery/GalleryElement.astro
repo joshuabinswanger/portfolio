@@ -3,7 +3,7 @@ import BracketOpenH from "../brackets/BracketOpenH.astro";
 import BracketCloseH from "../brackets/BracketCloseH.astro";
 import BracketMiddleH from "../brackets/BracketMiddleH.astro";
 import Icon from "../Icon.astro";
-import { Picture } from "astro:assets";
+import MediaElement from "../media/MediaElement.astro";
 
 import "keen-slider/keen-slider.min.css";
 import "photoswipe/style.css";
@@ -11,7 +11,6 @@ import { marked } from "marked";
 
 // Import the utility functions
 import { getGalleryData } from "./utils.ts";
-import { resolveImageUrl, resolveLocalImage } from "../images/localImages.ts";
 
 interface Props {
   project: string;
@@ -52,8 +51,6 @@ if (!galleryProject) {
 
         // Compute index: startIndex + 1 offset plus the current image index
         const computedIndex = Astro.props.startIndex + 1 + index;
-        const imageSrc = resolveLocalImage(image.data.src);
-        const imageUrl = resolveImageUrl(image.data.src);
 
         return (
           <div
@@ -106,27 +103,12 @@ if (!galleryProject) {
                 data-pswp-height={highResData[index].highResHeight} 
                 */}
 
-              <a
-                onclick={`pswpLightbox.loadAndOpen(${computedIndex}); return false;`}
-                class:list={["photo-link photoswipeData"]}
-                href={imageUrl}
-                data-pswp-width={image.data.width}
-                data-pswp-height={image.data.height}
-                target="_blank"
-                data-description_title={image.data.metadata?.description_title}
-                data-description_text={image.data.metadata?.description_text}
-                data-link={image.data.metadata?.link}
-              >
-                <Picture
-                  src={imageSrc}
-                  width={image.data.width}
-                  height={image.data.height}
-                  sizes="(max-width: 767px) 85vw, (max-width: 1119px) 50vw, (max-width: 1699px) 33vw, 25vw"
-                  alt={image.data.metadata?.description_title ?? ""}
-                  formats={["avif", "webp"]}
-                  loading={index === 0 ? "eager" : "lazy"}
-                />
-              </a>
+              <MediaElement
+                computedIndex={computedIndex}
+                media={image}
+                sizes="(max-width: 767px) 85vw, (max-width: 1119px) 50vw, (max-width: 1699px) 33vw, 25vw"
+                loading={index === 0 ? "eager" : "lazy"}
+              />
             </div>
           </div>
         );
@@ -221,6 +203,29 @@ if (!galleryProject) {
     vertical-align: top;
     width: 100%;
     height: auto;
+  }
+
+  .ImageElement :global(a),
+  .ImageElement :global(picture) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .ImageElement :global(img) {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    vertical-align: top;
+  }
+
+  .ImageElement :global(mux-video) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
   }
 
   .project-info-slide-wrapper {

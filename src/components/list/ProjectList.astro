@@ -26,7 +26,15 @@ for (const entry of sortedProjects) {
     return imageProject && projectName.includes(imageProject);
   });
 
-  const slidesCount = galleryImages.length;
+  const galleryVideos = await getCollection("images", ({ data }) => {
+    return (
+      data.mediaType === "video" &&
+      data.metadata?.project === projectName &&
+      data.metadata.showInProjectGallery === "yes"
+    );
+  });
+
+  const slidesCount = galleryImages.length + galleryVideos.length;
   globalIndex += slidesCount + 2;
 
   const projectData = {
@@ -113,7 +121,7 @@ for (const entry of sortedProjects) {
 
 <!-- Keen Slider -->
 <script>
-  import KeenSlider from "keen-slider";
+  import KeenSlider, { type KeenSliderInstance } from "keen-slider";
   import "keen-slider/keen-slider.min.css";
 
   type DestroyableSlider = {
@@ -126,19 +134,108 @@ for (const entry of sortedProjects) {
   document.addEventListener("astro:page-load", () => {
     const listElements = document.querySelectorAll<HTMLElement>(".ListElement");
 
+    function canPlayInlineVideos() {
+      return (
+        document.visibilityState === "visible" &&
+        document.documentElement.dataset.photoswipeOpen !== "true"
+      );
+    }
+
+    function pauseVideos(root: ParentNode) {
+      root.querySelectorAll("video, mux-video, mux-player").forEach((video) => {
+        if ("pause" in video && typeof video.pause === "function") {
+          video.pause();
+        }
+      });
+    }
+
+    function playAutoplayVideos(root: ParentNode) {
+      root.querySelectorAll("video, mux-video, mux-player").forEach((video) => {
+        const mediaLink = video.closest("a[data-media-type='video']");
+        const shouldAutoplay =
+          mediaLink?.getAttribute("data-mux-autoplay") === "true" ||
+          video.hasAttribute("autoplay");
+
+        if (
+          shouldAutoplay &&
+          "play" in video &&
+          typeof video.play === "function"
+        ) {
+          video.play().catch(() => {});
+        }
+      });
+    }
+
+    function syncVisibleVideos(s: KeenSliderInstance, sliderRoot: HTMLElement) {
+      pauseVideos(sliderRoot);
+
+      if (!canPlayInlineVideos()) {
+        return;
+      }
+
+      s.slides.forEach((slide, idx) => {
+        const visibleAmount = s.track.details.slides[idx]?.portion ?? 0;
+
+        if (visibleAmount > 0) {
+          playAutoplayVideos(slide);
+        }
+      });
+    }
+
     listElements.forEach((listEl) => {
       const sliderContainer = listEl.querySelector<HTMLElement>(".project-images");
       const listBar = listEl.querySelector<HTMLElement>(".list-element-bar");
+      let sliderInView = false;
+      let slider: KeenSliderInstance | null = null;
 
       if (!sliderContainer || !listBar) {
         return;
       }
+
+      const inlineVisibilityObserver = new IntersectionObserver(
+        ([entry]) => {
+          sliderInView = Boolean(entry?.isIntersecting);
+
+          if (!slider) {
+            return;
+          }
+
+          if (sliderInView && listEl.classList.contains("open")) {
+            syncVisibleVideos(slider, sliderContainer);
+          } else {
+            pauseVideos(sliderContainer);
+          }
+        },
+        { threshold: 0.25 },
+      );
+
+      inlineVisibilityObserver.observe(listEl);
+
+      document.addEventListener("portfolio:photoswipe-closed", () => {
+        if (slider && sliderInView && listEl.classList.contains("open")) {
+          syncVisibleVideos(slider, sliderContainer);
+        }
+      });
+
+      document.addEventListener("visibilitychange", () => {
+        if (
+          slider &&
+          sliderInView &&
+          listEl.classList.contains("open") &&
+          canPlayInlineVideos()
+        ) {
+          syncVisibleVideos(slider, sliderContainer);
+        } else {
+          pauseVideos(sliderContainer);
+        }
+      });
 
       // Click on bar
       listBar.addEventListener("click", () => {
         // Toggle the clicked slider
         if (listEl.classList.contains("open")) {
           listEl.classList.remove("open");
+          pauseVideos(listEl);
 
           setTimeout(() => {
             sliderContainer.style.display = "";
@@ -152,8 +249,11 @@ for (const entry of sortedProjects) {
             sliderContainer &&
             !sliderContainer.dataset.keenSliderInitialized
           ) {
-            const slider = new KeenSlider(sliderContainer, {
+            slider = new KeenSlider(sliderContainer, {
               loop: true,
+              created: (s) => syncVisibleVideos(s, sliderContainer),
+              slideChanged: (s) => syncVisibleVideos(s, sliderContainer),
+              animationEnded: (s) => syncVisibleVideos(s, sliderContainer),
               slides: { perView: 3, spacing: 50 },
               breakpoints: {
                 "(max-width: 1119px)": {
@@ -195,6 +295,14 @@ for (const entry of sortedProjects) {
 
   // Clean up sliders before Astro navigates away
   document.addEventListener("astro:before-swap", () => {
+    document
+      .querySelectorAll("video, mux-video, mux-player")
+      .forEach((video) => {
+        if ("pause" in video && typeof video.pause === "function") {
+          video.pause();
+        }
+      });
+
     Object.values(keenSlidersStore).forEach((slider) => {
       if (slider && typeof slider.destroy === "function") {
         slider.destroy();
@@ -206,6 +314,8 @@ for (const entry of sortedProjects) {
 
 <!-- PhotoSwipe -->
 <script>
+  import "@mux/mux-player";
+  import "@mux/mux-video";
   import PhotoSwipeLightbox from "photoswipe/lightbox";
   import { registerPhotoSwipeCaption } from "../gallery/photoswipeCaption";
 
@@ -219,6 +329,98 @@ for (const entry of sortedProjects) {
   function isPhonePortrait() {
     return window.matchMedia("(max-width: 650px) and (orientation: portrait)")
       .matches;
+  }
+
+  const MUX_ENV_KEY = import.meta.env.PUBLIC_MUX_ENV_KEY ?? "";
+
+  function escapeHtml(value: string | null) {
+    return (value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function buildMuxPlayerSlide(videoLink: HTMLAnchorElement) {
+    const playbackId = videoLink.getAttribute("data-mux-playback-id");
+    const poster = videoLink.getAttribute("data-mux-poster");
+    const maxResolution = videoLink.getAttribute("data-mux-max-resolution");
+    const width = videoLink.getAttribute("data-pswp-width") ?? "16";
+    const height = videoLink.getAttribute("data-pswp-height") ?? "9";
+    const showControls = videoLink.getAttribute("data-mux-controls") !== "false";
+    const autoplay = videoLink.getAttribute("data-mux-autoplay") === "true";
+    const loop = videoLink.getAttribute("data-mux-loop") === "true";
+    const muted = videoLink.getAttribute("data-mux-muted") === "true";
+    const title = escapeHtml(videoLink.getAttribute("data-description_title"));
+    const posterAttr = poster ? ` poster="${escapeHtml(poster)}"` : "";
+    const maxResolutionAttr = maxResolution
+      ? ` max-resolution="${escapeHtml(maxResolution)}"`
+      : "";
+    const controlsAttr = showControls ? " controls" : "";
+    const autoplayAttr = autoplay ? " autoplay" : "";
+    const loopAttr = loop ? " loop" : "";
+    const mutedAttr = muted ? " muted" : "";
+    const envKeyAttr = MUX_ENV_KEY
+      ? ` env-key="${escapeHtml(MUX_ENV_KEY)}"`
+      : "";
+    const muxElement = showControls ? "mux-player" : "mux-video";
+
+    return {
+      html: `<div class="pswp__video-slide photoswipeData" style="--video-aspect-ratio: ${escapeHtml(width)} / ${escapeHtml(height)};">
+        <${muxElement}
+          playback-id="${escapeHtml(playbackId)}"
+          stream-type="on-demand"
+          metadata-video-id="${escapeHtml(playbackId)}"
+          metadata-video-title="${title}"
+          ${controlsAttr}
+          ${autoplayAttr}
+          ${loopAttr}
+          ${mutedAttr}
+          playsinline
+          ${posterAttr}
+          ${maxResolutionAttr}
+          ${envKeyAttr}
+        ></${muxElement}>
+      </div>`,
+      width: videoLink.getAttribute("data-pswp-width"),
+      height: videoLink.getAttribute("data-pswp-height"),
+      description_title: videoLink.getAttribute("data-description_title"),
+      description_text: videoLink.getAttribute("data-description_text"),
+      link: videoLink.getAttribute("data-link"),
+    };
+  }
+
+  function pauseAllVideos(root: ParentNode = document) {
+    root.querySelectorAll("video, mux-video, mux-player").forEach((video) => {
+      if ("pause" in video && typeof video.pause === "function") {
+        video.pause();
+      }
+    });
+  }
+
+  function playAutoplayVideos(root: ParentNode) {
+    root.querySelectorAll("video, mux-video, mux-player").forEach((video) => {
+      if (
+        video.hasAttribute("autoplay") &&
+        "play" in video &&
+        typeof video.play === "function"
+      ) {
+        video.play().catch(() => {});
+      }
+    });
+  }
+
+  function playActivePhotoSwipeVideo() {
+    window.requestAnimationFrame(() => {
+      const activeSlide =
+        document.querySelector<HTMLElement>(".pswp__item--active") ??
+        document.querySelector<HTMLElement>(".pswp__item[aria-hidden='false']") ??
+        document.querySelector<HTMLElement>(".pswp__video-slide");
+
+      if (activeSlide) {
+        playAutoplayVideos(activeSlide);
+      }
+    });
   }
 
   document.addEventListener("astro:page-load", () => {
@@ -247,6 +449,11 @@ for (const entry of sortedProjects) {
       const imageLinks = projectEl.querySelectorAll<HTMLAnchorElement>(".ImageElement a");
 
       imageLinks.forEach((imgLink) => {
+        if (imgLink.getAttribute("data-media-type") === "video") {
+          galleryData.push(buildMuxPlayerSlide(imgLink));
+          return;
+        }
+
         const photoswipeImageData = {
           src: imgLink.getAttribute("href"),
           width: imgLink.getAttribute("data-pswp-width"),
@@ -324,6 +531,24 @@ for (const entry of sortedProjects) {
     lightbox = new PhotoSwipeLightbox(options);
 
     registerPhotoSwipeCaption(lightbox);
+    lightbox.on("beforeOpen", () => {
+      document.documentElement.dataset.photoswipeOpen = "true";
+      pauseAllVideos();
+    });
+    lightbox.on("change", () => {
+      pauseAllVideos();
+      playActivePhotoSwipeVideo();
+    });
+    lightbox.on("close", () => {
+      pauseAllVideos();
+      document.documentElement.dataset.photoswipeOpen = "false";
+      document.dispatchEvent(new CustomEvent("portfolio:photoswipe-closed"));
+    });
+    lightbox.on("destroy", () => {
+      pauseAllVideos();
+      document.documentElement.dataset.photoswipeOpen = "false";
+      document.dispatchEvent(new CustomEvent("portfolio:photoswipe-closed"));
+    });
 
     lightbox.init();
     window.pswpLightbox = lightbox;
@@ -331,6 +556,9 @@ for (const entry of sortedProjects) {
 
   // Clean up PhotoSwipe before navigation
   document.addEventListener("astro:before-swap", () => {
+    pauseAllVideos();
+    document.documentElement.dataset.photoswipeOpen = "false";
+
     if (lightbox) {
       lightbox.destroy();
       lightbox = null;
@@ -579,5 +807,22 @@ for (const entry of sortedProjects) {
 
   .ListElement.open > .list-element-bar > .column4 {
     transform: rotatez(180deg);
+  }
+
+  :global(.pswp__video-slide) {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    place-items: center;
+  }
+
+  :global(.pswp__video-slide mux-player),
+  :global(.pswp__video-slide mux-video) {
+    width: 100%;
+    max-width: min(100%, 1600px);
+    max-height: 100%;
+    aspect-ratio: var(--video-aspect-ratio, 16 / 9);
+    object-fit: contain;
+    --media-object-fit: contain;
   }
 </style>

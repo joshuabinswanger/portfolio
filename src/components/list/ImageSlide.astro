@@ -3,6 +3,7 @@ import { CldImage } from "astro-cloudinary";
 import { getEntry } from "astro:content";
 import { getCollection } from "astro:content";
 import "keen-slider/keen-slider.min.css";
+import MediaElement from "../media/MediaElement.astro";
 
 interface Props {
   projectName: string;
@@ -19,6 +20,14 @@ const projectImages = await getCollection("galleryImages", ({ data }) => {
   return data.metadata?.project === project;
 });
 
+const projectVideos = await getCollection("images", ({ data }) => {
+  return (
+    data.mediaType === "video" &&
+    data.metadata?.project === project &&
+    data.metadata.showInProjectGallery === "yes"
+  );
+});
+
 //order projectImages
 projectImages.sort((a, b) => {
   // Use Infinity as default for missing values to place them last in ascending sort
@@ -29,7 +38,26 @@ projectImages.sort((a, b) => {
   return orderA - orderB;
 });
 
-const highResData = [];
+projectVideos.sort((a, b) => {
+  const orderA = a.data.metadata?.projectGalleryOrder ?? Infinity;
+  const orderB = b.data.metadata?.projectGalleryOrder ?? Infinity;
+  return orderA - orderB;
+});
+
+const projectMedia = [
+  ...projectImages.map((image) => ({ kind: "cloudinary-image" as const, image })),
+  ...projectVideos.map((image) => ({ kind: "mux-video" as const, image })),
+].sort((a, b) => {
+  const orderA = a.image.data.metadata?.projectGalleryOrder ?? Infinity;
+  const orderB = b.image.data.metadata?.projectGalleryOrder ?? Infinity;
+  return orderA - orderB;
+});
+
+const highResData = new Map<string, {
+  width: number;
+  height: number;
+  url: string;
+}>();
 
 for (const image of projectImages) {
   // Initialize a default high-resolution entry object
@@ -50,18 +78,16 @@ for (const image of projectImages) {
       );
     }
     // Push the final data, merging base and high-resolution details
-    highResData.push({
-      ...image.data, // Include existing image data
-      highResWidth: highResEntry.data.width,
-      highResHeight: highResEntry.data.height,
-      highResSecureUrl: highResEntry.data.secure_url,
+    highResData.set(image.id, {
+      width: highResEntry.data.width,
+      height: highResEntry.data.height,
+      url: highResEntry.data.secure_url,
     });
   } else {
-    highResData.push({
-      ...image.data, // Include existing image data
-      highResWidth: image.data.width,
-      highResHeight: image.data.height,
-      highResSecureUrl: image.data.secure_url,
+    highResData.set(image.id, {
+      width: image.data.width,
+      height: image.data.height,
+      url: image.data.secure_url,
     });
   }
 }
@@ -75,9 +101,28 @@ for (const image of projectImages) {
   class:list={["image-slide keen-slider"]}
 >
   {
-    projectImages.map((image, index) => {
+    projectMedia.map((media, index) => {
       // Compute index: startIndex + 1 offset plus the current image index
       const computedIndex = Astro.props.startIndex + 1 + index;
+
+      if (media.kind === "mux-video") {
+        return (
+          <div
+            class:list={["keen-slider__slide ImageElement"]}
+            data-index={computedIndex}
+          >
+            <MediaElement
+              computedIndex={computedIndex}
+              media={media.image}
+              sizes="(max-width: 650px) 90vw, (max-width: 1200px) 50vw, 33vw"
+              loading={index === 0 ? "eager" : "lazy"}
+            />
+          </div>
+        );
+      }
+
+      const image = media.image;
+      const highRes = highResData.get(image.id);
 
       return (
         <div
@@ -87,9 +132,10 @@ for (const image of projectImages) {
           <a
             onclick={`pswpLightbox.loadAndOpen(${computedIndex}); return false;`}
             class:list={["photo-link photoswipeData"]}
-            href={highResData[index].highResSecureUrl}
-            data-pswp-width={highResData[index].highResWidth}
-            data-pswp-height={highResData[index].highResHeight}
+            href={highRes?.url ?? image.data.secure_url}
+            data-media-type="image"
+            data-pswp-width={highRes?.width ?? image.data.width}
+            data-pswp-height={highRes?.height ?? image.data.height}
             target="_blank"
             data-description_title={image.data.metadata?.description_title}
             data-description_text={image.data.metadata?.description_text}
@@ -113,5 +159,11 @@ for (const image of projectImages) {
 
 <style>
   .image-slide {
+  }
+
+  a {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 </style>
