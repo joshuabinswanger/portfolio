@@ -44,9 +44,7 @@ const { enrichedProjects } = await getPortfolioGalleryData();
                   data-gallery-index={index}
                   data-gallery-project={entry.data.title}
                 >
-                  <div class:list={["gallery-placeholder"]}>
-                    {/* <img src="/src/assets/ImagePlaceholder.jpg" alt="Gallery Preview" loading="eager" /> */}{" "}
-                  </div>
+                  <div class:list={["gallery-placeholder"]}></div>
                   <GalleryElement
                     project={entry.data.portfolioElementName}
                     startIndex={startIndex}
