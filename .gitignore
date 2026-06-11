@@ -8,6 +8,10 @@ yarn.lock
 pnpm-lock.yaml
 .pnp.cjs
 .pnp.loader.mjs
+.yarnrc.yml
+
+# Serena (coding agent) cache
+.serena/
 
 # Astro Build Output
 dist/
