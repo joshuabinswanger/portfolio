@@ -25,7 +25,8 @@ npm run preview
 Useful checks:
 
 ```bash
-npx astro check
+npm run check
+npm run lint
 npm run build
 ```
 
