@@ -404,8 +404,11 @@ function updateActiveFiltersList() {
     activeFiltersContainer.appendChild(div);
   });
 
-  // Update CSS variable for dynamic column count
-  activeFiltersContainer.style.setProperty('--active-filters-list-length', String(activeButtons.length));
+  // Update CSS variable for dynamic column count.
+  // Set it on #filter-box (the chip grid's ancestor) so both the chip grid
+  // and the #filter-box column-width calc resolve the same live value.
+  const filterBox = document.getElementById('filter-box');
+  filterBox?.style.setProperty('--active-filters-list-length', String(activeButtons.length));
 }
 
 // Function to handle removing filters on click
@@ -1156,6 +1159,15 @@ width: auto;
  #filter-box {
   display: grid;
   width: auto;
+  /* Width of the collapsed active-filter chip row, derived from the live chip
+     count. Used instead of `min-content` so grid-template-columns animates
+     between two lengths: WebKit/iOS collapses a track that transitions
+     between a length and an intrinsic keyword (min-content), where Chrome and
+     Firefox snap it to the final size instead. */
+  --active-filters-width: calc(
+    var(--active-filters-list-length) * 168px +
+    (var(--active-filters-list-length) - 1) * 8px
+  );
   grid-template-columns: 0px 0px 0px 0px;
   height: min-content;
   grid-column: 2 / 3;
@@ -1165,11 +1177,17 @@ width: auto;
   transform: translateZ(0); /* Force hardware acceleration */
   -webkit-transform: translateZ(0); /* Safari prefix */
 
+  @media (--bp-mobile) {
+    --active-filters-width: calc(
+      var(--active-filters-list-length) * 116px +
+      (var(--active-filters-list-length) - 1) * 8px
+    );
+  }
 }
 
 /* filter-box active */
 #filter.active + #filter-box {
-  grid-template-columns: 10px min-content 0px 10px;
+  grid-template-columns: 10px 168px 0px 10px;
   transition: grid-template-columns 0.25s ease 0s, height 0.75s ease 0.25s;
 
 }
@@ -1178,7 +1196,7 @@ width: auto;
 
 /* one of the many filter-button active */
 #filter:not(.active) + #filter-box:has(.filter-button.mixitup-control-active)  {
-  grid-template-columns: 4px min-content min-content 4px;
+  grid-template-columns: 4px 0px var(--active-filters-width) 4px;
   /* makes the transition smoother */
   transition: grid-template-columns 0.25s ease 0.25s;
 }
@@ -1186,7 +1204,7 @@ width: auto;
 
 /* this makes sure the active filter transitions smoothly*/
 #filter.active + #filter-box:has(.filter-button.mixitup-control-active)  {
-  grid-template-columns: 10px min-content min-content 10px;
+  grid-template-columns: 10px 168px 0px 10px;
   transition: grid-template-columns 0.5s ease 0.25s;
 }
 
