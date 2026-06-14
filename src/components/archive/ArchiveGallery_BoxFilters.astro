@@ -1450,69 +1450,104 @@ width: auto;
 
 
 /* ============================================================
-   MOBILE — full-screen filter overlay
-   On mobile the Role/Tool/Topic groups open as a full-screen sheet
-   that slides up, instead of the desktop bottom-anchored list that
-   clips against the fixed bar. Driven by transform/opacity (no grid
-   track animation) so it is WebKit/iOS-safe. The collapsed bar still
-   shows the active-filter chip row: #active-filters-list stays in
-   flow while #group-wrapper is lifted out into a fixed overlay.
+   MOBILE — bracketed filter box
+   The filter opens as a box framed by a top bracket (just below the
+   logo) and a bottom bracket (just above the Filter button). Two-stage
+   reveal: (1) the Filter button expands to full width, then (2) the box
+   grows up from the button to its full height. Width/height transitions
+   only (no grid-track animation) so it stays WebKit/iOS-safe.
    ============================================================ */
 
 @media (--bp-mobile) {
 
-  /* #group-wrapper becomes a fixed overlay (out of flow), so pin the
-     remaining bar children to their columns — otherwise the chip row
-     would reshuffle into the wrong grid column. */
-  #filter-box .bracket-start { grid-column: 1; }
-  #filter-box #active-filters-list { grid-column: 3; }
-  #filter-box .bracket-end { grid-column: 4; }
+  /* --- Stage 1: Filter button expands to full width --- */
+  /* Give the filter row the full bar width even when closed, so only the
+     Sort column has to collapse (keeps the track list interpolable: the
+     1fr column is identical at both ends, only 56px -> 0px animates). */
+  #filter-sort-wrapper {
+    grid-template-columns: 56px 1fr;
+  }
+  #filter-sort-wrapper:has(#filter.active) {
+    grid-template-columns: 0px 1fr;
+  }
+  #filter-sort-wrapper:has(#filter.active) #filter-wrapper {
+    width: 100%;
+    grid-template-columns: 1fr;
+    overflow: visible;
+  }
+  #filter.active {
+    width: 100%;
+  }
 
-  /* Overlay surface — hidden and slid off-screen by default. */
-  #group-wrapper {
+  /* --- The bracketed box: always fixed & bottom-anchored on mobile,
+         collapsed to height 0 until the filter is open. --- */
+  #filter-box {
     position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100dvh;
-    max-width: none;
-    box-sizing: border-box;
-    z-index: 1005;
+    left: 2px;
+    right: 2px;
+    bottom: 104px;          /* just above the Filter button */
+    top: auto;
+    width: auto;
+    z-index: 1004;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    grid-template-columns: none;
+    height: 0;
+    overflow: hidden;
+    background-color: var(--bg-color);
+    transition: height 0.4s ease 0s;   /* close: collapse first */
+  }
+
+  /* Stage 2: grow up to full height, after the button has widened. */
+  #filter.active + #filter-box,
+  #filter.active + #filter-box:has(.filter-button.mixitup-control-active) {
+    height: calc(100dvh - 180px);      /* below logo .. above filter button */
+    transition: height 0.45s ease 0.3s;
+  }
+
+  /* Top (⊓) and bottom (⊔) bracket frame — reuse the existing divs. */
+  #filter-box .bracket-start,
+  #filter-box .bracket-end {
+    position: static;
+    left: 0;
+    width: auto;
+    height: 12px;
+    flex: 0 0 12px;
+    border: 1.5px solid black;
+    opacity: 1;
+    transition: none;
+  }
+  #filter-box .bracket-start { border-bottom: none; }
+  #filter-box .bracket-end { border-top: none; }
+
+  /* Scrollable list fills the space between the brackets. */
+  #filter.active + #filter-box #group-wrapper,
+  #filter:not(.active) + #filter-box #group-wrapper,
+  #filter.active + #filter-box:has(.filter-button.mixitup-control-active) #group-wrapper {
+    position: static;
+    width: auto;
+    height: auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
     gap: 4px;
-    padding:
-      calc(env(safe-area-inset-top, 0px) + 72px) 20px
-      calc(env(safe-area-inset-bottom, 0px) + 104px);
+    padding: 12px 16px;
+    margin: 0;
     overflow-y: auto;
     overscroll-behavior: contain;
-    background-color: var(--bg-color);
+    background-color: transparent;
     grid-template-rows: none;
     grid-template-columns: none;
-    opacity: 0;
-    transform: translateY(100%);
-    pointer-events: none;
-    transition: transform 0.3s ease, opacity 0.25s ease;
-  }
-
-  /* Keep the surface full-width and animate the slide on close too. */
-  #filter:not(.active) + #filter-box #group-wrapper {
-    width: 100vw;
-    transition: transform 0.3s ease, opacity 0.25s ease;
-  }
-
-  /* Open state (incl. the higher-specificity :has variant). */
-  #filter.active + #filter-box #group-wrapper,
-  #filter.active + #filter-box:has(.filter-button.mixitup-control-active) #group-wrapper {
-    width: 100vw;
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
     pointer-events: auto;
-    transition: transform 0.3s ease, opacity 0.25s ease;
+    transition: none;
   }
 
   /* Each Role/Tool/Topic group: plain full-width stack. */
-  #filter.active + #filter-box .filter-group {
+  #filter.active + #filter-box .filter-group,
+  #filter:not(.active) + #filter-box .filter-group {
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -1525,28 +1560,26 @@ width: auto;
     transition: none;
   }
 
-  #filter.active + #filter-box .filter-title {
+  #filter-box .filter-title {
     width: 100%;
     text-align: left;
-    margin: 12px 0 2px;
+    margin: 10px 0 2px;
   }
 
-  /* Full-width, touch-sized buttons — no height-reveal in the overlay. */
-  #filter.active + #filter-box .filter-button {
+  /* Full-width, touch-sized buttons (no height-reveal inside the box). */
+  #filter-box .filter-button {
     width: 100%;
-    height: 52px;
+    height: 48px;
     transition: none;
   }
 
   #filter-reset-wrapper {
-    margin-top: 16px;
+    margin-top: 14px;
   }
 
-  /* Brackets are a desktop reveal flourish; drop them in the overlay. */
-  #filter.active + #filter-box .bracket-v,
-  #filter.active + #filter-box #group-wrapper .bracket-h {
-    display: none;
-  }
+  /* The collapsed-state chip row and per-group V brackets aren't used here. */
+  #filter-box #active-filters-list { display: none; }
+  #filter-box .bracket-v { display: none; }
 }
 
 </style>
