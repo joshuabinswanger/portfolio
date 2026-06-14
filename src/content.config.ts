@@ -23,6 +23,9 @@ const localImageMetadataSchema = z.object({
   topic: z.string().nullish(),
   link: z.string().nullish(),
   highres_public_id: z.string().nullish(),
+  // Archive thumbnail crop focal point, e.g. "70% 30%". Maps to CSS
+  // `object-position`; omit for a centered crop.
+  focus: z.string().nullish(),
 });
 
 const muxVideoSchema = z.object({
