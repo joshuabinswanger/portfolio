@@ -517,6 +517,14 @@ document.addEventListener("astro:page-load", () => {
     // --- START: Add Mutual Exclusivity Logic ---
       const filterButton = document.getElementById('filter');
       const sortButton = document.getElementById('sort');
+      const filterSortWrapper = document.getElementById('filter-sort-wrapper');
+
+      // Opening the filter doesn't change #filter-sort-wrapper's own grid columns
+      // (both base and :has(#filter.active) resolve to "56px auto"), so WebKit/iOS
+      // doesn't re-resolve the `auto` track the filter box lives in until some other
+      // container-level relayout happens (e.g. opening Sort). Force a synchronous
+      // layout flush after each toggle so the panel expands on first tap.
+      const nudgeReflow = () => { if (filterSortWrapper) void filterSortWrapper.offsetWidth; };
 
       if (filterButton && sortButton) { // Ensure buttons exist
           filterButton.addEventListener('click', () => {
@@ -527,6 +535,7 @@ document.addEventListener("astro:page-load", () => {
               }
               // Now toggle filter's state
               filterButton.classList.toggle('active');
+              nudgeReflow();
           });
 
           sortButton.addEventListener('click', () => {
@@ -537,6 +546,7 @@ document.addEventListener("astro:page-load", () => {
               }
               // Now toggle sort's state
               sortButton.classList.toggle('active');
+              nudgeReflow();
           });
       } else {
           console.error("Could not find filter or sort button elements.");
@@ -1174,8 +1184,6 @@ width: auto;
   position: relative; /* Add positioning context */
   background-color: var(--bg-color);
   transition: grid-template-columns 0.25s ease 0.25s, height 0.5s ease 0.75s;
-  transform: translateZ(0); /* Force hardware acceleration */
-  -webkit-transform: translateZ(0); /* Safari prefix */
 
   @media (--bp-mobile) {
     --active-filters-width: calc(
@@ -1440,5 +1448,105 @@ width: auto;
 
 
 
+
+/* ============================================================
+   MOBILE — full-screen filter overlay
+   On mobile the Role/Tool/Topic groups open as a full-screen sheet
+   that slides up, instead of the desktop bottom-anchored list that
+   clips against the fixed bar. Driven by transform/opacity (no grid
+   track animation) so it is WebKit/iOS-safe. The collapsed bar still
+   shows the active-filter chip row: #active-filters-list stays in
+   flow while #group-wrapper is lifted out into a fixed overlay.
+   ============================================================ */
+
+@media (--bp-mobile) {
+
+  /* #group-wrapper becomes a fixed overlay (out of flow), so pin the
+     remaining bar children to their columns — otherwise the chip row
+     would reshuffle into the wrong grid column. */
+  #filter-box .bracket-start { grid-column: 1; }
+  #filter-box #active-filters-list { grid-column: 3; }
+  #filter-box .bracket-end { grid-column: 4; }
+
+  /* Overlay surface — hidden and slid off-screen by default. */
+  #group-wrapper {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    box-sizing: border-box;
+    z-index: 1005;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 4px;
+    padding:
+      calc(env(safe-area-inset-top, 0px) + 72px) 20px
+      calc(env(safe-area-inset-bottom, 0px) + 104px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background-color: var(--bg-color);
+    grid-template-rows: none;
+    grid-template-columns: none;
+    opacity: 0;
+    transform: translateY(100%);
+    pointer-events: none;
+    transition: transform 0.3s ease, opacity 0.25s ease;
+  }
+
+  /* Keep the surface full-width and animate the slide on close too. */
+  #filter:not(.active) + #filter-box #group-wrapper {
+    width: 100vw;
+    transition: transform 0.3s ease, opacity 0.25s ease;
+  }
+
+  /* Open state (incl. the higher-specificity :has variant). */
+  #filter.active + #filter-box #group-wrapper,
+  #filter.active + #filter-box:has(.filter-button.mixitup-control-active) #group-wrapper {
+    width: 100vw;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    transition: transform 0.3s ease, opacity 0.25s ease;
+  }
+
+  /* Each Role/Tool/Topic group: plain full-width stack. */
+  #filter.active + #filter-box .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    height: auto;
+    grid-template-rows: none;
+    grid-auto-rows: auto;
+    opacity: 1;
+    overflow: visible;
+    transition: none;
+  }
+
+  #filter.active + #filter-box .filter-title {
+    width: 100%;
+    text-align: left;
+    margin: 12px 0 2px;
+  }
+
+  /* Full-width, touch-sized buttons — no height-reveal in the overlay. */
+  #filter.active + #filter-box .filter-button {
+    width: 100%;
+    height: 52px;
+    transition: none;
+  }
+
+  #filter-reset-wrapper {
+    margin-top: 16px;
+  }
+
+  /* Brackets are a desktop reveal flourish; drop them in the overlay. */
+  #filter.active + #filter-box .bracket-v,
+  #filter.active + #filter-box #group-wrapper .bracket-h {
+    display: none;
+  }
+}
 
 </style>
