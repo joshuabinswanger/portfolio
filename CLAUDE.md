@@ -13,9 +13,10 @@ YAML collections plus two remote Cloudinary collections loaded at build time.
 
 ## Read the docs first
 
-`docs/` has per-system notes. Before touching galleries, video playback,
-image handling, or content YAML, read the matching file:
-[galleries](docs/galleries.md), [video-player](docs/video-player.md),
+`docs/` has per-system notes. Before touching galleries, the archive
+filter/sort UI, video playback, image handling, or content YAML, read the
+matching file: [galleries](docs/galleries.md),
+[archive-filters](docs/archive-filters.md), [video-player](docs/video-player.md),
 [image-optimization](docs/image-optimization.md), [content-yaml](docs/content-yaml.md),
 [troubleshooting](docs/troubleshooting.md).
 
