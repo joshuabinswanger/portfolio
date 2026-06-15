@@ -131,7 +131,7 @@ const topicConvertedCSS = topicAllowed.map(convertTagForCss);
       <div id="filter-wrapper">
 
         <button  id="filter" class:list={[`main-button`]} type="button">
-          <span id="filter-span"> Filter &ensp;</span> <span class:list={["chevron"]} >&rarr;</span> 
+          <span id="filter-span"> Filter<span id="filter-count"></span> &ensp;</span> <span class:list={["chevron"]} >&rarr;</span>
         </button>
 
         <div id="filter-box" class:list={[``]}>
@@ -409,6 +409,12 @@ function updateActiveFiltersList() {
   // and the #filter-box column-width calc resolve the same live value.
   const filterBox = document.getElementById('filter-box');
   filterBox?.style.setProperty('--active-filters-list-length', String(activeButtons.length));
+
+  // Show the active-filter count in brackets on the Filter button, e.g. "Filter [2]".
+  const filterCount = document.getElementById('filter-count');
+  if (filterCount) {
+    filterCount.textContent = activeButtons.length > 0 ? ` [${activeButtons.length}]` : '';
+  }
 }
 
 // Function to handle removing filters on click
@@ -817,13 +823,16 @@ document.addEventListener("astro:page-load", () => {
  
 
   @media (--bp-mobile) {
-    grid-template-columns: 224px auto;
+    /* Sort goes full-width on mobile (mirrors the Filter button); the filter
+       column collapses while Sort is open. Percentage tracks (not 1fr) so the
+       widen interpolates smoothly from the base `56px calc(100% - 56px)`. */
+    grid-template-columns: 100% 0px;
 
   }
-  
+
   @media (--bp-desktop-wide) {
     grid-template-columns: 240px auto;
-  
+
   }
 }
 
@@ -925,6 +934,22 @@ fieldset {
   grid-template-rows: repeat(3, 0 min-content) 0px;
   background-color: var(--bg-color);
 
+}
+
+/* Sort dropdown brackets: gate visibility on the sort state. Closed, the
+   brackets only collapse because their grid column is 0-wide — but WebKit/iOS
+   still paints the overflow:visible bracket SVG at its intrinsic height, so
+   they bleed through when Sort is closed. Hiding via opacity fixes that and
+   lets them fade in with the buttons on open. The brackets are rendered by a
+   child component, so :global() is needed to pierce Astro's style scoping. */
+#sort-buttons :global(.svg-container) {
+  opacity: 0;
+  transition: opacity 0.2s ease 0s;
+}
+
+#sort.active ~ #sort-buttons :global(.svg-container) {
+  opacity: 1;
+  transition: opacity 0.25s ease 0.25s;
 }
 
 .sort-button {
@@ -1465,10 +1490,10 @@ width: auto;
      Sort column has to collapse (keeps the track list interpolable: the
      1fr column is identical at both ends, only 56px -> 0px animates). */
   #filter-sort-wrapper {
-    grid-template-columns: 56px 1fr;
+    grid-template-columns: 56px calc(100% - 56px);
   }
   #filter-sort-wrapper:has(#filter.active) {
-    grid-template-columns: 0px 1fr;
+    grid-template-columns: 0px 100%;
   }
   #filter-sort-wrapper:has(#filter.active) #filter-wrapper {
     width: 100%;
@@ -1580,6 +1605,80 @@ width: auto;
   /* The collapsed-state chip row and per-group V brackets aren't used here. */
   #filter-box #active-filters-list { display: none; }
   #filter-box .bracket-v { display: none; }
+
+
+  /* ============================================================
+     SORT — same full-width treatment as the Filter button, but the
+     options box is sized to its contents. Explicitly NOT the full-height
+     box the filter gets ("don't make it full height").
+     ============================================================ */
+
+  /* Sort button expands to full width; filter column collapses while open. */
+  #filter-sort-wrapper:has(#sort.active) #sort-wrapper {
+    width: 100%;
+    grid-template-columns: 1fr;
+  }
+  #filter-sort-wrapper:has(#sort.active) #filter-wrapper {
+    overflow: hidden;
+  }
+  #sort.active {
+    width: 100%;
+  }
+
+  /* Options drop into a bottom-anchored box above the button, sized to its
+     contents (NOT full height). Mirrors #filter-box: same bottom anchor, same
+     z-index, same grow-up height transition timing. */
+  #sort-buttons {
+    position: fixed;
+    left: 2px;
+    right: 2px;
+    bottom: 104px;            /* just above the Sort button, matches #filter-box */
+    z-index: 1004;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 0 16px;
+    box-sizing: border-box;
+    width: auto;
+    height: 0;
+    overflow: hidden;
+    background-color: var(--bg-color);
+    grid-template-rows: none;
+    grid-template-columns: none;
+    transition: height 0.4s ease 0s;   /* close: collapse first, like #filter-box */
+  }
+  #sort.active ~ #sort-buttons {
+    /* 3 options (48) + 2 brackets (12) + 4 gaps (6) = exact content height */
+    height: calc(3 * 48px + 2 * 12px + 4 * 6px);
+    transition: height 0.45s ease 0.3s;   /* grow up after the button widens */
+  }
+
+  /* Top (⊓) and bottom (⊔) bracket frame — same look as #filter-box. The sort
+     brackets come from a child component (hidden below), so the frame is drawn
+     with pseudo-elements instead. */
+  #sort-buttons::before,
+  #sort-buttons::after {
+    content: "";
+    flex: 0 0 12px;
+    border: 1.5px solid black;
+  }
+  #sort-buttons::before { border-bottom: none; }
+  #sort-buttons::after { border-top: none; }
+
+  /* Full-width, touch-sized options (no width/height reveal animation). */
+  #sort-buttons .sort-button,
+  #sort.active ~ #sort-buttons .sort-button {
+    width: 100%;
+    height: 48px;
+    transition: none;
+  }
+  #sort-buttons .sort-button::before {
+    height: 48px;
+  }
+
+  /* The component V brackets don't fit the vertical stack; the frame above
+     replaces them on mobile. */
+  #sort-buttons :global(.svg-container) { display: none; }
 }
 
 </style>
