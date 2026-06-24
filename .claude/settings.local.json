@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(grep -l \"width\\\\|height\" d:/SynoDrive/PORTFOLIO/Portfolio/Desktop/portfolio/src/content/images/*.yaml)",
-      "Bash(node -e \"const sharp = require\\(''sharp''\\); console.log\\(''sharp available''\\)\")"
+      "Bash(node -e \"const sharp = require\\(''sharp''\\); console.log\\(''sharp available''\\)\")",
+      "mcp__serena__initial_instructions",
+      "mcp__serena__onboarding",
+      "mcp__serena__read_memory"
     ]
   }
 }
