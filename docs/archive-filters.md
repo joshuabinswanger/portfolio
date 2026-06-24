@@ -17,6 +17,50 @@ and the per-image `focus` field see [image-optimization](image-optimization.md).
 - `src/components/archive/utils.ts` — build-time data/tag helpers (`isArchiveImage`, `convertTagForCss`, `ensureArray`).
 - `src/components/archive/ArchiveGalleryElement.astro` — one grid cell.
 - `src/components/brackets/Bracket*V.astro` / `Bracket*H.astro` — the `⊓`/`⊔` and `[ ]` bracket SVGs.
+- `src/layouts/GridLayout.astro` — owns `.archive-grid`, the responsive grid the
+  items lay out in (see **Zoom** below).
+
+## Zoom (column count)
+
+A `#zoom-wrapper` (`−` / `+`) lets the viewer grow/shrink the grid by one column.
+It's absolutely positioned at the right edge of the fixed bar — opposite the nav,
+in the same row as Filter — and is **desktop-only** (`display: none` on mobile).
+Absolute positioning keeps it out of the bar's grid so the fragile Sort/Filter
+track animations are untouched.
+
+- **Column count** is driven by the `--archive-columns` custom property on
+  `.archive-grid` in `GridLayout.astro`: `repeat(var(--archive-columns, N), 1fr)`,
+  with per-breakpoint fallbacks (desktop 4, tablet 3, wide 6) used when nothing is
+  set. Mobile pins a literal `1fr 1fr` and ignores the var.
+- `initArchiveZoom()` in `filters.ts` (called from the `astro:page-load` handler)
+  steps the count by ±1, clamps to **1–10**, writes it as an inline
+  `--archive-columns` on the grid, persists it in `localStorage` (`archiveColumns`),
+  and disables `−`/`+` at the bounds. The stored value is re-applied on each load /
+  View Transition swap. Current count is read from the persisted value, else from
+  the computed track count (so the first click respects the breakpoint default).
+- The cells stay square at any count via `ArchiveGalleryElement.astro` — see
+  [image-optimization](image-optimization.md).
+- **Gutter scales with the count.** The gap is a roughly constant fraction of the
+  cell width — `gap ∝ 1 / columns` — so zooming out tightens the grid (a
+  logarithmic curve was rejected: it shrinks slower than the cells, making gaps
+  look proportionally *bigger* when zoomed out). Implemented in `.archive-grid`
+  (GridLayout.astro): `column-gap` and `--archive-pad` are each
+  `clamp(8px, calc(K / var(--archive-columns, N)), max)`, with `K`/`N`/`max`
+  normalised per breakpoint so the value equals the old fixed gap at that
+  breakpoint's default column count, tapering to a 8px floor and capped at the
+  default so 1–2 columns don't balloon. `--archive-pad` is inherited by the cell
+  padding in `ArchiveGalleryElement.astro`.
+- **Animation:** the reflow is animated with a **FLIP** pass (`flipColumnChange`
+  in `filters.ts`) — measure each visible cell, change `--archive-columns`,
+  measure again, then animate old→new box with a `transform` (translate + scale)
+  via the Web Animations API. Transforms are GPU-compositable and never touch the
+  grid tracks, so it's smooth and WebKit-safe (don't replace it with a
+  `grid-template-columns` transition). In-flight zoom animations (tagged
+  `archiveZoom`) are cancelled before re-measuring so rapid clicks stay correct,
+  and the whole pass is skipped under `prefers-reduced-motion: reduce`.
+- **Edge case:** with many active filters the closed-state chip row can overflow
+  under the buttons; an opaque page-coloured gutter on `#zoom-wrapper` masks it so
+  chips stop cleanly before the control.
 
 ## Data & tags
 

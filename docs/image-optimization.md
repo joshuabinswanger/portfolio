@@ -81,7 +81,14 @@ approach). Since archive images are local Astro assets, cropping happens in CSS.
 
 Owned by `src/components/archive/ArchiveGalleryElement.astro`:
 
-- `#Image` sets `aspect-ratio: 1` — the cell is always square.
+- `#Image` sets `aspect-ratio: 1` — the cell is always square — plus
+  `overflow: hidden` so a stray overflow can never repaint past the square.
+- `a { min-width: 0; min-height: 0 }` — `#Image` is a 1fr×1fr grid and the `<a>`
+  is its grid item. Grid items default to `min-height: auto` (= min-content), so
+  a **portrait** image's intrinsic height would grow the `1fr` row past the
+  `aspect-ratio: 1` square (e.g. a 1400×2000 image rendered ~72px too tall).
+  Resetting the item minimums to 0 lets the aspect-ratio win. Without this,
+  landscape/square images look fine but portraits are visibly too tall.
 - `picture { display: block; width: 100%; height: 100% }` — the Astro `<Picture>`
   wrapper is inline/shrink-wrapped by default, so without this the `<img>`'s
   `width/height: 100%` resolves against an unsized box and the crop never

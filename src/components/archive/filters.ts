@@ -161,6 +161,134 @@ function updateFilterButtonAvailability() {
   });
 }
 
+//////////////////////////////
+///////ZOOM (COLUMN COUNT)/////
+//////////////////////////////
+
+// The archive grid's column count is driven by the --archive-columns CSS custom
+// property on the grid container (see .archive-grid in GridLayout.astro). The
+// +/- buttons step it by one and persist the choice. Mobile pins 2 columns in
+// CSS regardless, and the buttons are hidden there.
+const ZOOM_STORAGE_KEY = "archiveColumns";
+const ZOOM_MIN = 1;
+const ZOOM_MAX = 10;
+
+function getArchiveGrid() {
+  return document.querySelector<HTMLElement>("#archive .archive-grid");
+}
+
+// Current column count: the persisted override if set, otherwise the count the
+// CSS resolved for this breakpoint (read from the computed track list).
+function getArchiveColumnCount(grid: HTMLElement): number {
+  const stored = localStorage.getItem(ZOOM_STORAGE_KEY);
+  if (stored) {
+    const n = parseInt(stored, 10);
+    if (Number.isFinite(n)) return n;
+  }
+  const tracks = getComputedStyle(grid)
+    .gridTemplateColumns.split(" ")
+    .filter(Boolean).length;
+  return tracks || 4;
+}
+
+// Changing the column count reflows the grid, which would otherwise snap. FLIP
+// (First-Last-Invert-Play): measure each visible cell, apply the layout change,
+// measure again, then animate from the old box to the new one with a transform.
+// Transforms are GPU-compositable and don't touch grid tracks, so this is smooth
+// and WebKit-safe (unlike interpolating grid-template-columns). Honours
+// prefers-reduced-motion. Cells are always square, so scaleX == scaleY — the
+// image scales uniformly with no distortion.
+const ZOOM_ANIM_ID = "archiveZoom";
+
+function flipColumnChange(grid: HTMLElement, apply: () => void) {
+  const items = Array.from(
+    grid.querySelectorAll<HTMLElement>(".archiveElement"),
+  ).filter((el) => el.offsetParent !== null); // skip filtered-out (display:none) cells
+
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  if (reduceMotion || items.length === 0) {
+    apply();
+    return;
+  }
+
+  // Cancel any in-flight zoom animation so measurements reflect true layout,
+  // not a transformed mid-animation box.
+  items.forEach((el) =>
+    el.getAnimations().forEach((a) => {
+      if (a.id === ZOOM_ANIM_ID) a.cancel();
+    }),
+  );
+
+  const firstRects = items.map((el) => el.getBoundingClientRect());
+  apply();
+
+  items.forEach((el, i) => {
+    const first = firstRects[i];
+    const last = el.getBoundingClientRect();
+    const dx = first.left - last.left;
+    const dy = first.top - last.top;
+    const sx = last.width ? first.width / last.width : 1;
+    const sy = last.height ? first.height / last.height : 1;
+
+    // Skip cells that didn't move or resize.
+    if (
+      Math.abs(dx) < 0.5 &&
+      Math.abs(dy) < 0.5 &&
+      Math.abs(sx - 1) < 0.001 &&
+      Math.abs(sy - 1) < 0.001
+    ) {
+      return;
+    }
+
+    const anim = el.animate(
+      [
+        {
+          transformOrigin: "top left",
+          transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`,
+        },
+        { transformOrigin: "top left", transform: "none" },
+      ],
+      { duration: 300, easing: "cubic-bezier(0.4, 0, 0.2, 1)" },
+    );
+    anim.id = ZOOM_ANIM_ID;
+  });
+}
+
+function initArchiveZoom() {
+  const grid = getArchiveGrid();
+  const zoomIn = document.getElementById("zoom-in");
+  const zoomOut = document.getElementById("zoom-out");
+  if (!grid || !zoomIn || !zoomOut) return;
+
+  // Re-apply a persisted override after a fresh load / View Transition swap.
+  const stored = localStorage.getItem(ZOOM_STORAGE_KEY);
+  if (stored) grid.style.setProperty("--archive-columns", stored);
+
+  // "+" (#zoom-in) zooms in: fewer columns, larger images.
+  // "−" (#zoom-out) zooms out: more columns, smaller images.
+  const refreshDisabled = (count: number) => {
+    (zoomIn as HTMLButtonElement).disabled = count <= ZOOM_MIN;
+    (zoomOut as HTMLButtonElement).disabled = count >= ZOOM_MAX;
+  };
+
+  const setColumns = (count: number) => {
+    const clamped = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, count));
+    flipColumnChange(grid, () => {
+      grid.style.setProperty("--archive-columns", String(clamped));
+    });
+    localStorage.setItem(ZOOM_STORAGE_KEY, String(clamped));
+    refreshDisabled(clamped);
+  };
+
+  zoomIn.addEventListener("click", () => setColumns(getArchiveColumnCount(grid) - 1));
+  zoomOut.addEventListener("click", () => setColumns(getArchiveColumnCount(grid) + 1));
+
+  refreshDisabled(getArchiveColumnCount(grid));
+}
+
 ///////////////////////////////////////////////////////
 /////////////// PHOTOSWIPE FUNCTIONS //////////////////
 //////////////////////////////////////////////////////
@@ -276,6 +404,9 @@ export function initArchiveFilters() {
         console.error("Sort option buttons not found for close logic.");
     }
     // --- END: NEW - Close Sort dropdown ---
+
+    // Wire the +/- grid zoom control.
+    initArchiveZoom();
 
     /////////////////////
     ///////MixItUp//////

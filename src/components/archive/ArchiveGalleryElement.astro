@@ -63,16 +63,19 @@ const convertedRole = getArchiveRoleTags(archiveImage);
   @import "../../styles/global.css";
 
   .archiveElement {
-    padding: 28px;
-
-    @media (--bp-mobile) {
-      padding: 16px;
-    }
+    /* --archive-pad is set per-breakpoint on .archive-grid (GridLayout.astro) and
+       scales with the zoom column count; fall back to the old fixed value. */
+    padding: var(--archive-pad, 28px);
   }
 
   a {
     height: 100%;
     grid-column-start: 1;
+    /* Grid items default to min-height/min-width: auto, which lets a portrait
+       image's intrinsic height grow the 1fr row past the square. Reset to 0 so
+       #Image's aspect-ratio wins. */
+    min-width: 0;
+    min-height: 0;
   }
 
   picture {
@@ -92,6 +95,7 @@ const convertedRole = getArchiveRoleTags(archiveImage);
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
+    overflow: hidden;
   }
 
   .mix {

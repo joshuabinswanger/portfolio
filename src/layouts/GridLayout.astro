@@ -35,25 +35,41 @@ const { customClass = "" } = Astro.props;
     }
   }
 
+  /* Column count is driven by --archive-columns so the archive zoom control can
+     grow/shrink the grid at runtime (see #zoom-wrapper in
+     ArchiveGallery_BoxFilters.astro and initArchiveZoom in archive/filters.ts).
+     The per-breakpoint fallbacks are the defaults when nothing is set. Mobile is
+     pinned to 2 columns (literal, ignoring the var) since the zoom UI is
+     desktop-only. */
   .archive-grid {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    column-gap: 28px;
+    /* Gutter scales inversely with the column count (~constant % of cell width),
+       so zooming out (more columns) tightens the grid. Each breakpoint's clamp is
+       normalised so the value equals the previous fixed gap at that breakpoint's
+       default column count, then tapers down (min 8px) and is capped at the
+       default (so 1-2 columns don't balloon). --archive-pad is inherited by the
+       cell padding in ArchiveGalleryElement.astro. */
+    --archive-pad: clamp(8px, calc(112px / var(--archive-columns, 4)), 28px);
+    grid-template-columns: repeat(var(--archive-columns, 4), 1fr);
+    column-gap: clamp(8px, calc(112px / var(--archive-columns, 4)), 28px);
     grid-auto-rows: auto;
 
     @media (--bp-mobile) {
+      --archive-pad: 16px;
       grid-template-columns: 1fr 1fr;
       column-gap: 16px;
       row-gap: 16px;
     }
 
     @media (--bp-tablet) {
-      grid-template-columns: 1fr 1fr 1fr;
-      column-gap: 56px;
+      --archive-pad: clamp(8px, calc(84px / var(--archive-columns, 3)), 28px);
+      grid-template-columns: repeat(var(--archive-columns, 3), 1fr);
+      column-gap: clamp(8px, calc(168px / var(--archive-columns, 3)), 56px);
     }
 
     @media (--bp-desktop-wide) {
-      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-      column-gap: 56px;
+      --archive-pad: clamp(8px, calc(168px / var(--archive-columns, 6)), 28px);
+      grid-template-columns: repeat(var(--archive-columns, 6), 1fr);
+      column-gap: clamp(8px, calc(336px / var(--archive-columns, 6)), 56px);
     }
   }
 </style>
