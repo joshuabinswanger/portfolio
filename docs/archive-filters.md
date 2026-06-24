@@ -1,8 +1,10 @@
 # Archive Filters & Sort
 
-The archive page (`/personal`) is a filterable, sortable image grid. The whole
-UI — Sort dropdown, Filter panel, the grid, and the client logic — lives in one
-component: `src/components/archive/ArchiveGallery_BoxFilters.astro`.
+The archive page (`/personal`) is a filterable, sortable image grid. The markup
+and all styles live in `src/components/archive/ArchiveGallery_BoxFilters.astro`;
+the client runtime (MixItUp + PhotoSwipe wiring) lives in
+`src/components/archive/filters.ts`, which the component calls via
+`initArchiveFilters()`.
 
 This doc covers the filter/sort UI. For what the archive grid renders (image-only,
 Mux videos excluded) see [galleries](galleries.md); for the square-crop thumbnails
@@ -10,8 +12,9 @@ and the per-image `focus` field see [image-optimization](image-optimization.md).
 
 ## Main files
 
-- `src/components/archive/ArchiveGallery_BoxFilters.astro` — markup, client script, and all styles.
-- `src/components/archive/utils.ts` — `isArchiveImage`, tag helpers (`convertTagForCss`, `ensureArray`).
+- `src/components/archive/ArchiveGallery_BoxFilters.astro` — markup and all styles.
+- `src/components/archive/filters.ts` — client runtime: MixItUp setup, `onMixEnd`, active-filter chips, button availability, open/close, and the PhotoSwipe lightbox. Exposed as `initArchiveFilters()`.
+- `src/components/archive/utils.ts` — build-time data/tag helpers (`isArchiveImage`, `convertTagForCss`, `ensureArray`).
 - `src/components/archive/ArchiveGalleryElement.astro` — one grid cell.
 - `src/components/brackets/Bracket*V.astro` / `Bracket*H.astro` — the `⊓`/`⊔` and `[ ]` bracket SVGs.
 
