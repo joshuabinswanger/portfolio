@@ -8,6 +8,7 @@ This folder holds problem-specific notes for the portfolio codebase. Keep each f
 - [Galleries](./galleries.md): Homepage galleries, project-list galleries, PhotoSwipe indexing, sorting, and pause/play behavior.
 - [Image Optimization](./image-optimization.md): Local Astro images, Cloudinary images, high-resolution lightbox images, and sizing rules.
 - [Content YAML](./content-yaml.md): How project, portfolio, image, and video YAML entries fit together.
+- [SEO & AI Discoverability](./seo.md): Head metadata, canonical URLs, Open Graph, JSON-LD structured data, sitemap/robots, and llms.txt.
 - [Troubleshooting](./troubleshooting.md): Common dev-server, Vite cache, PhotoSwipe, Mux, and content-schema issues.
 - [Changelog 2026-04-30](./changelog-2026-04-30.md): Summary of the Astro 6 content-config migration and typecheck cleanup pass.
 

@@ -11,9 +11,70 @@ import ogImage from "../assets/Rhizome_OpenGraphImage_Main_ScientficIllustration
 // This forces Astro to process and include the image
 const optimizedOgImage = await getImage({ src: ogImage });
 
-const { title, description } = Astro.props;
+const {
+  title = "Rhizome Visuals — Scientific Illustration & 3D Design",
+  description = "Scientific illustration and 3D design by Joshua Binswanger (Rhizome Visuals).",
+} = Astro.props;
 
 const isProd = import.meta.env.PROD;
+
+// Per-page canonical / OG URL derived from the current route (not hardcoded),
+// so each page is its own indexable entity rather than a duplicate of the homepage.
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageUrl = new URL(optimizedOgImage.src, Astro.site).toString();
+
+// Structured data: tells search + AI answer engines who Joshua / Rhizome are
+// and how the entities relate, instead of leaving them to infer it from prose.
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://rhizome.ch/#person",
+      name: "Joshua Binswanger",
+      url: "https://rhizome.ch",
+      email: "info@rhizome.ch",
+      image: ogImageUrl,
+      jobTitle: "Scientific Illustrator & 3D Designer",
+      knowsAbout: [
+        "Scientific Illustration",
+        "3D Visualisation",
+        "Data Visualisation",
+        "Knowledge Visualisation",
+        "Information Design",
+        "SideFX Houdini",
+        "Blender",
+      ],
+      worksFor: { "@id": "https://rhizome.ch/#org" },
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://rhizome.ch/#org",
+      name: "Rhizome Visuals",
+      url: "https://rhizome.ch",
+      image: ogImageUrl,
+      email: "info@rhizome.ch",
+      description:
+        "Scientific illustration, 3D design and visualisation practice of Joshua Binswanger.",
+      founder: { "@id": "https://rhizome.ch/#person" },
+      areaServed: "Worldwide",
+      serviceType: [
+        "Scientific Illustration",
+        "3D Design & Visualisation",
+        "Drawing & Illustration",
+        "Infographics",
+        "Workshops",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://rhizome.ch/#website",
+      url: "https://rhizome.ch",
+      name: "Rhizome Visuals",
+      publisher: { "@id": "https://rhizome.ch/#person" },
+    },
+  ],
+};
 ---
 
 <html
@@ -28,35 +89,35 @@ const isProd = import.meta.env.PROD;
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <meta name="description" content={description} />
-    <meta
-      name="keywords"
-      content="scientific illustration, 3D visualisation, data visualisation, knowledge visualisation, information design, sidefx houdini, blender, science illustration, character design"
-    />
     <meta name="author" content="Joshua Binswanger" />
     <meta name="generator" content={Astro.generator} />
 
     <title>{title}</title>
-    <link rel="canonical" href="https://rhizome.ch" />
+    <link rel="canonical" href={canonicalURL} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
     <!-- OG Tags -->
-    <meta
-      property="og:title"
-      content="Rhizome Visuals - Scientific Illustration"
-    />
-    <meta
-      property="og:description"
-      content="Scientific Illustration and 3D Design by Joshua Binswanger"
-    />
-    <meta
-      property="og:image"
-      content={new URL(optimizedOgImage.src, Astro.site)}
-    />
-    <meta property="og:url" content="https://rhizome.ch" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:url" content={canonicalURL} />
     <meta property="og:type" content="website" />
     <meta
       property="og:site_name"
       content="Rhizome Visuals - Scientific Illustration"
+    />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- Structured data (JSON-LD) -->
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(structuredData)}
     />
 
     <!-- Client Router -->
