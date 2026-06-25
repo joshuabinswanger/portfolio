@@ -224,6 +224,27 @@
   background-color: #000000;
 }
 
+/* Archive lightbox: clean title centred at the bottom (registerArchiveTitle in
+   archive/filters.ts). Sits in the bottom padding gutter below the image. */
+.pswp__archive-title {
+  position: absolute;
+  bottom: 3%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  pointer-events: none;
+}
+
+.pswp__archive-title p {
+  display: inline-block;
+  margin: 0;
+  padding: 5px 12px;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  color: #000000;
+  background: #fbf9f422;
+}
+
 .pswp__img {
   /*   background: var(--bg-color); */
 }

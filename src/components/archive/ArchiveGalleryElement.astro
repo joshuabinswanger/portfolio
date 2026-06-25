@@ -6,6 +6,7 @@ import "photoswipe/style.css";
 import { resolveImageUrl, resolveLocalImage } from "../images/localImages";
 import {
   buildArchiveHighResData,
+  getArchiveImageTitle,
   getArchiveRoleTags,
   getArchiveTagClassString,
   type ArchiveImage,
@@ -22,6 +23,9 @@ const imageUrl = resolveImageUrl(archiveImage.data.src);
 const highResData = await buildArchiveHighResData(archiveImage);
 const tagClassString = getArchiveTagClassString(archiveImage);
 const convertedRole = getArchiveRoleTags(archiveImage);
+// Resolved once at build time; reused by the grid caption (single-column only)
+// and read off data-title by the PhotoSwipe lightbox.
+const captionTitle = getArchiveImageTitle(archiveImage);
 ---
 
 <div
@@ -40,6 +44,7 @@ const convertedRole = getArchiveRoleTags(archiveImage);
       data-pswp-width={highResData.width}
       data-pswp-height={highResData.height}
       target="_blank"
+      data-title={captionTitle}
       data-description_title={archiveImage.data.metadata?.description_title}
       data-description_text={archiveImage.data.metadata?.description_text}
       data-link={archiveImage.data.metadata?.link}
@@ -57,6 +62,11 @@ const convertedRole = getArchiveRoleTags(archiveImage);
       />
     </a>
   </div>
+  {
+    captionTitle && (
+      <figcaption class="archive-caption">{captionTitle}</figcaption>
+    )
+  }
 </div>
 
 <style>
@@ -96,6 +106,22 @@ const convertedRole = getArchiveRoleTags(archiveImage);
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
     overflow: hidden;
+  }
+
+  /* Grid caption: only shown when the grid is zoomed to a single column. The
+     `is-single-column` class is toggled on .archive-grid by the zoom runtime
+     (initArchivezoom in archive/filters.ts). Hidden by default so multi-column
+     layouts stay image-only. */
+  .archive-caption {
+    display: none;
+    margin: 10px 0 0;
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 0.3px;
+  }
+
+  :global(.archive-grid.is-single-column) .archive-caption {
+    display: block;
   }
 
   .mix {

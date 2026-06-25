@@ -63,6 +63,29 @@ export function getArchiveRoleTags(image: ArchiveImage): string[] {
   return ensureArray(image.data.metadata?.role).map(convertTagForCss);
 }
 
+// Placeholder project slugs that carry no real title.
+const PLACEHOLDER_PROJECTS = new Set(["none", "aaa_noproject", ""]);
+
+// Humanise a project slug for display: "BardsOfDawn" -> "Bards Of Dawn".
+export function prettifyProjectName(slug: string | null | undefined): string {
+  const value = (slug ?? "").trim();
+  if (PLACEHOLDER_PROJECTS.has(value)) return "";
+  return value
+    .replace(/[_-]+/g, " ")
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .trim();
+}
+
+// The image's display title: its description_title, falling back to a humanised
+// project name. Used for both the grid caption (single-column only) and the
+// PhotoSwipe bottom title — see ArchiveGalleryElement.astro / archive/filters.ts.
+export function getArchiveImageTitle(image: ArchiveImage): string {
+  return (
+    image.data.metadata?.description_title ||
+    prettifyProjectName(image.data.metadata?.project)
+  );
+}
+
 export async function buildArchiveHighResData(
   image: ArchiveImage,
 ): Promise<ArchiveHighResData> {

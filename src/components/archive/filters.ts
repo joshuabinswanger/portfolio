@@ -13,7 +13,6 @@
 import mixitup from "mixitup";
 import mixitupMultifilter from "mixitup-multifilter";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
-import { registerPhotoSwipeCaption } from "../gallery/photoswipeCaption";
 
 //////////////////////////////
 ///////MixItUp FUNCTIONS//////
@@ -24,6 +23,7 @@ type PhotoSwipeDataItem = {
   width: number;
   height: number;
   alt: string;
+  title: string;
   description_title: string | null;
   description_text: string | null;
 };
@@ -167,22 +167,32 @@ function updateFilterButtonAvailability() {
 
 // The archive grid's column count is driven by the --archive-columns CSS custom
 // property on the grid container (see .archive-grid in GridLayout.astro). The
-// +/- buttons step it by one and persist the choice. Mobile pins 2 columns in
-// CSS regardless, and the buttons are hidden there.
+// +/- buttons step it by one and persist the choice. The upper bound is
+// breakpoint-aware: phones get a smaller range (more columns would be too tiny).
 const ZOOM_STORAGE_KEY = "archiveColumns";
 const ZOOM_MIN = 1;
-const ZOOM_MAX = 10;
+const ZOOM_MAX_DESKTOP = 10;
+const ZOOM_MAX_MOBILE = 4;
+const ZOOM_MOBILE_QUERY = "(max-width: 767px)"; // matches --bp-mobile
+
+function getMaxColumns(): number {
+  return window.matchMedia(ZOOM_MOBILE_QUERY).matches
+    ? ZOOM_MAX_MOBILE
+    : ZOOM_MAX_DESKTOP;
+}
 
 function getArchiveGrid() {
   return document.querySelector<HTMLElement>("#archive .archive-grid");
 }
 
-// Current column count: the persisted override if set, otherwise the count the
-// CSS resolved for this breakpoint (read from the computed track list).
+// Current column count: the live applied value (inline --archive-columns) if set,
+// otherwise the count the CSS resolved for this breakpoint (computed track list).
+// Reading the applied value — not raw storage — keeps stepping correct when a
+// stored desktop value is clamped down on mobile.
 function getArchiveColumnCount(grid: HTMLElement): number {
-  const stored = localStorage.getItem(ZOOM_STORAGE_KEY);
-  if (stored) {
-    const n = parseInt(stored, 10);
+  const inline = grid.style.getPropertyValue("--archive-columns").trim();
+  if (inline) {
+    const n = parseInt(inline, 10);
     if (Number.isFinite(n)) return n;
   }
   const tracks = getComputedStyle(grid)
@@ -263,21 +273,37 @@ function initArchiveZoom() {
   const zoomOut = document.getElementById("zoom-out");
   if (!grid || !zoomIn || !zoomOut) return;
 
-  // Re-apply a persisted override after a fresh load / View Transition swap.
+  // Re-apply a persisted override after a fresh load / View Transition swap,
+  // clamped to this breakpoint's range. Storage is left untouched so a desktop
+  // preference survives a mobile visit (where it's only displayed clamped).
   const stored = localStorage.getItem(ZOOM_STORAGE_KEY);
-  if (stored) grid.style.setProperty("--archive-columns", stored);
+  if (stored) {
+    const n = parseInt(stored, 10);
+    if (Number.isFinite(n)) {
+      const clamped = Math.max(ZOOM_MIN, Math.min(getMaxColumns(), n));
+      grid.style.setProperty("--archive-columns", String(clamped));
+    }
+  }
 
   // "+" (#zoom-in) zooms in: fewer columns, larger images.
   // "−" (#zoom-out) zooms out: more columns, smaller images.
   const refreshDisabled = (count: number) => {
     (zoomIn as HTMLButtonElement).disabled = count <= ZOOM_MIN;
-    (zoomOut as HTMLButtonElement).disabled = count >= ZOOM_MAX;
+    (zoomOut as HTMLButtonElement).disabled = count >= getMaxColumns();
+  };
+
+  // The per-cell title caption is only revealed at a single column.
+  const syncSingleColumn = (count: number) => {
+    grid.classList.toggle("is-single-column", count === ZOOM_MIN);
   };
 
   const setColumns = (count: number) => {
-    const clamped = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, count));
+    const clamped = Math.max(ZOOM_MIN, Math.min(getMaxColumns(), count));
     flipColumnChange(grid, () => {
       grid.style.setProperty("--archive-columns", String(clamped));
+      // Toggle inside the FLIP "apply" so the post-change measurement includes
+      // the caption's height and the reflow animates cleanly.
+      syncSingleColumn(clamped);
     });
     localStorage.setItem(ZOOM_STORAGE_KEY, String(clamped));
     refreshDisabled(clamped);
@@ -286,7 +312,9 @@ function initArchiveZoom() {
   zoomIn.addEventListener("click", () => setColumns(getArchiveColumnCount(grid) - 1));
   zoomOut.addEventListener("click", () => setColumns(getArchiveColumnCount(grid) + 1));
 
-  refreshDisabled(getArchiveColumnCount(grid));
+  const initialCount = getArchiveColumnCount(grid);
+  refreshDisabled(initialCount);
+  syncSingleColumn(initialCount);
 }
 
 ///////////////////////////////////////////////////////
@@ -317,8 +345,35 @@ function createPhotoSwipeDataSource() {
       width: Number(link.getAttribute("data-pswp-width")) || 0,
       height: Number(link.getAttribute("data-pswp-height")) || 0,
       alt: img?.getAttribute("alt") ?? "",
+      // Bottom title: resolved once at build time (description_title, else a
+      // humanised project name) and exposed via data-title on the link — same
+      // value the single-column grid caption uses. See archive/utils.ts.
+      title: link.getAttribute("data-title") ?? "",
       description_title: link.getAttribute("data-description_title"),
       description_text: link.getAttribute("data-description_text"),
+    });
+  });
+}
+
+// Archive lightbox caption: a single clean title centred at the bottom. (The
+// shared gallery caption in photoswipeCaption.ts renders title + full
+// description text; the archive deliberately shows title-only — see the
+// `title` field built in createPhotoSwipeDataSource above.)
+function registerArchiveTitle(lb: InstanceType<typeof PhotoSwipeLightbox>) {
+  lb.on("uiRegister", () => {
+    lb.pswp.ui.registerElement({
+      name: "archive-title",
+      order: 9,
+      isButton: false,
+      appendTo: "wrapper",
+      html: "",
+      onInit: (element, pswp) => {
+        pswp.on("change", () => {
+          const data = pswp.currSlide?.data as { title?: string } | undefined;
+          const title = data?.title ?? "";
+          element.innerHTML = title ? `<p>${title}</p>` : "";
+        });
+      },
     });
   });
 }
@@ -478,9 +533,11 @@ export function initArchiveFilters() {
         zoom: false,
         mainClass: "pswp--custom-bg pswp--custom-icon-colors",
         paddingFn: () => {
+          // Larger gutters give the image room to breathe and leave space at
+          // the bottom for the title caption (registerArchiveTitle).
           return isPhonePortrait()
-            ? { top: 0, bottom: 0, left: 10, right: 10 }
-            : { top: 20, bottom: 40, left: 100, right: 100 };
+            ? { top: 0, bottom: 56, left: 16, right: 16 }
+            : { top: 56, bottom: 110, left: 160, right: 160 };
         },
         showHideAnimationType: "fade" as const,
         pswpModule: () => import("photoswipe"),
@@ -489,7 +546,7 @@ export function initArchiveFilters() {
       // Initialize the PhotoSwipe lightbox
       lightbox.init();
 
-      registerPhotoSwipeCaption(lightbox, "");
+      registerArchiveTitle(lightbox);
     }
   });
 

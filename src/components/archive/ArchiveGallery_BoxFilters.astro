@@ -301,8 +301,8 @@ const topicConvertedCSS = topicAllowed.map(convertTagForCss);
       <!-- Zoom: grow/shrink the grid by one column. Anchored to the right edge
            of the fixed bar, opposite the nav. Desktop only (hidden on mobile). -->
       <div id="zoom-wrapper">
-        <button type="button" class:list={["zoom-button main-button"]} id="zoom-out" aria-label="Zoom out: more columns, smaller images" title="Zoom out">&minus;</button>
         <button type="button" class:list={["zoom-button main-button"]} id="zoom-in" aria-label="Zoom in: fewer columns, larger images" title="Zoom in">+</button>
+        <button type="button" class:list={["zoom-button main-button"]} id="zoom-out" aria-label="Zoom out: more columns, smaller images" title="Zoom out">&minus;</button>
       </div>
 
       </form>
@@ -440,13 +440,16 @@ initArchiveFilters();
 
   grid-template-columns: 224px auto;
   transition:  grid-template-columns 0.25s ease 0s;
- 
+
 
   @media (--bp-mobile) {
-    /* Sort goes full-width on mobile (mirrors the Filter button); the filter
-       column collapses while Sort is open. Percentage tracks (not 1fr) so the
-       widen interpolates smoothly from the base `56px calc(100% - 56px)`. */
-    grid-template-columns: 100% 0px;
+    /* Sort fills the gap and pushes the Filter button right, stopping with a
+       gap before the (still-visible) zoom +. Col 1 (Sort) grows; col 2 is the
+       110px Filter button so its right edge lands at the same spot as in the
+       filter-open state (consistent gap to the +). --zoom-reserve keeps the
+       zoom + its gap clear. Percentage/px tracks (not 1fr) so the widen
+       interpolates smoothly from the base `56px calc(100% - 56px)`. */
+    grid-template-columns: calc(100% - var(--zoom-reserve) - 110px) 110px;
 
   }
 
@@ -501,16 +504,15 @@ fieldset {
   display: flex;
   gap: 2px;
   z-index: 1012;
-  /* The active-filter chip row (closed state) can overflow this far right when
-     many filters are active. An opaque page-coloured gutter masks it cleanly so
-     chips stop before the buttons instead of peeking through. */
-  background: var(--bg-color);
-  padding-left: 12px;
-
-  @media (--bp-mobile) {
-    display: none;
-  }
+  /* No background/padding: the buttons are opaque black at a higher z-index, so
+     an overflowing active-filter chip simply tucks behind them (black-on-black)
+     instead of needing a page-coloured mask gutter. */
 }
+
+/* Mobile: the bar sits at the bottom. The Sort/Filter panels expand only up to
+   the zoom +, which stays visible (the buttons stop short of it), so no hiding
+   rule is needed here. The Sort/Filter button itself remains the close
+   affordance via its higher z-index. */
 
 .zoom-button {
   width: 40px;
@@ -943,7 +945,7 @@ width: auto;
 
 #filter.active + #filter-box:has(.filter-button.mixitup-control-active) #group-wrapper{
   width: 168px;
-  transition: 
+  transition:
     opacity 0.125s ease 0.5s,
     grid-template-rows 0.25s ease 0.5s,
     width 0.25s ease 0.25s;
@@ -1146,31 +1148,49 @@ width: auto;
 
 @media (--bp-mobile) {
 
-  /* --- Stage 1: Filter button expands to full width --- */
-  /* Give the filter row the full bar width even when closed, so only the
-     Sort column has to collapse (keeps the track list interpolable: the
-     1fr column is identical at both ends, only 56px -> 0px animates). */
+  /* --- Stage 1: Filter button expands rightward up to the zoom + --- */
+  /* The Filter column is held CONSTANT at its open width (full bar minus the
+     Sort column minus the zoom reserve) in every state. The widen is driven by
+     animating the Filter *button* width (110px -> 100% of that fixed column),
+     not the grid track — animating the track would make the button pop to the
+     old full width then shrink. --zoom-reserve is the space kept clear at the
+     right for the zoom +/- control plus a small gap. */
   #filter-sort-wrapper {
-    grid-template-columns: 56px calc(100% - 56px);
+    grid-template-columns: 56px calc(100% - 56px - var(--zoom-reserve));
+    /* 82px zoom +/- control plus a ~14px gap so buttons/boxes stop short of
+       the + rather than touching. */
+    --zoom-reserve: 96px;
   }
+  /* Held equal to the base (overrides the desktop rule's intrinsic `auto` track
+     on mobile); the button width — not this track — animates. */
   #filter-sort-wrapper:has(#filter.active) {
-    grid-template-columns: 0px 100%;
+    grid-template-columns: 56px calc(100% - 56px - var(--zoom-reserve));
   }
   #filter-sort-wrapper:has(#filter.active) #filter-wrapper {
     width: 100%;
     grid-template-columns: 1fr;
     overflow: visible;
   }
+  /* Smoothly widen/narrow the Filter button itself. Open: widen immediately,
+     the box follows (its own delay). Close: narrow after the box has collapsed. */
+  #filter {
+    transition: width 0.25s ease 0.25s;
+  }
   #filter.active {
     width: 100%;
+    transition: width 0.25s ease 0s;
   }
 
   /* --- The bracketed box: always fixed & bottom-anchored on mobile,
          collapsed to height 0 until the filter is open. --- */
   #filter-box {
     position: fixed;
-    left: 2px;
-    right: 2px;
+    /* Match the widened Filter button exactly and sit directly above it.
+       Button left = bar left (2px) + Sort col (56px) + Filter margin (2px) = 60px;
+       button right = 100% - zoom-reserve + 4px, so the box's right inset is
+       (zoom-reserve - 4px). */
+    left: 60px;
+    right: calc(var(--zoom-reserve) - 4px);
     bottom: 104px;          /* just above the Filter button */
     top: auto;
     width: auto;
@@ -1279,11 +1299,19 @@ width: auto;
     width: 100%;
     grid-template-columns: 1fr;
   }
+  /* Keep the pushed-right Filter button visible (it stops at the zoom +). */
   #filter-sort-wrapper:has(#sort.active) #filter-wrapper {
-    overflow: hidden;
+    overflow: visible;
   }
   #sort.active {
     width: 100%;
+  }
+  /* The Sort widen is driven by the grid track (col 1 grows, pushing Filter);
+     the button is width:100% and simply tracks that animating column. Drop its
+     own width transition so the two don't fight — one smooth driver. */
+  #sort,
+  #sort.active {
+    transition: none;
   }
 
   /* Options drop into a bottom-anchored box above the button, sized to its
@@ -1291,8 +1319,12 @@ width: auto;
      z-index, same grow-up height transition timing. */
   #sort-buttons {
     position: fixed;
+    /* Match the widened Sort button exactly and sit directly above it.
+       Button left = bar left (2px); button right = 100% - zoom-reserve - 108px
+       (Sort col = 100% - zoom-reserve - 110px, + bar left 2px), so the box's
+       right inset is (zoom-reserve + 108px). */
     left: 2px;
-    right: 2px;
+    right: calc(var(--zoom-reserve) + 108px);
     bottom: 104px;            /* just above the Sort button, matches #filter-box */
     z-index: 1004;
     display: flex;

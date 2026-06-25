@@ -13,7 +13,7 @@ and the per-image `focus` field see [image-optimization](image-optimization.md).
 ## Main files
 
 - `src/components/archive/ArchiveGallery_BoxFilters.astro` — markup and all styles.
-- `src/components/archive/filters.ts` — client runtime: MixItUp setup, `onMixEnd`, active-filter chips, button availability, open/close, and the PhotoSwipe lightbox. Exposed as `initArchiveFilters()`.
+- `src/components/archive/filters.ts` — client runtime: MixItUp setup, `onMixEnd`, active-filter chips, button availability, open/close, the PhotoSwipe lightbox, and the grid zoom (`initArchiveZoom`, `flipColumnChange` — see **Zoom** below). Exposed as `initArchiveFilters()`.
 - `src/components/archive/utils.ts` — build-time data/tag helpers (`isArchiveImage`, `convertTagForCss`, `ensureArray`).
 - `src/components/archive/ArchiveGalleryElement.astro` — one grid cell.
 - `src/components/brackets/Bracket*V.astro` / `Bracket*H.astro` — the `⊓`/`⊔` and `[ ]` bracket SVGs.
@@ -22,34 +22,42 @@ and the per-image `focus` field see [image-optimization](image-optimization.md).
 
 ## Zoom (column count)
 
-A `#zoom-wrapper` (`−` / `+`) lets the viewer grow/shrink the grid by one column.
+A `#zoom-wrapper` (`+` / `−`) lets the viewer grow/shrink the grid by one column.
 It's absolutely positioned at the right edge of the fixed bar — opposite the nav,
-in the same row as Filter — and is **desktop-only** (`display: none` on mobile).
-Absolute positioning keeps it out of the bar's grid so the fragile Sort/Filter
-track animations are untouched.
+in the same row as Filter (the bottom bar on mobile). Absolute positioning keeps
+it out of the bar's grid so the fragile Sort/Filter track animations are
+untouched. It's shown on every breakpoint **including while a Sort/Filter panel is open on
+mobile**: the mobile panels expand only up to the zoom (see the mobile section
+below), so it no longer needs to be hidden.
 
 - **Column count** is driven by the `--archive-columns` custom property on
-  `.archive-grid` in `GridLayout.astro`: `repeat(var(--archive-columns, N), 1fr)`,
-  with per-breakpoint fallbacks (desktop 4, tablet 3, wide 6) used when nothing is
-  set. Mobile pins a literal `1fr 1fr` and ignores the var.
+  `.archive-grid` in `GridLayout.astro`: `repeat(var(--archive-columns, N), 1fr)`
+  at every breakpoint (including mobile), with per-breakpoint fallbacks (desktop 4,
+  tablet 3, wide 6, mobile 2) used when nothing is set.
 - `initArchiveZoom()` in `filters.ts` (called from the `astro:page-load` handler)
-  steps the count by ±1, clamps to **1–10**, writes it as an inline
-  `--archive-columns` on the grid, persists it in `localStorage` (`archiveColumns`),
-  and disables `−`/`+` at the bounds. The stored value is re-applied on each load /
-  View Transition swap. Current count is read from the persisted value, else from
-  the computed track count (so the first click respects the breakpoint default).
+  steps the count by ±1, clamps to a **breakpoint-aware range** (`getMaxColumns()`:
+  1–10 desktop, **1–4 mobile**), writes it as an inline `--archive-columns` on the
+  grid, persists it in `localStorage` (`archiveColumns`), and disables `+`/`−` at
+  the bounds. On load the stored value is re-applied **clamped to the current
+  breakpoint** (storage is left untouched, so a desktop preference survives a
+  mobile visit). Current count is read from the live inline value, else the
+  computed track count — reading the applied value keeps stepping correct when a
+  stored desktop count is clamped down on mobile.
 - The cells stay square at any count via `ArchiveGalleryElement.astro` — see
   [image-optimization](image-optimization.md).
 - **Gutter scales with the count.** The gap is a roughly constant fraction of the
   cell width — `gap ∝ 1 / columns` — so zooming out tightens the grid (a
   logarithmic curve was rejected: it shrinks slower than the cells, making gaps
   look proportionally *bigger* when zoomed out). Implemented in `.archive-grid`
-  (GridLayout.astro): `column-gap` and `--archive-pad` are each
+  (GridLayout.astro): the `gap` shorthand (equal row + column gutters) and
+  `--archive-pad` are each
   `clamp(8px, calc(K / var(--archive-columns, N)), max)`, with `K`/`N`/`max`
   normalised per breakpoint so the value equals the old fixed gap at that
-  breakpoint's default column count, tapering to a 8px floor and capped at the
-  default so 1–2 columns don't balloon. `--archive-pad` is inherited by the cell
-  padding in `ArchiveGalleryElement.astro`.
+  breakpoint's default column count, tapering to an 8px floor. The upper bound is
+  set *above* the default-count value (e.g. 40px desktop vs the 28px default), so
+  close zoom levels (1–3 columns) get extra whitespace while 4+ columns are
+  unchanged. `--archive-pad` is inherited by the cell padding in
+  `ArchiveGalleryElement.astro`.
 - **Animation:** the reflow is animated with a **FLIP** pass (`flipColumnChange`
   in `filters.ts`) — measure each visible cell, change `--archive-columns`,
   measure again, then animate old→new box with a `transform` (translate + scale)
@@ -59,8 +67,41 @@ track animations are untouched.
   `archiveZoom`) are cancelled before re-measuring so rapid clicks stay correct,
   and the whole pass is skipped under `prefers-reduced-motion: reduce`.
 - **Edge case:** with many active filters the closed-state chip row can overflow
-  under the buttons; an opaque page-coloured gutter on `#zoom-wrapper` masks it so
-  chips stop cleanly before the control.
+  behind the buttons. The buttons are opaque black at a higher `z-index`, so an
+  overflowing chip simply tucks behind them (black-on-black) — no mask gutter
+  needed. (On mobile the closed-state chip row is dropped entirely.)
+
+## Image title (grid caption + lightbox)
+
+Each image has a single resolved **title**, computed once at build time by
+`getArchiveImageTitle` in `utils.ts`: the image's `metadata.description_title`,
+falling back to a **humanised project name** (`prettifyProjectName`:
+`BardsOfDawn` → "Bards Of Dawn"). Placeholder projects (`none`, `aaa_noproject`,
+empty) resolve to `""` (no title). `ArchiveGalleryElement.astro` renders it both
+as the cell's `<figcaption class="archive-caption">` **and** as `data-title` on
+the `.photo-link` — one source of truth for both surfaces below.
+
+**Grid caption (single column only).** The `.archive-caption` under each cell is
+`display: none` by default and only revealed when the grid is zoomed to one
+column. The zoom runtime (`initArchiveZoom`) toggles `is-single-column` on
+`.archive-grid` whenever the count hits 1 (`syncSingleColumn`, folded into the
+FLIP "apply" so the reflow animates), and
+`:global(.archive-grid.is-single-column) .archive-caption` shows it. Multi-column
+layouts stay image-only.
+
+**Lightbox (single-image view).** Clicking a thumbnail opens the **PhotoSwipe**
+lightbox. Two archive-specific touches:
+
+- **Padding / gap** — `paddingFn` sets generous gutters so the image breathes and
+  there's room for the title below it: desktop `{top:56, bottom:110, left:160,
+  right:160}`, phone-portrait `{top:0, bottom:56, left:16, right:16}` (the bottom
+  inset leaves space for the caption).
+- **Bottom title** — `registerArchiveTitle(lightbox)` adds a centred title in the
+  bottom gutter, reading the `title` field on each data-source item (sourced from
+  the link's `data-title`). Styling lives in `.pswp__archive-title` in
+  `global.css`. Title-only by design — the shared `photoswipeCaption.ts` (homepage
+  gallery + project list) renders title **plus** the full description paragraph;
+  the archive deliberately does not.
 
 ## Data & tags
 
@@ -121,12 +162,31 @@ active-filter chips.
 **Mobile** (`@media (--bp-mobile)`, bar pinned to `bottom: 52px` above the nav):
 both open as a **bracketed box** anchored just above their button, in two stages:
 
-1. **Button widens to full width.** The bar is a 2-column grid; the *other*
-   column collapses. Tracks are percentage-based so the widen interpolates
-   smoothly (see the WebKit notes):
-   - base `56px calc(100% - 56px)`
-   - filter open `0px 100%` · sort open `100% 0px`
-2. **Box grows up** from the button (`height: 0 → target`, `bottom: 104px`).
+1. **Button widens toward the zoom +, stopping short with a gap.** The buttons
+   expand to fill the gap but leave a visible gap before the zoom `+/−`, which
+   stays visible. The reserved space (zoom width + gap) is the `--zoom-reserve`
+   custom property (defined on `#filter-sort-wrapper` in the mobile block). The
+   two sides animate by **different** drivers, each chosen so nothing pops:
+   - **filter open** — the Filter column is held **constant** at its open width
+     (`56px calc(100% - 56px - var(--zoom-reserve))`) in every state; the widen
+     is a transition on the **Filter button width** (`110px → 100%` of that fixed
+     column). Animating the track instead would pop the button to the old full
+     width (`calc(100% - 56px)`) then shrink it. Sort stays put.
+   - **sort open** — driven by the **grid track**: col 1 grows
+     (`calc(100% - var(--zoom-reserve) - 110px)`) and pushes the (still-visible)
+     110px Filter button right. The Sort button is `width: 100%` and simply
+     tracks that animating column — its own `width` transition is dropped
+     (`transition: none`) so the two don't fight. The 110px filter col makes the
+     pushed button's right edge land at the same spot as the filter-open state,
+     so the gap to the + is identical in both. Tracks are percentage/px (never
+     intrinsic keywords) so they interpolate cleanly on WebKit.
+2. **Box grows up** from the button (`height: 0 → target`, `bottom: 104px`). Each
+   box is sized and positioned to **exactly overlay its trigger button** (same
+   left edge, same width) and sit directly above it — Filter box over the Filter
+   button (`left: 60px; right: calc(var(--zoom-reserve) - 4px)`), Sort box over
+   the Sort button (`left: 2px; right: calc(var(--zoom-reserve) + 108px)`). The
+   `4px`/`108px` offsets fold in the 2px bar inset and the 2px button margins; if
+   the bar inset, Sort column (56px), or button margins change, recompute them.
    - **Filter** → full height, `calc(100dvh - 180px)` (logo → above the button).
    - **Sort** → content height only, `calc(3*48px + 2*12px + 4*6px)` = **192px**
      (3 options + 2 brackets + gaps). Deliberately *not* full height.
