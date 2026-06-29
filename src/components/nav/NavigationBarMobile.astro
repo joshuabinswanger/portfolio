@@ -9,6 +9,12 @@ import RhizomLogo from "../../assets/Rhizome_Logo_208h.jpg";
 interface Props {
   personal?: boolean;
 }
+
+// Active nav item, derived from the current route so the highlight + aria-current
+// ship in the initial HTML (no dependency on the post-load JS or its 500ms delay).
+const norm = (p: string) => (p !== "/" && p.endsWith("/") ? p.slice(0, -1) : p);
+const here = norm(Astro.url.pathname);
+const isActive = (href: string) => norm(href) === here;
 ---
 
 <nav id="NavBarMobile" transition:persist>
@@ -19,7 +25,7 @@ interface Props {
     data-href="/"
     data-animation="out"
   >
-    <Image src={RhizomLogo} id="Image" alt="Rhizom Logo" loading="eager" />
+    <Image src={RhizomLogo} id="Image" alt="Rhizome Visuals — home" loading="eager" />
   </a>
   <div id="Menu">
     <div id="MainWrapper">
@@ -28,10 +34,11 @@ interface Props {
       <!-- Menu item: Portfolio -->
       <a
         id="portfolio"
-        class:list={["main-button", "button", "animation"]}
+        class:list={["main-button", "button", "animation", { active: isActive("/") }]}
         href="/"
         data-href="/"
-        data-animation="out"
+        data-animation={isActive("/") ? "in" : "out"}
+        aria-current={isActive("/") ? "page" : undefined}
       >
         Portfolio
       </a>
@@ -41,10 +48,11 @@ interface Props {
       <!-- Projects submenu -->
       <a
         id="projects"
-        class:list={["main-button", "button", "animation"]}
+        class:list={["main-button", "button", "animation", { active: isActive("/project-index/") }]}
         href="/project-index/"
         data-href="/project-index/"
-        data-animation="out"
+        data-animation={isActive("/project-index/") ? "in" : "out"}
+        aria-current={isActive("/project-index/") ? "page" : undefined}
       >
         Index
       </a>
@@ -53,10 +61,11 @@ interface Props {
 
       <!-- Menu item: Information -->
       <a
-        class:list={["main-button", "button", "animation"]}
+        class:list={["main-button", "button", "animation", { active: isActive("/info/") }]}
         href="/info/"
         data-href="/info/"
-        data-animation="out"
+        data-animation={isActive("/info/") ? "in" : "out"}
+        aria-current={isActive("/info/") ? "page" : undefined}
       >
         Info
       </a>
@@ -154,7 +163,7 @@ interface Props {
 
   /* General main-button styling */
   .main-button {
-    font-size: var(--font-size-dekstop-h1);
+    font-size: var(--font-size-desktop-h1);
     font-family: PowerGrotesk-Light;
     font-weight: 200;
     display: flex;
@@ -185,6 +194,16 @@ interface Props {
 <script>
   // Update visual state (add/remove active class)
   function updateAnimationState(buttons: NodeListOf<HTMLElement>) {
+    // a11y: reflect the current page immediately, independent of the 500ms
+    // visual delay below, so assistive tech always has the right state.
+    buttons.forEach((btn) => {
+      if (!btn) return;
+      if (btn.getAttribute("data-animation") === "in") {
+        btn.setAttribute("aria-current", "page");
+      } else {
+        btn.removeAttribute("aria-current");
+      }
+    });
     setTimeout(() => {
       buttons.forEach((btn) => {
         if (!btn) return;

@@ -88,7 +88,7 @@ for (const entry of sortedProjects) {
 
               <div class:list={["flip-out"]}>
                 <div class:list={["project-slider"]}>
-                  <button class:list={["arrow-left"]}>&larr;</button>
+                  <button class:list={["arrow-left"]} aria-label="Previous image">&larr;</button>
 
                   <div class:list={["project-images"]}>
                     <ImageSlide
@@ -98,7 +98,7 @@ for (const entry of sortedProjects) {
                     />
                   </div>
 
-                  <button class:list={["arrow-right"]}>&rarr;</button>
+                  <button class:list={["arrow-right"]} aria-label="Next image">&rarr;</button>
                 </div>
 
                 <div class:list={["project-description"]}>

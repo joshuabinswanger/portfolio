@@ -9,6 +9,12 @@ import JoshLogo from "../../assets/joshuabinswanger_tempLogo.png";
 interface Props {
   personal?: boolean;
 }
+
+// Active nav item, derived from the current route so the highlight + aria-current
+// ship in the initial HTML (no dependency on the post-load JS or its 500ms delay).
+const norm = (p: string) => (p !== "/" && p.endsWith("/") ? p.slice(0, -1) : p);
+const here = norm(Astro.url.pathname);
+const isActive = (href: string) => norm(href) === here;
 ---
 
 <nav id="NavBarMobile" transition:persist>
@@ -22,7 +28,7 @@ interface Props {
     <Image
       src={JoshLogo}
       id="Image"
-      alt="Joshua Binswanger Logo"
+      alt="Joshua Binswanger — home"
       loading="eager"
     />
   </a>
@@ -33,10 +39,11 @@ interface Props {
       <!-- Menu item: Gallery -->
       <a
         id="portfolio"
-        class:list={["main-button", "button", "animation"]}
+        class:list={["main-button", "button", "animation", { active: isActive("/personal") }]}
         href="/personal"
         data-href="/personal"
-        data-animation="out"
+        data-animation={isActive("/personal") ? "in" : "out"}
+        aria-current={isActive("/personal") ? "page" : undefined}
       >
         Gallery
       </a>
@@ -46,10 +53,11 @@ interface Props {
       <!-- Menu item: Information -->
       <a
         id="info"
-        class:list={["main-button", "button", "animation"]}
+        class:list={["main-button", "button", "animation", { active: isActive("/personal/info") }]}
         href="/personal/info"
         data-href="/personal/info"
-        data-animation="out"
+        data-animation={isActive("/personal/info") ? "in" : "out"}
+        aria-current={isActive("/personal/info") ? "page" : undefined}
       >
         Info
       </a>
@@ -146,7 +154,7 @@ interface Props {
 
     /* General main-button styling */
     .main-button {
-      font-size: var(--font-size-dekstop-h1);
+      font-size: var(--font-size-desktop-h1);
       font-family: PowerGrotesk-Light;
       font-weight: 200;
       display: flex;
@@ -177,6 +185,16 @@ interface Props {
   <script>
     // Update visual state (add/remove active class)
     function updateAnimationState(buttons: NodeListOf<HTMLElement>) {
+      // a11y: reflect the current page immediately, independent of the 500ms
+      // visual delay below, so assistive tech always has the right state.
+      buttons.forEach((btn) => {
+        if (!btn) return;
+        if (btn.getAttribute("data-animation") === "in") {
+          btn.setAttribute("aria-current", "page");
+        } else {
+          btn.removeAttribute("aria-current");
+        }
+      });
       setTimeout(() => {
         buttons.forEach((btn) => {
           if (!btn) return;

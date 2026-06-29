@@ -25,7 +25,9 @@ interface Props {
     {personal ? <NavigationBarPersonal /> : <NavigationBar />}
   </div>
 
-  <slot />
+  <main id="main" tabindex="-1">
+    <slot />
+  </main>
 </div>
 
 <style>
@@ -68,6 +70,15 @@ interface Props {
       margin-right: var(--margin-right-desktop-wide);
       grid-column-gap: 8px;
     }
+  }
+
+  /* a11y: the page-content landmark + skip-link target. It's the single grid
+     item in the content column, so the 160px/952px layout is unchanged. */
+  #main {
+    min-width: 0;
+  }
+  #main:focus {
+    outline: none;
   }
 
   #Nav {

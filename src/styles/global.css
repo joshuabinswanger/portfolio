@@ -113,13 +113,13 @@
   --font-size-mobile: 12px;
   --font-size-mobile-small: 10px;
   --font-size-tablet: 12px;
-  --font-size-dekstop: 14px;
+  --font-size-desktop: 14px;
   --font-size-desktop-wide: 14px;
 
   --font-size-mobile-h1: 14px;
   --font-size-mobile-small-h1: 14px;
   --font-size-tablet-h1: 16px;
-  --font-size-dekstop-h1: 18px;
+  --font-size-desktop-h1: 18px;
   --font-size-desktop-wide-h1: 18px;
 
   letter-spacing: 0.7px;
@@ -281,7 +281,7 @@
 
 .pswp__project-info-slide {
   display: grid;
-  font-size: var(--font-size-dekstop);
+  font-size: var(--font-size-desktop);
   width: min(70%, 66ch);
   grid-auto-rows: auto;
   align-items: center;

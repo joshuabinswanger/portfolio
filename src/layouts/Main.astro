@@ -136,6 +136,7 @@ const structuredData = {
     }
   </head>
   <body>
+    <a href="#main" class="skip-link">Skip to content</a>
     {/* We want the content of each page to go here */}
     <slot />
     <Backdrop transition:animate="none" transition:persist />
@@ -185,6 +186,25 @@ const structuredData = {
     @media (--bp-mobile) {
       grid-template-rows: 0px 1fr auto;
     }
+  }
+
+  /* a11y: keyboard skip link. position:fixed keeps it out of the body grid (so
+     it never becomes a grid row) and pins it to the viewport, so it's visible on
+     focus regardless of scroll position. Off-screen until focused. */
+  .skip-link {
+    position: fixed;
+    left: 8px;
+    top: -48px;
+    z-index: 3000;
+    padding: 8px 14px;
+    background: var(--bg-dark);
+    color: var(--bg-color);
+    font-family: PowerGrotesk-Light;
+    text-decoration: none;
+    transition: top 0.2s ease;
+  }
+  .skip-link:focus {
+    top: 8px;
   }
 
   ::-webkit-scrollbar-track {

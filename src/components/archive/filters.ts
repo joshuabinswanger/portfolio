@@ -60,6 +60,16 @@ function updateActiveFiltersList() {
     ".filter-button.mixitup-control-active",
   );
 
+  // a11y (A-3): mirror each filter button's toggle state for assistive tech.
+  document
+    .querySelectorAll<HTMLButtonElement>(".filter-button")
+    .forEach((btn) =>
+      btn.setAttribute(
+        "aria-pressed",
+        String(btn.classList.contains("mixitup-control-active")),
+      ),
+    );
+
   // Retrieve Astro scoped attribute from the container or existing element
   const astroScopedAttr = activeFiltersContainer.attributes;
   let astroCidAttr = "";
@@ -409,6 +419,24 @@ export function initArchiveFilters() {
       if (filterSortWrapper) void filterSortWrapper.offsetWidth;
     };
 
+    // a11y (A-4): keep collapsed panels out of the tab order. #group-wrapper holds
+    // the filter buttons and #sort-buttons the sort options; both collapse when
+    // their toggle isn't `.active`. The closed-state active-filter chips live in
+    // the sibling #active-filters-list and stay reachable. `inert` only affects
+    // focus/interaction/AT — it never touches the (WebKit-fragile) track sizes.
+    const groupWrapper = document.getElementById("group-wrapper");
+    const sortButtonsBox = document.getElementById("sort-buttons");
+    const syncPanelInert = () => {
+      groupWrapper?.toggleAttribute(
+        "inert",
+        !filterButton?.classList.contains("active"),
+      );
+      sortButtonsBox?.toggleAttribute(
+        "inert",
+        !sortButton?.classList.contains("active"),
+      );
+    };
+
     if (filterButton && sortButton) {
       // Ensure buttons exist
       filterButton.addEventListener("click", () => {
@@ -420,6 +448,7 @@ export function initArchiveFilters() {
         // Now toggle filter's state
         filterButton.classList.toggle("active");
         nudgeReflow();
+        syncPanelInert();
       });
 
       sortButton.addEventListener("click", () => {
@@ -431,7 +460,16 @@ export function initArchiveFilters() {
         // Now toggle sort's state
         sortButton.classList.toggle("active");
         nudgeReflow();
+        syncPanelInert();
       });
+
+      // Both panels start closed → start inert.
+      syncPanelInert();
+
+      // a11y (A-3): default toggle state before any filtering happens.
+      document
+        .querySelectorAll<HTMLButtonElement>(".filter-button")
+        .forEach((btn) => btn.setAttribute("aria-pressed", "false"));
     } else {
       console.error("Could not find filter or sort button elements.");
     }
@@ -449,6 +487,7 @@ export function initArchiveFilters() {
           // ...remove the 'active' class from the main Sort button to close the dropdown
           setTimeout(() => {
             sortButton.classList.remove("active");
+            syncPanelInert();
           }, 500);
         });
       });
