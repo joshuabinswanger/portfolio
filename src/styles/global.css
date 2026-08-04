@@ -151,6 +151,40 @@
   );
   --grid-layout-columns-desktop: repeat(17, 56px);
   --grid-layout-columns-desktop-wide: repeat(17, 88px);
+
+  /* --- Additive tokens (2026-08-04) --------------------------------------
+     Added alongside the originals above. Nothing here replaces an existing
+     token, and no existing rule was changed to consume them — adopt these
+     names as you touch files. All of them are rendered on /styleguide. */
+
+  /* Font families. The five PowerGrotesk faces declared at the top of this
+     file, so component CSS stops hardcoding `font-family: PowerGrotesk-Light`
+     (currently literal in Main.astro, NavigationBar.astro and
+     ArchiveGallery_BoxFilters.astro). */
+  --font-ultralight: PowerGrotesk-UltraLight;
+  --font-light: PowerGrotesk-Light;
+  --font-regular: PowerGrotesk-Regular;
+  --font-medium: PowerGrotesk-Medium;
+  --font-bold: PowerGrotesk-Bold;
+
+  /* Spacing scale, derived from values already load-bearing in this codebase
+     rather than invented: 20px is --margin-right-tablet, 56px and 88px are the
+     desktop and desktop-wide grid column widths. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 20px;
+  --space-5: 32px;
+  --space-6: 56px;
+  --space-7: 88px;
+
+  /* Semantic aliases over the --bg-* values above. Use these in new code so
+     intent is readable at the point of use. */
+  --color-text: #000000;
+  --color-surface: var(--bg-color);
+  --color-surface-accent: var(--bg-color-accent);
+  --color-border: var(--bg-dark);
+  --color-overlay: var(--bg-color-trans);
 }
 
 /* Media Queries Breakpoints*/
