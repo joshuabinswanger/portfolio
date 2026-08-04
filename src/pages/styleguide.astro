@@ -9,6 +9,8 @@ import ColorSwatches from "../components/styleguide/ColorSwatches.astro";
 import TypeSpecimens from "../components/styleguide/TypeSpecimens.astro";
 import SpacingScale from "../components/styleguide/SpacingScale.astro";
 import GridOverlay from "../components/styleguide/GridOverlay.astro";
+import BracketGallery from "../components/styleguide/BracketGallery.astro";
+import IconGallery from "../components/styleguide/IconGallery.astro";
 import "../styles/styleguide.css";
 
 // Section ids are the contract between this ToC and the <Section> calls below.
@@ -68,8 +70,12 @@ const SECTIONS = [
         <Section id="grid" title="Grid">
           <GridOverlay />
         </Section>
-        <Section id="brackets" title="Brackets" />
-        <Section id="icons" title="Icons" />
+        <Section id="brackets" title="Brackets">
+          <BracketGallery />
+        </Section>
+        <Section id="icons" title="Icons">
+          <IconGallery />
+        </Section>
         <Section id="chrome" title="Chrome" />
       </main>
     </div>

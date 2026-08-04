@@ -1,0 +1,113 @@
+---
+import BracketOpenV from "../brackets/BracketOpenV.astro";
+import BracketMiddleV from "../brackets/BracketMiddleV.astro";
+import BracketCloseV from "../brackets/BracketCloseV.astro";
+import BracketOpenH from "../brackets/BracketOpenH.astro";
+import BracketMiddleH from "../brackets/BracketMiddleH.astro";
+import BracketCloseH from "../brackets/BracketCloseH.astro";
+
+// The V and H families are NOT interchangeable. V variants are wide and short
+// (viewBox 200x16 / 200x32) and stack as horizontal rules; H variants are tall
+// and narrow (50x200 / 100x200) and sit side by side as vertical rules. Sizing
+// one like the other renders a hairline, so each demo frame below is sized to
+// its component's own aspect ratio.
+const V = [
+  { name: "BracketOpenV", Comp: BracketOpenV, box: "0 0 200 16", h: 16 },
+  { name: "BracketMiddleV", Comp: BracketMiddleV, box: "0 -16 200 32", h: 32 },
+  { name: "BracketCloseV", Comp: BracketCloseV, box: "0 -16 200 16", h: 16 },
+];
+
+const H = [
+  { name: "BracketOpenH", Comp: BracketOpenH, box: "0 0 50 200", w: 50 },
+  { name: "BracketMiddleH", Comp: BracketMiddleH, box: "-50 0 100 200", w: 100 },
+  { name: "BracketCloseH", Comp: BracketCloseH, box: "0 0 50 200", w: 50 },
+];
+---
+
+<p class="sg-note">
+  Six SVG components in <code>src/components/brackets/</code>. All six use
+  <code>vector-effect="non-scaling-stroke"</code>, so the stroke stays
+  <code>1px</code> no matter how the container is sized. Shared props:
+  <code>strokewidth</code> (<code>"1px"</code>), <code>strokecolor</code>
+  (<code>"black"</code>), <code>height</code> / <code>width</code>
+  (<code>"100%"</code>); the V variants also take <code>overflow</code>
+  (<code>"visible"</code>) and the H variants <code>padding</code>
+  (<code>"1px"</code>) instead.
+</p>
+
+<h3 class="sg-subtitle">Vertical stacks (wide &amp; short)</h3>
+<p class="sg-note">
+  Used as horizontal rules between stacked items — the nav menu and the sort
+  dropdown are built from these.
+</p>
+<div class="sg-bracket-list">
+  {
+    V.map(({ name, Comp, box, h }) => (
+      <div class="sg-bracket-row">
+        <div class="sg-bracket-meta">
+          <code class="sg-label">{name}</code>
+          <span class="sg-value">viewBox="{box}"</span>
+        </div>
+        <div class="sg-demo sg-bracket-frame" style={`height: ${h + 24}px`}>
+          <div style={`width: 200px; height: ${h}px`}>
+            <Comp />
+          </div>
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<h3 class="sg-subtitle">Horizontal runs (tall &amp; narrow)</h3>
+<p class="sg-note">
+  Used as vertical rules beside side-by-side items.
+</p>
+<div class="sg-bracket-h-list">
+  {
+    H.map(({ name, Comp, box, w }) => (
+      <div class="sg-bracket-row">
+        <div class="sg-bracket-meta">
+          <code class="sg-label">{name}</code>
+          <span class="sg-value">viewBox="{box}"</span>
+        </div>
+        <div class="sg-demo sg-bracket-frame">
+          <div style={`width: ${w}px; height: 160px`}>
+            <Comp />
+          </div>
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  @import "../../styles/global.css";
+
+  .sg-bracket-list {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .sg-bracket-h-list {
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    gap: var(--space-4);
+
+    @media (--bp-mobile) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .sg-bracket-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-3);
+    align-items: baseline;
+    padding-bottom: 6px;
+  }
+
+  .sg-bracket-frame {
+    min-width: 0;
+    overflow: hidden;
+  }
+</style>
