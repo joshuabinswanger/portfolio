@@ -3,7 +3,20 @@
 // component, noindex via Main.astro, and filtered out of the sitemap in
 // astro.config.mjs. See docs/design-system.md.
 import Main from "../layouts/Main.astro";
+import Section from "../components/styleguide/Section.astro";
 import "../styles/styleguide.css";
+
+// Section ids are the contract between this ToC and the <Section> calls below.
+const SECTIONS = [
+  { id: "breakpoints", title: "Breakpoints" },
+  { id: "color", title: "Colour" },
+  { id: "type", title: "Type" },
+  { id: "spacing", title: "Spacing & Border" },
+  { id: "grid", title: "Grid" },
+  { id: "brackets", title: "Brackets" },
+  { id: "icons", title: "Icons" },
+  { id: "chrome", title: "Chrome" },
+];
 ---
 
 <Main
@@ -15,14 +28,31 @@ import "../styles/styleguide.css";
     <header class="sg-header">
       <h1 class="sg-title">Design System</h1>
       <p class="sg-lede">
-        Internal reference for rhizome.ch. Every token below is read live from
-        <code>src/styles/global.css</code> — resize the window to see the
-        per-breakpoint values change.
+        Internal reference for rhizome.ch. Every token below is read from
+        <code>src/styles/global.css</code> at render time — resize the window to
+        watch the per-breakpoint values change. Not linked, not indexed.
       </p>
     </header>
 
-    <main class="sg-body" id="main">
-      <!-- Sections are added in Tasks 4-10. -->
-    </main>
+    <div class="sg-layout">
+      <nav class="sg-toc" aria-label="Design system sections">
+        {
+          SECTIONS.map((s) => (
+            <a href={`#${s.id}`}>{s.title}</a>
+          ))
+        }
+      </nav>
+
+      <main class="sg-body" id="main">
+        <Section id="breakpoints" title="Breakpoints" />
+        <Section id="color" title="Colour" />
+        <Section id="type" title="Type" />
+        <Section id="spacing" title="Spacing & Border" />
+        <Section id="grid" title="Grid" />
+        <Section id="brackets" title="Brackets" />
+        <Section id="icons" title="Icons" />
+        <Section id="chrome" title="Chrome" />
+      </main>
+    </div>
   </div>
 </Main>
