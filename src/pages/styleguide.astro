@@ -8,6 +8,7 @@ import BreakpointReadout from "../components/styleguide/BreakpointReadout.astro"
 import ColorSwatches from "../components/styleguide/ColorSwatches.astro";
 import TypeSpecimens from "../components/styleguide/TypeSpecimens.astro";
 import SpacingScale from "../components/styleguide/SpacingScale.astro";
+import GridOverlay from "../components/styleguide/GridOverlay.astro";
 import "../styles/styleguide.css";
 
 // Section ids are the contract between this ToC and the <Section> calls below.
@@ -64,7 +65,9 @@ const SECTIONS = [
         <Section id="spacing" title="Spacing & Border">
           <SpacingScale />
         </Section>
-        <Section id="grid" title="Grid" />
+        <Section id="grid" title="Grid">
+          <GridOverlay />
+        </Section>
         <Section id="brackets" title="Brackets" />
         <Section id="icons" title="Icons" />
         <Section id="chrome" title="Chrome" />

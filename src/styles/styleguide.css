@@ -101,6 +101,11 @@
   border-top: var(--border-size) solid var(--color-border);
   padding-top: var(--space-4);
   scroll-margin-top: var(--space-4);
+  /* Grid items default to min-width:auto, which lets wide content (the 952px
+     grid demo, wide tables) push past the column and get clipped by
+     `body { overflow-x: hidden }` in Main.astro — with no scrollbar to reveal
+     it. min-width:0 lets max-width and overflow actually take effect. */
+  min-width: 0;
 }
 
 .sg-section-title {
