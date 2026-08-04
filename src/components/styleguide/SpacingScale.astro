@@ -45,32 +45,34 @@ const RULES = [
   rather than invented. Nothing outside this page consumes them yet.
 </p>
 
-<table class="sg-table">
-  <thead>
-    <tr>
-      <th scope="col">Token</th>
-      <th scope="col">Value</th>
-      <th scope="col">Provenance</th>
-      <th scope="col" class="sg-bar-col">Scale</th>
-    </tr>
-  </thead>
-  <tbody>
-    {
-      SPACING.map((s) => (
-        <tr>
-          <td>
-            <code class="sg-label">{s.token}</code>
-          </td>
-          <td class="sg-value">{s.value}</td>
-          <td class="sg-value">{s.note || "—"}</td>
-          <td>
-            <div class="sg-bar" style={`width: var(${s.token})`} />
-          </td>
-        </tr>
-      ))
-    }
-  </tbody>
-</table>
+<div class="sg-scroll">
+  <table class="sg-table">
+    <thead>
+      <tr>
+        <th scope="col">Token</th>
+        <th scope="col">Value</th>
+        <th scope="col">Provenance</th>
+        <th scope="col" class="sg-bar-col">Scale</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        SPACING.map((s) => (
+          <tr>
+            <td>
+              <code class="sg-label">{s.token}</code>
+            </td>
+            <td class="sg-value">{s.value}</td>
+            <td class="sg-value">{s.note || "—"}</td>
+            <td>
+              <div class="sg-bar" style={`width: var(${s.token})`} />
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
 
 <h3 class="sg-subtitle">Padding tokens</h3>
 <p class="sg-note">

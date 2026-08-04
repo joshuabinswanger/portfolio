@@ -198,10 +198,14 @@
   white-space: nowrap;
 }
 
-/* Wide tables scroll inside their own box rather than widening the page. */
+/* Wide tables scroll inside their own box rather than widening the page.
+   min-width:0 is load-bearing: as a grid descendant the default min-width:auto
+   lets intrinsic content width beat max-width, overflowing instead of
+   scrolling. */
 .sg-scroll {
   overflow-x: auto;
   max-width: 100%;
+  min-width: 0;
 }
 
 .sg-bar {

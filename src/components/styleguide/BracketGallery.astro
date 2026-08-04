@@ -88,9 +88,12 @@ const H = [
     gap: var(--space-4);
   }
 
+  /* minmax(0, 1fr), not max-content: the row's widest child is its metadata
+     label ("viewBox=..."), so max-content sized each column to the text and
+     overflowed the body column. The 0 minimum lets the label wrap instead. */
   .sg-bracket-h-list {
     display: grid;
-    grid-template-columns: repeat(3, max-content);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--space-4);
 
     @media (--bp-mobile) {
