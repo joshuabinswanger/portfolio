@@ -11,6 +11,7 @@ import SpacingScale from "../components/styleguide/SpacingScale.astro";
 import GridOverlay from "../components/styleguide/GridOverlay.astro";
 import BracketGallery from "../components/styleguide/BracketGallery.astro";
 import IconGallery from "../components/styleguide/IconGallery.astro";
+import ChromeStates from "../components/styleguide/ChromeStates.astro";
 import "../styles/styleguide.css";
 
 // Section ids are the contract between this ToC and the <Section> calls below.
@@ -76,7 +77,9 @@ const SECTIONS = [
         <Section id="icons" title="Icons">
           <IconGallery />
         </Section>
-        <Section id="chrome" title="Chrome" />
+        <Section id="chrome" title="Chrome">
+          <ChromeStates />
+        </Section>
       </main>
     </div>
   </div>

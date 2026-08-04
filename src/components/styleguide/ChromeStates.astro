@@ -1,0 +1,297 @@
+---
+// SNAPSHOT — these styles are COPIED, not imported. Sources:
+//
+//   src/components/archive/ArchiveGallery_BoxFilters.astro
+//     .main-button          :465-480
+//     .zoom-button:disabled :524-527
+//     .sort-button          :618-681
+//     .filter-button        :764-822
+//     .filter-disabled      :824-827
+//     .active-filter        :1095-1117
+//   src/components/nav/NavigationBar.astro
+//     .button / .button.active  :287-340
+//
+// Neither source can be imported here:
+//   - ArchiveGallery_BoxFilters calls getCollection("images") (build-time
+//     Cloudinary data), initialises MixItUp on mount, and styles its controls
+//     purely through open/closed state selectors. Its resting state is
+//     height: 0, so an imported instance renders nothing visible.
+//   - NavigationBar is position:sticky, display:none under --bp-mobile, and
+//     carries transition:persist; a second persisted instance on another route
+//     risks interfering with ClientRouter.
+//
+// The cost is drift. When you change either source, update this file — see the
+// change checklist in docs/design-system.md.
+
+const ARCHIVE = [
+  {
+    cls: "main-button",
+    label: ".main-button",
+    text: "Sort",
+    note: "Bar buttons (Sort, Filter, zoom). 40px tall, 14px, letter-spacing 0.6px.",
+  },
+  {
+    cls: "main-button sg-disabled-35",
+    label: ".zoom-button:disabled",
+    text: "+",
+    note: "opacity 0.35, cursor default.",
+  },
+  {
+    cls: "sort-button",
+    label: ".sort-button",
+    text: "Project",
+    note: "Shown at its OPEN size (168x40). The resting 0x0 is an animation artefact, not a design state.",
+  },
+  {
+    cls: "sort-button is-active",
+    label: ".sort-button.mixitup-control-active",
+    text: "Random",
+    note: "Selected: ::before fill grows to 100%, text inverts to --bg-color.",
+  },
+  {
+    cls: "filter-button",
+    label: ".filter-button",
+    text: "Houdini",
+    note: "Shown at its open size (168x32).",
+  },
+  {
+    cls: "filter-button is-active",
+    label: ".filter-button.mixitup-control-active",
+    text: "Blender",
+    note: "Selected, same ::before fill mechanism at 32px.",
+  },
+  {
+    cls: "filter-button sg-disabled-25",
+    label: ".filter-disabled",
+    text: "ZBrush",
+    note: "opacity 0.25 — applied when a filter would yield no results.",
+  },
+  {
+    cls: "active-filter",
+    label: ".active-filter",
+    text: "Science",
+    note: "The collapsed chip in the bar. 168x32, 11px, always filled.",
+  },
+];
+---
+
+<p class="sg-note">
+  <strong>Snapshot, not live.</strong> These are re-declarations of the resting
+  appearance of controls that live in
+  <code>ArchiveGallery_BoxFilters.astro</code> and
+  <code>NavigationBar.astro</code>. Neither can be imported here — one needs
+  build-time Cloudinary data and renders at <code>height: 0</code> until MixItUp
+  opens it, the other is <code>position: sticky</code> with
+  <code>transition:persist</code>. Exact source line ranges are in this
+  component's frontmatter, and the change checklist is in
+  <code>docs/design-system.md</code>.
+</p>
+
+<div class="sg-chrome">
+  <h3 class="sg-subtitle">Archive controls</h3>
+  <div class="sg-chrome-list">
+    {
+      ARCHIVE.map((c) => (
+        <div class="sg-chrome-row">
+          <div class="sg-chrome-meta">
+            <code class="sg-label">{c.label}</code>
+            <span class="sg-value">{c.note}</span>
+          </div>
+          <div class="sg-demo sg-chrome-frame">
+            <button type="button" class={c.cls}>
+              <span>{c.text}</span>
+            </button>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <h3 class="sg-subtitle">Nav links</h3>
+  <div class="sg-chrome-list">
+    <div class="sg-chrome-row">
+      <div class="sg-chrome-meta">
+        <code class="sg-label">.button</code>
+        <span class="sg-value">Default — black text, no fill.</span>
+      </div>
+      <div class="sg-demo sg-chrome-frame">
+        <a href="#chrome" class="nav-button">Index</a>
+      </div>
+    </div>
+    <div class="sg-chrome-row">
+      <div class="sg-chrome-meta">
+        <code class="sg-label">.button.active</code>
+        <span class="sg-value">
+          Current page — ::before bar at 100% width, text inverts.
+        </span>
+      </div>
+      <div class="sg-demo sg-chrome-frame">
+        <a href="#chrome" class="nav-button is-active">Portfolio</a>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="sg-subtitle">Focus</h3>
+  <p class="sg-note">
+    Tab into the controls above. <strong
+      >None of these controls declares a <code>:focus-visible</code> style in the
+      source</strong
+    > — the only keyboard affordance is the browser default outline, which on the
+    filled black variants sits on a black background. That is a real
+    accessibility gap in the site, not an omission in this page; no invented
+    focus style is shown here, because the site does not have one.
+  </p>
+</div>
+
+<style>
+  @import "../../styles/global.css";
+
+  .sg-chrome-list {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .sg-chrome-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-3);
+    align-items: baseline;
+    padding-bottom: 6px;
+  }
+
+  .sg-chrome-frame {
+    place-items: start;
+    padding: var(--space-3);
+  }
+
+  /* --- Copied from ArchiveGallery_BoxFilters.astro ---------------------- */
+
+  .sg-chrome button {
+    font-family: PowerGrotesk-Light;
+    letter-spacing: 0.6px;
+    border: 0;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  /* :465-480 */
+  .main-button {
+    height: 40px;
+    font-size: 14px;
+    color: var(--bg-color);
+    background-color: black;
+    padding: 0 8px;
+    min-width: 54px;
+  }
+
+  /* :618-681, at the open size --- #sort.active ~ #sort-buttons .sort-button */
+  .sort-button {
+    width: 168px;
+    height: 40px;
+    display: grid;
+    font-size: var(--font-size-desktop);
+    color: black;
+    background-color: transparent;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* :764-822, at the open size --- #filter.active + #filter-box .filter-button */
+  .filter-button {
+    width: 168px;
+    height: 32px;
+    display: grid;
+    font-size: var(--font-size-desktop);
+    color: black;
+    background-color: transparent;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* The fill is a ::before pseudo-element grown from 0% to 100%, not a
+     background-color swap — that is what makes the selection animate. */
+  .sort-button::before,
+  .filter-button::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0%;
+    background-color: black;
+    transition: width 0.5s ease;
+  }
+
+  .sort-button.is-active::before,
+  .filter-button.is-active::before {
+    width: 100%;
+  }
+
+  .sort-button > span,
+  .filter-button > span {
+    margin: auto;
+    position: relative;
+  }
+
+  .sort-button.is-active > span,
+  .filter-button.is-active > span {
+    color: var(--bg-color);
+  }
+
+  /* :1095-1117 */
+  .active-filter {
+    width: 168px;
+    height: 32px;
+    display: grid;
+    place-content: center;
+    font-size: 11px;
+    color: var(--bg-color);
+    background-color: black;
+    text-align: center;
+  }
+
+  /* :824-827 and :524-527 */
+  .sg-disabled-25 {
+    opacity: 0.25;
+    cursor: default;
+  }
+
+  .sg-disabled-35 {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  /* --- Copied from NavigationBar.astro :287-340 ------------------------- */
+
+  .nav-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    width: 160px;
+    color: black;
+    font-size: var(--font-size-desktop-h1);
+    text-decoration: none;
+    transition: color 0.3s ease 0.15s;
+    z-index: 1;
+  }
+
+  .nav-button::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0%;
+    height: 100%;
+    background-color: black;
+    transition: width 0.6s ease;
+    z-index: -1;
+  }
+
+  .nav-button.is-active {
+    color: var(--bg-color);
+  }
+
+  .nav-button.is-active::before {
+    width: 100%;
+  }
+</style>
