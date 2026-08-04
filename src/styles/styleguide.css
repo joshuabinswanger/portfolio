@@ -1,0 +1,11 @@
+/* Styles for the internal /styleguide page only. Loaded exclusively by
+   src/pages/styleguide.astro, so nothing here reaches the public site.
+   All classes are `sg-` prefixed to guarantee no collision. */
+
+.sg-page {
+  font-family: var(--font-light);
+  color: var(--color-text);
+  padding: var(--space-5) var(--space-4) calc(var(--space-7) * 2);
+  max-width: 1100px;
+  margin: 0 auto;
+}

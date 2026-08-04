@@ -1,0 +1,28 @@
+---
+// Internal design-system reference. Unlisted: not linked from any nav
+// component, noindex via Main.astro, and filtered out of the sitemap in
+// astro.config.mjs. See docs/design-system.md.
+import Main from "../layouts/Main.astro";
+import "../styles/styleguide.css";
+---
+
+<Main
+  title="Design System — Rhizome Visuals (internal)"
+  description="Internal reference rendering the design tokens and UI primitives of rhizome.ch."
+  noindex={true}
+>
+  <div class="sg-page">
+    <header class="sg-header">
+      <h1 class="sg-title">Design System</h1>
+      <p class="sg-lede">
+        Internal reference for rhizome.ch. Every token below is read live from
+        <code>src/styles/global.css</code> — resize the window to see the
+        per-breakpoint values change.
+      </p>
+    </header>
+
+    <main class="sg-body" id="main">
+      <!-- Sections are added in Tasks 4-10. -->
+    </main>
+  </div>
+</Main>
