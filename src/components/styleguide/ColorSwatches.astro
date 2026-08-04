@@ -1,0 +1,131 @@
+---
+// Every swatch fills itself with `var(--token)` rather than a literal hex, so a
+// swatch can never drift from the token it claims to show. The hex strings below
+// are documentation of the declared value only.
+
+const RAW = [
+  { name: "--bg-color", hex: "#fbf9f4", note: "Page background" },
+  {
+    name: "--bg-color-trans",
+    hex: "#fbf9f4b1",
+    note: "Translucent — used for PhotoSwipe caption backgrounds",
+  },
+  {
+    name: "--bg-light",
+    hex: "#fbf9f4",
+    note: "Duplicate of --bg-color. Redundant; kept for compatibility",
+  },
+  {
+    name: "--bg-dark",
+    hex: "#aaaaaa",
+    note: "Scrollbar thumb, skip-link background",
+  },
+  { name: "--bg-color-accent", hex: "#e7dace", note: "Accent surface" },
+];
+
+const SEMANTIC = [
+  { name: "--color-text", hex: "#000000", note: "Body text" },
+  { name: "--color-surface", hex: "var(--bg-color)", note: "Default surface" },
+  {
+    name: "--color-surface-accent",
+    hex: "var(--bg-color-accent)",
+    note: "Raised / grouped surface",
+  },
+  { name: "--color-border", hex: "var(--bg-dark)", note: "Hairline rules" },
+  {
+    name: "--color-overlay",
+    hex: "var(--bg-color-trans)",
+    note: "Scrim over media",
+  },
+];
+---
+
+<p class="sg-note">
+  Each token is shown twice — on <code>--bg-color</code> and on
+  <code>--bg-dark</code> — so alpha and low-contrast pairs are visible rather
+  than assumed.
+</p>
+
+<h3 class="sg-subtitle">Base</h3>
+<div class="sg-grid-auto">
+  {
+    RAW.map((c) => (
+      <div class="sg-card">
+        <div class="sg-pair">
+          <div class="sg-chip sg-on-light">
+            <span style={`background: var(${c.name})`} />
+          </div>
+          <div class="sg-chip sg-on-dark">
+            <span style={`background: var(${c.name})`} />
+          </div>
+        </div>
+        <code class="sg-label">{c.name}</code>
+        <span class="sg-value">{c.hex}</span>
+        <span class="sg-caption">{c.note}</span>
+      </div>
+    ))
+  }
+</div>
+
+<h3 class="sg-subtitle">Semantic aliases</h3>
+<p class="sg-note">
+  Added 2026-08-04. These resolve to the base tokens above; nothing in the
+  existing codebase consumes them yet — use them in new code.
+</p>
+<div class="sg-grid-auto">
+  {
+    SEMANTIC.map((c) => (
+      <div class="sg-card">
+        <div class="sg-pair">
+          <div class="sg-chip sg-on-light">
+            <span style={`background: var(${c.name})`} />
+          </div>
+          <div class="sg-chip sg-on-dark">
+            <span style={`background: var(${c.name})`} />
+          </div>
+        </div>
+        <code class="sg-label">{c.name}</code>
+        <span class="sg-value">→ {c.hex}</span>
+        <span class="sg-caption">{c.note}</span>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  @import "../../styles/global.css";
+
+  .sg-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  .sg-chip {
+    height: 52px;
+    display: grid;
+    place-items: stretch;
+    padding: 8px;
+  }
+
+  .sg-on-light {
+    background: var(--bg-color);
+  }
+
+  .sg-on-dark {
+    background: var(--bg-dark);
+  }
+
+  /* The inner span carries the token colour; the parent supplies the backing
+     so translucent tokens read differently against each. */
+  .sg-chip span {
+    display: block;
+    border: var(--border-size) solid #00000022;
+  }
+
+  .sg-caption {
+    font-size: 11px;
+    line-height: 1.45;
+    color: #555;
+  }
+</style>
