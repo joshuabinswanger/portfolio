@@ -6,6 +6,7 @@ import Main from "../layouts/Main.astro";
 import Section from "../components/styleguide/Section.astro";
 import BreakpointReadout from "../components/styleguide/BreakpointReadout.astro";
 import ColorSwatches from "../components/styleguide/ColorSwatches.astro";
+import TypeSpecimens from "../components/styleguide/TypeSpecimens.astro";
 import "../styles/styleguide.css";
 
 // Section ids are the contract between this ToC and the <Section> calls below.
@@ -56,7 +57,9 @@ const SECTIONS = [
         <Section id="color" title="Colour">
           <ColorSwatches />
         </Section>
-        <Section id="type" title="Type" />
+        <Section id="type" title="Type">
+          <TypeSpecimens />
+        </Section>
         <Section id="spacing" title="Spacing & Border" />
         <Section id="grid" title="Grid" />
         <Section id="brackets" title="Brackets" />
