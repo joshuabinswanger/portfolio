@@ -1,0 +1,134 @@
+---
+// Live readout of everything that varies by viewport in this codebase.
+//
+// The grid values are MEASURED, not hardcoded: the hidden probe below carries
+// the same per-breakpoint grid-template-columns rules as .grid-container in
+// src/layouts/GridLayout.astro, and the script reads its computed style. If a
+// --grid-layout-columns-* token changes, this panel follows automatically.
+---
+
+<dl class="sg-readout">
+  <dt>Viewport width</dt>
+  <dd class="sg-value" id="sg-rd-width">—</dd>
+
+  <dt>Active <code>@custom-media</code></dt>
+  <dd class="sg-value" id="sg-rd-bp">—</dd>
+
+  <dt><code>--scrollbar-width</code></dt>
+  <dd class="sg-value" id="sg-rd-sbw">—</dd>
+
+  <dt>Grid columns</dt>
+  <dd class="sg-value" id="sg-rd-cols">—</dd>
+
+  <dt>Column width</dt>
+  <dd class="sg-value" id="sg-rd-colw">—</dd>
+
+  <dt>Device pixel ratio</dt>
+  <dd class="sg-value" id="sg-rd-dpr">—</dd>
+</dl>
+
+<noscript>
+  <p class="sg-note">This panel measures the live viewport and needs JavaScript.</p>
+</noscript>
+
+<!-- Offscreen probe. Mirrors .grid-container in src/layouts/GridLayout.astro. -->
+<div id="sg-probe" aria-hidden="true"></div>
+
+<script>
+  function activeBreakpoints(w: number): string[] {
+    const names: string[] = [];
+    // These ranges mirror the @custom-media queries in src/styles/global.css.
+    // mobile-small is a subset of mobile, so both can match at once.
+    if (w <= 375) names.push("--bp-mobile-small");
+    if (w <= 767) names.push("--bp-mobile");
+    if (w >= 768 && w <= 1119) names.push("--bp-tablet");
+    if (w >= 1120 && w <= 1699) names.push("--bp-desktop");
+    if (w >= 1700) names.push("--bp-desktop-wide");
+    return names;
+  }
+
+  function update() {
+    const probe = document.getElementById("sg-probe");
+    if (!probe) return;
+
+    const cols = getComputedStyle(probe)
+      .gridTemplateColumns.split(" ")
+      .filter(Boolean);
+
+    const set = (id: string, value: string) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    };
+
+    set("sg-rd-width", `${window.innerWidth}px`);
+    set("sg-rd-bp", activeBreakpoints(window.innerWidth).join("  +  ") || "none");
+    set(
+      "sg-rd-sbw",
+      getComputedStyle(document.documentElement)
+        .getPropertyValue("--scrollbar-width")
+        .trim() || "(unset)",
+    );
+    set("sg-rd-cols", String(cols.length));
+    set("sg-rd-colw", cols[0] ?? "—");
+    set("sg-rd-dpr", String(window.devicePixelRatio));
+  }
+
+  window.addEventListener("resize", update);
+  // A ResizeObserver on the root catches viewport changes that never fire a
+  // `resize` event — browser zoom, devtools device emulation, and embedded
+  // preview panes that resize the frame directly.
+  if ("ResizeObserver" in window) {
+    new ResizeObserver(update).observe(document.documentElement);
+  }
+  // ClientRouter is in play, so bind to astro:page-load as well as running now.
+  document.addEventListener("astro:page-load", update);
+  update();
+</script>
+
+<style>
+  @import "../../styles/global.css";
+
+  .sg-readout {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 6px var(--space-4);
+    margin: 0;
+    align-items: baseline;
+  }
+
+  dt {
+    font-size: 12px;
+  }
+
+  dd {
+    margin: 0;
+  }
+
+  /* Measured, never displayed. Kept in the layout (not display:none) because a
+     display:none grid still computes grid-template-columns, but keeping it
+     rendered-yet-invisible is the safer guarantee across engines. */
+  #sg-probe {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    pointer-events: none;
+
+    display: grid;
+    grid-template-columns: var(--grid-layout-columns-desktop);
+
+    @media (--bp-mobile) {
+      grid-template-columns: var(--grid-layout-columns-mobile);
+    }
+
+    @media (--bp-tablet) {
+      grid-template-columns: var(--grid-layout-columns-tablet);
+    }
+
+    @media (--bp-desktop-wide) {
+      grid-template-columns: var(--grid-layout-columns-desktop-wide);
+    }
+  }
+</style>
