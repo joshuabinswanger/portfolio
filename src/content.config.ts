@@ -244,8 +244,8 @@ export const collections = {
 
   // Project stories: an ordered list of blocks rendered as a smooth-scrolling
   // narrative page at /projects/<slug>. Block-based on purpose — each block is
-  // a flat JSON-friendly object, so the same data can later be edited from an
-  // admin UI without the schema changing. See docs/stories.md.
+  // a flat object with a `type`, so a story is reordered or extended by
+  // editing YAML only. See docs/stories.md.
   stories: defineCollection({
     loader: glob({ pattern: "**/[^_]*.yaml", base: "./src/content/stories" }),
     schema: z.object({

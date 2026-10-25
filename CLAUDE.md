@@ -19,8 +19,7 @@ YAML, or head metadata/SEO, read the matching file: [galleries](docs/galleries.m
 [archive-filters](docs/archive-filters.md), [stories](docs/stories.md),
 [video-player](docs/video-player.md), [image-optimization](docs/image-optimization.md),
 [content-yaml](docs/content-yaml.md), [seo](docs/seo.md),
-[troubleshooting](docs/troubleshooting.md). The admin/CMS question is assessed in
-[admin-editing-assessment](docs/admin-editing-assessment.md).
+[troubleshooting](docs/troubleshooting.md).
 
 ## Layout
 

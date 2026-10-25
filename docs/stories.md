@@ -52,10 +52,9 @@ file name. Text fields marked *markdown* are rendered with `marked`.
 
 An `image` object is `{ src, alt, caption? }`.
 
-Blocks are deliberately flat, JSON-shaped objects with a `type` discriminator:
-that is the contract a future admin editor would write to (see
-[admin-editing-assessment](admin-editing-assessment.md)). Add a new block type
-by extending `storyBlockSchema` and adding a `case` in `Story.astro`.
+Blocks are deliberately flat objects with a `type` discriminator, so a story
+is rewritten or reordered by editing its YAML alone. Add a new block type by
+extending `storyBlockSchema` and adding a `case` in `Story.astro`.
 
 ## Motion
 
