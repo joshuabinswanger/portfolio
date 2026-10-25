@@ -696,6 +696,12 @@ const sortOptions = [
       font-size: 14px;
     }
 
+    /* Nothing to reset: take Reset out of the row so Done spans it. */
+    #filter-sort-wrapper:not(:has(.filter-button.mixitup-control-active))
+      #filter-reset-all {
+      display: none;
+    }
+
     #filter-done {
       height: 40px;
     }
