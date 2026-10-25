@@ -5,7 +5,7 @@ import { marked } from "marked";
 import ImageSlide from "./ImageSlide.astro";
 import "keen-slider/keen-slider.min.css";
 
-import { sortProjectsByYear } from "./utils.ts";
+import { getProjectMedia, sortProjectsByYear } from "./utils.ts";
 
 const projects = await getCollection("projects");
 
@@ -20,21 +20,8 @@ for (const entry of sortedProjects) {
   const projectName = entry.data.projectName;
   const startIndex = globalIndex;
 
-  // Fetch galleryImages
-  const galleryImages = await getCollection("galleryImages", ({ data }) => {
-    const imageProject = data.metadata?.project;
-    return imageProject && projectName.includes(imageProject);
-  });
-
-  const galleryVideos = await getCollection("images", ({ data }) => {
-    return (
-      data.mediaType === "video" &&
-      data.metadata?.project === projectName &&
-      data.metadata.showInProjectGallery === "yes"
-    );
-  });
-
-  const slidesCount = galleryImages.length + galleryVideos.length;
+  // Same list ImageSlide renders, so the PhotoSwipe indices line up.
+  const slidesCount = (await getProjectMedia(projectName)).length;
   globalIndex += slidesCount + 2;
 
   const projectData = {

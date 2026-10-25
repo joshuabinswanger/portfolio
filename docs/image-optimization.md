@@ -37,23 +37,23 @@ This lets Astro generate responsive optimized output.
 
 ## Cloudinary Images
 
-Cloudinary images are loaded through `astro-cloudinary` collections:
+All gallery thumbnails and slides (homepage, project index, archive) are local
+assets. Cloudinary remains only for:
 
-- `galleryImages`: `Portfolio/Gallery`
-- `highResImages`: `Portfolio/HighRes`
-
-Project-list slides render Cloudinary images with `CldImage`.
+- `highResImages` (`Portfolio/HighRes`), an `astro-cloudinary` collection used
+  for high-resolution lightbox lookups.
+- The unlisted `/nzz-bewerbung` page, which renders `CldImage` directly.
 
 ## High-Resolution Lightbox Images
 
-Cloudinary gallery images can point to high-resolution versions through:
+Image entries can point to a Cloudinary high-resolution version through:
 
 ```yaml
 metadata:
   highres_public_id: cloudinary_public_id
 ```
 
-When present, the project-list lightbox uses the high-resolution asset dimensions and URL. Otherwise it falls back to the base gallery image.
+When present, the archive lightbox uses the high-resolution asset dimensions and URL. Otherwise it falls back to the local image.
 
 Local image support for high-resolution lightbox data exists in `gallery/utils.ts`, but the `GalleryElement.astro` markup currently keeps that path commented as a TODO.
 
@@ -126,4 +126,4 @@ Browser checks:
 - Images do not overflow gallery columns.
 - PhotoSwipe opens with the correct aspect ratio.
 - Local image paths resolve case-insensitively but still start with `/src/assets/`.
-- Project-list Cloudinary images still load after changing gallery logic.
+- Project-index sliders and their lightbox still open on the right slide after changing gallery logic.

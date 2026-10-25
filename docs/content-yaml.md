@@ -10,7 +10,6 @@ Defined in `src/content.config.ts`:
 - `projects`: individual project entries from `src/content/projects`.
 - `images`: local image and Mux video entries from `src/content/images`.
 - `links`: external links from `src/content/links`.
-- `galleryImages`: Cloudinary gallery images from `Portfolio/Gallery`.
 - `highResImages`: Cloudinary high-resolution images from `Portfolio/HighRes`.
 
 ## Portfolio Entries
@@ -48,7 +47,7 @@ projectDescription: ...
 credits: ...
 ```
 
-`projectName` must match Cloudinary metadata and local video/image metadata when the media should appear in that project.
+`projectName` must equal `metadata.project` on the local image/video entries (with `showInProjectGallery: "yes"`) that should appear in that project.
 
 ## Local Image Entries
 

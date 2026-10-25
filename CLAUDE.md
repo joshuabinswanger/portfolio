@@ -2,7 +2,7 @@
 
 Personal portfolio of Joshua Binswanger (Rhizome Visuals). Astro 6 static site,
 TypeScript, PostCSS (preset-env + nesting, no Tailwind). Content comes from
-YAML collections plus two remote Cloudinary collections loaded at build time.
+YAML collections plus one remote Cloudinary collection (high-res lookups) loaded at build time.
 
 ## Commands
 

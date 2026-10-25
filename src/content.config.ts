@@ -140,17 +140,8 @@ const storyBlockSchema = z.discriminatedUnion("type", [
 export type StoryBlock = z.infer<typeof storyBlockSchema>;
 
 export const collections = {
-  galleryImages: defineCollection({
-    loader: cldAssetsLoader({
-      context: true,
-      folder: "Portfolio/Gallery",
-      tags: true,
-      metadata: true,
-      limit: 300,
-    }),
-    schema: cloudinaryAssetSchema,
-  }),
-
+  // Cloudinary high-res originals, looked up by metadata.highres_public_id for
+  // lightboxes. All gallery thumbnails/slides are local (`images`).
   highResImages: defineCollection({
     loader: cldAssetsLoader({
       context: true,

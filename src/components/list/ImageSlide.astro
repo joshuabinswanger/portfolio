@@ -1,9 +1,11 @@
 ---
-import { CldImage } from "astro-cloudinary";
-import { getEntry } from "astro:content";
-import { getCollection } from "astro:content";
+// One project's slider on the project index. Images and Mux videos both come
+// from the local `images` collection (see getProjectMedia) and render through
+// the shared MediaElement, which also emits the data-* attributes the
+// project-list PhotoSwipe reads.
 import "keen-slider/keen-slider.min.css";
 import MediaElement from "../media/MediaElement.astro";
+import { getProjectMedia } from "./utils";
 
 interface Props {
   projectName: string;
@@ -14,85 +16,7 @@ interface Props {
 // Generate a unique ID for each instance
 const instanceId = Math.random().toString(36).slice(2, 11);
 
-const project = Astro.props.projectName;
-
-const projectImages = await getCollection("galleryImages", ({ data }) => {
-  return data.metadata?.project === project;
-});
-
-const projectVideos = await getCollection("images", ({ data }) => {
-  return (
-    data.mediaType === "video" &&
-    data.metadata?.project === project &&
-    data.metadata.showInProjectGallery === "yes"
-  );
-});
-
-//order projectImages
-projectImages.sort((a, b) => {
-  // Use Infinity as default for missing values to place them last in ascending sort
-  const orderA = a.data.metadata?.projectGalleryOrder ?? Infinity;
-  const orderB = b.data.metadata?.projectGalleryOrder ?? Infinity;
-
-  // Simple subtraction works for numerical sorting
-  return orderA - orderB;
-});
-
-projectVideos.sort((a, b) => {
-  const orderA = a.data.metadata?.projectGalleryOrder ?? Infinity;
-  const orderB = b.data.metadata?.projectGalleryOrder ?? Infinity;
-  return orderA - orderB;
-});
-
-const projectMedia = [
-  ...projectImages.map((image) => ({ kind: "cloudinary-image" as const, image })),
-  ...projectVideos.map((image) => ({ kind: "mux-video" as const, image })),
-].sort((a, b) => {
-  const orderA = a.image.data.metadata?.projectGalleryOrder ?? Infinity;
-  const orderB = b.image.data.metadata?.projectGalleryOrder ?? Infinity;
-  return orderA - orderB;
-});
-
-const highResData = new Map<string, {
-  width: number;
-  height: number;
-  url: string;
-}>();
-
-for (const image of projectImages) {
-  // Initialize a default high-resolution entry object
-  let highResEntry = null;
-
-  // Check if highres_public_id is present and fetch the entry if available
-  if (image.data.metadata?.highres_public_id) {
-    try {
-      highResEntry = await getEntry(
-        "highResImages",
-        image.data.metadata.highres_public_id,
-      );
-      /* console.log(highResEntry.data.secure_url); */
-    } catch (error) {
-      console.error(
-        `Failed to fetch highResImages for ${image.data.metadata.highres_public_id}:`,
-        error,
-      );
-    }
-    // Push the final data, merging base and high-resolution details
-    highResData.set(image.id, {
-      width: highResEntry.data.width,
-      height: highResEntry.data.height,
-      url: highResEntry.data.secure_url,
-    });
-  } else {
-    highResData.set(image.id, {
-      width: image.data.width,
-      height: image.data.height,
-      url: image.data.secure_url,
-    });
-  }
-}
-
-/* console.log(projectImages.metadata?.description_title); */
+const projectMedia = await getProjectMedia(Astro.props.projectName);
 ---
 
 <div
@@ -102,55 +26,20 @@ for (const image of projectImages) {
 >
   {
     projectMedia.map((media, index) => {
-      // Compute index: startIndex + 1 offset plus the current image index
+      // Slide 0 of each project is the PhotoSwipe title slide, hence +1.
       const computedIndex = Astro.props.startIndex + 1 + index;
-
-      if (media.kind === "mux-video") {
-        return (
-          <div
-            class:list={["keen-slider__slide ImageElement"]}
-            data-index={computedIndex}
-          >
-            <MediaElement
-              computedIndex={computedIndex}
-              media={media.image}
-              sizes="(max-width: 650px) 90vw, (max-width: 1200px) 50vw, 33vw"
-              loading={index === 0 ? "eager" : "lazy"}
-            />
-          </div>
-        );
-      }
-
-      const image = media.image;
-      const highRes = highResData.get(image.id);
 
       return (
         <div
           class:list={["keen-slider__slide ImageElement"]}
           data-index={computedIndex}
         >
-          <a
-            onclick={`pswpLightbox.loadAndOpen(${computedIndex}); return false;`}
-            class:list={["photo-link photoswipeData"]}
-            href={highRes?.url ?? image.data.secure_url}
-            data-media-type="image"
-            data-pswp-width={highRes?.width ?? image.data.width}
-            data-pswp-height={highRes?.height ?? image.data.height}
-            target="_blank"
-            data-description_title={image.data.metadata?.description_title}
-            data-description_text={image.data.metadata?.description_text}
-            data-link={image.data.metadata?.link}
-          >
-            <CldImage
-              src={image.data.public_id}
-              data-src={image.data.secure_url}
-              width={image.data.width}
-              height={image.data.height}
-              sizes="(max-width: 650px) 90vw, (max-width: 1200px) 50vw, 33vw"
-              alt={image.data.metadata?.description_title}
-              format="avif"
-            />
-          </a>
+          <MediaElement
+            computedIndex={computedIndex}
+            media={media}
+            sizes="(max-width: 650px) 90vw, (max-width: 1200px) 50vw, 33vw"
+            loading={index === 0 ? "eager" : "lazy"}
+          />
         </div>
       );
     })
@@ -158,9 +47,6 @@ for (const image of projectImages) {
 </div>
 
 <style>
-  .image-slide {
-  }
-
   a {
     display: block;
     width: 100%;

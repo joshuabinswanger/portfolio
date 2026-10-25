@@ -82,7 +82,6 @@ Cloudinary content collections depend on environment variables and network acces
 
 Relevant collections:
 
-- `galleryImages`
 - `highResImages`
 
 If Cloudinary metadata is missing, check the asset metadata in Cloudinary and verify that `metadata.project`, ordering fields, and `highres_public_id` are present where expected.

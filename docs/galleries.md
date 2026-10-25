@@ -33,14 +33,18 @@ Because those custom slides count as PhotoSwipe slides, `startIndex` and `slides
 
 ## Project List Gallery
 
-The project-list view combines two media systems:
+The project-list view reads only the local `images` collection: every image
+or Mux video whose `metadata.project` equals the project's `projectName` and
+whose `showInProjectGallery` is `"yes"`, sorted by `metadata.projectGalleryOrder`
+(missing order sorts last). `getProjectMedia()` in `src/components/list/utils.ts`
+is the single source for both the slide count (`ProjectList.astro`, used for
+PhotoSwipe indices) and the slides themselves (`ImageSlide.astro`), which
+render through the shared `MediaElement`.
 
-- Cloudinary images from the `galleryImages` content collection.
-- Local Mux videos from the `images` content collection where `mediaType: video` and `showInProjectGallery: "yes"`.
-
-Both are sorted by `metadata.projectGalleryOrder`.
-
-Cloudinary images render with `CldImage`. Mux videos render with `MediaElement`.
+Until 2026-10 the images came from the Cloudinary `galleryImages` collection
+and the `showInProjectGallery` flag was ignored for images. The local YAML was
+already a mirror, so the switch kept every project's images and order; four
+entries that were displayed despite a `"no"` flag were set to `"yes"`.
 
 ## Archive Gallery
 
