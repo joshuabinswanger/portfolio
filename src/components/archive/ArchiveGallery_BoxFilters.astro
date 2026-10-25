@@ -504,7 +504,14 @@ const sortOptions = [
       display: none;
     }
 
-    #filter-sort-wrapper > * {
+    /* The row itself lets taps through to the grid; only the two pills and the
+       sheet take them. The backdrop is deliberately NOT listed: it is a
+       full-screen layer above everything, so it may only catch taps while the
+       sheet is open (rule below). A blanket `> *` here once made the invisible
+       backdrop swallow every tap on the page. */
+    #filter,
+    #zoom-wrapper,
+    #filter-box {
       pointer-events: auto;
     }
 
@@ -557,6 +564,10 @@ const sortOptions = [
     #filter-sort-wrapper.is-open #filter-backdrop {
       opacity: 1;
       pointer-events: auto;
+    }
+
+    #filter-sort-wrapper:not(.is-open) #filter-backdrop {
+      pointer-events: none;
     }
 
     /* The sheet */

@@ -97,8 +97,8 @@ const isActive = (href: string) => norm(href) === here;
       width: 100%;
     }
 
-    /* Floating pill — mirrors NavigationBarMobile.astro; tokens live in
-       global.css (--mobile-nav-*, --surface-*). */
+    /* Floating bar — mirrors NavigationBarMobile.astro: inset and lifted,
+       otherwise the original square, solid look. Tokens in global.css. */
     #Menu {
       position: fixed;
       bottom: var(--mobile-nav-bottom);
@@ -106,12 +106,7 @@ const isActive = (href: string) => norm(href) === here;
       right: var(--mobile-nav-inset);
       z-index: 1001;
       padding: var(--mobile-nav-pad);
-      border-radius: 999px;
-      background-color: var(--surface-glass);
-      -webkit-backdrop-filter: var(--surface-blur);
-      backdrop-filter: var(--surface-blur);
-      border: var(--border-size) solid var(--surface-line);
-      box-shadow: var(--surface-shadow);
+      background-color: var(--bg-color);
     }
 
     #MainWrapper {
@@ -121,8 +116,6 @@ const isActive = (href: string) => norm(href) === here;
       grid-template-columns: 12px 1fr 24px 1fr 12px;
       justify-items: center;
       z-index: 1002;
-      border-radius: 999px;
-      overflow: hidden;
       transition: grid-template-columns 0.6s ease;
     }
 
@@ -141,15 +134,14 @@ const isActive = (href: string) => norm(href) === here;
       content: "";
       position: absolute;
       left: -12px;
-      right: -12px;
-      top: 0;
       bottom: 0;
-      border-radius: 999px;
+      width: calc(100% + 24px);
+      height: 0%;
       background-color: black;
-      transform: translateY(105%);
-      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: height 0.6s ease;
       z-index: -1;
-      will-change: transform;
+      transform-origin: bottom;
+      will-change: height;
     }
 
     .button.active {
@@ -157,13 +149,7 @@ const isActive = (href: string) => norm(href) === here;
     }
 
     .button.active::after {
-      transform: translateY(0);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .button::after {
-        transition: none;
-      }
+      height: 100%;
     }
 
     /* General main-button styling */
