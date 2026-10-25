@@ -142,7 +142,7 @@
      stacks above the nav using --mobile-nav-stack (bottom offset + pad +
      height + pad) plus --mobile-bar-gap. */
   --mobile-nav-inset: 10px;
-  --mobile-nav-pad: 3px;
+  --mobile-nav-pad: 0px; /* bar edge = bracket lines, no inner border */
   --mobile-nav-height: 40px;
   --mobile-nav-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
   --mobile-nav-stack: calc(
