@@ -255,7 +255,7 @@ const sortOptions = [
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: rgba(0, 0, 0, 0.55);
-    margin: 0 0 8px;
+    margin: 0 0 5px;
     white-space: nowrap;
   }
 
@@ -270,9 +270,10 @@ const sortOptions = [
   .chip-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 4px;
   }
 
+  /* All controls are square, like the rest of the site (nav, brackets). */
   .chip,
   .sort-button,
   .zoom-button,
@@ -285,6 +286,7 @@ const sortOptions = [
     line-height: 1;
     color: black;
     border: 0;
+    border-radius: 0;
     background: transparent;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
@@ -301,26 +303,23 @@ const sortOptions = [
   }
 
   .chip {
-    height: 32px;
-    padding: 0 14px;
-    border-radius: 999px;
-    border: var(--border-size) solid var(--surface-line);
+    height: 26px;
+    padding: 0 8px;
+    border: var(--border-size) solid black;
     transition:
       background-color 0.2s ease,
       color 0.2s ease,
-      border-color 0.2s ease,
       opacity 0.2s ease;
   }
 
   @media (hover: hover) {
-    .chip:not(:disabled):hover {
-      border-color: black;
+    .chip:not(:disabled):not(.mixitup-control-active):hover {
+      background-color: rgba(0, 0, 0, 0.07);
     }
   }
 
   .chip.mixitup-control-active {
     background-color: black;
-    border-color: black;
     color: var(--bg-color);
   }
 
@@ -333,21 +332,16 @@ const sortOptions = [
   .segmented {
     display: inline-flex;
     align-items: center;
-    gap: 2px;
-    padding: 3px;
-    border-radius: 999px;
-    border: var(--border-size) solid var(--surface-line);
+    gap: 0;
+    border: var(--border-size) solid black;
   }
 
-  .sort-button,
-  .zoom-button {
+  .sort-button {
     height: 26px;
-    padding: 0 12px;
-    border-radius: 999px;
+    padding: 0 10px;
     transition:
       background-color 0.2s ease,
-      color 0.2s ease,
-      opacity 0.2s ease;
+      color 0.2s ease;
   }
 
   .sort-button.mixitup-control-active {
@@ -355,14 +349,23 @@ const sortOptions = [
     color: var(--bg-color);
   }
 
+  /* Zoom: two black squares, as the original bar had them. */
+  #zoom-wrapper.segmented {
+    gap: 2px;
+    border: 0;
+  }
+
   .zoom-button {
-    width: 34px;
+    width: 26px;
+    height: 26px;
     padding: 0;
     font-size: 16px;
+    background-color: black;
+    color: var(--bg-color);
+    transition: opacity 0.2s ease;
   }
 
   @media (hover: hover) {
-    .zoom-button:not(:disabled):hover,
     .sort-button:not(.mixitup-control-active):hover {
       background-color: rgba(0, 0, 0, 0.07);
     }
@@ -374,17 +377,16 @@ const sortOptions = [
   }
 
   .text-button {
-    height: 32px;
-    padding: 0 10px;
+    height: 26px;
+    padding: 0 6px;
     text-decoration: underline;
     text-underline-offset: 3px;
     text-decoration-color: rgba(0, 0, 0, 0.3);
   }
 
   .solid-button {
-    height: 44px;
-    padding: 0 22px;
-    border-radius: 999px;
+    height: 36px;
+    padding: 0 16px;
     background-color: black;
     color: var(--bg-color);
   }
@@ -401,7 +403,7 @@ const sortOptions = [
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: start;
     column-gap: 24px;
-    padding: 14px 0 14px;
+    padding: 10px 0;
     margin-bottom: 8px;
     background-color: var(--surface-glass);
     -webkit-backdrop-filter: var(--surface-blur);
@@ -436,14 +438,14 @@ const sortOptions = [
     display: flex;
     flex-wrap: wrap;
     align-items: start;
-    gap: 12px 28px;
+    gap: 8px 20px;
     min-width: 0;
   }
 
   #group-wrapper {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px 28px;
+    gap: 8px 20px;
     min-width: 0;
     flex: 1 1 auto;
   }
@@ -515,18 +517,17 @@ const sortOptions = [
       pointer-events: auto;
     }
 
-    /* Trigger pill (solid) and zoom pill (glass) sit at the two ends. */
+    /* Trigger and zoom: square black blocks at the two ends, like the
+       original bar's buttons. */
     #filter {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      height: 44px;
-      padding: 0 18px;
-      border-radius: 999px;
+      height: 40px;
+      padding: 0 12px;
       background-color: black;
       color: var(--bg-color);
       font-size: 14px;
-      box-shadow: var(--surface-shadow);
     }
 
     #filter .count:not(:empty) {
@@ -535,17 +536,10 @@ const sortOptions = [
 
     #zoom-wrapper {
       margin: 0;
-      height: 44px;
-      box-sizing: border-box;
-      padding: 4px;
-      background-color: var(--surface-glass);
-      -webkit-backdrop-filter: var(--surface-blur);
-      backdrop-filter: var(--surface-blur);
-      box-shadow: var(--surface-shadow);
     }
 
     .zoom-button {
-      height: 34px;
+      height: 40px;
       width: 40px;
     }
 
@@ -582,10 +576,9 @@ const sortOptions = [
       gap: 0;
       max-height: min(82dvh, 680px);
       box-sizing: border-box;
-      padding: 0 20px calc(16px + env(safe-area-inset-bottom, 0px));
-      border-radius: 24px 24px 0 0;
+      padding: 0 16px calc(12px + env(safe-area-inset-bottom, 0px));
       background-color: var(--bg-color);
-      box-shadow: 0 -12px 40px -16px rgba(0, 0, 0, 0.4);
+      border-top: var(--border-size) solid black;
       transform: translateY(100%);
       visibility: hidden;
       transition:
@@ -601,14 +594,29 @@ const sortOptions = [
         visibility 0s linear 0s;
     }
 
+    /* Drag handle: a full-width 28px strip (the hit area for drag-to-close,
+       see initSheetDrag in filters.ts) with a short bar drawn in the middle.
+       touch-action: none so the browser hands the gesture to us. */
     .sheet-handle {
       display: block;
+      position: relative;
       flex: 0 0 auto;
-      width: 40px;
-      height: 4px;
-      margin: 10px auto 6px;
-      border-radius: 999px;
-      background-color: rgba(0, 0, 0, 0.18);
+      align-self: stretch;
+      height: 28px;
+      margin: 0 -16px;
+      touch-action: none;
+      cursor: grab;
+    }
+
+    .sheet-handle::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 12px;
+      width: 36px;
+      height: 3px;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.3);
     }
 
     #group-wrapper {
@@ -619,22 +627,22 @@ const sortOptions = [
       -webkit-overflow-scrolling: touch;
       display: flex;
       flex-direction: column;
-      gap: 18px;
-      padding: 8px 0 12px;
+      gap: 14px;
+      padding: 0 0 10px;
     }
 
     .filter-title {
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
 
     .chip-row {
-      gap: 8px;
+      gap: 4px;
     }
 
     /* Touch-sized controls inside the sheet. */
     .chip {
-      height: 40px;
-      padding: 0 16px;
+      height: 34px;
+      padding: 0 10px;
       font-size: 14px;
     }
 
@@ -658,14 +666,23 @@ const sortOptions = [
       flex: 0 0 auto;
       align-self: stretch;
       display: flex;
-      gap: 12px;
-      padding-top: 12px;
+      gap: 8px;
+      padding-top: 10px;
       border-top: var(--border-size) solid var(--surface-line);
     }
 
     #filter-reset-all {
-      height: 44px;
+      height: 40px;
       font-size: 14px;
+    }
+
+    #filter-done {
+      height: 40px;
+    }
+
+    /* While a finger drags the sheet, it follows 1:1 (no easing). */
+    #filter-box.is-dragging {
+      transition: none;
     }
 
     #filter-done {

@@ -123,6 +123,8 @@ function initFilterSheet(): () => void {
   document.addEventListener("keydown", onKey);
   mobile.addEventListener("change", onBreakpoint);
 
+  initSheetDrag(wrapper, box, backdrop, close);
+
   setOpen(false);
 
   return () => {
@@ -394,6 +396,109 @@ function isPhonePortrait() {
 /////////////////////////////////////////
 ////////////// page load ////////////////
 ////////////////////////////////////////
+
+// Drag-to-close for the mobile sheet. A drag engages when it starts on the
+// handle strip, or anywhere in the sheet while the option list is scrolled to
+// the top and the finger moves down. The sheet follows the finger; on release
+// it closes if pulled past a quarter of its height or flicked down, otherwise
+// it springs back. Touch only (the sheet only exists on phones). Listeners
+// live on the sheet element, so they go away with it on a page swap.
+const DRAG_SLOP = 6; // px of movement before we decide drag vs. scroll/tap
+const DRAG_CLOSE_RATIO = 0.25;
+const DRAG_FLICK_VELOCITY = 0.5; // px per ms
+
+function initSheetDrag(
+  wrapper: HTMLElement,
+  box: HTMLElement,
+  backdrop: HTMLElement | null,
+  close: () => void,
+) {
+  const scroller = document.getElementById("group-wrapper");
+  const handle = box.querySelector<HTMLElement>(".sheet-handle");
+
+  let tracking = false;
+  let engaged = false;
+  let fromHandle = false;
+  let startY = 0;
+  let lastY = 0;
+  let lastT = 0;
+  let velocity = 0;
+
+  const reset = () => {
+    box.classList.remove("is-dragging");
+    box.style.transform = "";
+    if (backdrop) backdrop.style.opacity = "";
+  };
+
+  box.addEventListener(
+    "touchstart",
+    (event) => {
+      if (!wrapper.classList.contains(SHEET_OPEN_CLASS) || event.touches.length !== 1) {
+        tracking = false;
+        return;
+      }
+      const y = event.touches[0].clientY;
+      tracking = true;
+      engaged = false;
+      fromHandle = !!handle && handle.contains(event.target as Node);
+      startY = lastY = y;
+      lastT = event.timeStamp;
+      velocity = 0;
+    },
+    { passive: true },
+  );
+
+  box.addEventListener(
+    "touchmove",
+    (event) => {
+      if (!tracking) return;
+      const y = event.touches[0].clientY;
+      const dy = y - startY;
+
+      if (!engaged) {
+        if (Math.abs(dy) < DRAG_SLOP) return;
+        const listAtTop = !scroller || scroller.scrollTop <= 0;
+        if (dy > 0 && (fromHandle || listAtTop)) {
+          engaged = true;
+          box.classList.add("is-dragging");
+        } else {
+          // Upward or mid-list: let the list scroll normally.
+          tracking = false;
+          return;
+        }
+      }
+
+      event.preventDefault();
+      const offset = Math.max(0, dy);
+      box.style.transform = `translateY(${offset}px)`;
+      if (backdrop) {
+        backdrop.style.opacity = String(1 - Math.min(1, offset / box.offsetHeight));
+      }
+      const dt = event.timeStamp - lastT;
+      if (dt > 0) velocity = (y - lastY) / dt;
+      lastY = y;
+      lastT = event.timeStamp;
+    },
+    { passive: false },
+  );
+
+  const end = () => {
+    if (!tracking) return;
+    tracking = false;
+    if (!engaged) return;
+    engaged = false;
+    const pulled = lastY - startY;
+    const shouldClose =
+      pulled > box.offsetHeight * DRAG_CLOSE_RATIO || velocity > DRAG_FLICK_VELOCITY;
+    // Removing the inline transform in the same frame as the class change
+    // lets the CSS transition run from the finger's position.
+    reset();
+    if (shouldClose) close();
+  };
+
+  box.addEventListener("touchend", end);
+  box.addEventListener("touchcancel", end);
+}
 
 let teardownSheet: (() => void) | null = null;
 

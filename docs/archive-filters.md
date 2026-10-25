@@ -48,11 +48,15 @@ bracket left in this UI.
 
 ### Shared control styles
 
-- `.chip` — outlined pill, fills black when `mixitup-control-active`, dims to
-  0.28 opacity when disabled (`updateFilterButtonAvailability` sets the real
-  `disabled` attribute, so unavailable chips also leave the tab order).
-- `.segmented` — outlined pill container; the active `.sort-button` fills black.
-  The zoom reuses the same container.
+Every control is **square** (no border-radius), matching the nav and the
+bracket motif, with tight padding.
+
+- `.chip` — hairline black outline, fills black when `mixitup-control-active`,
+  dims to 0.28 opacity when disabled (`updateFilterButtonAvailability` sets the
+  real `disabled` attribute, so unavailable chips also leave the tab order).
+- `.segmented` — hairline black outlined box; the active `.sort-button` fills
+  black. `#zoom-wrapper` reuses the class but drops the outline: its two
+  buttons are solid black squares, like the original bar.
 - Reset is invisible (`opacity: 0; pointer-events: none`) until any chip is
   active — `#filter-sort-wrapper:has(.filter-button.mixitup-control-active)`.
 
@@ -77,15 +81,23 @@ on (at 952px that's the Topic row — two rows total).
   is a full-screen fixed child and would then swallow every tap on the page
   while invisible (shipped once, 2026-10-25). The backdrop takes pointer
   events only under `.is-open`.
-- `#filter` is a solid black pill on the left; `#zoom-wrapper` a glass pill on
-  the right.
+- `#filter` is a solid black square block on the left; the zoom's two black
+  squares sit on the right. Both are 40px tall.
 - `#filter-box` is a fixed bottom sheet: `translateY(100%)` + `visibility:
   hidden` when closed, `translateY(0)` when `#filter-sort-wrapper.is-open`.
-  Rounded top, drag-handle decoration (`.sheet-handle`), `max-height:
-  min(82dvh, 680px)`, safe-area bottom padding. `#group-wrapper` scrolls
-  inside it (`overscroll-behavior: contain`). Chips grow to 40px, Sort becomes
-  a full-width segmented control, and the actions row (Reset + Done) is pinned
+  Square, with a hairline top edge, `max-height: min(82dvh, 680px)` and
+  safe-area bottom padding. `#group-wrapper` scrolls inside it
+  (`overscroll-behavior: contain`). Chips grow to 34px, Sort becomes a
+  full-width segmented control, and the actions row (Reset + Done) is pinned
   at the bottom.
+- **Drag to close** (`initSheetDrag` in filters.ts). `.sheet-handle` is a
+  full-width 28px strip (`touch-action: none`) with a short bar drawn by
+  `::before`. A downward drag engages from the handle, or from anywhere in the
+  sheet while the list is scrolled to the top; mid-list or upward drags scroll
+  normally. While engaged the sheet follows the finger (`.is-dragging` kills
+  the transition) and the backdrop fades with it. Release closes past 25% of
+  the sheet height or on a flick faster than 0.5px/ms, otherwise it springs
+  back. Touch events only, since the sheet only exists on phones.
 - `#filter-backdrop` fades in behind the sheet (z 1100 / sheet 1101, above the
   nav's 1001) so the nav is dimmed too.
 
