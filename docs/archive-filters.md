@@ -69,10 +69,14 @@ on (at 952px that's the Topic row — two rows total).
 
 ## Mobile (`--bp-mobile`): floating pills + bottom sheet
 
-- The form becomes a fixed row just above the floating nav pill:
+- The form becomes a fixed row just above the floating nav bar:
   `bottom: calc(var(--mobile-nav-stack) + 10px)` with `--mobile-nav-inset`
-  side margins. `pointer-events: none` on the row, `auto` on its children, so
-  the gap between the pills scrolls through to the grid.
+  side margins. The row has `pointer-events: none` so the gap between the
+  pills scrolls through to the grid; only `#filter`, `#zoom-wrapper` and
+  `#filter-box` opt back in. **Never** use a blanket `> *` here: the backdrop
+  is a full-screen fixed child and would then swallow every tap on the page
+  while invisible (shipped once, 2026-10-25). The backdrop takes pointer
+  events only under `.is-open`.
 - `#filter` is a solid black pill on the left; `#zoom-wrapper` a glass pill on
   the right.
 - `#filter-box` is a fixed bottom sheet: `translateY(100%)` + `visibility:
