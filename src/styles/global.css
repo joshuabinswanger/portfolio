@@ -127,6 +127,25 @@
   /* border size */
   --border-size: 0.5px;
 
+  /* Floating surfaces (mobile nav pill, archive toolbar, filter sheet) */
+  --surface-glass: color-mix(in srgb, var(--bg-color) 84%, transparent);
+  --surface-blur: blur(18px) saturate(1.4);
+  --surface-line: rgba(0, 0, 0, 0.14);
+  --surface-shadow:
+    0 12px 32px -14px rgba(0, 0, 0, 0.35),
+    0 2px 6px rgba(0, 0, 0, 0.05);
+
+  /* Mobile floating nav geometry. The archive toolbar stacks above the nav
+     using --mobile-nav-stack (bottom offset + pad + height + pad). */
+  --mobile-nav-inset: 12px;
+  --mobile-nav-pad: 4px;
+  --mobile-nav-height: 48px;
+  --mobile-nav-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  --mobile-nav-stack: calc(
+    var(--mobile-nav-bottom) + var(--mobile-nav-pad) * 2 +
+      var(--mobile-nav-height)
+  );
+
   /* Columns: Nav Main */
   --nav-main-layout-mobile-small: 1fr;
   --nav-main-layout-mobile: 1fr;

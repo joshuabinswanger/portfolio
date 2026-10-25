@@ -1,7 +1,4 @@
 ---
-import BracketOpenV from "../brackets/BracketOpenV.astro";
-import BracketMiddleV from "../brackets/BracketMiddleV.astro";
-import BracketCloseV from "../brackets/BracketCloseV.astro";
 import TopWrapper from "../../layouts/TopWrapper.astro";
 import GridLayout from "../../layouts/GridLayout.astro";
 import ArchiveElement from "./ArchiveGalleryElement.astro";
@@ -10,7 +7,7 @@ import { convertTagForCss, ensureArray, isArchiveImage } from "./utils";
 
 // Filter the collection to include only items with metadata.archive === "include"
 const archiveImages = (
-  await getCollection('images', ({ data }) => {
+  await getCollection("images", ({ data }) => {
     return data.metadata?.showInIndex === "yes";
   })
 ).filter(isArchiveImage);
@@ -19,1359 +16,663 @@ const archiveImages = (
 ///// TAGS ///////
 //////////////////
 
-//// Role /////
+// Each group: the tags present in the data, filtered against an allow-list,
+// with an optional display-name remap. The CSS class (used by MixItUp's
+// data-toggle) comes from convertTagForCss.
 
-/// extract role tags
-const role = Array.from(
-  new Set(archiveImages.flatMap((image) => ensureArray(image.data.metadata?.role) || []))
-);
-
-//Filter the tags so only those in `AllowedList` remain
-const roleAllowedList = ["2D", "3D", "Dev"];
-const roleListLength = roleAllowedList.length;
-
-const roleAllowed = role.filter(tag => roleAllowedList.includes(tag));
-
-const roleConversionName = {
-  "Dev": "Tech",
+type FilterGroup = {
+  id: string;
+  label: string;
+  options: { css: string; name: string }[];
 };
 
+function buildGroup(
+  id: string,
+  label: string,
+  values: string[],
+  allowed: string[],
+  rename: Record<string, string> = {},
+): FilterGroup {
+  const present = Array.from(new Set(values));
+  const options = allowed
+    .filter((tag) => present.includes(tag))
+    .map((tag) => ({ css: convertTagForCss(tag), name: rename[tag] || tag }));
+  return { id, label, options };
+}
 
-const roleConvertedCSS = roleAllowed.map(convertTagForCss);
-const roleConvertedName = roleAllowed.map(tag => roleConversionName[tag] || tag);
-
-
-
-//// PROGRAM /////
-
-/// extract role tags
-const program = Array.from(
-  new Set(archiveImages.flatMap((image) => ensureArray(image.data.metadata?.program) || []))
+const roleGroup = buildGroup(
+  "role",
+  "Role",
+  archiveImages.flatMap((image) => ensureArray(image.data.metadata?.role)),
+  ["2D", "3D", "Dev"],
+  { Dev: "Tech" },
 );
 
-//Filter the tags so only those in `AllowedList` remain
-const programAllowedList = ["Houdini", "Blender", "ZBrush"];
-const programListLength = programAllowedList.length;
-
-const programAllowed = program.filter(tag => programAllowedList.includes(tag));
-
-const programConversionName = {
-  "SubstancePainter" : "Substance Painter"
-};
-
-
-const programConvertedCSS = programAllowed.map(convertTagForCss);
-const programConvertedName= programAllowed.map(tag => programConversionName[tag] || tag);
-
-
-
-
-
-//// TOPIC /////
-
-// Extract topic tags and combine with tags
-const topic = Array.from(
-  new Set(
-    archiveImages.flatMap((image) => [
-      ...(ensureArray(image.data.metadata?.topic) || []),
-      ...(ensureArray(image.data.tags) || [])
-    ])
-  )
+const programGroup = buildGroup(
+  "program",
+  "Tool",
+  archiveImages.flatMap((image) => ensureArray(image.data.metadata?.program)),
+  ["Houdini", "Blender", "ZBrush"],
+  { SubstancePainter: "Substance Painter" },
 );
 
+const topicGroup = buildGroup(
+  "topic",
+  "Topic",
+  archiveImages.flatMap((image) => [
+    ...ensureArray(image.data.metadata?.topic),
+    ...ensureArray(image.data.tags),
+  ]),
+  [
+    "Science",
+    "Motion",
+    "Interactive",
+    "Wood",
+    "Character",
+    "Creature",
+    "Illustration",
+    "Figure",
+  ],
+  { SciCom: "Science", Proceduralism: "Procedural" },
+);
 
-//Filter the tags so only those in `AllowedList` remain
-const topicAllowedList = ['Science', 'Motion', 'Interactive', 'Wood', 'Character', 'Creature', 'Illustration', 'Figure'];
+const groups = [roleGroup, programGroup, topicGroup];
 
-const topicAllowed = topic.filter(tag => topicAllowedList.includes(tag));
-
-const topicListLength = topicAllowed.length;
-
-const topicConversionName = {
-  "SciCom" : "Science",
-  "Proceduralism" : "Procedural" 
-};
-const topicConvertedName = topicAllowed.map(tag => topicConversionName[tag] || tag);
-
-
-const topicConvertedCSS = topicAllowed.map(convertTagForCss);
-
+const sortOptions = [
+  { id: "sort-random", sort: "random", label: "Random", active: true },
+  { id: "sort-project", sort: "project:asc", label: "Project", active: false },
+  { id: "sort-date", sort: "date:asc", label: "Date", active: false },
+];
 ---
 
 <TopWrapper personal={true}>
-  
-    <div class:list={[""]} id="archive-wrapper">
-      
-      <!-- Filter Buttons-->
-      <form id="filter-sort-wrapper" >
-        
-      <!-- Filter Buttosn in a Group  --> 
-      <div id="sort-wrapper">
-        <button type="button" class:list={["expand-button main-button"]} id="sort">Sort</button>
+  <div id="archive-wrapper">
+    <!--
+      Toolbar. Desktop: a sticky rail of filter chips + segmented sort + zoom.
+      Mobile: a floating "Filter & Sort" pill and zoom pill above the nav; the
+      same #filter-box becomes a bottom sheet. Runtime: ./filters.ts.
+    -->
+    <form id="filter-sort-wrapper" aria-label="Filter and sort the archive">
+      <button
+        type="button"
+        id="filter"
+        class="trigger"
+        aria-expanded="false"
+        aria-controls="filter-box"
+      >
+        <span>Filter &amp; Sort</span><span id="filter-count" class="count"></span>
+      </button>
 
-        <fieldset id="sort-buttons" class:list={[`sort-group`]} >
+      <div id="filter-backdrop" aria-hidden="true"></div>
 
-          <BracketOpenV />
+      <div id="filter-box" role="group" aria-label="Filter and sort options">
+        <div class="sheet-handle" aria-hidden="true"></div>
 
-          <button type="button" class:list={["sort-button mixitup-control-active"]} id="sort-random" data-sort="random"><p>Random</p></button>
-        
-          <BracketMiddleV />
-
-          <button type="button" class:list={["sort-button "]} id="sort-project" data-sort="project:asc"> <p>Project</p></button>
-    
-          <BracketMiddleV />
-
-          <button type="button" class:list={["sort-button "]} id="sort-date" data-sort="date:asc"><p>Date</p></button>
-
-          <BracketCloseV />
-        </fieldset>
-
-      </div>
-      
-      <div id="filter-wrapper">
-
-        <button  id="filter" class:list={[`main-button`]} type="button">
-          <span id="filter-span"> Filter<span id="filter-count"></span> &ensp;</span> <span class:list={["chevron"]} >&rarr;</span>
-        </button>
-
-        <div id="filter-box" class:list={[``]}>
-
-          <div class:list={["bracket-h bracket-start"]}> 
-          </div>
-          
-          <div id="group-wrapper">
-
-            <!-- Role -->
-            <fieldset class:list={[`filter-group`]} id="role-buttons-wrapper" data-filter-group="role" >
-
-              <div class:list={[`filter-title`]}>
-                Role
-              </div>
-
-              <div class:list={["bracket-v"]}>
-                <BracketOpenV />
-              </div>
-            
-                {roleConvertedCSS.map((tag, index) => {
-
-                  	if (index === 0) {
-                      return(
-                      <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`} data-index={`${index}`} data-filter-name={`${roleConvertedName[index]}`}>
-                          <p>{roleConvertedName[index]}</p>
-                      </button>
-                      );
-                    }
-
-                    
-                  	else {
-                      return(
-                      <div class:list={["bracket-v"]}>
-                        <BracketMiddleV />
-                      </div>
-
-                      <button  type="button" class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`} data-index={`${index}`} data-filter-name={`${roleConvertedName[index]}`}>
-                          <p>{roleConvertedName[index]} </p>
-                      </button>
-                      );
-                    };
-
-                })}
-
-                <div class:list={["bracket-v"]}>
-                  <BracketCloseV />
-                </div>
-
-            </fieldset>
-
-            <!-- Program -->
-            <fieldset class:list={[`filter-group`]} id="program-buttons-wrapper" data-filter-group="program">
-
-              <div class:list={[`filter-title`]}>
-                Tool
-              </div>
-
-              <div class:list={["bracket-v"]}>
-                <BracketOpenV />
-              </div>
-
-                {programConvertedCSS.map((tag, index) => {
-
-
-
-                if (index === 0) {
-                  return(
-                  <button  type="button" class:list={[`filter-button ${tag} `]}  data-toggle={`.${tag}`} data-filter-name={`${programConvertedName[index]}`}>
-                      <p>{programConvertedName[index]}</p>
-                  </button>
-                  );
-
-                } else {
-
-                  return(
-                  <div class:list={["bracket-v"]}>
-                   <BracketMiddleV />
-                  </div>
-
-                  <button  type="button" class:list={[`filter-button ${tag} `]}  data-toggle={`.${tag}`} data-filter-name={`${programConvertedName[index]}`}>
-                      <p>{programConvertedName[index]}</p>
-        
-                  </button>
-                  );
-
-                };
-
-
-
-                })}
-
-                <div class:list={["bracket-v"]}>
-                  <BracketCloseV />
-                </div>
-
-            </fieldset>
-        
-            <!-- Topic -->
-            <fieldset class:list={[`filter-group`]} id="topic-buttons-wrapper" data-filter-group="topic" >
-              
-              <div class:list={[`filter-title`]}>
-                Topic
-              </div>
-
-              <div class:list={["bracket-v"]}>
-                <BracketOpenV />
-              </div>
-
-              {topicConvertedCSS.map((tag, index) => {
-
-
-                if (index === 0) {
-                  return(
-                    <button type="button"class:list={[`filter-button ${tag} `]}  data-toggle={`.${tag}`} data-filter-name={`${topicConvertedName[index]}`}>
-                      <p>{topicConvertedName[index]}</p>
-                      
+        <div id="group-wrapper">
+          {
+            groups.map((group) => (
+              <fieldset
+                class="filter-group"
+                id={`${group.id}-buttons-wrapper`}
+                data-filter-group={group.id}
+              >
+                <legend class="filter-title">{group.label}</legend>
+                <div class="chip-row">
+                  {group.options.map((option) => (
+                    <button
+                      type="button"
+                      class:list={["filter-button", "chip", option.css]}
+                      data-toggle={`.${option.css}`}
+                      data-filter-name={option.name}
+                    >
+                      {option.name}
                     </button>
-                    );
+                  ))}
+                </div>
+              </fieldset>
+            ))
+          }
 
-                } else {
-                  return(
-
-                  <div class:list={["bracket-v"]}>
-                    <BracketMiddleV />
-                  </div>
-
-                  <button type="button"class:list={[`filter-button ${tag}`]}  data-toggle={`.${tag}`} data-filter-name={`${topicConvertedName[index]}`}>
-                      <p>{topicConvertedName[index]}</p>
-                      
-                    </button>
-                  
-                  )
-                }
-
-      
-                
-
-
-              })}
-
-              <div class:list={["bracket-v"]}>
-                <BracketCloseV />
-              </div>
-
-
-            </fieldset>
-
-            <!-- Filter Reset -->
-            <fieldset class:list={[``]} id="filter-reset-wrapper">
-              <button type="reset" class:list={["filter-button"]} id="filter-reset-all"><p>Reset</p></button>
-            </fieldset>
-                    
-
-          </div>
-
-          <div id="active-filters-list">
-          </div>
-
-          <div class:list={["bracket-h bracket-end"]}> 
-          </div>
-
+          <fieldset class="filter-group sort-group" id="sort-buttons">
+            <legend class="filter-title">Sort</legend>
+            <div class="segmented" role="group" aria-label="Sort order">
+              {
+                sortOptions.map((option) => (
+                  <button
+                    type="button"
+                    class:list={[
+                      "sort-button",
+                      { "mixitup-control-active": option.active },
+                    ]}
+                    id={option.id}
+                    data-sort={option.sort}
+                  >
+                    {option.label}
+                  </button>
+                ))
+              }
+            </div>
+          </fieldset>
         </div>
 
+        <div class="sheet-actions">
+          <button type="reset" id="filter-reset-all" class="text-button">
+            Reset
+          </button>
+          <button type="button" id="filter-done" class="solid-button">
+            Done
+          </button>
+        </div>
       </div>
 
-      <!-- Zoom: grow/shrink the grid by one column. Anchored to the right edge
-           of the fixed bar, opposite the nav. Desktop only (hidden on mobile). -->
-      <div id="zoom-wrapper">
-        <button type="button" class:list={["zoom-button main-button"]} id="zoom-in" aria-label="Zoom in: fewer columns, larger images" title="Zoom in">+</button>
-        <button type="button" class:list={["zoom-button main-button"]} id="zoom-out" aria-label="Zoom out: more columns, smaller images" title="Zoom out">&minus;</button>
+      <!-- Zoom: grow/shrink the grid by one column. -->
+      <div id="zoom-wrapper" class="segmented" role="group" aria-label="Grid zoom">
+        <button
+          type="button"
+          class="zoom-button"
+          id="zoom-out"
+          aria-label="Zoom out: more columns, smaller images"
+          title="Zoom out">&minus;</button
+        >
+        <button
+          type="button"
+          class="zoom-button"
+          id="zoom-in"
+          aria-label="Zoom in: fewer columns, larger images"
+          title="Zoom in">+</button
+        >
       </div>
-
-      </form>
+    </form>
 
     <!-- Archive Gallery-->
     <div class:list={["container"]} id="archive">
       <GridLayout customClass={"archive-grid"}>
-        {archiveImages.map((image, index) => (
-            
-                <ArchiveElement
-                    image={image}
-                    index={index}
-                />
-
-        ))}
-        </GridLayout>
+        {
+          archiveImages.map((image, index) => (
+            <ArchiveElement image={image} index={index} />
+          ))
+        }
+      </GridLayout>
     </div>
   </div>
 </TopWrapper>
 
 <script>
-import { initArchiveFilters } from "./filters";
+  import { initArchiveFilters } from "./filters";
 
-initArchiveFilters();
+  initArchiveFilters();
 </script>
 
-<!--
-  The archive filter/sort runtime now lives in ./filters.ts (see that file).
-  Only the markup, the define:vars CSS, and the mobile/iOS animation layer
-  remain in this component.
--->
+<style>
+  @import "../../styles/global.css";
 
+  /* ------------------------------------------------------------------ */
+  /* Layout                                                              */
+  /* ------------------------------------------------------------------ */
 
-<style define:vars={{ roleFilters: roleListLength, programFilters: programListLength, topicFilters: topicListLength}}>
+  #archive-wrapper {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    padding-bottom: 11rem;
 
-@import "../../styles/global.css";
-
-:root {
-  --active-filters-list-length: 5;
-}
-
-#archive-wrapper {
-  display: grid;
-  grid-template-rows: 40px 1fr;
-  padding-bottom: 11rem;
-  margin-top: var(--padding-desktop);
-
-  @media (--bp-mobile) {
-    grid-template-rows: 1fr;
-    grid-row-start: 1;
-    margin-top: 0rem; 
+    @media (--bp-mobile) {
+      grid-template-rows: 1fr;
+      padding-bottom: 4rem;
+    }
   }
 
-  @media (--bp-tablet) {
-  margin-top: var(--padding-desktop);
+  #archive {
+    grid-row-start: 2;
+
+    @media (--bp-mobile) {
+      grid-row-start: 1;
+    }
   }
 
-  @media (--bp-desktop-wide) {
-  margin-top: var(--padding-desktop);
-  }
-}
-
-#archive {
-  padding-top: 0px;
-  height: 100%;
-  grid-row-start: 2;
-
-  @media (--bp-mobile) {
-		margin-top: 0rem; 
-    grid-row-start: 1;
-	}
-
-  @media (--bp-tablet) {
-    margin-top: ;
-  }
-
-  @media (--bp-desktop-wide) {
-    margin-top: ;
-  }
-}
-
-
-
-/* filter sort wrapper */
-
-#filter-sort-wrapper {
-  display: grid;
-  position: fixed;
-  grid-template-columns: 56px auto;
-  z-index: 2;
-  --archive-width: 100%;
-  grid-row-start: 1;
-  width: 952px;
-  overflow: hidden;
-  transition:  grid-template-columns 0.25s ease 0.25s;
-  
-  @media (--bp-mobile) {
-    bottom: 52px;
-    padding-bottom: 4px;
-    left: 2px;
-    grid-template-columns: 56px auto;
-    grid-template-rows: auto;
-    width: 100%;
-    overflow-y: hidden;
-    overflow-x: hidden;
-    
-  }
-
-	@media (--bp-tablet) {
-		padding-top: var(--padding-tablet); 
-	}
-
-  @media (--bp-desktop-wide) {
-    grid-template-columns: 80px auto;
-    width: 1496px;
-  }
-
-}
-
-#filter-sort-wrapper:has(#filter.active) {
-    grid-template-columns: 56px auto;
-    transition:  grid-template-columns 0.25s ease 0s;
-
-  @media (--bp-mobile) {
-    grid-template-columns: 56px auto;
-
-  }
-
-  @media (--bp-desktop-wide) {
-    grid-template-columns: 80px auto;
-  }
-}
-
-#filter-sort-wrapper:has(#sort.active)  {
-
-  grid-template-columns: 224px auto;
-  transition:  grid-template-columns 0.25s ease 0s;
-
-
-  @media (--bp-mobile) {
-    /* Sort fills the gap and pushes the Filter button right, stopping with a
-       gap before the (still-visible) zoom +. Col 1 (Sort) grows; col 2 is the
-       110px Filter button so its right edge lands at the same spot as in the
-       filter-open state (consistent gap to the +). --zoom-reserve keeps the
-       zoom + its gap clear. Percentage/px tracks (not 1fr) so the widen
-       interpolates smoothly from the base `56px calc(100% - 56px)`. */
-    grid-template-columns: calc(100% - var(--zoom-reserve) - 110px) 110px;
-
-  }
-
-  @media (--bp-desktop-wide) {
-    grid-template-columns: 240px auto;
-
-  }
-}
-
-
-/* Main Button Styling */
-
-.main-button {
-  height: 40px;
-  grid-column-start: 1;
-  grid-column-end: span 1;
-  font-family: PowerGrotesk-Light;
-  color: var(--bg-color);
-  font-size: 14px;
-  letter-spacing: 0.6px;
-  border: 0px;
-  background-color: black;
-  padding: 0 8px;
-  margin-right: 4px;
-  cursor: pointer;
-  z-index: 1011;
-
-}
-
-
-fieldset {
-  border: none; /* Ensure fieldset behaves like a div */
-  margin: 0;
-  padding: 0;
-}
-
-
-
-/* Zoom control */
-/* Zoom control */
-/* Zoom control */
-
-/* Anchored to the right edge of the fixed bar (#filter-sort-wrapper is the
-   containing block and already spans the content width at every breakpoint, so
-   right: 0 tracks the right edge automatically). Absolute positioning keeps it
-   out of the bar's grid so the fragile Sort/Filter track animations are
-   untouched. */
-#zoom-wrapper {
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: flex;
-  gap: 2px;
-  z-index: 1012;
-  /* No background/padding: the buttons are opaque black at a higher z-index, so
-     an overflowing active-filter chip simply tucks behind them (black-on-black)
-     instead of needing a page-coloured mask gutter. */
-}
-
-/* Mobile: the bar sits at the bottom. The Sort/Filter panels expand only up to
-   the zoom +, which stays visible (the buttons stop short of it), so no hiding
-   rule is needed here. The Sort/Filter button itself remains the close
-   affordance via its higher z-index. */
-
-.zoom-button {
-  width: 40px;
-  margin-right: 0;
-  padding: 0;
-  /* font-size / family inherited from .main-button — matches the Filter button. */
-}
-
-.zoom-button:disabled {
-  opacity: 0.35;
-  cursor: default;
-}
-
-
-
-/* Sort  */
-/* Sort  */
-/* Sort  */
-
-#sort-wrapper {
-  grid-column-start: 1;
-  grid-column-end: 2;
-  grid-row-start: 1;
-  grid-row-end: 2;
-  align-self: flex-start;
-  width: 100%;
-
-  display: grid;
-  grid-template-columns: min-content min-content;
-
-  @media (--bp-mobile) {
-    align-self: flex-end;
-    grid-column-start: 1;
-    grid-row-start: 1;
-  }
-}
- 
-#sort  {
-  width: 54px;
-  grid-column-start: 1;
-  transition:  width 0.25s ease 0.25s;
-  align-self: flex-start;
-  margin-right: 2px;
-
-
-  @media (--bp-mobile) {
-    align-self: flex-end;
-  }
-
-  @media (--bp-desktop-wide) {
-    width: 78px;
-  }
-}
-
-#sort.active {
-  transition:  width 0.25s ease 0s;
-}
-
-#filter-sort-wrapper:has(#filter.active) #sort-wrapper #sort {
-  width: 54px;
-  transition:  width 0.25s ease 0s;
-
-  @media (--bp-mobile) {
-    width: 54px;
-  }
-
-  @media (--bp-desktop-wide) {
-    width: 78px;
-  }
-}
-
-#filter-sort-wrapper:has(#filter.active) #sort-wrapper #sort-buttons .sort-button {
-  transition: width 0.25s ease 0s, height 0.25s ease 0s;
-}
-
-
-/* sort-buttons */
-
-#sort-buttons {
-  grid-column-start: 2;
-  display: grid;
-  grid-template-rows: repeat(3, 0 min-content) 0px;
-  background-color: var(--bg-color);
-
-}
-
-/* Sort dropdown brackets: gate visibility on the sort state. Closed, the
-   brackets only collapse because their grid column is 0-wide — but WebKit/iOS
-   still paints the overflow:visible bracket SVG at its intrinsic height, so
-   they bleed through when Sort is closed. Hiding via opacity fixes that and
-   lets them fade in with the buttons on open. The brackets are rendered by a
-   child component, so :global() is needed to pierce Astro's style scoping. */
-#sort-buttons :global(.svg-container) {
-  opacity: 0;
-  transition: opacity 0.2s ease 0s;
-}
-
-#sort.active ~ #sort-buttons :global(.svg-container) {
-  opacity: 1;
-  transition: opacity 0.25s ease 0.25s;
-}
-
-.sort-button {
-  height: 0px;
-  width: 0px;
-  font-family: PowerGrotesk-Light;
-  color: black;
-  display: grid;
-  font-size: var(--font-size-desktop);
-  letter-spacing: 0.6px;
-  border: 0px;
-  background-color: transparent;
-  overflow: hidden;
-  cursor: pointer;
-  z-index: 1011;
-  padding: 0;
-  transition: width 0.25s ease 0.25s, height 0.25s ease 0s;
-
-  @media (--bp-mobile) {
-    font-size: var(--font-size-mobile-h1);
-  }
-
-}
-
-
-
-.sort-button > p {
-  margin: auto;
-  grid-column-start: 1;
-  grid-row-start: 1;
-}
-
-.sort-button.mixitup-control-active > p {
-  color: var(--bg-color);
-}
-
-#sort.active ~ #sort-buttons .sort-button {
-  width: 168px;
-  height: 40px;
-  transition: width 0.25s ease 0s, height 0.25s ease 0.25s;
-
-  @media (--bp-desktop-wide) {
-    width: 160px;
-  }
-
-}
-
-.sort-button::before {
-  content: "";
-  grid-column-start: 1;
-  grid-row-start: 1;
-  width: 0%;
-  color: var(--bg-color);
-  background-color: black;
-  transition: width 0.5s ease;
-  height: 40px;
-}
-
-.sort-button.mixitup-control-active::before {
-  width: 100%;
-}
-
-.sort-button.mixitup-control-active {
-  color: var(--bg-color);
-  height: 40px;
-}
-
-
-
-/* filter */
-/* filter */
-/* filter */
-
-
-
-#filter-wrapper {
-
-display: grid; /* Keeps the grid layout */
-grid-template-columns: min-content  min-content;
-grid-column-start: 2;
-width: auto;
-
-  @media (--bp-mobile) {
-    font-size: var(--font-size-mobile-small);
-    grid-template-columns: min-content min-content min-content;
+  fieldset {
+    border: none;
     margin: 0;
-    overflow-x: scroll;
-    grid-column-start: 2;
-    grid-row-start: 1;
-    align-items: end;
+    padding: 0;
+    min-width: 0;
   }
 
-}
-
-#filter {
-  display: grid;
-  width: 110px;
-  margin-left: 2px;
-  place-items: center;
-  grid-column-start: 1;
-  grid-column-end: 2;
-
-  @media (--bp-mobile) {
-  
+  legend {
+    padding: 0;
   }
 
-  @media (--bp-desktop-wide) {
-    width: 120px;
-  }
-  
-}
-
-#filter-span {
-  grid-column-start: 1;
-}
-
-.chevron {
-  place-self: center;
-  grid-column-start: 2;
-  font-size: 16px;
-  transform: rotateZ(0);
-  transition: transform 0.25s ease 0.25s;
-}
-
-#filter.active .chevron {
-  transform: rotateZ(180deg);
-}
-
-
-
-
-
-/* filter buttons */
-
-.filter-title {
-  font-size: var(--font-size-desktop-h1);
-  text-align: center;
-  margin-top: 0px;
-  margin-bottom: 0px;
-  align-self: center;
-  overflow: hidden;
-
-  @media (--bp-mobile) {
-    font-size: var(--font-size-mobile-h1);
+  /* Scroll lock while the mobile sheet is open (toggled in filters.ts). */
+  :global(html.archive-sheet-open) {
+    overflow: hidden;
   }
 
-}
+  /* ------------------------------------------------------------------ */
+  /* Shared controls: chips, segmented control, buttons                 */
+  /* ------------------------------------------------------------------ */
 
-.filter-button {
-  font-family: PowerGrotesk-Light;
-  color: black;
-  display: grid;
-  width: 168px;
-  height: 0px;
-  font-size: var(--font-size-desktop);
-  letter-spacing: 0.6px;
-  border: 0px;
-  background-color: transparent;
-  overflow: hidden;
-  cursor: pointer;
-  z-index: 1011;
-  padding: 0;
-  transition: width 0.5s ease 0s, height 0.5s ease 0s;
-
-  @media (--bp-mobile) {
-    font-size: var(--font-size-mobile-h1);
+  .filter-title {
+    font-family: PowerGrotesk-Light;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.55);
+    margin: 0 0 8px;
+    white-space: nowrap;
   }
 
-  @media (--bp-desktop-wide) {
-    width: 168px;
+  /* Bracket motif carried over from the old UI, now typographic. */
+  .filter-title::before {
+    content: "[ ";
+  }
+  .filter-title::after {
+    content: " ]";
   }
 
-}
-
-#filter.active + #filter-box .filter-button {
-  height: 32px;
-  transition: height 0.75s ease 0.375s;
-}
-
-#filter.active + #filter-box:has(.filter-button.mixitup-control-active) .filter-button  {
-  transition: height 0.5s ease 0.5s;
-}
-
-.filter-button > p {
-  margin: auto;
-  grid-column-start: 1;
-  grid-row-start: 1;
-}
-
-.filter-button.mixitup-control-active > p {
-  color: var(--bg-color);
-}
-
-.filter-button::before {
-  content: "";
-  grid-column-start: 1;
-  grid-row-start: 1;
-  width: 0%;
-  color: var(--bg-color);
-  background-color: black;
-  transition: width 1s ease;
-  height: 32px;
-}
-
-.filter-button.mixitup-control-active::before {
-  width: 100%;
-}
-
-.filter-disabled {
-  opacity: 0.25;
-  cursor: default;
-}
-
-
-/* filter reset  */
-
-#filter-reset-wrapper {
-  @media (--bp-mobile) {
-    grid-column-start: 1;
-    grid-row-start: 4;
+  .chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
   }
-}
 
-#filter-reset-all {
+  .chip,
+  .sort-button,
+  .zoom-button,
+  .text-button,
+  .solid-button,
+  .trigger {
+    font-family: PowerGrotesk-Light;
+    font-size: 13px;
+    letter-spacing: 0.4px;
+    line-height: 1;
+    color: black;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
 
-  background-color: black;
-}
+  .chip:focus-visible,
+  .sort-button:focus-visible,
+  .zoom-button:focus-visible,
+  .text-button:focus-visible,
+  .solid-button:focus-visible,
+  .trigger:focus-visible {
+    outline: 2px solid black;
+    outline-offset: 2px;
+  }
 
-#filter-reset-all > p {
-  color: var(--bg-color);
-}
+  .chip {
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 999px;
+    border: var(--border-size) solid var(--surface-line);
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease,
+      opacity 0.2s ease;
+  }
 
+  @media (hover: hover) {
+    .chip:not(:disabled):hover {
+      border-color: black;
+    }
+  }
 
+  .chip.mixitup-control-active {
+    background-color: black;
+    border-color: black;
+    color: var(--bg-color);
+  }
 
+  .chip:disabled,
+  .chip.filter-disabled {
+    opacity: 0.28;
+    cursor: default;
+  }
 
+  .segmented {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 999px;
+    border: var(--border-size) solid var(--surface-line);
+  }
 
+  .sort-button,
+  .zoom-button {
+    height: 26px;
+    padding: 0 12px;
+    border-radius: 999px;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      opacity 0.2s ease;
+  }
 
+  .sort-button.mixitup-control-active {
+    background-color: black;
+    color: var(--bg-color);
+  }
 
+  .zoom-button {
+    width: 34px;
+    padding: 0;
+    font-size: 16px;
+  }
 
-/* filter-box  */
+  @media (hover: hover) {
+    .zoom-button:not(:disabled):hover,
+    .sort-button:not(.mixitup-control-active):hover {
+      background-color: rgba(0, 0, 0, 0.07);
+    }
+  }
 
- #filter-box {
-  display: grid;
-  width: auto;
-  /* Width of the collapsed active-filter chip row, derived from the live chip
-     count. Used instead of `min-content` so grid-template-columns animates
-     between two lengths: WebKit/iOS collapses a track that transitions
-     between a length and an intrinsic keyword (min-content), where Chrome and
-     Firefox snap it to the final size instead. */
-  --active-filters-width: calc(
-    var(--active-filters-list-length) * 168px +
-    (var(--active-filters-list-length) - 1) * 8px
-  );
-  grid-template-columns: 0px 0px 0px 0px;
-  height: min-content;
-  grid-column: 2 / 3;
-  position: relative; /* Add positioning context */
-  background-color: var(--bg-color);
-  transition: grid-template-columns 0.25s ease 0.25s, height 0.5s ease 0.75s;
+  .zoom-button:disabled {
+    opacity: 0.28;
+    cursor: default;
+  }
 
-  @media (--bp-mobile) {
-    --active-filters-width: calc(
-      var(--active-filters-list-length) * 116px +
-      (var(--active-filters-list-length) - 1) * 8px
+  .text-button {
+    height: 32px;
+    padding: 0 10px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(0, 0, 0, 0.3);
+  }
+
+  .solid-button {
+    height: 44px;
+    padding: 0 22px;
+    border-radius: 999px;
+    background-color: black;
+    color: var(--bg-color);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Desktop / tablet: sticky rail                                       */
+  /* ------------------------------------------------------------------ */
+
+  #filter-sort-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    column-gap: 24px;
+    padding: 14px 0 14px;
+    margin-bottom: 8px;
+    background-color: var(--surface-glass);
+    -webkit-backdrop-filter: var(--surface-blur);
+    backdrop-filter: var(--surface-blur);
+  }
+
+  /* Soft fade below the rail so images slide out under it instead of
+     meeting a hard edge. */
+  #filter-sort-wrapper::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 18px;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      var(--bg-color) 0%,
+      rgb(from var(--bg-color) r g b / 0) 100%
     );
   }
-}
 
-/* filter-box active */
-#filter.active + #filter-box {
-  grid-template-columns: 10px 168px 0px 10px;
-  transition: grid-template-columns 0.25s ease 0s, height 0.75s ease 0.25s;
-
-}
-
-
-
-/* one of the many filter-button active */
-#filter:not(.active) + #filter-box:has(.filter-button.mixitup-control-active)  {
-  grid-template-columns: 4px 0px var(--active-filters-width) 4px;
-  /* makes the transition smoother */
-  transition: grid-template-columns 0.25s ease 0.25s;
-}
-
-
-/* this makes sure the active filter transitions smoothly*/
-#filter.active + #filter-box:has(.filter-button.mixitup-control-active)  {
-  grid-template-columns: 10px 168px 0px 10px;
-  transition: grid-template-columns 0.5s ease 0.25s;
-}
-
-
-
-
-/* group wrapper  */
-/* group wrapper  */
-/* the var are defined in the front matter  */
-
-
-#group-wrapper {
-  --roleFiltersHeight: calc(var(--roleFilters) * 32px + 40px );
-  --programFiltersHeight: calc(var(--programFilters) * 32px + 40px);
-  --topicFiltersHeight: calc(var(--topicFilters) * 32px + 48px);
-  display: grid;
-  grid-template-rows: var(--roleFiltersHeight) var(--programFiltersHeight) var(--topicFiltersHeight) 40px;
-  grid-template-columns: 168px;
-  place-content: flex-start;
-  width: 0px;
-  transition: 
-    opacity 0.125s ease 0.125s,
-    grid-template-rows 0.25s ease 0s,
-    width 0.25s ease 0.25s;
-}
-
-#filter.active + #filter-box #group-wrapper {
-  opacity: 1;
-  width: 168px;
-  transition:
-    opacity 0.5s ease 0.5s,
-    grid-template-rows 0.5s ease 0.25s,
-    width 0.25s ease 0s;
-
-}
-
-#filter:not(.active) + #filter-box #group-wrapper {
-  grid-template-rows: 0px 0px 0px 0px;
-  width: 0px;
-  opacity: 0;
-}  
-
-#filter.active + #filter-box:has(.filter-button.mixitup-control-active) #group-wrapper{
-  width: 168px;
-  transition:
-    opacity 0.125s ease 0.5s,
-    grid-template-rows 0.25s ease 0.5s,
-    width 0.25s ease 0.25s;
-}
-
-
-
-
-
-/* filter-group: Role Tool Topic  */
-/* filter-group: Role Tool Topic  */
-/* filter-group: Role Tool Topic  */
-
-
-.filter-group {
-  display: grid;
-  grid-auto-columns: min-content;
-  grid-column-gap: 8px;
-  height: fit-content;
-  grid-template-rows: 0px;
-  grid-auto-rows: 0px min-content;
-  place-content: space-between;
-  overflow: hidden;
-  opacity: 0;
-  transition: grid-template-rows 0.25s ease 0s, opacity 0.125s ease 0s ;
-}
-
-#filter.active + #filter-box .filter-group {
-  grid-template-rows: 28px;
-  opacity: 1;
-  transition: grid-template-rows 0.25s ease 0.375s, opacity 0.125s ease 0.375s ;
-}
-
-#filter:not(.active) + #filter-box .filter-group:has(.filter-button.mixitup-control-active) {
-  transition: grid-template-rows 0.25s ease 0s, opacity 0.125s ease 0s ;
-}
-
-#filter.active + #filter-box .filter-group:has(.filter-button.mixitup-control-active) {
-  transition: grid-template-rows 0.25s ease 0.5s, opacity 0.125s ease .5s ;
-}
-
-
-
-
-
-
-
-
-/* brackets */
-
-/* brackets */
-.bracket-start {
-  width: 20px;
-  border-top: 1.5px solid black;
-  border-bottom: 1.5px solid black;
-  border-left: 1.5px solid black;
-  opacity: 1;
-  z-index: 1; /* Ensure proper stacking */
-  transition: opacity 0.5s ease 0.75s;
-}
-
-.bracket-end {
-  width: 20px;
-  position: relative;
-  left: -16px;
-  border-top: 1.5px solid black;
-  border-bottom: 1.5px solid black;
-  border-right: 1.5px solid black;
-  opacity: 1;
-  z-index: 1; /* Ensure proper stacking */
-  transition: opacity 0.5s ease 0.75s;
-}
-
-
-#filter.active + #filter-box .bracket-start {
-  transition: opacity 0.2s ease 0.1s;
-}
-
-#filter.active + #filter-box .bracket-end {
-  transition: opacity 0.2s ease 0.1s;
-  left: -10px;
-}
-
-#filter:not(.active) + #filter-box:not(:has(.filter-button.mixitup-control-active)) .bracket-start {
-  opacity: 0;
-  transition: opacity 0.25s ease 0.25s;
-}
-
-#filter:not(.active) + #filter-box:not(:has(.filter-button.mixitup-control-active)) .bracket-end {
-  opacity: 0;
-  transition: opacity 0.25s ease 0.25s;
-}
-
-
-
-.bracket-v {
-  opacity: 0;
-}
-
-#filter.active + #filter-box .bracket-v {
-  opacity: 1;
-}
-
-#filter-box .group-wrapper .filter-group {
-  grid-column-start: 1;
-} 
-
-
-
-
-
-
-/* actve filter list  */
-
-#active-filters-list {
-  height: 40px;
-  width: 100%; 
-  min-width: 0px;
-  display: grid;
-  overflow: hidden;
-  grid-template-columns: repeat(var(--active-filters-list-length), 0px);
-  grid-gap: 0px;
-  justify-content: start; /* Align columns to left */
-  transition: min-width 0.125s ease 0.375s, grid-template-columns 0.5s ease 0.5s, grid-gap 0.5s ease 0.5s;
-}
-
-#filter:not(.active) + #filter-box #active-filters-list:has(div) {
-  min-width: 10px;
-  grid-template-columns: repeat(var(--active-filters-list-length), 168px);
-  grid-gap: 8px;
-
-  @media (--bp-mobile) {
-    grid-template-columns: repeat(var(--active-filters-list-length), 116px);
+  #filter,
+  #filter-backdrop,
+  .sheet-handle,
+  #filter-done {
+    display: none;
   }
 
-}
-
-#filter.active + #filter-box #active-filters-list:has(div) {
-  min-width: 0px;
-  grid-template-columns: repeat(var(--active-filters-list-length), 0px);
-  grid-gap: 0px;
-  transition: min-width 0.125s ease 0s, grid-template-columns 0.25s ease 0s, grid-gap 0.25s ease 0s;
-}
-
-
-
-.active-filter {
-  font-family: PowerGrotesk-Light;
-  color: var(--bg-color);
-  display: grid;
-  width: 168px;
-  height: 32px;
-  font-size: 11px;
-  letter-spacing: 0.6px;
-  border: 0px;
-  background-color: black;
-  overflow: hidden;
-  cursor: pointer;
-  z-index: 1011;
-  text-align: center;
-  padding: 0;
-  margin: auto;
-  align-content: center;
-
-  
-  @media (--bp-mobile) {
-   width: 116px;
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ============================================================
-   MOBILE — bracketed filter box
-   The filter opens as a box framed by a top bracket (just below the
-   logo) and a bottom bracket (just above the Filter button). Two-stage
-   reveal: (1) the Filter button expands to full width, then (2) the box
-   grows up from the button to its full height. Width/height transitions
-   only (no grid-track animation) so it stays WebKit/iOS-safe.
-   ============================================================ */
-
-@media (--bp-mobile) {
-
-  /* --- Stage 1: Filter button expands rightward up to the zoom + --- */
-  /* The Filter column is held CONSTANT at its open width (full bar minus the
-     Sort column minus the zoom reserve) in every state. The widen is driven by
-     animating the Filter *button* width (110px -> 100% of that fixed column),
-     not the grid track — animating the track would make the button pop to the
-     old full width then shrink. --zoom-reserve is the space kept clear at the
-     right for the zoom +/- control plus a small gap. */
-  #filter-sort-wrapper {
-    grid-template-columns: 56px calc(100% - 56px - var(--zoom-reserve));
-    /* 82px zoom +/- control plus a ~14px gap so buttons/boxes stop short of
-       the + rather than touching. */
-    --zoom-reserve: 96px;
-  }
-  /* Held equal to the base (overrides the desktop rule's intrinsic `auto` track
-     on mobile); the button width — not this track — animates. */
-  #filter-sort-wrapper:has(#filter.active) {
-    grid-template-columns: 56px calc(100% - 56px - var(--zoom-reserve));
-  }
-  #filter-sort-wrapper:has(#filter.active) #filter-wrapper {
-    width: 100%;
-    grid-template-columns: 1fr;
-    overflow: visible;
-  }
-  /* Smoothly widen/narrow the Filter button itself. Open: widen immediately,
-     the box follows (its own delay). Close: narrow after the box has collapsed. */
-  #filter {
-    transition: width 0.25s ease 0.25s;
-  }
-  #filter.active {
-    width: 100%;
-    transition: width 0.25s ease 0s;
-  }
-
-  /* --- The bracketed box: always fixed & bottom-anchored on mobile,
-         collapsed to height 0 until the filter is open. --- */
   #filter-box {
-    position: fixed;
-    /* Match the widened Filter button exactly and sit directly above it.
-       Button left = bar left (2px) + Sort col (56px) + Filter margin (2px) = 60px;
-       button right = 100% - zoom-reserve + 4px, so the box's right inset is
-       (zoom-reserve - 4px). */
-    left: 60px;
-    right: calc(var(--zoom-reserve) - 4px);
-    bottom: 104px;          /* just above the Filter button */
-    top: auto;
-    width: auto;
-    z-index: 1004;
     display: flex;
-    flex-direction: column;
-    grid-template-columns: none;
-    height: 0;
-    overflow: hidden;
-    background-color: var(--bg-color);
-    transition: height 0.4s ease 0s;   /* close: collapse first */
+    flex-wrap: wrap;
+    align-items: start;
+    gap: 12px 28px;
+    min-width: 0;
   }
 
-  /* Stage 2: grow up to full height, after the button has widened. */
-  #filter.active + #filter-box,
-  #filter.active + #filter-box:has(.filter-button.mixitup-control-active) {
-    height: calc(100dvh - 180px);      /* below logo .. above filter button */
-    transition: height 0.45s ease 0.3s;
-  }
-
-  /* Top (⊓) and bottom (⊔) bracket frame — reuse the existing divs. */
-  #filter-box .bracket-start,
-  #filter-box .bracket-end {
-    position: static;
-    left: 0;
-    width: auto;
-    height: 12px;
-    flex: 0 0 12px;
-    border: 1.5px solid black;
-    opacity: 1;
-    transition: none;
-  }
-  #filter-box .bracket-start { border-bottom: none; }
-  #filter-box .bracket-end { border-top: none; }
-
-  /* Scrollable list fills the space between the brackets. */
-  #filter.active + #filter-box #group-wrapper,
-  #filter:not(.active) + #filter-box #group-wrapper,
-  #filter.active + #filter-box:has(.filter-button.mixitup-control-active) #group-wrapper {
-    position: static;
-    width: auto;
-    height: auto;
+  #group-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 28px;
+    min-width: 0;
     flex: 1 1 auto;
-    min-height: 0;
+  }
+
+  /* View controls (sort) gravitate to the right edge of their row, next to
+     the zoom; the Topic row is wide enough to share with it at 952px. */
+  .sort-group {
+    margin-left: auto;
+  }
+
+  .sheet-actions {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 12px 16px;
-    margin: 0;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    background-color: transparent;
-    grid-template-rows: none;
-    grid-template-columns: none;
+    align-items: center;
+    align-self: end;
+    margin-bottom: 1px;
+  }
+
+  /* Reset is only offered once something is selected. */
+  #filter-reset-all {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  #filter-sort-wrapper:has(.filter-button.mixitup-control-active)
+    #filter-reset-all {
     opacity: 1;
-    transform: none;
     pointer-events: auto;
-    transition: none;
   }
 
-  /* Each Role/Tool/Topic group: plain full-width stack. */
-  #filter.active + #filter-box .filter-group,
-  #filter:not(.active) + #filter-box .filter-group {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    width: 100%;
-    height: auto;
-    grid-template-rows: none;
-    grid-auto-rows: auto;
-    opacity: 1;
-    overflow: visible;
-    transition: none;
+  #zoom-wrapper {
+    margin-top: 22px; /* align with the chip row below the group label */
   }
 
-  #filter-box .filter-title {
-    width: 100%;
-    text-align: left;
-    margin: 10px 0 2px;
+  /* ------------------------------------------------------------------ */
+  /* Mobile: floating pills + bottom sheet                               */
+  /* ------------------------------------------------------------------ */
+
+  @media (--bp-mobile) {
+    #filter-sort-wrapper {
+      position: fixed;
+      top: auto;
+      bottom: calc(var(--mobile-nav-stack) + 10px);
+      left: var(--mobile-nav-inset);
+      right: var(--mobile-nav-inset);
+      z-index: 1003;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0;
+      margin: 0;
+      background: none;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+      pointer-events: none;
+    }
+
+    #filter-sort-wrapper::after {
+      display: none;
+    }
+
+    #filter-sort-wrapper > * {
+      pointer-events: auto;
+    }
+
+    /* Trigger pill (solid) and zoom pill (glass) sit at the two ends. */
+    #filter {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 44px;
+      padding: 0 18px;
+      border-radius: 999px;
+      background-color: black;
+      color: var(--bg-color);
+      font-size: 14px;
+      box-shadow: var(--surface-shadow);
+    }
+
+    #filter .count:not(:empty) {
+      opacity: 0.7;
+    }
+
+    #zoom-wrapper {
+      margin: 0;
+      height: 44px;
+      box-sizing: border-box;
+      padding: 4px;
+      background-color: var(--surface-glass);
+      -webkit-backdrop-filter: var(--surface-blur);
+      backdrop-filter: var(--surface-blur);
+      box-shadow: var(--surface-shadow);
+    }
+
+    .zoom-button {
+      height: 34px;
+      width: 40px;
+    }
+
+    /* Backdrop dims the page (and the nav pill) while the sheet is up. */
+    #filter-backdrop {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: 1100;
+      background-color: rgba(0, 0, 0, 0.28);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    #filter-sort-wrapper.is-open #filter-backdrop {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* The sheet */
+    #filter-box {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1101;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      max-height: min(82dvh, 680px);
+      box-sizing: border-box;
+      padding: 0 20px calc(16px + env(safe-area-inset-bottom, 0px));
+      border-radius: 24px 24px 0 0;
+      background-color: var(--bg-color);
+      box-shadow: 0 -12px 40px -16px rgba(0, 0, 0, 0.4);
+      transform: translateY(100%);
+      visibility: hidden;
+      transition:
+        transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0s linear 0.42s;
+    }
+
+    #filter-sort-wrapper.is-open #filter-box {
+      transform: translateY(0);
+      visibility: visible;
+      transition:
+        transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0s linear 0s;
+    }
+
+    .sheet-handle {
+      display: block;
+      flex: 0 0 auto;
+      width: 40px;
+      height: 4px;
+      margin: 10px auto 6px;
+      border-radius: 999px;
+      background-color: rgba(0, 0, 0, 0.18);
+    }
+
+    #group-wrapper {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      padding: 8px 0 12px;
+    }
+
+    .filter-title {
+      margin-bottom: 10px;
+    }
+
+    .chip-row {
+      gap: 8px;
+    }
+
+    /* Touch-sized controls inside the sheet. */
+    .chip {
+      height: 40px;
+      padding: 0 16px;
+      font-size: 14px;
+    }
+
+    .sort-group {
+      margin-left: 0;
+    }
+
+    .sort-group .segmented {
+      display: flex;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .sort-button {
+      flex: 1 1 0;
+      height: 34px;
+      font-size: 14px;
+    }
+
+    .sheet-actions {
+      flex: 0 0 auto;
+      align-self: stretch;
+      display: flex;
+      gap: 12px;
+      padding-top: 12px;
+      border-top: var(--border-size) solid var(--surface-line);
+    }
+
+    #filter-reset-all {
+      height: 44px;
+      font-size: 14px;
+    }
+
+    #filter-done {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1 1 auto;
+      font-size: 14px;
+    }
   }
 
-  /* Full-width, touch-sized buttons (no height-reveal inside the box). */
-  #filter-box .filter-button {
-    width: 100%;
-    height: 48px;
-    transition: none;
+  @media (prefers-reduced-motion: reduce) {
+    #filter-box,
+    #filter-backdrop,
+    .chip,
+    .sort-button,
+    .zoom-button {
+      transition: none;
+    }
   }
-
-  #filter-reset-wrapper {
-    margin-top: 14px;
-  }
-
-  /* The collapsed-state chip row and per-group V brackets aren't used here. */
-  #filter-box #active-filters-list { display: none; }
-  #filter-box .bracket-v { display: none; }
-
-
-  /* ============================================================
-     SORT — same full-width treatment as the Filter button, but the
-     options box is sized to its contents. Explicitly NOT the full-height
-     box the filter gets ("don't make it full height").
-     ============================================================ */
-
-  /* Sort button expands to full width; filter column collapses while open. */
-  #filter-sort-wrapper:has(#sort.active) #sort-wrapper {
-    width: 100%;
-    grid-template-columns: 1fr;
-  }
-  /* Keep the pushed-right Filter button visible (it stops at the zoom +). */
-  #filter-sort-wrapper:has(#sort.active) #filter-wrapper {
-    overflow: visible;
-  }
-  #sort.active {
-    width: 100%;
-  }
-  /* The Sort widen is driven by the grid track (col 1 grows, pushing Filter);
-     the button is width:100% and simply tracks that animating column. Drop its
-     own width transition so the two don't fight — one smooth driver. */
-  #sort,
-  #sort.active {
-    transition: none;
-  }
-
-  /* Options drop into a bottom-anchored box above the button, sized to its
-     contents (NOT full height). Mirrors #filter-box: same bottom anchor, same
-     z-index, same grow-up height transition timing. */
-  #sort-buttons {
-    position: fixed;
-    /* Match the widened Sort button exactly and sit directly above it.
-       Button left = bar left (2px); button right = 100% - zoom-reserve - 108px
-       (Sort col = 100% - zoom-reserve - 110px, + bar left 2px), so the box's
-       right inset is (zoom-reserve + 108px). */
-    left: 2px;
-    right: calc(var(--zoom-reserve) + 108px);
-    bottom: 104px;            /* just above the Sort button, matches #filter-box */
-    z-index: 1004;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 0 16px;
-    box-sizing: border-box;
-    width: auto;
-    height: 0;
-    overflow: hidden;
-    background-color: var(--bg-color);
-    grid-template-rows: none;
-    grid-template-columns: none;
-    transition: height 0.4s ease 0s;   /* close: collapse first, like #filter-box */
-  }
-  #sort.active ~ #sort-buttons {
-    /* 3 options (48) + 2 brackets (12) + 4 gaps (6) = exact content height */
-    height: calc(3 * 48px + 2 * 12px + 4 * 6px);
-    transition: height 0.45s ease 0.3s;   /* grow up after the button widens */
-  }
-
-  /* Top (⊓) and bottom (⊔) bracket frame — same look as #filter-box. The sort
-     brackets come from a child component (hidden below), so the frame is drawn
-     with pseudo-elements instead. */
-  #sort-buttons::before,
-  #sort-buttons::after {
-    content: "";
-    flex: 0 0 12px;
-    border: 1.5px solid black;
-  }
-  #sort-buttons::before { border-bottom: none; }
-  #sort-buttons::after { border-top: none; }
-
-  /* Full-width, touch-sized options (no width/height reveal animation). */
-  #sort-buttons .sort-button,
-  #sort.active ~ #sort-buttons .sort-button {
-    width: 100%;
-    height: 48px;
-    transition: none;
-  }
-  #sort-buttons .sort-button::before {
-    height: 48px;
-  }
-
-  /* The component V brackets don't fit the vertical stack; the frame above
-     replaces them on mobile. */
-  #sort-buttons :global(.svg-container) { display: none; }
-}
-
 </style>

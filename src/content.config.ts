@@ -75,6 +75,70 @@ const cloudinaryAssetSchema = z.looseObject({
     width: z.number(),
 });
 
+// ---- Project stories ------------------------------------------------------
+
+const storyImageSchema = z.object({
+  // Local asset path, e.g. "/src/assets/projects/structureofwood/x.webp"
+  src: z.string(),
+  alt: z.string(),
+  caption: z.string().optional(),
+});
+
+const storyStepSchema = z.object({
+  heading: z.string().optional(),
+  body: z.string(), // markdown
+});
+
+const storyBlockSchema = z.discriminatedUnion("type", [
+  // Full-width opener: image with the title overlaid.
+  z.object({
+    type: z.literal("hero"),
+    image: storyImageSchema,
+    kicker: z.string().optional(),
+  }),
+  // A paragraph or two of markdown.
+  z.object({
+    type: z.literal("text"),
+    heading: z.string().optional(),
+    body: z.string(),
+    align: z.enum(["left", "center"]).optional(),
+  }),
+  // One image at a chosen width.
+  z.object({
+    type: z.literal("image"),
+    image: storyImageSchema,
+    size: z.enum(["full", "wide", "narrow"]).optional(),
+  }),
+  // Image beside text.
+  z.object({
+    type: z.literal("split"),
+    image: storyImageSchema,
+    heading: z.string().optional(),
+    body: z.string(),
+    imageSide: z.enum(["left", "right"]).optional(),
+  }),
+  // Image grid.
+  z.object({
+    type: z.literal("gallery"),
+    images: z.array(storyImageSchema).min(1),
+    columns: z.number().int().min(2).max(4).optional(),
+  }),
+  // The "story" block: one image stays pinned while short text steps scroll
+  // past it, each lighting up as it reaches the middle of the screen.
+  z.object({
+    type: z.literal("sticky"),
+    image: storyImageSchema,
+    steps: z.array(storyStepSchema).min(1),
+  }),
+  z.object({
+    type: z.literal("quote"),
+    text: z.string(),
+    source: z.string().optional(),
+  }),
+]);
+
+export type StoryBlock = z.infer<typeof storyBlockSchema>;
+
 export const collections = {
   galleryImages: defineCollection({
     loader: cldAssetsLoader({
@@ -175,6 +239,26 @@ export const collections = {
       bgcolor: z.string().optional(),
       projectDescription: z.string(),
       credits: z.string(),
+    }),
+  }),
+
+  // Project stories: an ordered list of blocks rendered as a smooth-scrolling
+  // narrative page at /projects/<slug>. Block-based on purpose — each block is
+  // a flat JSON-friendly object, so the same data can later be edited from an
+  // admin UI without the schema changing. See docs/stories.md.
+  stories: defineCollection({
+    loader: glob({ pattern: "**/[^_]*.yaml", base: "./src/content/stories" }),
+    schema: z.object({
+      project: z.string(),
+      title: z.string(),
+      subtitle: z.string().optional(),
+      year: z.string().optional(),
+      client: z.string().optional(),
+      role: z.string().optional(),
+      tools: z.string().optional(),
+      summary: z.string().optional(),
+      draft: z.boolean().default(false),
+      blocks: z.array(storyBlockSchema),
     }),
   }),
 

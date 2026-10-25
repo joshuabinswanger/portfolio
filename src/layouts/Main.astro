@@ -120,6 +120,9 @@ const structuredData = {
       set:html={JSON.stringify(structuredData)}
     />
 
+    <!-- Per-page extras (e.g. a noindex meta for draft story pages) -->
+    <slot name="head" />
+
     <!-- Client Router -->
     <ClientRouter fallback="swap" />
 

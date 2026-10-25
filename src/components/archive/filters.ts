@@ -44,18 +44,10 @@ function getArchiveContainer() {
   return containerEl;
 }
 
-// Updates Active Filters List on MixItUp end
+// Reflects the active filter set after every mix: aria-pressed on each chip,
+// the "[N]" count on the mobile trigger, and data-active-count on the toolbar
+// (CSS keys the Reset affordance off the chips' active class directly).
 function updateActiveFiltersList() {
-  const activeFiltersContainer = document.getElementById("active-filters-list");
-
-  if (!activeFiltersContainer) {
-    return;
-  }
-
-  // Clear current filters
-  activeFiltersContainer.innerHTML = "";
-
-  // Select active filter buttons
   const activeButtons = document.querySelectorAll<HTMLButtonElement>(
     ".filter-button.mixitup-control-active",
   );
@@ -70,74 +62,74 @@ function updateActiveFiltersList() {
       ),
     );
 
-  // Retrieve Astro scoped attribute from the container or existing element
-  const astroScopedAttr = activeFiltersContainer.attributes;
-  let astroCidAttr = "";
+  document
+    .getElementById("filter-sort-wrapper")
+    ?.setAttribute("data-active-count", String(activeButtons.length));
 
-  for (const attr of astroScopedAttr) {
-    if (attr.name.startsWith("data-astro-cid-")) {
-      astroCidAttr = attr.name;
-      break;
-    }
-  }
-
-  // Generate active filter divs with Astro scoped ID
-  activeButtons.forEach((button) => {
-    const filterName =
-      button.getAttribute("data-filter-name") || button.textContent?.trim() || "";
-    const filterClass = button.getAttribute("data-toggle")?.replace(".", "") ?? "";
-
-    // Create div element
-    const div = document.createElement("div");
-    div.classList.add("active-filter");
-
-    // Add Astro scoped attribute if found
-    if (astroCidAttr) {
-      div.setAttribute(astroCidAttr, "");
-    }
-
-    div.textContent = filterName;
-    div.dataset.filterClass = filterClass;
-
-    // Add click-to-remove event handler
-    div.addEventListener("click", removeActiveFilter);
-
-    activeFiltersContainer.appendChild(div);
-  });
-
-  // Update CSS variable for dynamic column count.
-  // Set it on #filter-box (the chip grid's ancestor) so both the chip grid
-  // and the #filter-box column-width calc resolve the same live value.
-  const filterBox = document.getElementById("filter-box");
-  filterBox?.style.setProperty(
-    "--active-filters-list-length",
-    String(activeButtons.length),
-  );
-
-  // Show the active-filter count in brackets on the Filter button, e.g. "Filter [2]".
+  // Active-filter count in brackets on the trigger, e.g. "Filter & Sort [2]".
   const filterCount = document.getElementById("filter-count");
   if (filterCount) {
     filterCount.textContent =
-      activeButtons.length > 0 ? ` [${activeButtons.length}]` : "";
+      activeButtons.length > 0 ? `[${activeButtons.length}]` : "";
   }
 }
 
-// Function to handle removing filters on click
-function removeActiveFilter(event: MouseEvent) {
-  const filterClass = (event.currentTarget as HTMLElement).dataset.filterClass;
+//////////////////////////////
+///////FILTER SHEET (MOBILE)///
+//////////////////////////////
 
-  if (!filterClass) {
-    return;
-  }
+// On phones the filter box is a bottom sheet opened by #filter; on wider
+// viewports the same box is an always-visible rail and the trigger is hidden.
+// `inert` keeps the collapsed sheet out of the tab order (A-4) without
+// touching layout. Returns a teardown used on View Transition swaps.
+const SHEET_OPEN_CLASS = "is-open";
+const SCROLL_LOCK_CLASS = "archive-sheet-open";
+const MOBILE_QUERY = "(max-width: 767px)"; // matches --bp-mobile
 
-  // Find corresponding button and simulate a click to deactivate it
-  const correspondingButton = document.querySelector<HTMLButtonElement>(
-    `.filter-button[data-toggle=".${filterClass}"].mixitup-control-active`,
-  );
+function initFilterSheet(): () => void {
+  const wrapper = document.getElementById("filter-sort-wrapper");
+  const trigger = document.getElementById("filter");
+  const box = document.getElementById("filter-box");
+  const backdrop = document.getElementById("filter-backdrop");
+  const done = document.getElementById("filter-done");
+  if (!wrapper || !trigger || !box) return () => {};
 
-  if (correspondingButton) {
-    correspondingButton.click();
-  }
+  const mobile = window.matchMedia(MOBILE_QUERY);
+
+  const setOpen = (open: boolean) => {
+    const isMobile = mobile.matches;
+    const effective = open && isMobile;
+    wrapper.classList.toggle(SHEET_OPEN_CLASS, effective);
+    trigger.setAttribute("aria-expanded", String(effective));
+    box.toggleAttribute("inert", isMobile && !effective);
+    document.documentElement.classList.toggle(SCROLL_LOCK_CLASS, effective);
+  };
+
+  const toggle = () => setOpen(!wrapper.classList.contains(SHEET_OPEN_CLASS));
+  const close = () => setOpen(false);
+  const onKey = (event: KeyboardEvent) => {
+    if (event.key === "Escape" && wrapper.classList.contains(SHEET_OPEN_CLASS)) {
+      close();
+      trigger.focus();
+    }
+  };
+  // Leaving the phone breakpoint while the sheet is open: drop the sheet
+  // state so the desktop rail is interactive again.
+  const onBreakpoint = () => setOpen(false);
+
+  trigger.addEventListener("click", toggle);
+  backdrop?.addEventListener("click", close);
+  done?.addEventListener("click", close);
+  document.addEventListener("keydown", onKey);
+  mobile.addEventListener("change", onBreakpoint);
+
+  setOpen(false);
+
+  return () => {
+    document.removeEventListener("keydown", onKey);
+    mobile.removeEventListener("change", onBreakpoint);
+    document.documentElement.classList.remove(SCROLL_LOCK_CLASS);
+  };
 }
 
 function updateFilterButtonAvailability() {
@@ -403,101 +395,17 @@ function isPhonePortrait() {
 ////////////// page load ////////////////
 ////////////////////////////////////////
 
+let teardownSheet: (() => void) | null = null;
+
 export function initArchiveFilters() {
   document.addEventListener("astro:page-load", () => {
-    // --- START: Add Mutual Exclusivity Logic ---
-    const filterButton = document.getElementById("filter");
-    const sortButton = document.getElementById("sort");
-    const filterSortWrapper = document.getElementById("filter-sort-wrapper");
+    // Mobile bottom sheet open/close (no-op layout-wise on desktop).
+    teardownSheet = initFilterSheet();
 
-    // Opening the filter doesn't change #filter-sort-wrapper's own grid columns
-    // (both base and :has(#filter.active) resolve to "56px auto"), so WebKit/iOS
-    // doesn't re-resolve the `auto` track the filter box lives in until some other
-    // container-level relayout happens (e.g. opening Sort). Force a synchronous
-    // layout flush after each toggle so the panel expands on first tap.
-    const nudgeReflow = () => {
-      if (filterSortWrapper) void filterSortWrapper.offsetWidth;
-    };
-
-    // a11y (A-4): keep collapsed panels out of the tab order. #group-wrapper holds
-    // the filter buttons and #sort-buttons the sort options; both collapse when
-    // their toggle isn't `.active`. The closed-state active-filter chips live in
-    // the sibling #active-filters-list and stay reachable. `inert` only affects
-    // focus/interaction/AT — it never touches the (WebKit-fragile) track sizes.
-    const groupWrapper = document.getElementById("group-wrapper");
-    const sortButtonsBox = document.getElementById("sort-buttons");
-    const syncPanelInert = () => {
-      groupWrapper?.toggleAttribute(
-        "inert",
-        !filterButton?.classList.contains("active"),
-      );
-      sortButtonsBox?.toggleAttribute(
-        "inert",
-        !sortButton?.classList.contains("active"),
-      );
-    };
-
-    if (filterButton && sortButton) {
-      // Ensure buttons exist
-      filterButton.addEventListener("click", () => {
-        const currentlyActive = filterButton.classList.contains("active");
-        // If activating filter, deactivate sort first
-        if (!currentlyActive) {
-          sortButton.classList.remove("active");
-        }
-        // Now toggle filter's state
-        filterButton.classList.toggle("active");
-        nudgeReflow();
-        syncPanelInert();
-      });
-
-      sortButton.addEventListener("click", () => {
-        const currentlyActive = sortButton.classList.contains("active");
-        // If activating sort, deactivate filter first
-        if (!currentlyActive) {
-          filterButton.classList.remove("active");
-        }
-        // Now toggle sort's state
-        sortButton.classList.toggle("active");
-        nudgeReflow();
-        syncPanelInert();
-      });
-
-      // Both panels start closed → start inert.
-      syncPanelInert();
-
-      // a11y (A-3): default toggle state before any filtering happens.
-      document
-        .querySelectorAll<HTMLButtonElement>(".filter-button")
-        .forEach((btn) => btn.setAttribute("aria-pressed", "false"));
-    } else {
-      console.error("Could not find filter or sort button elements.");
-    }
-    // --- END: Add Mutual Exclusivity Logic ---
-
-    // --- START: NEW - Close Sort dropdown when an option is clicked ---
-    const sortOptionButtons = document.querySelectorAll<HTMLButtonElement>(
-      "#sort-buttons .sort-button",
-    ); // Get specific sort option buttons
-
-    if (sortButton && sortOptionButtons.length > 0) {
-      sortOptionButtons.forEach((optionBtn) => {
-        optionBtn.addEventListener("click", () => {
-          // When a sort option like 'Random', 'Project', 'Date' is clicked...
-          // ...remove the 'active' class from the main Sort button to close the dropdown
-          setTimeout(() => {
-            sortButton.classList.remove("active");
-            syncPanelInert();
-          }, 500);
-        });
-      });
-    } else {
-      if (!sortButton)
-        console.error("Main sort button (#sort) not found for close logic.");
-      if (sortOptionButtons.length === 0)
-        console.error("Sort option buttons not found for close logic.");
-    }
-    // --- END: NEW - Close Sort dropdown ---
+    // a11y (A-3): default toggle state before any filtering happens.
+    document
+      .querySelectorAll<HTMLButtonElement>(".filter-button")
+      .forEach((btn) => btn.setAttribute("aria-pressed", "false"));
 
     // Wire the +/- grid zoom control.
     initArchiveZoom();
@@ -594,6 +502,9 @@ export function initArchiveFilters() {
   ///////////////////////////////////
 
   document.addEventListener("astro:before-swap", () => {
+    teardownSheet?.();
+    teardownSheet = null;
+
     /////////////////////
     ///////MixItUp//////
     /////////////////////

@@ -1,0 +1,483 @@
+---
+// Renders one `stories` entry as a scrolling narrative: a header, then the
+// ordered block list. Every block is a plain object (see storyBlockSchema in
+// content.config.ts) so the same data can later come from an admin UI.
+// Smooth scrolling + reveal-on-scroll live in ./scroll.ts.
+import type { CollectionEntry } from "astro:content";
+import { marked } from "marked";
+import TopWrapper from "../../layouts/TopWrapper.astro";
+import StoryImage from "./StoryImage.astro";
+
+interface Props {
+  story: CollectionEntry<"stories">;
+}
+
+const { story } = Astro.props;
+const { data } = story;
+
+const md = (text: string) => marked.parse(text) as string;
+
+const meta = [
+  ["Year", data.year],
+  ["Client", data.client],
+  ["Role", data.role],
+  ["Tools", data.tools],
+].filter((row): row is [string, string] => Boolean(row[1]));
+---
+
+<TopWrapper>
+  <article class="story" data-story={story.id}>
+    <header class="story-header" data-reveal>
+      <h1>{data.title}</h1>
+      {data.subtitle && <p class="subtitle">{data.subtitle}</p>}
+      {
+        meta.length > 0 && (
+          <dl class="meta">
+            {meta.map(([label, value]) => (
+              <div>
+                <dt>{label}</dt>
+                <dd>{value}</dd>
+              </div>
+            ))}
+          </dl>
+        )
+      }
+      {data.summary && <p class="summary">{data.summary}</p>}
+    </header>
+
+    {
+      data.blocks.map((block, index) => {
+        switch (block.type) {
+          case "hero":
+            return (
+              <section class="block block-hero" data-reveal>
+                <StoryImage
+                  {...block.image}
+                  loading={index === 0 ? "eager" : "lazy"}
+                  sizes="100vw"
+                />
+                {block.kicker && <p class="kicker">{block.kicker}</p>}
+              </section>
+            );
+
+          case "text":
+            return (
+              <section
+                class:list={["block", "block-text", `align-${block.align ?? "left"}`]}
+                data-reveal
+              >
+                {block.heading && <h2>{block.heading}</h2>}
+                <div class="prose" set:html={md(block.body)} />
+              </section>
+            );
+
+          case "image":
+            return (
+              <section
+                class:list={["block", "block-image", `size-${block.size ?? "wide"}`]}
+                data-reveal
+              >
+                <StoryImage
+                  {...block.image}
+                  sizes={
+                    block.size === "narrow"
+                      ? "(max-width: 767px) 100vw, 640px"
+                      : "(max-width: 767px) 100vw, 952px"
+                  }
+                />
+              </section>
+            );
+
+          case "split":
+            return (
+              <section
+                class:list={[
+                  "block",
+                  "block-split",
+                  `image-${block.imageSide ?? "left"}`,
+                ]}
+                data-reveal
+              >
+                <StoryImage
+                  {...block.image}
+                  sizes="(max-width: 767px) 100vw, 520px"
+                />
+                <div class="split-text">
+                  {block.heading && <h2>{block.heading}</h2>}
+                  <div class="prose" set:html={md(block.body)} />
+                </div>
+              </section>
+            );
+
+          case "gallery":
+            return (
+              <section
+                class="block block-gallery"
+                style={`--gallery-columns: ${block.columns ?? 3}`}
+                data-reveal
+              >
+                {block.images.map((image) => (
+                  <StoryImage
+                    {...image}
+                    sizes={`(max-width: 767px) 100vw, ${Math.round(952 / (block.columns ?? 3))}px`}
+                  />
+                ))}
+              </section>
+            );
+
+          case "sticky":
+            return (
+              <section class="block block-sticky" data-sticky>
+                <div class="sticky-media">
+                  <StoryImage
+                    {...block.image}
+                    sizes="(max-width: 767px) 100vw, 520px"
+                  />
+                </div>
+                <ol class="sticky-steps">
+                  {block.steps.map((step, stepIndex) => (
+                    <li
+                      class:list={["sticky-step", { "is-active": stepIndex === 0 }]}
+                      data-step
+                    >
+                      {step.heading && <h2>{step.heading}</h2>}
+                      <div class="prose" set:html={md(step.body)} />
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            );
+
+          case "quote":
+            return (
+              <section class="block block-quote" data-reveal>
+                <blockquote>
+                  <p>{block.text}</p>
+                  {block.source && <cite>{block.source}</cite>}
+                </blockquote>
+              </section>
+            );
+
+          default:
+            return null;
+        }
+      })
+    }
+
+    <footer class="story-footer" data-reveal>
+      <a href="/project-index/" class="back">&larr; All projects</a>
+    </footer>
+  </article>
+</TopWrapper>
+
+<script>
+  import { initStoryScroll } from "./scroll";
+
+  initStoryScroll();
+</script>
+
+<style>
+  @import "../../styles/global.css";
+
+  .story {
+    --story-narrow: 640px;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(64px, 10vh, 128px);
+    padding-bottom: 20vh;
+    font-family: PowerGrotesk-Light;
+    color: black;
+    min-width: 0;
+  }
+
+  /* ---------- header ---------- */
+
+  .story-header {
+    max-width: var(--story-narrow);
+    margin: 0 auto;
+    padding-top: 8vh;
+    text-align: center;
+
+    @media (--bp-mobile) {
+      padding-top: 2vh;
+    }
+  }
+
+  h1 {
+    font-family: PowerGrotesk-Regular;
+    font-weight: 400;
+    font-size: clamp(32px, 5vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 0 0 14px;
+  }
+
+  .subtitle {
+    font-size: clamp(15px, 1.6vw, 19px);
+    margin: 0 0 28px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 28px;
+    margin: 0 0 28px;
+    font-size: 12px;
+  }
+
+  .meta div {
+    display: flex;
+    gap: 8px;
+  }
+
+  .meta dt {
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: 10px;
+    color: rgba(0, 0, 0, 0.5);
+    align-self: center;
+  }
+
+  .meta dt::before {
+    content: "[ ";
+  }
+  .meta dt::after {
+    content: " ]";
+  }
+
+  .meta dd {
+    margin: 0;
+  }
+
+  .summary {
+    font-size: clamp(15px, 1.5vw, 18px);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* ---------- blocks ---------- */
+
+  .block {
+    min-width: 0;
+  }
+
+  h2 {
+    font-family: PowerGrotesk-Regular;
+    font-weight: 400;
+    font-size: clamp(22px, 2.4vw, 30px);
+    line-height: 1.15;
+    margin: 0 0 16px;
+  }
+
+  .prose {
+    font-size: clamp(15px, 1.4vw, 17px);
+    line-height: 1.6;
+  }
+
+  .prose :global(p) {
+    margin: 0 0 1em;
+  }
+  .prose :global(p:last-child) {
+    margin-bottom: 0;
+  }
+  .prose :global(a) {
+    color: black;
+  }
+
+  .block-hero {
+    position: relative;
+  }
+
+  .kicker {
+    position: absolute;
+    left: 20px;
+    bottom: 16px;
+    margin: 0;
+    padding: 6px 12px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background-color: var(--surface-glass);
+    -webkit-backdrop-filter: var(--surface-blur);
+    backdrop-filter: var(--surface-blur);
+    border-radius: 999px;
+  }
+
+  .block-text {
+    max-width: var(--story-narrow);
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .block-text.align-center {
+    text-align: center;
+  }
+
+  .block-image.size-narrow {
+    max-width: var(--story-narrow);
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .block-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 48px;
+    align-items: center;
+
+    @media (--bp-mobile) {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+
+  .block-split.image-right :global(.story-image) {
+    order: 2;
+
+    @media (--bp-mobile) {
+      order: 0;
+    }
+  }
+
+  .block-gallery {
+    display: grid;
+    grid-template-columns: repeat(var(--gallery-columns, 3), minmax(0, 1fr));
+    gap: 16px;
+
+    @media (--bp-mobile) {
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+  }
+
+  /* Sticky story: image pins while the steps scroll past. Pure CSS sticky —
+     no scroll pinning library — so it degrades to a normal stack. */
+  .block-sticky {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 64px;
+    align-items: start;
+
+    @media (--bp-mobile) {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+  }
+
+  .sticky-media {
+    position: sticky;
+    top: 12vh;
+
+    @media (--bp-mobile) {
+      top: 0;
+      z-index: 1;
+      background-color: var(--bg-color);
+      padding-bottom: 12px;
+    }
+  }
+
+  .sticky-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .sticky-step {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10vh 0;
+    opacity: 0.3;
+    transform: translateY(12px);
+    transition:
+      opacity 0.5s ease,
+      transform 0.5s ease;
+
+    @media (--bp-mobile) {
+      min-height: 40vh;
+      padding: 6vh 0;
+    }
+  }
+
+  .sticky-step.is-active {
+    opacity: 1;
+    transform: none;
+  }
+
+  .block-quote {
+    max-width: var(--story-narrow);
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+  }
+
+  blockquote {
+    margin: 0;
+  }
+
+  blockquote p {
+    font-family: PowerGrotesk-UltraLight;
+    font-weight: 100;
+    font-size: clamp(22px, 3vw, 36px);
+    line-height: 1.3;
+    margin: 0 0 16px;
+  }
+
+  blockquote p::before {
+    content: "[ ";
+  }
+  blockquote p::after {
+    content: " ]";
+  }
+
+  cite {
+    font-style: normal;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: rgba(0, 0, 0, 0.55);
+  }
+
+  .story-footer {
+    text-align: center;
+  }
+
+  .back {
+    display: inline-block;
+    padding: 12px 22px;
+    border-radius: 999px;
+    border: var(--border-size) solid var(--surface-line);
+    color: black;
+    text-decoration: none;
+    font-size: 13px;
+  }
+
+  /* ---------- reveal on scroll (scroll.ts adds .is-visible) ---------- */
+
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal],
+    .sticky-step {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .sticky-step:not(.is-active) {
+      opacity: 0.5;
+    }
+  }
+</style>

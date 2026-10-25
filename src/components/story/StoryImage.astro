@@ -1,0 +1,60 @@
+---
+// One story image: local asset → responsive <Picture>, optional caption.
+import { Picture } from "astro:assets";
+import { resolveLocalImage } from "../images/localImages";
+
+interface Props {
+  src: string;
+  alt: string;
+  caption?: string;
+  sizes?: string;
+  loading?: "eager" | "lazy";
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  caption,
+  sizes = "(max-width: 767px) 100vw, 952px",
+  loading = "lazy",
+  class: className = "",
+} = Astro.props;
+
+const image = resolveLocalImage(src);
+---
+
+<figure class:list={["story-image", className]}>
+  <Picture
+    src={image}
+    alt={alt}
+    sizes={sizes}
+    widths={[480, 768, 1200, 1600]}
+    formats={["avif", "webp"]}
+    loading={loading}
+  />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  @import "../../styles/global.css";
+
+  .story-image {
+    margin: 0;
+    min-width: 0;
+  }
+
+  picture,
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  figcaption {
+    margin-top: 10px;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+</style>

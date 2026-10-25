@@ -14,20 +14,27 @@ YAML collections plus two remote Cloudinary collections loaded at build time.
 ## Read the docs first
 
 `docs/` has per-system notes. Before touching galleries, the archive
-filter/sort UI, video playback, image handling, content YAML, or head
-metadata/SEO, read the matching file: [galleries](docs/galleries.md),
-[archive-filters](docs/archive-filters.md), [video-player](docs/video-player.md),
-[image-optimization](docs/image-optimization.md), [content-yaml](docs/content-yaml.md),
-[seo](docs/seo.md), [troubleshooting](docs/troubleshooting.md).
+filter/sort UI, project story pages, video playback, image handling, content
+YAML, or head metadata/SEO, read the matching file: [galleries](docs/galleries.md),
+[archive-filters](docs/archive-filters.md), [stories](docs/stories.md),
+[video-player](docs/video-player.md), [image-optimization](docs/image-optimization.md),
+[content-yaml](docs/content-yaml.md), [seo](docs/seo.md),
+[troubleshooting](docs/troubleshooting.md). The admin/CMS question is assessed in
+[admin-editing-assessment](docs/admin-editing-assessment.md).
 
 ## Layout
 
 - `src/pages` — routes: `index` (homepage gallery), `project-index`, `info`,
-  `fire`, `nzz-bewerbung`; `personal/` is a parallel variant of the site.
+  `projects/[slug]` (block-based story pages), `fire`, `nzz-bewerbung`;
+  `personal/` is a parallel variant of the site.
 - `src/components/gallery` — homepage gallery (keen-slider + PhotoSwipe).
   Shared PhotoSwipe helpers live here: `photoswipeCaption.ts`, `photoswipeVideo.ts`.
 - `src/components/list` — project-list gallery; `archive` — filterable archive
-  (MixItUp); `media` — shared image/video rendering incl. Mux.
+  (MixItUp); `story` — project story pages (Lenis + reveal); `media` — shared
+  image/video rendering incl. Mux.
+- `src/components/nav` — desktop + mobile nav (mobile is a floating pill; its
+  geometry tokens `--mobile-nav-*` / `--surface-*` live in `src/styles/global.css`
+  and are shared with the archive toolbar).
 - `src/content.config.ts` — zod schemas for all collections.
 - `scripts/` — Node maintenance scripts for Cloudinary/YAML upkeep.
 

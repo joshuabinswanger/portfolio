@@ -1,0 +1,27 @@
+---
+// One page per entry in src/content/stories (file name = slug). Drafts are
+// built too so they can be previewed, but are kept out of the sitemap/index
+// via noindex. See docs/stories.md.
+import { getCollection } from "astro:content";
+import Main from "../../layouts/Main.astro";
+import Story from "../../components/story/Story.astro";
+
+export async function getStaticPaths() {
+  const stories = await getCollection("stories");
+  return stories.map((story) => ({
+    params: { slug: story.id },
+    props: { story },
+  }));
+}
+
+const { story } = Astro.props;
+const { title, subtitle, summary, draft } = story.data;
+---
+
+<Main
+  title={`${title} — Rhizome Visuals | Joshua Binswanger`}
+  description={summary ?? subtitle ?? `${title}, a project by Joshua Binswanger.`}
+>
+  {draft && <meta name="robots" content="noindex" slot="head" />}
+  <Story story={story} />
+</Main>

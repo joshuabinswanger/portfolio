@@ -38,9 +38,8 @@ const { customClass = "" } = Astro.props;
   /* Column count is driven by --archive-columns so the archive zoom control can
      grow/shrink the grid at runtime (see #zoom-wrapper in
      ArchiveGallery_BoxFilters.astro and initArchiveZoom in archive/filters.ts).
-     The per-breakpoint fallbacks are the defaults when nothing is set. Mobile is
-     pinned to 2 columns (literal, ignoring the var) since the zoom UI is
-     desktop-only. */
+     The per-breakpoint fallbacks are the defaults when nothing is set (mobile
+     defaults to 2 and is clamped to 1–4 by the runtime). */
   .archive-grid {
     /* Gutter scales inversely with the column count (~constant % of cell width),
        so zooming out (more columns) tightens the grid. Each breakpoint's clamp is
