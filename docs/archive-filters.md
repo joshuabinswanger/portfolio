@@ -73,16 +73,22 @@ on (at 952px that's the Topic row — two rows total).
 
 ## Mobile (`--bp-mobile`): floating pills + bottom sheet
 
-- The form becomes a fixed row just above the floating nav bar:
-  `bottom: calc(var(--mobile-nav-stack) + 10px)` with `--mobile-nav-inset`
-  side margins. The row has `pointer-events: none` so the gap between the
-  pills scrolls through to the grid; only `#filter`, `#zoom-wrapper` and
-  `#filter-box` opt back in. **Never** use a blanket `> *` here: the backdrop
-  is a full-screen fixed child and would then swallow every tap on the page
-  while invisible (shipped once, 2026-10-25). The backdrop takes pointer
-  events only under `.is-open`.
+- The form becomes a second floating bar directly above the nav bar:
+  `bottom: calc(var(--mobile-nav-stack) + var(--mobile-bar-gap))`, the same
+  `--mobile-nav-inset` and `--mobile-nav-pad` as the nav, so its buttons line
+  up with the nav's inner edges. Both bars are frosted (`--surface-glass` +
+  `--surface-blur`) with a small `--bar-shadow` (tokens in `global.css`).
+- The bar's frosted surface is `#filter-sort-wrapper::before`, **not** a
+  `backdrop-filter` on the form: a backdrop-filter on an ancestor becomes the
+  containing block for `position: fixed` descendants and would trap the
+  full-screen sheet and backdrop inside the bar.
+- Taps: the form has `pointer-events: none`; the `::before` surface,
+  `#filter`, `#zoom-wrapper` and `#filter-box` opt back in. **Never** use a
+  blanket `> *` here: the backdrop is a full-screen fixed child and would then
+  swallow every tap on the page while invisible (shipped once, 2026-10-25).
+  The backdrop takes pointer events only under `.is-open`.
 - `#filter` is a solid black square block on the left; the zoom's two black
-  squares sit on the right. Both are 40px tall.
+  squares sit on the right. Both are `--mobile-toolbar-height` (32px) tall.
 - `#filter-box` is a fixed bottom sheet: `translateY(100%)` + `visibility:
   hidden` when closed, `translateY(0)` when `#filter-sort-wrapper.is-open`.
   Square, with a hairline top edge, `max-height: min(82dvh, 680px)` and

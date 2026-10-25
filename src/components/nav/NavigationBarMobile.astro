@@ -106,9 +106,9 @@ const isActive = (href: string) => norm(href) === here;
     width: 100%;
   }
 
-  /* Floating bar: inset from the screen edges and lifted clear of the home
-     indicator, otherwise the original look (square corners, solid page
-     background, bracket dividers). The sizing tokens are shared with the
+  /* Floating bar: inset from the screen edges, lifted clear of the home
+     indicator, frosted (blur) with a small drop shadow; otherwise the original
+     look (square corners, bracket dividers). The sizing tokens are shared with the
      archive toolbar (--mobile-nav-*), which stacks above this bar. */
   #Menu {
     position: fixed;
@@ -117,7 +117,10 @@ const isActive = (href: string) => norm(href) === here;
     right: var(--mobile-nav-inset);
     z-index: 1001;
     padding: var(--mobile-nav-pad);
-    background-color: var(--bg-color);
+    background-color: var(--surface-glass);
+    -webkit-backdrop-filter: var(--surface-blur);
+    backdrop-filter: var(--surface-blur);
+    box-shadow: var(--bar-shadow);
   }
 
   #MainWrapper {

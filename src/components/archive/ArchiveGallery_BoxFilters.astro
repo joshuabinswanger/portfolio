@@ -484,17 +484,20 @@ const sortOptions = [
   /* ------------------------------------------------------------------ */
 
   @media (--bp-mobile) {
+    /* A second floating bar directly above the nav bar, with the same inset
+       and inner padding so the Filter & Sort block and the zoom line up with
+       the nav's edges. */
     #filter-sort-wrapper {
       position: fixed;
       top: auto;
-      bottom: calc(var(--mobile-nav-stack) + 10px);
+      bottom: calc(var(--mobile-nav-stack) + var(--mobile-bar-gap));
       left: var(--mobile-nav-inset);
       right: var(--mobile-nav-inset);
       z-index: 1003;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0;
+      padding: var(--mobile-nav-pad);
       margin: 0;
       background: none;
       -webkit-backdrop-filter: none;
@@ -502,15 +505,32 @@ const sortOptions = [
       pointer-events: none;
     }
 
+    /* The frosted surface is a pseudo-element, NOT backdrop-filter on the
+       form: a backdrop-filter on an ancestor becomes the containing block for
+       position:fixed descendants, which would trap the full-screen sheet and
+       backdrop inside this bar. */
     #filter-sort-wrapper::after {
       display: none;
     }
 
-    /* The row itself lets taps through to the grid; only the two pills and the
-       sheet take them. The backdrop is deliberately NOT listed: it is a
+    #filter-sort-wrapper::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background-color: var(--surface-glass);
+      -webkit-backdrop-filter: var(--surface-blur);
+      backdrop-filter: var(--surface-blur);
+      box-shadow: var(--bar-shadow);
+      pointer-events: auto;
+    }
+
+    /* Taps: the bar surface (::before) and the two buttons take them, so a
+       tap between the buttons doesn't fall through to an image. The sheet
+       opts in too. The backdrop is deliberately NOT listed: it is a
        full-screen layer above everything, so it may only catch taps while the
-       sheet is open (rule below). A blanket `> *` here once made the invisible
-       backdrop swallow every tap on the page. */
+       sheet is open (rule below). A blanket `> *` here once made the
+       invisible backdrop swallow every tap on the page. */
     #filter,
     #zoom-wrapper,
     #filter-box {
@@ -523,11 +543,11 @@ const sortOptions = [
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      height: 40px;
-      padding: 0 12px;
+      height: var(--mobile-toolbar-height);
+      padding: 0 10px;
       background-color: black;
       color: var(--bg-color);
-      font-size: 14px;
+      font-size: 13px;
     }
 
     #filter .count:not(:empty) {
@@ -539,8 +559,8 @@ const sortOptions = [
     }
 
     .zoom-button {
-      height: 40px;
-      width: 40px;
+      height: var(--mobile-toolbar-height);
+      width: var(--mobile-toolbar-height);
     }
 
     /* Backdrop dims the page (and the nav pill) while the sheet is up. */

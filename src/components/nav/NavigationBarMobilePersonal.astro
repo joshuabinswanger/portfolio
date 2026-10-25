@@ -97,8 +97,8 @@ const isActive = (href: string) => norm(href) === here;
       width: 100%;
     }
 
-    /* Floating bar — mirrors NavigationBarMobile.astro: inset and lifted,
-       otherwise the original square, solid look. Tokens in global.css. */
+    /* Floating bar — mirrors NavigationBarMobile.astro: inset, lifted,
+       frosted with a small shadow, square. Tokens in global.css. */
     #Menu {
       position: fixed;
       bottom: var(--mobile-nav-bottom);
@@ -106,7 +106,10 @@ const isActive = (href: string) => norm(href) === here;
       right: var(--mobile-nav-inset);
       z-index: 1001;
       padding: var(--mobile-nav-pad);
-      background-color: var(--bg-color);
+      background-color: var(--surface-glass);
+      -webkit-backdrop-filter: var(--surface-blur);
+      backdrop-filter: var(--surface-blur);
+      box-shadow: var(--bar-shadow);
     }
 
     #MainWrapper {
