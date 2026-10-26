@@ -6,7 +6,7 @@ import ImageSlide from "./ImageSlide.astro";
 import "keen-slider/keen-slider.min.css";
 
 import { getProjectMedia, sortProjectsByYear } from "./utils.ts";
-import { formatListSummary } from "./listHelpers.ts";
+import { formatListSummary, getProjectFacts } from "./listHelpers.ts";
 
 const projects = await getCollection("projects");
 
@@ -40,6 +40,7 @@ for (const entry of sortedProjects) {
     {
       enrichedProjects.map(({ entry, startIndex, slidesCount }) => {
         const year = entry.data.year.slice(0, 4);
+        const facts = getProjectFacts(entry.data);
 
         return (
           <Fragment>
@@ -65,27 +66,46 @@ for (const entry of sortedProjects) {
               <div
                 class:list={["flip-out"]}
                 id={`${entry.data.projectName}-panel`}
+                inert
               >
-                <div class:list={["project-slider"]}>
+                <div class:list={["project-images"]}>
+                  <ImageSlide
+                    projectName={entry.data.projectName}
+                    startIndex={startIndex}
+                    slidesCount={slidesCount}
+                  />
+                </div>
+
+                <div class:list={["slider-controls"]} hidden>
                   <button
-                    class:list={["arrow-left"]}
+                    type="button"
+                    class:list={["slider-prev"]}
                     aria-label="Previous image"
                   >
                     &larr;
                   </button>
-
-                  <div class:list={["project-images"]}>
-                    <ImageSlide
-                      projectName={entry.data.projectName}
-                      startIndex={startIndex}
-                      slidesCount={slidesCount}
-                    />
-                  </div>
-
-                  <button class:list={["arrow-right"]} aria-label="Next image">
+                  <span class:list={["slider-count"]} aria-live="polite">
+                    1 / {slidesCount}
+                  </span>
+                  <button
+                    type="button"
+                    class:list={["slider-next"]}
+                    aria-label="Next image"
+                  >
                     &rarr;
                   </button>
                 </div>
+
+                {facts.length > 0 && (
+                  <dl class:list={["facts"]}>
+                    {facts.map((fact) => (
+                      <Fragment>
+                        <dt>{fact.label}</dt>
+                        <dd>{fact.value}</dd>
+                      </Fragment>
+                    ))}
+                  </dl>
+                )}
 
                 <div class:list={["project-description"]}>
                   <div class:list={["description"]}>
@@ -110,6 +130,7 @@ for (const entry of sortedProjects) {
 <!-- Keen Slider -->
 <script>
   import KeenSlider, { type KeenSliderInstance } from "keen-slider";
+  import { shouldShowSliderControls } from "./listHelpers.ts";
   import "keen-slider/keen-slider.min.css";
 
   type DestroyableSlider = {
@@ -219,12 +240,50 @@ for (const entry of sortedProjects) {
         }
       });
 
+      const panel = listEl.querySelector<HTMLElement>(".flip-out");
+      const controls = listEl.querySelector<HTMLElement>(".slider-controls");
+      const prevButton =
+        listEl.querySelector<HTMLButtonElement>(".slider-prev");
+      const nextButton =
+        listEl.querySelector<HTMLButtonElement>(".slider-next");
+      const countLabel = listEl.querySelector<HTMLElement>(".slider-count");
+
+      // Show the counter only when more slides exist than fit in view.
+      function updateControls(s: KeenSliderInstance) {
+        if (!controls) {
+          return;
+        }
+
+        const configuredPerView = s.options.slides;
+        const perView =
+          typeof configuredPerView === "object" &&
+          typeof configuredPerView?.perView === "number"
+            ? configuredPerView.perView
+            : 1;
+        const total = s.slides.length;
+        const current = s.track.details.rel;
+
+        controls.hidden = !shouldShowSliderControls(total, perView);
+
+        if (countLabel) {
+          countLabel.textContent = `${current + 1} / ${total}`;
+        }
+        if (prevButton) {
+          prevButton.disabled = current <= 0;
+        }
+        if (nextButton) {
+          nextButton.disabled = current >= s.track.details.maxIdx;
+        }
+      }
+
       // Click on bar
       listBar.addEventListener("click", () => {
         // Toggle the clicked slider
         if (listEl.classList.contains("open")) {
           listEl.classList.remove("open");
           listBar.setAttribute("aria-expanded", "false");
+          // Closed panels must be skipped by Tab and hidden from assistive tech.
+          panel?.setAttribute("inert", "");
           pauseVideos(listEl);
 
           setTimeout(() => {
@@ -234,6 +293,7 @@ for (const entry of sortedProjects) {
           sliderContainer.style.display = "block";
           listEl.classList.add("open");
           listBar.setAttribute("aria-expanded", "true");
+          panel?.removeAttribute("inert");
 
           // Initialize Keen Slider if not already initialized
           if (
@@ -241,17 +301,24 @@ for (const entry of sortedProjects) {
             !sliderContainer.dataset.keenSliderInitialized
           ) {
             slider = new KeenSlider(sliderContainer, {
-              loop: true,
-              created: (s) => syncVisibleVideos(s, sliderContainer),
-              slideChanged: (s) => syncVisibleVideos(s, sliderContainer),
+              loop: false,
+              created: (s) => {
+                syncVisibleVideos(s, sliderContainer);
+                updateControls(s);
+              },
+              slideChanged: (s) => {
+                syncVisibleVideos(s, sliderContainer);
+                updateControls(s);
+              },
               animationEnded: (s) => syncVisibleVideos(s, sliderContainer),
-              slides: { perView: 3, spacing: 50 },
+              optionsChanged: (s) => updateControls(s),
+              slides: { perView: 4, spacing: 12 },
               breakpoints: {
                 "(max-width: 1119px)": {
-                  slides: { perView: 2, spacing: 40 },
+                  slides: { perView: 3, spacing: 12 },
                 },
-                "(min-width: 1201px)": {
-                  slides: { perView: 3, spacing: 80 },
+                "(max-width: 767px)": {
+                  slides: { perView: 1.2, spacing: 12 },
                 },
               },
             });
@@ -259,26 +326,20 @@ for (const entry of sortedProjects) {
             // Store slider instance for cleanup
             keenSlidersStore[listEl.id] = slider;
 
-            // Add click event listeners to the arrow buttons
-            const arrowLeft = listEl.querySelector<HTMLElement>(".arrow-left");
-            const arrowRight =
-              listEl.querySelector<HTMLElement>(".arrow-right");
+            prevButton?.addEventListener("click", (e) => {
+              e.stopPropagation(); // Prevent triggering the list bar click
+              slider?.prev();
+            });
 
-            if (arrowLeft) {
-              arrowLeft.addEventListener("click", (e) => {
-                e.stopPropagation(); // Prevent triggering the list bar click
-                slider.prev();
-              });
-            }
-
-            if (arrowRight) {
-              arrowRight.addEventListener("click", (e) => {
-                e.stopPropagation(); // Prevent triggering the list bar click
-                slider.next();
-              });
-            }
+            nextButton?.addEventListener("click", (e) => {
+              e.stopPropagation(); // Prevent triggering the list bar click
+              slider?.next();
+            });
 
             sliderContainer.dataset.keenSliderInitialized = "true";
+          } else if (slider && sliderInView) {
+            // Re-opened: resume videos that are in view again.
+            syncVisibleVideos(slider, sliderContainer);
           }
         }
       });
@@ -599,65 +660,127 @@ for (const entry of sortedProjects) {
   }
 
   .flip-out {
-    margin: 0px 0px 0px 0px;
-    grid-column-start: 1;
-    grid-column-end: 6;
+    grid-column: 1 / -1;
     max-height: 0;
     overflow: hidden;
     transition: all 0.5s ease;
     display: grid;
-    grid-template-rows: min-content min-content;
-    grid-template-columns: 1fr 1fr 1fr;
-  }
+    grid-template-columns: var(--list-columns);
+    column-gap: 16px;
+    align-items: start;
 
-  .project-slider {
-    margin: 0px 0px 0px 0px;
-    grid-row-start: 1;
-    grid-column-start: 1;
-    grid-column-end: 4;
-    overflow: hidden;
-    transition: all 0.5s ease;
-    display: grid;
-    grid-template-rows: 1fr;
-    grid-template-columns: 40px 1fr 40px;
-  }
-
-  .project-description {
-    display: grid;
-    justify-content: center;
-    padding: 40px;
-    margin-top: 16px;
-    grid-row-start: 2;
-    grid-column-start: 1;
-    grid-column-end: 4;
-    grid-template-rows: min-content min-content;
-    column-gap: 80px;
-    grid-template-columns: 660px 1fr;
-
+    @media (--bp-tablet) {
+      grid-template-columns: 1fr;
+    }
     @media (--bp-mobile) {
       grid-template-columns: 1fr;
     }
   }
 
-  .title {
-    grid-row-start: 1;
-    grid-column-start: 1;
+  .ListElement.open .flip-out {
+    max-height: 1600px;
+    overflow: visible;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--rule);
   }
 
-  .subtitle {
-    grid-row-start: 1;
-    grid-column-start: 1;
+  .project-images {
+    display: none;
+    grid-column: 1 / -1;
+    margin-top: 18px;
+    overflow-x: hidden;
+    min-width: 0;
   }
 
-  .description {
-    grid-row-start: 1;
-    grid-column-start: 1;
+  .slider-controls {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-muted);
+    z-index: 2; /* under the fixed mobile nav (z 1000) */
   }
 
-  .credits {
-    grid-row-start: 2;
-    grid-column-start: 1;
-    align-items: start;
+  .slider-controls[hidden] {
+    display: none;
+  }
+
+  .slider-prev,
+  .slider-next {
+    all: unset;
+    cursor: pointer;
+    color: var(--ink);
+    padding: 4px;
+  }
+
+  .slider-prev:focus-visible,
+  .slider-next:focus-visible {
+    outline: 1px solid var(--ink);
+  }
+
+  .slider-prev:disabled,
+  .slider-next:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .facts {
+    grid-column: 1 / 3;
+    display: grid;
+    grid-template-columns: 5rem 1fr;
+    column-gap: 16px;
+    row-gap: 4px;
+    margin: 28px 0 0;
+    line-height: 18px;
+
+    @media (--bp-tablet) {
+      grid-column: 1 / -1;
+    }
+    @media (--bp-mobile) {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .facts dt {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+  }
+
+  .facts dd {
+    margin: 0;
+    font-size: 13px;
+    color: var(--ink);
+  }
+
+  .project-description {
+    grid-column: 3 / 6;
+    margin-top: 28px;
+    max-width: 60ch;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--ink);
+
+    @media (--bp-tablet) {
+      grid-column: 1 / -1;
+      margin-top: 24px;
+    }
+    @media (--bp-mobile) {
+      grid-column: 1 / -1;
+      margin-top: 24px;
+    }
+  }
+
+  .description :global(a) {
+    font-family: PowerGrotesk-Medium;
+  }
+
+  .description :global(a)::after {
+    content: " ↗";
   }
 
   table tbody td {
@@ -674,48 +797,6 @@ for (const entry of sortedProjects) {
   table {
     border-collapse: collapse;
     width: 100%;
-  }
-
-  .arrow-left,
-  .arrow-right {
-    all: unset;
-    font-size: 22px;
-    height: 40px;
-    text-justify: center;
-    text-align: center;
-    background-color: #fbf9f44c;
-    width: stretch;
-    cursor: pointer;
-    z-index: 2; /* under the fixed mobile nav (z 1000) */
-    align-self: center;
-  }
-
-  .arrow-left {
-    grid-row-start: 1;
-    grid-column-start: 1;
-  }
-
-  .arrow-right {
-    grid-row-start: 1;
-    grid-column-start: 3;
-    justify-self: flex-end;
-  }
-
-  .project-images {
-    display: none;
-    grid-row-start: 1;
-    grid-column-start: 2;
-    grid-column-end: 3;
-    overflow-x: hidden;
-  }
-
-  .ListElement.open .flip-out {
-    display: grid;
-    margin: 8px 0px 16px 0px;
-    max-height: 800px;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    overflow: visible;
   }
 
   p {
