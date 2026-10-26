@@ -136,6 +136,8 @@
     0 2px 6px rgba(0, 0, 0, 0.05);
   /* Small drop shadow for the floating mobile bars. */
   --bar-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.18);
+  /* Stronger frost for the floating mobile nav bar. */
+  --bar-blur: blur(28px) saturate(1.5);
 
   /* Mobile floating bars. Both the nav bar and the archive toolbar bar use
      the same inset and inner padding, so their contents line up; the toolbar
