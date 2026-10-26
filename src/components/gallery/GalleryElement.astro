@@ -301,7 +301,9 @@ if (!galleryProject) {
 
     overflow: auto;
 
-    z-index: 1111;
+    /* Above .Filter (11). Keep below the fixed mobile nav (z 1000): at 1111
+       the overlay and the arrows painted over the bar. */
+    z-index: 12;
 
     @media (--bp-mobile) {
       font-size: var(--font-size-mobile);
@@ -418,7 +420,7 @@ max-width: 80vw !important;
     width: 100%;
     grid-template-columns: auto min-content auto;
     place-items: center;
-    z-index: 1111;
+    z-index: 2; /* see .ImageInfo */
   }
 
   button {
