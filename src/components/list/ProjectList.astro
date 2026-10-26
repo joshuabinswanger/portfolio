@@ -693,11 +693,17 @@ for (const entry of sortedProjects) {
   }
 
   .cell-toggle::before {
-    content: "+";
+    content: "↓";
+    display: inline-block;
+    transition: transform 200ms ease;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
   }
 
   .row-bar[aria-expanded="true"] .cell-toggle::before {
-    content: "–";
+    transform: rotate(180deg);
   }
 
   .list-summary {

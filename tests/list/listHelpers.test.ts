@@ -31,7 +31,7 @@ test("getProjectFacts keeps spec order and labels", () => {
     }),
     [
       { label: "Client", value: "HNE" },
-      { label: "Role", value: "Design" },
+      { label: "Type", value: "Design" },
       { label: "Tools", value: "Houdini" },
       { label: "With", value: "A, B" },
     ],
