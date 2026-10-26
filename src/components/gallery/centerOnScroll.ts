@@ -1,7 +1,8 @@
 // Mobile homepage: the galleries sit offset left/right in the 7-column grid
 // (span 6 from column 1 or 2). While scrolling, each one slides sideways into
-// the horizontal centre as it nears the middle of the screen, and back out as
-// it leaves. Scroll-linked (no timers); off on desktop and under
+// the horizontal centre as it rises towards the middle of the screen and
+// stays centred from there on up (scrolling back down reverses it).
+// Scroll-linked (no timers); off on desktop and under
 // prefers-reduced-motion.
 
 const MOBILE = "(max-width: 767px)";
@@ -38,9 +39,10 @@ export function startCenterOnScroll(selector: string) {
       // Offset from centred, measured on the untransformed layout box.
       const toCentre =
         host.left + host.width / 2 - (box.left - applied + box.width / 2);
-      // 1 when the gallery's middle is at the screen's middle, 0 from
-      // roughly 60% of a screen away; smoothstep for a soft start and stop.
-      const distance = Math.abs(box.top + box.height / 2 - vh / 2);
+      // 0 while the gallery's middle is ~60% of a screen below the screen's
+      // middle, 1 once it reaches the middle and above (it stays centred on
+      // its way to the top); smoothstep for a soft start and stop.
+      const distance = Math.max(box.top + box.height / 2 - vh / 2, 0);
       const t = Math.min(Math.max(1 - distance / (vh * 0.6), 0), 1);
       const eased = t * t * (3 - 2 * t);
       const x = Math.round(toCentre * eased * 10) / 10;
