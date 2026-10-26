@@ -91,14 +91,13 @@ const isActive = (href: string) => norm(href) === here;
     }
 
     #Logo {
-      /* Folds into the left edge on scroll down (logoFold.ts). */
-      transform-origin: left center;
-      transform: perspective(400px) rotateY(0deg);
-      transition: transform 0.5s cubic-bezier(0.3, 0.7, 0.2, 1);
+      /* Slides out to the left on scroll down (logoFold.ts). */
+      transform: translateX(0);
+      transition: transform 0.45s cubic-bezier(0.3, 0.7, 0.2, 1);
     }
 
     #Logo.is-folded:not(:focus-visible) {
-      transform: perspective(400px) rotateY(90deg);
+      transform: translateX(-100%);
       pointer-events: none;
     }
 

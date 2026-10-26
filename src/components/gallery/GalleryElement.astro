@@ -260,11 +260,11 @@ if (!galleryProject) {
     background-color: #fbf9f400;
     width: 100%;
     height: 100%;
-    backdrop-filter: blur(0px);
+    /* No idle backdrop-filter here (or on .ImageInfo): an always-on
+       blur(0px) layer per slide kept iOS Safari from blurring the gallery
+       under the floating nav bar. */
     z-index: 11;
-    transition:
-      backdrop-filter ease-in-out 0.2s,
-      background-color ease-in-out 0.2s;
+    transition: background-color ease-in-out 0.2s;
     pointer-events: none;
   }
 
@@ -288,8 +288,8 @@ if (!galleryProject) {
     pointer-events: none; /* Prevent interaction with the description if needed */
     background-color: var(--bg-color-trans); /* Example style */
 
-    /* Start with no blur (initial state) */
-    backdrop-filter: blur(0px);
+    /* No blur until .InfoVisible (see .Filter) */
+    backdrop-filter: none;
 
     /* Add transition for backdrop-filter */
     transition:

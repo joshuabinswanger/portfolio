@@ -1,6 +1,6 @@
-// Mobile logo: folds into the left screen edge while the page scrolls down and
-// unfolds on scroll up or back at the top. The class drives a CSS rotateY
-// hinged on the left edge (see #Logo in the mobile navs).
+// Mobile logo: slides out past the left screen edge while the page scrolls
+// down and back in on scroll up or at the top. The class drives a CSS
+// translateX (see #Logo in the mobile navs).
 
 const TOP = 24; // always unfolded this close to the top
 const TRAVEL = 12; // px of scroll in one direction before the state flips
