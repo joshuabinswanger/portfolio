@@ -1,12 +1,18 @@
 ---
 import TopWrapper from "../../layouts/TopWrapper.astro";
 import { getCollection } from "astro:content";
+import { getImage } from "astro:assets";
 import { marked } from "marked";
 import ImageSlide from "./ImageSlide.astro";
 import "keen-slider/keen-slider.min.css";
 
 import { getProjectMedia, sortProjectsByYear } from "./utils.ts";
-import { formatListSummary, getProjectFacts } from "./listHelpers.ts";
+import { resolveLocalImage } from "../images/localImages.ts";
+import {
+  formatListSummary,
+  getProjectFacts,
+  pickPreviewSrc,
+} from "./listHelpers.ts";
 
 const projects = await getCollection("projects");
 
@@ -22,14 +28,29 @@ for (const entry of sortedProjects) {
   const startIndex = globalIndex;
 
   // Same list ImageSlide renders, so the PhotoSwipe indices line up.
-  const slidesCount = (await getProjectMedia(projectName)).length;
+  const media = await getProjectMedia(projectName);
+  const slidesCount = media.length;
   globalIndex += slidesCount + 2;
+
+  // Small variant for the cursor-following hover preview (shown at 220px).
+  const previewPath = pickPreviewSrc(media);
+  let preview: { src: string; width: number; height: number } | null = null;
+  if (previewPath) {
+    const source = resolveLocalImage(previewPath);
+    const optimized = await getImage({ src: source, width: 440 });
+    preview = {
+      src: optimized.src,
+      width: source.width,
+      height: source.height,
+    };
+  }
 
   const projectData = {
     entry,
     projectName,
     startIndex,
     slidesCount,
+    preview,
   };
   enrichedProjects.push(projectData);
 }
@@ -38,7 +59,7 @@ for (const entry of sortedProjects) {
 <TopWrapper>
   <div id="list-wrapper">
     {
-      enrichedProjects.map(({ entry, startIndex, slidesCount }) => {
+      enrichedProjects.map(({ entry, startIndex, slidesCount, preview }) => {
         const year = entry.data.year.slice(0, 4);
         const facts = getProjectFacts(entry.data);
 
@@ -49,6 +70,9 @@ for (const entry of sortedProjects) {
               id={entry.data.projectName}
               data-project-title={entry.data.title}
               data-project-credits={entry.data.credits}
+              data-preview-src={preview?.src}
+              data-preview-width={preview?.width}
+              data-preview-height={preview?.height}
             >
               <button
                 type="button"
@@ -124,6 +148,8 @@ for (const entry of sortedProjects) {
     <p class="list-summary">
       {formatListSummary(sortedProjects.map((p) => p.data.year))}
     </p>
+
+    <img class="list-preview" alt="" aria-hidden="true" hidden />
   </div>
 </TopWrapper>
 
@@ -131,6 +157,7 @@ for (const entry of sortedProjects) {
 <script>
   import KeenSlider, { type KeenSliderInstance } from "keen-slider";
   import { shouldShowSliderControls } from "./listHelpers.ts";
+  import { initListPreview } from "./preview.ts";
   import "keen-slider/keen-slider.min.css";
 
   type DestroyableSlider = {
@@ -139,8 +166,13 @@ for (const entry of sortedProjects) {
 
   // Store slider instances for later destruction
   let keenSlidersStore: Record<string, DestroyableSlider> = {};
+  let cleanupListPreview: (() => void) | null = null;
 
   document.addEventListener("astro:page-load", () => {
+    const listWrapper = document.getElementById("list-wrapper");
+    cleanupListPreview?.();
+    cleanupListPreview = listWrapper ? initListPreview(listWrapper) : null;
+
     const listElements = document.querySelectorAll<HTMLElement>(".ListElement");
 
     function canPlayInlineVideos() {
@@ -348,6 +380,9 @@ for (const entry of sortedProjects) {
 
   // Clean up sliders before Astro navigates away
   document.addEventListener("astro:before-swap", () => {
+    cleanupListPreview?.();
+    cleanupListPreview = null;
+
     document
       .querySelectorAll("video, mux-video, mux-player")
       .forEach((video) => {
@@ -657,6 +692,20 @@ for (const entry of sortedProjects) {
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--text-muted);
+  }
+
+  .list-preview {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: auto;
+    pointer-events: none;
+    z-index: 10; /* under the fixed mobile nav (z 1000) */
+
+    @media (hover: none), (pointer: coarse) {
+      display: none;
+    }
   }
 
   .flip-out {
