@@ -2,7 +2,7 @@
 // so the node test runner can load this file directly.
 
 export type ProjectFact = {
-  label: "Client" | "Role" | "Tools" | "With";
+  label: "Client" | "Type" | "Tools" | "With";
   value: string;
 };
 
@@ -26,7 +26,7 @@ export function getProjectFacts(data: {
 }): ProjectFact[] {
   const entries: [ProjectFact["label"], string | undefined][] = [
     ["Client", data.client],
-    ["Role", data.role],
+    ["Type", data.role],
     ["Tools", data.tools],
     ["With", data.collaborators],
   ];

@@ -25,22 +25,23 @@ links** (footer). Prototype status (2026-10): one story exists,
 ## Story file
 
 ```yaml
-project: StructureOfWood   # matches metadata.project / projectName elsewhere
+project: StructureOfWood # matches metadata.project / projectName elsewhere
 title: Structure of Wood
-subtitle: ...              # optional; small line under the title
-summary: ...               # optional; the short description under the title,
-                           # also used as the meta description
+subtitle: ... # optional; small line under the title
+summary:
+  ... # optional; the short description under the title,
+  # also used as the meta description
 # Facts — all optional, shown at the end in this order (Project = title):
-year: "2019"               # string, like the other collections
+year: "2019" # string, like the other collections
 context: BA Diploma
 client: ...
-role: ...
+role: ... # one-word product type (Poster, Figure, App…), shown as "Type"
 tools: ...
 collaborators: ...
-links:                     # listed after the facts, open in a new tab
+links: # listed after the facts, open in a new tab
   - label: Publication
     url: https://...
-draft: false               # true → page still builds but gets <meta robots noindex>
+draft: false # true → page still builds but gets <meta robots noindex>
 blocks: [...]
 ```
 
@@ -50,20 +51,20 @@ stacked on mobile), then the links, then a square "All projects" button.
 Images are **local assets** (`/src/assets/projects/...`), resolved with
 `resolveLocalImage` — same rule as the `images` collection. Note the asset
 files keep their old Cloudinary suffix (`..._Gallery_1_ytvxjm.webp`); use the real
-file name. Text fields marked *markdown* are rendered with `marked`.
+file name. Text fields marked _markdown_ are rendered with `marked`.
 
 ## Block types
 
-| `type` | Fields | Renders as |
-| --- | --- | --- |
-| `hero` | `image`, `kicker?` | Full-column opener; kicker is a small square frosted label in the corner. |
-| `text` | `body` (md), `heading?`, `align?` (`left`/`center`) | 640px prose column. |
-| `image` | `image`, `size?` (`full`/`wide`/`narrow`) | One image; `narrow` = 640px, others fill the column. |
-| `split` | `image`, `body` (md), `heading?`, `imageSide?` (`left`/`right`) | Image beside text; stacks on mobile. |
-| `gallery` | `images[]`, `columns?` (2–4) | Grid; 2 columns on mobile. |
+| `type`    | Fields                                                                           | Renders as                                                                                                                                                                                                                                                                                                                                                                                               |
+| --------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `hero`    | `image`, `kicker?`                                                               | Full-column opener; kicker is a small square frosted label in the corner.                                                                                                                                                                                                                                                                                                                                |
+| `text`    | `body` (md), `heading?`, `align?` (`left`/`center`)                              | 640px prose column.                                                                                                                                                                                                                                                                                                                                                                                      |
+| `image`   | `image`, `size?` (`full`/`wide`/`narrow`)                                        | One image; `narrow` = 640px, others fill the column.                                                                                                                                                                                                                                                                                                                                                     |
+| `split`   | `image`, `body` (md), `heading?`, `imageSide?` (`left`/`right`)                  | Image beside text; stacks on mobile.                                                                                                                                                                                                                                                                                                                                                                     |
+| `gallery` | `images[]`, `columns?` (2–4)                                                     | Grid; 2 columns on mobile.                                                                                                                                                                                                                                                                                                                                                                               |
 | `scrolly` | `steps[]` (`image?`, `heading?`, `body` md, `position?` `left`/`right`/`center`) | **Classic scrollytelling.** A full-height stage pins to the viewport and the steps' text cards (square, near-opaque paper over a heavy 40px blur, small shadow) scroll up over it. Each step's `image` cross-fades in when its card crosses the middle of the screen; a step without `image` keeps the previous one. The first step must have an image. Images are fitted with `contain`, never cropped. |
-| `sticky` | `image`, `steps[]` (`heading?`, `body` md) | Side-by-side variant: Image pins (`position: sticky`) while the steps scroll past; the step nearest the viewport centre gets `.is-active` (others dim). On mobile the image pins to the top. |
-| `quote` | `text`, `source?` | Centred pull quote in brackets. |
+| `sticky`  | `image`, `steps[]` (`heading?`, `body` md)                                       | Side-by-side variant: Image pins (`position: sticky`) while the steps scroll past; the step nearest the viewport centre gets `.is-active` (others dim). On mobile the image pins to the top.                                                                                                                                                                                                             |
+| `quote`   | `text`, `source?`                                                                | Centred pull quote in brackets.                                                                                                                                                                                                                                                                                                                                                                          |
 
 An `image` object is `{ src, alt, caption? }`.
 

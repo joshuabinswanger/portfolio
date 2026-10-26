@@ -52,13 +52,13 @@ entries that were displayed despite a `"no"` flag were set to `"yes"`.
 
 Each project in `src/components/list/ProjectList.astro` is a `.ListElement`
 (`id` = project name) that holds one `button.row-bar`. The button is the whole
-clickable row: year, client, title, role and a `+` / `–` toggle. Its
+clickable row: year, client, title, type and a `↓` toggle that flips to `↑` when open. Its
 `aria-expanded` and `aria-controls` point at the panel `#<projectName>-panel`.
 
 - Opening a row adds `open` to `.ListElement` and sets `aria-expanded="true"`.
 - Closed `.flip-out` panels carry `inert`, so they are skipped by Tab and
   hidden from assistive tech. The attribute is removed when the row opens.
-- The client cell is hidden at the tablet and mobile breakpoints, and the role
+- The client cell is hidden at the tablet and mobile breakpoints, and the type
   cell at mobile only.
 
 The inverted band (ink background, background-coloured text) is set in the
@@ -91,7 +91,7 @@ is reused on later opens.
 ### Facts, description and credits
 
 - `getProjectFacts()` in `src/components/list/listHelpers.ts` builds the
-  `dl.facts` list from client, role, tools and collaborators (labelled "With").
+  `dl.facts` list from client, type (the `role` field), tools and collaborators (labelled "With").
   Blank values are dropped.
 - The description is rendered from the project's markdown. Its links are
   restyled by CSS only (`.description a` uses PowerGrotesk-Medium and adds a
