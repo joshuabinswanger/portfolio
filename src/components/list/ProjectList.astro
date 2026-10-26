@@ -586,7 +586,8 @@ for (const entry of sortedProjects) {
       --list-columns: 3.5rem 0 minmax(0, 1fr) 0 1.5rem;
 
       margin-top: var(--padding-mobile);
-      padding-left: 0px;
+      box-sizing: border-box;
+      padding-inline: 12px;
       padding-bottom: calc(var(--mobile-nav-stack) + 16px);
       grid-column-start: 1;
     }
@@ -627,11 +628,11 @@ for (const entry of sortedProjects) {
       color 120ms ease;
 
     @media (--bp-mobile) {
-      /* The page margin is only 2px here: overhang by that much so the band
-         reaches the screen edge without causing horizontal scroll. */
-      width: calc(100% + 4px);
-      margin-inline: -2px;
-      padding-inline: 2px;
+      /* The page margin is 2px and the list adds 12px: overhang by both so
+         the band still reaches the screen edge while the text sits 14px in. */
+      width: calc(100% + 28px);
+      margin-inline: -14px;
+      padding-inline: 14px;
       min-height: 44px;
       align-items: center;
     }
