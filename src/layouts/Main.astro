@@ -173,6 +173,9 @@ const structuredData = {
     background: var(--bg-color);
     scrollbar-gutter: stable;
     scrollbar-color: var(--bg-dark) var(--bg-color);
+    /* No double-tap zoom (iOS zoomed in on quick taps on the carousel
+       arrows); pinch-zoom still works. */
+    touch-action: manipulation;
   }
 
   body {
