@@ -3,6 +3,8 @@
 // - Lenis smooth scrolling (skipped under prefers-reduced-motion).
 // - Reveal-on-scroll: adds `.is-visible` to every [data-reveal] once.
 // - Sticky blocks: the step nearest the viewport centre gets `.is-active`.
+// - Scrolly blocks: the stage frame belonging to the step crossing the
+//   viewport centre gets `.is-active` (the frames cross-fade in CSS).
 //
 // Everything is torn down on `astro:before-swap` so View Transitions never
 // double-init (the earlier /fire prototype leaked its Lenis + ticker; see
@@ -74,6 +76,35 @@ function startStickySteps(root: HTMLElement) {
   });
 }
 
+function startScrolly(root: HTMLElement) {
+  root.querySelectorAll<HTMLElement>("[data-scrolly]").forEach((block) => {
+    const frames = Array.from(
+      block.querySelectorAll<HTMLElement>(".scrolly-frame"),
+    );
+    const steps = Array.from(block.querySelectorAll<HTMLElement>("[data-step]"));
+    if (frames.length < 2 || steps.length === 0) return;
+
+    const show = (frame: string | undefined) =>
+      frames.forEach((el) =>
+        el.classList.toggle("is-active", el.dataset.frame === frame),
+      );
+
+    // A thin band at the viewport centre: the step inside it picks the frame.
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            show((entry.target as HTMLElement).dataset.frame);
+          }
+        });
+      },
+      { rootMargin: "-50% 0px -50% 0px", threshold: 0 },
+    );
+    steps.forEach((step) => io.observe(step));
+    observers.push(io);
+  });
+}
+
 function teardown() {
   cancelAnimationFrame(rafId);
   rafId = 0;
@@ -91,6 +122,7 @@ export function initStoryScroll() {
     startSmoothScroll();
     startReveals(root);
     startStickySteps(root);
+    startScrolly(root);
   });
 
   document.addEventListener("astro:before-swap", teardown);

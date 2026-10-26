@@ -49,6 +49,16 @@ const storyStepSchema = z.object({
   body: z.string(), // markdown
 });
 
+// One scrollytelling step: a text card that slides over the pinned stage.
+// `image` swaps the stage picture when the card reaches the middle of the
+// screen; steps without one keep the previous picture.
+const storyScrollyStepSchema = z.object({
+  image: storyImageSchema.optional(),
+  heading: z.string().optional(),
+  body: z.string(), // markdown
+  position: z.enum(["left", "right", "center"]).optional(),
+});
+
 const storyBlockSchema = z.discriminatedUnion("type", [
   // Full-width opener: image with the title overlaid.
   z.object({
@@ -89,6 +99,17 @@ const storyBlockSchema = z.discriminatedUnion("type", [
     type: z.literal("sticky"),
     image: storyImageSchema,
     steps: z.array(storyStepSchema).min(1),
+  }),
+  // Classic scrollytelling: a full-height image pinned in place while text
+  // cards scroll up over it, cross-fading the image per step.
+  z.object({
+    type: z.literal("scrolly"),
+    steps: z
+      .array(storyScrollyStepSchema)
+      .min(1)
+      .refine((steps) => Boolean(steps[0].image), {
+        message: "The first scrolly step needs an image",
+      }),
   }),
   z.object({
     type: z.literal("quote"),
@@ -192,8 +213,15 @@ export const collections = {
       subtitle: z.string().optional(),
       year: z.string().optional(),
       client: z.string().optional(),
+      context: z.string().optional(), // e.g. "BA Diploma"
       role: z.string().optional(),
       tools: z.string().optional(),
+      collaborators: z.string().optional(),
+      // Shown at the end, after the facts.
+      links: z
+        .array(z.object({ label: z.string(), url: z.string() }))
+        .optional(),
+      // Short description under the title; also the meta description.
       summary: z.string().optional(),
       draft: z.boolean().default(false),
       blocks: z.array(storyBlockSchema),

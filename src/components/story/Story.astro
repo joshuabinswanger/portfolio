@@ -1,6 +1,6 @@
 ---
-// Renders one `stories` entry as a scrolling narrative: a header, then the
-// ordered block list. Every block is a plain object (see storyBlockSchema in
+// Renders one `stories` entry as a scrolling narrative: title + short
+// description, the ordered block list, then the project facts and links. Every block is a plain object (see storyBlockSchema in
 // content.config.ts), so stories are written and reordered in YAML only.
 // Smooth scrolling + reveal-on-scroll live in ./scroll.ts.
 import type { CollectionEntry } from "astro:content";
@@ -17,12 +17,28 @@ const { data } = story;
 
 const md = (text: string) => marked.parse(text) as string;
 
-const meta = [
+const facts = [
+  ["Project", data.title],
   ["Year", data.year],
+  ["Context", data.context],
   ["Client", data.client],
   ["Role", data.role],
   ["Tools", data.tools],
+  ["Collaborators", data.collaborators],
 ].filter((row): row is [string, string] => Boolean(row[1]));
+
+type StoryImageData = { src: string; alt: string; caption?: string };
+
+// Scrolly blocks: give every step the index of the stage picture it shows
+// (its own image, or the last one before it).
+const scrollyFrames = (steps: { image?: StoryImageData }[]) => {
+  const frames: StoryImageData[] = [];
+  const stepFrames = steps.map((step) => {
+    if (step.image) frames.push(step.image);
+    return frames.length - 1;
+  });
+  return { frames, stepFrames };
+};
 ---
 
 <TopWrapper>
@@ -30,18 +46,6 @@ const meta = [
     <header class="story-header" data-reveal>
       <h1>{data.title}</h1>
       {data.subtitle && <p class="subtitle">{data.subtitle}</p>}
-      {
-        meta.length > 0 && (
-          <dl class="meta">
-            {meta.map(([label, value]) => (
-              <div>
-                <dt>{label}</dt>
-                <dd>{value}</dd>
-              </div>
-            ))}
-          </dl>
-        )
-      }
       {data.summary && <p class="summary">{data.summary}</p>}
     </header>
 
@@ -148,6 +152,46 @@ const meta = [
               </section>
             );
 
+          case "scrolly": {
+            const { frames, stepFrames } = scrollyFrames(block.steps);
+            return (
+              <section class="block block-scrolly" data-scrolly>
+                <div class="scrolly-stage">
+                  {frames.map((image, frameIndex) => (
+                    <div
+                      class:list={["scrolly-frame", { "is-active": frameIndex === 0 }]}
+                      data-frame={frameIndex}
+                    >
+                      <StoryImage
+                        src={image.src}
+                        alt={image.alt}
+                        sizes="(max-width: 767px) 100vw, 952px"
+                        loading={index === 0 && frameIndex === 0 ? "eager" : "lazy"}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <ol class="scrolly-steps">
+                  {block.steps.map((step, stepIndex) => (
+                    <li
+                      class:list={["scrolly-step", `pos-${step.position ?? "left"}`]}
+                      data-step
+                      data-frame={stepFrames[stepIndex]}
+                    >
+                      <div class="scrolly-card">
+                        {step.heading && <h2>{step.heading}</h2>}
+                        <div class="prose" set:html={md(step.body)} />
+                        {step.image?.caption && (
+                          <p class="scrolly-caption">{step.image.caption}</p>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            );
+          }
+
           case "quote":
             return (
               <section class="block block-quote" data-reveal>
@@ -165,6 +209,34 @@ const meta = [
     }
 
     <footer class="story-footer" data-reveal>
+      {
+        facts.length > 0 && (
+          <dl class="facts">
+            {facts.map(([label, value]) => (
+              <div class="fact">
+                <dt>{label}</dt>
+                <dd>{value}</dd>
+              </div>
+            ))}
+            {data.links && data.links.length > 0 && (
+              <div class="fact">
+                <dt>Links</dt>
+                <dd>
+                  <ul class="links">
+                    {data.links.map((link) => (
+                      <li>
+                        <a href={link.url} target="_blank" rel="noopener">
+                          {link.label} &nearr;
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </dd>
+              </div>
+            )}
+          </dl>
+        )
+      }
       <a href="/project-index/" class="back">&larr; All projects</a>
     </footer>
   </article>
@@ -218,43 +290,11 @@ const meta = [
     color: rgba(0, 0, 0, 0.6);
   }
 
-  .meta {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px 28px;
-    margin: 0 0 28px;
-    font-size: 12px;
-  }
-
-  .meta div {
-    display: flex;
-    gap: 8px;
-  }
-
-  .meta dt {
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    font-size: 10px;
-    color: rgba(0, 0, 0, 0.5);
-    align-self: center;
-  }
-
-  .meta dt::before {
-    content: "[ ";
-  }
-  .meta dt::after {
-    content: " ]";
-  }
-
-  .meta dd {
-    margin: 0;
-  }
-
   .summary {
     font-size: clamp(15px, 1.5vw, 18px);
     line-height: 1.5;
-    margin: 0;
+    margin: 0 auto;
+    max-width: 52ch;
   }
 
   /* ---------- blocks ---------- */
@@ -302,7 +342,6 @@ const meta = [
     background-color: var(--surface-glass);
     -webkit-backdrop-filter: var(--surface-blur);
     backdrop-filter: var(--surface-blur);
-    border-radius: 999px;
   }
 
   .block-text {
@@ -407,6 +446,115 @@ const meta = [
     transform: none;
   }
 
+  /* Scrollytelling: the stage pins to the viewport (pure CSS sticky) and the
+     step list is pulled up over it, so the cards slide across the picture.
+     scroll.ts swaps .is-active on the frames as each step passes the middle
+     of the screen. Spacers before/after give the first and last picture a
+     moment on their own. */
+  .block-scrolly {
+    position: relative;
+  }
+
+  .scrolly-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    display: grid;
+    overflow: hidden;
+  }
+
+  .scrolly-frame {
+    grid-area: 1 / 1;
+    min-height: 0;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+
+  .scrolly-frame.is-active {
+    opacity: 1;
+  }
+
+  .scrolly-frame :global(.story-image),
+  .scrolly-frame :global(picture) {
+    height: 100%;
+  }
+
+  .scrolly-frame :global(img) {
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .scrolly-steps {
+    position: relative;
+    z-index: 1;
+    list-style: none;
+    margin: -100vh 0 0;
+    margin-top: -100svh;
+    padding: 0;
+    pointer-events: none;
+  }
+
+  .scrolly-steps::before {
+    content: "";
+    display: block;
+    height: 55svh;
+  }
+
+  .scrolly-steps::after {
+    content: "";
+    display: block;
+    height: 45svh;
+  }
+
+  .scrolly-step {
+    display: flex;
+    align-items: center;
+    min-height: 100svh;
+    padding: 0 4%;
+
+    @media (--bp-mobile) {
+      padding: 0 12px;
+    }
+  }
+
+  .scrolly-step.pos-right {
+    justify-content: flex-end;
+  }
+
+  .scrolly-step.pos-center {
+    justify-content: center;
+  }
+
+  /* Card: square, frosted, small shadow, like the floating bars. */
+  .scrolly-card {
+    pointer-events: auto;
+    box-sizing: border-box;
+    width: min(400px, 100%);
+    padding: 20px 22px;
+    background-color: var(--surface-glass);
+    -webkit-backdrop-filter: var(--bar-blur);
+    backdrop-filter: var(--bar-blur);
+    box-shadow: var(--bar-shadow);
+
+    @media (--bp-mobile) {
+      width: 100%;
+      padding: 16px 18px;
+    }
+  }
+
+  .scrolly-card h2 {
+    font-size: clamp(19px, 1.9vw, 24px);
+    margin-bottom: 10px;
+  }
+
+  .scrolly-caption {
+    margin: 12px 0 0;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
   .block-quote {
     max-width: var(--story-narrow);
     margin: 0 auto;
@@ -440,16 +588,71 @@ const meta = [
     color: rgba(0, 0, 0, 0.55);
   }
 
+  /* Project facts: one ruled row per item, bracketed label, then value. */
   .story-footer {
-    text-align: center;
+    width: 100%;
+    max-width: var(--story-narrow);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 40px;
+  }
+
+  .facts {
+    width: 100%;
+    margin: 0;
+    border-top: var(--border-size) solid black;
+  }
+
+  .fact {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: var(--border-size) solid black;
+    font-size: 14px;
+
+    @media (--bp-mobile) {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+  }
+
+  .fact dt {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.55);
+    padding-top: 2px;
+  }
+
+  .fact dt::before {
+    content: "[ ";
+  }
+  .fact dt::after {
+    content: " ]";
+  }
+
+  .fact dd {
+    margin: 0;
+  }
+
+  .links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .links a {
+    color: black;
   }
 
   .back {
     display: inline-block;
-    padding: 12px 22px;
-    border-radius: 999px;
-    border: var(--border-size) solid var(--surface-line);
-    color: black;
+    padding: 10px 16px;
+    background-color: black;
+    color: var(--bg-color);
     text-decoration: none;
     font-size: 13px;
   }

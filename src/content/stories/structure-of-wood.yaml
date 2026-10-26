@@ -1,91 +1,103 @@
-# Prototype story. Copy is placeholder written from the project description —
-# edit freely. Block types: hero, text, image, split, gallery, sticky, quote.
-# See docs/stories.md.
+# Story page: title + short description, then a scrollytelling sequence
+# (cards slide over a pinned image), then the facts and links at the end.
+# Chapter text is drafted from the image captions in src/content/images —
+# edit freely. Block types and fields: docs/stories.md.
 
 project: StructureOfWood
 title: Structure of Wood
-subtitle: Visualisations & 3D prints of what makes wood work
+subtitle: Visualisations & 3D Prints
+summary: >-
+  Stability, lightness and durability make wood a natural miracle material.
+  These illustrations look inside it, scale by scale, to show where those
+  properties come from.
+
+# Facts, shown at the end in this order.
 year: "2019"
+context: BA Diploma
 client: ETH Zürich, Wood Materials Science
 role: Illustration, 3D
 tools: ZBrush, Keyshot, Adobe Suite
-summary: >-
-  Stability, lightness and durability make wood a natural miracle material.
-  This series looks inside the trunk, cell by cell, to show where those
-  properties come from.
+collaborators: ETH Wood Materials Science Group
+# links:
+#   - label: Publication
+#     url: https://example.org
 draft: false
 
 blocks:
-  - type: hero
-    kicker: BA Diploma · 2019
-    image:
-      src: /src/assets/projects/structureofwood/StructureofWood_Gallery_1_ytvxjm.webp
-      alt: Cross-section illustration of a spruce trunk showing bark, cambium and growth rings
+  - type: scrolly
+    steps:
+      - image:
+          src: /src/assets/projects/structureofwood/StructureofWood_Gallery_6_buzkrx.webp
+          alt: Wood cell structures at their real sizes, from the year ring down to the cellulose molecule
+        heading: From year ring to molecule
+        body: |
+          Every property of wood comes from a structure, and every structure
+          sits inside a larger one. The series follows them down through the
+          scales, each shown at its real size.
+
+      - image:
+          src: /src/assets/projects/structureofwood/StructureofWood_Gallery_1_ytvxjm.webp
+          alt: Softwood cell structure with year ring, bordered pits and parenchyma cells
+        heading: Softwood cells · 300 µm
+        body: |
+          Fibre cells cut across a year ring. Bordered pits connect
+          neighbouring cells, and parenchyma cells run between them.
+        position: right
+
+      - image:
+          src: /src/assets/projects/structureofwood/StructureofWood_Gallery_2_rgmaqy.webp
+          alt: Close-up of bordered pits showing the margo
+        heading: Bordered pits
+        body: |
+          Closer in, the bordered pits show the margo, the porous membrane
+          water passes through on its way from cell to cell.
+
+      - image:
+          src: /src/assets/projects/structureofwood/StructureofWood_Gallery_3_s5mqz0.webp
+          alt: Simplified softwood fibre cell wall with its layers of fibres at different angles
+        heading: The cell wall · 30 µm
+        body: |
+          A simplified fibre cell wall. Its layers wind the fibres at
+          different angles, and that layering is what makes the wall strong.
+        position: right
+
+      - image:
+          src: /src/assets/projects/structureofwood/StructureofWood_Gallery_4_llpwgf.webp
+          alt: Abstract arrangement of cellulose and lignin molecules in a microfibril
+        heading: Cellulose microfibril · 15 nm
+        body: |
+          A possible arrangement of cellulose (blue) and lignin (pink)
+          molecules.
+
+      - image:
+          src: /src/assets/projects/structureofwood/StructureofWood_Gallery_5_g1x7ry.webp
+          alt: Close-up of lignin fibrils wrapping around cellulose fibrils
+        heading: Like reinforced concrete
+        body: |
+          The lignin wraps around the cellulose fibrils, much like concrete
+          around steel rebar.
+        position: right
 
   - type: text
     align: center
-    body: |
-      Wood is stable, light and astonishingly durable. None of that is an
-      accident: every property comes from a structure, and every structure
-      sits inside a larger one. The series walks from the whole trunk down to
-      a single cell wall.
-
-  - type: sticky
-    image:
-      src: /src/assets/projects/structureofwood/StructureofWood_Gallery_2_rgmaqy.webp
-      alt: Layered illustration of wood tissue from trunk to cell wall
-    steps:
-      - heading: The trunk
-        body: |
-          Growth rings record every season. Early wood grows fast and wide,
-          late wood slow and dense, and that rhythm alone decides how a plank
-          will bend.
-      - heading: The tissue
-        body: |
-          Tracheids, long hollow cells, line up along the grain and carry water
-          upwards. Rays run across them and hold the structure together
-          sideways.
-      - heading: The cell wall
-        body: |
-          Inside each wall, cellulose fibrils wind around the cell at an
-          angle. The steeper the angle, the stiffer the wood.
-
-  - type: split
-    imageSide: left
     heading: From drawing to object
-    image:
-      src: /src/assets/projects/structureofwood/StructureofWood_Gallery_3_s5mqz0.webp
-      alt: 3D printed model of a wood cell structure
     body: |
-      The illustrations were modelled in ZBrush so they could also leave the
-      page. A set of 3D prints turns the microscopic cell geometry into
-      something you can hold, scaled up around ten thousand times.
+      Each scale was also modelled in 3D, so the structures could leave the
+      page as prints you can hold.
 
   - type: gallery
     columns: 3
     images:
-      - src: /src/assets/projects/structureofwood/StructureofWood_Gallery_4_llpwgf.webp
-        alt: Rendering of tracheid cells
-      - src: /src/assets/projects/structureofwood/StructureofWood_Gallery_5_g1x7ry.webp
-        alt: Rendering of a bordered pit between two cells
-      - src: /src/assets/projects/structureofwood/StructureofWood_Gallery_6_buzkrx.webp
-        alt: Close-up of the fibril winding in a cell wall
-
-  - type: quote
-    text: Where do the properties of wood come from? They are made possible by the structures within it.
-    source: Project brief
+      - src: /src/assets/projects/structureofwood/StructureofWood_Gallery_7_ars89c.webp
+        alt: 3D model of a cellulose microfibril wrapped in lignin
+      - src: /src/assets/projects/structureofwood/StructureofWood_Gallery_8_gza6jh.webp
+        alt: 3D model of a block of cell wall layers
+      - src: /src/assets/projects/structureofwood/StructureofWood_Gallery_9_vvgrqh.webp
+        alt: 3D model of softwood fibre cells with bordered pits
 
   - type: image
     size: wide
     image:
-      src: /src/assets/projects/structureofwood/StructureofWood_Gallery_7_ars89c.webp
-      alt: Exhibition view of the printed models and posters
-      caption: Diploma exhibition, ETH Zürich
-
-  - type: gallery
-    columns: 2
-    images:
-      - src: /src/assets/projects/structureofwood/StructureofWood_Gallery_8_gza6jh.webp
-        alt: Detail of a printed model
-      - src: /src/assets/projects/structureofwood/StructureofWood_Gallery_10_wfkvon.webp
-        alt: Poster detail
+      src: /src/assets/projects/structureofwood/StructureofWood_Gallery_10_wfkvon.webp
+      alt: Exhibition wall with the posters, a microscope and a tree trunk
+      caption: Diploma exhibition
