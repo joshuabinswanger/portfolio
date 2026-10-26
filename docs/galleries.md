@@ -31,17 +31,6 @@ Each homepage gallery also gets custom PhotoSwipe slides:
 
 Because those custom slides count as PhotoSwipe slides, `startIndex` and `slidesCount` must stay correct.
 
-### Mobile: slide to centre on scroll
-
-On phones the galleries alternate left/right in the 7-column grid (span 6
-from column 1 or 2). `src/components/gallery/centerOnScroll.ts` slides each
-`.observer` sideways into the horizontal centre as its middle approaches the
-middle of the screen (scroll-linked, smoothstep over ~60% of a screen) and
-stays centred above the middle on its way to the top (no shift back). It sets an inline `transform` only on mobile and
-not under `prefers-reduced-motion`; a ResizeObserver re-measures when a
-gallery grows from its `.restrain` loading size. Started from the KeenSlider
-script in `PortfolioGallery.astro`, stopped on `astro:before-swap`.
-
 ## Project List Gallery
 
 The project-list view reads only the local `images` collection: every image
