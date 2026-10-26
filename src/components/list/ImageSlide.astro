@@ -37,7 +37,7 @@ const projectMedia = await getProjectMedia(Astro.props.projectName);
           <MediaElement
             computedIndex={computedIndex}
             media={media}
-            sizes="(max-width: 650px) 90vw, (max-width: 1200px) 50vw, 33vw"
+            sizes="(max-width: 767px) 80vw, (max-width: 1119px) 33vw, 25vw"
             loading={index === 0 ? "eager" : "lazy"}
           />
         </div>
