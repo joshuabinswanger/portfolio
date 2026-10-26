@@ -86,6 +86,17 @@ Relevant collections:
 
 If Cloudinary metadata is missing, check the asset metadata in Cloudinary and verify that `metadata.project`, ordering fields, and `highres_public_id` are present where expected.
 
+## Mobile Nav Lines Off The Bar Edge (iPhone)
+
+The mobile nav brackets in `NavigationBarMobile.astro` and
+`NavigationBarMobilePersonal.astro` are bordered `<span class="br">` boxes,
+not the `Bracket*H` SVG components. A `border-box` border always sits on the
+cell edge and snaps to whole device pixels. The SVGs did not: in WebKit (every
+iPhone browser) they grew the row to ~52px, and their bottom stroke hung 1px
+below the bar. Keep the nav on borders; the SVG components remain only for the
+homepage gallery (`GalleryElement.astro`). Check changes in Playwright WebKit
+with the iPhone 15 device profile, since Chromium does not show these bugs.
+
 ## Standard Verification Commands
 
 ```bash
