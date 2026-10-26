@@ -122,7 +122,7 @@ const isActive = (href: string) => norm(href) === here;
   }
 
   /* Floating bar: inset from the screen edges, lifted clear of the home
-     indicator, frosted (blur) with a small drop shadow; otherwise the original
+     indicator, solid page colour with a small drop shadow; otherwise the original
      look (square corners, bracket dividers). The sizing tokens are shared with the
      archive toolbar (--mobile-nav-*), which stacks above this bar. */
   #Menu {
@@ -132,9 +132,9 @@ const isActive = (href: string) => norm(href) === here;
     right: var(--mobile-nav-inset);
     z-index: 1001;
     padding: var(--mobile-nav-pad);
-    background-color: var(--surface-glass);
-    -webkit-backdrop-filter: var(--bar-blur);
-    backdrop-filter: var(--bar-blur);
+    /* Solid, not frosted: iOS Safari's backdrop blur skipped the gallery
+       controls, so they showed sharp through the bar (2026-10-26). */
+    background-color: var(--bg-color);
     box-shadow: var(--bar-shadow);
   }
 

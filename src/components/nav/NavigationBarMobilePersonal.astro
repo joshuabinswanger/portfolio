@@ -113,7 +113,7 @@ const isActive = (href: string) => norm(href) === here;
     }
 
     /* Floating bar — mirrors NavigationBarMobile.astro: inset, lifted,
-       frosted with a small shadow, square. Tokens in global.css. */
+       solid with a small shadow, square. Tokens in global.css. */
     #Menu {
       position: fixed;
       bottom: var(--mobile-nav-bottom);
@@ -121,9 +121,9 @@ const isActive = (href: string) => norm(href) === here;
       right: var(--mobile-nav-inset);
       z-index: 1001;
       padding: var(--mobile-nav-pad);
-      background-color: var(--surface-glass);
-      -webkit-backdrop-filter: var(--bar-blur);
-      backdrop-filter: var(--bar-blur);
+      /* Solid, not frosted: iOS Safari's backdrop blur skipped the gallery
+         controls, so they showed sharp through the bar (2026-10-26). */
+      background-color: var(--bg-color);
       box-shadow: var(--bar-shadow);
     }
 
