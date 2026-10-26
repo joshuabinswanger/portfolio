@@ -9,6 +9,8 @@ The portfolio has several gallery surfaces. They share concepts, but they do not
 - `src/components/gallery/utils.ts`: portfolio gallery data loading, ordering, high-resolution lookup.
 - `src/components/list/ProjectList.astro`: expandable project list and project-list PhotoSwipe.
 - `src/components/list/ImageSlide.astro`: project-list media slides.
+- `src/components/list/listHelpers.ts`: DOM-free helpers for the list (summary, facts, preview placement and source, slider-controls rule).
+- `src/components/list/preview.ts`: `initListPreview()`, the cursor-following hover preview.
 - `src/components/archive/ArchiveGallery_BoxFilters.astro`: archive/filter gallery.
 - `src/components/archive/utils.ts`: archive-safe image filtering.
 
@@ -65,6 +67,9 @@ component's `<style>`:
 - It shows on open rows and on `:focus-visible` everywhere.
 - It shows on hover only under `(hover: hover)`, so touch devices do not keep a
   sticky hover state.
+- Open rows already show the band and forced-colors mode drops it, so
+  `.row-bar:focus-visible` also draws a 1px inset ring (`outline-offset: -4px`,
+  in the background colour) inside the band.
 
 ### Slider
 
@@ -77,7 +82,11 @@ is reused on later opens.
   slides than fit in view. `shouldShowSliderControls()` in
   `src/components/list/listHelpers.ts` makes that decision. Prev and next
   disable at the ends.
-- Control clicks stop propagation, so they do not toggle the row.
+- The controls are siblings of `.row-bar`, not children, so their clicks never
+  reach the row toggle; `stopPropagation` on them is only defensive.
+- Closing a row hides `.project-images` after the 500ms transition. Reopening
+  within that window cancels the pending hide (`hideTimer`), so a quick
+  close-then-open keeps the gallery visible.
 
 ### Facts, description and credits
 
@@ -102,6 +111,10 @@ is reused on later opens.
   the viewport.
 - The preview is hidden for open rows, on pointer leave and on click. The first
   pointer enter preloads every row's preview image once.
+- Touch pointers (`pointerType: "touch"`, e.g. on touch laptops) hide it.
+  The move handler also runs on `pointerover`, which most engines fire when
+  content scrolls under a still pointer, and any window `scroll` hides it as a
+  fallback so it never lingers on the previous project.
 - JavaScript enables it only for `(hover: hover) and (pointer: fine)`. CSS also
   hides it on `(hover: none), (pointer: coarse)`.
 

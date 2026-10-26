@@ -34,6 +34,11 @@ export function initListPreview(list: HTMLElement): () => void {
   }
 
   function onPointerMove(event: PointerEvent) {
+    if (event.pointerType === "touch") {
+      hide();
+      return;
+    }
+
     const row = rowFor(event.target);
     const src = row?.dataset.previewSrc;
 
@@ -95,12 +100,18 @@ export function initListPreview(list: HTMLElement): () => void {
   }
 
   list.addEventListener("pointermove", onPointerMove);
+  // Content scrolling under a still pointer fires pointerover in most engines;
+  // the passive scroll listener is the reliable fallback (hide until it moves).
+  list.addEventListener("pointerover", onPointerMove);
+  window.addEventListener("scroll", hide, { passive: true });
   list.addEventListener("pointerleave", hide);
   list.addEventListener("click", hide);
   list.addEventListener("pointerenter", onPointerEnter);
 
   return () => {
     list.removeEventListener("pointermove", onPointerMove);
+    list.removeEventListener("pointerover", onPointerMove);
+    window.removeEventListener("scroll", hide);
     list.removeEventListener("pointerleave", hide);
     list.removeEventListener("click", hide);
     list.removeEventListener("pointerenter", onPointerEnter);

@@ -308,6 +308,8 @@ for (const entry of sortedProjects) {
         }
       }
 
+      let hideTimer: ReturnType<typeof setTimeout> | undefined;
+
       // Click on bar
       listBar.addEventListener("click", () => {
         // Toggle the clicked slider
@@ -318,10 +320,15 @@ for (const entry of sortedProjects) {
           panel?.setAttribute("inert", "");
           pauseVideos(listEl);
 
-          setTimeout(() => {
-            sliderContainer.style.display = "";
+          // Wait out the close transition, but never undo a reopen.
+          clearTimeout(hideTimer);
+          hideTimer = setTimeout(() => {
+            if (!listEl.classList.contains("open")) {
+              sliderContainer.style.display = "";
+            }
           }, 500);
         } else {
+          clearTimeout(hideTimer);
           sliderContainer.style.display = "block";
           listEl.classList.add("open");
           listBar.setAttribute("aria-expanded", "true");
@@ -597,7 +604,6 @@ for (const entry of sortedProjects) {
     display: grid;
     grid-template-columns: 1fr;
     transition: all 0.5s ease;
-    cursor: pointer;
     /* Visible so the row band can overhang the column by 10px each side;
        the closed .flip-out clips itself (max-height 0 + overflow hidden). */
     overflow: visible;
@@ -635,6 +641,13 @@ for (const entry of sortedProjects) {
   .row-bar:focus-visible {
     background: var(--ink);
     color: var(--bg-color);
+  }
+
+  /* The band alone does not mark focus on open rows (already inverted) or in
+     forced-colors mode, so add an inset ring inside the band. */
+  .row-bar:focus-visible {
+    outline: 1px solid var(--bg-color);
+    outline-offset: -4px;
   }
 
   @media (hover: hover) {
@@ -700,6 +713,7 @@ for (const entry of sortedProjects) {
     left: 0;
     width: 220px;
     height: auto;
+    object-fit: cover;
     pointer-events: none;
     z-index: 10; /* under the fixed mobile nav (z 1000) */
 
@@ -830,22 +844,6 @@ for (const entry of sortedProjects) {
 
   .description :global(a)::after {
     content: " ↗";
-  }
-
-  table tbody td {
-    vertical-align: top;
-    padding: 5px;
-  }
-
-  table th {
-    padding: 5px;
-    text-align: left;
-    vertical-align: top;
-  }
-
-  table {
-    border-collapse: collapse;
-    width: 100%;
   }
 
   p {
