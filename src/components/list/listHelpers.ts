@@ -38,3 +38,56 @@ export function getProjectFacts(data: {
   }
   return facts;
 }
+
+export type Point = { x: number; y: number };
+export type Size = { width: number; height: number };
+
+const PREVIEW_OFFSET = { x: 20, y: 14 };
+const PREVIEW_MARGIN = 8;
+
+// Places a hover preview beside the pointer, flipping or pulling it back so it
+// stays inside the viewport and never crosses the top-left margin.
+export function placePreview(
+  pointer: Point,
+  preview: Size,
+  viewport: Size,
+): Point {
+  let x = pointer.x + PREVIEW_OFFSET.x;
+  if (x + preview.width > viewport.width - PREVIEW_MARGIN) {
+    x = pointer.x - PREVIEW_OFFSET.x - preview.width;
+  }
+  x = Math.max(x, PREVIEW_MARGIN);
+
+  let y = pointer.y + PREVIEW_OFFSET.y;
+  if (y + preview.height > viewport.height - PREVIEW_MARGIN) {
+    y = viewport.height - PREVIEW_MARGIN - preview.height;
+  }
+  y = Math.max(y, PREVIEW_MARGIN);
+
+  return { x, y };
+}
+
+export type PreviewCandidate = {
+  data:
+    | { mediaType?: "image"; src: string }
+    | { mediaType: "video"; posterSrc: string };
+};
+
+// Prefers the first still image; a video contributes its poster only when no
+// image exists, so the preview stays on local images.
+export function pickPreviewSrc(media: PreviewCandidate[]): string | null {
+  for (const { data } of media) {
+    if ("src" in data) return data.src;
+  }
+  for (const { data } of media) {
+    if ("posterSrc" in data) return data.posterSrc;
+  }
+  return null;
+}
+
+export function shouldShowSliderControls(
+  slideCount: number,
+  perView: number,
+): boolean {
+  return slideCount > perView;
+}

@@ -3,6 +3,9 @@ import assert from "node:assert/strict";
 import {
   formatListSummary,
   getProjectFacts,
+  pickPreviewSrc,
+  placePreview,
+  shouldShowSliderControls,
 } from "../../src/components/list/listHelpers.ts";
 
 test("formatListSummary counts projects and spans first 4 year digits", () => {
@@ -39,4 +42,59 @@ test("getProjectFacts omits empty and whitespace values", () => {
     getProjectFacts({ client: " SLF ", collaborators: "", tools: "   " }),
     [{ label: "Client", value: "SLF" }],
   );
+});
+
+const vp = { width: 1440, height: 900 };
+const img = { width: 220, height: 275 };
+test("placePreview sits 20px right and 14px below the pointer", () => {
+  assert.deepEqual(placePreview({ x: 600, y: 200 }, img, vp), {
+    x: 620,
+    y: 214,
+  });
+});
+test("placePreview flips left of the pointer near the right edge", () => {
+  assert.deepEqual(placePreview({ x: 1300, y: 200 }, img, vp), {
+    x: 1060,
+    y: 214,
+  });
+});
+test("placePreview pulls up near the bottom edge", () => {
+  assert.deepEqual(placePreview({ x: 600, y: 800 }, img, vp), {
+    x: 620,
+    y: 617,
+  });
+});
+test("placePreview never leaves the top-left margin", () => {
+  assert.deepEqual(
+    placePreview(
+      { x: 100, y: 10 },
+      { width: 220, height: 2000 },
+      { width: 300, height: 900 },
+    ),
+    { x: 8, y: 8 },
+  );
+});
+test("pickPreviewSrc prefers the first image", () => {
+  assert.equal(
+    pickPreviewSrc([
+      { data: { mediaType: "video", posterSrc: "/p.webp" } },
+      { data: { src: "/a.webp" } },
+      { data: { mediaType: "image", src: "/b.webp" } },
+    ]),
+    "/a.webp",
+  );
+});
+test("pickPreviewSrc falls back to a video poster, then null", () => {
+  assert.equal(
+    pickPreviewSrc([{ data: { mediaType: "video", posterSrc: "/p.webp" } }]),
+    "/p.webp",
+  );
+  assert.equal(pickPreviewSrc([]), null);
+});
+test("shouldShowSliderControls only when slides overflow the view", () => {
+  assert.equal(shouldShowSliderControls(3, 4), false);
+  assert.equal(shouldShowSliderControls(4, 4), false);
+  assert.equal(shouldShowSliderControls(5, 4), true);
+  assert.equal(shouldShowSliderControls(1, 1.2), false);
+  assert.equal(shouldShowSliderControls(2, 1.2), true);
 });
