@@ -505,36 +505,32 @@ const sortOptions = [
       pointer-events: none;
     }
 
-    /* The frosted surface is a pseudo-element, NOT backdrop-filter on the
-       form: a backdrop-filter on an ancestor becomes the containing block for
-       position:fixed descendants, which would trap the full-screen sheet and
-       backdrop inside this bar. */
+    /* No bar surface on mobile: only the Filter & Sort block and the zoom
+       float, each with its own small shadow, and the page shows between
+       them. Never put a backdrop-filter on the form itself: it would become
+       the containing block for the position:fixed sheet and backdrop and
+       trap them inside this strip. */
+    #filter-sort-wrapper::before,
     #filter-sort-wrapper::after {
       display: none;
     }
 
-    #filter-sort-wrapper::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      background-color: var(--surface-glass);
-      -webkit-backdrop-filter: var(--surface-blur);
-      backdrop-filter: var(--surface-blur);
-      box-shadow: var(--bar-shadow);
-      pointer-events: auto;
-    }
-
-    /* Taps: the bar surface (::before) and the two buttons take them, so a
-       tap between the buttons doesn't fall through to an image. The sheet
-       opts in too. The backdrop is deliberately NOT listed: it is a
-       full-screen layer above everything, so it may only catch taps while the
-       sheet is open (rule below). A blanket `> *` here once made the
-       invisible backdrop swallow every tap on the page. */
+    /* Taps: only the two buttons and the sheet take them; a tap between the
+       buttons falls through to the grid. The backdrop is deliberately NOT
+       listed: it is a full-screen layer above everything, so it may only
+       catch taps while the sheet is open (rule below). A blanket `> *` here
+       once made the invisible backdrop swallow every tap on the page. */
     #filter,
     #zoom-wrapper,
     #filter-box {
       pointer-events: auto;
+    }
+
+    /* Per button, not on #zoom-wrapper: the 2px gap between the zoom
+       squares stays clear. */
+    #filter,
+    .zoom-button {
+      box-shadow: var(--bar-shadow);
     }
 
     /* Trigger and zoom: square black blocks at the two ends, like the
