@@ -76,25 +76,22 @@ src: /src/assets/projects/example/example.webp
 
 The path must start with `/src/assets/`. `resolveLocalImage()` also keeps a lowercase lookup fallback, but the best fix is still to match the real file path.
 
-## Cloudinary Data Missing
+## High-Res Image Missing In The Lightbox
 
-Cloudinary content collections depend on environment variables and network access.
+The build logs `High-res image not found in src/assets/highres: <id>` when an
+image YAML's `metadata.highres_public_id` has no matching file. Add the original
+as `src/assets/highres/<id>.<ext>` or set the field to `null`.
 
-Relevant collections:
+## Bracket Lines Off The Bar Edge (iPhone)
 
-- `highResImages`
-
-If Cloudinary metadata is missing, check the asset metadata in Cloudinary and verify that `metadata.project`, ordering fields, and `highres_public_id` are present where expected.
-
-## Mobile Nav Lines Off The Bar Edge (iPhone)
-
-The mobile nav brackets in `NavigationBarMobile.astro` and
-`NavigationBarMobilePersonal.astro` are bordered `<span class="br">` boxes,
-not the `Bracket*H` SVG components. A `border-box` border always sits on the
+The horizontal brackets (mobile navs and the gallery caption bar in
+`GalleryElement.astro`) use `src/components/brackets/Bracket.astro`
+(`kind="open" | "mid" | "close"`), a bordered box, not SVG. A `border-box` border always sits on the
 cell edge and snaps to whole device pixels. The SVGs did not: in WebKit (every
 iPhone browser) they grew the row to ~52px, and their bottom stroke hung 1px
-below the bar. Keep the nav on borders; the SVG components remain only for the
-homepage gallery (`GalleryElement.astro`). Check changes in Playwright WebKit
+below the bar. The bracket stretches to its grid row, so the row's height sets
+the bracket height (the gallery bar pins it with `min-height: 56px`). The
+vertical `Bracket*V` SVGs in the desktop nav are unchanged. Check changes in Playwright WebKit
 with the iPhone 15 device profile, since Chromium does not show these bugs.
 
 ## Standard Verification Commands

@@ -6,7 +6,7 @@ This folder holds problem-specific notes for the portfolio codebase. Keep each f
 
 - [Video Player](./video-player.md): Mux videos, HLS URLs, inline previews, PhotoSwipe playback, and YAML toggles.
 - [Galleries](./galleries.md): Homepage galleries, project-list galleries, PhotoSwipe indexing, sorting, and pause/play behavior.
-- [Image Optimization](./image-optimization.md): Local Astro images, Cloudinary images, high-resolution lightbox images, and sizing rules.
+- [Image Optimization](./image-optimization.md): Local Astro images, high-resolution lightbox images, and sizing rules.
 - [Archive Filters](./archive-filters.md): The `/personal` archive toolbar — chip rail on desktop, bottom sheet on mobile, MixItUp wiring, zoom, lightbox title.
 - [Project Stories](./stories.md): Block-based `/projects/<slug>` narrative pages (schema, block types, scroll runtime).
 - [Content YAML](./content-yaml.md): How project, portfolio, image, and video YAML entries fit together.

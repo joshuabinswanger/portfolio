@@ -1,4 +1,5 @@
 ---
+import Bracket from "../brackets/Bracket.astro";
 import "../../styles/global.css";
 import { Image } from "astro:assets";
 import RhizomLogo from "../../assets/Rhizome_Logo_208h.jpg";
@@ -26,7 +27,7 @@ const isActive = (href: string) => norm(href) === here;
   </a>
   <div id="Menu">
     <div id="MainWrapper">
-      <span class="br br-open" aria-hidden="true"></span>
+      <Bracket kind="open" />
 
       <!-- Menu item: Portfolio -->
       <a
@@ -40,7 +41,7 @@ const isActive = (href: string) => norm(href) === here;
         Portfolio
       </a>
 
-      <span class="br br-mid" aria-hidden="true"></span>
+      <Bracket kind="mid" />
 
       <!-- Projects submenu -->
       <a
@@ -54,7 +55,7 @@ const isActive = (href: string) => norm(href) === here;
         Index
       </a>
 
-      <span class="br br-mid" aria-hidden="true"></span>
+      <Bracket kind="mid" />
 
       <!-- Menu item: Information -->
       <a
@@ -67,7 +68,7 @@ const isActive = (href: string) => norm(href) === here;
         Info
       </a>
 
-      <span class="br br-close" aria-hidden="true"></span>
+      <Bracket kind="close" />
     </div>
   </div>
 </nav>
@@ -122,7 +123,7 @@ const isActive = (href: string) => norm(href) === here;
 
   /* The row is pinned to the bar height (`grid-template-rows: 100%`) so the
      active fill and the brackets are exactly as tall as the bar. (The old SVG
-     brackets grew an auto row to ~52px in WebKit; see .br below.) */
+     brackets grew an auto row to ~52px in WebKit; see Bracket.astro.) */
   #MainWrapper {
     height: var(--mobile-nav-height);
     display: grid;
@@ -132,38 +133,6 @@ const isActive = (href: string) => norm(href) === here;
     justify-items: center;
     z-index: 1002;
     transition: grid-template-columns 0.6s ease;
-  }
-
-  /* Brackets are bordered boxes, not SVGs: a border-box border sits exactly
-     on the cell edge, so the lines land on the bar's edges and snap to whole
-     device pixels (an SVG stroke could drift past the bar or blur). The
-     middle column must stay 24px so the active fill ends on the stem. */
-  .br {
-    box-sizing: border-box;
-    width: 100%;
-    height: 100%;
-    border: 0 solid black;
-    border-block-width: 1px;
-  }
-
-  .br-open {
-    border-left-width: 1px;
-  }
-
-  .br-close {
-    border-right-width: 1px;
-  }
-
-  .br-mid {
-    position: relative;
-  }
-
-  .br-mid::before {
-    content: "";
-    position: absolute;
-    inset-block: 0;
-    left: 50%;
-    border-left: 1px solid black;
   }
 
   /* Main button styling and active animation */

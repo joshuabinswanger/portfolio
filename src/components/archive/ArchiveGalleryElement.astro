@@ -20,7 +20,7 @@ interface Props {
 const archiveImage = Astro.props.image;
 const imageSrc = resolveLocalImage(archiveImage.data.src);
 const imageUrl = resolveImageUrl(archiveImage.data.src);
-const highResData = await buildArchiveHighResData(archiveImage);
+const highResData = buildArchiveHighResData(archiveImage);
 const tagClassString = getArchiveTagClassString(archiveImage);
 const convertedRole = getArchiveRoleTags(archiveImage);
 // Resolved once at build time; reused by the grid caption (single-column only)

@@ -1,7 +1,5 @@
 ---
-import BracketOpenH from "../brackets/BracketOpenH.astro";
-import BracketCloseH from "../brackets/BracketCloseH.astro";
-import BracketMiddleH from "../brackets/BracketMiddleH.astro";
+import Bracket from "../brackets/Bracket.astro";
 import Icon from "../Icon.astro";
 import MediaElement from "../media/MediaElement.astro";
 
@@ -137,7 +135,7 @@ if (!galleryProject) {
   </div>
 
   <div id="GalleryDescriptionWrapper">
-    <BracketOpenH />
+    <Bracket kind="open" />
 
     <div id="TextContainer">
       <div id="TextWrapper">
@@ -146,7 +144,7 @@ if (!galleryProject) {
       </div>
     </div>
 
-    <BracketMiddleH />
+    <Bracket kind="mid" />
 
     <div id="ArrowWrapper">
       <button class:list={["ArrowLeft"]} aria-label="Previous image">&larr;</button>
@@ -156,13 +154,13 @@ if (!galleryProject) {
       <button class:list={["ArrowRight"]} aria-label="Next image">&rarr;</button>
     </div>
 
-    <BracketMiddleH />
+    <Bracket kind="mid" />
 
     <div id="Info">
       <Icon icon="Info" width="77%" />
     </div>
 
-    <BracketCloseH />
+    <Bracket kind="close" />
   </div>
 </div>
 
@@ -404,6 +402,9 @@ max-width: 80vw !important;
     overflow: visible;
     opacity: 1;
     height: fit-content;
+    /* The brackets stretch to this row height; 56px is the bar's established
+       look (the old SVG brackets sized it implicitly). */
+    min-height: 56px;
     grid-template-columns:
       1.5ch minmax(min-content, 2fr) 3ch minmax(7ch, 1.5fr)
       3ch 3.5ch 1.5ch;

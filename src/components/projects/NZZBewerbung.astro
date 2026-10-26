@@ -1,5 +1,26 @@
 ---
-import { CldImage } from "astro-cloudinary";
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+// Every image on this page is a local asset, looked up by file name (the old
+// Cloudinary public ID): project images, high-res originals, and the few
+// page-only images in src/assets/nzz.
+const pageImages = import.meta.glob<{ default: ImageMetadata }>(
+  [
+    "/src/assets/projects/**/*.{jpg,jpeg,png,webp}",
+    "/src/assets/highres/*.{jpg,jpeg,png,webp}",
+    "/src/assets/nzz/*.{jpg,jpeg,png,webp}",
+  ],
+  { eager: true },
+);
+
+function pageImage(id: string): ImageMetadata {
+  const match = Object.entries(pageImages).find(([path]) =>
+    path.slice(path.lastIndexOf("/") + 1).startsWith(`${id}.`),
+  );
+  if (!match) throw new Error(`NZZ page image not found: ${id}`);
+  return match[1].default;
+}
 
 const mobileFlowerFiles = import.meta.glob(
   "/src/assets/projects/FlowerSplats/FlowerSplats_mobile/*.avif",
@@ -53,11 +74,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
         aria-label="Eiche VDB Volume Rendering"
       >
         <source
-          src="https://res.cloudinary.com/rhizomech/video/upload/f_webm,vc_vp9/v1772652991/Eiche_VDB_0001_h265_l14cyb.webm"
-          type="video/webm"
-        />
-        <source
-          src="https://res.cloudinary.com/rhizomech/video/upload/v1772652991/Eiche_VDB_0001_h265_l14cyb.mp4"
+          src="/videos/nzz/Eiche_VDB_0001_h265_l14cyb.mp4"
           type="video/mp4"
         />
       </video>
@@ -73,9 +90,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
 
     <!-- Intro Buchdrucker -->
     <div class="img-stack img-buchdrucker">
-      <CldImage
-        src="Borkenkaefer_Gallery_2_zdvtwp"
+      <Image
+        src={pageImage("Borkenkaefer_Gallery_2_zdvtwp")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Borkenkäfer Infoposter"
       />
@@ -90,9 +108,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
 
     <!-- Intro Fire -->
     <div class="img-stack img-fire">
-      <CldImage
-        src="Fire_2020_mvjojb"
+      <Image
+        src={pageImage("Fire_2020_mvjojb")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Boreale Feuer 2020"
       />
@@ -120,11 +139,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
         aria-label="UB Zürich Jahresbericht 2025"
       >
         <source
-          src="https://res.cloudinary.com/rhizomech/video/upload/f_webm,vc_vp9/UB_Zuerich_Jahresbericht25_grgopa.webm"
-          type="video/webm"
-        />
-        <source
-          src="https://res.cloudinary.com/rhizomech/video/upload/f_mp4,vc_h264/UB_Zuerich_Jahresbericht25_grgopa.mp4"
+          src="/videos/nzz/UB_Zuerich_Jahresbericht25_grgopa.mp4"
           type="video/mp4"
         />
       </video>
@@ -162,9 +177,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     <!-- chapter 3 images -->
 
     <div class="img-stack img-pheno">
-      <CldImage
-        src="Phenological_Shift_GalleryImage1_cjmvqe"
+      <Image
+        src={pageImage("Phenological_Shift_GalleryImage1_cjmvqe")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Phenological Shift"
       />
@@ -180,9 +196,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     </div>
 
     <div class="img-stack img-eth-vis-1">
-      <CldImage
-        src="ETHVisualisations_GalleryPic1_hnzfw1"
+      <Image
+        src={pageImage("ETHVisualisations_GalleryPic1_hnzfw1")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="ETH Visualisation 1"
       />
@@ -199,9 +216,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     </div>
 
     <div class="img-stack img-microbiome">
-      <CldImage
-        src="Microbiome_OLMA_ttmkmz"
+      <Image
+        src={pageImage("Microbiome_OLMA_ttmkmz")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Microbiome OLMA"
       />
@@ -239,9 +257,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       </p>
     </div>
     <div class="img-stack img-illustration-1">
-      <CldImage
-        src="Illustration_GalleryImages_1_sihglc"
+      <Image
+        src={pageImage("Illustration_GalleryImages_1_sihglc")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Illustration 1"
       />
@@ -256,9 +275,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       </div>
     </div>
     <div class="img-stack img-wood-12">
-      <CldImage
-        src="StructureofWood_Gallery_12_rbvqux"
+      <Image
+        src={pageImage("StructureofWood_Gallery_12_rbvqux")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Structure of Wood"
       />
@@ -284,9 +304,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       </p>
     </div>
     <div class="img-stack img-bacteria">
-      <CldImage
-        src="blender_bacteria_o8jyby"
+      <Image
+        src={pageImage("blender_bacteria_o8jyby")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Blender Bacteria"
       />
@@ -297,9 +318,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     </div>
 
     <div class="img-stack img-gjermundbu">
-      <CldImage
-        src="Gjermundbu_GalleryImages_1_sco2yz"
+      <Image
+        src={pageImage("Gjermundbu_GalleryImages_1_sco2yz")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="UZH Blender Kurs"
       />
@@ -321,11 +343,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
         aria-label="Game Design 101 – prozedurale Animation"
       >
         <source
-          src="https://res.cloudinary.com/rhizomech/video/upload/f_webm,vc_vp9/GameDesign101_1080p_eoaems.webm"
-          type="video/webm"
-        />
-        <source
-          src="https://res.cloudinary.com/rhizomech/video/upload/f_mp4,vc_h264/GameDesign101_1080p_eoaems.mp4"
+          src="/videos/nzz/GameDesign101_1080p_eoaems.mp4"
           type="video/mp4"
         />
       </video>
@@ -336,9 +354,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     </div>
 
     <div class="img-stack img-uzh-blender">
-      <CldImage
-        src="UZHBlenderCourse_1_r6kaar"
+      <Image
+        src={pageImage("UZHBlenderCourse_1_r6kaar")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="UZH Blender Kurs"
       />
@@ -368,9 +387,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     </div>
 
     <div class="img-stack img-xylo">
-      <CldImage
-        src="XylopediaInsta4_hjbuf8"
+      <Image
+        src={pageImage("XylopediaInsta4_hjbuf8")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Xylopedia iPad App"
       />
@@ -381,9 +401,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     </div>
 
     <div class="img-stack img-augmedi">
-      <CldImage
-        src="Houdini_Scripts_hd7d5e"
+      <Image
+        src={pageImage("Houdini_Scripts_hd7d5e")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Augmedi AG – Houdini Scripts für anatomische 3D-Modelle"
       />
@@ -406,11 +427,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     <div class="img-stack img-portfolio-video">
       <video autoplay muted loop playsinline aria-label="Portfolio">
         <source
-          src="https://res.cloudinary.com/rhizomech/video/upload/f_webm,vc_vp9/Portfolio_lc2mft.webm"
-          type="video/webm"
-        />
-        <source
-          src="https://res.cloudinary.com/rhizomech/video/upload/f_mp4,vc_h264/Portfolio_lc2mft.mp4"
+          src="/videos/nzz/Portfolio_lc2mft.mp4"
           type="video/mp4"
         />
       </video>

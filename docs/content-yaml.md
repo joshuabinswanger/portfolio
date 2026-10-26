@@ -10,7 +10,6 @@ Defined in `src/content.config.ts`:
 - `projects`: individual project entries from `src/content/projects`.
 - `images`: local image and Mux video entries from `src/content/images`.
 - `links`: external links from `src/content/links`.
-- `highResImages`: Cloudinary high-resolution images from `Portfolio/HighRes`.
 
 ## Portfolio Entries
 

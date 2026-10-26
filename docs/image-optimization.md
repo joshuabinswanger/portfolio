@@ -1,13 +1,13 @@
 # Image Optimization
 
-Images come from two places: local Astro assets and Cloudinary. The rendering path depends on which gallery/view owns the image.
+All images are local Astro assets (Cloudinary was removed 2026-10-26). The rendering path depends on which gallery/view owns the image.
 
 ## Main Files
 
-- `src/components/images/localImages.ts`: resolves local assets under `src/assets/projects`.
+- `src/components/images/localImages.ts`: resolves local assets under `src/assets/projects` (`resolveLocalImage`) and high-res originals under `src/assets/highres` (`resolveHighResImage`).
 - `src/components/media/MediaElement.astro`: renders local images with Astro `Picture`.
-- `src/components/list/ImageSlide.astro`: renders Cloudinary project-list images with `CldImage`.
-- `src/content.config.ts`: defines Cloudinary and local image content collections.
+- `src/components/list/ImageSlide.astro`: renders project-list images through `MediaElement`.
+- `src/content.config.ts`: defines the local image content collections.
 - `astro.config.mjs`: sets `assetsInlineLimit: 0` so assets are emitted as files instead of being inlined.
 
 ## Local Images
@@ -35,25 +35,27 @@ metadata:
 
 This lets Astro generate responsive optimized output.
 
-## Cloudinary Images
+## The `/nzz-bewerbung` Page
 
-All gallery thumbnails and slides (homepage, project index, archive) are local
-assets. Cloudinary remains only for:
-
-- `highResImages` (`Portfolio/HighRes`), an `astro-cloudinary` collection used
-  for high-resolution lightbox lookups.
-- The unlisted `/nzz-bewerbung` page, which renders `CldImage` directly.
+The unlisted application page resolves its images by file name from
+`src/assets/projects`, `src/assets/highres` and `src/assets/nzz` (page-only
+images) and renders them with Astro `Image`. Its videos are local H.264 MP4s in
+`public/videos/nzz` (each must stay under Cloudflare Pages' 25 MiB file limit).
 
 ## High-Resolution Lightbox Images
 
-Image entries can point to a Cloudinary high-resolution version through:
+Image entries can point to a high-resolution original through:
 
 ```yaml
 metadata:
-  highres_public_id: cloudinary_public_id
+  highres_public_id: Freedom_Zeitstrahl_er4ere
 ```
 
-When present, the archive lightbox uses the high-resolution asset dimensions and URL. Otherwise it falls back to the local image.
+The value is the file name, without extension, of an image in
+`src/assets/highres` (the field name is left over from Cloudinary). When it
+resolves, the archive lightbox opens that original unprocessed at its full
+dimensions; otherwise it falls back to the local image. A missing file logs
+`High-res image not found in src/assets/highres` during the build.
 
 Local image support for high-resolution lightbox data exists in `gallery/utils.ts`, but the `GalleryElement.astro` markup currently keeps that path commented as a TODO.
 

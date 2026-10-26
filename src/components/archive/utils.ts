@@ -1,7 +1,6 @@
-import { getEntry } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 
-import { resolveImageUrl } from "../images/localImages";
+import { resolveHighResImage, resolveImageUrl } from "../images/localImages";
 
 const tagConversion: Record<string, string> = {
   "2D": "twoD",
@@ -86,27 +85,18 @@ export function getArchiveImageTitle(image: ArchiveImage): string {
   );
 }
 
-export async function buildArchiveHighResData(
+export function buildArchiveHighResData(
   image: ArchiveImage,
-): Promise<ArchiveHighResData> {
-  const highResPublicId = image.data.metadata?.highres_public_id;
+): ArchiveHighResData {
+  const highResId = image.data.metadata?.highres_public_id;
+  const highRes = highResId ? resolveHighResImage(highResId) : undefined;
 
-  if (highResPublicId) {
-    try {
-      const highResImage = await getEntry("highResImages", highResPublicId);
+  if (highResId && !highRes) {
+    console.error(`High-res image not found in src/assets/highres: ${highResId}`);
+  }
 
-      if (highResImage?.data) {
-        return {
-          width: highResImage.data.width,
-          height: highResImage.data.height,
-          url: highResImage.data.secure_url,
-        };
-      }
-
-      console.error(`High-res image data is invalid for public ID: ${highResPublicId}`);
-    } catch (error) {
-      console.error(`Failed to fetch highResImages for ${highResPublicId}:`, error);
-    }
+  if (highRes) {
+    return { width: highRes.width, height: highRes.height, url: highRes.src };
   }
 
   return {

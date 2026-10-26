@@ -11,7 +11,6 @@ Live site: [rhizome.ch](https://rhizome.ch)
 - PostCSS
 - Keen Slider
 - PhotoSwipe
-- Cloudinary via `astro-cloudinary`
 - Mux via `@mux/mux-video` and `@mux/mux-player`
 
 ## Development

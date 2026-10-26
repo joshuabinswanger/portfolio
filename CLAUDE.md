@@ -2,12 +2,13 @@
 
 Personal portfolio of Joshua Binswanger (Rhizome Visuals). Astro 6 static site,
 TypeScript, PostCSS (preset-env + nesting, no Tailwind). Content comes from
-YAML collections plus one remote Cloudinary collection (high-res lookups) loaded at build time.
+YAML collections and local assets; no remote image service (Cloudinary was removed
+2026-10-26). Videos are Mux streams or local MP4s in `public/videos`.
 
 ## Commands
 
 - `npm run dev` — dev server
-- `npm run build` — production build (needs Cloudinary credentials in `.env` and network)
+- `npm run build` — production build (no credentials needed)
 - `npm run check` — `astro check` typecheck (keep at 0 errors/warnings/hints)
 - `npm run lint` / `npm run format` — ESLint / Prettier
 
@@ -35,7 +36,7 @@ YAML, or head metadata/SEO, read the matching file: [galleries](docs/galleries.m
   geometry tokens `--mobile-nav-*` / `--surface-*` live in `src/styles/global.css`
   and are shared with the archive toolbar).
 - `src/content.config.ts` — zod schemas for all collections.
-- `scripts/` — Node maintenance scripts for Cloudinary/YAML upkeep.
+- `scripts/` — Node maintenance scripts for YAML upkeep.
 
 ## Conventions
 
@@ -45,6 +46,4 @@ YAML, or head metadata/SEO, read the matching file: [galleries](docs/galleries.m
 - YAML visibility flags are string enums `"yes"`/`"no"`, not booleans.
 - Content YAML files starting with `_` are excluded from the `images`/`portfolio`
   collections.
-- Cloudinary-sourced schemas use `z.looseObject`; local YAML schemas are strict.
-- Env: `PUBLIC_MUX_ENV_KEY` (client, Mux metrics) and Cloudinary credentials
-  (build-time loaders) live in `.env`.
+- Env: `PUBLIC_MUX_ENV_KEY` (client, Mux metrics) lives in `.env`.
