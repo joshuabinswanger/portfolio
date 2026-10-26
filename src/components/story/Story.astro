@@ -526,15 +526,17 @@ const scrollyFrames = (steps: { image?: StoryImageData }[]) => {
     justify-content: center;
   }
 
-  /* Card: square, frosted, small shadow, like the floating bars. */
+  /* Card: square, near-opaque paper over a heavy blur, small shadow. */
   .scrolly-card {
     pointer-events: auto;
     box-sizing: border-box;
     width: min(400px, 100%);
     padding: 20px 22px;
-    background-color: var(--surface-glass);
-    -webkit-backdrop-filter: var(--bar-blur);
-    backdrop-filter: var(--bar-blur);
+    /* Much more opaque than the nav glass so the text reads over any
+       picture; the heavy blur turns what still shows through into a haze. */
+    background-color: color-mix(in srgb, var(--bg-color) 88%, transparent);
+    -webkit-backdrop-filter: blur(40px) saturate(1.4);
+    backdrop-filter: blur(40px) saturate(1.4);
     box-shadow: var(--bar-shadow);
 
     @media (--bp-mobile) {

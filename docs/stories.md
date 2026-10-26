@@ -61,7 +61,7 @@ file name. Text fields marked *markdown* are rendered with `marked`.
 | `image` | `image`, `size?` (`full`/`wide`/`narrow`) | One image; `narrow` = 640px, others fill the column. |
 | `split` | `image`, `body` (md), `heading?`, `imageSide?` (`left`/`right`) | Image beside text; stacks on mobile. |
 | `gallery` | `images[]`, `columns?` (2–4) | Grid; 2 columns on mobile. |
-| `scrolly` | `steps[]` (`image?`, `heading?`, `body` md, `position?` `left`/`right`/`center`) | **Classic scrollytelling.** A full-height stage pins to the viewport and the steps' text cards (square, frosted, small shadow) scroll up over it. Each step's `image` cross-fades in when its card crosses the middle of the screen; a step without `image` keeps the previous one. The first step must have an image. Images are fitted with `contain`, never cropped. |
+| `scrolly` | `steps[]` (`image?`, `heading?`, `body` md, `position?` `left`/`right`/`center`) | **Classic scrollytelling.** A full-height stage pins to the viewport and the steps' text cards (square, near-opaque paper over a heavy 40px blur, small shadow) scroll up over it. Each step's `image` cross-fades in when its card crosses the middle of the screen; a step without `image` keeps the previous one. The first step must have an image. Images are fitted with `contain`, never cropped. |
 | `sticky` | `image`, `steps[]` (`heading?`, `body` md) | Side-by-side variant: Image pins (`position: sticky`) while the steps scroll past; the step nearest the viewport centre gets `.is-active` (others dim). On mobile the image pins to the top. |
 | `quote` | `text`, `source?` | Centred pull quote in brackets. |
 
