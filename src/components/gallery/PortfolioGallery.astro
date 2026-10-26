@@ -63,8 +63,13 @@ const { enrichedProjects } = await getPortfolioGalleryData();
 <!-- KeenSlider -->
 <script>
   import KeenSlider, { type KeenSliderInstance } from "keen-slider";
+  import { startCenterOnScroll, stopCenterOnScroll } from "./centerOnScroll";
+
+  document.addEventListener("astro:before-swap", stopCenterOnScroll);
 
   document.addEventListener("astro:page-load", () => {
+    startCenterOnScroll(".observer");
+
     const Sliders = document.querySelectorAll<HTMLElement>(".GalleryElement");
 
     Sliders.forEach((item) => {
