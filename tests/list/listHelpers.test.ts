@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   formatListSummary,
+  getPerView,
   getProjectFacts,
   pickPreviewSrc,
   placePreview,
@@ -97,4 +98,14 @@ test("shouldShowSliderControls only when slides overflow the view", () => {
   assert.equal(shouldShowSliderControls(5, 4), true);
   assert.equal(shouldShowSliderControls(1, 1.2), false);
   assert.equal(shouldShowSliderControls(2, 1.2), true);
+});
+
+test("getPerView peeks when slides overflow, fills the row when they do not", () => {
+  assert.equal(getPerView(6, 3.5), 3.5);
+  assert.equal(getPerView(4, 3.5), 3.5);
+  assert.equal(getPerView(3, 3.5), 3);
+  assert.equal(getPerView(2, 3.5), 2);
+  assert.equal(getPerView(2, 1.2), 1.2);
+  assert.equal(getPerView(1, 1.2), 1);
+  assert.equal(getPerView(0, 3.5), 1);
 });
