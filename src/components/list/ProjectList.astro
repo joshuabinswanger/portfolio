@@ -591,6 +591,10 @@ for (const entry of sortedProjects) {
     }
     @media (--bp-desktop-wide) {
       margin-top: var(--padding-desktop-wide);
+      /* The wide page column is 1496px; that is too long a line to scan on a
+         large monitor, so cap the list and centre it in the page column. */
+      max-width: 1100px;
+      margin-inline: auto;
     }
   }
 
@@ -760,6 +764,18 @@ for (const entry of sortedProjects) {
     min-width: 0;
   }
 
+  /* Tall images would push the facts and description far down on a big
+     screen: cap the height. The slide keeps its width, so the image is shown
+     whole (contain) and sits against the slide's left edge. */
+  @media (--bp-desktop), (--bp-desktop-wide) {
+    .project-images :global(img),
+    .project-images :global(mux-video) {
+      max-height: 500px;
+      object-fit: contain;
+      object-position: left top;
+    }
+  }
+
   /* Arrows sit on the images. The next slide peeks in from the edge, so the
      row reads as scrollable even before an arrow is used. */
   .slider-arrow {
@@ -779,9 +795,9 @@ for (const entry of sortedProjects) {
     font: 18px PowerGrotesk-Light;
     cursor: pointer;
 
+    /* Phones swipe; the peeking next image already shows there is more. */
     @media (--bp-mobile) {
-      width: 36px;
-      height: 36px;
+      display: none;
     }
   }
 

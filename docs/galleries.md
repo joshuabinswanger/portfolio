@@ -83,10 +83,14 @@ is reused on later opens.
 - Prev/next arrows (`.slider-arrow`) sit on the images, inside `.gallery`
   next to `.project-images` (Keen's slides stay the only children of its
   container). Each shows only when there is more to scroll to in that
-  direction; none show when every slide fits (`shouldShowSliderControls()` in
+  direction; none show when every slide fits, and none on phones
+  (below 768px), which swipe (`shouldShowSliderControls()` in
   `src/components/list/listHelpers.ts`).
 - The arrows are not inside `.row-bar`, so their clicks never reach the row
   toggle.
+- At 1120px and wider, images and videos in `.project-images` are capped at
+  500px high (`object-fit: contain`, left/top aligned inside their slide), so
+  a tall poster cannot push the facts and description far down the page.
 - Closing a row hides `.project-images` after the 500ms transition. Reopening
   within that window cancels the pending hide (`hideTimer`), so a quick
   close-then-open keeps the gallery visible.
