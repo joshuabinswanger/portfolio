@@ -85,6 +85,15 @@ export function pickPreviewSrc(media: PreviewCandidate[]): string | null {
   return null;
 }
 
+// Slides per view: the wanted value when there are more slides than fit (the
+// fraction lets the next slide peek in), otherwise exactly as many as exist so
+// a short gallery fills the row instead of leaving a gap.
+export function getPerView(slideCount: number, wanted: number): number {
+  return slideCount > Math.floor(wanted)
+    ? wanted
+    : Math.max(1, Math.min(slideCount, Math.floor(wanted)));
+}
+
 export function shouldShowSliderControls(
   slideCount: number,
   perView: number,

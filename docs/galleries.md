@@ -52,7 +52,7 @@ entries that were displayed despite a `"no"` flag were set to `"yes"`.
 
 Each project in `src/components/list/ProjectList.astro` is a `.ListElement`
 (`id` = project name) that holds one `button.row-bar`. The button is the whole
-clickable row: year, client, title, type and a `↓` toggle that flips to `↑` when open. Its
+clickable row: year, title, client, type and a `↓` toggle that flips to `↑` when open. Its
 `aria-expanded` and `aria-controls` point at the panel `#<projectName>-panel`.
 
 - Opening a row adds `open` to `.ListElement` and sets `aria-expanded="true"`.
@@ -74,16 +74,19 @@ component's `<style>`:
 ### Slider
 
 The first time a row opens, its `.project-images` container gets a Keen Slider
-with `loop: false`, 4 slides per view, 3 below 1120px and 1.2 below 768px
-(12px spacing). The slider is marked with `data-keen-slider-initialized` and
+with `loop: false`, 3.5 slides per view, 2.5 below 1120px and 1.2 below 768px
+(12px spacing). The fraction lets the next image peek in, so the row reads as
+scrollable; `getPerView()` drops to a whole number when a project has too few
+images to need the peek. The slider is marked with `data-keen-slider-initialized` and
 is reused on later opens.
 
-- The `← n / N →` controls (`.slider-controls`) show only when there are more
-  slides than fit in view. `shouldShowSliderControls()` in
-  `src/components/list/listHelpers.ts` makes that decision. Prev and next
-  disable at the ends.
-- The controls are siblings of `.row-bar`, not children, so their clicks never
-  reach the row toggle; `stopPropagation` on them is only defensive.
+- Prev/next arrows (`.slider-arrow`) sit on the images, inside `.gallery`
+  next to `.project-images` (Keen's slides stay the only children of its
+  container). Each shows only when there is more to scroll to in that
+  direction; none show when every slide fits (`shouldShowSliderControls()` in
+  `src/components/list/listHelpers.ts`).
+- The arrows are not inside `.row-bar`, so their clicks never reach the row
+  toggle.
 - Closing a row hides `.project-images` after the 500ms transition. Reopening
   within that window cancels the pending hide (`hideTimer`), so a quick
   close-then-open keeps the gallery visible.
