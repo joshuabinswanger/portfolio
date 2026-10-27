@@ -592,8 +592,9 @@ for (const entry of sortedProjects) {
     @media (--bp-desktop-wide) {
       margin-top: var(--padding-desktop-wide);
       /* The wide page column is 1496px; that is too long a line to scan on a
-         large monitor, so cap the list and keep it beside the nav. */
+         large monitor, so cap the list and centre it in the page column. */
       max-width: 1100px;
+      margin-inline: auto;
     }
   }
 
