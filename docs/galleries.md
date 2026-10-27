@@ -83,7 +83,8 @@ is reused on later opens.
 - Prev/next arrows (`.slider-arrow`) sit on the images, inside `.gallery`
   next to `.project-images` (Keen's slides stay the only children of its
   container). Each shows only when there is more to scroll to in that
-  direction; none show when every slide fits (`shouldShowSliderControls()` in
+  direction; none show when every slide fits, and none on phones
+  (below 768px), which swipe (`shouldShowSliderControls()` in
   `src/components/list/listHelpers.ts`).
 - The arrows are not inside `.row-bar`, so their clicks never reach the row
   toggle.

@@ -782,9 +782,9 @@ for (const entry of sortedProjects) {
     font: 18px PowerGrotesk-Light;
     cursor: pointer;
 
+    /* Phones swipe; the peeking next image already shows there is more. */
     @media (--bp-mobile) {
-      width: 36px;
-      height: 36px;
+      display: none;
     }
   }
 
