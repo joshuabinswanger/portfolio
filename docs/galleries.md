@@ -88,6 +88,9 @@ is reused on later opens.
   `src/components/list/listHelpers.ts`).
 - The arrows are not inside `.row-bar`, so their clicks never reach the row
   toggle.
+- At 1120px and wider, images and videos in `.project-images` are capped at
+  500px high (`object-fit: contain`, left/top aligned inside their slide), so
+  a tall poster cannot push the facts and description far down the page.
 - Closing a row hides `.project-images` after the 500ms transition. Reopening
   within that window cancels the pending hide (`hideTimer`), so a quick
   close-then-open keeps the gallery visible.
