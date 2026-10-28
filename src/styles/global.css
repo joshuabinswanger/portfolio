@@ -123,7 +123,7 @@
   --font-size-mobile-small-h1: 14px;
   --font-size-tablet-h1: 16px;
   --font-size-desktop-h1: 18px;
-  --font-size-desktop-wide-h1: 18px;
+  --font-size-desktop-wide-h1: 16px;
 
   letter-spacing: 0.7px;
 
@@ -161,7 +161,24 @@
   --nav-main-layout-mobile: 1fr;
   --nav-main-layout-tablet: 144px 1fr;
   --nav-main-layout-desktop: 160px 952px;
-  --nav-main-layout-desktop-wide: 160px 1496px;
+  --nav-main-layout-desktop-wide: var(--nav-width-desktop-wide)
+    calc(17 * var(--grid-cell-desktop-wide));
+
+  /* Desktop wide: a narrower nav, and the 17-column grid fills the rest of
+     the viewport (16px page margins, 8px nav gap) up to 96px cells, e.g.
+     ~92px on a 16" MacBook Pro (1728px). Rows use the same size so the
+     gallery's row placement scales with it. */
+  --nav-width-desktop-wide: 128px;
+  --grid-cell-desktop-wide: min(
+    96px,
+    calc(
+      (
+          100vw - var(--scrollbar-width, 0px) - var(--nav-width-desktop-wide) -
+            8px - 32px
+        ) /
+        17
+    )
+  );
 
   /* Grid Layout*/
   /* grid template columns: 17 Columns = 100vw - margin right - NavBar - margin left - column gap - scrollbar-wdith*(2) / 17*/
@@ -179,7 +196,7 @@
     calc((100vw - 124px - 20px - calc(var(--scrollbar-width) * 2)) / 11)
   );
   --grid-layout-columns-desktop: repeat(17, 56px);
-  --grid-layout-columns-desktop-wide: repeat(17, 88px);
+  --grid-layout-columns-desktop-wide: repeat(17, var(--grid-cell-desktop-wide));
 }
 
 /* Media Queries Breakpoints*/
