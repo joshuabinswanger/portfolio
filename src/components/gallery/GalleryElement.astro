@@ -414,8 +414,8 @@ max-width: 80vw !important;
     align-items: center;
     transition: opacity 1.5s ease-in;
 
-    /* A slimmer bar to match the smaller nav buttons on wide desktops. */
-    @media (--bp-desktop-wide) {
+    /* A slimmer bar to match the smaller nav buttons on desktop. */
+    @media (--bp-desktop), (--bp-desktop-wide) {
       min-height: 48px;
     }
   }

@@ -227,7 +227,7 @@ const isActive = (href: string) => norm(href) === here;
     height: min-content;
     display: grid;
     justify-items: center;
-    grid-template-rows: 40px 1fr;
+    grid-template-rows: 32px 1fr;
     top: var(--padding-top-desktop);
     row-gap: 4px;
 
@@ -240,7 +240,6 @@ const isActive = (href: string) => norm(href) === here;
     }
     @media (--bp-desktop-wide) {
       top: var(--padding-top-desktop-wide);
-      grid-template-rows: 32px 1fr;
     }
   }
 
@@ -270,13 +269,10 @@ const isActive = (href: string) => norm(href) === here;
     width: 100%;
     display: grid;
     /* Restored original grid rows for 3 main items */
-    grid-template-rows: 0 48px 0 48px 0 48px 0;
+    grid-template-rows: 0 40px 0 40px 0 40px 0;
     transition: grid-template-rows 0.6s ease; /* Changed from columns to rows */
 
     @media (--bp-tablet) {
-      grid-template-rows: 0 40px 0 40px 0 40px 0;
-    }
-    @media (--bp-desktop-wide) {
       grid-template-rows: 0 40px 0 40px 0 40px 0;
     }
   }

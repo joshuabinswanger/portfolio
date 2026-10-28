@@ -122,7 +122,7 @@
   --font-size-mobile-h1: 14px;
   --font-size-mobile-small-h1: 14px;
   --font-size-tablet-h1: 16px;
-  --font-size-desktop-h1: 18px;
+  --font-size-desktop-h1: 16px;
   --font-size-desktop-wide-h1: 16px;
 
   letter-spacing: 0.7px;
@@ -160,21 +160,22 @@
   --nav-main-layout-mobile-small: 1fr;
   --nav-main-layout-mobile: 1fr;
   --nav-main-layout-tablet: 144px 1fr;
-  --nav-main-layout-desktop: 160px 952px;
-  --nav-main-layout-desktop-wide: var(--nav-width-desktop-wide)
-    calc(17 * var(--grid-cell-desktop-wide));
+  --nav-main-layout-desktop: var(--nav-width-desktop)
+    calc(17 * var(--grid-cell-desktop));
+  --nav-main-layout-desktop-wide: var(--nav-main-layout-desktop);
 
-  /* Desktop wide: a narrower nav, and the 17-column grid fills the rest of
-     the viewport (16px page margins, 8px nav gap) up to 96px cells, e.g.
-     ~92px on a 16" MacBook Pro (1728px). Rows use the same size so the
-     gallery's row placement scales with it. */
-  --nav-width-desktop-wide: 128px;
-  --grid-cell-desktop-wide: min(
+  /* Desktop (1120px and up): a 128px nav, and the 17-column grid fills the
+     rest of the viewport (16px page margins, 8px nav gap) up to 96px cells.
+     That is 56px at 1120px, ~84px at 1600px and ~92px on a 16" MacBook Pro
+     (1728px). Rows use the same size so the gallery's row placement scales
+     with the columns. */
+  --nav-width-desktop: 128px;
+  --grid-cell-desktop: min(
     96px,
     calc(
       (
-          100vw - var(--scrollbar-width, 0px) - var(--nav-width-desktop-wide) -
-            8px - 32px
+          100vw - var(--scrollbar-width, 0px) - var(--nav-width-desktop) - 8px -
+            32px
         ) /
         17
     )
@@ -195,8 +196,8 @@
     11,
     calc((100vw - 124px - 20px - calc(var(--scrollbar-width) * 2)) / 11)
   );
-  --grid-layout-columns-desktop: repeat(17, 56px);
-  --grid-layout-columns-desktop-wide: repeat(17, var(--grid-cell-desktop-wide));
+  --grid-layout-columns-desktop: repeat(17, var(--grid-cell-desktop));
+  --grid-layout-columns-desktop-wide: var(--grid-layout-columns-desktop);
 }
 
 /* Media Queries Breakpoints*/
