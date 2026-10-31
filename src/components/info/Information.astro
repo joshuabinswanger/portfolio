@@ -12,6 +12,11 @@ const socials = (await getCollection("links"))
 const blenderCourse = await getEntry("links", "blendercourse");
 if (!blenderCourse) throw new Error("links/BlenderCourse.yaml is missing");
 
+// The Elsewhere list: social profiles plus the Blender workshop.
+const elsewhere = [...socials, blenderCourse].sort(
+  (a, b) => a.data.sortOrder - b.data.sortOrder,
+);
+
 const services = [
   "Scientific Illustration",
   "3D Design & Visualisation",
@@ -108,9 +113,12 @@ const clients = [
       <h2>Elsewhere</h2>
       <ul>
         {
-          socials.map((s) => (
+          elsewhere.map((s) => (
             <li>
-              <a href={s.data.link} rel="me noopener">
+              <a
+                href={s.data.link}
+                rel={s.data.kind === "social" ? "me noopener" : "noopener"}
+              >
                 <span class="platform">{s.data.text}</span>
                 <span class="handle">{s.data.handle}</span>
                 <span class="arrow" aria-hidden="true">
@@ -345,7 +353,7 @@ const clients = [
 
     & a {
       display: grid;
-      grid-template-columns: 6.5rem minmax(0, 1fr) auto;
+      grid-template-columns: 8.5rem minmax(0, 1fr) auto;
       align-items: baseline;
       gap: 1rem;
       padding: 0.75rem 0;
