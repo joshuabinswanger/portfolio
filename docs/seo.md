@@ -44,7 +44,8 @@ Everything else is derived, not passed:
 
 `Main.astro` emits one `application/ld+json` block (a `@graph`) on every page:
 
-- `Person` (`#person`) — Joshua Binswanger: job title, `knowsAbout`, `worksFor`.
+- `Person` (`#person`) — Joshua Binswanger: job title, `knowsAbout`, `worksFor`,
+  and `sameAs` built from the `links` collection entries with `kind: social`.
 - `ProfessionalService` (`#org`) — Rhizome Visuals: `serviceType`, `founder`.
 - `WebSite` (`#website`) — publisher points back to `#person`.
 
@@ -53,7 +54,7 @@ loose objects. This is the highest-leverage AI-SEO surface: it states the
 who/what/relationships explicitly instead of leaving them to be inferred.
 
 Not yet implemented (future work): per-project `CreativeWork` / `ImageObject`
-schema, and `sameAs` social links on the `Person`.
+schema.
 
 ## Sitemap & robots
 

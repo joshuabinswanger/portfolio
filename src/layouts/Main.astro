@@ -6,6 +6,7 @@ import Backdrop from "../components/Background.astro";
 import "../styles/global.css";
 
 import { getImage } from "astro:assets";
+import { getCollection } from "astro:content";
 import ogImage from "../assets/Rhizome_OpenGraphImage_Main_ScientficIllustration.jpg";
 
 // This forces Astro to process and include the image
@@ -22,6 +23,12 @@ const isProd = import.meta.env.PROD;
 // so each page is its own indexable entity rather than a duplicate of the homepage.
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImageUrl = new URL(optimizedOgImage.src, Astro.site).toString();
+
+// Social profiles (links collection, kind "social") become the Person's sameAs.
+const sameAs = (await getCollection("links"))
+  .filter((l) => l.data.kind === "social")
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .map((l) => l.data.link);
 
 // Structured data: tells search + AI answer engines who Joshua / Rhizome are
 // and how the entities relate, instead of leaving them to infer it from prose.
@@ -46,6 +53,7 @@ const structuredData = {
         "Blender",
       ],
       worksFor: { "@id": "https://rhizome.ch/#org" },
+      sameAs,
     },
     {
       "@type": "ProfessionalService",
