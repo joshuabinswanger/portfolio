@@ -1,12 +1,16 @@
 ---
 import TopWrapper from "../../layouts/TopWrapper.astro";
-import { getCollection } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import "../../styles/global.css";
 
 // Social profiles come from the links collection (kind "social").
 const socials = (await getCollection("links"))
   .filter((l) => l.data.kind === "social")
   .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+
+// Entry ids are slugified file names (BlenderCourse.yaml -> "blendercourse").
+const blenderCourse = await getEntry("links", "blendercourse");
+if (!blenderCourse) throw new Error("links/BlenderCourse.yaml is missing");
 
 const services = [
   "Scientific Illustration",
@@ -47,13 +51,20 @@ const clients = [
         combine them with my visual aesthetic and technical expertise.
       </p>
       <p>
+        Alongside Rhizome Visuals, I currently work at
+        <a href="https://www.augmedi.com/" rel="noopener">AugMedi</a>.
+      </p>
+      <p>
         Anchored by a deep fascination with the natural world, my work often
         depicts its intricacies accurately and engagingly, yet I'm drawn to
         challenging topics across the full spectrum of scientific fields.
       </p>
       <p>
         I keep sharpening my skills in art, design and technology, and share
-        what I learn through courses, workshops and online platforms.
+        what I learn through workshops, online platforms and my
+        <a href={blenderCourse.data.link} rel="noopener"
+          >Blender course at the University of Zurich</a
+        >.
       </p>
     </div>
 
@@ -109,13 +120,15 @@ const clients = [
             </li>
           ))
         }
+        <li>
+          <a href="/personal">
+            <span class="platform">Personal site</span>
+            <span class="handle">rhizome.ch/personal</span>
+            <span class="arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
       </ul>
     </section>
-
-    <p class="personal">
-      More personal and experimental work lives in my
-      <a href="/personal">design portfolio</a>.
-    </p>
   </article>
 </TopWrapper>
 
@@ -369,14 +382,13 @@ const clients = [
     white-space: nowrap;
   }
 
-  .personal {
-    grid-column: 1 / -1;
-    color: var(--text-muted);
+  .bio a {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
 
-    & a {
-      color: var(--ink);
-      text-decoration: underline;
-      text-underline-offset: 0.2em;
+    &:hover {
+      text-decoration-thickness: 2px;
     }
   }
 

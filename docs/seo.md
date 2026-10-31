@@ -44,7 +44,7 @@ Everything else is derived, not passed:
 
 `Main.astro` emits one `application/ld+json` block (a `@graph`) on every page:
 
-- `Person` (`#person`) — Joshua Binswanger: job title, `knowsAbout`, `worksFor`,
+- `Person` (`#person`) — Joshua Binswanger: job title, `knowsAbout`, `worksFor` (Rhizome + AugMedi),
   and `sameAs` built from the `links` collection entries with `kind: social`.
 - `ProfessionalService` (`#org`) — Rhizome Visuals: `serviceType`, `founder`.
 - `WebSite` (`#website`) — publisher points back to `#person`.
