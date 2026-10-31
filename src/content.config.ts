@@ -234,6 +234,11 @@ export const collections = {
       sortOrder: z.number(),
       text: z.string(),
       link: z.string(),
+      // Profile name shown next to the platform on the About page.
+      handle: z.string().optional(),
+      // "social" links are listed on the About page and emitted as the
+      // Person's `sameAs`; "resource" links (courses, boards) are not.
+      kind: z.enum(["social", "resource"]),
     }),
   }),
 };
