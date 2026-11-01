@@ -15,7 +15,10 @@ and the per-image `focus` field see [image-optimization](image-optimization.md).
 > sheet. In 2026-11 the desktop toolbar went back to the original bracket look
 > (Filter drawer + Sort dropdown, below), rebuilt without the old grid-track
 > animations; the phone sheet is unchanged. The mockup it follows is
-> `archive-filter-bracket-mockup.af` (Affinity, kept outside the repo).
+> `archive-filter-bracket-mockup.af` (Affinity, kept outside the repo); the
+> phone toolbar, sheet and sort sections are in `archive-filter-mobile-sort.af`
+> next to it, and `archive-filter-desktop-sort.af` redraws the desktop toolbar
+> in the phone's chip style (a proposal, not yet built).
 
 ## Main files
 
