@@ -147,7 +147,11 @@ on (at 952px that's the Topic row — two rows total).
 
 Each image has a single resolved **title**, computed once at build time by
 `getArchiveImageTitle` in `utils.ts`: `metadata.description_title`, falling
-back to a humanised project name. `ArchiveGalleryElement.astro` renders it as
+back to the project's display name (`getProjectDisplayName`): the matching
+`projects` entry's `title` (slug matched case-insensitively), then
+`ARCHIVE_GROUP_TITLES` for archive-only groups with no project entry
+(`FigureDrawing`, `misc3d`, …), then a humanised slug. Add a new archive-only
+slug to that map to give it a proper name. `ArchiveGalleryElement.astro` renders it as
 the cell's `<figcaption class="archive-caption">` **and** as `data-title` on
 the `.photo-link`.
 

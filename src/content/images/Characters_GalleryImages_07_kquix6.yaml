@@ -5,7 +5,7 @@ tags:
   - 2D
   - Character
 metadata:
-  project: hold
+  project: characters
   description_title: Vitsi
   description_text: Vitsi
   showInPortfolioGallery: 'no'
@@ -13,7 +13,7 @@ metadata:
   showInProjectGallery: 'no'
   projectGalleryOrder: null
   showInIndex: 'yes'
-  year: '20250'
+  year: '2021'
   client: null
   collaborators: null
   role: Illustration, 2D

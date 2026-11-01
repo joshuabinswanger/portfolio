@@ -52,6 +52,24 @@ credits: ...
 
 Local image entries live in `src/content/images` and use local files under `src/assets/projects`.
 
+To review them, run `npm run dev` and open `/dev/images`: every entry as a
+thumbnail beside its title, year, visibility and tags, grouped by project, with
+a filter box and a link that opens the YAML file in VS Code. **Edit** on a card
+opens a form (title, text, year, project, visibility, role, program, topic,
+tags); **Save** posts to `/dev/api/image-meta`, which validates the change
+(`src/dev/imageMeta.ts`) and rewrites only the lines that changed, keeping
+quoting and comments. The dev server then reloads the page.
+
+The review page reads each YAML file from disk on every load instead of the
+content-collection cache. When Astro restarts itself after a change to
+`astro.config.mjs` (or a file it imports, such as `src/dev/*.ts`), its content
+watcher stops picking up file edits; the rest of the site then shows stale
+content until `npm run dev` is restarted by hand.
+
+The page (`src/dev/ImageReview.astro`) and the save endpoint
+(`src/dev/imageMetaMiddleware.ts`) are wired up by an integration in
+`astro.config.mjs` only under `astro dev`, so neither is ever built or deployed.
+
 ```yaml
 src: /src/assets/projects/GameDesign101/example.webp
 width: 1500
@@ -65,9 +83,14 @@ metadata:
   showInProjectGallery: "no"
   projectGalleryOrder: null
   showInIndex: "yes"
+  year: "2024"
 ```
 
 `mediaType: image` is optional for existing image entries.
+
+`metadata.year` is always four digits, `YYYY`, with no month. The archive's
+Date sort compares these numerically, so mixing in a six-digit `YYYYMM` value
+would sort it after every plain year.
 
 ## Mux Video Entries
 
