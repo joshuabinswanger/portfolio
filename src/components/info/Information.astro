@@ -1,21 +1,13 @@
 ---
 import TopWrapper from "../../layouts/TopWrapper.astro";
-import { getCollection, getEntry } from "astro:content";
+import { getCollection } from "astro:content";
 import "../../styles/global.css";
 
-// Social profiles come from the links collection (kind "social").
-const socials = (await getCollection("links"))
-  .filter((l) => l.data.kind === "social")
+// The Links list: every links entry except "resource" ones (VSCN, socials,
+// the Blender workshop, the personal site).
+const links = (await getCollection("links"))
+  .filter((l) => l.data.kind !== "resource")
   .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
-
-// Entry ids are slugified file names (BlenderCourse.yaml -> "blendercourse").
-const blenderCourse = await getEntry("links", "blendercourse");
-if (!blenderCourse) throw new Error("links/BlenderCourse.yaml is missing");
-
-// The Elsewhere list: social profiles plus the Blender workshop.
-const elsewhere = [...socials, blenderCourse].sort(
-  (a, b) => a.data.sortOrder - b.data.sortOrder,
-);
 
 const services = [
   "Scientific Illustration",
@@ -48,85 +40,72 @@ const clients = [
       </h1>
     </header>
 
-    <div class="bio">
-      <p>
-        Working at the intersection of knowledge transfer and visual
-        storytelling, I communicate complex information through engaging
-        imagery. I thrive where I can learn, question and discuss new topics and
-        combine them with my visual aesthetic and technical expertise.
-      </p>
-      <p>
-        Alongside Rhizome Visuals, I currently work at
-        <a href="https://www.augmedi.com/" rel="noopener">AugMedi</a>.
-      </p>
-      <p>
-        Anchored by a deep fascination with the natural world, my work often
-        depicts its intricacies accurately and engagingly, yet I'm drawn to
-        challenging topics across the full spectrum of scientific fields.
-      </p>
-      <p>
-        I keep sharpening my skills in art, design and technology, and share
-        what I learn through courses, workshops and online platforms.
-      </p>
+    <div class="main">
+      <div class="bio">
+        <p>
+          Working at the intersection of knowledge transfer and visual
+          storytelling, I communicate complex information through engaging
+          imagery. I thrive where I can learn, question and discuss new topics
+          and combine them with my visual aesthetic and technical expertise.
+        </p>
+        <p>
+          Alongside Rhizome Visuals, I currently work at
+          <a href="https://www.augmedi.com/" rel="noopener">AugMedi</a>.
+        </p>
+        <p>
+          Anchored by a deep fascination with the natural world, my work often
+          depicts its intricacies accurately and engagingly, yet I'm drawn to
+          challenging topics across the full spectrum of scientific fields.
+        </p>
+        <p>
+          I keep sharpening my skills in art, design and technology, and share
+          what I learn through courses, workshops and online platforms.
+        </p>
+      </div>
+
+      <div class="facts">
+        <section>
+          <h2>Services</h2>
+          <ul>{services.map((s) => <li>{s}</li>)}</ul>
+        </section>
+        <section>
+          <h2>Selected clients</h2>
+          <ul>{clients.map((c) => <li>{c}</li>)}</ul>
+        </section>
+      </div>
+
+      <section class="contact">
+        <p class="contact-text">
+          For collaborations or other inquiries, write to me:
+        </p>
+        <!--email_off-->
+        <a class="email" href="mailto:info@rhizome.ch">info@rhizome.ch</a>
+        <!--/email_off-->
+      </section>
     </div>
 
-    <aside class="facts">
-      <section>
-        <h2>Services</h2>
-        <ul>{services.map((s) => <li>{s}</li>)}</ul>
-      </section>
-      <section>
-        <h2>Selected clients</h2>
-        <ul>{clients.map((c) => <li>{c}</li>)}</ul>
-      </section>
+    <aside class="side">
+      <nav class="links" aria-label="Links">
+        <ul>
+          {
+            links.map((s) => (
+              <li>
+                <a
+                  href={s.data.link}
+                  rel={s.data.kind === "social" ? "me noopener" : "noopener"}
+                >
+                  <span class="platform">{s.data.text}</span>
+                  <span class="handle">{s.data.handle}</span>
+                  <span class="arrow" aria-hidden="true">
+                    ↗
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
     </aside>
-
-    <section class="project" aria-labelledby="ProjectTitle">
-      <h2>Also by me</h2>
-      <a class="project-card" href="https://vscn.ch" rel="noopener">
-        <span class="project-name" id="ProjectTitle">
-          VSCN <span class="arrow" aria-hidden="true">↗</span>
-        </span>
-        <span class="project-sub">Visual Science Communication Network</span>
-        <span class="project-text">
-          A platform where visual science communicators connect, show their work
-          and find collaborators.
-        </span>
-        <span class="project-url">vscn.ch</span>
-      </a>
-    </section>
-
-    <section class="contact">
-      <h2>Get in touch</h2>
-      <p class="contact-text">
-        For collaborations or other inquiries, write to me:
-      </p>
-      <!--email_off-->
-      <a class="email" href="mailto:info@rhizome.ch">info@rhizome.ch</a>
-      <!--/email_off-->
-    </section>
-
-    <section class="elsewhere">
-      <h2>Elsewhere</h2>
-      <ul>
-        {
-          elsewhere.map((s) => (
-            <li>
-              <a
-                href={s.data.link}
-                rel={s.data.kind === "social" ? "me noopener" : "noopener"}
-              >
-                <span class="platform">{s.data.text}</span>
-                <span class="handle">{s.data.handle}</span>
-                <span class="arrow" aria-hidden="true">
-                  ↗
-                </span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
   </article>
 </TopWrapper>
 
@@ -136,21 +115,27 @@ const clients = [
   #About {
     --about-size: var(--font-size-desktop);
 
-    /* One stacked column at every size, spanning the full page column. */
+    /* Headline across the top, then a wide text column (bio, services and
+       clients, contact) and a thinner side column with the links. */
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: minmax(0, 2fr) minmax(16rem, 1fr);
+    column-gap: clamp(2rem, 5vw, 6rem);
     row-gap: 3.5rem;
+    max-width: 1180px;
     padding: 0 16px;
     font-size: var(--about-size);
     letter-spacing: 1px;
 
     @media (--bp-tablet) {
       --about-size: var(--font-size-tablet);
+      grid-template-columns: minmax(0, 2fr) minmax(13rem, 1fr);
+      column-gap: 2rem;
       row-gap: 2.5rem;
     }
 
     @media (--bp-mobile) {
       --about-size: var(--font-size-mobile);
+      grid-template-columns: minmax(0, 1fr);
       row-gap: 2.5rem;
       padding: 0 14px;
     }
@@ -186,6 +171,10 @@ const clients = [
     border-bottom: 1px solid var(--rule);
   }
 
+  .intro {
+    grid-column: 1 / -1;
+  }
+
   .kicker {
     font-family: PowerGrotesk-Light;
     font-style: italic;
@@ -200,98 +189,46 @@ const clients = [
     font-size: clamp(1.6rem, 1rem + 2.2vw, 3rem);
     line-height: 1.12;
     letter-spacing: 0;
-    max-width: 30ch;
     text-wrap: balance;
+  }
+
+  .main {
+    display: grid;
+    gap: 3rem;
+    align-content: start;
   }
 
   .bio {
     display: grid;
     gap: 1.1em;
-    max-width: 90ch;
     line-height: 1.6;
 
     & p:first-child {
       font-size: calc(var(--about-size) + 2px);
+    }
+
+    & a {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.2em;
+
+      &:hover {
+        text-decoration-thickness: 2px;
+      }
     }
   }
 
   .facts {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2rem;
+    column-gap: clamp(1.5rem, 4vw, 4rem);
     line-height: 1.9;
   }
 
-  /* VSCN feature card: a bracketed box echoing the nav's bracket lines */
-
-  .project-card {
-    position: relative;
-    display: grid;
-    gap: 0.4rem;
-    padding: 1.6rem 1.75rem;
-    text-decoration: none;
-    border-inline: 1px solid var(--ink);
-    transition: background-color 200ms ease;
-
-    &::before,
-    &::after {
-      content: "";
-      position: absolute;
-      inset-inline: 0;
-      height: 1px;
-      background: linear-gradient(
-        to right,
-        var(--ink) 14px,
-        transparent 14px calc(100% - 14px),
-        var(--ink) calc(100% - 14px)
-      );
-    }
-
-    &::before {
-      top: 0;
-    }
-
-    &::after {
-      bottom: 0;
-    }
-
-    &:hover,
-    &:focus-visible {
-      background-color: var(--bg-color-accent);
-    }
-
-    &:hover .arrow,
-    &:focus-visible .arrow {
-      transform: translate(3px, -3px);
-    }
-  }
-
-  .project-name {
-    font-family: PowerGrotesk-Medium;
-    font-size: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
-    letter-spacing: 2px;
-    line-height: 1;
-  }
-
-  .project-sub {
-    font-family: PowerGrotesk-Regular;
-  }
-
-  .project-text {
-    max-width: 52ch;
-    line-height: 1.6;
-    color: color-mix(in srgb, var(--ink) 75%, transparent);
-  }
-
-  .project-url {
-    margin-top: 0.6rem;
-    color: var(--text-muted);
-  }
-
-  .arrow {
-    display: inline-block;
-    font-family: PowerGrotesk-Light;
-    transition: transform 200ms ease;
+  .contact {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
   }
 
   .contact-text {
@@ -312,17 +249,20 @@ const clients = [
     }
   }
 
-  .elsewhere {
+  /* Links: name on the first line, handle under it, arrow on the right. */
+  .links {
+    line-height: 1.4;
+
     & li {
       border-bottom: 1px solid var(--rule);
     }
 
     & a {
       display: grid;
-      grid-template-columns: 8.5rem minmax(0, 1fr) auto;
-      align-items: baseline;
-      gap: 1rem;
-      padding: 0.75rem 0;
+      grid-template-columns: minmax(0, 1fr) auto;
+      column-gap: 1rem;
+      align-items: center;
+      padding: 0.6rem 0;
       text-decoration: none;
       transition: padding 200ms ease;
 
@@ -343,26 +283,24 @@ const clients = [
   }
 
   .handle {
+    grid-column: 1;
+    font-size: calc(var(--about-size) - 2px);
     color: var(--text-muted);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .bio a {
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.2em;
-
-    &:hover {
-      text-decoration-thickness: 2px;
-    }
+  .arrow {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    font-family: PowerGrotesk-Light;
+    transition: transform 200ms ease;
   }
 
   @media (prefers-reduced-motion: reduce) {
     .arrow,
-    .project-card,
-    .elsewhere a {
+    .links a {
       transition: none;
     }
   }
