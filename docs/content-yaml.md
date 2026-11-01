@@ -60,6 +60,12 @@ tags); **Save** posts to `/dev/api/image-meta`, which validates the change
 (`src/dev/imageMeta.ts`) and rewrites only the lines that changed, keeping
 quoting and comments. The dev server then reloads the page.
 
+The review page reads each YAML file from disk on every load instead of the
+content-collection cache. When Astro restarts itself after a change to
+`astro.config.mjs` (or a file it imports, such as `src/dev/*.ts`), its content
+watcher stops picking up file edits; the rest of the site then shows stale
+content until `npm run dev` is restarted by hand.
+
 The page (`src/dev/ImageReview.astro`) and the save endpoint
 (`src/dev/imageMetaMiddleware.ts`) are wired up by an integration in
 `astro.config.mjs` only under `astro dev`, so neither is ever built or deployed.

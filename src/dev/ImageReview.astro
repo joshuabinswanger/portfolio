@@ -5,7 +5,9 @@
 // by the dev-image-review integration in astro.config.mjs; never built.
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { parse } from "yaml";
 
 import {
   buildProjectTitleMap,
@@ -20,16 +22,36 @@ const images = await getCollection("images");
 const NO_PROJECT = "(no project)";
 
 // "202405" -> "2024-05"; anything else is shown as-is so odd values stand out.
-function formatYear(year: string | null | undefined): string {
-  if (!year) return "—";
+function formatYear(value: string | number | null | undefined): string {
+  if (!value) return "—";
+  const year = String(value); // an unquoted year in hand-edited YAML is a number
   return /^\d{6}$/.test(year) ? `${year.slice(0, 4)}-${year.slice(4)}` : year;
 }
 
-const cards = images.map((entry) => {
-  const data = entry.data;
+type ImageData = (typeof images)[number]["data"];
+
+// Read each entry's YAML from disk on every request rather than trusting the
+// content-collection cache: after Astro restarts itself (config change) its
+// file watcher stops, and saved edits would otherwise not show up here.
+async function readFresh(filePath: string, cached: ImageData) {
+  try {
+    const fresh = parse(await readFile(filePath, "utf8")) as ImageData;
+    return { ...fresh, metadata: { ...cached.metadata, ...fresh.metadata } };
+  } catch {
+    return cached;
+  }
+}
+
+const entries = await Promise.all(
+  images.map(async (entry) => {
+    const filePath = entry.filePath ?? `src/content/images/${entry.id}.yaml`;
+    return { entry, filePath, data: await readFresh(filePath, entry.data) };
+  }),
+);
+
+const cards = entries.map(({ entry, filePath, data }) => {
   const meta = data.metadata;
   const src = data.mediaType === "video" ? data.posterSrc : data.src;
-  const filePath = entry.filePath ?? `src/content/images/${entry.id}.yaml`;
   const group =
     getProjectDisplayName(meta.project, projectTitles) || NO_PROJECT;
   const flags = [
