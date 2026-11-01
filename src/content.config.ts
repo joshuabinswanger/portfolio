@@ -236,9 +236,10 @@ export const collections = {
       link: z.string(),
       // Profile name shown next to the platform on the About page.
       handle: z.string().optional(),
-      // "social" links are listed on the About page and emitted as the
-      // Person's `sameAs`; "resource" links (courses, boards) are not.
-      kind: z.enum(["social", "resource"]),
+      // "social": listed on the About page and emitted as the Person's
+      // `sameAs`. "link": listed on the About page only (projects, courses).
+      // "resource": not shown on the About page.
+      kind: z.enum(["social", "link", "resource"]),
     }),
   }),
 };
