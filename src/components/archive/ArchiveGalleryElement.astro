@@ -8,7 +8,9 @@ import { resolveImageUrl, resolveLocalImage } from "../images/localImages";
 import {
   buildArchiveHighResData,
   buildProjectTitleMap,
+  getArchiveDate,
   getArchiveImageTitle,
+  getArchiveProject,
   getArchiveRoleTags,
   getArchiveTagClassString,
   type ArchiveImage,
@@ -29,6 +31,9 @@ const convertedRole = getArchiveRoleTags(archiveImage);
 // and read off data-title by the PhotoSwipe lightbox.
 const projectTitles = buildProjectTitleMap(await getCollection("projects"));
 const captionTitle = getArchiveImageTitle(archiveImage, projectTitles);
+// Sort keys + section titles for the Project and Date sorts (filters.ts).
+const archiveProject = getArchiveProject(archiveImage, projectTitles);
+const archiveDate = getArchiveDate(archiveImage);
 ---
 
 <div
@@ -36,8 +41,10 @@ const captionTitle = getArchiveImageTitle(archiveImage, projectTitles);
   id={`archiveElement-${Astro.props.index}`}
   data-role={convertedRole}
   data-program={archiveImage.data.metadata?.program}
-  data-project={archiveImage.data.metadata?.project || "aaa_noproject"}
-  data-date={archiveImage.data.metadata?.year || "2016"}
+  data-project={archiveProject.key}
+  data-project-title={archiveProject.title}
+  data-date={archiveDate.key}
+  data-year={archiveDate.year}
 >
   <div id="Image" class:list={["ImageElement"]}>
     <a

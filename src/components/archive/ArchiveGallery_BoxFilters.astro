@@ -81,16 +81,21 @@ const groups = [roleGroup, programGroup, topicGroup];
 const sortOptions = [
   { id: "sort-random", sort: "random", label: "Random", active: true },
   { id: "sort-project", sort: "project:asc", label: "Project", active: false },
-  { id: "sort-date", sort: "date:asc", label: "Date", active: false },
+  // Newest first.
+  { id: "sort-date", sort: "date:desc", label: "Date", active: false },
 ];
 ---
 
 <TopWrapper personal={true}>
   <div id="archive-wrapper">
     <!--
-      Toolbar. Desktop: a sticky rail of filter chips + segmented sort + zoom.
-      Mobile: a floating "Filter & Sort" pill and zoom pill above the nav; the
-      same #filter-box becomes a bottom sheet. Runtime: ./filters.ts.
+      Toolbar. Desktop: a sticky bar in the original bracket style. "Filter"
+      widens and drops #filter-box below it as a bracketed drawer of option
+      lists; "Sort" opens its own dropdown (#sort-menu). Active filters sit in
+      the bar between brackets. Both menus lay over the grid.
+      Mobile: a floating "Filter & Sort" pill and zoom pill above the nav;
+      #filter-box (with its own Sort group) becomes a bottom sheet.
+      Runtime: ./filters.ts.
     -->
     <form id="filter-sort-wrapper" aria-label="Filter and sort the archive">
       <button
@@ -100,68 +105,143 @@ const sortOptions = [
         aria-expanded="false"
         aria-controls="filter-box"
       >
-        <span>Filter &amp; Sort</span><span id="filter-count" class="count"></span>
+        <span class="label-mobile">Filter &amp; Sort</span><span
+          class="label-desktop">Filter</span
+        ><span id="filter-count" class="count"></span><span
+          class="trigger-icon"
+          aria-hidden="true">&darr;</span
+        >
       </button>
+
+      <!-- Desktop only: the active filters in a bracket; each chip removes its
+           filter (filled in by updateActiveFiltersList), then Clear. -->
+      <div id="filter-summary">
+        <span id="filter-active" class="summary-chips"></span>
+        <button type="reset" id="filter-clear" class="text-button">Clear</button>
+      </div>
 
       <div id="filter-backdrop" aria-hidden="true"></div>
 
       <div id="filter-box" role="group" aria-label="Filter and sort options">
         <div class="sheet-handle" aria-hidden="true"></div>
 
-        <div id="group-wrapper">
-          {
-            groups.map((group) => (
-              <fieldset
-                class="filter-group"
-                id={`${group.id}-buttons-wrapper`}
-                data-filter-group={group.id}
-              >
-                <legend class="filter-title">{group.label}</legend>
-                <div class="chip-row">
-                  {group.options.map((option) => (
+        <!-- display: contents on mobile; the clipped drawer body on desktop. -->
+        <div class="box-inner">
+          <div id="group-wrapper">
+            {
+              groups.map((group, index) => {
+                // Long groups (Topic) split into two lists side by side.
+                const rows =
+                  group.options.length > 4
+                    ? Math.ceil(group.options.length / 2)
+                    : group.options.length;
+                return (
+                  <fieldset
+                    class="filter-group"
+                    id={`${group.id}-buttons-wrapper`}
+                    data-filter-group={group.id}
+                    style={`--card-index: ${index}`}
+                  >
+                    <legend class="filter-title">{group.label}</legend>
+                    <div
+                      class:list={["chip-row", { "two-col": rows < group.options.length }]}
+                      style={`--rows: ${rows}`}
+                    >
+                      {group.options.map((option, i) => (
+                        <button
+                          type="button"
+                          class:list={[
+                            "filter-button",
+                            "chip",
+                            option.css,
+                            { "col-2": i >= rows && rows < group.options.length },
+                          ]}
+                          data-toggle={`.${option.css}`}
+                          data-filter-name={option.name}
+                        >
+                          {option.name}
+                        </button>
+                      ))}
+                    </div>
+                  </fieldset>
+                );
+              })
+            }
+
+            <!-- Sort inside the sheet is phone-only; desktop uses #sort-menu. -->
+            <fieldset
+              class="filter-group sort-group"
+              id="sort-buttons"
+              style={`--card-index: ${groups.length}`}
+            >
+              <legend class="filter-title">Sort</legend>
+              <div class="segmented" role="group" aria-label="Sort order">
+                {
+                  sortOptions.map((option) => (
                     <button
                       type="button"
-                      class:list={["filter-button", "chip", option.css]}
-                      data-toggle={`.${option.css}`}
-                      data-filter-name={option.name}
+                      class:list={[
+                        "sort-button",
+                        { "mixitup-control-active": option.active },
+                      ]}
+                      id={option.id}
+                      data-sort={option.sort}
                     >
-                      {option.name}
+                      {option.label}
                     </button>
-                  ))}
-                </div>
-              </fieldset>
-            ))
-          }
+                  ))
+                }
+              </div>
+            </fieldset>
+          </div>
 
-          <fieldset class="filter-group sort-group" id="sort-buttons">
-            <legend class="filter-title">Sort</legend>
-            <div class="segmented" role="group" aria-label="Sort order">
-              {
-                sortOptions.map((option) => (
-                  <button
-                    type="button"
-                    class:list={[
-                      "sort-button",
-                      { "mixitup-control-active": option.active },
-                    ]}
-                    id={option.id}
-                    data-sort={option.sort}
-                  >
-                    {option.label}
-                  </button>
-                ))
-              }
-            </div>
-          </fieldset>
+          <div class="sheet-actions">
+            <button type="reset" id="filter-reset-all" class="text-button">
+              <span class="label-mobile">Reset</span><span class="label-desktop"
+                >Clear</span
+              >
+            </button>
+            <button type="button" id="filter-done" class="solid-button">
+              Done
+            </button>
+          </div>
         </div>
+      </div>
 
-        <div class="sheet-actions">
-          <button type="reset" id="filter-reset-all" class="text-button">
-            Reset
-          </button>
-          <button type="button" id="filter-done" class="solid-button">
-            Done
-          </button>
+      <!-- Desktop only: Sort as its own dropdown. Its buttons are a second set
+           of MixItUp sort controls; MixItUp keeps both sets' active state in
+           step. The toggle shows the chosen order once one is picked. -->
+      <div id="sort-menu">
+        <button
+          type="button"
+          id="sort-toggle"
+          class="trigger"
+          aria-expanded="false"
+          aria-controls="sort-list"
+        >
+          <span id="sort-label">Sort</span><span
+            class="trigger-icon"
+            aria-hidden="true">&darr;</span
+          >
+        </button>
+        <div id="sort-list" role="group" aria-label="Sort order">
+          <div class="sort-list-inner">
+            {
+              sortOptions.map((option) => (
+                <button
+                  type="button"
+                  class:list={[
+                    "sort-button",
+                    "sort-option",
+                    { "mixitup-control-active": option.active },
+                  ]}
+                  data-sort={option.sort}
+                >
+                  {option.label}
+                </button>
+              ))
+            }
+          </div>
         </div>
       </div>
 
@@ -238,6 +318,57 @@ const sortOptions = [
 
   legend {
     padding: 0;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Sort sections (sort by Project or Date)                            */
+  /* ------------------------------------------------------------------ */
+
+  /* Inserted into the grid by syncSortSections (filters.ts), so they are
+     outside Astro's style scope. The heading takes a whole row (so the next
+     section starts on a new line); its subgrid lets the title + line span
+     exactly --span columns, i.e. as wide as that section's images. The line
+     ends in a short down tick, the bracket motif. */
+  #archive :global(.sort-heading) {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+    padding-top: 40px;
+  }
+
+  #archive :global(.sort-heading:first-child) {
+    padding-top: 0;
+  }
+
+  #archive :global(.sort-heading-inner) {
+    grid-column: 1 / span var(--span, 1);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+    /* Line up with the images, which sit inside the cells' padding. */
+    padding: 0 var(--archive-pad, 28px);
+  }
+
+  #archive :global(.sort-heading-title) {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: PowerGrotesk-Light;
+    font-size: 16px;
+    letter-spacing: 0.6px;
+    line-height: 1.2;
+  }
+
+  #archive :global(.sort-heading-line) {
+    flex: 1 1 auto;
+    min-width: 24px;
+    height: 7px;
+    margin-top: 7px; /* puts the rule at the title's middle */
+    border-top: 1px solid black;
+    border-right: 1px solid black;
   }
 
   /* Scroll lock while the mobile sheet is open (toggled in filters.ts). */
@@ -392,98 +523,534 @@ const sortOptions = [
   }
 
   /* ------------------------------------------------------------------ */
-  /* Desktop / tablet: sticky rail                                       */
+  /* Desktop / tablet: bracket bar, Filter drawer, Sort dropdown         */
   /* ------------------------------------------------------------------ */
 
-  #filter-sort-wrapper {
-    position: sticky;
-    top: 0;
-    z-index: 3;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: start;
-    column-gap: 24px;
-    padding: 10px 0;
-    margin-bottom: 8px;
-    background-color: var(--surface-glass);
-    -webkit-backdrop-filter: var(--surface-blur);
-    backdrop-filter: var(--surface-blur);
-  }
-
-  /* Soft fade below the rail so images slide out under it instead of
-     meeting a hard edge. */
-  #filter-sort-wrapper::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 100%;
-    height: 18px;
-    pointer-events: none;
-    background: linear-gradient(
-      to bottom,
-      var(--bg-color) 0%,
-      rgb(from var(--bg-color) r g b / 0) 100%
-    );
-  }
-
-  #filter,
+  /* Pieces that only exist on one side of the breakpoint. The desktop and
+     mobile blocks below re-show the ones they need. */
+  .trigger-icon,
+  .label-desktop,
+  #filter-summary,
+  #sort-menu,
   #filter-backdrop,
   .sheet-handle,
   #filter-done {
     display: none;
   }
 
-  #filter-box {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: start;
-    gap: 8px 20px;
-    min-width: 0;
-  }
+  /* Scoped to non-phone widths so none of it leaks into the bottom sheet.
+     The look is the pre-2026-10 toolbar's: solid black blocks, and option
+     lists closed off by thin brackets (a bar with legs on top, a rule with
+     side ticks between rows, a bar with legs at the bottom). */
+  @media (width >= 768px) {
+    #filter-sort-wrapper {
+      --bar-h: 32px;
+      --block-w: 96px; /* closed Filter and Sort blocks */
+      --ladder-w: 128px;
+      --ladder-leg: 11px;
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      /* The page's top padding, which is also where the nav sticks. */
+      --bar-top: var(--padding-top-desktop);
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      /* No surface: the bar is transparent and the images slide behind the
+         controls. The padding is pulled up by the page's top padding so the
+         controls sit level with the logo at rest and stay there while the
+         page scrolls. */
+      padding: var(--bar-top) 0 10px;
+      margin: calc(-1 * var(--bar-top)) 0 14px;
 
-  #group-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 20px;
-    min-width: 0;
-    flex: 1 1 auto;
-  }
+      @media (--bp-tablet) {
+        --bar-top: var(--padding-top-tablet);
+      }
 
-  /* View controls (sort) gravitate to the right edge of their row, next to
-     the zoom; the Topic row is wide enough to share with it at 952px. */
-  .sort-group {
-    margin-left: auto;
-  }
+      @media (--bp-desktop-wide) {
+        --bar-top: var(--padding-top-desktop-wide);
+      }
+    }
 
-  .sheet-actions {
-    display: flex;
-    align-items: center;
-    align-self: end;
-    margin-bottom: 1px;
-  }
+    /* The bar is invisible but spans the column, so only its controls and
+       open menus take clicks; anywhere else reaches the image behind it. */
+    #filter-sort-wrapper {
+      pointer-events: none;
+    }
 
-  /* Reset is only offered once something is selected. */
-  #filter-reset-all {
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease;
-  }
-  #filter-sort-wrapper:has(.filter-button.mixitup-control-active)
+    #filter,
+    #filter-summary,
+    #sort-menu,
+    #zoom-wrapper,
+    #filter-box {
+      pointer-events: auto;
+    }
+
+    .label-mobile {
+      display: none;
+    }
+
+    .label-desktop {
+      display: inline;
+    }
+
+    /* Black blocks: Filter (widens into the drawer's header when open) and
+       Sort (turns into the top of its bracket list when open). */
+    #filter,
+    #sort-toggle {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-sizing: border-box;
+      height: var(--bar-h);
+      padding: 0 10px;
+      font-size: 14px;
+      letter-spacing: 0.6px;
+      background-color: black;
+      color: var(--bg-color);
+    }
+
+    #filter #filter-count {
+      display: none;
+    }
+
+    .trigger-icon {
+      display: inline-block;
+      font-size: 15px;
+      transition: transform 0.3s ease;
+    }
+
+    #filter-sort-wrapper.is-open #filter .trigger-icon,
+    #filter-sort-wrapper.is-sort-open #sort-toggle .trigger-icon {
+      transform: rotate(180deg);
+    }
+
+    /* Opening runs in two steps, like the original: the block widens to the
+       drawer's width, then the drawer drops. Closing reverses it, so the
+       width transition waits while the drawer folds. --drawer-w is measured
+       in filters.ts. */
+    #filter {
+      flex: 0 0 auto;
+      width: var(--block-w);
+      transition: width 0.3s ease 0.3s;
+    }
+
+    #filter-sort-wrapper.is-open #filter {
+      width: var(--drawer-w, var(--block-w));
+      transition: width 0.3s var(--ease-out) 0s;
+    }
+
+    /* Active filters between brackets, then Clear. Hidden while the drawer
+       is open (the Filter block runs across where they sit). */
+    #filter-summary {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      transition:
+        opacity 0.2s ease 0.45s,
+        visibility 0s linear 0.45s;
+    }
+
+    #filter-sort-wrapper.is-open #filter-summary {
+      opacity: 0;
+      visibility: hidden;
+      transition:
+        opacity 0.1s ease,
+        visibility 0s linear 0.1s;
+    }
+
+    .summary-chips {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      box-sizing: border-box;
+      height: var(--bar-h);
+      padding: 0 5px;
+    }
+
+    .summary-chips:empty {
+      display: none;
+    }
+
+    /* [ and ] drawn as borders, the full height of the bar. */
+    .summary-chips::before,
+    .summary-chips::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 6px;
+      box-sizing: border-box;
+      border: 1.5px solid black;
+    }
+
+    .summary-chips::before {
+      left: 0;
+      border-right: 0;
+    }
+
+    .summary-chips::after {
+      right: 0;
+      border-left: 0;
+    }
+
+    /* Chips are created in filters.ts, outside Astro's style scope. */
+    #filter-summary :global(.summary-chip) {
+      position: relative;
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 112px;
+      height: 24px;
+      padding: 0 14px;
+      font-family: PowerGrotesk-Light;
+      font-size: 14px;
+      letter-spacing: 0.6px;
+      line-height: 1;
+      color: var(--bg-color);
+      background-color: black;
+      border: 0;
+      border-radius: 0;
+      cursor: pointer;
+      animation: summary-chip-in 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* A thin rule between chips. */
+    #filter-summary :global(.summary-chip + .summary-chip::before) {
+      content: "";
+      position: absolute;
+      left: -4px;
+      top: 2px;
+      bottom: 2px;
+      width: 1px;
+      background-color: black;
+    }
+
+    #filter-summary :global(.summary-chip:focus-visible) {
+      outline: 2px solid black;
+      outline-offset: 2px;
+    }
+
+    @media (hover: hover) {
+      #filter-summary :global(.summary-chip:hover) {
+        text-decoration: line-through;
+        text-decoration-thickness: 1px;
+      }
+    }
+
+    @keyframes summary-chip-in {
+      from {
+        opacity: 0;
+        transform: translateX(-4px);
+      }
+    }
+
+    #filter-clear {
+      font-size: 14px;
+    }
+
+    #zoom-wrapper {
+      flex: 0 0 auto;
+    }
+
+    .zoom-button {
+      width: var(--bar-h);
+      height: var(--bar-h);
+    }
+
+    /* ---- Option lists ("ladders") ------------------------------------ */
+
+    /* One row per option. Each row draws its own top rule and the four
+       11px side segments; stacked rows make the original bracket: legs
+       under the top bar, ticks either side of each rule, legs above the
+       bottom bar (the list's own border-bottom). The first background
+       layer is the active fill, which sweeps in from the left. */
+    .chip-row .chip,
+    .sort-option {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      width: var(--ladder-w);
+      height: 32px;
+      padding: 0 8px;
+      font-size: 14px;
+      letter-spacing: 0.6px;
+      white-space: nowrap;
+      color: black;
+      opacity: 1;
+      border: 0;
+      border-top: 1px solid black;
+      background-color: transparent;
+      background-image:
+        linear-gradient(black, black), linear-gradient(black, black),
+        linear-gradient(black, black), linear-gradient(black, black),
+        linear-gradient(black, black);
+      background-repeat: no-repeat;
+      background-position:
+        left center,
+        left top,
+        right top,
+        left bottom,
+        right bottom;
+      background-size:
+        0% 100%,
+        1px var(--ladder-leg),
+        1px var(--ladder-leg),
+        1px var(--ladder-leg),
+        1px var(--ladder-leg);
+      transition:
+        background-size 0.45s ease,
+        color 0.25s ease;
+    }
+
+    .chip-row .chip.mixitup-control-active,
+    .sort-option.mixitup-control-active {
+      color: var(--bg-color);
+      background-color: transparent;
+      background-size:
+        100% 100%,
+        1px var(--ladder-leg),
+        1px var(--ladder-leg),
+        1px var(--ladder-leg),
+        1px var(--ladder-leg);
+    }
+
+    @media (hover: hover) {
+      .chip-row .chip:not(:disabled):not(.mixitup-control-active):hover,
+      .sort-option:not(.mixitup-control-active):hover {
+        background-color: rgba(0, 0, 0, 0.06);
+      }
+    }
+
+    /* Unavailable options fade their text only; the bracket stays whole. */
+    .chip-row .chip:disabled,
+    .chip-row .chip.filter-disabled {
+      opacity: 1;
+      color: rgba(0, 0, 0, 0.28);
+    }
+
+    .chip-row,
+    .sort-list-inner {
+      display: grid;
+      grid-template-columns: var(--ladder-w);
+      gap: 0;
+      width: max-content;
+      border-bottom: 1px solid black;
+    }
+
+    /* Long groups (Topic): two lists side by side sharing the middle line. */
+    .chip-row.two-col {
+      grid-template-columns: none;
+      grid-template-rows: repeat(var(--rows), auto);
+      grid-auto-flow: column;
+      grid-auto-columns: var(--ladder-w);
+    }
+
+    .chip-row .col-2 {
+      margin-left: -1px;
+    }
+
+    /* ---- Filter drawer ----------------------------------------------- */
+
+    /* Hangs under the Filter block and lays over the grid. Collapsed it is a
+       0fr grid row, open 1fr. */
+    #filter-box {
+      position: absolute;
+      left: 0;
+      top: calc(var(--bar-top) + var(--bar-h));
+      z-index: 2;
+      display: grid;
+      grid-template-rows: 0fr;
+      width: max-content;
+      background-color: var(--bg-color);
+      transition: grid-template-rows 0.3s ease 0.08s;
+    }
+
+    #filter-sort-wrapper.is-open #filter-box {
+      grid-template-rows: 1fr;
+      transition: grid-template-rows 0.4s var(--ease-out) 0.22s;
+    }
+
+    .box-inner {
+      position: relative;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    /* The drawer is one big bracket: legs down from the Filter block's
+       ends, and a bar with legs closing it at the bottom. */
+    .box-inner::before,
+    .box-inner::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: var(--ladder-leg);
+      box-sizing: border-box;
+      border: 1px solid black;
+      pointer-events: none;
+    }
+
+    .box-inner::before {
+      top: 0;
+      border-top: 0;
+      border-bottom: 0;
+    }
+
+    .box-inner::after {
+      bottom: 0;
+      border-top: 0;
+    }
+
+    /* filters.ts stretches the drawer so its right edge lands on an image
+       column's centre; the groups spread out over any extra width. */
+    #group-wrapper {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0 48px;
+      padding: 14px 26px 0;
+    }
+
+    .sort-group {
+      display: none;
+    }
+
+    .filter-group {
+      opacity: 0;
+      transform: translateY(-6px);
+      transition:
+        opacity 0.12s ease,
+        transform 0.12s ease;
+    }
+
+    #filter-sort-wrapper.is-open .filter-group {
+      opacity: 1;
+      transform: none;
+      transition:
+        opacity 0.3s ease calc(0.4s + var(--card-index, 0) * 0.06s),
+        transform 0.4s var(--ease-out)
+          calc(0.4s + var(--card-index, 0) * 0.06s);
+    }
+
+    /* Group title, centred over its list(s). Floated so the legend sits in
+       the flow like a normal block. */
+    .filter-group .filter-title {
+      float: left;
+      width: 100%;
+      margin: 0 0 8px;
+      font-size: 16px;
+      letter-spacing: 0.6px;
+      text-transform: none;
+      text-align: center;
+      color: black;
+    }
+
+    .filter-group .filter-title::before,
+    .filter-group .filter-title::after {
+      content: none;
+    }
+
+    .filter-group .chip-row {
+      clear: both;
+    }
+
+    .sheet-actions {
+      display: flex;
+      justify-content: center;
+      padding: 12px 0 16px;
+    }
+
     #filter-reset-all {
-    opacity: 1;
-    pointer-events: auto;
+      font-size: 14px;
+    }
+
+    /* ---- Sort dropdown ----------------------------------------------- */
+
+    /* Same width as the closed Filter block; its list matches it. */
+    #sort-menu {
+      display: block;
+      position: relative;
+      flex: 0 0 auto;
+      width: var(--block-w);
+      margin-left: auto;
+    }
+
+    #sort-toggle {
+      width: 100%;
+      background-image:
+        linear-gradient(black, black), linear-gradient(black, black),
+        linear-gradient(black, black);
+      background-repeat: no-repeat;
+      background-position:
+        left top,
+        left top,
+        right top;
+      background-size:
+        100% 1px,
+        1px var(--ladder-leg),
+        1px var(--ladder-leg);
+      transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+    }
+
+    /* Open, the block becomes the top of the list's bracket. */
+    #filter-sort-wrapper.is-sort-open #sort-toggle {
+      background-color: var(--bg-color);
+      color: black;
+    }
+
+    #sort-list {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 2;
+      display: grid;
+      grid-template-rows: 0fr;
+      background-color: var(--bg-color);
+      transition: grid-template-rows 0.3s ease;
+    }
+
+    #filter-sort-wrapper.is-sort-open #sort-list {
+      grid-template-rows: 1fr;
+      transition: grid-template-rows 0.35s var(--ease-out);
+    }
+
+    .sort-list-inner {
+      grid-template-columns: 100%;
+      width: auto;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .sort-option {
+      width: 100%;
+    }
   }
 
-  #zoom-wrapper {
-    margin-top: 22px; /* align with the chip row below the group label */
-  }
+  /* Clear (bar and drawer) is always shown on desktop. The phone sheet's
+     Reset is taken out of its row while nothing is selected (mobile block). */
 
   /* ------------------------------------------------------------------ */
   /* Mobile: floating pills + bottom sheet                               */
   /* ------------------------------------------------------------------ */
 
   @media (--bp-mobile) {
+    /* The drawer body wrapper drops out of layout, so the sheet's handle,
+       option list and actions stay direct flex children of #filter-box. */
+    .box-inner {
+      display: contents;
+    }
+
     /* A second floating bar directly above the nav bar, with the same inset
        and inner padding so the Filter & Sort block and the zoom line up with
        the nav's edges. */
@@ -716,13 +1283,17 @@ const sortOptions = [
     }
   }
 
+  /* Everything in the toolbar snaps; !important because the open-state
+     rules carry their own (more specific) transitions. */
   @media (prefers-reduced-motion: reduce) {
-    #filter-box,
-    #filter-backdrop,
-    .chip,
-    .sort-button,
-    .zoom-button {
-      transition: none;
+    #filter-sort-wrapper,
+    #filter-sort-wrapper * {
+      transition-duration: 0s !important;
+      transition-delay: 0s !important;
+    }
+
+    #filter-summary :global(.summary-chip) {
+      animation: none;
     }
   }
 </style>

@@ -113,6 +113,40 @@ export function getProjectDisplayName(
   );
 }
 
+// Sort key and year for the archive's "sort by Date" view (sections per year,
+// see syncSortSections in filters.ts). metadata.year is plain YYYY; older
+// YYYYMM values still parse. The key is always YYYYMM (month 00 when unknown)
+// so mixed lengths never compare out of calendar order; images without a
+// date get "000000", which the newest-first Date sort puts last, as
+// "Undated".
+export function getArchiveDate(image: ArchiveImage): {
+  key: string;
+  year: string;
+} {
+  const digits = (image.data.metadata?.year ?? "").replace(/\D/g, "");
+  if (digits.length < 4) return { key: "000000", year: "Undated" };
+  const year = digits.slice(0, 4);
+  const month = digits.length >= 6 ? digits.slice(4, 6) : "00";
+  return { key: `${year}${month}`, year };
+}
+
+// Sort key and section title for an image's project (the archive's "sort by
+// Project" view groups by it, see syncSortSections in filters.ts). The title
+// is the project's display name; the key is that name lowercased, so slugs
+// that share a display name ("hold" / "characters", or "StructureOfWood" /
+// "structureofwood") share one section, and sections sort alphabetically by
+// what they show. Images without a project sort last, under "Other".
+export const NO_PROJECT_KEY = "zzz_noproject";
+
+export function getArchiveProject(
+  image: ArchiveImage,
+  projectTitles: Map<string, string>,
+): { key: string; title: string } {
+  const title = getProjectDisplayName(image.data.metadata?.project, projectTitles);
+  if (!title) return { key: NO_PROJECT_KEY, title: "Other" };
+  return { key: title.toLowerCase(), title };
+}
+
 // The image's display title: its description_title, falling back to the
 // project's display name. Used for both the grid caption (single-column only)
 // and the PhotoSwipe bottom title — see ArchiveGalleryElement.astro /

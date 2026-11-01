@@ -94,6 +94,19 @@ the bracket height (the gallery bar pins it with `min-height: 56px`). The
 vertical `Bracket*V` SVGs in the desktop nav are unchanged. Check changes in Playwright WebKit
 with the iPhone 15 device profile, since Chromium does not show these bugs.
 
+## Lightbox Or Filters Dead In Dev ("Outdated Optimize Dep")
+
+Symptom (dev server only): clicking a thumbnail opens nothing, or a sort/filter
+never finishes, and the console shows `504 (Outdated Optimize Dep)` for a file
+under `node_modules/.vite/deps/` (e.g. `photoswipe.js`). PhotoSwipe's core is
+loaded with a dynamic `import("photoswipe")` on first click, so Vite found it
+late, re-bundled its dependencies, and the open page still asked for the old
+bundle. `astro.config.mjs` now lists `photoswipe`, `photoswipe/lightbox`,
+`mixitup` and `mixitup-multifilter` in `vite.optimizeDeps.include`, so they are
+bundled at startup. If it happens anyway (a new dependency, or after
+`npm install`): stop the dev server, delete `node_modules/.vite`, start it
+again, and reload. Production builds are not affected.
+
 ## Standard Verification Commands
 
 ```bash
