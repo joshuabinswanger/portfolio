@@ -192,7 +192,11 @@ const groups = [...byGroup]
                     {c.text && (
                       <>
                         <dt>Text</dt>
-                        <dd class="text">{c.text}</dd>
+                        <dd class="text">
+                          <details>
+                            <summary>{c.text}</summary>
+                          </details>
+                        </dd>
                       </>
                     )}
                   </dl>
@@ -535,6 +539,26 @@ const groups = [...byGroup]
       }
       .text {
         color: var(--muted);
+      }
+      /* Caption text collapses to two lines; click to expand. The summary is
+         the text itself, clamped while closed. */
+      .text summary {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        cursor: pointer;
+        list-style: none;
+      }
+      .text summary::-webkit-details-marker {
+        display: none;
+      }
+      .text summary:hover {
+        color: var(--ink);
+      }
+      .text details[open] summary {
+        display: block;
+        -webkit-line-clamp: unset;
       }
       footer {
         display: flex;
