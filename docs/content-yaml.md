@@ -65,9 +65,14 @@ metadata:
   showInProjectGallery: "no"
   projectGalleryOrder: null
   showInIndex: "yes"
+  year: "202405"
 ```
 
 `mediaType: image` is optional for existing image entries.
+
+`metadata.year` is always six digits, `YYYYMM` (use `01` when the month is
+unknown). The archive's Date sort compares these numerically, so a bare
+`"2024"` would sort before every six-digit date.
 
 ## Mux Video Entries
 
