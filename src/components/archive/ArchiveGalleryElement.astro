@@ -6,6 +6,7 @@ import "photoswipe/style.css";
 import { resolveImageUrl, resolveLocalImage } from "../images/localImages";
 import {
   buildArchiveHighResData,
+  getArchiveDate,
   getArchiveImageTitle,
   getArchiveRoleTags,
   getArchiveTagClassString,
@@ -15,6 +16,8 @@ import {
 interface Props {
   image: ArchiveImage;
   index: number;
+  // Sort key + section title, from getArchiveProject.
+  project: { key: string; title: string };
 }
 
 const archiveImage = Astro.props.image;
@@ -26,6 +29,8 @@ const convertedRole = getArchiveRoleTags(archiveImage);
 // Resolved once at build time; reused by the grid caption (single-column only)
 // and read off data-title by the PhotoSwipe lightbox.
 const captionTitle = getArchiveImageTitle(archiveImage);
+// Normalised YYYYMM sort key + year for the Date sort and its sections.
+const archiveDate = getArchiveDate(archiveImage);
 ---
 
 <div
@@ -33,8 +38,10 @@ const captionTitle = getArchiveImageTitle(archiveImage);
   id={`archiveElement-${Astro.props.index}`}
   data-role={convertedRole}
   data-program={archiveImage.data.metadata?.program}
-  data-project={archiveImage.data.metadata?.project || "aaa_noproject"}
-  data-date={archiveImage.data.metadata?.year || "2016-01"}
+  data-project={Astro.props.project.key}
+  data-project-title={Astro.props.project.title}
+  data-date={archiveDate.key}
+  data-year={archiveDate.year}
 >
   <div id="Image" class:list={["ImageElement"]}>
     <a

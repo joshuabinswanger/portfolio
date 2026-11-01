@@ -75,6 +75,41 @@ export function prettifyProjectName(slug: string | null | undefined): string {
     .trim();
 }
 
+// Sort key and year for the archive's "sort by Date" view (sections per year,
+// see syncSortSections in filters.ts). metadata.year mixes "2020", "202410"
+// and "20250" (a 2025 date missing a digit), and MixItUp compares mixed
+// lengths numerically, out of calendar order. The key is always YYYYMM
+// (month 00 when unknown); images without a date get "000000", which the
+// newest-first Date sort puts last, as "Undated".
+export function getArchiveDate(image: ArchiveImage): {
+  key: string;
+  year: string;
+} {
+  const digits = (image.data.metadata?.year ?? "").replace(/\D/g, "");
+  if (digits.length < 4) return { key: "000000", year: "Undated" };
+  const year = digits.slice(0, 4);
+  const month = digits.length >= 6 ? digits.slice(4, 6) : "00";
+  return { key: `${year}${month}`, year };
+}
+
+// Sort key and section title for an image's project (the archive's "sort by
+// Project" view groups by it, see syncSortSections in filters.ts). Keys are
+// lowercased so slugs that differ only in case ("StructureOfWood" /
+// "structureofwood") share a section; images without a project sort last,
+// under "Other". Titles come from the projects collection where one exists.
+export const NO_PROJECT_KEY = "zzz_noproject";
+
+export function getArchiveProject(
+  image: ArchiveImage,
+  projectTitles: Map<string, string>,
+): { key: string; title: string } {
+  const slug = (image.data.metadata?.project ?? "").trim();
+  const name = prettifyProjectName(slug);
+  if (!name) return { key: NO_PROJECT_KEY, title: "Other" };
+  const key = slug.toLowerCase();
+  return { key, title: projectTitles.get(key) ?? name };
+}
+
 // The image's display title: its description_title, falling back to a humanised
 // project name. Used for both the grid caption (single-column only) and the
 // PhotoSwipe bottom title — see ArchiveGalleryElement.astro / archive/filters.ts.

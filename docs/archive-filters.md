@@ -11,9 +11,11 @@ Mux videos excluded) see [galleries](galleries.md); for the square-crop thumbnai
 and the per-image `focus` field see [image-optimization](image-optimization.md).
 
 > History: until 2026-10 the toolbar was a bracket-animated expanding bar with a
-> large WebKit-workaround CSS layer. It was replaced by the chip rail / bottom
-> sheet described here. The old per-bracket animations and their iOS caveats
-> are gone with it; nothing below animates grid tracks.
+> large WebKit-workaround CSS layer. It was replaced by a chip rail / bottom
+> sheet. In 2026-11 the desktop toolbar went back to the original bracket look
+> (Filter drawer + Sort dropdown, below), rebuilt without the old grid-track
+> animations; the phone sheet is unchanged. The mockup it follows is
+> `archive-filter-bracket-mockup.af` (Affinity, kept outside the repo).
 
 ## Main files
 
@@ -23,7 +25,8 @@ and the per-image `focus` field see [image-optimization](image-optimization.md).
   sheet (`initFilterSheet`), the PhotoSwipe lightbox, and the grid zoom
   (`initArchiveZoom`, `flipColumnChange`). Exposed as `initArchiveFilters()`.
 - `src/components/archive/utils.ts` — build-time data/tag helpers
-  (`isArchiveImage`, `convertTagForCss`, `ensureArray`, `getArchiveImageTitle`).
+  (`isArchiveImage`, `convertTagForCss`, `ensureArray`, `getArchiveImageTitle`,
+  `getArchiveProject`, `getArchiveDate`).
 - `src/components/archive/ArchiveGalleryElement.astro` — one grid cell.
 - `src/layouts/GridLayout.astro` — owns `.archive-grid`, the responsive grid.
 - `src/styles/global.css` — the shared `--surface-*` (glass/blur/line/shadow)
@@ -35,16 +38,18 @@ One `<form id="filter-sort-wrapper">` holds everything:
 
 | Element | Role |
 | --- | --- |
-| `#filter` | **Mobile only.** "Filter & Sort" trigger pill; `#filter-count` inside it shows `[N]` active filters. Hidden on desktop. |
+| `#filter` | Trigger. Mobile: "Filter & Sort" pill with `#filter-count` (`[N]`). Desktop: the black "Filter" block that widens into the drawer's header. Labels swap via `.label-mobile` / `.label-desktop`. |
+| `#filter-summary` | Desktop only. `#filter-active` (bracketed row of removable `.summary-chip`s) and `#filter-clear`. |
 | `#filter-backdrop` | Mobile only. Dims the page behind the open sheet; tap closes. |
-| `#filter-box` | The options. Desktop: an inline rail. Mobile: a bottom sheet. |
-| `#group-wrapper` | The three `fieldset.filter-group`s (Role / Tool / Topic, `data-filter-group`) each with a `.chip-row` of `button.filter-button.chip[data-toggle]`, plus the `#sort-buttons` fieldset with a `.segmented` control of `button.sort-button[data-sort]`. |
-| `.sheet-actions` | `#filter-reset-all` (`type="reset"`) and `#filter-done` (mobile only). |
+| `#filter-box` | The options. Desktop: the drawer under Filter. Mobile: a bottom sheet. Its body is wrapped in `.box-inner` (`display: contents` on mobile). |
+| `#group-wrapper` | The three `fieldset.filter-group`s (Role / Tool / Topic, `data-filter-group`) each with a `.chip-row` of `button.filter-button.chip[data-toggle]`, plus the phone-only `#sort-buttons` fieldset (`.segmented` of `button.sort-button[data-sort]`). Groups with more than 4 options get `.two-col` + `--rows`, and their second-column buttons `.col-2`. |
+| `.sheet-actions` | `#filter-reset-all` (`type="reset"`; "Reset" on phones, "Clear" in the drawer) and `#filter-done` (mobile only). |
+| `#sort-menu` | Desktop only. `#sort-toggle` (shows `#sort-label`) and `#sort-list`, a second set of `button.sort-option[data-sort]`. |
 | `#zoom-wrapper` | `#zoom-out` / `#zoom-in` in a `.segmented` pill. |
 
-Group labels (`legend.filter-title`) carry the site's bracket motif
-typographically (`[ ROLE ]` via `::before`/`::after`), which is the only
-bracket left in this UI.
+On phones the group labels (`legend.filter-title`) carry the bracket motif
+typographically (`[ ROLE ]` via `::before`/`::after`); on desktop they are
+plain centred titles over bracket lists.
 
 ### Shared control styles
 
@@ -57,19 +62,112 @@ bracket motif, with tight padding.
 - `.segmented` — hairline black outlined box; the active `.sort-button` fills
   black. `#zoom-wrapper` reuses the class but drops the outline: its two
   buttons are solid black squares, like the original bar.
-- Reset is invisible (`opacity: 0; pointer-events: none`) until any chip is
-  active — `#filter-sort-wrapper:has(.filter-button.mixitup-control-active)`.
+- Clear (`#filter-clear` in the bar, `#filter-reset-all` in the drawer) is
+  always shown on desktop. The phone sheet's Reset is taken out of its row
+  (`display: none`) until a chip is active.
 
-## Desktop / tablet: sticky rail
+## Desktop / tablet: bracket bar, Filter drawer, Sort dropdown
 
-`#filter-sort-wrapper` is `position: sticky; top: 0` inside `#archive-wrapper`
-(grid rows `auto 1fr`), frosted with `--surface-glass` + `--surface-blur`, and
-has an 18px gradient fade below it (`::after`) so thumbnails slide out under it.
+All desktop rules sit in one `@media (width >= 768px)` block so none of them
+leak into the phone sheet. The look is the pre-2026-10 toolbar's: solid black
+32px blocks, and option lists closed off by thin brackets.
 
-Layout is a 2-column grid: `#filter-box` (chips, wrapping) and `#zoom-wrapper`
-at the right. Inside the box the fieldsets wrap in a flex row; `.sort-group`
-has `margin-left: auto` so Sort sits at the right end of whichever row it lands
-on (at 952px that's the Topic row — two rows total).
+`#filter-sort-wrapper` is `position: sticky; top: 0`, a flex row with **no
+surface at all** (no background, frost or fade, by request 2026-11): images
+slide behind the black blocks. Because the invisible bar still spans the
+column, it has `pointer-events: none` and only `#filter`, `#filter-summary`,
+`#sort-menu`, `#zoom-wrapper` and `#filter-box` opt back in, so a click on an
+empty part of the bar reaches the image behind it. Its top padding is
+`--bar-top`, the page's top padding per breakpoint (`--padding-top-desktop` /
+`-tablet` / `-desktop-wide`, the same offset the nav sticks at), pulled back
+by an equal negative margin, and
+the controls sit level with the logo at rest **and** while scrolling (they
+used to ride up 10px from the window top). The drawer hangs at
+`--bar-top + --bar-h`. Row: `#filter` | `#filter-summary` | `#sort-menu`
+(`margin-left: auto`) | `#zoom-wrapper`. Both menus are absolutely positioned
+and **lay over the grid**; the page keeps scrolling (no scroll lock).
+
+- **Bracket lists ("ladders").** `.chip-row .chip` and `.sort-option` are 32px
+  rows, 128px (`--ladder-w`) wide. Each row draws its own top rule plus four
+  11px side segments as background gradients; stacked, they make the original
+  bracket (legs under the top bar, ticks either side of each rule, legs above
+  the bottom bar, which is the list's own `border-bottom`). The first gradient
+  layer is the active fill: `background-size` 0% to 100% sweeps it in from the
+  left. Unavailable options fade their text only (`opacity: 1`, faint
+  `color`) so the bracket stays whole. `.two-col` lists (Topic) are a
+  column-flow grid of `--rows` rows; `.col-2` shifts the second list 1px left
+  so both share the middle line.
+- **Filter drawer.** `#filter-box` hangs under the Filter block,
+  `width: max-content`, and animates `grid-template-rows: 0fr` to `1fr`;
+  `.box-inner` is the clipped body. Its `::before` draws legs down from the
+  Filter block's ends, its `::after` the closing bar with legs. Opening is two
+  steps, like the original: `#filter` widens from 96px to `--drawer-w`, then
+  the drawer drops and the groups fade in staggered by `--card-index`. Closing
+  runs it backwards via the closed-state transition delays. The phone Sort
+  group is hidden here; Clear (`#filter-reset-all`) sits centred at the bottom.
+- **Drawer width ends mid-image.** `syncDrawerWidth` (filters.ts) measures the
+  drawer's content width, then stretches it so its right edge lands on the
+  first image column centre past that (`getColumnCentres` reads the grid's
+  resolved tracks and gap; cells pad their image evenly, so a column's centre
+  is its images' centre). It sets both the inline width and `--drawer-w`, and
+  re-runs on open, resize, breakpoint change and zoom (the zoom calls it
+  through the module-level `syncDrawer` hook). The groups spread over the
+  extra width (`justify-content: space-between`). With no centre far enough
+  out (e.g. one column) the drawer keeps its content width. Sort is not
+  snapped: its right edge is fixed by the zoom buttons, so snapping its left
+  edge made it 280px+ wide.
+- **Active filters in the bar.** `#filter-active` holds one `.summary-chip` per
+  active filter (built in `updateActiveFiltersList`; clicking one clicks the
+  real `.filter-button`, so MixItUp stays the single source of truth), between
+  `[ ]` drawn by its `::before`/`::after`, then `#filter-clear` (a second
+  `type="reset"`). Chips are created at runtime, so their CSS must be
+  `:global(...)`. The summary hides while the drawer is open. There is no
+  result count, on purpose.
+- **Sort dropdown.** `#sort-toggle` is a black block the same width as the
+  closed Filter block (`--block-w`, 96px), and its options fill that width
+  rather than `--ladder-w`. Open
+  (`.is-sort-open` on the form) it turns page-coloured and becomes the top of
+  the bracket (its background gradients draw the bar and legs), and
+  `#sort-list` drops under it. The `.sort-option`s are a second set of MixItUp
+  sort controls; MixItUp keeps the active class on both sets in step. Picking
+  an order (here or in the sheet) writes its name into `#sort-label`; picking
+  it in the dropdown also closes it.
+- **Open/close.** Only one menu is open at a time (`setOpen` / `setSortOpen`
+  close each other). `Escape` closes whichever is open and returns focus to
+  its trigger; a `pointerdown` outside the form closes both. Whatever is
+  collapsed is `inert`.
+
+## Sort sections (sort by Project or Date)
+
+Sorted by Project or Date, the grid reads as sections: each project (or year)
+on a new row under its title and a bracket line (rule + down tick) as wide as
+its images, at most one row.
+
+- Build time (utils.ts), on each cell:
+  - `getArchiveProject` gives `data-project` (a lowercased slug, so case
+    variants share a section; no project gives `zzz_noproject`, sorted last
+    and titled "Other") and `data-project-title` (the `projects` collection's
+    `title`, matched by `projectName`, else the humanised slug).
+  - `getArchiveDate` gives `data-date`, always `YYYYMM` (month `00` when
+    unknown), and `data-year`. `metadata.year` mixes `2020`, `202410` and
+    `20250` (a 2025 date missing a digit); MixItUp compared those raw values
+    numerically, so years came out of order before this. Images without a
+    date sort last (Date is newest first) under "Undated".
+- Runtime: `syncSortSections` (filters.ts) runs in `onMixEnd` with the active
+  sort string. `SECTION_GROUPS` maps the sort attribute to the cell data that
+  groups a section and names it (`project` -> `project` / `projectTitle`,
+  `date` -> `year` / `year`); any other sort (Random) gets no sections. It
+  walks runs of equal keys among visible cells and inserts a `.sort-heading`
+  before each. `onMixStart` removes them all first (`clearSortSections`), so
+  MixItUp never measures or moves anything but its own targets.
+- Layout: a heading is a full-row grid item (`grid-column: 1 / -1`) with
+  `grid-template-columns: subgrid`; its `.sort-heading-inner` spans `--span`
+  columns, padded by `--archive-pad` so the line meets the images' edges.
+  `--span` is the run length clamped to the current column count, and
+  `refreshSectionSpans` re-clamps it whenever the zoom changes.
+- Project titles come from content: images whose project has no entry in the
+  `projects` collection show their humanised slug (e.g. `chromaticdragons`,
+  `hold`). Add a project entry or fix the slug to change it.
 
 ## Mobile (`--bp-mobile`): floating pills + bottom sheet
 
@@ -111,13 +209,13 @@ on (at 952px that's the Topic row — two rows total).
 
 - `#filter` toggles; backdrop, Done and `Escape` close. Escape returns focus to
   the trigger.
-- State lives on the form: `.is-open`, plus `aria-expanded` on the trigger.
-- `inert` is set on `#filter-box` only while the sheet is closed **on mobile**
-  (A-4). On desktop the box is never inert.
-- While open, `<html>` gets `.archive-sheet-open` (`overflow: hidden`) to lock
-  page scroll.
-- Crossing the 767px breakpoint while open closes the sheet so the desktop rail
-  is interactive. Everything is torn down on `astro:before-swap`.
+- State lives on the form: `.is-open` (and `.is-sort-open` for the desktop
+  dropdown), plus `aria-expanded` on the triggers.
+- `inert` is set on `#filter-box` (and `#sort-list`) whenever closed (A-4).
+- While open on mobile, `<html>` gets `.archive-sheet-open` (`overflow:
+  hidden`) to lock page scroll.
+- Crossing the 767px breakpoint closes everything (sheet ↔ menus swap).
+  Everything is torn down on `astro:before-swap`.
 
 ## Zoom (column count)
 
@@ -178,16 +276,25 @@ mixer is created on `#archive-wrapper`.
 
 - Each chip carries `data-toggle=".<cssTag>"`; fieldsets carry
   `data-filter-group` so multifilter ANDs across groups and ORs within a group.
-- Sort buttons carry `data-sort` (`random`, `project:asc`, `date:asc`).
+- Sort buttons carry `data-sort` (`random`, `project:asc`, `date:desc`, i.e. newest first). There
+  are two sets (the phone sheet's `.sort-button`s and the desktop dropdown's
+  `.sort-option`s); MixItUp marks the active one in both.
 - MixItUp adds `mixitup-control-active` to active controls — all "is this active"
   state and styling keys off that class.
-- `#filter-reset-all` is `type="reset"` (multifilter clears its state on form
-  reset) and additionally calls `mixer.show()`.
+- `#filter-reset-all` and `#filter-clear` are `type="reset"` (multifilter
+  clears its state on form reset) and additionally call `mixer.show()`.
 
-`onMixEnd` rebuilds the PhotoSwipe data source, calls
-`updateActiveFiltersList()` (aria-pressed on chips, `[N]` count, and
-`data-active-count` on the form) and `updateFilterButtonAvailability()`
-(disables chips that would match nothing), then scrolls to top.
+`onMixStart` removes the section headings. `onMixEnd` re-adds them when
+sorted by Project or Date (`syncSortSections`), rebuilds the PhotoSwipe data
+source, calls `updateActiveFiltersList()` (aria-pressed on chips, `[N]` count,
+the bar's summary chips and `data-active-count` on the form) and
+`updateFilterButtonAvailability()` (disables chips that would match nothing).
+It deliberately does not scroll: filtering or sorting leaves the page where
+the visitor had it (until 2026-11 it scrolled to the top).
+
+A mix only ends once animation frames run. In a hidden or backgrounded
+browser tab, sorting and filtering stall and `onMixEnd` never fires, so test
+these in a visible window.
 
 ## Change checklist
 

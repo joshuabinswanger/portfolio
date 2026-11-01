@@ -45,8 +45,9 @@ function getArchiveContainer() {
 }
 
 // Reflects the active filter set after every mix: aria-pressed on each chip,
-// the "[N]" count on the mobile trigger, and data-active-count on the toolbar
-// (CSS keys the Reset affordance off the chips' active class directly).
+// the "[N]" count on the phone trigger, data-active-count on the toolbar, and
+// the desktop bar's bracketed row of removable chips. CSS keys the
+// Reset/Clear affordance off the chips' active class directly.
 function updateActiveFiltersList() {
   const activeButtons = document.querySelectorAll<HTMLButtonElement>(
     ".filter-button.mixitup-control-active",
@@ -72,17 +73,37 @@ function updateActiveFiltersList() {
     filterCount.textContent =
       activeButtons.length > 0 ? `[${activeButtons.length}]` : "";
   }
+
+  // Desktop bar: one chip per active filter; clicking it clicks the real
+  // filter button (see initFilterSheet), so MixItUp stays the only source of
+  // truth.
+  const summary = document.getElementById("filter-active");
+  if (summary) {
+    summary.replaceChildren(
+      ...Array.from(activeButtons).map((btn) => {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "summary-chip";
+        chip.dataset.removes = btn.getAttribute("data-toggle") ?? "";
+        chip.textContent = btn.dataset.filterName ?? btn.textContent ?? "";
+        chip.setAttribute("aria-label", `Remove filter ${chip.textContent}`);
+        return chip;
+      }),
+    );
+  }
 }
 
 //////////////////////////////
-///////FILTER SHEET (MOBILE)///
+///////FILTER MENUS / SHEET////
 //////////////////////////////
 
-// On phones the filter box is a bottom sheet opened by #filter; on wider
-// viewports the same box is an always-visible rail and the trigger is hidden.
-// `inert` keeps the collapsed sheet out of the tab order (A-4) without
-// touching layout. Returns a teardown used on View Transition swaps.
+// Phones: #filter opens #filter-box as a bottom sheet (filters + sort).
+// Wider viewports: two menus in the bar. #filter widens and drops #filter-box
+// as a drawer; #sort-toggle opens #sort-list. Only one is open at a time.
+// `inert` keeps whatever is collapsed out of the tab order (A-4). Returns a
+// teardown used on View Transition swaps.
 const SHEET_OPEN_CLASS = "is-open";
+const SORT_OPEN_CLASS = "is-sort-open";
 const SCROLL_LOCK_CLASS = "archive-sheet-open";
 const MOBILE_QUERY = "(max-width: 767px)"; // matches --bp-mobile
 
@@ -92,46 +113,157 @@ function initFilterSheet(): () => void {
   const box = document.getElementById("filter-box");
   const backdrop = document.getElementById("filter-backdrop");
   const done = document.getElementById("filter-done");
+  const summary = document.getElementById("filter-active");
+  const sortToggle = document.getElementById("sort-toggle");
+  const sortList = document.getElementById("sort-list");
+  const sortLabel = document.getElementById("sort-label");
   if (!wrapper || !trigger || !box) return () => {};
 
   const mobile = window.matchMedia(MOBILE_QUERY);
 
+  // The desktop drawer ends on the middle of an image: its right edge is
+  // stretched to the first image column centre past its content (or stays
+  // at its content width when no centre is far enough out). The Filter
+  // block widens to --drawer-w before the drawer drops (CSS). With no inline
+  // width the drawer is max-content wide, even while collapsed, so it can be
+  // measured at any time. Re-run on open, resize and zoom.
+  const syncDrawerWidth = () => {
+    box.style.width = "";
+    if (mobile.matches) return;
+
+    const grid = getArchiveGrid();
+    const left = box.getBoundingClientRect().left;
+    const natural = box.offsetWidth;
+    const edge = (grid ? getColumnCentres(grid) : []).find(
+      (x) => x - left >= natural,
+    );
+    const width = edge === undefined ? natural : Math.round(edge - left);
+    box.style.width = `${width}px`;
+    wrapper.style.setProperty("--drawer-w", `${width}px`);
+  };
+  syncDrawer = syncDrawerWidth;
+
+  // Page scroll is only locked for the phone sheet; the desktop menus lay
+  // over the grid and it keeps scrolling under them.
   const setOpen = (open: boolean) => {
-    const isMobile = mobile.matches;
-    const effective = open && isMobile;
-    wrapper.classList.toggle(SHEET_OPEN_CLASS, effective);
-    trigger.setAttribute("aria-expanded", String(effective));
-    box.toggleAttribute("inert", isMobile && !effective);
-    document.documentElement.classList.toggle(SCROLL_LOCK_CLASS, effective);
+    if (open) {
+      setSortOpen(false);
+      syncDrawerWidth();
+    }
+    wrapper.classList.toggle(SHEET_OPEN_CLASS, open);
+    trigger.setAttribute("aria-expanded", String(open));
+    box.toggleAttribute("inert", !open);
+    document.documentElement.classList.toggle(
+      SCROLL_LOCK_CLASS,
+      open && mobile.matches,
+    );
+  };
+
+  const setSortOpen = (open: boolean) => {
+    if (!sortToggle || !sortList) return;
+    if (open) setOpen(false);
+    wrapper.classList.toggle(SORT_OPEN_CLASS, open);
+    sortToggle.setAttribute("aria-expanded", String(open));
+    sortList.toggleAttribute("inert", !open);
   };
 
   const toggle = () => setOpen(!wrapper.classList.contains(SHEET_OPEN_CLASS));
   const close = () => setOpen(false);
+  const closeAll = () => {
+    setOpen(false);
+    setSortOpen(false);
+  };
+
   const onKey = (event: KeyboardEvent) => {
-    if (event.key === "Escape" && wrapper.classList.contains(SHEET_OPEN_CLASS)) {
+    if (event.key !== "Escape") return;
+    if (wrapper.classList.contains(SHEET_OPEN_CLASS)) {
       close();
       trigger.focus();
+    } else if (wrapper.classList.contains(SORT_OPEN_CLASS)) {
+      setSortOpen(false);
+      sortToggle?.focus();
     }
   };
-  // Leaving the phone breakpoint while the sheet is open: drop the sheet
-  // state so the desktop rail is interactive again.
-  const onBreakpoint = () => setOpen(false);
+  // Desktop: a press anywhere outside the toolbar folds the menus away.
+  // (On phones the backdrop covers the page and handles this.)
+  const onOutside = (event: PointerEvent) => {
+    if (!mobile.matches && !wrapper.contains(event.target as Node)) closeAll();
+  };
+  // Crossing the phone breakpoint swaps sheet <-> menus: start closed.
+  const onBreakpoint = () => {
+    closeAll();
+    syncDrawerWidth();
+  };
+  const onResize = () => syncDrawerWidth();
+
+  // Picking an order (here or in the phone sheet) names it on the Sort
+  // block; picking it in the dropdown also closes the dropdown. MixItUp
+  // handles the sort itself.
+  const onSortPick = (event: MouseEvent) => {
+    const option = (event.target as HTMLElement).closest<HTMLElement>(
+      "[data-sort]",
+    );
+    if (!option) return;
+    if (sortLabel) sortLabel.textContent = option.textContent?.trim() ?? "Sort";
+    if (sortList?.contains(option)) setSortOpen(false);
+  };
 
   trigger.addEventListener("click", toggle);
+  sortToggle?.addEventListener("click", () =>
+    setSortOpen(!wrapper.classList.contains(SORT_OPEN_CLASS)),
+  );
+  wrapper.addEventListener("click", onSortPick);
   backdrop?.addEventListener("click", close);
   done?.addEventListener("click", close);
+  summary?.addEventListener("click", (event) => {
+    const chip = (event.target as HTMLElement).closest<HTMLElement>(
+      ".summary-chip",
+    );
+    const toggleSelector = chip?.dataset.removes;
+    if (!toggleSelector) return;
+    document
+      .querySelector<HTMLButtonElement>(
+        `.filter-button[data-toggle="${toggleSelector}"]`,
+      )
+      ?.click();
+  });
   document.addEventListener("keydown", onKey);
+  document.addEventListener("pointerdown", onOutside);
   mobile.addEventListener("change", onBreakpoint);
+  window.addEventListener("resize", onResize);
 
   initSheetDrag(wrapper, box, backdrop, close);
 
-  setOpen(false);
+  closeAll();
 
   return () => {
     document.removeEventListener("keydown", onKey);
+    document.removeEventListener("pointerdown", onOutside);
     mobile.removeEventListener("change", onBreakpoint);
+    window.removeEventListener("resize", onResize);
     document.documentElement.classList.remove(SCROLL_LOCK_CLASS);
+    syncDrawer = null;
   };
+}
+
+// Set by initFilterSheet; re-fits the drawer when the column count changes.
+let syncDrawer: (() => void) | null = null;
+
+// Viewport x of each archive grid column's centre. Cells pad their image
+// evenly, so a column's centre is also its images' centre.
+function getColumnCentres(grid: HTMLElement): number[] {
+  const style = getComputedStyle(grid);
+  const gap = parseFloat(style.columnGap) || 0;
+  let x = grid.getBoundingClientRect().left + (parseFloat(style.paddingLeft) || 0);
+  return style.gridTemplateColumns
+    .split(" ")
+    .map(parseFloat)
+    .filter(Number.isFinite)
+    .map((track) => {
+      const centre = x + track / 2;
+      x += track + gap;
+      return centre;
+    });
 }
 
 function updateFilterButtonAvailability() {
@@ -308,9 +440,11 @@ function initArchiveZoom() {
       // Toggle inside the FLIP "apply" so the post-change measurement includes
       // the caption's height and the reflow animates cleanly.
       syncSingleColumn(clamped);
+      refreshSectionSpans(grid);
     });
     localStorage.setItem(ZOOM_STORAGE_KEY, String(clamped));
     refreshDisabled(clamped);
+    syncDrawer?.();
   };
 
   zoomIn.addEventListener("click", () => setColumns(getArchiveColumnCount(grid) - 1));
@@ -319,6 +453,85 @@ function initArchiveZoom() {
   const initialCount = getArchiveColumnCount(grid);
   refreshDisabled(initialCount);
   syncSingleColumn(initialCount);
+}
+
+//////////////////////////////
+///////SORT SECTIONS//////////
+//////////////////////////////
+
+// Sorted by Project or Date, the grid reads as sections: each project (or
+// year) starts on a new row under its name and a bracket line as wide as its
+// images (at most one row). A heading is a full-row grid item whose subgrid
+// lets the title + line span exactly --span columns. Headings sit between
+// MixItUp's targets only while no mix is running (see the mixer callbacks),
+// and their spans are re-clamped whenever the zoom changes the column count.
+const HEADING_CLASS = "sort-heading";
+
+// Sort attribute -> the cell data that groups a section and names it
+// (dataset keys; see ArchiveGalleryElement.astro).
+const SECTION_GROUPS: Record<string, { key: string; title: string }> = {
+  project: { key: "project", title: "projectTitle" },
+  date: { key: "year", title: "year" },
+};
+
+function clearSortSections() {
+  document
+    .querySelectorAll(`#grid-container .${HEADING_CLASS}`)
+    .forEach((heading) => heading.remove());
+}
+
+function refreshSectionSpans(grid: HTMLElement) {
+  const columns = getArchiveColumnCount(grid);
+  grid
+    .querySelectorAll<HTMLElement>(`.${HEADING_CLASS}`)
+    .forEach((heading) =>
+      heading.style.setProperty(
+        "--span",
+        String(Math.min(columns, Number(heading.dataset.count) || 1)),
+      ),
+    );
+}
+
+function syncSortSections(sortString: string | undefined) {
+  clearSortSections();
+  const grid = getArchiveGrid();
+  const group = SECTION_GROUPS[(sortString ?? "").split(":")[0]];
+  if (!group || !grid) return;
+
+  const items = Array.from(
+    grid.querySelectorAll<HTMLElement>(
+      '.archiveElement:not([style*="display: none"])',
+    ),
+  );
+
+  // MixItUp has already put the cells in order: walk runs of the same key
+  // and head each run.
+  for (let start = 0; start < items.length; ) {
+    const key = items[start].dataset[group.key];
+    let end = start;
+    while (end < items.length && items[end].dataset[group.key] === key) end++;
+
+    const heading = document.createElement("div");
+    heading.className = HEADING_CLASS;
+    heading.dataset.count = String(end - start);
+    const inner = document.createElement("div");
+    inner.className = "sort-heading-inner";
+    inner.setAttribute("role", "heading");
+    inner.setAttribute("aria-level", "2");
+    const title = document.createElement("span");
+    title.className = "sort-heading-title";
+    title.textContent = items[start].dataset[group.title] ?? "";
+    const line = document.createElement("span");
+    line.className = "sort-heading-line";
+    line.setAttribute("aria-hidden", "true");
+    inner.append(title, line);
+    heading.append(inner);
+    items[start].before(heading);
+
+    start = end;
+  }
+
+  refreshSectionSpans(grid);
 }
 
 ///////////////////////////////////////////////////////
@@ -512,8 +725,10 @@ export function initArchiveFilters() {
       .querySelectorAll<HTMLButtonElement>(".filter-button")
       .forEach((btn) => btn.setAttribute("aria-pressed", "false"));
 
-    // Wire the +/- grid zoom control.
+    // Wire the +/- grid zoom control, then fit the drawer to the restored
+    // column count.
     initArchiveZoom();
+    syncDrawer?.();
 
     /////////////////////
     ///////MixItUp//////
@@ -542,13 +757,17 @@ export function initArchiveFilters() {
       },
 
       callbacks: {
-        onMixEnd: function () {
+        // Section headings are not MixItUp targets: take them out before it
+        // measures and moves the grid, put them back once it is done.
+        onMixStart: function () {
+          clearSortSections();
+        },
+        onMixEnd: function (state: { activeSort?: { sortString?: string } }) {
+          syncSortSections(state.activeSort?.sortString);
           createPhotoSwipeDataSource();
           updateActiveFiltersList();
           updateFilterButtonAvailability();
-
-          // Scroll to the top of the page smoothly after the mix operation
-          window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+          // No scroll to top: the page stays where the visitor left it.
         },
       },
     });
@@ -562,11 +781,18 @@ export function initArchiveFilters() {
       },
     });
 
-    const filterResetButton =
-      document.querySelector<HTMLButtonElement>(`#filter-reset-all`);
-    filterResetButton?.addEventListener(`click`, () => {
-      mixer?.show();
-    });
+    // Both reset buttons (sheet "Reset", desktop bar "Clear") are
+    // type="reset": multifilter clears on the form reset, show() re-mixes.
+    document
+      .querySelectorAll<HTMLButtonElement>(`#filter-reset-all, #filter-clear`)
+      .forEach((button) =>
+        button.addEventListener(`click`, () => {
+          mixer?.show();
+        }),
+      );
+
+    // Summary state before the first mix.
+    updateActiveFiltersList();
 
     ////////////////////////////////////////////////////////////
     ///////////////     PHOTOSWIPE ////////////////////////////
