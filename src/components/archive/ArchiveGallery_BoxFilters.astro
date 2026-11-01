@@ -377,7 +377,7 @@ const sortOptions = [
 
   .filter-title {
     font-family: PowerGrotesk-Light;
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: rgba(0, 0, 0, 0.55);
@@ -569,8 +569,11 @@ const sortOptions = [
     }
 
     /* The bar is invisible but spans the column, so only its controls and
-       open menus take clicks; anywhere else reaches the image behind it. */
+       open menus take clicks; anywhere else reaches the image behind it.
+       min-width: 0 so a too-wide bar can never stretch the page's grid
+       track (and with it the gallery). */
     #filter-sort-wrapper {
+      min-width: 0;
       pointer-events: none;
     }
 
@@ -958,10 +961,11 @@ const sortOptions = [
       clear: both;
     }
 
+    /* Clear sits at the drawer's right edge, the groups stay left. */
     .sheet-actions {
       display: flex;
-      justify-content: center;
-      padding: 12px 0 16px;
+      justify-content: flex-end;
+      padding: 12px 20px 16px;
     }
 
     #filter-reset-all {
@@ -1286,7 +1290,9 @@ const sortOptions = [
       border-top: var(--border-size) solid var(--surface-line);
     }
 
+    /* Reset to the right of Done, Done on the left. */
     #filter-reset-all {
+      order: 1;
       height: 40px;
       font-size: 14px;
     }

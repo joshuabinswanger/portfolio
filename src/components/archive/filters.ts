@@ -124,18 +124,29 @@ function initFilterSheet(): () => void {
   // The desktop drawer ends on the middle of an image: its right edge is
   // stretched to the first image column centre past its content (or stays
   // at its content width when no centre is far enough out). The Filter
-  // block widens to --drawer-w before the drawer drops (CSS). With no inline
-  // width the drawer is max-content wide, even while collapsed, so it can be
-  // measured at any time. Re-run on open, resize and zoom.
+  // block widens to --drawer-w before the drawer drops (CSS), so the width
+  // is capped where that block would run into Sort and zoom; the column
+  // (the bar's parent) is measured, as the bar itself can overflow. With no
+  // inline width the drawer is max-content wide, even while collapsed, so it
+  // can be measured at any time. Re-run on open, resize and zoom.
+  const sortMenu = document.getElementById("sort-menu");
+  const zoom = document.getElementById("zoom-wrapper");
   const syncDrawerWidth = () => {
     box.style.width = "";
     if (mobile.matches) return;
 
     const grid = getArchiveGrid();
     const left = box.getBoundingClientRect().left;
-    const natural = box.offsetWidth;
+    const gap = parseFloat(getComputedStyle(wrapper).columnGap) || 0;
+    const room =
+      (wrapper.parentElement?.clientWidth ?? Infinity) -
+      (sortMenu?.offsetWidth ?? 0) -
+      (zoom?.offsetWidth ?? 0) -
+      3 * gap;
+    // Rounded up: a fraction short and the groups would wrap.
+    const natural = Math.min(Math.ceil(box.getBoundingClientRect().width), room);
     const edge = (grid ? getColumnCentres(grid) : []).find(
-      (x) => x - left >= natural,
+      (x) => x - left >= natural && x - left <= room,
     );
     const width = edge === undefined ? natural : Math.round(edge - left);
     box.style.width = `${width}px`;

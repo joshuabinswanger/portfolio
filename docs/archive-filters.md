@@ -111,14 +111,20 @@ and **lay over the grid**; the page keeps scrolling (no scroll lock).
   steps, like the original: `#filter` widens from 96px to `--drawer-w`, then
   the drawer drops and the groups fade in staggered by `--card-index`. Closing
   runs it backwards via the closed-state transition delays. The phone Sort
-  group is hidden here; Clear (`#filter-reset-all`) sits centred at the bottom.
+  group is hidden here; Clear (`#filter-reset-all`) sits at the bottom right.
+  On phones Reset likewise sits right of Done (`order: 1`).
 - **Drawer width ends mid-image.** `syncDrawerWidth` (filters.ts) measures the
   drawer's content width, then stretches it so its right edge lands on the
   first image column centre past that (`getColumnCentres` reads the grid's
   resolved tracks and gap; cells pad their image evenly, so a column's centre
   is its images' centre). It sets both the inline width and `--drawer-w`, and
   re-runs on open, resize, breakpoint change and zoom (the zoom calls it
-  through the module-level `syncDrawer` hook). The groups stay packed left
+  through the module-level `syncDrawer` hook). The width is capped at the
+  room the widened Filter block leaves for Sort and zoom (measured on the
+  bar's parent, `#archive-wrapper`, since the bar itself can overflow); a
+  centre past that cap is skipped, and the drawer keeps its content width.
+  The bar also has `min-width: 0`, so it can never stretch the page's grid
+  track and the gallery with it. The groups stay packed left
   (48px apart). `max-width: 100%` keeps the drawer inside the column; on
   narrow tablets the groups wrap (Topic drops under Role and Tool). With no centre far enough
   out (e.g. one column) the drawer keeps its content width. Sort is not
