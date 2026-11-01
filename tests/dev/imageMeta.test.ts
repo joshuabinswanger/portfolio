@@ -18,26 +18,26 @@ metadata:
   showInPortfolioGallery: 'no'
   showInProjectGallery: 'no'
   showInIndex: 'yes'
-  year: '202501'
+  year: '2025'
   role: Illustration, 2D
   topic: null
 `;
 
 test("parseImageMetaChanges trims text and turns blanks into null", () => {
   const changes = parseImageMetaChanges({
-    metadata: { description_title: "  Abram ", topic: "", year: " 201905 " },
+    metadata: { description_title: "  Abram ", topic: "", year: " 2019 " },
   });
   assert.deepEqual(changes.metadata, {
     description_title: "Abram",
     topic: null,
-    year: "201905",
+    year: "2019",
   });
 });
 
 test("parseImageMetaChanges rejects bad years, flags and unknown fields", () => {
   assert.throws(
-    () => parseImageMetaChanges({ metadata: { year: "2019" } }),
-    /YYYYMM/,
+    () => parseImageMetaChanges({ metadata: { year: "201905" } }),
+    /YYYY/,
   );
   assert.throws(
     () => parseImageMetaChanges({ metadata: { showInIndex: "true" } }),
@@ -50,8 +50,8 @@ test("parseImageMetaChanges rejects bad years, flags and unknown fields", () => 
 });
 
 test("applyImageMetaChanges edits one line and keeps quoting", () => {
-  const out = applyImageMetaChanges(RAW, { metadata: { year: "201905" } });
-  assert.equal(out, RAW.replace("year: '202501'", "year: '201905'"));
+  const out = applyImageMetaChanges(RAW, { metadata: { year: "2019" } });
+  assert.equal(out, RAW.replace("year: '2025'", "year: '2019'"));
 });
 
 test("applyImageMetaChanges returns the input untouched when nothing differs", () => {

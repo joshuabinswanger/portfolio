@@ -21,11 +21,10 @@ const images = await getCollection("images");
 
 const NO_PROJECT = "(no project)";
 
-// "202405" -> "2024-05"; anything else is shown as-is so odd values stand out.
+// Shown as-is; "—" when missing.
 function formatYear(value: string | number | null | undefined): string {
   if (!value) return "—";
-  const year = String(value); // an unquoted year in hand-edited YAML is a number
-  return /^\d{6}$/.test(year) ? `${year.slice(0, 4)}-${year.slice(4)}` : year;
+  return String(value); // an unquoted year in hand-edited YAML is a number
 }
 
 type ImageData = (typeof images)[number]["data"];
@@ -209,13 +208,13 @@ const groups = [...byGroup]
                       />
                     </label>
                     <label class="half">
-                      Year <small>YYYYMM</small>
+                      Year <small>YYYY</small>
                       <input
                         name="year"
                         value={c.form.year}
-                        pattern="[0-9]{6}"
+                        pattern="[0-9]{4}"
                         inputmode="numeric"
-                        placeholder="202405"
+                        placeholder="2024"
                       />
                     </label>
                     <label class="half">

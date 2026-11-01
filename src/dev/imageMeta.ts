@@ -64,10 +64,10 @@ export function parseImageMetaChanges(body: unknown): ImageMetaChanges {
     const year = typeof meta.year === "string" ? meta.year.trim() : meta.year;
     if (year === null || year === "") {
       changes.metadata.year = null;
-    } else if (typeof year === "string" && /^\d{6}$/.test(year)) {
+    } else if (typeof year === "string" && /^\d{4}$/.test(year)) {
       changes.metadata.year = year;
     } else {
-      throw new Error("year must be six digits, YYYYMM");
+      throw new Error("year must be four digits, YYYY");
     }
   }
 
