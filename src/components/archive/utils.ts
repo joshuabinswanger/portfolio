@@ -65,7 +65,21 @@ export function getArchiveRoleTags(image: ArchiveImage): string[] {
 // Placeholder project slugs that carry no real title.
 const PLACEHOLDER_PROJECTS = new Set(["none", "aaa_noproject", ""]);
 
+// Display titles for archive-only groups: project slugs on images that have no
+// entry in the projects collection. Keys are lowercase slugs.
+const ARCHIVE_GROUP_TITLES: Record<string, string> = {
+  bardsofdawn: "Bards of Dawn",
+  characters: "Characters",
+  chromaticdragons: "Chromatic Dragons",
+  figuredrawing: "Figure Drawing",
+  gamesdesign101forkids: "Game Design 101 for Kids",
+  hold: "Characters",
+  illustration: "Illustration",
+  misc3d: "Miscellaneous 3D",
+};
+
 // Humanise a project slug for display: "BardsOfDawn" -> "Bards Of Dawn".
+// Last resort for slugs with neither a project entry nor a group title.
 export function prettifyProjectName(slug: string | null | undefined): string {
   const value = (slug ?? "").trim();
   if (PLACEHOLDER_PROJECTS.has(value)) return "";
@@ -75,12 +89,36 @@ export function prettifyProjectName(slug: string | null | undefined): string {
     .trim();
 }
 
+// Map of lowercase projectName -> title, built from the projects collection.
+export function buildProjectTitleMap(
+  projects: CollectionEntry<"projects">[],
+): Map<string, string> {
+  return new Map(
+    projects.map((p) => [p.data.projectName.toLowerCase(), p.data.title]),
+  );
+}
+
+// Readable name for a project slug: the project's own title, then the
+// archive-group title, then a humanised slug. Case-insensitive, so stray
+// lowercase slugs ("structureofwood") still resolve.
+export function getProjectDisplayName(
+  slug: string | null | undefined,
+  projectTitles: Map<string, string>,
+): string {
+  const key = (slug ?? "").trim().toLowerCase();
+  return (
+    projectTitles.get(key) ??
+    ARCHIVE_GROUP_TITLES[key] ??
+    prettifyProjectName(slug)
+  );
+}
+
 // Sort key and year for the archive's "sort by Date" view (sections per year,
-// see syncSortSections in filters.ts). metadata.year mixes "2020", "202410"
-// and "20250" (a 2025 date missing a digit), and MixItUp compares mixed
-// lengths numerically, out of calendar order. The key is always YYYYMM
-// (month 00 when unknown); images without a date get "000000", which the
-// newest-first Date sort puts last, as "Undated".
+// see syncSortSections in filters.ts). metadata.year is plain YYYY; older
+// YYYYMM values still parse. The key is always YYYYMM (month 00 when unknown)
+// so mixed lengths never compare out of calendar order; images without a
+// date get "000000", which the newest-first Date sort puts last, as
+// "Undated".
 export function getArchiveDate(image: ArchiveImage): {
   key: string;
   year: string;
@@ -93,30 +131,33 @@ export function getArchiveDate(image: ArchiveImage): {
 }
 
 // Sort key and section title for an image's project (the archive's "sort by
-// Project" view groups by it, see syncSortSections in filters.ts). Keys are
-// lowercased so slugs that differ only in case ("StructureOfWood" /
-// "structureofwood") share a section; images without a project sort last,
-// under "Other". Titles come from the projects collection where one exists.
+// Project" view groups by it, see syncSortSections in filters.ts). The title
+// is the project's display name; the key is that name lowercased, so slugs
+// that share a display name ("hold" / "characters", or "StructureOfWood" /
+// "structureofwood") share one section, and sections sort alphabetically by
+// what they show. Images without a project sort last, under "Other".
 export const NO_PROJECT_KEY = "zzz_noproject";
 
 export function getArchiveProject(
   image: ArchiveImage,
   projectTitles: Map<string, string>,
 ): { key: string; title: string } {
-  const slug = (image.data.metadata?.project ?? "").trim();
-  const name = prettifyProjectName(slug);
-  if (!name) return { key: NO_PROJECT_KEY, title: "Other" };
-  const key = slug.toLowerCase();
-  return { key, title: projectTitles.get(key) ?? name };
+  const title = getProjectDisplayName(image.data.metadata?.project, projectTitles);
+  if (!title) return { key: NO_PROJECT_KEY, title: "Other" };
+  return { key: title.toLowerCase(), title };
 }
 
-// The image's display title: its description_title, falling back to a humanised
-// project name. Used for both the grid caption (single-column only) and the
-// PhotoSwipe bottom title — see ArchiveGalleryElement.astro / archive/filters.ts.
-export function getArchiveImageTitle(image: ArchiveImage): string {
+// The image's display title: its description_title, falling back to the
+// project's display name. Used for both the grid caption (single-column only)
+// and the PhotoSwipe bottom title — see ArchiveGalleryElement.astro /
+// archive/filters.ts.
+export function getArchiveImageTitle(
+  image: ArchiveImage,
+  projectTitles: Map<string, string>,
+): string {
   return (
     image.data.metadata?.description_title ||
-    prettifyProjectName(image.data.metadata?.project)
+    getProjectDisplayName(image.data.metadata?.project, projectTitles)
   );
 }
 

@@ -144,15 +144,19 @@ on a new row under its title and a bracket line (rule + down tick) as wide as
 its images, at most one row.
 
 - Build time (utils.ts), on each cell:
-  - `getArchiveProject` gives `data-project` (a lowercased slug, so case
-    variants share a section; no project gives `zzz_noproject`, sorted last
-    and titled "Other") and `data-project-title` (the `projects` collection's
-    `title`, matched by `projectName`, else the humanised slug).
+  - `getArchiveProject` gives `data-project-title`, the project's display
+    name from `getProjectDisplayName` (the `projects` collection's `title`,
+    then `ARCHIVE_GROUP_TITLES` for slug-only groups, then the humanised
+    slug), and `data-project`, that name lowercased. Keying by the shown name
+    means slugs with the same name share one section (`hold` and
+    `characters` are both "Characters"; `StructureOfWood` and
+    `structureofwood` too) and sections sort alphabetically by what they
+    show. No project gives `zzz_noproject`, sorted last and titled "Other".
   - `getArchiveDate` gives `data-date`, always `YYYYMM` (month `00` when
-    unknown), and `data-year`. `metadata.year` mixes `2020`, `202410` and
-    `20250` (a 2025 date missing a digit); MixItUp compared those raw values
-    numerically, so years came out of order before this. Images without a
-    date sort last (Date is newest first) under "Undated".
+    unknown), and `data-year`. `metadata.year` is plain `YYYY` now; older
+    `YYYYMM` values still parse, and the fixed length keeps MixItUp's numeric
+    compare in calendar order. Images without a date sort last (Date is
+    newest first) under "Undated".
 - Runtime: `syncSortSections` (filters.ts) runs in `onMixEnd` with the active
   sort string. `SECTION_GROUPS` maps the sort attribute to the cell data that
   groups a section and names it (`project` -> `project` / `projectTitle`,
@@ -165,9 +169,8 @@ its images, at most one row.
   columns, padded by `--archive-pad` so the line meets the images' edges.
   `--span` is the run length clamped to the current column count, and
   `refreshSectionSpans` re-clamps it whenever the zoom changes.
-- Project titles come from content: images whose project has no entry in the
-  `projects` collection show their humanised slug (e.g. `chromaticdragons`,
-  `hold`). Add a project entry or fix the slug to change it.
+- Section titles come from content: give a slug-only group a readable name in
+  `ARCHIVE_GROUP_TITLES` (utils.ts), or add a `projects` entry.
 
 ## Mobile (`--bp-mobile`): floating pills + bottom sheet
 
@@ -245,7 +248,11 @@ its images, at most one row.
 
 Each image has a single resolved **title**, computed once at build time by
 `getArchiveImageTitle` in `utils.ts`: `metadata.description_title`, falling
-back to a humanised project name. `ArchiveGalleryElement.astro` renders it as
+back to the project's display name (`getProjectDisplayName`): the matching
+`projects` entry's `title` (slug matched case-insensitively), then
+`ARCHIVE_GROUP_TITLES` for archive-only groups with no project entry
+(`FigureDrawing`, `misc3d`, …), then a humanised slug. Add a new archive-only
+slug to that map to give it a proper name. `ArchiveGalleryElement.astro` renders it as
 the cell's `<figcaption class="archive-caption">` **and** as `data-title` on
 the `.photo-link`.
 

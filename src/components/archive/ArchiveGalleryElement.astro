@@ -1,13 +1,16 @@
 ---
 import { Picture } from "astro:assets";
+import { getCollection } from "astro:content";
 
 import "photoswipe/style.css";
 
 import { resolveImageUrl, resolveLocalImage } from "../images/localImages";
 import {
   buildArchiveHighResData,
+  buildProjectTitleMap,
   getArchiveDate,
   getArchiveImageTitle,
+  getArchiveProject,
   getArchiveRoleTags,
   getArchiveTagClassString,
   type ArchiveImage,
@@ -16,8 +19,6 @@ import {
 interface Props {
   image: ArchiveImage;
   index: number;
-  // Sort key + section title, from getArchiveProject.
-  project: { key: string; title: string };
 }
 
 const archiveImage = Astro.props.image;
@@ -28,8 +29,10 @@ const tagClassString = getArchiveTagClassString(archiveImage);
 const convertedRole = getArchiveRoleTags(archiveImage);
 // Resolved once at build time; reused by the grid caption (single-column only)
 // and read off data-title by the PhotoSwipe lightbox.
-const captionTitle = getArchiveImageTitle(archiveImage);
-// Normalised YYYYMM sort key + year for the Date sort and its sections.
+const projectTitles = buildProjectTitleMap(await getCollection("projects"));
+const captionTitle = getArchiveImageTitle(archiveImage, projectTitles);
+// Sort keys + section titles for the Project and Date sorts (filters.ts).
+const archiveProject = getArchiveProject(archiveImage, projectTitles);
 const archiveDate = getArchiveDate(archiveImage);
 ---
 
@@ -38,8 +41,8 @@ const archiveDate = getArchiveDate(archiveImage);
   id={`archiveElement-${Astro.props.index}`}
   data-role={convertedRole}
   data-program={archiveImage.data.metadata?.program}
-  data-project={Astro.props.project.key}
-  data-project-title={Astro.props.project.title}
+  data-project={archiveProject.key}
+  data-project-title={archiveProject.title}
   data-date={archiveDate.key}
   data-year={archiveDate.year}
 >
