@@ -1,7 +1,7 @@
 ---
 import Bracket from "../brackets/Bracket.astro";
 import Icon from "../Icon.astro";
-import MediaElement from "../media/MediaElement.astro";
+import GallerySlide from "./GallerySlide.astro";
 
 import "keen-slider/keen-slider.min.css";
 import "photoswipe/style.css";
@@ -33,6 +33,11 @@ const {
 if (!galleryProject) {
   throw new Error(`Gallery project "${targetProject}" not found`);
 }
+
+// Rendered once: every slide's overlay and the info slide show the same text.
+const projectDescriptionHtml = await marked.parse(
+  galleryProject.data.projectDescription,
+);
 ---
 
 <div
@@ -43,74 +48,16 @@ if (!galleryProject) {
   data-gallery-project={galleryProject.data.title}
 >
   <div class:list={"SlidesContainer keen-slider"}>
+    {/* Slide 0 of each gallery is the PhotoSwipe title slide, hence +1. */}
     {
-      galleryImages.map((image, index) => {
-        /* console.log(highResData[index].highResSecureUrl) */
-
-        // Compute index: startIndex + 1 offset plus the current image index
-        const computedIndex = Astro.props.startIndex + 1 + index;
-
-        return (
-          <div
-            id={`ImageContainer-${index}`}
-            class:list={["keen-slider__slide Slide"]}
-            data-index={computedIndex}
-          >
-            <div class:list={"ImageInfo"}>
-              <div class:list={"ImageDescriptionWrapper"}>
-                <div class:list={"image-description"}>
-                  {image.data.metadata && (
-                    <>
-                      <p>
-                        <strong>
-                          {image.data.metadata?.description_title}
-                        </strong>
-                      </p>
-                      <p>{image.data.metadata?.description_text}</p>
-                    </>
-                  )}
-                </div>
-
-                <hr />
-
-                <div class:list={["image-info-project"]}>
-                  <div class:list={"ProjectInfoWrapper"}>
-                    <p>
-                      <strong>About the Project:</strong>
-                    </p>
-                    <Fragment
-                      set:html={marked.parse(
-                        galleryProject.data.projectDescription,
-                      )}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class:list={"Filter"} />
-
-            <div
-              id="Image"
-              class:list={["ImageElement"]}
-              style={index > 1 ? "display: none;" : ""}
-            >
-              {/*        TODO: restore highRes lightbox data
-                href={highResData[index].highResSecureUrl}
-                data-pswp-width={highResData[index].highResWidth}
-                data-pswp-height={highResData[index].highResHeight} 
-                */}
-
-              <MediaElement
-                computedIndex={computedIndex}
-                media={image}
-                sizes="(max-width: 767px) 85vw, (max-width: 1119px) 50vw, (max-width: 1699px) 33vw, 25vw"
-                loading={index === 0 ? "eager" : "lazy"}
-              />
-            </div>
-          </div>
-        );
-      })
+      galleryImages.map((image, index) => (
+        <GallerySlide
+          media={image}
+          index={index}
+          computedIndex={Astro.props.startIndex + 1 + index}
+          projectDescriptionHtml={projectDescriptionHtml}
+        />
+      ))
     }
 
     <div
@@ -122,9 +69,7 @@ if (!galleryProject) {
       <div class:list={["project-info-slide"]}>
         <div class:list={"ProjectInfoWrapper"}>
           <p><strong>About the Project:</strong></p>
-          <Fragment
-            set:html={marked.parse(galleryProject.data.projectDescription)}
-          />
+          <Fragment set:html={projectDescriptionHtml} />
         </div>
 
         <div class:list={"DetailsInfoWrapper"}>
@@ -147,11 +92,14 @@ if (!galleryProject) {
     <Bracket kind="mid" />
 
     <div id="ArrowWrapper">
-      <button class:list={["ArrowLeft"]} aria-label="Previous image">&larr;</button>
+      <button class:list={["ArrowLeft"]} aria-label="Previous image"
+        >&larr;</button
+      >
       <div class:list={"CounterContainer"}>
         1 / {imagesAmount + 1}
       </div>
-      <button class:list={["ArrowRight"]} aria-label="Next image">&rarr;</button>
+      <button class:list={["ArrowRight"]} aria-label="Next image">&rarr;</button
+      >
     </div>
 
     <Bracket kind="mid" />
@@ -184,48 +132,6 @@ if (!galleryProject) {
     box-shadow: 0px 0px 22px #988f821b;
   }
 
-  a {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
-  picture {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
-  img {
-    display: block;
-    vertical-align: top;
-    width: 100%;
-    height: auto;
-  }
-
-  .ImageElement :global(a),
-  .ImageElement :global(picture) {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-
-  .ImageElement :global(img) {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    vertical-align: top;
-  }
-
-  .ImageElement :global(mux-video) {
-    display: block;
-    width: 100%;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
-  }
-
   .project-info-slide-wrapper {
     height: 100%;
     display: grid;
@@ -253,112 +159,6 @@ if (!galleryProject) {
     }
   }
 
-  .Filter {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: #fbf9f400;
-    width: 100%;
-    height: 100%;
-    /* No idle backdrop-filter here (or on .ImageInfo): an always-on
-       blur(0px) layer per slide kept iOS Safari from blurring the gallery
-       under the floating nav bar. */
-    z-index: 11;
-    transition: background-color ease-in-out 0.2s;
-    pointer-events: none;
-  }
-
-  .hidden-image {
-    display: none;
-  }
-
-  /*   Image Info */
-
-  .ImageInfo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    width: 100%;
-    height: 100%;
-    display: grid;
-    justify-items: center;
-    align-items: center;
-
-    pointer-events: none; /* Prevent interaction with the description if needed */
-    background-color: var(--bg-color-trans); /* Example style */
-
-    /* No blur until .InfoVisible (see .Filter) */
-    backdrop-filter: none;
-
-    /* Add transition for backdrop-filter */
-    transition:
-      backdrop-filter ease-in-out 0.3s,
-      opacity 0.3s ease-in-out;
-
-    font-size: var(--font-size-desktop);
-    hyphens: auto;
-
-    overflow: auto;
-
-    /* Above .Filter (11). Keep below the fixed mobile nav (z 1000): at 1111
-       the overlay and the arrows painted over the bar. */
-    z-index: 12;
-
-    @media (--bp-mobile) {
-      font-size: var(--font-size-mobile);
-    }
-
-    @media (--bp-tablet) {
-      font-size: var(--font-size-tablet);
-    }
-
-    @media (--bp-desktop-wide) {
-      font-size: var(--font-size-desktop-wide);
-      line-height: 1.33;
-    }
-  }
-
-  .ImageDescriptionWrapper {
-    display: grid;
-    width: min(88%, 66ch);
-    grid-template-rows: min-content min-content min-content;
-    align-items: center;
-    align-content: space-around;
-  }
-
-  hr {
-    width: 80%;
-    align-self: center;
-    border-style: unset;
-    border-top: 1px solid;
-    border-color: black;
-    margin-block: unset;
-    margin-inline: unset;
-    margin: 24px auto;
-
-    @media (--bp-mobile) {
-      display: none;
-    }
-  }
-
-  .image-info-project {
-    margin-top: 10px;
-
-    @media (--bp-mobile) {
-      display: none;
-    }
-  }
-
-  .InfoVisible {
-    opacity: 1;
-    backdrop-filter: blur(22px);
-    transition:
-      opacity 0.3s,
-      backdrop-filter 0.3s ease;
-  }
-
-  .image-description,
   .ProjectInfoWrapper,
   .DetailsInfoWrapper {
     width: 80%; /* Ensure it takes full width */
@@ -373,9 +173,6 @@ if (!galleryProject) {
     @media (--bp-mobile) {
       width: 85%;
     }
-  }
-
-  .ProjectInfoWrapper {
   }
 
   .DetailsInfoWrapper {

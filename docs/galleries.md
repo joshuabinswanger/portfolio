@@ -6,6 +6,7 @@ The portfolio has several gallery surfaces. They share concepts, but they do not
 
 - `src/components/gallery/PortfolioGallery.astro`: homepage gallery grid, Keen Slider setup, PhotoSwipe data source.
 - `src/components/gallery/GalleryElement.astro`: one homepage gallery instance.
+- `src/components/gallery/GallerySlide.astro`: one homepage media slide (media plus the description overlay toggled by the info button).
 - `src/components/gallery/utils.ts`: portfolio gallery data loading, ordering, high-resolution lookup.
 - `src/components/list/ProjectList.astro`: expandable project list and project-list PhotoSwipe.
 - `src/components/list/ImageSlide.astro`: project-list media slides.
@@ -23,7 +24,7 @@ Data flow:
 3. `src/components/gallery/utils.ts` fetches matching entries from `src/content/images`.
 4. Entries are filtered by `metadata.showInPortfolioGallery === "yes"`.
 5. Entries are sorted by `metadata.portfolioOrder`.
-6. `GalleryElement.astro` renders each entry through `MediaElement.astro`.
+6. `GalleryElement.astro` renders each entry as a `GallerySlide.astro`, which draws the media through `MediaElement.astro`. The script in `PortfolioGallery.astro` finds slides by the `.ImageElement` and `.ImageInfo` classes, so keep those names.
 
 Each homepage gallery also gets custom PhotoSwipe slides:
 
