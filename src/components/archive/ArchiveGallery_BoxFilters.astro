@@ -1214,8 +1214,15 @@ const sortOptions = [
       padding: 0 0 10px;
     }
 
+    /* Plain caps titles in ink, no brackets (phone mockup, 2026-11). */
     .filter-title {
       margin-bottom: 6px;
+      color: black;
+    }
+
+    .filter-title::before,
+    .filter-title::after {
+      content: none;
     }
 
     .chip-row {
@@ -1233,6 +1240,14 @@ const sortOptions = [
       margin-left: 0;
     }
 
+    /* A hairline sets Sort apart from the filter groups above it. Drawn
+       under the last filter group: a fieldset's top border would run
+       through the Sort legend. */
+    .filter-group:has(+ .sort-group) {
+      padding-bottom: 14px;
+      border-bottom: var(--border-size) solid var(--surface-line);
+    }
+
     .sort-group .segmented {
       display: flex;
       width: 100%;
@@ -1240,9 +1255,30 @@ const sortOptions = [
     }
 
     .sort-button {
+      position: relative;
       flex: 1 1 0;
       height: 34px;
       font-size: 14px;
+    }
+
+    /* Options split by short ticks at the top and bottom edge, the bracket
+       motif again, instead of full-height dividers. */
+    .sort-group .sort-button + .sort-button::before,
+    .sort-group .sort-button + .sort-button::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: var(--border-size);
+      height: 8px;
+      background-color: black;
+    }
+
+    .sort-group .sort-button + .sort-button::before {
+      top: 0;
+    }
+
+    .sort-group .sort-button + .sort-button::after {
+      bottom: 0;
     }
 
     .sheet-actions {
