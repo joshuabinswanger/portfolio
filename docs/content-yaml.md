@@ -52,6 +52,12 @@ credits: ...
 
 Local image entries live in `src/content/images` and use local files under `src/assets/projects`.
 
+To review them, run `npm run dev` and open `/dev/images`: every entry as a
+thumbnail beside its title, year, visibility and tags, grouped by project, with
+a filter box and a link that opens the YAML file in VS Code. The page
+(`src/dev/ImageReview.astro`) is injected by an integration in
+`astro.config.mjs` only under `astro dev`, so it is never built or deployed.
+
 ```yaml
 src: /src/assets/projects/GameDesign101/example.webp
 width: 1500

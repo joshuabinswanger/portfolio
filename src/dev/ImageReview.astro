@@ -1,0 +1,316 @@
+---
+// Dev-only review page: every entry in the `images` collection as a thumbnail
+// next to its metadata, grouped by project. Registered at /dev/images by the
+// dev-image-review integration in astro.config.mjs; never part of a build.
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+import path from "node:path";
+
+import {
+  buildProjectTitleMap,
+  getProjectDisplayName,
+} from "../components/archive/utils";
+import { resolveLocalImage } from "../components/images/localImages";
+
+const projectTitles = buildProjectTitleMap(await getCollection("projects"));
+const images = await getCollection("images");
+
+const NO_PROJECT = "(no project)";
+
+// "202405" -> "2024-05"; anything else is shown as-is so odd values stand out.
+function formatYear(year: string | null | undefined): string {
+  if (!year) return "—";
+  return /^\d{6}$/.test(year) ? `${year.slice(0, 4)}-${year.slice(4)}` : year;
+}
+
+const cards = images.map((entry) => {
+  const data = entry.data;
+  const meta = data.metadata;
+  const src = data.mediaType === "video" ? data.posterSrc : data.src;
+  const filePath = entry.filePath ?? `src/content/images/${entry.id}.yaml`;
+  const group = getProjectDisplayName(meta.project, projectTitles) || NO_PROJECT;
+  const flags = [
+    meta.showInIndex === "yes" && "archive",
+    meta.showInPortfolioGallery === "yes" && "homepage",
+    meta.showInProjectGallery === "yes" && "project",
+  ].filter(Boolean) as string[];
+
+  return {
+    id: entry.id,
+    image: resolveLocalImage(src),
+    isVideo: data.mediaType === "video",
+    title: meta.description_title,
+    text: meta.description_text,
+    slug: meta.project ?? "",
+    group,
+    year: formatYear(meta.year),
+    flags,
+    tags: [meta.role, meta.program, meta.topic, ...(data.tags ?? [])]
+      .filter(Boolean)
+      .join(" · "),
+    filePath,
+    editUrl: `vscode://file/${path.resolve(filePath).replaceAll("\\", "/")}`,
+  };
+});
+
+const byGroup = new Map<string, typeof cards>();
+for (const card of cards) {
+  byGroup.set(card.group, [...(byGroup.get(card.group) ?? []), card]);
+}
+
+// Groups alphabetically (no-project last); cards inside by year, then title.
+const groups = [...byGroup]
+  .sort(([a], [b]) =>
+    a === NO_PROJECT ? 1 : b === NO_PROJECT ? -1 : a.localeCompare(b),
+  )
+  .map(([name, items]) => ({
+    name,
+    slugs: [...new Set(items.map((c) => c.slug).filter(Boolean))].join(", "),
+    items: items.sort(
+      (a, b) =>
+        a.year.localeCompare(b.year) ||
+        (a.title ?? "").localeCompare(b.title ?? ""),
+    ),
+  }));
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Image review</title>
+  </head>
+  <body>
+    <header class="bar">
+      <h1>Image review <span>{cards.length} entries · dev only</span></h1>
+      <input
+        id="filter"
+        type="search"
+        placeholder="Filter by title, project, year, file…"
+        autocomplete="off"
+      />
+      <label><input id="untitled" type="checkbox" /> Untitled only</label>
+    </header>
+
+    <main>
+      {
+        groups.map((g) => (
+          <section class="group">
+            <h2>
+              {g.name} <span>{g.slugs}</span>
+            </h2>
+            <div class="grid">
+              {g.items.map((c) => (
+                <article
+                  class="card"
+                  data-untitled={c.title ? undefined : ""}
+                  data-search={[c.title, c.text, c.group, c.slug, c.year, c.filePath, c.tags]
+                    .filter(Boolean)
+                    .join(" ")
+                    .toLowerCase()}
+                >
+                  <a class="thumb" href={c.image.src} target="_blank">
+                    <Image src={c.image} alt="" width={360} loading="lazy" />
+                    {c.isVideo && <span class="badge">video poster</span>}
+                  </a>
+                  <dl>
+                    <dt>Title</dt>
+                    <dd class:list={[{ missing: !c.title }]}>
+                      {c.title ?? "none"}
+                    </dd>
+                    <dt>Year</dt>
+                    <dd>{c.year}</dd>
+                    <dt>Shown in</dt>
+                    <dd class:list={[{ missing: !c.flags.length }]}>
+                      {c.flags.join(", ") || "hidden"}
+                    </dd>
+                    {c.tags && (
+                      <>
+                        <dt>Tags</dt>
+                        <dd>{c.tags}</dd>
+                      </>
+                    )}
+                    {c.text && (
+                      <>
+                        <dt>Text</dt>
+                        <dd class="text">{c.text}</dd>
+                      </>
+                    )}
+                  </dl>
+                  <a class="file" href={c.editUrl} title="Open in VS Code">
+                    {c.filePath}
+                  </a>
+                </article>
+              ))}
+            </div>
+          </section>
+        ))
+      }
+    </main>
+
+    <script>
+      const filter = document.querySelector<HTMLInputElement>("#filter")!;
+      const untitled = document.querySelector<HTMLInputElement>("#untitled")!;
+      const cards = document.querySelectorAll<HTMLElement>(".card");
+      const groups = document.querySelectorAll<HTMLElement>(".group");
+
+      function apply() {
+        const q = filter.value.trim().toLowerCase();
+        cards.forEach((card) => {
+          const match =
+            (!q || card.dataset.search!.includes(q)) &&
+            (!untitled.checked || card.hasAttribute("data-untitled"));
+          card.hidden = !match;
+        });
+        groups.forEach((group) => {
+          group.hidden = !group.querySelector(".card:not([hidden])");
+        });
+      }
+
+      filter.addEventListener("input", apply);
+      untitled.addEventListener("change", apply);
+    </script>
+
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #f6f4ef;
+        --card: #fff;
+        --ink: #1b1b1b;
+        --muted: #6b6b6b;
+        --line: #e2ded5;
+        --warn: #b4401c;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #161616;
+          --card: #202020;
+          --ink: #ececec;
+          --muted: #9a9a9a;
+          --line: #333;
+          --warn: #ff8a65;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font: 13px/1.4 system-ui, sans-serif;
+      }
+      .bar {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 20px;
+        align-items: center;
+        padding: 12px 16px;
+        background: var(--bg);
+        border-bottom: 1px solid var(--line);
+      }
+      h1 {
+        margin: 0;
+        font-size: 16px;
+      }
+      h1 span,
+      h2 span {
+        color: var(--muted);
+        font-weight: 400;
+        font-size: 12px;
+        margin-left: 6px;
+      }
+      #filter {
+        flex: 1 1 240px;
+        max-width: 420px;
+        padding: 6px 10px;
+        font: inherit;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--card);
+        color: inherit;
+      }
+      main {
+        padding: 8px 16px 48px;
+      }
+      h2 {
+        margin: 28px 0 10px;
+        font-size: 15px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+        gap: 12px;
+      }
+      .card {
+        display: flex;
+        flex-direction: column;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .card[hidden],
+      .group[hidden] {
+        display: none;
+      }
+      .thumb {
+        position: relative;
+        display: block;
+        aspect-ratio: 4 / 3;
+        background: var(--line);
+      }
+      .thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      .badge {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        padding: 1px 6px;
+        border-radius: 4px;
+        background: #000a;
+        color: #fff;
+        font-size: 11px;
+      }
+      dl {
+        display: grid;
+        grid-template-columns: 64px 1fr;
+        gap: 3px 8px;
+        margin: 0;
+        padding: 10px 12px 6px;
+      }
+      dt {
+        color: var(--muted);
+      }
+      dd {
+        margin: 0;
+        overflow-wrap: anywhere;
+      }
+      .missing {
+        color: var(--warn);
+        font-style: italic;
+      }
+      .text {
+        color: var(--muted);
+      }
+      .file {
+        margin-top: auto;
+        padding: 6px 12px 10px;
+        color: var(--muted);
+        font: 11px/1.3 ui-monospace, monospace;
+        overflow-wrap: anywhere;
+      }
+      .file:hover {
+        color: var(--ink);
+      }
+    </style>
+  </body>
+</html>
