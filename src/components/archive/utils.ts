@@ -65,7 +65,21 @@ export function getArchiveRoleTags(image: ArchiveImage): string[] {
 // Placeholder project slugs that carry no real title.
 const PLACEHOLDER_PROJECTS = new Set(["none", "aaa_noproject", ""]);
 
+// Display titles for archive-only groups: project slugs on images that have no
+// entry in the projects collection. Keys are lowercase slugs.
+const ARCHIVE_GROUP_TITLES: Record<string, string> = {
+  bardsofdawn: "Bards of Dawn",
+  characters: "Characters",
+  chromaticdragons: "Chromatic Dragons",
+  figuredrawing: "Figure Drawing",
+  gamesdesign101forkids: "Game Design 101 for Kids",
+  hold: "Characters",
+  illustration: "Illustration",
+  misc3d: "Miscellaneous 3D",
+};
+
 // Humanise a project slug for display: "BardsOfDawn" -> "Bards Of Dawn".
+// Last resort for slugs with neither a project entry nor a group title.
 export function prettifyProjectName(slug: string | null | undefined): string {
   const value = (slug ?? "").trim();
   if (PLACEHOLDER_PROJECTS.has(value)) return "";
@@ -75,13 +89,41 @@ export function prettifyProjectName(slug: string | null | undefined): string {
     .trim();
 }
 
-// The image's display title: its description_title, falling back to a humanised
-// project name. Used for both the grid caption (single-column only) and the
-// PhotoSwipe bottom title — see ArchiveGalleryElement.astro / archive/filters.ts.
-export function getArchiveImageTitle(image: ArchiveImage): string {
+// Map of lowercase projectName -> title, built from the projects collection.
+export function buildProjectTitleMap(
+  projects: CollectionEntry<"projects">[],
+): Map<string, string> {
+  return new Map(
+    projects.map((p) => [p.data.projectName.toLowerCase(), p.data.title]),
+  );
+}
+
+// Readable name for a project slug: the project's own title, then the
+// archive-group title, then a humanised slug. Case-insensitive, so stray
+// lowercase slugs ("structureofwood") still resolve.
+export function getProjectDisplayName(
+  slug: string | null | undefined,
+  projectTitles: Map<string, string>,
+): string {
+  const key = (slug ?? "").trim().toLowerCase();
+  return (
+    projectTitles.get(key) ??
+    ARCHIVE_GROUP_TITLES[key] ??
+    prettifyProjectName(slug)
+  );
+}
+
+// The image's display title: its description_title, falling back to the
+// project's display name. Used for both the grid caption (single-column only)
+// and the PhotoSwipe bottom title — see ArchiveGalleryElement.astro /
+// archive/filters.ts.
+export function getArchiveImageTitle(
+  image: ArchiveImage,
+  projectTitles: Map<string, string>,
+): string {
   return (
     image.data.metadata?.description_title ||
-    prettifyProjectName(image.data.metadata?.project)
+    getProjectDisplayName(image.data.metadata?.project, projectTitles)
   );
 }
 

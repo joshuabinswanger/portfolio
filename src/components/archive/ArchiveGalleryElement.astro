@@ -1,11 +1,13 @@
 ---
 import { Picture } from "astro:assets";
+import { getCollection } from "astro:content";
 
 import "photoswipe/style.css";
 
 import { resolveImageUrl, resolveLocalImage } from "../images/localImages";
 import {
   buildArchiveHighResData,
+  buildProjectTitleMap,
   getArchiveImageTitle,
   getArchiveRoleTags,
   getArchiveTagClassString,
@@ -25,7 +27,8 @@ const tagClassString = getArchiveTagClassString(archiveImage);
 const convertedRole = getArchiveRoleTags(archiveImage);
 // Resolved once at build time; reused by the grid caption (single-column only)
 // and read off data-title by the PhotoSwipe lightbox.
-const captionTitle = getArchiveImageTitle(archiveImage);
+const projectTitles = buildProjectTitleMap(await getCollection("projects"));
+const captionTitle = getArchiveImageTitle(archiveImage, projectTitles);
 ---
 
 <div
