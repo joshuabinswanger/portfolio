@@ -8,12 +8,12 @@ metadata:
   project: hold
   description_title: Birkart Grellenort
   description_text: Sketch inspired by the character from Sapowski's Hussite Trilogy
-  showInPortfolioGallery: 'no'
+  showInPortfolioGallery: "no"
   portfolioOrder: 9
-  showInProjectGallery: 'no'
+  showInProjectGallery: "no"
   projectGalleryOrder: null
-  showInIndex: 'yes'
-  year: '202501'
+  showInIndex: "yes"
+  year: "201901"
   client: null
   collaborators: null
   role: Illustration, 2D
