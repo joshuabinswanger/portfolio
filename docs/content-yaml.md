@@ -54,9 +54,15 @@ Local image entries live in `src/content/images` and use local files under `src/
 
 To review them, run `npm run dev` and open `/dev/images`: every entry as a
 thumbnail beside its title, year, visibility and tags, grouped by project, with
-a filter box and a link that opens the YAML file in VS Code. The page
-(`src/dev/ImageReview.astro`) is injected by an integration in
-`astro.config.mjs` only under `astro dev`, so it is never built or deployed.
+a filter box and a link that opens the YAML file in VS Code. **Edit** on a card
+opens a form (title, text, year, project, visibility, role, program, topic,
+tags); **Save** posts to `/dev/api/image-meta`, which validates the change
+(`src/dev/imageMeta.ts`) and rewrites only the lines that changed, keeping
+quoting and comments. The dev server then reloads the page.
+
+The page (`src/dev/ImageReview.astro`) and the save endpoint
+(`src/dev/imageMetaMiddleware.ts`) are wired up by an integration in
+`astro.config.mjs` only under `astro dev`, so neither is ever built or deployed.
 
 ```yaml
 src: /src/assets/projects/GameDesign101/example.webp

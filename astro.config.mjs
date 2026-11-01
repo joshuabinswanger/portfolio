@@ -1,10 +1,17 @@
+import { fileURLToPath } from "node:url";
+
 import { defineConfig } from "astro/config";
 
 import robotsTxt from "astro-robots-txt";
 import sitemap from "@astrojs/sitemap";
 
-// /dev/images: thumbnails next to their YAML metadata, for content upkeep.
-// Injected only under `astro dev`, so it never ships in a build.
+import {
+  IMAGE_META_ENDPOINT,
+  createImageMetaMiddleware,
+} from "./src/dev/imageMetaMiddleware.ts";
+
+// /dev/images: thumbnails next to their YAML metadata, editable in place, for
+// content upkeep. Injected only under `astro dev`, so it never ships in a build.
 const devImageReview = {
   name: "dev-image-review",
   hooks: {
@@ -14,6 +21,12 @@ const devImageReview = {
         pattern: "/dev/images",
         entrypoint: "./src/dev/ImageReview.astro",
       });
+    },
+    "astro:server:setup": ({ server }) => {
+      server.middlewares.use(
+        IMAGE_META_ENDPOINT,
+        createImageMetaMiddleware(fileURLToPath(new URL(".", import.meta.url))),
+      );
     },
   },
 };
