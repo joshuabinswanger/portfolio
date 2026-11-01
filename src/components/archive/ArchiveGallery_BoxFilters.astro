@@ -147,15 +147,10 @@ const sortOptions = [
                       class:list={["chip-row", { "two-col": rows < group.options.length }]}
                       style={`--rows: ${rows}`}
                     >
-                      {group.options.map((option, i) => (
+                      {group.options.map((option) => (
                         <button
                           type="button"
-                          class:list={[
-                            "filter-button",
-                            "chip",
-                            option.css,
-                            { "col-2": i >= rows && rows < group.options.length },
-                          ]}
+                          class:list={["filter-button", "chip", option.css]}
                           data-toggle={`.${option.css}`}
                           data-filter-name={option.name}
                         >
@@ -764,14 +759,40 @@ const sortOptions = [
       height: var(--bar-h);
     }
 
-    /* ---- Option lists ("ladders") ------------------------------------ */
+    /* ---- Filter chips ------------------------------------------------ */
+
+    /* The phone sheet's chips: hairline boxes, black when active, faded
+       when nothing would match. Each group keeps its own column. */
+    .chip-row {
+      display: flex;
+      gap: 4px;
+      width: max-content;
+    }
+
+    /* Long groups (Topic): two rows, the chips lined up in columns. */
+    .chip-row.two-col {
+      display: grid;
+      grid-template-columns: repeat(var(--rows), auto);
+    }
+
+    .chip-row .chip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: var(--bar-h);
+      padding: 0 10px;
+      font-size: 14px;
+      letter-spacing: 0.6px;
+      white-space: nowrap;
+    }
+
+    /* ---- Sort list ("ladder") ---------------------------------------- */
 
     /* One row per option. Each row draws its own top rule and the four
        11px side segments; stacked rows make the original bracket: legs
        under the top bar, ticks either side of each rule, legs above the
        bottom bar (the list's own border-bottom). The first background
        layer is the active fill, which sweeps in from the left. */
-    .chip-row .chip,
     .sort-option {
       display: flex;
       align-items: center;
@@ -810,7 +831,6 @@ const sortOptions = [
         color 0.25s ease;
     }
 
-    .chip-row .chip.mixitup-control-active,
     .sort-option.mixitup-control-active {
       color: var(--bg-color);
       background-color: transparent;
@@ -823,38 +843,15 @@ const sortOptions = [
     }
 
     @media (hover: hover) {
-      .chip-row .chip:not(:disabled):not(.mixitup-control-active):hover,
       .sort-option:not(.mixitup-control-active):hover {
         background-color: rgba(0, 0, 0, 0.06);
       }
     }
 
-    /* Unavailable options fade their text only; the bracket stays whole. */
-    .chip-row .chip:disabled,
-    .chip-row .chip.filter-disabled {
-      opacity: 1;
-      color: rgba(0, 0, 0, 0.28);
-    }
-
-    .chip-row,
     .sort-list-inner {
       display: grid;
-      grid-template-columns: var(--ladder-w);
       gap: 0;
-      width: max-content;
       border-bottom: 1px solid black;
-    }
-
-    /* Long groups (Topic): two lists side by side sharing the middle line. */
-    .chip-row.two-col {
-      grid-template-columns: none;
-      grid-template-rows: repeat(var(--rows), auto);
-      grid-auto-flow: column;
-      grid-auto-columns: var(--ladder-w);
-    }
-
-    .chip-row .col-2 {
-      margin-left: -1px;
     }
 
     /* ---- Filter drawer ----------------------------------------------- */
@@ -869,6 +866,8 @@ const sortOptions = [
       display: grid;
       grid-template-rows: 0fr;
       width: max-content;
+      /* Never past the column: on narrow screens the groups wrap instead. */
+      max-width: 100%;
       background-color: var(--bg-color);
       transition: grid-template-rows 0.3s ease 0.08s;
     }
@@ -910,12 +909,13 @@ const sortOptions = [
     }
 
     /* filters.ts stretches the drawer so its right edge lands on an image
-       column's centre; the groups spread out over any extra width. */
+       column's centre; the groups stay packed left, one column each, and
+       wrap to a second row when the column is too narrow for all three. */
     #group-wrapper {
       display: flex;
+      flex-wrap: wrap;
       align-items: flex-start;
-      justify-content: space-between;
-      gap: 0 48px;
+      gap: 14px 48px;
       padding: 14px 26px 0;
     }
 
@@ -940,16 +940,12 @@ const sortOptions = [
           calc(0.4s + var(--card-index, 0) * 0.06s);
     }
 
-    /* Group title, centred over its list(s). Floated so the legend sits in
-       the flow like a normal block. */
+    /* Group title in plain caps over its chips, as in the phone sheet.
+       Floated so the legend sits in the flow like a normal block. */
     .filter-group .filter-title {
       float: left;
       width: 100%;
       margin: 0 0 8px;
-      font-size: 16px;
-      letter-spacing: 0.6px;
-      text-transform: none;
-      text-align: center;
       color: black;
     }
 

@@ -17,8 +17,9 @@ and the per-image `focus` field see [image-optimization](image-optimization.md).
 > animations; the phone sheet is unchanged. The mockup it follows is
 > `archive-filter-bracket-mockup.af` (Affinity, kept outside the repo); the
 > phone toolbar, sheet and sort sections are in `archive-filter-mobile-sort.af`
-> next to it, and `archive-filter-desktop-sort.af` redraws the desktop toolbar
-> in the phone's chip style (a proposal, not yet built).
+> next to it. Later in 2026-11 the drawer's bracket lists became the phone's
+> chips with plain caps titles (`archive-filter-desktop-sort.af`); the Sort
+> dropdown kept its bracket list.
 
 ## Main files
 
@@ -45,14 +46,16 @@ One `<form id="filter-sort-wrapper">` holds everything:
 | `#filter-summary` | Desktop only. `#filter-active` (bracketed row of removable `.summary-chip`s) and `#filter-clear`. |
 | `#filter-backdrop` | Mobile only. Dims the page behind the open sheet; tap closes. |
 | `#filter-box` | The options. Desktop: the drawer under Filter. Mobile: a bottom sheet. Its body is wrapped in `.box-inner` (`display: contents` on mobile). |
-| `#group-wrapper` | The three `fieldset.filter-group`s (Role / Tool / Topic, `data-filter-group`) each with a `.chip-row` of `button.filter-button.chip[data-toggle]`, plus the phone-only `#sort-buttons` fieldset (`.segmented` of `button.sort-button[data-sort]`). Groups with more than 4 options get `.two-col` + `--rows`, and their second-column buttons `.col-2`. |
+| `#group-wrapper` | The three `fieldset.filter-group`s (Role / Tool / Topic, `data-filter-group`) each with a `.chip-row` of `button.filter-button.chip[data-toggle]`, plus the phone-only `#sort-buttons` fieldset (`.segmented` of `button.sort-button[data-sort]`). Groups with more than 4 options get `.two-col` + `--rows` (chips per row on desktop). |
 | `.sheet-actions` | `#filter-reset-all` (`type="reset"`; "Reset" on phones, "Clear" in the drawer) and `#filter-done` (mobile only). |
 | `#sort-menu` | Desktop only. `#sort-toggle` (shows `#sort-label`) and `#sort-list`, a second set of `button.sort-option[data-sort]`. |
 | `#zoom-wrapper` | `#zoom-out` / `#zoom-in` in a `.segmented` pill. |
 
-On phones the group labels (`legend.filter-title`) carry the bracket motif
-typographically (`[ ROLE ]` via `::before`/`::after`); on desktop they are
-plain centred titles over bracket lists.
+The group labels (`legend.filter-title`) are plain caps in black on both
+sides of the breakpoint (`ROLE`, no brackets: the shared rule's `[ ]`
+`::before`/`::after` are switched off in the phone and desktop blocks). In the
+phone sheet a hairline under the last filter group sets Sort apart, and the
+Sort options are split by short top/bottom ticks instead of full dividers.
 
 ### Shared control styles
 
@@ -73,7 +76,8 @@ bracket motif, with tight padding.
 
 All desktop rules sit in one `@media (width >= 768px)` block so none of them
 leak into the phone sheet. The look is the pre-2026-10 toolbar's: solid black
-32px blocks, and option lists closed off by thin brackets.
+32px blocks, the drawer and the Sort list closed off by thin brackets; the
+filter options themselves are the phone's chips.
 
 `#filter-sort-wrapper` is `position: sticky; top: 0`, a flex row with **no
 surface at all** (no background, frost or fade, by request 2026-11): images
@@ -90,16 +94,16 @@ used to ride up 10px from the window top). The drawer hangs at
 (`margin-left: auto`) | `#zoom-wrapper`. Both menus are absolutely positioned
 and **lay over the grid**; the page keeps scrolling (no scroll lock).
 
-- **Bracket lists ("ladders").** `.chip-row .chip` and `.sort-option` are 32px
-  rows, 128px (`--ladder-w`) wide. Each row draws its own top rule plus four
-  11px side segments as background gradients; stacked, they make the original
-  bracket (legs under the top bar, ticks either side of each rule, legs above
-  the bottom bar, which is the list's own `border-bottom`). The first gradient
-  layer is the active fill: `background-size` 0% to 100% sweeps it in from the
-  left. Unavailable options fade their text only (`opacity: 1`, faint
-  `color`) so the bracket stays whole. `.two-col` lists (Topic) are a
-  column-flow grid of `--rows` rows; `.col-2` shifts the second list 1px left
-  so both share the middle line.
+- **Filter chips.** Each group is one column: its caps title over a
+  `.chip-row` of 32px `.chip`s (hairline box, black when active, 0.28 opacity
+  when unavailable, as on phones). `.two-col` rows (Topic) are a grid of
+  `--rows` columns, so its chips sit in two lined-up rows.
+- **Sort list ("ladder").** `.sort-option`s are 32px rows. Each row draws
+  its own top rule plus four 11px (`--ladder-leg`) side segments as background
+  gradients; stacked, they make the original bracket (legs under the top bar,
+  ticks either side of each rule, legs above the bottom bar, which is the
+  list's own `border-bottom`). The first gradient layer is the active fill:
+  `background-size` 0% to 100% sweeps it in from the left.
 - **Filter drawer.** `#filter-box` hangs under the Filter block,
   `width: max-content`, and animates `grid-template-rows: 0fr` to `1fr`;
   `.box-inner` is the clipped body. Its `::before` draws legs down from the
@@ -114,8 +118,9 @@ and **lay over the grid**; the page keeps scrolling (no scroll lock).
   resolved tracks and gap; cells pad their image evenly, so a column's centre
   is its images' centre). It sets both the inline width and `--drawer-w`, and
   re-runs on open, resize, breakpoint change and zoom (the zoom calls it
-  through the module-level `syncDrawer` hook). The groups spread over the
-  extra width (`justify-content: space-between`). With no centre far enough
+  through the module-level `syncDrawer` hook). The groups stay packed left
+  (48px apart). `max-width: 100%` keeps the drawer inside the column; on
+  narrow tablets the groups wrap (Topic drops under Role and Tool). With no centre far enough
   out (e.g. one column) the drawer keeps its content width. Sort is not
   snapped: its right edge is fixed by the zoom buttons, so snapping its left
   edge made it 280px+ wide.
@@ -127,8 +132,8 @@ and **lay over the grid**; the page keeps scrolling (no scroll lock).
   `:global(...)`. The summary hides while the drawer is open. There is no
   result count, on purpose.
 - **Sort dropdown.** `#sort-toggle` is a black block the same width as the
-  closed Filter block (`--block-w`, 96px), and its options fill that width
-  rather than `--ladder-w`. Open
+  closed Filter block (`--block-w`, 96px), and its options fill that width.
+  Open
   (`.is-sort-open` on the form) it turns page-coloured and becomes the top of
   the bracket (its background gradients draw the bar and legs), and
   `#sort-list` drops under it. The `.sort-option`s are a second set of MixItUp
