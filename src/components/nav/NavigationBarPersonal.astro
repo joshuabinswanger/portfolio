@@ -31,47 +31,37 @@ const isActive = (href: string) => norm(href) === here;
       alt="Joshua Binswanger — home"
       loading="eager"
     />
+
+    <div id="MainWrapper">
+      <BracketOpenV />
+
+      <a
+        id="portfolio"
+        class:list={["main-button", "button", "animation", { active: isActive("/personal") }]}
+        href="/personal"
+        data-href="/personal"
+        data-animation={isActive("/personal") ? "in" : "out"}
+        aria-current={isActive("/personal") ? "page" : undefined}
+      >
+        Gallery
+      </a>
+
+      <BracketMiddleV />
+
+      <a
+        id="info"
+        class:list={["main-button", "button", "animation", { active: isActive("/personal/info") }]}
+        href="/personal/info"
+        data-href="/personal/info"
+        data-animation={isActive("/personal/info") ? "in" : "out"}
+        aria-current={isActive("/personal/info") ? "page" : undefined}
+      >
+        Info
+      </a>
+
+      <BracketCloseV />
+    </div>
   </a>
-
-  <div id="MainWrapper">
-    <BracketOpenV />
-
-    <a
-      id="portfolio"
-      class:list={[
-        "main-button",
-        "button",
-        "animation",
-        { active: isActive("/personal") },
-      ]}
-      href="/personal"
-      data-href="/personal"
-      data-animation={isActive("/personal") ? "in" : "out"}
-      aria-current={isActive("/personal") ? "page" : undefined}
-    >
-      Gallery
-    </a>
-
-    <BracketMiddleV />
-
-    <a
-      id="info"
-      class:list={[
-        "main-button",
-        "button",
-        "animation",
-        { active: isActive("/personal/info") },
-      ]}
-      href="/personal/info"
-      data-href="/personal/info"
-      data-animation={isActive("/personal/info") ? "in" : "out"}
-      aria-current={isActive("/personal/info") ? "page" : undefined}
-    >
-      Info
-    </a>
-
-    <BracketCloseV />
-  </div>
 
   <script>
     // Update visual state (add/remove active class)
@@ -97,10 +87,7 @@ const isActive = (href: string) => norm(href) === here;
     }
 
     // Handle button click for all buttons
-    function handleButtonClick(
-      clickedBtn: HTMLElement,
-      allButtonsNodeList: NodeListOf<HTMLElement>,
-    ) {
+    function handleButtonClick(clickedBtn: HTMLElement, allButtonsNodeList: NodeListOf<HTMLElement>) {
       // Convert NodeList to Array for easier filtering if needed
       const allButtons = Array.from(allButtonsNodeList);
       const mainButtons = allButtons.filter((btn) => btn.id !== "Logo"); // Exclude logo for some logic
@@ -235,12 +222,8 @@ const isActive = (href: string) => norm(href) === here;
   <style>
     @import "../../styles/global.css";
 
-    /* Fixed, not sticky: a sticky nav gets pushed up at the end of short pages,
-       which would slide the menu under the fixed logo. left stays auto, so the
-       menu keeps its place in the nav column. */
     #NavBarDesktop {
-      position: fixed;
-      width: var(--nav-width-desktop);
+      position: sticky;
       height: min-content;
       display: grid;
       justify-items: center;
@@ -253,7 +236,6 @@ const isActive = (href: string) => norm(href) === here;
       }
       @media (--bp-tablet) {
         top: var(--padding-top-tablet);
-        width: 144px;
         grid-template-rows: 36px 1fr;
       }
       @media (--bp-desktop-wide) {
@@ -265,24 +247,16 @@ const isActive = (href: string) => norm(href) === here;
       letter-spacing: 0.8px;
     }
 
-    /* The layout is centred (auto margins), so the logo is pinned to the viewport's
-       left edge instead; it lines up with the nav's top, and #MainWrapper keeps
-       row 2 so the logo's row stays reserved. */
     #Logo {
       display: block;
-      position: fixed;
-      left: 0;
-      top: var(--padding-top-desktop);
-      width: var(--nav-width-desktop);
-      height: 32px;
+      height: 100%;
 
-      @media (--bp-tablet) {
-        top: var(--padding-top-tablet);
-        width: 144px;
+      @media (--bp-mobile) {
+        margin-top: 32px;
+        display: block;
         height: 36px;
-      }
-      @media (--bp-desktop-wide) {
-        top: var(--padding-top-desktop-wide);
+        width: 144px;
+        padding-left: 2px;
       }
     }
 
@@ -292,7 +266,6 @@ const isActive = (href: string) => norm(href) === here;
     }
 
     #MainWrapper {
-      grid-row: 2;
       width: 100%;
       display: grid;
       /* Grid rows for 2 main items (Gallery and Info) */
