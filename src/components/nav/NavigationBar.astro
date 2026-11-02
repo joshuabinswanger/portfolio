@@ -222,12 +222,8 @@ const isActive = (href: string) => norm(href) === here;
 <style>
   @import "../../styles/global.css";
 
-  /* Fixed, not sticky: a sticky nav gets pushed up at the end of short pages,
-     which would slide the menu under the fixed logo. left stays auto, so the
-     menu keeps its place in the nav column. */
   #NavBarDesktop {
-    position: fixed;
-    width: var(--nav-width-desktop);
+    position: sticky;
     height: min-content;
     display: grid;
     justify-items: center;
@@ -240,7 +236,6 @@ const isActive = (href: string) => norm(href) === here;
     }
     @media (--bp-tablet) {
       top: var(--padding-top-tablet);
-      width: 144px;
       grid-template-rows: 36px 1fr;
     }
     @media (--bp-desktop-wide) {
@@ -252,25 +247,10 @@ const isActive = (href: string) => norm(href) === here;
     letter-spacing: 0.8px;
   }
 
-  /* The layout is centred (auto margins), so the logo is pinned to the viewport's
-     left edge instead; it lines up with the sticky nav's top, and #MainWrapper
-     keeps row 2 so the logo's row stays reserved. */
   #Logo {
     display: block;
-    position: fixed;
-    left: 0;
-    top: var(--padding-top-desktop);
-    width: var(--nav-width-desktop);
-    height: 32px;
+    height: 100%;
 
-    @media (--bp-tablet) {
-      top: var(--padding-top-tablet);
-      width: 144px;
-      height: 36px;
-    }
-    @media (--bp-desktop-wide) {
-      top: var(--padding-top-desktop-wide);
-    }
     @media (--bp-mobile) {
       margin-top: 32px;
       display: block;
@@ -286,7 +266,6 @@ const isActive = (href: string) => norm(href) === here;
   }
 
   #MainWrapper {
-    grid-row: 2;
     width: 100%;
     display: grid;
     /* Restored original grid rows for 3 main items */
