@@ -623,7 +623,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   // item (or back, for a short drag) instead of coasting on momentum and
   // waiting for the snap.
   const SWIPE_MIN_PX = 30;
-  const GLIDE_SECONDS = 0.6;
+  const GLIDE_SECONDS = 1.2;
   let touchActive = false; // a touch gesture or its glide is in progress
   let touchFree = false; // gesture started outside the story: no stepping
   let touchBase = 0; // resting point the gesture started from
@@ -675,7 +675,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     if (event.cancelable) event.preventDefault();
     lenis.scrollTo(toPx(target), {
       duration: GLIDE_SECONDS,
-      easing: (t) => 1 - Math.pow(1 - t, 3),
+      // ease-in-out: the transition plays out evenly instead of rushing at
+      // the start.
+      easing: (t) =>
+        t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
       onComplete: () => {
         touchActive = false;
       },
@@ -716,7 +719,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
         // Snap from where the scroll actually is, not from a position
         // projected forward by its speed.
         inertia: false,
-        duration: { min: 0.3, max: 0.7 },
+        duration: { min: 0.6, max: 1.2 },
         delay: 0.1,
         ease: "power2.inOut",
       },
@@ -1154,12 +1157,16 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     width: auto;
     height: auto;
     align-self: start;
+    /* An image narrower than the screen (capped by max-height) would
+       otherwise sit at the left edge of its grid cell. */
+    justify-self: center;
 
     @media (min-width: 1024px) {
       grid-column: 1;
       max-height: 85vh;
       max-width: 60vw;
       align-self: center;
+      justify-self: start;
     }
   }
 
