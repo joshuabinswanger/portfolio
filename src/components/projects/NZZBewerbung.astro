@@ -573,9 +573,12 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   // A trackpad swipe keeps sending wheel events for a second or more of
   // momentum. Once a swipe has carried the scroll to the next resting point,
   // the rest of that swipe is swallowed, so one swipe moves exactly one item.
-  // restProgress is where the last snap settled; null after a jump from the
-  // progress words, which must not be capped.
-  let restProgress: number | null = 0;
+  // wheelBase is the resting point nearest to where the current swipe
+  // started. It is read from the live scroll position at the start of every
+  // swipe, never from snap callbacks: a swipe that happens to stop exactly on
+  // a resting point triggers no snap, and a stale base would then swallow
+  // every later swipe.
+  let wheelBase = 0;
   let lockedDir = 0;
   let lastWheelTime = 0;
   let lastWheelMag = 0;
@@ -592,12 +595,15 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       (mag > lastWheelMag * 1.5 && mag - lastWheelMag > 4);
     lastWheelTime = now;
     lastWheelMag = mag;
-    if (newGesture) lockedDir = 0;
 
     const st = masterTl.scrollTrigger;
-    if (!st || restProgress === null) return true;
+    if (!st) return true;
+    if (newGesture) {
+      lockedDir = 0;
+      wheelBase = nearestStep(st.progress);
+    }
     const dir = Math.sign(deltaY);
-    const limit = neighbourStep(restProgress, dir);
+    const limit = neighbourStep(wheelBase, dir);
     // At either end of the story, scroll freely (e.g. on to the footer).
     if (limit === null) return true;
 
@@ -667,7 +673,6 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       return true; // past either end: normal inertia
     }
     if (event.cancelable) event.preventDefault();
-    restProgress = target;
     lenis.scrollTo(toPx(target), {
       duration: GLIDE_SECONDS,
       easing: (t) => 1 - Math.pow(1 - t, 3),
@@ -679,7 +684,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   };
 
   // Snap to the next resting point in the scroll direction, but never past
-  // the one next to where the last snap settled while a swipe drove it.
+  // the one next to where the current wheel swipe started.
   let snapToStep: ((value: number, direction: number) => number) | null = null;
   const snapStep = (value: number, self?: ScrollTrigger) => {
     // Touch gestures place themselves (see gateTouch); don't fight them.
@@ -688,8 +693,8 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     const dir = self?.direction ?? 1;
     let target = snapToStep(value, dir);
     const wheelDriven = performance.now() - lastWheelTime < 1000;
-    if (restProgress !== null && wheelDriven) {
-      const cap = neighbourStep(restProgress, dir);
+    if (wheelDriven) {
+      const cap = neighbourStep(wheelBase, dir);
       if (cap !== null) {
         target = dir > 0 ? Math.min(target, cap) : Math.max(target, cap);
       }
@@ -708,14 +713,12 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       pin: true,
       snap: {
         snapTo: snapStep,
+        // Snap from where the scroll actually is, not from a position
+        // projected forward by its speed.
+        inertia: false,
         duration: { min: 0.3, max: 0.7 },
         delay: 0.1,
         ease: "power2.inOut",
-        onComplete: () => {
-          if (masterTl.scrollTrigger) {
-            restProgress = nearestStep(masterTl.scrollTrigger.progress);
-          }
-        },
       },
       onUpdate: (self) => {
         const tl = self.animation as unknown as {
@@ -994,9 +997,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
 
       if (masterTl.scrollTrigger) {
         const scrollPos = masterTl.scrollTrigger.labelToScroll(label) + 700;
-        // Free jump: lift the one-item cap until the next snap settles.
-        restProgress = null;
+        // Free jump; the next swipe measures its one item from wherever
+        // this lands.
         lockedDir = 0;
+        lastWheelTime = 0;
         lenis.scrollTo(scrollPos, {
           duration: 3,
           easing: (t) =>
