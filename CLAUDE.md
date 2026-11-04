@@ -15,9 +15,10 @@ YAML collections and local assets; no remote image service (Cloudinary was remov
 ## Read the docs first
 
 `docs/` has per-system notes. Before touching galleries, the archive
-filter/sort UI, project story pages, video playback, image handling, content
-YAML, or head metadata/SEO, read the matching file: [galleries](docs/galleries.md),
-[archive-filters](docs/archive-filters.md), [stories](docs/stories.md),
+filter/sort UI, project story pages, the NZZ Bewerbung scrollytelling, video
+playback, image handling, content YAML, or head metadata/SEO, read the matching
+file: [galleries](docs/galleries.md), [archive-filters](docs/archive-filters.md),
+[stories](docs/stories.md), [nzz-bewerbung](docs/nzz-bewerbung.md),
 [video-player](docs/video-player.md), [image-optimization](docs/image-optimization.md),
 [content-yaml](docs/content-yaml.md), [seo](docs/seo.md),
 [troubleshooting](docs/troubleshooting.md).

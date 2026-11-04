@@ -9,6 +9,7 @@ This folder holds problem-specific notes for the portfolio codebase. Keep each f
 - [Image Optimization](./image-optimization.md): Local Astro images, high-resolution lightbox images, and sizing rules.
 - [Archive Filters](./archive-filters.md): The `/personal` archive toolbar — chip rail on desktop, bottom sheet on mobile, MixItUp wiring, zoom, lightbox title.
 - [Project Stories](./stories.md): Block-based `/projects/<slug>` narrative pages (schema, block types, scroll runtime).
+- [NZZ Bewerbung](./nzz-bewerbung.md): The `/nzz-bewerbung` scrollytelling — pinned GSAP timeline, one-item-per-swipe for trackpad and touch, free finale, and why it works this way.
 - [Content YAML](./content-yaml.md): How project, portfolio, image, and video YAML entries fit together.
 - [SEO & AI Discoverability](./seo.md): Head metadata, canonical URLs, Open Graph, JSON-LD structured data, sitemap/robots, and llms.txt.
 - [Troubleshooting](./troubleshooting.md): Common dev-server, Vite cache, PhotoSwipe, Mux, and content-schema issues.
