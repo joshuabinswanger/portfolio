@@ -517,11 +517,17 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   // #region Lenis Smooth Scroll
   // wheelMultiplier stays at 1: trackpad momentum (MacBook) already travels
   // far, anything above 1 makes a single swipe skip several steps.
+  // syncTouch: Lenis drives touch scrolling instead of iOS/Android native
+  // momentum, so a finger swipe can be stepped one item at a time too.
   const lenis = new Lenis({
     lerp: 0.15,
     wheelMultiplier: 1,
     smoothWheel: true,
-    virtualScroll: (data) => gateWheel(data.deltaY, data.event),
+    syncTouch: true,
+    virtualScroll: (data) =>
+      data.event.type.includes("touch")
+        ? gateTouch(data.deltaY, data.event)
+        : gateWheel(data.deltaY, data.event),
   });
   lenis.on("scroll", ScrollTrigger.update);
   gsap.ticker.add((time) => {
@@ -606,10 +612,78 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     return true;
   };
 
+  // Touch (phones): the finger drags the story directly, but never further
+  // than the neighbouring item. On release the page glides straight to that
+  // item (or back, for a short drag) instead of coasting on momentum and
+  // waiting for the snap.
+  const SWIPE_MIN_PX = 30;
+  const GLIDE_SECONDS = 0.6;
+  let touchActive = false; // a touch gesture or its glide is in progress
+  let touchFree = false; // gesture started outside the story: no stepping
+  let touchBase = 0; // resting point the gesture started from
+  let touchStartScroll = 0;
+
+  const gateTouch = (deltaY: number, event: WheelEvent | TouchEvent) => {
+    const st = masterTl.scrollTrigger;
+    if (!st) return true;
+    const toPx = (p: number) => st.start + p * (st.end - st.start);
+
+    if (event.type === "touchstart") {
+      const scroll = lenis.animatedScroll;
+      touchFree = scroll < st.start - 1 || scroll > st.end + 1;
+      touchActive = !touchFree;
+      touchBase = nearestStep(st.progress);
+      touchStartScroll = lenis.targetScroll;
+      return true;
+    }
+    if (touchFree) return true;
+
+    if (event.type === "touchmove") {
+      if (deltaY === 0) return true;
+      const limit = neighbourStep(touchBase, Math.sign(deltaY));
+      if (limit === null) return true;
+      const limitPx = toPx(limit);
+      const reached =
+        deltaY > 0
+          ? lenis.targetScroll >= limitPx
+          : lenis.targetScroll <= limitPx;
+      if (reached) {
+        if (event.cancelable) event.preventDefault();
+        return false;
+      }
+      return true;
+    }
+
+    // touchend
+    const moved = lenis.targetScroll - touchStartScroll;
+    if (Math.abs(moved) < 2) {
+      touchActive = false;
+      return true; // a tap, leave it alone
+    }
+    const dir = Math.abs(moved) >= SWIPE_MIN_PX ? Math.sign(moved) : 0;
+    const target = dir ? neighbourStep(touchBase, dir) : touchBase;
+    if (target === null) {
+      touchActive = false;
+      return true; // past either end: normal inertia
+    }
+    if (event.cancelable) event.preventDefault();
+    restProgress = target;
+    lenis.scrollTo(toPx(target), {
+      duration: GLIDE_SECONDS,
+      easing: (t) => 1 - Math.pow(1 - t, 3),
+      onComplete: () => {
+        touchActive = false;
+      },
+    });
+    return false;
+  };
+
   // Snap to the next resting point in the scroll direction, but never past
   // the one next to where the last snap settled while a swipe drove it.
   let snapToStep: ((value: number, direction: number) => number) | null = null;
   const snapStep = (value: number, self?: ScrollTrigger) => {
+    // Touch gestures place themselves (see gateTouch); don't fight them.
+    if (touchActive) return value;
     snapToStep ??= ScrollTrigger.snapDirectional(stepPoints());
     const dir = self?.direction ?? 1;
     let target = snapToStep(value, dir);
@@ -634,8 +708,8 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       pin: true,
       snap: {
         snapTo: snapStep,
-        duration: { min: 0.4, max: 1 },
-        delay: 0.2,
+        duration: { min: 0.3, max: 0.7 },
+        delay: 0.1,
         ease: "power2.inOut",
         onComplete: () => {
           if (masterTl.scrollTrigger) {
