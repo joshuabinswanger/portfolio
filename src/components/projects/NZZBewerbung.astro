@@ -543,7 +543,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   // SCROLL_PER_UNIT — screen heights of scroll per unit of timeline time.
   //   A transition is 1 unit and moves an item one screen height, so at 1
   //   the items travel exactly with the scroll, like a normal page.
-  const STEP_HOLD = 0.6;
+  // Touch screens get no hold: a finger drag should move the images right
+  // away, and the release (see gateTouch) settles them on an item.
+  const IS_TOUCH = window.matchMedia("(pointer: coarse)").matches;
+  const STEP_HOLD = IS_TOUCH ? 0 : 0.6;
   const SCROLL_PER_UNIT = 1;
 
   // Resting points as scroll progress (0–1): the snap-* labels plus both
@@ -619,16 +622,17 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     return true;
   };
 
-  // Touch (phones): the finger drags the story directly, but never further
-  // than the neighbouring item. On release the page glides straight to that
-  // item (or back, for a short drag) instead of coasting on momentum and
-  // waiting for the snap.
-  const SWIPE_MIN_PX = 30;
-  const GLIDE_SECONDS = 1.2;
+  // Touch (phones): the images follow the finger like a normal page, but
+  // never further than the neighbouring item. On release they glide on to
+  // that item if the drag went far or fast enough, otherwise they snap back.
+  const ADVANCE_FRACTION = 0.25; // of the way to the next item
+  const FLICK_PX_PER_MS = 0.4; // a quick flick advances even if short
+  const GLIDE_SECONDS = 1.2; // a full item; shorter distances glide faster
   let touchActive = false; // a touch gesture or its glide is in progress
   let touchFree = false; // gesture started outside the story: no stepping
   let touchBase = 0; // resting point the gesture started from
   let touchStartScroll = 0;
+  let touchSamples: { t: number; y: number }[] = [];
 
   const gateTouch = (deltaY: number, event: WheelEvent | TouchEvent) => {
     const st = masterTl.scrollTrigger;
@@ -641,11 +645,15 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       touchActive = !touchFree;
       touchBase = nearestStep(st.progress);
       touchStartScroll = lenis.targetScroll;
+      touchSamples = [{ t: performance.now(), y: lenis.targetScroll }];
       return true;
     }
     if (touchFree) return true;
 
     if (event.type === "touchmove") {
+      const now = performance.now();
+      touchSamples.push({ t: now, y: lenis.targetScroll + deltaY });
+      touchSamples = touchSamples.filter((s) => now - s.t < 120);
       if (deltaY === 0) return true;
       const limit = neighbourStep(touchBase, Math.sign(deltaY));
       if (limit === null) return true;
@@ -667,19 +675,29 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       touchActive = false;
       return true; // a tap, leave it alone
     }
-    const dir = Math.abs(moved) >= SWIPE_MIN_PX ? Math.sign(moved) : 0;
-    const target = dir ? neighbourStep(touchBase, dir) : touchBase;
-    if (target === null) {
+    const dir = Math.sign(moved);
+    const next = neighbourStep(touchBase, dir);
+    if (next === null) {
       touchActive = false;
       return true; // past either end: normal inertia
     }
+    const stepPx = Math.abs(toPx(next) - toPx(touchBase));
+    // Finger speed over the last ~120ms, in scroll px per ms.
+    const first = touchSamples[0];
+    const last = touchSamples[touchSamples.length - 1];
+    const speed =
+      first && last && last.t > first.t ? (last.y - first.y) / (last.t - first.t) : 0;
+    const advance =
+      Math.abs(moved) >= stepPx * ADVANCE_FRACTION ||
+      (Math.sign(speed) === dir && Math.abs(speed) >= FLICK_PX_PER_MS);
+    const targetPx = toPx(advance ? next : touchBase);
+    const remaining = Math.abs(targetPx - lenis.targetScroll);
+
     if (event.cancelable) event.preventDefault();
-    lenis.scrollTo(toPx(target), {
-      duration: GLIDE_SECONDS,
-      // ease-in-out: the transition plays out evenly instead of rushing at
-      // the start.
-      easing: (t) =>
-        t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
+    lenis.scrollTo(targetPx, {
+      duration: GLIDE_SECONDS * Math.min(1, Math.max(0.35, remaining / stepPx)),
+      // ease-out: carries on from the finger's motion, then settles.
+      easing: (t) => 1 - Math.pow(1 - t, 3),
       onComplete: () => {
         touchActive = false;
       },
@@ -808,9 +826,9 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   // Resting point after an item has arrived: empty time with the snap label
   // in the middle, so a small scroll either way stays on the same item.
   const addStep = () => {
-    masterTl.to({}, { duration: STEP_HOLD / 2 });
+    if (STEP_HOLD > 0) masterTl.to({}, { duration: STEP_HOLD / 2 });
     masterTl.addLabel(`snap-${snapLabelCount++}`);
-    masterTl.to({}, { duration: STEP_HOLD / 2 });
+    if (STEP_HOLD > 0) masterTl.to({}, { duration: STEP_HOLD / 2 });
   };
 
   // Every item moves like a normal page being scrolled: it comes up from
