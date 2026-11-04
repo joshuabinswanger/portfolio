@@ -515,10 +515,13 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   // #endregion
 
   // #region Lenis Smooth Scroll
+  // wheelMultiplier stays at 1: trackpad momentum (MacBook) already travels
+  // far, anything above 1 makes a single swipe skip several steps.
   const lenis = new Lenis({
     lerp: 0.15,
-    wheelMultiplier: 1.3,
+    wheelMultiplier: 1,
     smoothWheel: true,
+    virtualScroll: (data) => gateWheel(data.deltaY, data.event),
   });
   lenis.on("scroll", ScrollTrigger.update);
   gsap.ticker.add((time) => {
@@ -527,18 +530,118 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   // #endregion
 
   // #region Master Timeline & Progress Update
+  // Pacing knobs:
+  // STEP_HOLD — timeline time of stillness around every snap point. Each item
+  //   rests on screen for this stretch before the next transition starts, so
+  //   raising it means more scrolling between two items.
+  // SCROLL_PER_UNIT — screen heights of scroll per unit of timeline time.
+  //   Sets how fast the transitions themselves play.
+  const STEP_HOLD = 0.8;
+  const SCROLL_PER_UNIT = 0.75;
+
+  // Resting points as scroll progress (0–1): the snap-* labels plus both
+  // ends. Chapter labels are left out, they sit on empty in-between states.
+  let stepPointCache: number[] | null = null;
+  const stepPoints = () => {
+    if (!stepPointCache) {
+      const total = masterTl.duration();
+      const points = Object.entries(masterTl.labels)
+        .filter(([name]) => name.startsWith("snap-"))
+        .map(([, time]) => time / total);
+      stepPointCache = [...new Set([0, ...points, 1])].sort((a, b) => a - b);
+    }
+    return stepPointCache;
+  };
+  const EPS = 1e-4;
+  // The next resting point after `p` in `dir`, or null at either end.
+  const neighbourStep = (p: number, dir: number) => {
+    const points = stepPoints();
+    return dir > 0
+      ? (points.find((x) => x > p + EPS) ?? null)
+      : (points.findLast((x) => x < p - EPS) ?? null);
+  };
+  const nearestStep = (p: number) =>
+    stepPoints().reduce((a, b) => (Math.abs(b - p) < Math.abs(a - p) ? b : a));
+
+  // #region One item per swipe
+  // A trackpad swipe keeps sending wheel events for a second or more of
+  // momentum. Once a swipe has carried the scroll to the next resting point,
+  // the rest of that swipe is swallowed, so one swipe moves exactly one item.
+  // restProgress is where the last snap settled; null after a jump from the
+  // progress words, which must not be capped.
+  let restProgress: number | null = 0;
+  let lockedDir = 0;
+  let lastWheelTime = 0;
+  let lastWheelMag = 0;
+  const GESTURE_GAP_MS = 180;
+
+  const gateWheel = (deltaY: number, event: WheelEvent | TouchEvent) => {
+    if (!event.type.includes("wheel") || deltaY === 0) return true;
+    const now = performance.now();
+    const mag = Math.abs(deltaY);
+    // A new swipe: a pause in the event stream, or deltas jumping up again
+    // after momentum had been decaying.
+    const newGesture =
+      now - lastWheelTime > GESTURE_GAP_MS ||
+      (mag > lastWheelMag * 1.5 && mag - lastWheelMag > 4);
+    lastWheelTime = now;
+    lastWheelMag = mag;
+    if (newGesture) lockedDir = 0;
+
+    const st = masterTl.scrollTrigger;
+    if (!st || restProgress === null) return true;
+    const dir = Math.sign(deltaY);
+    const limit = neighbourStep(restProgress, dir);
+    // At either end of the story, scroll freely (e.g. on to the footer).
+    if (limit === null) return true;
+
+    const limitPx = st.start + limit * (st.end - st.start);
+    const reached =
+      dir > 0 ? lenis.targetScroll >= limitPx : lenis.targetScroll <= limitPx;
+    if (dir === lockedDir || reached) {
+      lockedDir = dir;
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  };
+
+  // Snap to the next resting point in the scroll direction, but never past
+  // the one next to where the last snap settled while a swipe drove it.
+  let snapToStep: ((value: number, direction: number) => number) | null = null;
+  const snapStep = (value: number, self?: ScrollTrigger) => {
+    snapToStep ??= ScrollTrigger.snapDirectional(stepPoints());
+    const dir = self?.direction ?? 1;
+    let target = snapToStep(value, dir);
+    const wheelDriven = performance.now() - lastWheelTime < 1000;
+    if (restProgress !== null && wheelDriven) {
+      const cap = neighbourStep(restProgress, dir);
+      if (cap !== null) {
+        target = dir > 0 ? Math.min(target, cap) : Math.max(target, cap);
+      }
+    }
+    return target;
+  };
+  // #endregion
+
   const masterTl = gsap.timeline({
     scrollTrigger: {
       trigger: "#scrolly-container",
       start: "top top",
-      end: "+=2700%",
+      end: () =>
+        `+=${Math.round(masterTl.duration() * SCROLL_PER_UNIT * window.innerHeight)}`,
       scrub: 0.8,
       pin: true,
       snap: {
-        snapTo: "labelsDirectional",
+        snapTo: snapStep,
         duration: { min: 0.4, max: 1 },
         delay: 0.2,
         ease: "power2.inOut",
+        onComplete: () => {
+          if (masterTl.scrollTrigger) {
+            restProgress = nearestStep(masterTl.scrollTrigger.progress);
+          }
+        },
       },
       onUpdate: (self) => {
         const tl = self.animation as unknown as {
@@ -621,6 +724,14 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   // Helper functions
   let snapLabelCount = 0;
 
+  // Resting point after an item has arrived: empty time with the snap label
+  // in the middle, so a small scroll either way stays on the same item.
+  const addStep = () => {
+    masterTl.to({}, { duration: STEP_HOLD / 2 });
+    masterTl.addLabel(`snap-${snapLabelCount++}`);
+    masterTl.to({}, { duration: STEP_HOLD / 2 });
+  };
+
   const slideIn = (selector: string, sync = false, snap = true) => {
     const result = masterTl.fromTo(
       selector,
@@ -628,7 +739,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       { y: 0, opacity: 1, duration: 1, ease: "power2.out" },
       sync ? "<" : "-=0.2",
     );
-    if (snap) masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
+    if (snap) addStep();
     return result;
   };
   const fadeIn = (selector: string, sync = false, snap = true) => {
@@ -638,7 +749,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       { scale: 1, opacity: 1, duration: 1, ease: "power2.out" },
       sync ? "<" : "-=0.2",
     );
-    if (snap) masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
+    if (snap) addStep();
     return result;
   };
 
@@ -809,6 +920,9 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
 
       if (masterTl.scrollTrigger) {
         const scrollPos = masterTl.scrollTrigger.labelToScroll(label) + 700;
+        // Free jump: lift the one-item cap until the next snap settles.
+        restProgress = null;
+        lockedDir = 0;
         lenis.scrollTo(scrollPos, {
           duration: 3,
           easing: (t) =>
