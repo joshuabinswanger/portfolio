@@ -549,20 +549,28 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   const STEP_HOLD = IS_TOUCH ? 0 : 0.6;
   const SCROLL_PER_UNIT = 1;
 
-  // Resting points as scroll progress (0–1): the snap-* labels plus both
-  // ends. Chapter labels are left out, they sit on empty in-between states.
+  // Resting points as scroll progress (0–1): the start plus the snap-*
+  // labels before the "free-scroll" label. Chapter labels are left out, they
+  // sit on empty in-between states.
   let stepPointCache: number[] | null = null;
   const stepPoints = () => {
     if (!stepPointCache) {
       const total = masterTl.duration();
+      const freeAt = masterTl.labels["free-scroll"] ?? total;
       const points = Object.entries(masterTl.labels)
-        .filter(([name]) => name.startsWith("snap-"))
+        .filter(([name, time]) => name.startsWith("snap-") && time <= freeAt)
         .map(([, time]) => time / total);
-      stepPointCache = [...new Set([0, ...points, 1])].sort((a, b) => a - b);
+      stepPointCache = [...new Set([0, ...points])].sort((a, b) => a - b);
     }
     return stepPointCache;
   };
   const EPS = 1e-4;
+  // The finale (flower + closing line) after the last resting point scrolls
+  // freely: no snapping, no one-item cap.
+  const inFreeZone = (p: number) => {
+    const points = stepPoints();
+    return p > points[points.length - 1] + EPS;
+  };
   // The next resting point after `p` in `dir`, or null at either end.
   const neighbourStep = (p: number, dir: number) => {
     const points = stepPoints();
@@ -606,6 +614,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       lockedDir = 0;
       wheelBase = nearestStep(st.progress);
     }
+    if (inFreeZone(st.progress)) {
+      lockedDir = 0;
+      return true;
+    }
     const dir = Math.sign(deltaY);
     const limit = neighbourStep(wheelBase, dir);
     // At either end of the story, scroll freely (e.g. on to the footer).
@@ -641,7 +653,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
 
     if (event.type === "touchstart") {
       const scroll = lenis.animatedScroll;
-      touchFree = scroll < st.start - 1 || scroll > st.end + 1;
+      touchFree =
+        scroll < st.start - 1 ||
+        scroll > st.end + 1 ||
+        inFreeZone(st.progress);
       touchActive = !touchFree;
       touchBase = nearestStep(st.progress);
       touchStartScroll = lenis.targetScroll;
@@ -710,7 +725,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   let snapToStep: ((value: number, direction: number) => number) | null = null;
   const snapStep = (value: number, self?: ScrollTrigger) => {
     // Touch gestures place themselves (see gateTouch); don't fight them.
-    if (touchActive) return value;
+    if (touchActive || inFreeZone(value)) return value;
     snapToStep ??= ScrollTrigger.snapDirectional(stepPoints());
     const dir = self?.direction ?? 1;
     let target = snapToStep(value, dir);
@@ -995,6 +1010,9 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   );
   slideIn(".text-p8-3");
   slideIn(".text-p8-4");
+  // Everything after this point (texts leaving, flower, closing line)
+  // scrolls freely; see inFreeZone.
+  masterTl.addLabel("free-scroll");
   slideOut(".text-p8-2");
   slideOut(".text-p8-3", true);
   slideOut(".text-p8-4", true);
@@ -1010,9 +1028,8 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     },
     "<",
   );
-  slideIn(".img-flower-canvas", true);
-  slideIn(".text-p8-5");
-  masterTl.addLabel(`text-snap-${snapLabelCount++}`);
+  slideIn(".img-flower-canvas", true, false);
+  slideIn(".text-p8-5", false, false);
   masterTl.addLabel("end");
   // #endregion
 
