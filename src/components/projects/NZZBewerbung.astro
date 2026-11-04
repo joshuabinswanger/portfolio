@@ -836,6 +836,32 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   // no fade, no zoom). An item going out and the next one coming in run
   // together (sync), so they travel as one continuous page.
   // sync: start together with the previous tween instead of after it.
+  // Subtle text settle: while an item comes up, its text lines (paragraphs,
+  // caption heading and caption text) trail slightly behind and brighten,
+  // one after the other, landing together with the item. The stagger amount
+  // plus each line's duration add up to the item's 1-unit move, so the
+  // resting point is unchanged.
+  const TEXT_LINES =
+    ":scope > .text-block, .img-caption > h2, .img-caption > p";
+  const settleText = (selector: string) => {
+    const lines = gsap.utils
+      .toArray<HTMLElement>(selector)
+      .flatMap((el) => [...el.querySelectorAll<HTMLElement>(TEXT_LINES)]);
+    if (lines.length === 0) return;
+    masterTl.fromTo(
+      lines,
+      { y: 32, opacity: 0.25 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.75,
+        ease: "power2.out",
+        stagger: { amount: 0.25 },
+      },
+      "<",
+    );
+  };
+
   const slideIn = (selector: string, sync = false, snap = true) => {
     const result = masterTl.fromTo(
       selector,
@@ -843,6 +869,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       { y: 0, opacity: 1, duration: 1, ease: "none" },
       sync ? "<" : ">",
     );
+    settleText(selector);
     if (snap) addStep();
     return result;
   };
