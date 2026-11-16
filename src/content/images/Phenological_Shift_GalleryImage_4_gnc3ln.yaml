@@ -7,7 +7,7 @@ tags:
   - Science
 metadata:
   project: PhenologicalShift
-  description_title: Ultrasonic Plant Height Masurement
+  description_title: Ultrasonic Plant Height Measurement
   description_text: Ultrasonic plant height measurements from 32 automatic weather stations from 1500 to 2700 m.
   showInPortfolioGallery: 'yes'
   portfolioOrder: 3

@@ -2,37 +2,29 @@
 import BracketOpenV from "../brackets/BracketOpenV.astro";
 import BracketMiddleV from "../brackets/BracketMiddleV.astro";
 import BracketCloseV from "../brackets/BracketCloseV.astro";
-import BracketOpenH from "../brackets/BracketOpenH.astro";
-import BracketMiddleH from "../brackets/BracketMiddleH.astro";
-import BracketCloseH from "../brackets/BracketCloseH.astro";
+import Bracket from "../brackets/Bracket.astro";
 
-// The V and H families are NOT interchangeable. V variants are wide and short
-// (viewBox 200x16 / 200x32) and stack as horizontal rules; H variants are tall
-// and narrow (50x200 / 100x200) and sit side by side as vertical rules. Sizing
-// one like the other renders a hairline, so each demo frame below is sized to
-// its component's own aspect ratio.
+// V variants are wide, short SVGs (viewBox 200x16 / 200x32) that stack as
+// horizontal rules; each demo frame is sized to its own aspect ratio. The
+// side-by-side brackets are the CSS-border `Bracket` component (the old
+// BracketOpenH/MiddleH/CloseH SVGs were removed in Oct 2026).
 const V = [
   { name: "BracketOpenV", Comp: BracketOpenV, box: "0 0 200 16", h: 16 },
   { name: "BracketMiddleV", Comp: BracketMiddleV, box: "0 -16 200 32", h: 32 },
   { name: "BracketCloseV", Comp: BracketCloseV, box: "0 -16 200 16", h: 16 },
 ];
 
-const H = [
-  { name: "BracketOpenH", Comp: BracketOpenH, box: "0 0 50 200", w: 50 },
-  { name: "BracketMiddleH", Comp: BracketMiddleH, box: "-50 0 100 200", w: 100 },
-  { name: "BracketCloseH", Comp: BracketCloseH, box: "0 0 50 200", w: 50 },
-];
+const KINDS = ["open", "mid", "close"] as const;
 ---
 
 <p class="sg-note">
-  Six SVG components in <code>src/components/brackets/</code>. All six use
+  <code>src/components/brackets/</code> holds three V SVGs and the
+  CSS-border <code>Bracket</code>. The SVGs use
   <code>vector-effect="non-scaling-stroke"</code>, so the stroke stays
-  <code>1px</code> no matter how the container is sized. Shared props:
-  <code>strokewidth</code> (<code>"1px"</code>), <code>strokecolor</code>
-  (<code>"black"</code>), <code>height</code> / <code>width</code>
-  (<code>"100%"</code>); the V variants also take <code>overflow</code>
-  (<code>"visible"</code>) and the H variants <code>padding</code>
-  (<code>"1px"</code>) instead.
+  <code>1px</code> at any size; props: <code>strokewidth</code>
+  (<code>"1px"</code>), <code>strokecolor</code> (<code>"black"</code>),
+  <code>height</code> / <code>width</code> (<code>"100%"</code>),
+  <code>overflow</code> (<code>"visible"</code>).
 </p>
 
 <h3 class="sg-subtitle">Vertical stacks (wide &amp; short)</h3>
@@ -58,21 +50,22 @@ const H = [
   }
 </div>
 
-<h3 class="sg-subtitle">Horizontal runs (tall &amp; narrow)</h3>
+<h3 class="sg-subtitle">Horizontal runs (CSS borders)</h3>
 <p class="sg-note">
-  Used as vertical rules beside side-by-side items.
+  <code>&lt;Bracket kind="open | mid | close" /&gt;</code> draws [, ][ and ]
+  with 1px borders that stretch to fill their grid cell and snap to device
+  pixels. Used beside side-by-side items, e.g. the homepage gallery bar.
 </p>
 <div class="sg-bracket-h-list">
   {
-    H.map(({ name, Comp, box, w }) => (
+    KINDS.map((kind) => (
       <div class="sg-bracket-row">
         <div class="sg-bracket-meta">
-          <code class="sg-label">{name}</code>
-          <span class="sg-value">viewBox="{box}"</span>
+          <code class="sg-label">kind="{kind}"</code>
         </div>
         <div class="sg-demo sg-bracket-frame">
-          <div style={`width: ${w}px; height: 160px`}>
-            <Comp />
+          <div class="sg-bracket-cell">
+            <Bracket kind={kind} />
           </div>
         </div>
       </div>
@@ -107,6 +100,12 @@ const H = [
     gap: var(--space-1) var(--space-3);
     align-items: baseline;
     padding-bottom: 6px;
+  }
+
+  .sg-bracket-cell {
+    display: grid;
+    width: 50px;
+    height: 48px;
   }
 
   .sg-bracket-frame {

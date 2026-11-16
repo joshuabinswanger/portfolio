@@ -1,7 +1,5 @@
 ---
-import BracketOpenH from "../brackets/BracketOpenH.astro";
-import BracketCloseH from "../brackets/BracketCloseH.astro";
-import BracketMiddleH from "../brackets/BracketMiddleH.astro";
+import Bracket from "../brackets/Bracket.astro";
 import Icon from "../Icon.astro";
 import MediaElement from "../media/MediaElement.astro";
 
@@ -137,7 +135,7 @@ if (!galleryProject) {
   </div>
 
   <div id="GalleryDescriptionWrapper">
-    <BracketOpenH />
+    <Bracket kind="open" />
 
     <div id="TextContainer">
       <div id="TextWrapper">
@@ -146,7 +144,7 @@ if (!galleryProject) {
       </div>
     </div>
 
-    <BracketMiddleH />
+    <Bracket kind="mid" />
 
     <div id="ArrowWrapper">
       <button class:list={["ArrowLeft"]} aria-label="Previous image">&larr;</button>
@@ -156,13 +154,13 @@ if (!galleryProject) {
       <button class:list={["ArrowRight"]} aria-label="Next image">&rarr;</button>
     </div>
 
-    <BracketMiddleH />
+    <Bracket kind="mid" />
 
     <div id="Info">
       <Icon icon="Info" width="77%" />
     </div>
 
-    <BracketCloseH />
+    <Bracket kind="close" />
   </div>
 </div>
 
@@ -262,11 +260,11 @@ if (!galleryProject) {
     background-color: #fbf9f400;
     width: 100%;
     height: 100%;
-    backdrop-filter: blur(0px);
+    /* No idle backdrop-filter here (or on .ImageInfo): an always-on
+       blur(0px) layer per slide kept iOS Safari from blurring the gallery
+       under the floating nav bar. */
     z-index: 11;
-    transition:
-      backdrop-filter ease-in-out 0.2s,
-      background-color ease-in-out 0.2s;
+    transition: background-color ease-in-out 0.2s;
     pointer-events: none;
   }
 
@@ -290,8 +288,8 @@ if (!galleryProject) {
     pointer-events: none; /* Prevent interaction with the description if needed */
     background-color: var(--bg-color-trans); /* Example style */
 
-    /* Start with no blur (initial state) */
-    backdrop-filter: blur(0px);
+    /* No blur until .InfoVisible (see .Filter) */
+    backdrop-filter: none;
 
     /* Add transition for backdrop-filter */
     transition:
@@ -303,7 +301,9 @@ if (!galleryProject) {
 
     overflow: auto;
 
-    z-index: 1111;
+    /* Above .Filter (11). Keep below the fixed mobile nav (z 1000): at 1111
+       the overlay and the arrows painted over the bar. */
+    z-index: 12;
 
     @media (--bp-mobile) {
       font-size: var(--font-size-mobile);
@@ -404,12 +404,20 @@ max-width: 80vw !important;
     overflow: visible;
     opacity: 1;
     height: fit-content;
+    /* The brackets stretch to this row height; 56px is the bar's established
+       look (the old SVG brackets sized it implicitly). */
+    min-height: 56px;
     grid-template-columns:
       1.5ch minmax(min-content, 2fr) 3ch minmax(7ch, 1.5fr)
       3ch 3.5ch 1.5ch;
     justify-content: center;
     align-items: center;
     transition: opacity 1.5s ease-in;
+
+    /* A slimmer bar to match the smaller nav buttons on desktop. */
+    @media (--bp-desktop), (--bp-desktop-wide) {
+      min-height: 48px;
+    }
   }
 
   #ArrowWrapper {
@@ -417,7 +425,7 @@ max-width: 80vw !important;
     width: 100%;
     grid-template-columns: auto min-content auto;
     place-items: center;
-    z-index: 1111;
+    z-index: 2; /* see .ImageInfo */
   }
 
   button {

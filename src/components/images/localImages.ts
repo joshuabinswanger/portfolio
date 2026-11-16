@@ -31,3 +31,21 @@ export function resolveLocalImage(src: string): ImageMetadata {
 export function resolveImageUrl(src: string): string {
   return resolveLocalImage(src).src;
 }
+
+// High-res originals for the lightbox, keyed by file name without extension —
+// the value of `metadata.highres_public_id` in the image YAML.
+const highResImages = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/highres/*.{avif,jpeg,jpg,png,webp}",
+  { eager: true },
+);
+
+const highResImagesById = new Map(
+  Object.entries(highResImages).map(([path, image]) => [
+    path.slice(path.lastIndexOf("/") + 1, path.lastIndexOf(".")),
+    image.default,
+  ]),
+);
+
+export function resolveHighResImage(id: string): ImageMetadata | undefined {
+  return highResImagesById.get(id);
+}

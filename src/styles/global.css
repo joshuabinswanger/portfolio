@@ -80,6 +80,9 @@
   --bg-light: #fbf9f4;
   --bg-dark: #aaaaaa;
   --bg-color-accent: #e7dace;
+  --ink: #000000;
+  --text-muted: #8f897f;
+  --rule: #e4dfd5;
 
   /* Top Padding */
   --padding-top-mobile-small: 80px;
@@ -119,20 +122,64 @@
   --font-size-mobile-h1: 14px;
   --font-size-mobile-small-h1: 14px;
   --font-size-tablet-h1: 16px;
-  --font-size-desktop-h1: 18px;
-  --font-size-desktop-wide-h1: 18px;
+  --font-size-desktop-h1: 16px;
+  --font-size-desktop-wide-h1: 16px;
 
   letter-spacing: 0.7px;
 
   /* border size */
   --border-size: 0.5px;
 
+  /* Floating surfaces (mobile bars, desktop archive rail, filter sheet) */
+  --surface-glass: color-mix(in srgb, var(--bg-color) 72%, transparent);
+  --surface-blur: blur(14px) saturate(1.3);
+  --surface-line: rgba(0, 0, 0, 0.14);
+  --surface-shadow:
+    0 12px 32px -14px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.05);
+  /* Small drop shadow for the floating mobile bars. */
+  --bar-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.18);
+  /* Frost for the floating mobile nav bar. */
+  --bar-blur: blur(28px) saturate(1.5);
+
+  /* Mobile floating bars. Both the nav bar and the archive toolbar bar use
+     the same inset and inner padding, so their contents line up; the toolbar
+     stacks above the nav using --mobile-nav-stack (bottom offset + pad +
+     height + pad) plus --mobile-bar-gap. */
+  --mobile-nav-inset: 36px;
+  --mobile-nav-pad: 0px; /* bar edge = bracket lines, no inner border */
+  --mobile-nav-height: 36px;
+  --mobile-nav-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  --mobile-nav-stack: calc(
+    var(--mobile-nav-bottom) + var(--mobile-nav-pad) * 2 +
+      var(--mobile-nav-height)
+  );
+  --mobile-bar-gap: 6px;
+  --mobile-toolbar-height: 32px;
+
   /* Columns: Nav Main */
   --nav-main-layout-mobile-small: 1fr;
   --nav-main-layout-mobile: 1fr;
   --nav-main-layout-tablet: 144px 1fr;
-  --nav-main-layout-desktop: 160px 952px;
-  --nav-main-layout-desktop-wide: 160px 1496px;
+  --nav-main-layout-desktop: var(--nav-width-desktop)
+    calc(17 * var(--grid-cell-desktop));
+  --nav-main-layout-desktop-wide: var(--nav-main-layout-desktop);
+
+  /* Desktop (1120px and up): a 128px nav, and the 17-column grid fills the
+     rest of the viewport (16px page margins, 8px nav gap) up to 96px cells.
+     That is 56px at 1120px, ~84px at 1600px and ~92px on a 16" MacBook Pro
+     (1728px). Rows use the same size so the gallery's row placement scales
+     with the columns. */
+  --nav-width-desktop: 128px;
+  --grid-cell-desktop: min(
+    96px,
+    calc(
+      (
+          100vw - var(--scrollbar-width, 0px) - var(--nav-width-desktop) - 8px -
+            32px
+        ) /
+        17
+    )
+  );
 
   /* Grid Layout*/
   /* grid template columns: 17 Columns = 100vw - margin right - NavBar - margin left - column gap - scrollbar-wdith*(2) / 17*/
@@ -149,8 +196,8 @@
     11,
     calc((100vw - 124px - 20px - calc(var(--scrollbar-width) * 2)) / 11)
   );
-  --grid-layout-columns-desktop: repeat(17, 56px);
-  --grid-layout-columns-desktop-wide: repeat(17, 88px);
+  --grid-layout-columns-desktop: repeat(17, var(--grid-cell-desktop));
+  --grid-layout-columns-desktop-wide: var(--grid-layout-columns-desktop);
 
   /* --- Additive tokens (2026-08-04) --------------------------------------
      Added alongside the originals above. Nothing here replaces an existing
@@ -158,9 +205,7 @@
      names as you touch files. All of them are rendered on /styleguide. */
 
   /* Font families. The five PowerGrotesk faces declared at the top of this
-     file, so component CSS stops hardcoding `font-family: PowerGrotesk-Light`
-     (currently literal in Main.astro, NavigationBar.astro and
-     ArchiveGallery_BoxFilters.astro). */
+     file, so component CSS stops hardcoding `font-family: PowerGrotesk-Light`. */
   --font-ultralight: PowerGrotesk-UltraLight;
   --font-light: PowerGrotesk-Light;
   --font-regular: PowerGrotesk-Regular;
@@ -168,8 +213,9 @@
   --font-bold: PowerGrotesk-Bold;
 
   /* Spacing scale, derived from values already load-bearing in this codebase
-     rather than invented: 20px is --margin-right-tablet, 56px and 88px are the
-     desktop and desktop-wide grid column widths. */
+     rather than invented: 20px is --margin-right-tablet; 56px and 88px were
+     the fixed desktop and desktop-wide column widths before the grid went
+     fluid (--grid-cell-desktop, 56px at 1120px up to 96px). */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;

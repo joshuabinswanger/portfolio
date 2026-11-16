@@ -1,0 +1,682 @@
+---
+// Dev-only review page: every entry in the `images` collection as a thumbnail
+// next to its metadata, grouped by project, with an edit form per card that
+// saves back to the YAML (imageMetaMiddleware.ts). Registered at /dev/images
+// by the dev-image-review integration in astro.config.mjs; never built.
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+import { parse } from "yaml";
+
+import {
+  buildProjectTitleMap,
+  getProjectDisplayName,
+} from "../components/archive/utils";
+import { resolveLocalImage } from "../components/images/localImages";
+import { IMAGE_META_ENDPOINT } from "./imageMetaMiddleware";
+
+const projectTitles = buildProjectTitleMap(await getCollection("projects"));
+const images = await getCollection("images");
+
+const NO_PROJECT = "(no project)";
+
+// Shown as-is; "—" when missing.
+function formatYear(value: string | number | null | undefined): string {
+  if (!value) return "—";
+  return String(value); // an unquoted year in hand-edited YAML is a number
+}
+
+type ImageData = (typeof images)[number]["data"];
+
+// Read each entry's YAML from disk on every request rather than trusting the
+// content-collection cache: after Astro restarts itself (config change) its
+// file watcher stops, and saved edits would otherwise not show up here.
+async function readFresh(filePath: string, cached: ImageData) {
+  try {
+    const fresh = parse(await readFile(filePath, "utf8")) as ImageData;
+    return { ...fresh, metadata: { ...cached.metadata, ...fresh.metadata } };
+  } catch {
+    return cached;
+  }
+}
+
+const entries = await Promise.all(
+  images.map(async (entry) => {
+    const filePath = entry.filePath ?? `src/content/images/${entry.id}.yaml`;
+    return { entry, filePath, data: await readFresh(filePath, entry.data) };
+  }),
+);
+
+const cards = entries.map(({ entry, filePath, data }) => {
+  const meta = data.metadata;
+  const src = data.mediaType === "video" ? data.posterSrc : data.src;
+  const group =
+    getProjectDisplayName(meta.project, projectTitles) || NO_PROJECT;
+  const flags = [
+    meta.showInIndex === "yes" && "archive",
+    meta.showInPortfolioGallery === "yes" && "homepage",
+    meta.showInProjectGallery === "yes" && "project",
+  ].filter(Boolean) as string[];
+
+  return {
+    id: entry.id,
+    image: resolveLocalImage(src),
+    isVideo: data.mediaType === "video",
+    title: meta.description_title,
+    text: meta.description_text,
+    slug: meta.project ?? "",
+    group,
+    year: formatYear(meta.year),
+    flags,
+    tags: [meta.role, meta.program, meta.topic, ...(data.tags ?? [])]
+      .filter(Boolean)
+      .join(" · "),
+    filePath,
+    editUrl: `vscode://file/${path.resolve(filePath).replaceAll("\\", "/")}`,
+    // Raw values for the edit form.
+    form: {
+      description_title: meta.description_title ?? "",
+      description_text: meta.description_text ?? "",
+      project: meta.project ?? "",
+      year: meta.year ?? "",
+      role: meta.role ?? "",
+      program: meta.program ?? "",
+      topic: meta.topic ?? "",
+      tags: (data.tags ?? []).join(", "),
+      showInIndex: meta.showInIndex === "yes",
+      showInPortfolioGallery: meta.showInPortfolioGallery === "yes",
+      showInProjectGallery: meta.showInProjectGallery === "yes",
+    },
+  };
+});
+
+const projectSlugs = [
+  ...new Set(cards.map((c) => c.slug).filter((s) => s && s !== "none")),
+].sort((a, b) => a.localeCompare(b));
+
+const FLAG_LABELS = [
+  ["showInIndex", "archive"],
+  ["showInPortfolioGallery", "homepage"],
+  ["showInProjectGallery", "project"],
+] as const;
+
+const byGroup = new Map<string, typeof cards>();
+for (const card of cards) {
+  byGroup.set(card.group, [...(byGroup.get(card.group) ?? []), card]);
+}
+
+// Groups alphabetically (no-project last); cards inside by year, then title.
+const groups = [...byGroup]
+  .sort(([a], [b]) =>
+    a === NO_PROJECT ? 1 : b === NO_PROJECT ? -1 : a.localeCompare(b),
+  )
+  .map(([name, items]) => ({
+    name,
+    slugs: [...new Set(items.map((c) => c.slug).filter(Boolean))].join(", "),
+    items: items.sort(
+      (a, b) =>
+        a.year.localeCompare(b.year) ||
+        (a.title ?? "").localeCompare(b.title ?? ""),
+    ),
+  }));
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Image review</title>
+  </head>
+  <body>
+    <header class="bar">
+      <h1>Image review <span>{cards.length} entries · dev only</span></h1>
+      <input
+        id="filter"
+        type="search"
+        placeholder="Filter by title, project, year, file…"
+        autocomplete="off"
+      />
+      <label><input id="untitled" type="checkbox" /> Untitled only</label>
+    </header>
+
+    <main data-endpoint={IMAGE_META_ENDPOINT}>
+      {
+        groups.map((g) => (
+          <section class="group">
+            <h2>
+              {g.name} <span>{g.slugs}</span>
+            </h2>
+            <div class="grid">
+              {g.items.map((c) => (
+                <article
+                  class="card"
+                  data-untitled={c.title ? undefined : ""}
+                  data-search={[
+                    c.title,
+                    c.text,
+                    c.group,
+                    c.slug,
+                    c.year,
+                    c.filePath,
+                    c.tags,
+                  ]
+                    .filter(Boolean)
+                    .join(" ")
+                    .toLowerCase()}
+                >
+                  <a class="thumb" href={c.image.src} target="_blank">
+                    <Image src={c.image} alt="" width={360} loading="lazy" />
+                    {c.isVideo && <span class="badge">video poster</span>}
+                  </a>
+                  <dl>
+                    <dt>Title</dt>
+                    <dd class:list={[{ missing: !c.title }]}>
+                      {c.title ?? "none"}
+                    </dd>
+                    <dt>Year</dt>
+                    <dd>{c.year}</dd>
+                    <dt>Shown in</dt>
+                    <dd class:list={[{ missing: !c.flags.length }]}>
+                      {c.flags.join(", ") || "hidden"}
+                    </dd>
+                    {c.tags && (
+                      <>
+                        <dt>Tags</dt>
+                        <dd>{c.tags}</dd>
+                      </>
+                    )}
+                    {c.text && (
+                      <>
+                        <dt>Text</dt>
+                        <dd class="text">
+                          <details>
+                            <summary>{c.text}</summary>
+                          </details>
+                        </dd>
+                      </>
+                    )}
+                  </dl>
+                  <form class="edit" data-file={c.filePath} hidden>
+                    <label>
+                      Title
+                      <input
+                        name="description_title"
+                        value={c.form.description_title}
+                      />
+                    </label>
+                    <label class="half">
+                      Year <small>YYYY</small>
+                      <input
+                        name="year"
+                        value={c.form.year}
+                        pattern="[0-9]{4}"
+                        inputmode="numeric"
+                        placeholder="2024"
+                      />
+                    </label>
+                    <label class="half">
+                      Project
+                      <input
+                        name="project"
+                        value={c.form.project}
+                        list="project-slugs"
+                      />
+                    </label>
+                    <fieldset>
+                      <legend>Shown in</legend>
+                      {FLAG_LABELS.map(([name, label]) => (
+                        <label class="check">
+                          <input
+                            type="checkbox"
+                            name={name}
+                            checked={c.form[name]}
+                          />
+                          {label}
+                        </label>
+                      ))}
+                    </fieldset>
+                    <label class="half">
+                      Role
+                      <input name="role" value={c.form.role} />
+                    </label>
+                    <label class="half">
+                      Program
+                      <input name="program" value={c.form.program} />
+                    </label>
+                    <label class="half">
+                      Topic
+                      <input name="topic" value={c.form.topic} />
+                    </label>
+                    <label class="half">
+                      Tags <small>comma-separated</small>
+                      <input name="tags" value={c.form.tags} />
+                    </label>
+                    <label>
+                      Text
+                      <textarea name="description_text" rows="4">
+                        {c.form.description_text}
+                      </textarea>
+                    </label>
+                    <div class="actions">
+                      <button type="submit">Save</button>
+                      <button type="button" class="cancel">
+                        Cancel
+                      </button>
+                      <span class="status" role="status" />
+                    </div>
+                  </form>
+                  <footer>
+                    <a class="file" href={c.editUrl} title="Open in VS Code">
+                      {c.filePath}
+                    </a>
+                    <button type="button" class="edit-toggle">
+                      Edit
+                    </button>
+                  </footer>
+                </article>
+              ))}
+            </div>
+          </section>
+        ))
+      }
+    </main>
+
+    <datalist id="project-slugs">
+      {projectSlugs.map((slug) => <option value={slug} />)}
+    </datalist>
+
+    <script>
+      const filter = document.querySelector<HTMLInputElement>("#filter")!;
+      const untitled = document.querySelector<HTMLInputElement>("#untitled")!;
+      const cards = document.querySelectorAll<HTMLElement>(".card");
+      const groups = document.querySelectorAll<HTMLElement>(".group");
+      const endpoint =
+        document.querySelector<HTMLElement>("main")!.dataset.endpoint!;
+      const STATE_KEY = "dev-image-review";
+
+      // Saving rewrites a YAML file, which makes the dev server reload the
+      // page; keep the filter across that reload.
+      function saveState() {
+        try {
+          sessionStorage.setItem(
+            STATE_KEY,
+            JSON.stringify({ q: filter.value, untitled: untitled.checked }),
+          );
+        } catch {
+          /* storage unavailable: the filter just resets */
+        }
+      }
+
+      function restoreState() {
+        try {
+          const state = JSON.parse(sessionStorage.getItem(STATE_KEY) ?? "{}");
+          filter.value = state.q ?? "";
+          untitled.checked = Boolean(state.untitled);
+        } catch {
+          /* ignore */
+        }
+      }
+
+      function apply() {
+        saveState();
+        const q = filter.value.trim().toLowerCase();
+        cards.forEach((card) => {
+          const match =
+            (!q || card.dataset.search!.includes(q)) &&
+            (!untitled.checked || card.hasAttribute("data-untitled"));
+          card.hidden = !match;
+        });
+        groups.forEach((group) => {
+          group.hidden = !group.querySelector(".card:not([hidden])");
+        });
+      }
+
+      filter.addEventListener("input", apply);
+      untitled.addEventListener("change", apply);
+      restoreState();
+      apply();
+
+      function setEditing(card: HTMLElement, editing: boolean) {
+        card.classList.toggle("editing", editing);
+        card.querySelector<HTMLFormElement>(".edit")!.hidden = !editing;
+        card.querySelector<HTMLElement>("dl")!.hidden = editing;
+        card.querySelector<HTMLElement>(".edit-toggle")!.hidden = editing;
+      }
+
+      function readForm(form: HTMLFormElement) {
+        const value = (name: string) =>
+          (form.elements.namedItem(name) as HTMLInputElement).value;
+        const flag = (name: string) =>
+          (form.elements.namedItem(name) as HTMLInputElement).checked
+            ? "yes"
+            : "no";
+        return {
+          file: form.dataset.file,
+          metadata: {
+            description_title: value("description_title"),
+            description_text: value("description_text"),
+            project: value("project"),
+            year: value("year"),
+            role: value("role"),
+            program: value("program"),
+            topic: value("topic"),
+            showInIndex: flag("showInIndex"),
+            showInPortfolioGallery: flag("showInPortfolioGallery"),
+            showInProjectGallery: flag("showInProjectGallery"),
+          },
+          tags: value("tags").split(","),
+        };
+      }
+
+      cards.forEach((card) => {
+        const form = card.querySelector<HTMLFormElement>(".edit")!;
+        const status = form.querySelector<HTMLElement>(".status")!;
+
+        card
+          .querySelector(".edit-toggle")!
+          .addEventListener("click", () => setEditing(card, true));
+        form.querySelector(".cancel")!.addEventListener("click", () => {
+          form.reset();
+          status.textContent = "";
+          setEditing(card, false);
+        });
+
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          status.textContent = "Saving…";
+          status.className = "status";
+          try {
+            const response = await fetch(endpoint, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(readForm(form)),
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error);
+            status.textContent = result.changed ? "Saved" : "No changes";
+            // The dev server reloads the page when the YAML changes; reload
+            // ourselves in case it doesn't, so the card shows the new values.
+            if (result.changed) setTimeout(() => location.reload(), 1500);
+            else setEditing(card, false);
+          } catch (error) {
+            status.textContent = (error as Error).message;
+            status.className = "status error";
+          }
+        });
+      });
+    </script>
+
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #f6f4ef;
+        --card: #fff;
+        --ink: #1b1b1b;
+        --muted: #6b6b6b;
+        --line: #e2ded5;
+        --warn: #b4401c;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #161616;
+          --card: #202020;
+          --ink: #ececec;
+          --muted: #9a9a9a;
+          --line: #333;
+          --warn: #ff8a65;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font:
+          13px/1.4 system-ui,
+          sans-serif;
+      }
+      .bar {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 20px;
+        align-items: center;
+        padding: 12px 16px;
+        background: var(--bg);
+        border-bottom: 1px solid var(--line);
+      }
+      h1 {
+        margin: 0;
+        font-size: 16px;
+      }
+      h1 span,
+      h2 span {
+        color: var(--muted);
+        font-weight: 400;
+        font-size: 12px;
+        margin-left: 6px;
+      }
+      #filter {
+        flex: 1 1 240px;
+        max-width: 420px;
+        padding: 6px 10px;
+        font: inherit;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--card);
+        color: inherit;
+      }
+      main {
+        padding: 8px 16px 48px;
+      }
+      h2 {
+        margin: 28px 0 10px;
+        font-size: 15px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+        gap: 12px;
+      }
+      .card {
+        display: flex;
+        flex-direction: column;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .card[hidden],
+      .group[hidden] {
+        display: none;
+      }
+      .thumb {
+        position: relative;
+        display: block;
+        aspect-ratio: 4 / 3;
+        background: var(--line);
+      }
+      .thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      .badge {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        padding: 1px 6px;
+        border-radius: 4px;
+        background: #000a;
+        color: #fff;
+        font-size: 11px;
+      }
+      dl {
+        display: grid;
+        grid-template-columns: 64px 1fr;
+        gap: 3px 8px;
+        margin: 0;
+        padding: 10px 12px 6px;
+      }
+      dt {
+        color: var(--muted);
+      }
+      dd {
+        margin: 0;
+        overflow-wrap: anywhere;
+      }
+      .missing {
+        color: var(--warn);
+        font-style: italic;
+      }
+      .text {
+        color: var(--muted);
+      }
+      /* Caption text collapses to two lines; click to expand. The summary is
+         the text itself, clamped while closed. */
+      .text summary {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        cursor: pointer;
+        list-style: none;
+      }
+      .text summary::-webkit-details-marker {
+        display: none;
+      }
+      .text summary:hover {
+        color: var(--ink);
+      }
+      .text details[open] summary {
+        display: block;
+        -webkit-line-clamp: unset;
+      }
+      footer {
+        display: flex;
+        gap: 8px;
+        align-items: flex-end;
+        margin-top: auto;
+        padding: 6px 12px 10px;
+      }
+      .file {
+        flex: 1;
+        color: var(--muted);
+        font:
+          11px/1.3 ui-monospace,
+          monospace;
+        overflow-wrap: anywhere;
+      }
+      .file:hover {
+        color: var(--ink);
+      }
+      button {
+        padding: 4px 12px;
+        font: inherit;
+        color: inherit;
+        background: var(--bg);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      button:hover {
+        border-color: var(--muted);
+      }
+      button[type="submit"] {
+        background: var(--ink);
+        color: var(--card);
+        border-color: var(--ink);
+      }
+      .card.editing {
+        outline: 2px solid var(--ink);
+      }
+      .edit[hidden],
+      dl[hidden],
+      button[hidden] {
+        display: none;
+      }
+      .edit {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        padding: 10px 12px 4px;
+      }
+      .edit label {
+        display: grid;
+        gap: 2px;
+        grid-column: 1 / -1;
+        color: var(--muted);
+        font-size: 11px;
+      }
+      .edit label.half {
+        grid-column: auto;
+      }
+      .edit small {
+        font-size: 10px;
+        opacity: 0.8;
+      }
+      .edit input:not([type="checkbox"]),
+      .edit textarea {
+        width: 100%;
+        padding: 4px 6px;
+        font:
+          13px/1.35 system-ui,
+          sans-serif;
+        color: var(--ink);
+        background: var(--bg);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+      }
+      .edit input:invalid {
+        border-color: var(--warn);
+      }
+      .edit textarea {
+        resize: vertical;
+      }
+      .edit fieldset {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 14px;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        color: var(--muted);
+        font-size: 11px;
+      }
+      .edit legend {
+        width: 100%;
+        padding: 0 0 2px;
+      }
+      .edit label.check {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        grid-column: auto;
+        color: var(--ink);
+        font-size: 13px;
+      }
+      .actions {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        padding-top: 2px;
+      }
+      .status {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .status.error {
+        color: var(--warn);
+      }
+    </style>
+  </body>
+</html>

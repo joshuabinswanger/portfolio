@@ -1,5 +1,26 @@
 ---
-import { CldImage } from "astro-cloudinary";
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+// Every image on this page is a local asset, looked up by file name (the old
+// Cloudinary public ID): project images, high-res originals, and the few
+// page-only images in src/assets/nzz.
+const pageImages = import.meta.glob<{ default: ImageMetadata }>(
+  [
+    "/src/assets/projects/**/*.{jpg,jpeg,png,webp}",
+    "/src/assets/highres/*.{jpg,jpeg,png,webp}",
+    "/src/assets/nzz/*.{jpg,jpeg,png,webp}",
+  ],
+  { eager: true },
+);
+
+function pageImage(id: string): ImageMetadata {
+  const match = Object.entries(pageImages).find(([path]) =>
+    path.slice(path.lastIndexOf("/") + 1).startsWith(`${id}.`),
+  );
+  if (!match) throw new Error(`NZZ page image not found: ${id}`);
+  return match[1].default;
+}
 
 const mobileFlowerFiles = import.meta.glob(
   "/src/assets/projects/FlowerSplats/FlowerSplats_mobile/*.avif",
@@ -53,11 +74,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
         aria-label="Eiche VDB Volume Rendering"
       >
         <source
-          src="https://res.cloudinary.com/rhizomech/video/upload/f_webm,vc_vp9/v1772652991/Eiche_VDB_0001_h265_l14cyb.webm"
-          type="video/webm"
-        />
-        <source
-          src="https://res.cloudinary.com/rhizomech/video/upload/v1772652991/Eiche_VDB_0001_h265_l14cyb.mp4"
+          src="/videos/nzz/Eiche_VDB_0001_h265_l14cyb.mp4"
           type="video/mp4"
         />
       </video>
@@ -73,9 +90,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
 
     <!-- Intro Buchdrucker -->
     <div class="img-stack img-buchdrucker">
-      <CldImage
-        src="Borkenkaefer_Gallery_2_zdvtwp"
+      <Image
+        src={pageImage("Borkenkaefer_Gallery_2_zdvtwp")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Borkenkäfer Infoposter"
       />
@@ -90,9 +108,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
 
     <!-- Intro Fire -->
     <div class="img-stack img-fire">
-      <CldImage
-        src="Fire_2020_mvjojb"
+      <Image
+        src={pageImage("Fire_2020_mvjojb")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Boreale Feuer 2020"
       />
@@ -120,11 +139,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
         aria-label="UB Zürich Jahresbericht 2025"
       >
         <source
-          src="https://res.cloudinary.com/rhizomech/video/upload/f_webm,vc_vp9/UB_Zuerich_Jahresbericht25_grgopa.webm"
-          type="video/webm"
-        />
-        <source
-          src="https://res.cloudinary.com/rhizomech/video/upload/f_mp4,vc_h264/UB_Zuerich_Jahresbericht25_grgopa.mp4"
+          src="/videos/nzz/UB_Zuerich_Jahresbericht25_grgopa.mp4"
           type="video/mp4"
         />
       </video>
@@ -162,9 +177,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     <!-- chapter 3 images -->
 
     <div class="img-stack img-pheno">
-      <CldImage
-        src="Phenological_Shift_GalleryImage1_cjmvqe"
+      <Image
+        src={pageImage("Phenological_Shift_GalleryImage1_cjmvqe")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Phenological Shift"
       />
@@ -180,9 +196,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     </div>
 
     <div class="img-stack img-eth-vis-1">
-      <CldImage
-        src="ETHVisualisations_GalleryPic1_hnzfw1"
+      <Image
+        src={pageImage("ETHVisualisations_GalleryPic1_hnzfw1")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="ETH Visualisation 1"
       />
@@ -199,9 +216,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     </div>
 
     <div class="img-stack img-microbiome">
-      <CldImage
-        src="Microbiome_OLMA_ttmkmz"
+      <Image
+        src={pageImage("Microbiome_OLMA_ttmkmz")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Microbiome OLMA"
       />
@@ -239,9 +257,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       </p>
     </div>
     <div class="img-stack img-illustration-1">
-      <CldImage
-        src="Illustration_GalleryImages_1_sihglc"
+      <Image
+        src={pageImage("Illustration_GalleryImages_1_sihglc")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Illustration 1"
       />
@@ -256,9 +275,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       </div>
     </div>
     <div class="img-stack img-wood-12">
-      <CldImage
-        src="StructureofWood_Gallery_12_rbvqux"
+      <Image
+        src={pageImage("StructureofWood_Gallery_12_rbvqux")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Structure of Wood"
       />
@@ -284,9 +304,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       </p>
     </div>
     <div class="img-stack img-bacteria">
-      <CldImage
-        src="blender_bacteria_o8jyby"
+      <Image
+        src={pageImage("blender_bacteria_o8jyby")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Blender Bacteria"
       />
@@ -297,9 +318,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     </div>
 
     <div class="img-stack img-gjermundbu">
-      <CldImage
-        src="Gjermundbu_GalleryImages_1_sco2yz"
+      <Image
+        src={pageImage("Gjermundbu_GalleryImages_1_sco2yz")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="UZH Blender Kurs"
       />
@@ -321,11 +343,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
         aria-label="Game Design 101 – prozedurale Animation"
       >
         <source
-          src="https://res.cloudinary.com/rhizomech/video/upload/f_webm,vc_vp9/GameDesign101_1080p_eoaems.webm"
-          type="video/webm"
-        />
-        <source
-          src="https://res.cloudinary.com/rhizomech/video/upload/f_mp4,vc_h264/GameDesign101_1080p_eoaems.mp4"
+          src="/videos/nzz/GameDesign101_1080p_eoaems.mp4"
           type="video/mp4"
         />
       </video>
@@ -336,9 +354,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     </div>
 
     <div class="img-stack img-uzh-blender">
-      <CldImage
-        src="UZHBlenderCourse_1_r6kaar"
+      <Image
+        src={pageImage("UZHBlenderCourse_1_r6kaar")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="UZH Blender Kurs"
       />
@@ -368,9 +387,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     </div>
 
     <div class="img-stack img-xylo">
-      <CldImage
-        src="XylopediaInsta4_hjbuf8"
+      <Image
+        src={pageImage("XylopediaInsta4_hjbuf8")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Xylopedia iPad App"
       />
@@ -381,9 +401,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     </div>
 
     <div class="img-stack img-augmedi">
-      <CldImage
-        src="Houdini_Scripts_hd7d5e"
+      <Image
+        src={pageImage("Houdini_Scripts_hd7d5e")}
         width={1200}
+        widths={[600, 900, 1200]}
         sizes="(max-width: 768px) 100vw, 50vw"
         alt="Augmedi AG – Houdini Scripts für anatomische 3D-Modelle"
       />
@@ -406,11 +427,7 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     <div class="img-stack img-portfolio-video">
       <video autoplay muted loop playsinline aria-label="Portfolio">
         <source
-          src="https://res.cloudinary.com/rhizomech/video/upload/f_webm,vc_vp9/Portfolio_lc2mft.webm"
-          type="video/webm"
-        />
-        <source
-          src="https://res.cloudinary.com/rhizomech/video/upload/f_mp4,vc_h264/Portfolio_lc2mft.mp4"
+          src="/videos/nzz/Portfolio_lc2mft.mp4"
           type="video/mp4"
         />
       </video>
@@ -498,10 +515,19 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   // #endregion
 
   // #region Lenis Smooth Scroll
+  // wheelMultiplier stays at 1: trackpad momentum (MacBook) already travels
+  // far, anything above 1 makes a single swipe skip several steps.
+  // syncTouch: Lenis drives touch scrolling instead of iOS/Android native
+  // momentum, so a finger swipe can be stepped one item at a time too.
   const lenis = new Lenis({
     lerp: 0.15,
-    wheelMultiplier: 1.3,
+    wheelMultiplier: 1,
     smoothWheel: true,
+    syncTouch: true,
+    virtualScroll: (data) =>
+      data.event.type.includes("touch")
+        ? gateTouch(data.deltaY, data.event)
+        : gateWheel(data.deltaY, data.event),
   });
   lenis.on("scroll", ScrollTrigger.update);
   gsap.ticker.add((time) => {
@@ -510,17 +536,225 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   // #endregion
 
   // #region Master Timeline & Progress Update
+  // Pacing knobs:
+  // STEP_HOLD — timeline time of stillness around every snap point. Each item
+  //   rests on screen for this stretch before the next transition starts, so
+  //   raising it means more scrolling between two items.
+  // SCROLL_PER_UNIT — screen heights of scroll per unit of timeline time.
+  //   A transition is 1 unit and moves an item one screen height, so at 1
+  //   the items travel exactly with the scroll, like a normal page.
+  // Touch screens get no hold: a finger drag should move the images right
+  // away, and the release (see gateTouch) settles them on an item.
+  const IS_TOUCH = window.matchMedia("(pointer: coarse)").matches;
+  const STEP_HOLD = IS_TOUCH ? 0 : 0.6;
+  const SCROLL_PER_UNIT = 1;
+
+  // Resting points as scroll progress (0–1): the start plus the snap-*
+  // labels before the "free-scroll" label. Chapter labels are left out, they
+  // sit on empty in-between states.
+  let stepPointCache: number[] | null = null;
+  const stepPoints = () => {
+    if (!stepPointCache) {
+      const total = masterTl.duration();
+      const freeAt = masterTl.labels["free-scroll"] ?? total;
+      const points = Object.entries(masterTl.labels)
+        .filter(([name, time]) => name.startsWith("snap-") && time <= freeAt)
+        .map(([, time]) => time / total);
+      stepPointCache = [...new Set([0, ...points])].sort((a, b) => a - b);
+    }
+    return stepPointCache;
+  };
+  const EPS = 1e-4;
+  // The finale (flower + closing line) after the last resting point scrolls
+  // freely: no snapping, no one-item cap.
+  const inFreeZone = (p: number) => {
+    const points = stepPoints();
+    return p > points[points.length - 1] + EPS;
+  };
+  // The next resting point after `p` in `dir`, or null at either end.
+  const neighbourStep = (p: number, dir: number) => {
+    const points = stepPoints();
+    return dir > 0
+      ? (points.find((x) => x > p + EPS) ?? null)
+      : (points.findLast((x) => x < p - EPS) ?? null);
+  };
+  const nearestStep = (p: number) =>
+    stepPoints().reduce((a, b) => (Math.abs(b - p) < Math.abs(a - p) ? b : a));
+
+  // #region One item per swipe
+  // A trackpad swipe keeps sending wheel events for a second or more of
+  // momentum. Once a swipe has carried the scroll to the next resting point,
+  // the rest of that swipe is swallowed, so one swipe moves exactly one item.
+  // wheelBase is the resting point nearest to where the current swipe
+  // started. It is read from the live scroll position at the start of every
+  // swipe, never from snap callbacks: a swipe that happens to stop exactly on
+  // a resting point triggers no snap, and a stale base would then swallow
+  // every later swipe.
+  let wheelBase = 0;
+  let lockedDir = 0;
+  let lastWheelTime = 0;
+  let lastWheelMag = 0;
+  const GESTURE_GAP_MS = 180;
+
+  const gateWheel = (deltaY: number, event: WheelEvent | TouchEvent) => {
+    if (!event.type.includes("wheel") || deltaY === 0) return true;
+    const now = performance.now();
+    const mag = Math.abs(deltaY);
+    // A new swipe: a pause in the event stream, or deltas jumping up again
+    // after momentum had been decaying.
+    const newGesture =
+      now - lastWheelTime > GESTURE_GAP_MS ||
+      (mag > lastWheelMag * 1.5 && mag - lastWheelMag > 4);
+    lastWheelTime = now;
+    lastWheelMag = mag;
+
+    const st = masterTl.scrollTrigger;
+    if (!st) return true;
+    if (newGesture) {
+      lockedDir = 0;
+      wheelBase = nearestStep(st.progress);
+    }
+    if (inFreeZone(st.progress)) {
+      lockedDir = 0;
+      return true;
+    }
+    const dir = Math.sign(deltaY);
+    const limit = neighbourStep(wheelBase, dir);
+    // At either end of the story, scroll freely (e.g. on to the footer).
+    if (limit === null) return true;
+
+    const limitPx = st.start + limit * (st.end - st.start);
+    const reached =
+      dir > 0 ? lenis.targetScroll >= limitPx : lenis.targetScroll <= limitPx;
+    if (dir === lockedDir || reached) {
+      lockedDir = dir;
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  };
+
+  // Touch (phones): the images follow the finger like a normal page, but
+  // never further than the neighbouring item. On release they glide on to
+  // that item if the drag went far or fast enough, otherwise they snap back.
+  const ADVANCE_FRACTION = 0.25; // of the way to the next item
+  const FLICK_PX_PER_MS = 0.4; // a quick flick advances even if short
+  const GLIDE_SECONDS = 1.2; // a full item; shorter distances glide faster
+  let touchActive = false; // a touch gesture or its glide is in progress
+  let touchFree = false; // gesture started outside the story: no stepping
+  let touchBase = 0; // resting point the gesture started from
+  let touchStartScroll = 0;
+  let touchSamples: { t: number; y: number }[] = [];
+
+  const gateTouch = (deltaY: number, event: WheelEvent | TouchEvent) => {
+    const st = masterTl.scrollTrigger;
+    if (!st) return true;
+    const toPx = (p: number) => st.start + p * (st.end - st.start);
+
+    if (event.type === "touchstart") {
+      const scroll = lenis.animatedScroll;
+      touchFree =
+        scroll < st.start - 1 ||
+        scroll > st.end + 1 ||
+        inFreeZone(st.progress);
+      touchActive = !touchFree;
+      touchBase = nearestStep(st.progress);
+      touchStartScroll = lenis.targetScroll;
+      touchSamples = [{ t: performance.now(), y: lenis.targetScroll }];
+      return true;
+    }
+    if (touchFree) return true;
+
+    if (event.type === "touchmove") {
+      const now = performance.now();
+      touchSamples.push({ t: now, y: lenis.targetScroll + deltaY });
+      touchSamples = touchSamples.filter((s) => now - s.t < 120);
+      if (deltaY === 0) return true;
+      const limit = neighbourStep(touchBase, Math.sign(deltaY));
+      if (limit === null) return true;
+      const limitPx = toPx(limit);
+      const reached =
+        deltaY > 0
+          ? lenis.targetScroll >= limitPx
+          : lenis.targetScroll <= limitPx;
+      if (reached) {
+        if (event.cancelable) event.preventDefault();
+        return false;
+      }
+      return true;
+    }
+
+    // touchend
+    const moved = lenis.targetScroll - touchStartScroll;
+    if (Math.abs(moved) < 2) {
+      touchActive = false;
+      return true; // a tap, leave it alone
+    }
+    const dir = Math.sign(moved);
+    const next = neighbourStep(touchBase, dir);
+    if (next === null) {
+      touchActive = false;
+      return true; // past either end: normal inertia
+    }
+    const stepPx = Math.abs(toPx(next) - toPx(touchBase));
+    // Finger speed over the last ~120ms, in scroll px per ms.
+    const first = touchSamples[0];
+    const last = touchSamples[touchSamples.length - 1];
+    const speed =
+      first && last && last.t > first.t ? (last.y - first.y) / (last.t - first.t) : 0;
+    const advance =
+      Math.abs(moved) >= stepPx * ADVANCE_FRACTION ||
+      (Math.sign(speed) === dir && Math.abs(speed) >= FLICK_PX_PER_MS);
+    const targetPx = toPx(advance ? next : touchBase);
+    const remaining = Math.abs(targetPx - lenis.targetScroll);
+
+    if (event.cancelable) event.preventDefault();
+    lenis.scrollTo(targetPx, {
+      duration: GLIDE_SECONDS * Math.min(1, Math.max(0.35, remaining / stepPx)),
+      // ease-out: carries on from the finger's motion, then settles.
+      easing: (t) => 1 - Math.pow(1 - t, 3),
+      onComplete: () => {
+        touchActive = false;
+      },
+    });
+    return false;
+  };
+
+  // Snap to the next resting point in the scroll direction, but never past
+  // the one next to where the current wheel swipe started.
+  let snapToStep: ((value: number, direction: number) => number) | null = null;
+  const snapStep = (value: number, self?: ScrollTrigger) => {
+    // Touch gestures place themselves (see gateTouch); don't fight them.
+    if (touchActive || inFreeZone(value)) return value;
+    snapToStep ??= ScrollTrigger.snapDirectional(stepPoints());
+    const dir = self?.direction ?? 1;
+    let target = snapToStep(value, dir);
+    const wheelDriven = performance.now() - lastWheelTime < 1000;
+    if (wheelDriven) {
+      const cap = neighbourStep(wheelBase, dir);
+      if (cap !== null) {
+        target = dir > 0 ? Math.min(target, cap) : Math.max(target, cap);
+      }
+    }
+    return target;
+  };
+  // #endregion
+
   const masterTl = gsap.timeline({
     scrollTrigger: {
       trigger: "#scrolly-container",
       start: "top top",
-      end: "+=2700%",
+      end: () =>
+        `+=${Math.round(masterTl.duration() * SCROLL_PER_UNIT * window.innerHeight)}`,
       scrub: 0.8,
       pin: true,
       snap: {
-        snapTo: "labelsDirectional",
-        duration: { min: 0.4, max: 1 },
-        delay: 0.2,
+        snapTo: snapStep,
+        // Snap from where the scroll actually is, not from a position
+        // projected forward by its speed.
+        inertia: false,
+        duration: { min: 0.6, max: 1.2 },
+        delay: 0.1,
         ease: "power2.inOut",
       },
       onUpdate: (self) => {
@@ -604,40 +838,62 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   // Helper functions
   let snapLabelCount = 0;
 
+  // Resting point after an item has arrived: empty time with the snap label
+  // in the middle, so a small scroll either way stays on the same item.
+  const addStep = () => {
+    if (STEP_HOLD > 0) masterTl.to({}, { duration: STEP_HOLD / 2 });
+    masterTl.addLabel(`snap-${snapLabelCount++}`);
+    if (STEP_HOLD > 0) masterTl.to({}, { duration: STEP_HOLD / 2 });
+  };
+
+  // Every item moves like a normal page being scrolled: it comes up from
+  // below the screen and leaves over the top, at a constant speed (no ease,
+  // no fade, no zoom). An item going out and the next one coming in run
+  // together (sync), so they travel as one continuous page.
+  // sync: start together with the previous tween instead of after it.
+  // Subtle text settle: while an item comes up, its text lines (paragraphs,
+  // caption heading and caption text) trail slightly behind and brighten,
+  // one after the other, landing together with the item. The stagger amount
+  // plus each line's duration add up to the item's 1-unit move, so the
+  // resting point is unchanged.
+  const TEXT_LINES =
+    ":scope > .text-block, .img-caption > h2, .img-caption > p";
+  const settleText = (selector: string) => {
+    const lines = gsap.utils
+      .toArray<HTMLElement>(selector)
+      .flatMap((el) => [...el.querySelectorAll<HTMLElement>(TEXT_LINES)]);
+    if (lines.length === 0) return;
+    masterTl.fromTo(
+      lines,
+      { y: 32, opacity: 0.25 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.75,
+        ease: "power2.out",
+        stagger: { amount: 0.25 },
+      },
+      "<",
+    );
+  };
+
   const slideIn = (selector: string, sync = false, snap = true) => {
     const result = masterTl.fromTo(
       selector,
-      { y: "70vh", opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, ease: "power2.out" },
-      sync ? "<" : "-=0.2",
+      { y: "100vh", opacity: 1 },
+      { y: 0, opacity: 1, duration: 1, ease: "none" },
+      sync ? "<" : ">",
     );
-    if (snap) masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
-    return result;
-  };
-  const fadeIn = (selector: string, sync = false, snap = true) => {
-    const result = masterTl.fromTo(
-      selector,
-      { scale: 0.8, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 1, ease: "power2.out" },
-      sync ? "<" : "-=0.2",
-    );
-    if (snap) masterTl.addLabel(`snap-${snapLabelCount++}`, ">");
+    settleText(selector);
+    if (snap) addStep();
     return result;
   };
 
   const slideOut = (selector: string, sync = false) => {
     return masterTl.to(
       selector,
-      { y: "-70vh", opacity: 0, duration: 0.7 },
-      sync ? "<" : "+=0.2",
-    );
-  };
-
-  const fadeOut = (selector: string, sync = false) => {
-    return masterTl.to(
-      selector,
-      { scale: 0.8, opacity: 0, duration: 0.5 },
-      sync ? "<" : "+=0.2",
+      { y: "-100vh", duration: 1, ease: "none" },
+      sync ? "<" : ">",
     );
   };
   // #endregion
@@ -668,84 +924,99 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
   masterTl.to("#scrolly-progress", { opacity: 1, duration: 0.6 }, "<");
 
   slideIn(".img-quercus", true);
-  fadeOut(".img-quercus");
-  fadeIn(".img-buchdrucker", true);
-  fadeOut(".img-buchdrucker");
-  fadeIn(".img-fire", true);
-  fadeOut(".img-fire");
-  fadeIn(".img-ub-intro", true);
-  fadeOut(".img-ub-intro");
-  fadeIn(".text-intro-after", true);
+  slideOut(".img-quercus");
+  slideIn(".img-buchdrucker", true);
+  slideOut(".img-buchdrucker");
+  slideIn(".img-fire", true);
+  slideOut(".img-fire");
+  slideIn(".img-ub-intro", true);
+  slideOut(".img-ub-intro");
+  slideIn(".text-intro-after", true);
   slideOut(".text-intro-after");
   // #endregion
 
+  // Chapter boundaries: the panel switch and the chapter label sit at the
+  // start ("<") of the last item's exit, so the next chapter's first item
+  // comes up together with it instead of after a blank screen.
+
   // #region Chapter 3: Work — panel-intro stays visible; panel-work overlays it
-  masterTl.addLabel("chapter-3");
-  masterTl.to("#panel-work", { opacity: 1, duration: 0.05 });
+  masterTl.addLabel("chapter-3", "<");
+  masterTl.to("#panel-work", { opacity: 1, duration: 0.05 }, "<");
   slideIn(".text-p3-intro", true);
   slideOut(".text-p3-intro");
   slideIn(".img-pheno", true);
-  fadeOut(".img-pheno");
-  fadeIn(".img-eth-vis-1", true);
-  fadeOut(".img-eth-vis-1");
-  fadeIn(".img-microbiome", true);
+  slideOut(".img-pheno");
+  slideIn(".img-eth-vis-1", true);
+  slideOut(".img-eth-vis-1");
+  slideIn(".img-microbiome", true);
   slideOut(".img-microbiome");
   slideIn(".text-p3-conclusion", true);
   slideOut(".text-p3-conclusion");
   // #endregion
 
-  // #region Chapter 5: Werdegang — fade out panel-intro (takes panel-work with it)
-  masterTl.addLabel("chapter-5");
+  // #region Chapter 5: Werdegang — panel-intro is empty by now, swap panels
+  masterTl.addLabel("chapter-5", "<");
   masterTl.to("#panel-werdegang", { opacity: 1, duration: 0.05 }, "<");
   masterTl.to("#panel-intro", { opacity: 0, duration: 0.05 }, "<");
   slideIn(".text-p5-1", true);
   slideOut(".text-p5-1");
   slideIn(".img-illustration-1", true);
-  fadeOut(".img-illustration-1");
-  fadeIn(".img-wood-12", true);
+  slideOut(".img-illustration-1");
+  slideIn(".img-wood-12", true);
   slideOut(".img-wood-12");
   // #endregion
 
   // #region Chapter 6: Technologie & 3D
-  masterTl.addLabel("chapter-6");
+  masterTl.addLabel("chapter-6", "<");
   slideIn(".text-p6", true);
   slideOut(".text-p6");
-  masterTl.to({}, { duration: 0.25 });
   slideIn(".img-bacteria", true);
-  fadeOut(".img-bacteria");
-  fadeIn(".img-gjermundbu", true);
-  fadeOut(".img-gjermundbu");
-  fadeIn(".img-gamedesign", true);
-  fadeOut(".img-gamedesign");
-  fadeIn(".img-uzh-blender", true);
+  slideOut(".img-bacteria");
+  slideIn(".img-gjermundbu", true);
+  slideOut(".img-gjermundbu");
+  slideIn(".img-gamedesign", true);
+  slideOut(".img-gamedesign");
+  slideIn(".img-uzh-blender", true);
   slideOut(".img-uzh-blender");
   // #endregion
 
   // #region Chapter 7: Digitale Formate & Web
-  masterTl.addLabel("chapter-7");
+  masterTl.addLabel("chapter-7", "<");
   slideIn(".text-p7-1", true);
   slideOut(".text-p7-1");
   slideIn(".img-xylo", true);
-  fadeOut(".img-xylo");
-  fadeIn(".img-augmedi", true);
-  fadeOut(".img-augmedi");
-  fadeIn(".img-portfolio-video", true);
-  fadeOut(".img-portfolio-video");
+  slideOut(".img-xylo");
+  slideIn(".img-augmedi", true);
+  slideOut(".img-augmedi");
+  slideIn(".img-portfolio-video", true);
+  slideOut(".img-portfolio-video");
   slideIn(".portfolio-link", true);
+  // slideOut appends at the end of the timeline, so this is its start time.
+  const linkOutStart = masterTl.duration();
   slideOut(".portfolio-link");
   // #endregion
 
   // #region Chapter 8: Zukunft — 3 sequential text reveals, then flower + finale
-  masterTl.addLabel("chapter-8");
-  masterTl.to("#panel-zukunft", { opacity: 1, duration: 0.05 });
-  masterTl.to("#panel-werdegang", { opacity: 0, duration: 0.05 }, "<");
-  masterTl.to(".text-p8-1", { opacity: 1, duration: 0.05 }, "<");
+  // panel-zukunft comes in with the link's exit; panel-werdegang is only
+  // hidden once the link is fully gone, so the link isn't cut off mid-move.
+  masterTl.addLabel("chapter-8", linkOutStart);
+  masterTl.to("#panel-zukunft", { opacity: 1, duration: 0.05 }, linkOutStart);
+  masterTl.to(".text-p8-1", { opacity: 1, duration: 0.05 }, linkOutStart);
   slideIn(".text-p8-2", true);
+  masterTl.to(
+    "#panel-werdegang",
+    { opacity: 0, duration: 0.05 },
+    linkOutStart + 1,
+  );
   slideIn(".text-p8-3");
   slideIn(".text-p8-4");
+  // Everything after this point (texts leaving, flower, closing line)
+  // scrolls freely; see inFreeZone.
+  masterTl.addLabel("free-scroll");
   slideOut(".text-p8-2");
   slideOut(".text-p8-3", true);
   slideOut(".text-p8-4", true);
+  // The flower sequence plays while its canvas comes up with the texts' exit.
   masterTl.to(
     flowerPlayhead,
     {
@@ -755,11 +1026,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
       onUpdate: renderFlower,
       duration: 1.5,
     },
-    "-=0.5",
+    "<",
   );
-  fadeIn(".img-flower-canvas", true);
-  slideIn(".text-p8-5");
-  masterTl.addLabel(`text-snap-${snapLabelCount++}`);
+  slideIn(".img-flower-canvas", true, false);
+  slideIn(".text-p8-5", false, false);
   masterTl.addLabel("end");
   // #endregion
 
@@ -792,6 +1062,10 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
 
       if (masterTl.scrollTrigger) {
         const scrollPos = masterTl.scrollTrigger.labelToScroll(label) + 700;
+        // Free jump; the next swipe measures its one item from wherever
+        // this lands.
+        lockedDir = 0;
+        lastWheelTime = 0;
         lenis.scrollTo(scrollPos, {
           duration: 3,
           easing: (t) =>
@@ -945,12 +1219,16 @@ const desktopFlowerUrls = Object.values(desktopFlowerFiles)
     width: auto;
     height: auto;
     align-self: start;
+    /* An image narrower than the screen (capped by max-height) would
+       otherwise sit at the left edge of its grid cell. */
+    justify-self: center;
 
     @media (min-width: 1024px) {
       grid-column: 1;
       max-height: 85vh;
       max-width: 60vw;
       align-self: center;
+      justify-self: start;
     }
   }
 

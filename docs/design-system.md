@@ -52,8 +52,9 @@ no existing rule was changed to consume these. Adopt them as you touch files.
   `ArchiveGallery_BoxFilters.astro`; these tokens stop that spreading further.
 - **Spacing** — `--space-1` … `--space-7` (4 / 8 / 12 / 20 / 32 / 56 / 88px).
   Derived from values already load-bearing here: 20px is
-  `--margin-right-tablet`, 56px and 88px are the desktop and desktop-wide grid
-  column widths.
+  `--margin-right-tablet`; 56px and 88px were the fixed desktop and
+  desktop-wide column widths before the grid went fluid (`--grid-cell-desktop`
+  now runs from 56px at 1120px up to 96px).
 - **Semantic colours** — `--color-text`, `--color-surface`,
   `--color-surface-accent`, `--color-border`, `--color-overlay`.
 
@@ -131,4 +132,5 @@ The first must be 1 or more; the second must find nothing.
 
 Finally load `/styleguide` at 375, 767, 1024, 1280 and 1700px. At each width:
 no console errors, no horizontal page scroll, and the breakpoint readout should
-report 7 / 7 / 11 / 17 / 17 columns at 53 / 109 / 75.9 / 56 / 88px.
+report 7 / 7 / 11 / 17 / 17 columns; the desktop cell is fluid (56px at
+1120px, capped at 96px).

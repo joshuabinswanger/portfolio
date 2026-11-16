@@ -1,0 +1,45 @@
+---
+// Horizontal bracket divider drawn with CSS borders: `open` = [, `mid` = ][,
+// `close` = ]. It stretches to fill its grid cell, and a border-box border
+// always sits exactly on the cell edge and snaps to whole device pixels, so
+// the lines line up with whatever surrounds them (SVG strokes drifted and
+// blurred, especially in WebKit).
+interface Props {
+  kind: "open" | "mid" | "close";
+}
+
+const { kind } = Astro.props;
+---
+
+<span class:list={["bracket", `bracket-${kind}`]} aria-hidden="true"></span>
+
+<style>
+  .bracket {
+    box-sizing: border-box;
+    align-self: stretch;
+    justify-self: stretch;
+    min-height: 0;
+    border: 0 solid black;
+    border-block-width: 1px;
+  }
+
+  .bracket-open {
+    border-left-width: 1px;
+  }
+
+  .bracket-close {
+    border-right-width: 1px;
+  }
+
+  .bracket-mid {
+    position: relative;
+  }
+
+  .bracket-mid::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    left: 50%;
+    border-left: 1px solid black;
+  }
+</style>

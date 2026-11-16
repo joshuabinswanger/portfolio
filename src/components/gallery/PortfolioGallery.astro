@@ -575,7 +575,7 @@ const { enrichedProjects } = await getPortfolioGalleryData();
     left: 0;
     width: 100%; /* fill the width of the parent */
     height: 100%; /* fill the height of the parent */
-    z-index: 1000;
+    z-index: 10; /* over the image, under the fixed mobile nav (z 1000) */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -754,79 +754,80 @@ const { enrichedProjects } = await getPortfolioGalleryData();
     }
   }
 
-  /* Desktop Wide */
+  /* Desktop Wide (16" MacBook Pro and up): items about a quarter smaller
+     than on the desktop breakpoint so a portrait image stays well inside one
+     screen. Left items keep their start column, right items their end column;
+     row starts are pulled in to keep the same vertical overlap. */
   @media (--bp-desktop-wide) {
     .observer:nth-of-type(1) {
       grid-column-start: 1;
-      grid-column-end: span 8;
+      grid-column-end: span 6;
       grid-row-start: 1;
     }
-
     .observer:nth-of-type(2) {
-      grid-column-start: 11;
-      grid-column-end: span 6;
-      grid-row-start: 9;
+      grid-column-start: 12;
+      grid-column-end: span 5;
+      grid-row-start: 7;
     }
-
     .observer:nth-of-type(3) {
       grid-column-start: 2;
-      grid-column-end: span 7;
-      grid-row-start: 14;
+      grid-column-end: span 6;
+      grid-row-start: 11;
     }
     .observer:nth-of-type(4) {
-      grid-column-start: 11;
-      grid-column-end: span 7;
-      grid-row-start: 21;
+      grid-column-start: 13;
+      grid-column-end: span 5;
+      grid-row-start: 17;
     }
     .observer:nth-of-type(5) {
       grid-column-start: 1;
-      grid-column-end: span 7;
-      grid-row-start: 27;
+      grid-column-end: span 6;
+      grid-row-start: 21;
     }
     .observer:nth-of-type(6) {
-      grid-column-start: 10;
-      grid-column-end: span 7;
-      grid-row-start: 35;
+      grid-column-start: 12;
+      grid-column-end: span 5;
+      grid-row-start: 28;
     }
     .observer:nth-of-type(7) {
       grid-column-start: 2;
-      grid-column-end: span 6;
-      grid-row-start: 42;
+      grid-column-end: span 5;
+      grid-row-start: 33;
     }
     .observer:nth-of-type(8) {
-      grid-column-start: 11;
-      grid-column-end: span 7;
-      grid-row-start: 49;
+      grid-column-start: 12;
+      grid-column-end: span 6;
+      grid-row-start: 39;
     }
     .observer:nth-of-type(9) {
       grid-column-start: 1;
-      grid-column-end: span 7;
-      grid-row-start: 57;
+      grid-column-end: span 5;
+      grid-row-start: 46;
     }
     .observer:nth-of-type(10) {
-      grid-column-start: 12;
-      grid-column-end: span 6;
-      grid-row-start: 62;
+      grid-column-start: 13;
+      grid-column-end: span 5;
+      grid-row-start: 49;
     }
     .observer:nth-of-type(11) {
       grid-column-start: 3;
-      grid-column-end: span 6;
-      grid-row-start: 66;
+      grid-column-end: span 5;
+      grid-row-start: 52;
     }
     .observer:nth-of-type(12) {
-      grid-column-start: 12;
-      grid-column-end: span 6;
-      grid-row-start: 71;
+      grid-column-start: 13;
+      grid-column-end: span 5;
+      grid-row-start: 56;
     }
     .observer:nth-of-type(13) {
-      grid-column-start: 12;
-      grid-column-end: span 6;
-      grid-row-start: 78;
+      grid-column-start: 13;
+      grid-column-end: span 5;
+      grid-row-start: 61;
     }
     .observer:nth-of-type(14) {
-      grid-column-start: 12;
-      grid-column-end: span 6;
-      grid-row-start: 86;
+      grid-column-start: 13;
+      grid-column-end: span 5;
+      grid-row-start: 67;
     }
   }
 </style>

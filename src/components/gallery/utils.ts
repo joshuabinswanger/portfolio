@@ -1,4 +1,5 @@
 import { getEntry, getCollection } from "astro:content";
+import { resolveHighResImage } from "../images/localImages";
 import type { CollectionEntry } from "astro:content";
 import { getMuxHlsUrl, isMuxVideoEntry } from "../media/mux";
 
@@ -152,8 +153,6 @@ export async function buildHighResData(
   const highResData = [];
 
   for (const image of galleryImages) {
-    let highResEntry = null;
-
     if (isMuxVideoEntry(image)) {
       highResData.push({
         ...image.data,
@@ -164,27 +163,16 @@ export async function buildHighResData(
       continue;
     }
 
-    if (image.data.metadata?.highres_public_id) {
-      try {
-        highResEntry = await getEntry(
-          "highResImages",
-          image.data.metadata.highres_public_id,
-        );
-      } catch (error) {
-        console.error(
-          `Failed to fetch highResImages for ${image.data.metadata.highres_public_id}:`,
-          error,
-        );
-      }
-    }
+    const highResId = image.data.metadata?.highres_public_id;
+    const highRes = highResId ? resolveHighResImage(highResId) : undefined;
 
     const imageUrl = "src" in image.data ? image.data.src : "";
 
     highResData.push({
       ...image.data,
-      highResWidth: highResEntry?.data.width ?? image.data.width,
-      highResHeight: highResEntry?.data.height ?? image.data.height,
-      highResSecureUrl: highResEntry?.data.secure_url ?? imageUrl,
+      highResWidth: highRes?.width ?? image.data.width,
+      highResHeight: highRes?.height ?? image.data.height,
+      highResSecureUrl: highRes?.src ?? imageUrl,
     });
   }
 

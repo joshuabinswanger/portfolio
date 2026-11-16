@@ -2,9 +2,6 @@
 import { defineCollection } from "astro:content";
 import { z } from "astro/zod";
 import { glob } from "astro/loaders";
-import { cldAssetsLoader } from "astro-cloudinary/loaders";
-
-const commaSeparatedField = z.union([z.string(), z.array(z.string())]);
 
 const localImageMetadataSchema = z.object({
   project: z.string().nullish(),
@@ -38,66 +35,92 @@ const muxVideoSchema = z.object({
   maxResolution: z.string().optional(),
 });
 
-const imageMetadataSchema = z.looseObject({
-    project: z.string().nullish(),
-    description_title: z.string().nullish(),
-    description_text: z.string().nullish(),
-    showInPortfolioGallery: z.string().nullish(),
-    portfolioOrder: z.coerce.number().nullish(),
-    showInProjectGallery: z.string().nullish(),
-    projectGalleryOrder: z.coerce.number().nullish(),
-    showInIndex: z.string().nullish(),
-    year: z.string().nullish(),
-    client: z.string().nullish(),
-    collaborators: z.string().nullish(),
-    role: commaSeparatedField.nullish(),
-    program: commaSeparatedField.nullish(),
-    topic: commaSeparatedField.nullish(),
-    link: z.string().nullish(),
-    highres_public_id: z.string().nullish(),
+// ---- Project stories ------------------------------------------------------
+
+const storyImageSchema = z.object({
+  // Local asset path, e.g. "/src/assets/projects/structureofwood/x.webp"
+  src: z.string(),
+  alt: z.string(),
+  caption: z.string().optional(),
 });
 
-const cloudinaryAssetSchema = z.looseObject({
-    asset_id: z.string(),
-    bytes: z.number(),
-    created_at: z.string(),
-    folder: z.string(),
-    format: z.string(),
-    height: z.number(),
-    metadata: imageMetadataSchema.optional(),
-    public_id: z.string(),
-    resource_type: z.string(),
-    secure_url: z.string(),
-    tags: z.array(z.string()).optional(),
-    type: z.string(),
-    url: z.string(),
-    version: z.number(),
-    width: z.number(),
+const storyStepSchema = z.object({
+  heading: z.string().optional(),
+  body: z.string(), // markdown
 });
+
+// One scrollytelling step: a text card that slides over the pinned stage.
+// `image` swaps the stage picture when the card reaches the middle of the
+// screen; steps without one keep the previous picture.
+const storyScrollyStepSchema = z.object({
+  image: storyImageSchema.optional(),
+  heading: z.string().optional(),
+  body: z.string(), // markdown
+  position: z.enum(["left", "right", "center"]).optional(),
+});
+
+const storyBlockSchema = z.discriminatedUnion("type", [
+  // Full-width opener: image with the title overlaid.
+  z.object({
+    type: z.literal("hero"),
+    image: storyImageSchema,
+    kicker: z.string().optional(),
+  }),
+  // A paragraph or two of markdown.
+  z.object({
+    type: z.literal("text"),
+    heading: z.string().optional(),
+    body: z.string(),
+    align: z.enum(["left", "center"]).optional(),
+  }),
+  // One image at a chosen width.
+  z.object({
+    type: z.literal("image"),
+    image: storyImageSchema,
+    size: z.enum(["full", "wide", "narrow"]).optional(),
+  }),
+  // Image beside text.
+  z.object({
+    type: z.literal("split"),
+    image: storyImageSchema,
+    heading: z.string().optional(),
+    body: z.string(),
+    imageSide: z.enum(["left", "right"]).optional(),
+  }),
+  // Image grid.
+  z.object({
+    type: z.literal("gallery"),
+    images: z.array(storyImageSchema).min(1),
+    columns: z.number().int().min(2).max(4).optional(),
+  }),
+  // The "story" block: one image stays pinned while short text steps scroll
+  // past it, each lighting up as it reaches the middle of the screen.
+  z.object({
+    type: z.literal("sticky"),
+    image: storyImageSchema,
+    steps: z.array(storyStepSchema).min(1),
+  }),
+  // Classic scrollytelling: a full-height image pinned in place while text
+  // cards scroll up over it, cross-fading the image per step.
+  z.object({
+    type: z.literal("scrolly"),
+    steps: z
+      .array(storyScrollyStepSchema)
+      .min(1)
+      .refine((steps) => Boolean(steps[0].image), {
+        message: "The first scrolly step needs an image",
+      }),
+  }),
+  z.object({
+    type: z.literal("quote"),
+    text: z.string(),
+    source: z.string().optional(),
+  }),
+]);
+
+export type StoryBlock = z.infer<typeof storyBlockSchema>;
 
 export const collections = {
-  galleryImages: defineCollection({
-    loader: cldAssetsLoader({
-      context: true,
-      folder: "Portfolio/Gallery",
-      tags: true,
-      metadata: true,
-      limit: 300,
-    }),
-    schema: cloudinaryAssetSchema,
-  }),
-
-  highResImages: defineCollection({
-    loader: cldAssetsLoader({
-      context: true,
-      folder: "Portfolio/HighRes",
-      tags: true,
-      metadata: true,
-      limit: 300,
-    }),
-    schema: cloudinaryAssetSchema,
-  }),
-
   images: defineCollection({
     loader: glob({
       pattern: "**/[^_]*.yaml",
@@ -178,12 +201,45 @@ export const collections = {
     }),
   }),
 
+  // Project stories: an ordered list of blocks rendered as a smooth-scrolling
+  // narrative page at /projects/<slug>. Block-based on purpose — each block is
+  // a flat object with a `type`, so a story is reordered or extended by
+  // editing YAML only. See docs/stories.md.
+  stories: defineCollection({
+    loader: glob({ pattern: "**/[^_]*.yaml", base: "./src/content/stories" }),
+    schema: z.object({
+      project: z.string(),
+      title: z.string(),
+      subtitle: z.string().optional(),
+      year: z.string().optional(),
+      client: z.string().optional(),
+      context: z.string().optional(), // e.g. "BA Diploma"
+      role: z.string().optional(),
+      tools: z.string().optional(),
+      collaborators: z.string().optional(),
+      // Shown at the end, after the facts.
+      links: z
+        .array(z.object({ label: z.string(), url: z.string() }))
+        .optional(),
+      // Short description under the title; also the meta description.
+      summary: z.string().optional(),
+      draft: z.boolean().default(false),
+      blocks: z.array(storyBlockSchema),
+    }),
+  }),
+
   links: defineCollection({
     loader: glob({ pattern: "**.yaml", base: "./src/content/links" }),
     schema: z.object({
       sortOrder: z.number(),
       text: z.string(),
       link: z.string(),
+      // Profile name shown next to the platform on the About page.
+      handle: z.string().optional(),
+      // "social": listed on the About page and emitted as the Person's
+      // `sameAs`. "link": listed on the About page only (projects, courses).
+      // "resource": not shown on the About page.
+      kind: z.enum(["social", "link", "resource"]),
     }),
   }),
 };

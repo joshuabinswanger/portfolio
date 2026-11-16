@@ -10,10 +10,10 @@ metadata:
   description_text: Joshua Binswanger - Rhizome Visuals - Scientific Illustration
   showInPortfolioGallery: 'no'
   portfolioOrder: 9
-  showInProjectGallery: 'no'
+  showInProjectGallery: 'yes'
   projectGalleryOrder: null
   showInIndex: 'no'
-  year: '202505'
+  year: '2024'
   client: null
   collaborators: null
   role: 2D Dev
