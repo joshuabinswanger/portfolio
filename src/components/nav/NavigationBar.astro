@@ -73,6 +73,8 @@ const isActive = (href: string) => norm(href) === here;
 </nav>
 
 <script>
+  import { initNavAutoHide } from "./navAutoHide.ts";
+
   // Update visual state (add/remove active class)
   function updateAnimationState(buttons: NodeListOf<HTMLElement>) {
     // a11y: reflect the current page immediately, independent of the 500ms
@@ -158,6 +160,8 @@ const isActive = (href: string) => norm(href) === here;
     const navBar = document.getElementById("NavBarDesktop");
     if (!navBar) return;
 
+    initNavAutoHide("NavBarDesktop");
+
     // Select the Logo (#Logo) AND the direct children 'a.animation' of MainWrapper
     const allNavButtons = navBar.querySelectorAll<HTMLElement>(
       "#Logo, #MainWrapper > a.animation",
@@ -240,6 +244,58 @@ const isActive = (href: string) => norm(href) === here;
     }
     @media (--bp-desktop-wide) {
       top: var(--padding-top-desktop-wide);
+    }
+  }
+
+  /* Auto-hide while scrolling down (navAutoHide.ts toggles .nav-hidden).
+     The logo and the menu move separately so they cascade: on the way out
+     they accelerate away to the left (ease-in), logo first, menu 50ms
+     behind; on the way back they spring in with a small overshoot, logo
+     first, menu 60ms behind. They slide past the left page margin, so
+     nothing stays on screen. Keyboard focus inside keeps it visible. */
+  #NavBarDesktop > #Logo,
+  #NavBarDesktop > #MainWrapper {
+    transition:
+      transform 0.65s cubic-bezier(0.34, 1.45, 0.64, 1),
+      opacity 0.35s ease-out;
+  }
+
+  /* #MainWrapper also animates its rows (see below), so its list repeats it. */
+  #NavBarDesktop > #MainWrapper {
+    transition:
+      transform 0.65s cubic-bezier(0.34, 1.45, 0.64, 1) 0.06s,
+      opacity 0.35s ease-out 0.06s,
+      grid-template-rows 0.6s ease;
+  }
+
+  #NavBarDesktop.nav-hidden:not(:focus-within) {
+    pointer-events: none;
+  }
+
+  #NavBarDesktop.nav-hidden:not(:focus-within) > #Logo,
+  #NavBarDesktop.nav-hidden:not(:focus-within) > #MainWrapper {
+    transform: translateX(calc(-100% - 40px));
+    opacity: 0;
+    transition:
+      transform 0.4s cubic-bezier(0.55, 0, 0.8, 0.15),
+      opacity 0.28s ease-in 0.1s;
+  }
+
+  #NavBarDesktop.nav-hidden:not(:focus-within) > #MainWrapper {
+    transition:
+      transform 0.4s cubic-bezier(0.55, 0, 0.8, 0.15) 0.05s,
+      opacity 0.28s ease-in 0.15s,
+      grid-template-rows 0.6s ease;
+  }
+
+  /* Reduced motion: no sliding, a short fade only. */
+  @media (prefers-reduced-motion: reduce) {
+    #NavBarDesktop > #Logo,
+    #NavBarDesktop > #MainWrapper,
+    #NavBarDesktop.nav-hidden:not(:focus-within) > #Logo,
+    #NavBarDesktop.nav-hidden:not(:focus-within) > #MainWrapper {
+      transform: none;
+      transition: opacity 0.2s linear;
     }
   }
 

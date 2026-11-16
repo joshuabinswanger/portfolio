@@ -35,7 +35,9 @@ Because those custom slides count as PhotoSwipe slides, `startIndex` and `slides
 
 Desktop placement is hand-set per item (`.observer:nth-of-type(n)` in
 `PortfolioGallery.astro`) in two blocks: 1120–1439px (items 6–8 columns wide)
-and 1440px and up (5–6 columns, so portrait images fit one laptop screen).
+and 1440px and up (5–6 columns, so portrait images fit one laptop screen;
+right-hand items end at column 14 or 15, leaving at least as much space on
+the right as the margin and sidebar take on the left).
 The split is at 1440px rather than the 1700px `--bp-desktop-wide` because a
 browser window on a 16" MacBook Pro is often narrower than the 1728px screen.
 
