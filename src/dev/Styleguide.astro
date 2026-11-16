@@ -1,7 +1,7 @@
 ---
-// Internal design-system reference. Unlisted: not linked from any nav
-// component, noindex via Main.astro, and filtered out of the sitemap in
-// astro.config.mjs. See docs/design-system.md.
+// Internal design-system reference, served at /styleguide under `astro dev`
+// only (injected in astro.config.mjs), so it never ships in a build. Also
+// noindex via Main.astro. See docs/design-system.md.
 import Main from "../layouts/Main.astro";
 import Section from "../components/styleguide/Section.astro";
 import BreakpointReadout from "../components/styleguide/BreakpointReadout.astro";

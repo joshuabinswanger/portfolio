@@ -13,7 +13,7 @@ This folder holds problem-specific notes for the portfolio codebase. Keep each f
 - [NZZ Bewerbung](./nzz-bewerbung.md): The `/nzz-bewerbung` scrollytelling — pinned GSAP timeline, one-item-per-swipe for trackpad and touch, free finale, and why it works this way.
 - [Content YAML](./content-yaml.md): How project, portfolio, image, and video YAML entries fit together.
 - [SEO & AI Discoverability](./seo.md): Head metadata, canonical URLs, Open Graph, JSON-LD structured data, sitemap/robots, and llms.txt.
-- [Design System](./design-system.md): The internal `/styleguide` page, the design tokens, and the token/chrome change checklist.
+- [Design System](./design-system.md): The dev-only `/styleguide` page, the design tokens, and the token/chrome change checklist.
 - [Troubleshooting](./troubleshooting.md): Common dev-server, Vite cache, PhotoSwipe, Mux, and content-schema issues.
 - [Changelog 2026-04-30](./changelog-2026-04-30.md): Summary of the Astro 6 content-config migration and typecheck cleanup pass.
 
