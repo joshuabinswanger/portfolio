@@ -7,8 +7,10 @@ reusable UI primitive in one place, so token drift, per-breakpoint type sizing,
 and control states can be inspected instead of rediscovered across `global.css`
 and a dozen component `<style>` blocks.
 
-It is **not** public: `noindex, nofollow`, excluded from the sitemap, and not
-linked from any nav component. Reach it by typing the URL.
+It is **dev-only**: `astro.config.mjs` injects the route only under
+`astro dev`, so it is never built or deployed (rhizome.ch/styleguide does not
+exist). Run `npm run dev` and open `/styleguide`. It also carries
+`noindex, nofollow` and is not linked from any nav component.
 
 The page has no Cloudinary, MixItUp, or PhotoSwipe dependency, so unlike the
 rest of the site it renders without credentials or network.
@@ -17,7 +19,7 @@ rest of the site it renders without credentials or network.
 
 | File | Role |
 | --- | --- |
-| `src/pages/styleguide.astro` | Composition and section nav only. Owns the `SECTIONS` list. |
+| `src/dev/Styleguide.astro` | Composition and section nav only. Owns the `SECTIONS` list. |
 | `src/styles/styleguide.css` | Page layout plus shared primitives (`.sg-card`, `.sg-table`, `.sg-demo`, `.sg-label`, `.sg-value`, `.sg-bar`, `.sg-active`). |
 | `src/components/styleguide/Section.astro` | Anchored section wrapper. Props: `id`, `title`, `note` (note renders as HTML). |
 | `src/components/styleguide/BreakpointReadout.astro` | Live viewport / grid readout. Owns a hidden probe. |
@@ -29,7 +31,7 @@ rest of the site it renders without credentials or network.
 | `src/components/styleguide/IconGallery.astro` | Auto-enumerated from `src/assets/svg/`. |
 | `src/components/styleguide/ChromeStates.astro` | **Snapshot** of archive and nav control styles. |
 | `src/layouts/Main.astro` | Provides the `noindex` prop. |
-| `astro.config.mjs` | Sitemap `filter` excluding `/styleguide`. |
+| `astro.config.mjs` | Injects `/styleguide` under `astro dev` only. |
 
 ## Data contract
 
@@ -78,7 +80,7 @@ no existing rule was changed to consume these. Adopt them as you touch files.
   correct family list. V variants are wide and short (used as horizontal rules),
   H variants tall and narrow (vertical rules); sizing one like the other
   collapses it to a hairline.
-- **Adding a section** → add an entry to `SECTIONS` in `styleguide.astro` and a
+- **Adding a section** → add an entry to `SECTIONS` in `src/dev/Styleguide.astro` and a
   matching `<Section id="…">`. The ids are the contract between the two.
 
 ## Findings this page surfaced
@@ -118,19 +120,13 @@ npm run lint
 npm run build
 ```
 
-Then confirm the page is built but excluded from the sitemap:
+Then confirm the page is not in the build (this must find nothing):
 
 ```bash
-grep -c noindex dist/styleguide/index.html
+ls dist | grep styleguide
 ```
 
-```bash
-grep -r styleguide dist/sitemap-index.xml dist/sitemap-0.xml
-```
-
-The first must be 1 or more; the second must find nothing.
-
-Finally load `/styleguide` at 375, 767, 1024, 1280 and 1700px. At each width:
+Finally, under `npm run dev`, load `/styleguide` at 375, 767, 1024, 1280 and 1700px. At each width:
 no console errors, no horizontal page scroll, and the breakpoint readout should
 report 7 / 7 / 11 / 17 / 17 columns; the desktop cell is fluid (56px at
 1120px, capped at 96px).

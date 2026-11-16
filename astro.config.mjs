@@ -10,8 +10,11 @@ import {
   createImageMetaMiddleware,
 } from "./src/dev/imageMetaMiddleware.ts";
 
-// /dev/images: thumbnails next to their YAML metadata, editable in place, for
-// content upkeep. Injected only under `astro dev`, so it never ships in a build.
+// Dev-only internal pages, injected only under `astro dev` so they never ship
+// in a build:
+// - /dev/images: thumbnails next to their YAML metadata, editable in place,
+//   for content upkeep.
+// - /styleguide: the design-token and UI-primitive reference.
 const devImageReview = {
   name: "dev-image-review",
   hooks: {
@@ -20,6 +23,10 @@ const devImageReview = {
       injectRoute({
         pattern: "/dev/images",
         entrypoint: "./src/dev/ImageReview.astro",
+      });
+      injectRoute({
+        pattern: "/styleguide",
+        entrypoint: "./src/dev/Styleguide.astro",
       });
     },
     "astro:server:setup": ({ server }) => {
@@ -35,10 +42,7 @@ const devImageReview = {
 export default defineConfig({
   site: "https://rhizome.ch",
   integrations: [
-    sitemap({
-      // /styleguide is an internal design-token reference, not site content.
-      filter: (page) => !page.includes("/styleguide"),
-    }),
+    sitemap(),
     robotsTxt(),
     devImageReview,
   ],

@@ -678,8 +678,8 @@ const { enrichedProjects } = await getPortfolioGalleryData();
     }
   }
 
-  /*Desktop*/
-  @media (--bp-desktop) {
+  /* Desktop, small screens (1120px to 1439px). */
+  @media (1120px <= width < 1440px) {
     .observer:nth-of-type(1) {
       grid-column-start: 1;
       grid-column-end: span 8;
@@ -754,11 +754,13 @@ const { enrichedProjects } = await getPortfolioGalleryData();
     }
   }
 
-  /* Desktop Wide (16" MacBook Pro and up): items about a quarter smaller
-     than on the desktop breakpoint so a portrait image stays well inside one
+  /* Desktop, 1440px and up (laptops such as a 16" MacBook Pro, whose browser
+     window is often narrower than its 1728px screen): items about a quarter
+     smaller than on small desktops so a portrait image stays well inside one
      screen. Left items keep their start column, right items their end column;
-     row starts are pulled in to keep the same vertical overlap. */
-  @media (--bp-desktop-wide) {
+     row starts are pulled in to keep the same vertical overlap. Grid rows and
+     columns both scale with --grid-cell-desktop, so this holds at any width. */
+  @media (width >= 1440px) {
     .observer:nth-of-type(1) {
       grid-column-start: 1;
       grid-column-end: span 6;

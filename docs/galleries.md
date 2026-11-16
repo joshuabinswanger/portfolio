@@ -33,6 +33,12 @@ Each homepage gallery also gets custom PhotoSwipe slides:
 
 Because those custom slides count as PhotoSwipe slides, `startIndex` and `slidesCount` must stay correct.
 
+Desktop placement is hand-set per item (`.observer:nth-of-type(n)` in
+`PortfolioGallery.astro`) in two blocks: 1120–1439px (items 6–8 columns wide)
+and 1440px and up (5–6 columns, so portrait images fit one laptop screen).
+The split is at 1440px rather than the 1700px `--bp-desktop-wide` because a
+browser window on a 16" MacBook Pro is often narrower than the 1728px screen.
+
 ## Project List Gallery
 
 The project-list view reads only the local `images` collection: every image
