@@ -5,6 +5,7 @@ This folder holds problem-specific notes for the portfolio codebase. Keep each f
 ## Topics
 
 - [Video Player](./video-player.md): Mux videos, HLS URLs, inline previews, PhotoSwipe playback, and YAML toggles.
+- [Navigation](./navigation.md): The four nav components, server-rendered + JS active state, `transition:persist` staleness, DOM structure, and accessibility.
 - [Galleries](./galleries.md): Homepage galleries, project-list galleries, PhotoSwipe indexing, sorting, and pause/play behavior.
 - [Image Optimization](./image-optimization.md): Local Astro images, high-resolution lightbox images, and sizing rules.
 - [Archive Filters](./archive-filters.md): The `/personal` archive toolbar — chip rail on desktop, bottom sheet on mobile, MixItUp wiring, zoom, lightbox title.
@@ -12,6 +13,7 @@ This folder holds problem-specific notes for the portfolio codebase. Keep each f
 - [NZZ Bewerbung](./nzz-bewerbung.md): The `/nzz-bewerbung` scrollytelling — pinned GSAP timeline, one-item-per-swipe for trackpad and touch, free finale, and why it works this way.
 - [Content YAML](./content-yaml.md): How project, portfolio, image, and video YAML entries fit together.
 - [SEO & AI Discoverability](./seo.md): Head metadata, canonical URLs, Open Graph, JSON-LD structured data, sitemap/robots, and llms.txt.
+- [Design System](./design-system.md): The internal `/styleguide` page, the design tokens, and the token/chrome change checklist.
 - [Troubleshooting](./troubleshooting.md): Common dev-server, Vite cache, PhotoSwipe, Mux, and content-schema issues.
 - [Changelog 2026-04-30](./changelog-2026-04-30.md): Summary of the Astro 6 content-config migration and typecheck cleanup pass.
 

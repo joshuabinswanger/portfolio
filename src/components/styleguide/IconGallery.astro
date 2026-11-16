@@ -1,0 +1,51 @@
+---
+import Icon from "../Icon.astro";
+
+// Enumerated rather than hardcoded so this section stays correct as icons are
+// added to src/assets/svg/. Icon.astro resolves the same directory by name
+// (`../assets/svg/${icon}.svg?raw`), so any file listed here is loadable.
+const files = import.meta.glob("../../assets/svg/*.svg", { query: "?raw" });
+const iconNames = Object.keys(files)
+  .map((path) => path.split("/").pop()!.replace(/\.svg$/, ""))
+  .sort();
+---
+
+<p class="sg-note">
+  Enumerated from <code>src/assets/svg/</code> at build time, so this section
+  cannot go stale — drop a new SVG in that folder and it appears here. Rendered
+  through <code>src/components/Icon.astro</code>, which inlines the file with
+  <code>?raw</code> and takes an optional <code>width</code>.
+</p>
+
+{
+  iconNames.length === 0 ? (
+    <p class="sg-note">
+      <strong>No icons found</strong> in <code>src/assets/svg/</code>.
+    </p>
+  ) : (
+    <div class="sg-icon-grid">
+      {iconNames.map((name) => (
+        <div class="sg-card">
+          <div class="sg-demo sg-icon-frame">
+            <Icon icon={name} width="32px" />
+          </div>
+          <code class="sg-label">{name}</code>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+<style>
+  @import "../../styles/global.css";
+
+  .sg-icon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 140px));
+    gap: var(--space-3);
+  }
+
+  .sg-icon-frame {
+    min-height: 72px;
+  }
+</style>

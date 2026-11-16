@@ -15,6 +15,9 @@ const optimizedOgImage = await getImage({ src: ogImage });
 const {
   title = "Rhizome Visuals — Scientific Illustration & 3D Design",
   description = "Scientific illustration and 3D design by Joshua Binswanger (Rhizome Visuals).",
+  // Internal pages (e.g. /styleguide) opt out of indexing. Canonical is still
+  // emitted — the page is real, just not something we want in results.
+  noindex = false,
 } = Astro.props;
 
 const isProd = import.meta.env.PROD;
@@ -106,6 +109,7 @@ const structuredData = {
     <meta name="description" content={description} />
     <meta name="author" content="Joshua Binswanger" />
     <meta name="generator" content={Astro.generator} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <title>{title}</title>
     <link rel="canonical" href={canonicalURL} />

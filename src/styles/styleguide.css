@@ -1,0 +1,220 @@
+/* Styles for the internal /styleguide page only. Loaded exclusively by
+   src/pages/styleguide.astro, so nothing here reaches the public site.
+   All classes are `sg-` prefixed to guarantee no collision with component
+   styles.
+
+   Every value below uses the tokens from src/styles/global.css — including the
+   ones added on 2026-08-04 (--font-*, --space-*, --color-*). That is
+   deliberate: if a token is broken, this page breaks visibly. */
+
+/* Required for the @custom-media breakpoint names below to resolve — same
+   pattern every component <style> block in this repo uses. */
+@import "./global.css";
+
+.sg-page {
+  font-family: var(--font-light);
+  color: var(--color-text);
+  padding: var(--space-5) var(--space-4) calc(var(--space-7) * 2);
+  /* width:100% is required, not redundant: this is a grid item in Main.astro's
+     body grid, and `margin-inline: auto` alone would resolve the free space by
+     shrinking the item to max-content instead of filling the column. */
+  width: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+  box-sizing: border-box;
+}
+
+/* --- Header ------------------------------------------------------------- */
+
+.sg-header {
+  padding-bottom: var(--space-5);
+}
+
+.sg-title {
+  font-family: var(--font-medium);
+  font-size: 32px;
+  font-weight: normal;
+  margin: 0 0 var(--space-3);
+}
+
+.sg-lede {
+  margin: 0;
+  max-width: 68ch;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* --- Two-column layout: sticky nav + body ------------------------------- */
+
+.sg-layout {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: var(--space-6);
+  align-items: start;
+
+  @media (--bp-mobile) {
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+
+  @media (--bp-tablet) {
+    grid-template-columns: 144px 1fr;
+    gap: var(--space-5);
+  }
+}
+
+.sg-toc {
+  position: sticky;
+  top: var(--space-5);
+  display: grid;
+  gap: var(--space-1);
+  font-size: 12px;
+
+  @media (--bp-mobile) {
+    position: static;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2);
+  }
+}
+
+.sg-toc a {
+  color: var(--color-text);
+  text-decoration: none;
+  padding: 3px 0;
+  border-bottom: var(--border-size) solid transparent;
+}
+
+.sg-toc a:hover,
+.sg-toc a:focus-visible {
+  border-bottom-color: var(--color-text);
+}
+
+.sg-body {
+  min-width: 0; /* lets wide children scroll instead of stretching the grid */
+  display: grid;
+  gap: var(--space-6);
+}
+
+/* --- Sections ----------------------------------------------------------- */
+
+.sg-section {
+  border-top: var(--border-size) solid var(--color-border);
+  padding-top: var(--space-4);
+  scroll-margin-top: var(--space-4);
+  /* Grid items default to min-width:auto, which lets wide content (the 952px
+     grid demo, wide tables) push past the column and get clipped by
+     `body { overflow-x: hidden }` in Main.astro — with no scrollbar to reveal
+     it. min-width:0 lets max-width and overflow actually take effect. */
+  min-width: 0;
+}
+
+.sg-section-title {
+  font-family: var(--font-medium);
+  font-size: 18px;
+  font-weight: normal;
+  margin: 0 0 var(--space-2);
+}
+
+.sg-subtitle {
+  font-family: var(--font-medium);
+  font-size: 13px;
+  font-weight: normal;
+  margin: var(--space-5) 0 var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+.sg-note {
+  margin: 0 0 var(--space-4);
+  max-width: 72ch;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* --- Shared primitives used by the section components ------------------- */
+
+/* Monospace so token names and resolved values never read as specimen text. */
+.sg-label,
+.sg-value {
+  font-family: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas,
+    monospace;
+  font-size: 11px;
+  letter-spacing: 0;
+}
+
+.sg-value {
+  color: #555;
+}
+
+.sg-page code {
+  font-family: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas,
+    monospace;
+  font-size: 0.92em;
+  background: var(--color-surface-accent);
+  padding: 1px 4px;
+}
+
+.sg-grid-auto {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-3);
+}
+
+.sg-card {
+  background: var(--color-surface-accent);
+  padding: var(--space-3);
+  display: grid;
+  gap: var(--space-1);
+  align-content: start;
+}
+
+/* Bordered frame for anything being shown rather than used. */
+.sg-demo {
+  border: 1px dashed var(--color-border);
+  padding: var(--space-3);
+  display: grid;
+  place-items: center;
+  background: var(--color-surface);
+}
+
+.sg-table {
+  border-collapse: collapse;
+  font-size: 12px;
+  width: 100%;
+}
+
+.sg-table th,
+.sg-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  border-bottom: var(--border-size) solid var(--color-border);
+}
+
+.sg-table th {
+  font-family: var(--font-medium);
+  font-weight: normal;
+  white-space: nowrap;
+}
+
+/* Wide tables scroll inside their own box rather than widening the page.
+   min-width:0 is load-bearing: as a grid descendant the default min-width:auto
+   lets intrinsic content width beat max-width, overflowing instead of
+   scrolling. */
+.sg-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.sg-bar {
+  background: var(--color-text);
+  height: 12px;
+}
+
+/* Marks the cell/row matching the current viewport. Set by client scripts. */
+.sg-active {
+  background: var(--color-surface-accent);
+  font-family: var(--font-medium);
+}

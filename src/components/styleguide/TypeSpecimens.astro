@@ -1,0 +1,232 @@
+---
+const FACES = [
+  { token: "--font-ultralight", family: "PowerGrotesk-UltraLight", weight: 100 },
+  { token: "--font-light", family: "PowerGrotesk-Light", weight: 200 },
+  { token: "--font-regular", family: "PowerGrotesk-Regular", weight: 400 },
+  { token: "--font-medium", family: "PowerGrotesk-Medium", weight: 600 },
+  { token: "--font-bold", family: "PowerGrotesk-Bold", weight: 600 },
+];
+
+const BREAKPOINTS = [
+  { key: "mobile-small", label: "mobile-small" },
+  { key: "mobile", label: "mobile" },
+  { key: "tablet", label: "tablet" },
+  { key: "desktop", label: "desktop" },
+  { key: "desktop-wide", label: "desktop-wide" },
+];
+
+// Literal values from src/styles/global.css:113-123. Kept as data so each cell
+// can be rendered AT its own size rather than just naming it.
+const SIZES = [
+  {
+    role: "body",
+    values: [
+      { token: "--font-size-mobile-small", value: "10px" },
+      { token: "--font-size-mobile", value: "12px" },
+      { token: "--font-size-tablet", value: "12px" },
+      { token: "--font-size-desktop", value: "14px" },
+      { token: "--font-size-desktop-wide", value: "14px" },
+    ],
+  },
+  {
+    role: "h1",
+    values: [
+      { token: "--font-size-mobile-small-h1", value: "14px" },
+      { token: "--font-size-mobile-h1", value: "14px" },
+      { token: "--font-size-tablet-h1", value: "16px" },
+      { token: "--font-size-desktop-h1", value: "18px" },
+      { token: "--font-size-desktop-wide-h1", value: "18px" },
+    ],
+  },
+];
+
+const PANGRAM = "Scientific illustration & 3D design — 0123456789";
+---
+
+<h3 class="sg-subtitle">Faces</h3>
+<p class="sg-note">
+  Five <code>@font-face</code> families, declared in
+  <code>src/styles/global.css:3-73</code>. Two things worth knowing:
+  <strong>only Light has an italic</strong>, and
+  <strong
+    ><code>PowerGrotesk-Medium</code> and <code>PowerGrotesk-Bold</code> are both
+    declared <code>font-weight: 600</code></strong
+  > — so they are indistinguishable to weight-based selection and must be chosen
+  by family name.
+</p>
+
+<div class="sg-faces">
+  {
+    FACES.map((f) => (
+      <div class="sg-face">
+        <div class="sg-face-meta">
+          <code class="sg-label">{f.token}</code>
+          <span class="sg-value">
+            {f.family} · declared font-weight {f.weight}
+          </span>
+        </div>
+        <p class="sg-specimen" style={`font-family: var(${f.token})`}>
+          {PANGRAM}
+        </p>
+      </div>
+    ))
+  }
+  <div class="sg-face">
+    <div class="sg-face-meta">
+      <code class="sg-label">--font-light</code>
+      <span class="sg-value">italic — the only italic in the stack</span>
+    </div>
+    <p class="sg-specimen" style="font-family: var(--font-light); font-style: italic;">
+      {PANGRAM}
+    </p>
+  </div>
+</div>
+
+<h3 class="sg-subtitle">Sizes</h3>
+<p class="sg-note">
+  Each cell is rendered at its own value, so the ratios are visible rather than
+  arithmetic. The column matching the current viewport is highlighted.
+</p>
+
+<div class="sg-scroll">
+  <table class="sg-table sg-size-table">
+    <thead>
+      <tr>
+        <th scope="col">Role</th>
+        {
+          BREAKPOINTS.map((b) => (
+            <th scope="col" data-bp={b.key}>
+              {b.label}
+            </th>
+          ))
+        }
+      </tr>
+    </thead>
+    <tbody>
+      {
+        SIZES.map((row) => (
+          <tr>
+            <th scope="row">{row.role}</th>
+            {row.values.map((cell, i) => (
+              <td data-bp={BREAKPOINTS[i].key}>
+                <span style={`font-size: ${cell.value}`}>Aa {cell.value}</span>
+                <code class="sg-label sg-cell-token">{cell.token}</code>
+              </td>
+            ))}
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
+
+<h3 class="sg-subtitle">Letter spacing</h3>
+<p class="sg-note">
+  <code>:root</code> sets <code>letter-spacing: 0.7px</code> globally
+  (<code>global.css:125</code>), which every page inherits. Left is inherited,
+  right is <code>normal</code>.
+</p>
+<div class="sg-ls">
+  <div class="sg-demo sg-ls-cell">
+    <p><span class="sg-value">inherited — 0.7px</span>{PANGRAM}</p>
+  </div>
+  <div class="sg-demo sg-ls-cell">
+    <p style="letter-spacing: normal">
+      <span class="sg-value">letter-spacing: normal</span>{PANGRAM}
+    </p>
+  </div>
+</div>
+
+<script>
+  // Highlights the table column matching the viewport. Bounds must stay in sync
+  // with the @custom-media queries in src/styles/global.css and with
+  // BreakpointReadout.astro, which mirrors the same ranges.
+  function currentBp(w: number): string {
+    if (w <= 375) return "mobile-small";
+    if (w <= 767) return "mobile";
+    if (w <= 1119) return "tablet";
+    if (w <= 1699) return "desktop";
+    return "desktop-wide";
+  }
+
+  function update() {
+    const key = currentBp(window.innerWidth);
+    document
+      .querySelectorAll<HTMLElement>(".sg-size-table [data-bp]")
+      .forEach((el) => {
+        el.classList.toggle("sg-active", el.dataset.bp === key);
+      });
+  }
+
+  window.addEventListener("resize", update);
+  if ("ResizeObserver" in window) {
+    new ResizeObserver(update).observe(document.documentElement);
+  }
+  document.addEventListener("astro:page-load", update);
+  update();
+</script>
+
+<style>
+  @import "../../styles/global.css";
+
+  .sg-faces {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .sg-face-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-3);
+    align-items: baseline;
+  }
+
+  .sg-specimen {
+    margin: 4px 0 0;
+    font-size: 24px;
+    line-height: 1.3;
+
+    @media (--bp-mobile) {
+      font-size: 18px;
+    }
+  }
+
+  .sg-size-table td {
+    white-space: nowrap;
+  }
+
+  .sg-size-table td span {
+    display: block;
+  }
+
+  .sg-cell-token {
+    display: block;
+    color: #777;
+    padding-top: 2px;
+  }
+
+  .sg-ls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+
+    @media (--bp-mobile) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .sg-ls-cell {
+    place-items: start;
+  }
+
+  .sg-ls-cell p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .sg-ls-cell .sg-value {
+    display: block;
+    padding-bottom: var(--space-2);
+  }
+</style>

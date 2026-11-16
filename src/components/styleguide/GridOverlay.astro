@@ -1,0 +1,136 @@
+---
+// The inline demo uses the REAL GridLayout, which is safe to import here
+// because it takes only `customClass` — no collection data, no client runtime.
+import GridLayout from "../../layouts/GridLayout.astro";
+
+// 17 is the desktop/desktop-wide column count. Under --bp-tablet (11) and
+// --bp-mobile (7) the extra cells wrap onto further rows, which is why the
+// numbering runs past the first row at those widths.
+const CELLS = Array.from({ length: 17 }, (_, i) => i + 1);
+---
+
+<h3 class="sg-subtitle">Column demo</h3>
+<p class="sg-note">
+  Rendered with the real <code>GridLayout</code> component. 17 numbered cells:
+  at desktop widths they form one row of 17, at
+  <code>--bp-tablet</code> they wrap after 11 and at <code>--bp-mobile</code>
+  after 7 — so numbers running onto a second row is the grid working, not a bug.
+</p>
+
+<div class="sg-grid-demo-wrap">
+  <GridLayout customClass="sg-grid-demo">
+    {CELLS.map((n) => <div class="sg-grid-cell">{n}</div>)}
+  </GridLayout>
+</div>
+
+<h3 class="sg-subtitle">Page overlay</h3>
+<p class="sg-note">
+  Overlays the same column tokens on the whole viewport, so you can check where
+  this page's content falls relative to the site grid.
+</p>
+
+<button type="button" id="sg-grid-toggle" class="sg-button" aria-pressed="false">
+  Toggle grid overlay
+</button>
+
+<div class="sg-grid-overlay" aria-hidden="true">
+  {CELLS.map(() => <div />)}
+</div>
+
+<script>
+  function bind() {
+    const btn = document.getElementById("sg-grid-toggle");
+    if (!btn || btn.dataset.bound === "1") return;
+    // Guard against double-binding: astro:page-load fires again on client-side
+    // navigation back to this route, and a second listener would toggle twice
+    // per click (a no-op). NavigationBar.astro uses the same pattern.
+    btn.dataset.bound = "1";
+    btn.addEventListener("click", () => {
+      const on = document.documentElement.classList.toggle("sg-grid-on");
+      btn.setAttribute("aria-pressed", String(on));
+    });
+  }
+
+  document.addEventListener("astro:page-load", bind);
+  bind();
+</script>
+
+<style is:global>
+  /* Global because the overlay is toggled by a class on <html>. */
+  .sg-grid-overlay {
+    display: none;
+  }
+
+  :root.sg-grid-on .sg-grid-overlay {
+    display: grid;
+    position: fixed;
+    inset: 0;
+    z-index: 2500;
+    pointer-events: none;
+    justify-content: center;
+  }
+</style>
+
+<style>
+  @import "../../styles/global.css";
+
+  /* The demo grid is wider than the body column at desktop widths (17 x 56px =
+     952px), so it scrolls in its own box rather than widening the page. */
+  .sg-grid-demo-wrap {
+    overflow-x: auto;
+    max-width: 100%;
+    /* Required alongside max-width: without it the intrinsic 952px min-content
+       width of the 17-column grid wins and the box overflows instead of
+       scrolling. */
+    min-width: 0;
+    padding-bottom: var(--space-2);
+  }
+
+  .sg-grid-cell {
+    background: var(--color-surface-accent);
+    outline: var(--border-size) solid var(--color-border);
+    outline-offset: -0.5px;
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    min-height: 40px;
+  }
+
+  .sg-button {
+    font-family: var(--font-light);
+    font-size: 12px;
+    letter-spacing: 0.6px;
+    color: var(--bg-color);
+    background: var(--color-text);
+    border: 0;
+    padding: 10px var(--space-3);
+    cursor: pointer;
+  }
+
+  .sg-button[aria-pressed="true"] {
+    background: var(--color-border);
+  }
+
+  /* Mirrors GridLayout's per-breakpoint column tokens so the overlay lands on
+     the same lines the real grid uses. */
+  .sg-grid-overlay {
+    grid-template-columns: var(--grid-layout-columns-desktop);
+
+    @media (--bp-mobile) {
+      grid-template-columns: var(--grid-layout-columns-mobile);
+    }
+
+    @media (--bp-tablet) {
+      grid-template-columns: var(--grid-layout-columns-tablet);
+    }
+
+    @media (--bp-desktop-wide) {
+      grid-template-columns: var(--grid-layout-columns-desktop-wide);
+    }
+  }
+
+  .sg-grid-overlay > div {
+    background: #ff000010;
+    border-inline: var(--border-size) solid #ff000055;
+  }
+</style>

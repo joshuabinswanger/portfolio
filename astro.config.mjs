@@ -34,7 +34,17 @@ const devImageReview = {
 // https://astro.build/config
 export default defineConfig({
   site: "https://rhizome.ch",
-  integrations: [sitemap(), robotsTxt(), devImageReview],
+  integrations: [
+    sitemap({
+      // /styleguide is an internal design-token reference, not site content.
+      filter: (page) => !page.includes("/styleguide"),
+    }),
+    robotsTxt(),
+    devImageReview,
+  ],
+  // Honor a PORT injected by the environment (e.g. the Claude Preview tool's
+  // autoPort assignment). Falls back to Astro's default 4321 for plain `npm run dev`.
+  server: process.env.PORT ? { port: Number(process.env.PORT) } : undefined,
   vite: {
     build: {
       assetsInlineLimit: 0,

@@ -1,0 +1,16 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  /** Optional caveat or pointer shown under the heading. Rendered as HTML so
+      it can contain <code> / <strong>. */
+  note?: string;
+}
+const { id, title, note } = Astro.props;
+---
+
+<section class="sg-section" id={id}>
+  <h2 class="sg-section-title">{title}</h2>
+  {note && <p class="sg-note" set:html={note} />}
+  <slot />
+</section>
